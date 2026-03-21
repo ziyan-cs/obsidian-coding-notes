@@ -6,12 +6,12 @@
 1. ofstream： 写操作
 2. ifstream： 读操作
 3. fstream： 读写操作
-## C++ wen写文件流程**
+## C++ 文本文件 —— 写操作流程
 ### 1. *包含头文件*
 	#include <fstream>
 ### 2. *创建流对象*
 	ofstream ofs;
-### 3. *打开文件*
+### 3. *打开文件*（含打开方式表）
 	ofs.open("文件路径", 打开方式);
 
 |  **打开方式**   |    **解释**     |
@@ -27,7 +27,7 @@
 	ofs << "写入的数据";
 ### 5. *关闭文件*
 	ofs.close();
-# 代码实例：
+> 代码实例：
 ```c++
 #include <fstream> 
 using namespace std;
