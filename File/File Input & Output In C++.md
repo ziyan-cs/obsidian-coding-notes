@@ -52,12 +52,20 @@ int main(){
 	ifstream ifs;
 ### 3. *打开文件*（含打开方式表）
 	ifs.open("文件路径", ios::in);
-### 4. *读数据（三种方式）*
-	ifs << "写入的数据";
 	if (!ifs.is_open()) {
-		cout << "文件打开失败！" << endl; 
-		return;
-	}
+	cout << "文件打开失败！" << endl; return; }
+### 4. *读数据（三种方式）*
+	// 方式1：逐字符读 
+	char c; 
+	while ((c = ifs.get()) != EOF) { cout << c; } 
+	
+	// 方式2：逐行读 
+	string buf; 
+	while (getline(ifs, buf)) { cout << buf << endl; } 
+	
+	// 方式3：逐单词读 
+	string word; 
+	while (ifs >> word) { cout << word << endl; }
 ### 5. *关闭文件*
 	ifs.close();
 >代码实例
