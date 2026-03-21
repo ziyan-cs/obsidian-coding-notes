@@ -27,7 +27,7 @@
 	ofs << "写入的数据";
 ### 5. *关闭文件（含打开失败判断）*
 	ofs.close();
-	> 代码实例
+>代码实例
 ```c++
 #include <fstream> 
 using namespace std;
@@ -56,3 +56,7 @@ int main(){
 	ofs << "写入的数据";
 ### 5. *关闭文件*
 	ofs.close();
+>代码实例
+```c++
+
+```
