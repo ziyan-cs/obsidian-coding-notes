@@ -49,13 +49,13 @@ int main(){
 ### 1. *包含头文件*
 	#include <fstream>
 ### 2. *创建流对象*
-	ofstream ofs;
+	ifstream ifs;
 ### 3. *打开文件*（含打开方式表）
-	ofs.open("文件路径", 打开方式);
+	ifs.open("文件路径", ios);
 ### 4. *读数据（三种方式）*
-	ofs << "写入的数据";
+	ifs << "写入的数据";
 ### 5. *关闭文件*
-	ofs.close();
+	ifs.close();
 >代码实例
 ```c++
 
