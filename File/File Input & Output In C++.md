@@ -51,9 +51,12 @@ int main(){
 ### 2. *创建流对象*
 	ifstream ifs;
 ### 3. *打开文件*（含打开方式表）
-	ifs.open("文件路径", ios);
+	ifs.open("文件路径", ios::in);
 ### 4. *读数据（三种方式）*
-	ifs << "写入的数据";
+	`ifs << "写入的数据";`
+	`if (!ifs.is_open()) {`
+	`cout << "文件打开失败！" << endl; return;`
+	`}`
 ### 5. *关闭文件*
 	ifs.close();
 >代码实例
