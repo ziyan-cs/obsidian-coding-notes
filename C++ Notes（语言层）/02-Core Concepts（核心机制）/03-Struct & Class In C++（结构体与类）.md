@@ -1,270 +1,400 @@
-## 1. 程序结构与命名空间
+## 一页速览
 
-- `main` 必须写成 `int main()`，不要写 `void main()`。
-- `return 0;` 可以省略，但显式写出更规范。
-- `using namespace std;`
-    - `.cpp`：可少量使用。
-    - `.h`：不要使用，避免命名污染。
-- 头文件要做防重包含：
+- **`struct`**：默认成员权限是 `public`
+- **`class`**：默认成员权限是 `private`
+- **对象**：由类 / 结构体创建出来的实例
+- **成员访问**：对象用 `.`，对象指针用 `->`
+- **构造函数**：对象创建时自动调用
+- **核心思想**：把数据和操作数据的函数放在一起
+- **最常错**：默认权限、构造函数写法、`.` 和 `->` 混淆
 
-```cpp
-#ifndef MY_HEADER_H
-#define MY_HEADER_H
+## 一、先总后分：这一节到底学什么
 
-// ...
+### 1. 结构体解决什么问题
 
-#endif
-```
+- 把多个相关数据打包成一个整体
+- 适合表达“一个对象的信息”
 
-- 如果能用 `#pragma once`，也很常见，但要知道考试/规范里更经典的是 include guard。
+### 2. 类解决什么问题
 
-## 2. 类型、变量与推导
+- 不只存数据，还把操作数据的方法一起封装
+- 为后面的面向对象打基础
 
-### 2.1 整数除法
+### 3. 当前阶段先抓主线
 
-- 两个整数相除，结果仍是整数，小数部分直接截断。
+- 会定义 `struct` 和 `class`
+- 会创建对象并访问成员
+- 会写最基础的构造函数
+- 会分清 `public` 和 `private`
 
-```cpp
-int a = 5, b = 2;
-cout << a / b; // 2
-cout << static_cast<double>(a) / b; // 2.5
-```
+---
 
-### 2.2 `const` 与指针
+## 二、结构体 `struct`
 
-```cpp
-int x = 10;
+### 1. 结构体是什么
 
-const int* p1 = &x;      // 不能通过 p1 改值
-int* const p2 = &x;      // p2 不能改指向
-const int* const p3 = &x; // 都不能改
-```
-
-- 看谁离 `const` 最近：
-    - 靠近类型：值不能改
-    - 靠近指针名：指针本身不能改
-
-### 2.3 `auto` 使用习惯
-
-- `auto` 适合简化复杂类型。
-- 但会忽略顶层 `const`、引用，必要时手动补：`const auto&`、`auto&`。
+- 自定义类型
+- 用来组织一组相关数据
 
 ```cpp
-vector<int> v = {1, 2, 3};
-for (auto x : v) cout << x;          // 拷贝
-for (auto& x : v) x *= 2;            // 可修改
-for (const auto& x : v) cout << x;   // 推荐只读遍历
-```
-
-### 2.4 统一初始化 `{}`（新标准必记）
-
-- 推荐优先用花括号初始化，风格统一。
-- 它还能防止窄化转换。
-
-```cpp
-int a{10};
-// int b{3.14}; // ❌ 窄化，报错
-```
-
-### 2.5 `nullptr` 替代 `NULL` / `0`
-
-- C++11 起，空指针请优先写 `nullptr`。
-
-```cpp
-int* p = nullptr;
-```
-
-- 原因：类型更明确，重载时更安全。
-
-## 3. 输入输出与字符串
-
-### 3.1 `cin` 和 `getline` 混用
-
-- `cin >>` 后若直接 `getline`，常读到残留换行。
-
-```cpp
-int num;
-cin >> num;
-cin.ignore(numeric_limits<streamsize>::max(), '\\n');
-
-string line;
-getline(cin, line);
-```
-
-### 3.2 输出效率
-
-- `endl` = 换行 + 刷新缓冲区，效率低。
-- 大多数场景优先用 `\\n`。
-
-### 3.3 格式控制
-
-```cpp
-#include <iomanip>
-double pi = 3.14159;
-cout << fixed << setprecision(2) << pi; // 3.14
-```
-
-## 4. 运算符与流程控制
-
-### 4.1 自增
-
-```cpp
-int i = 5;
-cout << i++; // 5
-cout << ++i; // 7
-```
-
-- 前置先变再用，后置先用再变。
-- 迭代器场景下，优先 `++it`。
-
-### 4.2 短路求值
-
-- `a && b`：`a` 为假，`b` 不执行。
-- `a || b`：`a` 为真，`b` 不执行。
-
-### 4.3 位运算
-
-- `x << 1` 常可理解为乘 2。
-- `x >> 1` 常可理解为除 2。
-- 但对负数、符号位不要机械套用。
-
-### 4.4 `switch`
-
-- 表达式通常是整型、字符、枚举。
-- `case` 后必须是常量。
-- 别漏 `break`，除非你就是要贯穿。
-
-```cpp
-char c = 'a';
-switch (c) {
-	case 'a':
-	case 'A':
-		cout << "Alpha";
-		break;
-	default:
-		cout << "Other";
-}
-```
-
-## 5. 函数基础
-
-### 5.1 重载
-
-- 函数名相同，但参数列表不同，才叫重载。
-- 仅返回值不同，不算重载。
-
-### 5.2 默认参数
-
-- 必须从右往左连续给默认值。
-
-```cpp
-void func(int a, int b = 10, int c = 20);
-```
-
-### 5.3 `inline`
-
-- 适合短小频繁调用的函数。
-- 它只是“建议”，编译器可不采纳。
-
-## 6. 入门后必须补上的现代 C++ 习惯
-
-### 6.1 范围 `for`（C++11）
-
-- 能不用下标就别硬写下标。
-
-```cpp
-for (const auto& x : v) {
-	cout << x << '\\n';
-}
-```
-
-### 6.2 `using` 替代 `typedef`
-
-```cpp
-using ll = long long;
-using Vec = vector<int>;
-```
-
-- 更直观，模板别名也更方便。
-
-### 6.3 `enum class` 替代普通枚举
-
-```cpp
-enum class Color { Red, Green, Blue };
-Color c = Color::Red;
-```
-
-- 优点：作用域更清晰，不易污染命名空间。
-
-### 6.4 `constexpr`（比 `const` 更进一步）
-
-- 表示值或函数可在编译期求值。
-
-```cpp
-constexpr int square(int x) {
-	return x * x;
-}
-```
-
-- 记忆：`const` 强调“不能改”，`constexpr` 强调“编译期可算”。
-
-### 6.5 结构化绑定（C++17）
-
-```cpp
-pair<int, string> p = {1, "Tom"};
-auto [id, name] = p;
-```
-
-- 读 `pair` / `tuple` / map 元素时很方便。
-
-### 6.6 `if` / `switch` 初始化器（C++17）
-
-```cpp
-if (int x = foo(); x > 0) {
-	cout << x;
-}
-```
-
-- 变量作用域更小，代码更整洁。
-
-### 6.7 `override` 必写（面向对象常考习惯）
-
-```cpp
-class Base {
-public:
-	virtual void show();
-};
-
-class Derived : public Base {
-public:
-	void show() override;
+struct Student {
+	string name;
+	int age;
+	double score;
 };
 ```
 
-- 防止“以为重写了，实际没重写”的低级错误。
+### 2. 怎么使用
 
-## 7. 高频避坑速记
+```cpp
+Student s1;
+s1.name = "Tom";
+s1.age = 18;
+s1.score = 95.5;
+```
 
-1. 整数相除默认还是整数。
-2. `cin >>` 后接 `getline` 记得 `cin.ignore()`。
-3. 指针的 `const` 看位置。
-4. `switch` 写完 `case` 先想 `break`。
-5. 输出大量数据优先 `\\n`，少用 `endl`。
-6. 空指针用 `nullptr`，不要再依赖 `NULL`。
-7. 遍历容器优先 `const auto&`。
-8. 初始化优先 `{}`。
-9. 类型别名优先 `using`。
-10. 继承重写函数时优先加 `override`。
+### 3. 速记
 
-## 8. 现阶段学习优先级建议
+- `Student`：类型
+- `s1`：对象 / 变量
+- `s1.name`：成员访问
 
-- 先熟：`const`、引用、指针、函数参数传递。
-- 再熟：`vector`、`string`、范围 `for`、`auto`。
-- 接着补：类与对象、构造函数、拷贝控制、继承多态。
-- 写题时坚持现代写法：`nullptr`、`using`、`enum class`、`override`、`const auto&`。
+---
 
-<aside> 💡
+## 三、类 `class`
 
-现代 C++ 的核心不是“写得更花”，而是“写得更安全、更清晰、更少出错”。
+### 1. 类是什么
+
+- 也是自定义类型
+- 但更强调“数据 + 行为”
+
+```cpp
+class Student {
+public:
+	string name;
+	int age;
+
+	void show() {
+		cout << name << " " << age << '\\n';
+	}
+};
+```
+
+### 2. 怎么使用
+
+```cpp
+Student s;
+s.name = "Alice";
+s.age = 20;
+s.show();
+```
+
+### 3. 当前阶段怎么理解
+
+- `struct`：更像“数据包”
+- `class`：更像“完整对象模型”
+
+---
+
+## 四、`struct` 和 `class` 的区别
+
+|对比项|`struct`|`class`|
+|---|---|---|
+|默认成员权限|`public`|`private`|
+|默认继承权限|`public`|`private`|
+|常见用途|简单数据组织|封装对象建模|
+
+### 考试 / 入门先记结论
+
+- 语法能力上两者非常像
+- 真正最常考的是：**默认权限不同**
+
+---
+
+## 五、访问权限：`public` 和 `private`
+
+### 1. `public`
+
+- 类外可以直接访问
+
+### 2. `private`
+
+- 类外不能直接访问
+- 用来保护数据
+
+```cpp
+class Person {
+public:
+	string name;
+
+private:
+	int age;
+};
+```
+
+### 3. 速记
+
+- `public`：外面能直接用
+- `private`：只能类内部处理
+
+---
+
+## 六、成员函数
+
+### 1. 什么是成员函数
+
+- 写在类里的函数
+- 用来操作类中的成员数据
+
+```cpp
+class Person {
+public:
+	string name;
+	int age;
+
+	void show() {
+		cout << name << " " << age << '\\n';
+	}
+};
+```
+
+### 2. 怎么调用
+
+```cpp
+Person p;
+p.name = "Bob";
+p.age = 19;
+p.show();
+```
+
+### 3. `this` 先有印象
+
+- 成员函数默认就是在操作“当前对象”
+- `this` 指向当前对象
+- 当前阶段知道这点就够了
+
+---
+
+## 七、构造函数
+
+### 1. 构造函数是什么
+
+- 对象创建时自动调用
+- 常用于初始化成员
+
+```cpp
+class Person {
+public:
+	string name;
+	int age;
+
+	Person() {
+		name = "unknown";
+		age = 0;
+	}
+};
+```
+
+### 2. 带参数构造函数
+
+```cpp
+class Person {
+public:
+	string name;
+	int age;
+
+	Person(string n, int a) {
+		name = n;
+		age = a;
+	}
+};
+```
+
+```cpp
+Person p("Tom", 20);
+```
+
+### 3. 必记特征
+
+- 函数名和类名相同
+- 没有返回类型
+- 创建对象时自动执行
+
+---
+
+## 八、封装：类最核心的思想
+
+### 1. 什么是封装
+
+- 把数据和方法放在一起
+- 对外隐藏不该直接改的数据
+
+### 2. 典型写法
+
+```cpp
+class Person {
+private:
+	int age;
+
+public:
+	void setAge(int a) {
+		if (a >= 0) age = a;
+	}
+
+	int getAge() {
+		return age;
+	}
+};
+```
+
+### 3. 为什么这样写
+
+- 防止外部乱改数据
+- 让类自己保证数据合法
+
+---
+
+## 九、对象、对象指针与访问方式
+
+### 1. 普通对象
+
+```cpp
+Person p;
+p.show();
+```
+
+- 用 `.` 访问成员
+
+### 2. 对象指针
+
+```cpp
+Person* p = new Person();
+p->show();
+delete p;
+```
+
+- 用 `->` 访问成员
+
+### 3. 速记
+
+- 对象：`.`
+- 指针：`->`
+
+---
+
+## 十、当前阶段最常见写法
+
+### 1. 简单数据组织用 `struct`
+
+```cpp
+struct Point {
+	int x;
+	int y;
+};
+```
+
+### 2. 需要封装行为用 `class`
+
+```cpp
+class Counter {
+private:
+	int cnt;
+
+public:
+	Counter() {
+		cnt = 0;
+	}
+
+	void addOne() {
+		++cnt;
+	}
+
+	int get() {
+		return cnt;
+	}
+};
+```
+
+---
+
+## 十一、现代 C++ 的基础习惯
+
+### 1. 不要图省事把成员全写成 `public`
+
+- 能封装就尽量封装
+
+### 2. 初始化优先交给构造函数
+
+- 让对象一创建就处于有效状态
+
+### 3. 一个类尽量表达一个清晰对象
+
+- 不要一上来塞太多职责
+
+### 4. 后面还会继续补
+
+- 初始化列表
+- 拷贝构造
+- 析构函数
+- 继承与多态
+
+---
+
+## 十二、高频易错点
+
+1. `struct` 默认是 `public`，`class` 默认是 `private`
+2. 构造函数没有返回类型
+3. 类定义末尾别漏分号 `;`
+4. 对象访问成员用 `.`，指针访问成员用 `->`
+5. `private` 成员不能在类外直接访问
+6. 不要把“类”和“对象”当成一回事
+7. 构造函数会在对象创建时自动调用
+8. 简单数据打包和封装建模要分场景
+
+---
+
+## 十三、最简模板
+
+### 结构体模板
+
+```cpp
+struct Student {
+	string name;
+	int age;
+};
+```
+
+### 类模板
+
+```cpp
+class Person {
+public:
+	string name;
+	int age;
+
+	void show() {
+		cout << name << " " << age << '\\n';
+	}
+};
+```
+
+### 带构造函数模板
+
+```cpp
+class Person {
+public:
+	string name;
+	int age;
+
+	Person(string n, int a) {
+		name = n;
+		age = a;
+	}
+};
+```
+
+<aside> 📌
+
+这一节真正要掌握的，不只是会写 `struct` 和 `class`，而是看到代码时能立刻判断：**这是类型还是对象、成员能不能直接访问、对象创建时是怎么初始化的。**
 
 </aside>
