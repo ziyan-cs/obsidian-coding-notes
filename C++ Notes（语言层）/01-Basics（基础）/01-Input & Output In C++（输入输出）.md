@@ -1,355 +1,212 @@
 #cpp #file
-## 一、先记结论
+## 一页速览
 
-- **文本文件**：适合保存可读字符内容，如 `.txt`
-- **二进制文件**：适合保存结构体、图片、音频等原始数据，效率更高
-- **常用文件流类**：`ifstream` 负责读，`ofstream` 负责写，`fstream` 可读可写
-- **工作 / 考试最常用**：文本文件读写、打开方式、逐行读取、二进制读写
+- **控制台输入**：`cin`
+- **控制台输出**：`cout`
+- **整行读取**：`getline(cin, s)`
+- **错误输出**：`cerr`
+- **文件读**：`ifstream`
+- **文件写**：`ofstream`
+- **最常考 / 最常错**：`cin` 和 `getline` 混用、输出格式控制、文件打开方式
+
+## 一、先总后分：输入输出怎么分
+
+### 1. 控制台输入输出
+
+- 面向键盘 / 屏幕
+- 常用：`cin`、`cout`、`cerr`
+
+### 2. 文件输入输出
+
+- 面向磁盘文件
+- 常用：`ifstream`、`ofstream`、`fstream`
+
+### 3. 快速判断怎么用
+
+- 读一个数字 / 单词：`cin >> x`
+- 读一整行：`getline(cin, s)`
+- 普通输出：`cout << x`
+- 读文件：`ifstream`
+- 写文件：`ofstream`
 
 ---
 
-## 二、文件分类
+## 二、控制台输入输出
 
-### 1. 文本文件
-
-- 以字符形式存储
-- 可以直接用记事本等工具查看
-- 常见后缀：`.txt`、`.csv`、`.log`
-- 适合保存配置、日志、普通文本内容
-
-### 2. 二进制文件
-
-- 以二进制形式存储
-- 人眼无法直接阅读
-- 存储效率高，适合保存原始数据
-- 常见后缀：`.bin`、`.dat`
-
----
-
-## 三、常用文件流类
+### 1. `cin` / `cout`
 
 ```cpp
-#include <fstream>
-using namespace std;
+int a;
+cin >> a;
+cout << a << '\\n';
 ```
 
-- `ofstream`：写文件
-- `ifstream`：读文件
-- `fstream`：读写文件
+- `cin >>`：按空白符分隔读取
+- `cout <<`：连续输出多个内容
+
+### 2. `getline`
+
+```cpp
+string s;
+getline(cin, s);
+```
+
+- 用于读取**一整行**，包含空格
+- 适合姓名、句子、路径等输入
+
+### 3. `cerr`
+
+```cpp
+cerr << "error\\n";
+```
+
+- 用于错误信息输出
+- 和普通输出区分更清楚
+
+---
+
+## 三、必须记住的坑
+
+### 1. `cin` 和 `getline` 混用
+
+```cpp
+int n;
+cin >> n;
+cin.ignore(numeric_limits<streamsize>::max(), '\\n');
+
+string s;
+getline(cin, s);
+```
+
+- `cin >>` 后会留下换行符
+- 不清理缓冲区，`getline` 容易直接读到空行
+
+### 2. `endl` 和 `\\n`
+
+- `endl`：换行 + 刷新缓冲区
+- `\\n`：只换行，效率更高
+- 日常 / 刷题优先 `\\n`
+
+### 3. 整数与浮点输出
+
+```cpp
+cout << 5 / 2 << '\\n';                  // 2
+cout << static_cast<double>(5) / 2 << '\\n'; // 2.5
+```
+
+- 输出结果不只取决于 `cout`
+- 也取决于表达式本身的类型
+
+---
+
+## 四、输出格式控制
+
+```cpp
+#include <iomanip>
+double pi = 3.14159;
+cout << fixed << setprecision(2) << pi; // 3.14
+```
+
+### 高频写法
+
+- `fixed`：固定小数形式
+- `setprecision(n)`：保留 `n` 位小数
 
 ### 速记
 
-- `o` = output = 写
-- `i` = input = 读
-- `f` = file
+- 保留两位小数：`fixed << setprecision(2)`
 
 ---
 
-## 四、文件打开方式
+## 五、文件输入输出
 
-|打开方式|作用|
-|---|---|
-|`ios::in`|读方式打开|
-|`ios::out`|写方式打开|
-|`ios::app`|追加写入，内容写到文件末尾|
-|`ios::ate`|打开后定位到文件尾|
-|`ios::trunc`|若文件存在则先清空再写|
-|`ios::binary`|二进制方式打开|
-
-### 常见组合
-
-```cpp
-ios::out | ios::trunc      // 写文件，覆盖原内容
-ios::out | ios::app        // 写文件，追加内容
-ios::in                    // 读文件
-ios::in | ios::binary      // 以二进制方式读文件
-ios::out | ios::binary     // 以二进制方式写文件
-```
-
----
-
-## 五、文本文件写操作
-
-### 标准流程
-
-1. 包含头文件 `#include <fstream>`
-2. 创建输出流对象 `ofstream ofs;`
-3. 打开文件 `ofs.open("文件路径", 打开方式);`
-4. 判断是否打开成功
-5. 写入数据
-6. 关闭文件
-
-### 基础写法
+### 1. 三个文件流类
 
 ```cpp
 #include <fstream>
-#include <iostream>
-using namespace std;
-
-int main() {
-    ofstream ofs;
-    ofs.open("test.txt", ios::out);
-
-    if (!ofs.is_open()) {
-        cout << "文件打开失败" << endl;
-        return 0;
-    }
-
-    ofs << "姓名：张三" << endl;
-    ofs << "年龄：20" << endl;
-    ofs << "专业：计算机" << endl;
-
-    ofs.close();
-    return 0;
-}
 ```
 
-### 追加写入写法
+- `ifstream`：读文件
+- `ofstream`：写文件
+- `fstream`：读写文件
+
+### 2. 常见打开方式
+
+- `ios::in`：读
+- `ios::out`：写
+- `ios::app`：追加
+- `ios::trunc`：清空后重写
+- `ios::binary`：二进制方式
+
+### 3. 最常用模板
+
+#### 写文件
 
 ```cpp
-#include <fstream>
-#include <iostream>
-using namespace std;
-
-int main() {
-    ofstream ofs("log.txt", ios::out | ios::app);
-
-    if (!ofs.is_open()) {
-        cout << "文件打开失败" << endl;
-        return 0;
-    }
-
-    ofs << "新增一条日志信息" << endl;
-    ofs.close();
-    return 0;
-}
-```
-
----
-
-## 六、文本文件读操作
-
-### 标准流程
-
-1. 包含头文件 `#include <fstream>`
-2. 创建输入流对象 `ifstream ifs;`
-3. 打开文件 `ifs.open("文件路径", ios::in);`
-4. 判断文件是否打开成功
-5. 读取数据
-6. 关闭文件
-
-### 基础写法
-
-```cpp
-#include <fstream>
-#include <iostream>
-#include <string>
-using namespace std;
-
-int main() {
-    ifstream ifs;
-    ifs.open("test.txt", ios::in);
-
-    if (!ifs.is_open()) {
-        cout << "文件打开失败" << endl;
-        return 0;
-    }
-
-    string line;
-    while (getline(ifs, line)) {
-        cout << line << endl;
-    }
-
-    ifs.close();
-    return 0;
-}
-```
-
-### 4 种常见读取方式
-
-#### 1. 逐字符读取
-
-```cpp
-char c;
-while ((c = ifs.get()) != EOF) {
-    cout << c;
-}
-```
-
-#### 2. 逐行读取到字符数组
-
-```cpp
-char buf[1024];
-while (ifs.getline(buf, sizeof(buf))) {
-    cout << buf << endl;
-}
-```
-
-#### 3. 逐行读取到 `string`（最常用）
-
-```cpp
-string line;
-while (getline(ifs, line)) {
-    cout << line << endl;
-}
-```
-
-#### 4. 按空白分隔读取单词
-
-```cpp
-string word;
-while (ifs >> word) {
-    cout << word << endl;
-}
-```
-
-### 读取方式怎么选
-
-- **最推荐**：`getline(ifs, line)`
-- **需要逐字符处理**：`ifs.get()`
-- **需要按单词拆分**：`ifs >> word`
-
----
-
-## 七、二进制文件写操作
-
-### 关键点
-
-- 必须使用 `ios::binary`
-- 通常配合 `write()` 使用
-- 常用于写结构体、数组、对象原始数据
-
-### 示例：写入结构体到二进制文件
-
-```cpp
-#include <fstream>
-#include <iostream>
-using namespace std;
-
-struct Person {
-    char name[64];
-    int age;
-};
-
-int main() {
-    Person p = {"ZhangSan", 20};
-
-    ofstream ofs("person.bin", ios::out | ios::binary);
-    if (!ofs.is_open()) {
-        cout << "文件打开失败" << endl;
-        return 0;
-    }
-
-    ofs.write((const char*)&p, sizeof(p));
-    ofs.close();
-    return 0;
-}
-```
-
----
-
-## 八、二进制文件读操作
-
-### 关键点
-
-- 必须使用 `ios::binary`
-- 通常配合 `read()` 使用
-- 读取时结构体类型要和写入时一致
-
-### 示例：从二进制文件读取结构体
-
-```cpp
-#include <fstream>
-#include <iostream>
-using namespace std;
-
-struct Person {
-    char name[64];
-    int age;
-};
-
-int main() {
-    Person p;
-
-    ifstream ifs("person.bin", ios::in | ios::binary);
-    if (!ifs.is_open()) {
-        cout << "文件打开失败" << endl;
-        return 0;
-    }
-
-    ifs.read((char*)&p, sizeof(p));
-    cout << "姓名：" << p.name << endl;
-    cout << "年龄：" << p.age << endl;
-
-    ifs.close();
-    return 0;
-}
-```
-
----
-
-## 九、考试高频易错点
-
-- **写文件后要关闭文件**，否则数据可能没真正写入
-- **读文件前要判断是否打开成功**
-- **文本文件常用 `<<` 和 `>>` / `getline()`**
-- **二进制文件常用 `write()` 和 `read()`**
-- **二进制读写一定要加 `ios::binary`**
-- **`getline()` 更适合读取整行文本**
-- **`ios::app` 是追加，`ios::trunc` 是清空后重写**
-
----
-
-## 十、工作 / 考试速查模板
-
-### 1. 文本写文件模板
-
-```cpp
-ofstream ofs("test.txt", ios::out);
+ofstream ofs("a.txt", ios::out);
 if (!ofs.is_open()) return 0;
-ofs << "hello" << endl;
+ofs << "hello" << '\\n';
 ofs.close();
 ```
 
-### 2. 文本读文件模板
+#### 读文件
 
 ```cpp
-ifstream ifs("test.txt", ios::in);
+ifstream ifs("a.txt", ios::in);
 if (!ifs.is_open()) return 0;
 string line;
 while (getline(ifs, line)) {
-    cout << line << endl;
+	cout << line << '\\n';
 }
 ifs.close();
 ```
 
-### 3. 二进制写文件模板
+### 4. 文件部分只记结论
 
-```cpp
-ofstream ofs("data.bin", ios::out | ios::binary);
-if (!ofs.is_open()) return 0;
-ofs.write((const char*)&obj, sizeof(obj));
-ofs.close();
-```
-
-### 4. 二进制读文件模板
-
-```cpp
-ifstream ifs("data.bin", ios::in | ios::binary);
-if (!ifs.is_open()) return 0;
-ifs.read((char*)&obj, sizeof(obj));
-ifs.close();
-```
+- 文本文件最常用：`<<`、`>>`、`getline`
+- 二进制文件最常用：`write`、`read`
+- 读写前先判断是否打开成功
+- 用完及时 `close()`
 
 ---
 
-## 十一、最简记忆版
+## 六、考试 / 刷题速记
 
-- `ofstream`：写
-- `ifstream`：读
-- `fstream`：读写
-- 文本文件：`<<`、`>>`、`getline()`
-- 二进制文件：`write()`、`read()`
-- 追加写：`ios::app`
-- 覆盖写：`ios::trunc`
-- 二进制方式：`ios::binary`
+1. `cin >>` 读到空白就停
+2. `getline` 读取整行
+3. `cin` 后接 `getline` 先 `ignore`
+4. 输出优先用 `\\n`
+5. 保留小数：`fixed << setprecision(n)`
+6. 文件读写：`ifstream` / `ofstream`
+7. 文件打开失败先判断 `is_open()`
+
+---
+
+## 七、最简模板
+
+### 控制台输入输出
+
+```cpp
+int x;
+string s;
+cin >> x;
+cin.ignore(numeric_limits<streamsize>::max(), '\\n');
+getline(cin, s);
+cout << x << '\\n' << s << '\\n';
+```
+
+### 文件输入输出
+
+```cpp
+ifstream ifs("a.txt");
+string line;
+while (getline(ifs, line)) {
+	cout << line << '\\n';
+}
+```
+
+<aside> 📌
+
+这一节真正要背熟的，不是所有函数细节，而是：**什么时候用 `cin`，什么时候用 `getline`，什么时候要清缓冲区，什么时候用文件流。**
+
+</aside>
