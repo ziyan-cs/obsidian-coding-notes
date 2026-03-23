@@ -1,265 +1,275 @@
 #cpp
-## 1. 程序结构与命名空间
+## 一页速览
 
-- `main` 必须写成 `int main()`，不要写 `void main()`。
-- `return 0;` 可以省略，但显式写出更规范。
-- `using namespace std;`
-    - `.cpp`：可少量使用。
-    - `.h`：不要使用，避免命名污染。
-- 头文件要做防重包含：
+- **变量定义**：`int a = 10;`
+- **常量**：`const int n = 100;`
+- **类型推导**：`auto x = 1;`
+- **条件判断**：`if / else`、`switch`
+- **循环**：`for`、`while`
+- **函数入口**：`int main()`
+- **最常错**：整数除法、`switch` 漏 `break`、`=` 和 `==` 混淆
 
-```cpp
-#ifndef MY_HEADER_H
-#define MY_HEADER_H
+## 一、先总后分：基础语法学什么
 
-// ...
+### 1. 变量与类型
 
-#endif
-```
+- 程序先会“存数据”
+- 常见类型：`int`、`double`、`char`、`bool`
 
-- 如果能用 `#pragma once`，也很常见，但要知道考试/规范里更经典的是 include guard。
+### 2. 表达式与运算
 
-## 2. 类型、变量与推导
+- 会算：算术、比较、逻辑、自增自减
 
-### 2.1 整数除法
+### 3. 流程控制
 
-- 两个整数相除，结果仍是整数，小数部分直接截断。
+- 会判断：`if`、`switch`
+- 会重复：`for`、`while`
 
-```cpp
-int a = 5, b = 2;
-cout << a / b; // 2
-cout << static_cast<double>(a) / b; // 2.5
-```
+### 4. 基础现代写法
 
-### 2.2 `const` 与指针
+- `const`
+- `auto`
+- `{}` 初始化
+- `nullptr`
 
-```cpp
-int x = 10;
+---
 
-const int* p1 = &x;      // 不能通过 p1 改值
-int* const p2 = &x;      // p2 不能改指向
-const int* const p3 = &x; // 都不能改
-```
+## 二、变量、常量与类型
 
-- 看谁离 `const` 最近：
-    - 靠近类型：值不能改
-    - 靠近指针名：指针本身不能改
+### 1. 常见基本类型
 
-### 2.3 `auto` 使用习惯
-
-- `auto` 适合简化复杂类型。
-- 但会忽略顶层 `const`、引用，必要时手动补：`const auto&`、`auto&`。
+- `int`：整数
+- `double`：小数
+- `char`：字符
+- `bool`：布尔值
 
 ```cpp
-vector<int> v = {1, 2, 3};
-for (auto x : v) cout << x;          // 拷贝
-for (auto& x : v) x *= 2;            // 可修改
-for (const auto& x : v) cout << x;   // 推荐只读遍历
+int age = 18;
+double score = 95.5;
+char grade = 'A';
+bool ok = true;
 ```
 
-### 2.4 统一初始化 `{}`（新标准必记）
+### 2. 常量 `const`
 
-- 推荐优先用花括号初始化，风格统一。
-- 它还能防止窄化转换。
+```cpp
+const int MAXN = 100;
+```
+
+- 定义后不能修改
+- 能不改的数据，尽量加 `const`
+
+### 3. `auto`
+
+```cpp
+auto x = 10;
+auto y = 3.14;
+```
+
+- 让编译器自动推导类型
+- 简洁，但别滥用到看不出类型
+
+### 4. 推荐初始化方式 `{}`
 
 ```cpp
 int a{10};
-// int b{3.14}; // ❌ 窄化，报错
+double b{3.14};
 ```
 
-### 2.5 `nullptr` 替代 `NULL` / `0`
+- 风格统一
+- 还能避免部分窄化转换
 
-- C++11 起，空指针请优先写 `nullptr`。
+---
+
+## 三、运算符
+
+### 1. 算术运算
+
+- `+` `-` `*` `/` `%`
+
+```cpp
+int a = 5, b = 2;
+cout << a / b << '\\n'; // 2
+```
+
+- **整数除法**：结果仍是整数
+
+### 2. 比较运算
+
+- `>` `<` `>=` `<=` `==` `!=`
+
+### 3. 逻辑运算
+
+- `&&`：与
+- `||`：或
+- `!`：非
+
+### 4. 自增自减
+
+```cpp
+int i = 5;
+cout << i++ << '\\n'; // 5
+cout << ++i << '\\n'; // 7
+```
+
+- `i++`：先用后加
+- `++i`：先加后用
+
+---
+
+## 四、流程控制
+
+### 1. `if / else`
+
+```cpp
+if (x > 0) {
+	cout << "positive";
+} else if (x == 0) {
+	cout << "zero";
+} else {
+	cout << "negative";
+}
+```
+
+- 最常用的判断结构
+
+### 2. `switch`
+
+```cpp
+char c = 'A';
+switch (c) {
+	case 'A':
+		cout << "优秀";
+		break;
+	case 'B':
+		cout << "良好";
+		break;
+	default:
+		cout << "其他";
+}
+```
+
+- `case` 后必须是常量
+- 别漏 `break`
+- 常用于离散分类判断
+
+### 3. `for`
+
+```cpp
+for (int i = 0; i < 5; ++i) {
+	cout << i << '\\n';
+}
+```
+
+- 适合已知循环次数
+
+### 4. `while`
+
+```cpp
+int i = 0;
+while (i < 5) {
+	cout << i << '\\n';
+	++i;
+}
+```
+
+- 适合循环次数不确定的场景
+
+---
+
+## 五、程序结构基础
+
+### 1. `main` 函数
+
+```cpp
+int main() {
+	return 0;
+}
+```
+
+- 程序入口必须是 `int main()`
+- 不写 `void main()`
+
+### 2. 代码块与作用域
+
+```cpp
+int x = 10;
+if (x > 0) {
+	int y = 20;
+}
+// y 在这里不可用
+```
+
+- 变量通常只在所属 `{}` 内有效
+
+### 3. 语句结束
+
+- 大多数语句后要写 `;`
+- `if`、`for`、`while` 的代码块本身后通常不加 `;`
+
+---
+
+## 六、现代 C++ 的基础习惯
+
+### 1. 空指针用 `nullptr`
 
 ```cpp
 int* p = nullptr;
 ```
 
-- 原因：类型更明确，重载时更安全。
+- 不再优先用 `NULL`
 
-## 3. 输入输出与字符串
+### 2. 能用 `const` 就用 `const`
 
-### 3.1 `cin` 和 `getline` 混用
+- 提高可读性
+- 减少误修改
 
-- `cin >>` 后若直接 `getline`，常读到残留换行。
+### 3. 循环里优先前置 `++i`
 
-```cpp
-int num;
-cin >> num;
-cin.ignore(numeric_limits<streamsize>::max(), '\\n');
+- 形成统一习惯
+- 对迭代器写法也更自然
 
-string line;
-getline(cin, line);
-```
+### 4. 命名清楚
 
-### 3.2 输出效率
+- 少用 `a`、`b`、`c` 做正式变量名
+- 优先用有意义名字：`count`、`sum`、`index`
 
-- `endl` = 换行 + 刷新缓冲区，效率低。
-- 大多数场景优先用 `\\n`。
+---
 
-### 3.3 格式控制
+## 七、基础语法高频易错点
 
-```cpp
-#include <iomanip>
-double pi = 3.14159;
-cout << fixed << setprecision(2) << pi; // 3.14
-```
+1. `=` 是赋值，`==` 才是比较
+2. 两个整数相除，结果还是整数
+3. `switch` 容易漏 `break`
+4. `if (x = 1)` 通常是错误写法，要警惕
+5. 变量先定义再使用
+6. 注意作用域，不要出了 `{}` 还访问局部变量
+7. 字符用单引号：`'A'`，字符串用双引号：`"A"`
 
-## 4. 运算符与流程控制
+---
 
-### 4.1 自增
+## 八、最简模板
 
-```cpp
-int i = 5;
-cout << i++; // 5
-cout << ++i; // 7
-```
-
-- 前置先变再用，后置先用再变。
-- 迭代器场景下，优先 `++it`。
-
-### 4.2 短路求值
-
-- `a && b`：`a` 为假，`b` 不执行。
-- `a || b`：`a` 为真，`b` 不执行。
-
-### 4.3 位运算
-
-- `x << 1` 常可理解为乘 2。
-- `x >> 1` 常可理解为除 2。
-- 但对负数、符号位不要机械套用。
-
-### 4.4 `switch`
-
-- 表达式通常是整型、字符、枚举。
-- `case` 后必须是常量。
-- 别漏 `break`，除非你就是要贯穿。
+### 变量 + 判断 + 循环
 
 ```cpp
-char c = 'a';
-switch (c) {
-	case 'a':
-	case 'A':
-		cout << "Alpha";
-		break;
-	default:
-		cout << "Other";
+int n = 5;
+if (n > 0) {
+	for (int i = 0; i < n; ++i) {
+		cout << i << '\\n';
+	}
 }
 ```
 
-## 5. 函数基础
-
-### 5.1 重载
-
-- 函数名相同，但参数列表不同，才叫重载。
-- 仅返回值不同，不算重载。
-
-### 5.2 默认参数
-
-- 必须从右往左连续给默认值。
+### 现代基础写法
 
 ```cpp
-void func(int a, int b = 10, int c = 20);
+const int n{10};
+auto x = n;
 ```
 
-### 5.3 `inline`
+<aside> 📌
 
-- 适合短小频繁调用的函数。
-- 它只是“建议”，编译器可不采纳。
+这一节要形成的不是“背概念”，而是看到一段代码时，能立刻分清：**变量是什么、条件怎么判断、循环怎么执行、哪里最容易写错。**
 
-## 6. 入门后必须补上的现代 C++ 习惯
-
-### 6.1 范围 `for`（C++11）
-
-- 能不用下标就别硬写下标。
-
-```cpp
-for (const auto& x : v) {
-	cout << x << '\\n';
-}
-```
-
-### 6.2 `using` 替代 `typedef`
-
-```cpp
-using ll = long long;
-using Vec = vector<int>;
-```
-
-- 更直观，模板别名也更方便。
-
-### 6.3 `enum class` 替代普通枚举
-
-```cpp
-enum class Color { Red, Green, Blue };
-Color c = Color::Red;
-```
-
-- 优点：作用域更清晰，不易污染命名空间。
-
-### 6.4 `constexpr`（比 `const` 更进一步）
-
-- 表示值或函数可在编译期求值。
-
-```cpp
-constexpr int square(int x) {
-	return x * x;
-}
-```
-
-- 记忆：`const` 强调“不能改”，`constexpr` 强调“编译期可算”。
-
-### 6.5 结构化绑定（C++17）
-
-```cpp
-pair<int, string> p = {1, "Tom"};
-auto [id, name] = p;
-```
-
-- 读 `pair` / `tuple` / map 元素时很方便。
-
-### 6.6 `if` / `switch` 初始化器（C++17）
-
-```cpp
-if (int x = foo(); x > 0) {
-	cout << x;
-}
-```
-
-- 变量作用域更小，代码更整洁。
-
-### 6.7 `override` 必写（面向对象常考习惯）
-
-```cpp
-class Base {
-public:
-	virtual void show();
-};
-
-class Derived : public Base {
-public:
-	void show() override;
-};
-```
-
-- 防止“以为重写了，实际没重写”的低级错误。
-
-## 7. 高频避坑速记
-
-1. 整数相除默认还是整数。
-2. `cin >>` 后接 `getline` 记得 `cin.ignore()`。
-3. 指针的 `const` 看位置。
-4. `switch` 写完 `case` 先想 `break`。
-5. 输出大量数据优先 `\\n`，少用 `endl`。
-6. 空指针用 `nullptr`，不要再依赖 `NULL`。
-7. 遍历容器优先 `const auto&`。
-8. 初始化优先 `{}`。
-9. 类型别名优先 `using`。
-10. 继承重写函数时优先加 `override`。
-
-## 8. 现阶段学习优先级建议
-
-- 先熟：`const`、引用、指针、函数参数传递。
-- 再熟：`vector`、`string`、范围 `for`、`auto`。
-- 接着补：类与对象、构造函数、拷贝控制、继承多态。
-- 写题时坚持现代写法：`nullptr`、`using`、`enum class`、`override`、`const auto&`。
+</aside>
