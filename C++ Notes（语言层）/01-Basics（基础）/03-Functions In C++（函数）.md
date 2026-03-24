@@ -28,7 +28,7 @@ int add(int a, int b) {
 
 ```cpp
 void print_yes() {
-	cout << "YES" << '\\n';
+	cout << "YES" << '\n';
 }
 ```
 
@@ -76,7 +76,7 @@ bool check(int x) {
 void solve() {
 	int x;
 	cin >> x;
-	cout << check(x) << '\\n';
+	cout << check(x) << '\n';
 }
 ```
 
@@ -126,7 +126,7 @@ int add(int a, int b) {
 void solve() {
 	int a, b;
 	cin >> a >> b;
-	cout << add(a, b) << '\\n';
+	cout << add(a, b) << '\n';
 }
 
 int main() {

@@ -32,18 +32,18 @@ string s = "hello";
 int n;
 string s;
 cin >> n >> s;
-cout << n << ' ' << s << '\\n';
+cout << n << ' ' << s << '\n';
 ```
 
 ### 3. 条件分支
 
 ```cpp
 if (x > 0) {
-	cout << "positive" << '\\n';
+	cout << "positive" << '\n';
 } else if (x == 0) {
 	cout << "zero" << '\\n';
 } else {
-	cout << "negative" << '\\n';
+	cout << "negative" << '\n';
 }
 ```
 
@@ -51,7 +51,7 @@ if (x > 0) {
 
 ```cpp
 for (int i = 0; i < n; ++i) {
-	cout << i << '\\n';
+	cout << i << '\n';
 }
 
 int i = 0;
@@ -80,8 +80,8 @@ nums.push_back(4);
 
 ```cpp
 string s = "abc";
-cout << s.size() << '\\n';
-cout << s[0] << '\\n';
+cout << s.size() << '\n';
+cout << s[0] << '\n';
 ```
 
 ### 8. 标准刷题主函数
@@ -151,7 +151,7 @@ int main() {
 	}
 
 	for (int i = 0; i < n; ++i) {
-		cout << a[i] << '\\n';
+		cout << a[i] << '\n';
 	}
 
 	return 0;
