@@ -1,493 +1,181 @@
-#数据结构 #堆 #排序
-## 一页速览
+#cpp #data-structure #binary-tree
 
-- **二叉树**：每个节点最多只有两个孩子的树结构
-- **核心特点**：天然适合表示层级关系和递归结构
-- **常见部分**：根节点、左孩子、右孩子、叶子节点
-- **核心优势**：很多分治、递归、搜索问题都能自然建模
-- **常见操作**：遍历、求高度、统计节点、判断结构
-- **高频场景**：树题基础、表达式树、搜索树基础、递归题建模
-- **最常错**：二叉树和二叉搜索树混淆、左右孩子概念写反、空节点判断漏掉、节点数和高度概念混淆
+## ⚡ TL;DR（快速决策）
 
-## 一、先总后分：这一节到底学什么
+- 数据天然有左右分叉、层级关系 → 二叉树
+- 题目出现“左右子树、根节点、叶子节点” → 先切到树的视角
+- 需要遍历、统计、判断结构 → 二叉树递归通常是第一选择
+- 需要按大小快速定位 → 先确认是不是 BST，不要把普通二叉树和二叉搜索树混掉
+- 树题大多数难点不在定义，而在“当前节点做什么 + 左右子树怎么递归”
 
-### 1. 二叉树解决什么问题
+## 🧩 Core Idea（核心本质）
 
-- 有些数据天然带层级关系
-- 每个节点下面又能继续分左右两个分支
-- 这时二叉树就是一种很自然的表示方式
+- **本质**：二叉树是每个节点最多只有两个孩子的树结构
+- **关键机制**：每个节点把问题继续拆成左子树和右子树，因此天然适合递归处理
+- **核心优势**：结构清晰，遍历、分治、递归建模都很自然，是大量树题的基础载体
 
-### 2. 二叉树最核心看什么
+## 🔧 Usage Patterns（可复用代码模板）
 
-- 节点之间的父子关系是什么
-- 左子树和右子树怎么理解
-- 二叉树有哪些基础性质
-- 遇到树题时为什么常用递归
-
-### 3. 当前阶段先抓主线
-
-- 会理解二叉树的基本结构
-- 会分清根、孩子、叶子、子树这些概念
-- 会知道常见遍历和递归为什么适合树
-- 会区分普通二叉树和二叉搜索树
-
----
-
-## 二、二叉树是什么
-
-### 1. 基本理解
-
-- 二叉树是一种树结构
-- 每个节点最多只有两个孩子
-- 这两个孩子通常叫：
-    - 左孩子
-    - 右孩子
-
-### 2. 一个简单例子
-
-```cpp
-  1
- / \\
-2   3
-```
-
-### 3. 当前阶段先记一句话
-
-- **二叉树 = 每个节点最多连出两个分支的树**
-
----
-
-## 三、二叉树的基本组成
-
-### 1. 根节点
-
-- 整棵树最上面的那个节点
-
-### 2. 父节点和孩子节点
-
-- 一个节点下面连接的节点，叫它的孩子
-- 上面的那个节点，叫父节点
-
-### 3. 叶子节点
-
-- 没有孩子的节点
-
-### 4. 子树
-
-- 一个节点连同它下面所有后代
-- 本身也可以看成一棵树
-
-### 5. 当前阶段先记
-
-- **树题里“子树”这个词非常高频**
-
----
-
-## 四、二叉树为什么天然适合递归
-
-### 1. 因为定义本身就有递归味道
-
-- 一个二叉树由：
-    - 根节点
-    - 左子树
-    - 右子树
-
-组成
-
-### 2. 当前阶段怎么理解
-
-- 左子树本身还是二叉树
-- 右子树本身也还是二叉树
-- 所以很多操作都能递归地写
-
-### 3. 当前阶段先记
-
-- **二叉树 = 非常典型的递归结构**
-
----
-
-## 五、二叉树的常见类型
-
-### 1. 普通二叉树
-
-- 只要求每个节点最多两个孩子
-- 不要求大小关系
-
-### 2. 满二叉树
-
-- 每个节点要么有两个孩子，要么没有孩子
-
-### 3. 完全二叉树
-
-- 除最后一层外，其余层都满
-- 最后一层从左到右连续排列
-
-### 4. 二叉搜索树先有印象
-
-- 在普通二叉树基础上，再加“左小右大”规则
-
-### 5. 当前阶段先记
-
-- **“二叉树”是大类，“二叉搜索树”只是其中一类特殊情况**
-
----
-
-## 六、二叉树和二叉搜索树的区别
-
-### 1. 普通二叉树
-
-- 没有大小上的强制规则
-- 左边不一定比根小
-- 右边也不一定比根大
-
-### 2. 二叉搜索树
-
-- 左子树所有节点值都小于根
-- 右子树所有节点值都大于根
-
-### 3. 当前阶段怎么理解
-
-- 不是所有二叉树都能直接做“按大小搜索”
-- 只有二叉搜索树才有这个性质
-
-### 4. 当前阶段先记
-
-- **看到“左小右大”，才是在说 BST，不是在说普通二叉树**
-
----
-
-## 七、二叉树里的常见概念
-
-### 1. 节点的度
-
-- 一个节点有几个孩子，度就是几
-- 在二叉树里，度最多是 `2`
-
-### 2. 节点的深度
-
-- 从根走到这个节点，经过了多少层
-
-### 3. 树的高度
-
-- 从根到最深叶子节点的层数
-
-### 4. 当前阶段怎么理解
-
-- **深度**常看某个节点的位置
-- **高度**常看整棵树有多高
-
-### 5. 当前阶段先记
-
-- **节点数、高度、叶子数，是树题最常见基础量**
-
----
-
-## 八、二叉树的存储方式
-
-### 1. 链式存储最常见
+### 1. 最基础节点定义
 
 ```cpp
 struct TreeNode {
 	int val;
 	TreeNode* left;
 	TreeNode* right;
+
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 ```
 
-### 2. 怎么理解
+### 2. 前序遍历
 
-- `val`：节点值
-- `left`：指向左孩子
-- `right`：指向右孩子
-
-### 3. 数组存储先有印象
-
-- 完全二叉树、堆这类结构常用数组存
-- 但普通树题更常见的是指针节点写法
-
-### 4. 当前阶段先记
-
-- **刷题里的二叉树，大多数默认是链式节点结构**
-
----
-
-## 九、二叉树最常见操作
-
-### 1. 遍历
-
-- 前序
-- 中序
-- 后序
-- 层序
-
-### 2. 求高度
-
-- 看树有多深
+```cpp
+void preorder(TreeNode* root) {
+	if (root == nullptr) return;
+	cout << root->val << '\\n';
+	preorder(root->left);
+	preorder(root->right);
+}
+```
 
 ### 3. 统计节点数
 
-- 看总共有多少节点
-
-### 4. 判断结构
-
-- 是否相同
-- 是否对称
-- 是否平衡
-
-### 5. 当前阶段怎么理解
-
-- 树题表面很多变
-- 但底层常常还是“遍历 + 递归 + 判断条件”
-
----
-
-## 十、最基础例子：统计节点数
-
-### 1. 问题理解
-
-- 求一棵二叉树总共有多少个节点
-
-### 2. 递归思路
-
-- 当前节点算 `1`
-- 再加上左子树节点数
-- 再加上右子树节点数
-
-### 3. 模板
-
 ```cpp
-int countNodes(TreeNode* root) {
+int count_nodes(TreeNode* root) {
 	if (root == nullptr) return 0;
-	return 1 + countNodes(root->left) + countNodes(root->right);
+	return 1 + count_nodes(root->left) + count_nodes(root->right);
 }
 ```
 
-### 4. 当前阶段怎么理解
-
-- 大问题被拆成：
-    - 左子树节点数
-    - 右子树节点数
-- 这正是二叉树递归最典型的味道
-
----
-
-## 十一、最基础例子：求树高
-
-### 1. 问题理解
-
-- 想知道树最多有多少层
-
-### 2. 递归思路
-
-- 树的高度 = 左子树高度和右子树高度的较大值 + 1
-
-### 3. 模板
+### 4. 求树高
 
 ```cpp
-int maxDepth(TreeNode* root) {
+int max_depth(TreeNode* root) {
 	if (root == nullptr) return 0;
-	return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+	return max(max_depth(root->left), max_depth(root->right)) + 1;
 }
 ```
 
-### 4. 当前阶段怎么理解
-
-- 当前节点自己贡献一层
-- 左右谁更深，就取谁
-
-### 5. 当前阶段先记
-
-- **“左边算一个、右边算一个、最后合并”是树递归的超高频模式**
-
----
-
-## 十二、最基础例子：判断是否为空树
-
-### 1. 空树是什么
-
-- 根节点就是 `nullptr`
-
-### 2. 为什么重要
-
-- 树递归几乎都要先判断空节点
-- 这是最基础的递归出口
-
-### 3. 当前阶段先记
-
-- **树题里最常见的第一句，就是 `if (root == nullptr)`**
-
----
-
-## 十三、什么时候能想到二叉树
-
-### 1. 数据天然有层级关系
-
-- 父子结构
-- 左右分叉
-
-### 2. 题目描述里出现这些词
-
-- 根节点
-- 左孩子 / 右孩子
-- 子树
-- 叶子节点
-- 层序
-
-### 3. 当前阶段怎么理解
-
-- 一旦题目对象是树
-- 你的第一反应通常就该是：能不能递归
-
-### 4. 当前阶段先记
-
-- **看到“左右子树”，就该立刻进入树题思维**
-
----
-
-## 十四、当前阶段最常见写法
-
-### 1. 节点定义模板
+### 5. 判断两棵树是否相同
 
 ```cpp
+bool is_same(TreeNode* a, TreeNode* b) {
+	if (a == nullptr && b == nullptr) return true;
+	if (a == nullptr || b == nullptr) return false;
+	if (a->val != b->val) return false;
+	return is_same(a->left, b->left) && is_same(a->right, b->right);
+}
+```
+
+### 6. 层序遍历
+
+```cpp
+void level_order(TreeNode* root) {
+	if (root == nullptr) return;
+	queue<TreeNode*> q;
+	q.push(root);
+	while (!q.empty()) {
+		TreeNode* cur = q.front();
+		q.pop();
+		if (cur->left) q.push(cur->left);
+		if (cur->right) q.push(cur->right);
+	}
+}
+```
+
+### 7. 递归函数的常见骨架
+
+```cpp
+int solve(TreeNode* root) {
+	if (root == nullptr) return 0;
+	int left = solve(root->left);
+	int right = solve(root->right);
+	return 由 left、right 和 root 组合出的答案;
+}
+```
+
+### 8. DFS 非递归先有印象
+
+```cpp
+stack<TreeNode*> st;
+if (root) st.push(root);
+while (!st.empty()) {
+	TreeNode* cur = st.top();
+	st.pop();
+	if (cur->right) st.push(cur->right);
+	if (cur->left) st.push(cur->left);
+}
+```
+
+## ⚠️ Pitfalls（高频错误）
+
+- 普通二叉树和二叉搜索树不是一回事，不要看到树就默认“左小右大”
+- 空节点判断最容易漏，几乎所有递归都要先处理 `nullptr`
+- 树的高度、节点深度、节点数是三种不同概念，不要混
+- 中序遍历有序这个性质只对 BST 成立，不对普通二叉树成立
+- 递归函数含义不清时，代码会越写越乱
+- 左右子树递归顺序写反，结果可能完全变掉
+- 层序遍历是 BFS，用队列，不是栈
+- 树题很多 bug 本质是边界没想清楚，不是算法不会
+
+## 🚀 Performance / Tips（性能优化）
+
+- 树题优先先想：
+
+```cpp
+当前节点做什么
+左子树返回什么
+右子树返回什么
+```
+
+- 写递归前，先把函数含义说清楚，比直接写代码更重要
+- 统计型、判断型、路径型问题，通常都能统一成“左右子树 + 当前节点”的组合模型
+- 层序问题优先想到队列，递归问题优先想到 DFS
+- 刷题时，树的真正主线通常是：遍历方式 + 递归定义 + 边界处理
+
+## 🧪 Common Scenarios（常见使用场景）
+
+- **遍历整棵树**：前序 / 中序 / 后序 / 层序
+- **统计信息**：节点数、高度、叶子数
+- **判断结构**：是否相同、是否对称、是否平衡
+- **路径问题**：根到叶路径、路径和
+- **树形递归**：把问题拆到左右子树处理
+- **BST 相关题前置结构**：二叉树基础是前提
+
+## 🧾 Minimal Template（最小可运行模板）
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
 struct TreeNode {
 	int val;
 	TreeNode* left;
 	TreeNode* right;
 
-	TreeNode(int x) {
-		val = x;
-		left = nullptr;
-		right = nullptr;
-	}
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
-```
 
-### 2. 统计节点模板
-
-```cpp
-int countNodes(TreeNode* root) {
+int max_depth(TreeNode* root) {
 	if (root == nullptr) return 0;
-	return 1 + countNodes(root->left) + countNodes(root->right);
+	return max(max_depth(root->left), max_depth(root->right)) + 1;
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	TreeNode* root = new TreeNode(1);
+	root->left = new TreeNode(2);
+	root->right = new TreeNode(3);
+
+	cout << max_depth(root) << '\\n';
+
+	return 0;
 }
 ```
 
-### 3. 求高度模板
+## 📌 One-liner Summary（一句话总结）
 
-```cpp
-int maxDepth(TreeNode* root) {
-	if (root == nullptr) return 0;
-	return max(maxDepth(root->left), maxDepth(root->right)) + 1;
-}
-```
-
-### 4. 遍历模板先有印象
-
-```cpp
-void preorder(TreeNode* root) {
-	if (root == nullptr) return;
-	cout << root->val << '\\n';
-	preorder(root->left);
-	preorder(root->right);
-}
-```
-
----
-
-## 十五、现代 C++ 的基础习惯
-
-### 1. 先判断空节点
-
-- 这是树题最常见递归出口
-- 很多 bug 都是因为漏掉这一句
-
-### 2. 先想当前函数含义
-
-- 比如：
-    - 这个函数是求高度
-    - 还是统计节点
-    - 还是遍历输出
-- 不同含义，对应不同返回值和处理方式
-
-### 3. 看到这些关键词先想到树递归
-
-- 左子树
-- 右子树
-- 高度
-- 节点数
-- 对称 / 平衡 / 遍历
-
-### 4. 以后会继续补
-
-- 平衡二叉树
-- 二叉搜索树
-- 最近公共祖先
-- 树形 DP
-- 但当前阶段先把基础结构和递归理解学稳
-
----
-
-## 十六、高频易错点
-
-1. 二叉树和二叉搜索树不要混
-2. 左右孩子方向容易写反
-3. 空节点判断最容易漏
-4. 节点深度和树高度不要混
-5. 树题很多都能递归，但函数含义必须先想清楚
-6. 不是所有二叉树的中序遍历都一定有序
-7. 子树本身也是树，这一点很关键
-8. 先想“当前节点怎么处理”，再想“左右子树怎么递归”
-
----
-
-## 十七、最简模板
-
-### 节点模板
-
-```cpp
-struct TreeNode {
-	int val;
-	TreeNode* left;
-	TreeNode* right;
-
-	TreeNode(int x) {
-		val = x;
-		left = nullptr;
-		right = nullptr;
-	}
-};
-```
-
-### 统计节点模板
-
-```cpp
-int countNodes(TreeNode* root) {
-	if (root == nullptr) return 0;
-	return 1 + countNodes(root->left) + countNodes(root->right);
-}
-```
-
-### 求高度模板
-
-```cpp
-int maxDepth(TreeNode* root) {
-	if (root == nullptr) return 0;
-	return max(maxDepth(root->left), maxDepth(root->right)) + 1;
-}
-```
-
-### 前序遍历模板
-
-```cpp
-void preorder(TreeNode* root) {
-	if (root == nullptr) return;
-	cout << root->val << '\\n';
-	preorder(root->left);
-	preorder(root->right);
-}
-```
-
-<aside> 📌
-
-这一节真正要掌握的，不只是“二叉树是什么”，而是看到题目时能立刻判断：**当前节点和左右子树分别代表什么、这题能不能递归拆解、以及函数到底是在统计、判断，还是遍历。**
-
-</aside>
+👉 二叉树的核心不是“有两个孩子”，而是理解它把问题天然拆成 **当前节点 + 左右子树**，所以大多数树题本质都是在定义递归含义和遍历方式。

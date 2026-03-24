@@ -1,273 +1,22 @@
-#数据结构 #二叉树 #树
-## 一页速览
+#cpp #data-structure #binary-search-tree
 
-- **二叉搜索树**：左子树小，右子树大的一类二叉树
-- **核心特点**：查找、插入、删除都围绕“大小关系”进行
-- **核心优势**：如果树比较平衡，查找效率高
-- **核心限制**：如果树退化成链，效率会变差
-- **常见操作**：查找、插入、删除、中序遍历
-- **高频场景**：动态维护有序数据、查找某个值、求前驱后继
-- **最常错**：把普通二叉树和二叉搜索树混淆、删除节点分类讨论不清、中序遍历性质忘记、左右方向写反
+## ⚡ TL;DR（快速决策）
 
-## 一、先总后分：这一节到底学什么
+- 需要在树结构上按大小快速查找 → 二叉搜索树（BST）
+- 题目出现“左小右大”“中序有序” → 先切到 BST 视角
+- 查询、插入、删除目标值 → 优先想利用 BST 性质，不要按普通二叉树全搜
+- 先确认题目是不是 BST，不要把普通二叉树和 BST 混掉
+- BST 题真正关键通常不在树结构本身，而在“如何利用有序性剪枝”
 
-### 1. 二叉搜索树解决什么问题
+## 🧩 Core Idea（核心本质）
 
-- 有些数据既想保留“大小关系”
-- 又想支持动态插入和删除
-- 这时二叉搜索树会比单纯数组查找更自然
+- **本质**：二叉搜索树是一种带有大小约束的二叉树
+- **关键机制**：对任意节点，都满足左子树节点值小于当前节点值，右子树节点值大于当前节点值
+- **核心优势**：可以把查找范围从整棵树缩到一条路径，天然适合搜索、插入、删除和范围判断
 
-### 2. 二叉搜索树最核心看什么
+## 🔧 Usage Patterns（可复用代码模板）
 
-- 左子树和右子树的大小规则
-- 查找怎么走
-- 插入怎么放
-- 删除为什么最难
-
-### 3. 当前阶段先抓主线
-
-- 会判断一棵树是不是二叉搜索树
-- 会理解查找、插入、删除的基本过程
-- 会记住中序遍历的有序性质
-- 会分清普通二叉树和二叉搜索树
-
----
-
-## 二、二叉搜索树是什么
-
-### 1. 基本理解
-
-- 二叉搜索树简称 **BST**
-- 它首先是一棵二叉树
-- 同时还满足“左小右大”的规则
-
-### 2. 核心规则
-
-对于任意一个节点：
-
-- 左子树所有节点值都小于它
-- 右子树所有节点值都大于它
-
-```cpp
-     8
-   /   \\
-  3     10
- / \\      \\
-1   6      14
-```
-
-### 3. 当前阶段先记一句话
-
-- **二叉搜索树 = 满足左小右大规则的二叉树**
-
----
-
-## 三、为什么它叫“搜索树”
-
-### 1. 查找会很自然
-
-- 如果目标值比当前节点小，就往左走
-- 如果目标值比当前节点大，就往右走
-- 如果相等，就找到了
-
-### 2. 当前阶段怎么理解
-
-- 它像是把“二分查找”的思想放到了树结构里
-- 每一步都根据大小关系缩小范围
-
-### 3. 当前阶段先记
-
-- **BST 的核心价值之一，就是按大小关系快速查找**
-
----
-
-## 四、查找操作
-
-### 1. 基本思路
-
-```cpp
-TreeNode* search(TreeNode* root, int x) {
-	while (root != nullptr) {
-		if (root->val == x) return root;
-		if (x < root->val) root = root->left;
-		else root = root->right;
-	}
-	return nullptr;
-}
-```
-
-### 2. 当前阶段怎么理解
-
-- 当前节点比目标大，就去左边找
-- 当前节点比目标小，就去右边找
-- 一直走到空还没找到，说明不存在
-
-### 3. 当前阶段先记
-
-- **查找路径由大小关系唯一决定**
-
----
-
-## 五、插入操作
-
-### 1. 基本思路
-
-- 从根节点开始找位置
-- 比当前节点小，就往左走
-- 比当前节点大，就往右走
-- 走到空位置时，把新节点放进去
-
-### 2. 当前阶段怎么理解
-
-- 插入不是随便放
-- 必须放到满足 BST 规则的位置上
-
-### 3. 一个简单例子
-
-原树：
-
-```cpp
-  8
- / \\
-3   10
-```
-
-插入 `6`：
-
-- `6 < 8`，往左
-- `6 > 3`，往右
-- 右边为空，就放在 `3` 的右边
-
-### 4. 当前阶段先记
-
-- **插入本质上就是“沿查找路径找到空位”**
-
----
-
-## 六、删除操作为什么最难
-
-### 1. 删除不是单纯断开就行
-
-- 因为删完之后，树还得继续满足 BST 规则
-
-### 2. 删除节点分 3 种情况
-
-- 没有孩子
-- 只有一个孩子
-- 有两个孩子
-
-### 3. 当前阶段先记
-
-- **BST 删除题的难点，本质上就在分类讨论**
-
----
-
-## 七、删除的 3 种情况
-
-### 1. 没有孩子
-
-- 直接删掉即可
-
-### 2. 只有一个孩子
-
-- 让孩子顶上来
-
-### 3. 有两个孩子
-
-- 常见做法是找“右子树最小值”或“左子树最大值”替代当前节点
-- 再删除那个替代节点
-
-### 4. 当前阶段怎么理解
-
-- 真正最常考的是“两个孩子”的情况
-- 因为既要删节点，又要保持有序结构
-
----
-
-## 八、中序遍历为什么重要
-
-### 1. 结论先记
-
-- **二叉搜索树的中序遍历结果一定是有序的**
-
-### 2. 为什么
-
-- 左边都比根小
-- 右边都比根大
-- 按“左 -> 根 -> 右”访问，自然就是升序
-
-### 3. 例子
-
-```cpp
-   5
- /   \\
-3     7
-```
-
-中序遍历结果：
-
-```cpp
-3 5 7
-```
-
-### 4. 当前阶段先记
-
-- **判断 BST、转有序序列、找第 k 小，都常和中序遍历有关**
-
----
-
-## 九、二叉搜索树和普通二叉树的区别
-
-|对比项|普通二叉树|二叉搜索树|
-|---|---|---|
-|左右子树大小关系|不一定有|有严格左小右大规则|
-|查找方式|常常要整棵找|可按大小关系定向找|
-|中序遍历结果|不一定有序|一定有序|
-
-### 当前阶段先记结论
-
-- **不是所有二叉树都是 BST**
-- **BST 最大特点就是“有序规则”**
-
----
-
-## 十、平衡性先有印象
-
-### 1. 为什么会提平衡
-
-- 如果树长得比较均匀
-- 查找、插入、删除会更快
-
-### 2. 最坏情况是什么
-
-```cpp
-1
- \\
-  2
-   \\
-    3
-     \\
-      4
-```
-
-- 这时树几乎退化成链表
-- 效率会明显变差
-
-### 3. 当前阶段怎么理解
-
-- BST 很好用
-- 但不保证一定平衡
-- 后面会学 AVL、红黑树这种“更稳”的树
-
-### 4. 当前阶段先记
-
-- **BST 的效率和树形状强相关**
-
----
-
-## 十一、当前阶段最常见写法
-
-### 1. 节点定义模板
+### 1. 最基础节点定义
 
 ```cpp
 struct TreeNode {
@@ -275,146 +24,166 @@ struct TreeNode {
 	TreeNode* left;
 	TreeNode* right;
 
-	TreeNode(int x) {
-		val = x;
-		left = nullptr;
-		right = nullptr;
-	}
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 ```
 
-### 2. 查找模板
+### 2. BST 查找目标值
 
 ```cpp
-TreeNode* search(TreeNode* root, int x) {
+TreeNode* search_bst(TreeNode* root, int target) {
 	while (root != nullptr) {
-		if (root->val == x) return root;
-		if (x < root->val) root = root->left;
+		if (root->val == target) return root;
+		if (target < root->val) root = root->left;
 		else root = root->right;
 	}
 	return nullptr;
 }
 ```
 
-### 3. 中序遍历模板
+### 3. BST 插入节点
 
 ```cpp
-void inorder(TreeNode* root) {
+TreeNode* insert_bst(TreeNode* root, int val) {
+	if (root == nullptr) return new TreeNode(val);
+	if (val < root->val) root->left = insert_bst(root->left, val);
+	else if (val > root->val) root->right = insert_bst(root->right, val);
+	return root;
+}
+```
+
+### 4. 验证是否为 BST
+
+```cpp
+bool is_valid_bst(TreeNode* root, long long low, long long high) {
+	if (root == nullptr) return true;
+	if (root->val <= low || root->val >= high) return false;
+	return is_valid_bst(root->left, low, root->val) &&
+		is_valid_bst(root->right, root->val, high);
+}
+```
+
+### 5. 中序遍历得到有序序列
+
+```cpp
+void inorder(TreeNode* root, vector<int>& nums) {
 	if (root == nullptr) return;
-	inorder(root->left);
-	cout << root->val << '\\n';
-	inorder(root->right);
+	inorder(root->left, nums);
+	nums.push_back(root->val);
+	inorder(root->right, nums);
 }
 ```
 
-### 4. 插入思路模板
+### 6. 找最小值节点
 
 ```cpp
-if (x < root->val) {
-	root->left = insert(root->left, x);
-} else if (x > root->val) {
-	root->right = insert(root->right, x);
+TreeNode* get_min(TreeNode* root) {
+	while (root != nullptr && root->left != nullptr) {
+		root = root->left;
+	}
+	return root;
 }
 ```
 
----
-
-## 十二、现代 C++ 的基础习惯
-
-### 1. 先把 BST 的性质背熟再做题
-
-- 很多题本质不是代码难
-- 而是没有抓住“左小右大”和“中序有序”
-
-### 2. 删除操作一定分情况讨论
-
-- 叶子节点
-- 单孩子节点
-- 双孩子节点
-- 别试图一把糊过去
-
-### 3. 看到这些关键词先想到 BST
-
-- 有序树
-- 查找某值
-- 第 k 小
-- 前驱后继
-- 中序有序
-
-### 4. 以后会继续补
-
-- BST 验证
-- BST 删除完整实现
-- 平衡二叉搜索树
-- 红黑树 / AVL
-- 但当前阶段先把基础性质学稳
-
----
-
-## 十三、高频易错点
-
-1. 左子树是“都小于根”，不是“只看左孩子小于根”
-2. 右子树是“都大于根”，不是“只看右孩子大于根”
-3. 中序遍历有序是 BST 的高频性质
-4. 删除节点时最难的是两个孩子的情况
-5. BST 不一定平衡
-6. 树退化成链表时效率会下降
-7. 普通二叉树和 BST 不要混
-8. 插入和查找本质都在沿大小关系往下走
-
----
-
-## 十四、最简模板
-
-### 节点模板
+### 7. 删除节点先有印象
 
 ```cpp
+TreeNode* delete_bst(TreeNode* root, int key) {
+	if (root == nullptr) return nullptr;
+	if (key < root->val) root->left = delete_bst(root->left, key);
+	else if (key > root->val) root->right = delete_bst(root->right, key);
+	else {
+		if (root->left == nullptr) return root->right;
+		if (root->right == nullptr) return root->left;
+		TreeNode* mn = get_min(root->right);
+		root->val = mn->val;
+		root->right = delete_bst(root->right, mn->val);
+	}
+	return root;
+}
+```
+
+### 8. 第 k 小先有印象
+
+```cpp
+// 中序遍历天然从小到大
+```
+
+## ⚠️ Pitfalls（高频错误）
+
+- 普通二叉树不是 BST，不要看到树就默认“左小右大”
+- BST 性质要求的是“整个左子树都小、整个右子树都大”，不是只和直接孩子比较
+- 验证 BST 时只检查 `left->val < root->val < right->val` 是不够的
+- 中序遍历有序只对 BST 成立，不对普通二叉树成立
+- 删除节点是 BST 最容易写乱的操作，尤其是有两个孩子时
+- 查找 / 插入 / 删除时，递归返回的新子树根不要忘记接回去
+- 是否允许重复值必须先看题意，不同题目定义可能不同
+- 用 `int` 做边界验证可能不够稳，验证 BST 常用更大范围类型
+
+## 🚀 Performance / Tips（性能优化）
+
+- BST 题优先先想：
+
+```cpp
+能不能利用左小右大直接剪枝
+```
+
+- 查询、插入、删除很多时候都只走一条路径，不要按普通树全量遍历
+- 验证 BST 时，优先用“值域约束”写法，比只看局部关系更稳
+- 第 k 小、前驱后继、范围查询这类题，常常和中序遍历强相关
+- 刷题时要先区分：
+
+```cpp
+这是普通二叉树题
+还是 BST 题
+```
+
+## 🧪 Common Scenarios（常见使用场景）
+
+- **查找某个值**：利用大小关系向左或向右走
+- **插入新节点**：沿搜索路径插入叶子位置
+- **删除节点**：分类讨论 0、1、2 个孩子
+- **验证 BST**：递归维护合法值域
+- **第 k 小 / 有序输出**：中序遍历
+- **前驱后继 / 范围查询**：利用 BST 有序性剪枝
+
+## 🧾 Minimal Template（最小可运行模板）
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
 struct TreeNode {
 	int val;
 	TreeNode* left;
 	TreeNode* right;
 
-	TreeNode(int x) {
-		val = x;
-		left = nullptr;
-		right = nullptr;
-	}
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
-```
 
-### 查找模板
-
-```cpp
-TreeNode* search(TreeNode* root, int x) {
+TreeNode* search_bst(TreeNode* root, int target) {
 	while (root != nullptr) {
-		if (root->val == x) return root;
-		if (x < root->val) root = root->left;
+		if (root->val == target) return root;
+		if (target < root->val) root = root->left;
 		else root = root->right;
 	}
 	return nullptr;
 }
-```
 
-### 中序遍历模板
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 
-```cpp
-void inorder(TreeNode* root) {
-	if (root == nullptr) return;
-	inorder(root->left);
-	cout << root->val << '\\n';
-	inorder(root->right);
+	TreeNode* root = new TreeNode(4);
+	root->left = new TreeNode(2);
+	root->right = new TreeNode(6);
+
+	cout << (search_bst(root, 2) != nullptr) << '\\n';
+
+	return 0;
 }
 ```
 
-### 插入方向模板
+## 📌 One-liner Summary（一句话总结）
 
-```cpp
-if (x < root->val) root->left = insert(root->left, x);
-else if (x > root->val) root->right = insert(root->right, x);
-```
-
-<aside> 📌
-
-这一节真正要掌握的，不只是“二叉搜索树是什么”，而是看到题目时能立刻判断：**这里能不能利用左小右大的性质、查找路径该往哪边走、以及中序遍历能不能直接提供有序信息。**
-
-</aside>
+👉 二叉搜索树的核心不是“它也是二叉树”，而是它额外提供了 **左小右大** 的有序性，所以很多题的关键都在于能否利用这条性质把搜索从整棵树缩成一条路径。
