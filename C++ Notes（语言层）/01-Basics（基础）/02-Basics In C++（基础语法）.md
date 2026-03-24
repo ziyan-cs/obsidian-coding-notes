@@ -1,275 +1,163 @@
-#cpp #基础 #语法
-## 一页速览
+#cpp #basics #syntax
 
-- **变量定义**：`int a = 10;`
-- **常量**：`const int n = 100;`
-- **类型推导**：`auto x = 1;`
-- **条件判断**：`if / else`、`switch`
-- **循环**：`for`、`while`
-- **函数入口**：`int main()`
-- **最常错**：整数除法、`switch` 漏 `break`、`=` 和 `==` 混淆
+## ⚡ TL;DR（快速决策）
 
-## 一、先总后分：基础语法学什么
+- 变量、条件、循环、函数 → C++ 语法骨架
+- 先掌握：类型、输入输出、分支、循环、函数、数组 / `vector`
+- 刷题默认模板 → `int main()` + 快速 IO + 基础控制流
+- 语法题大多数问题不在“不会写”，而在类型、作用域、边界和初始化
 
-### 1. 变量与类型
+## 🧩 Core Idea（核心本质）
 
-- 程序先会“存数据”
-- 常见类型：`int`、`double`、`char`、`bool`
+- **本质**：基础语法就是组织程序的最小表达单元
+- **关键机制**：数据靠类型约束，逻辑靠控制流驱动，复用靠函数抽象
+- **核心目标**：把“数据 + 判断 + 重复 + 封装”这四件事写稳定
 
-### 2. 表达式与运算
+## 🔧 Usage Patterns（可复用代码模板）
 
-- 会算：算术、比较、逻辑、自增自减
-
-### 3. 流程控制
-
-- 会判断：`if`、`switch`
-- 会重复：`for`、`while`
-
-### 4. 基础现代写法
-
-- `const`
-- `auto`
-- `{}` 初始化
-- `nullptr`
-
----
-
-## 二、变量、常量与类型
-
-### 1. 常见基本类型
-
-- `int`：整数
-- `double`：小数
-- `char`：字符
-- `bool`：布尔值
+### 1. 变量与基础类型
 
 ```cpp
-int age = 18;
-double score = 95.5;
-char grade = 'A';
+int a = 10;
+long long b = 10000000000LL;
+double x = 3.14;
+char ch = 'A';
 bool ok = true;
+string s = "hello";
 ```
 
-### 2. 常量 `const`
+### 2. 输入输出骨架
 
 ```cpp
-const int MAXN = 100;
+int n;
+string s;
+cin >> n >> s;
+cout << n << ' ' << s << '\\n';
 ```
 
-- 定义后不能修改
-- 能不改的数据，尽量加 `const`
-
-### 3. `auto`
-
-```cpp
-auto x = 10;
-auto y = 3.14;
-```
-
-- 让编译器自动推导类型
-- 简洁，但别滥用到看不出类型
-
-### 4. 推荐初始化方式 `{}`
-
-```cpp
-int a{10};
-double b{3.14};
-```
-
-- 风格统一
-- 还能避免部分窄化转换
-
----
-
-## 三、运算符
-
-### 1. 算术运算
-
-- `+` `-` `*` `/` `%`
-
-```cpp
-int a = 5, b = 2;
-cout << a / b << '\\n'; // 2
-```
-
-- **整数除法**：结果仍是整数
-
-### 2. 比较运算
-
-- `>` `<` `>=` `<=` `==` `!=`
-
-### 3. 逻辑运算
-
-- `&&`：与
-- `||`：或
-- `!`：非
-
-### 4. 自增自减
-
-```cpp
-int i = 5;
-cout << i++ << '\\n'; // 5
-cout << ++i << '\\n'; // 7
-```
-
-- `i++`：先用后加
-- `++i`：先加后用
-
----
-
-## 四、流程控制
-
-### 1. `if / else`
+### 3. 条件分支
 
 ```cpp
 if (x > 0) {
-	cout << "positive";
+	cout << "positive" << '\\n';
 } else if (x == 0) {
-	cout << "zero";
+	cout << "zero" << '\\n';
 } else {
-	cout << "negative";
+	cout << "negative" << '\\n';
 }
 ```
 
-- 最常用的判断结构
-
-### 2. `switch`
+### 4. 循环
 
 ```cpp
-char c = 'A';
-switch (c) {
-	case 'A':
-		cout << "优秀";
-		break;
-	case 'B':
-		cout << "良好";
-		break;
-	default:
-		cout << "其他";
-}
-```
-
-- `case` 后必须是常量
-- 别漏 `break`
-- 常用于离散分类判断
-
-### 3. `for`
-
-```cpp
-for (int i = 0; i < 5; ++i) {
+for (int i = 0; i < n; ++i) {
 	cout << i << '\\n';
 }
-```
 
-- 适合已知循环次数
-
-### 4. `while`
-
-```cpp
 int i = 0;
-while (i < 5) {
-	cout << i << '\\n';
+while (i < n) {
 	++i;
 }
 ```
 
-- 适合循环次数不确定的场景
-
----
-
-## 五、程序结构基础
-
-### 1. `main` 函数
+### 5. 函数
 
 ```cpp
+int add(int a, int b) {
+	return a + b;
+}
+```
+
+### 6. 数组与 `vector`
+
+```cpp
+int a[5] = {1, 2, 3, 4, 5};
+vector<int> nums = {1, 2, 3};
+nums.push_back(4);
+```
+
+### 7. 字符串
+
+```cpp
+string s = "abc";
+cout << s.size() << '\\n';
+cout << s[0] << '\\n';
+```
+
+### 8. 标准刷题主函数
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
 	return 0;
 }
 ```
 
-- 程序入口必须是 `int main()`
-- 不写 `void main()`
+## ⚠️ Pitfalls（高频错误）
 
-### 2. 代码块与作用域
+- `int` 范围不够时要换 `long long`
+- `=` 是赋值，`==` 才是比较
+- 变量未初始化就使用，结果不可靠
+- 数组 / 字符串下标从 `0` 开始
+- `for (int i = 0; i <= n; ++i)` 很容易越界
+- `cin >>` 读字符串时遇到空格会停
+- 函数参数传值会拷贝，大对象优先考虑引用
+- 作用域写乱时，变量重名会导致逻辑错误
+
+## 🚀 Performance / Tips（性能优化）
+
+- 刷题默认先写：
 
 ```cpp
-int x = 10;
-if (x > 0) {
-	int y = 20;
-}
-// y 在这里不可用
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
 ```
 
-- 变量通常只在所属 `{}` 内有效
+- 大整数优先先想 `long long`
+- 输出换行优先用 `\\n`，少用 `endl`
+- 不确定变量初值时，显式初始化，不靠默认行为
+- 能拆函数就拆函数，主逻辑会更稳定
 
-### 3. 语句结束
+## 🧪 Common Scenarios（常见使用场景）
 
-- 大多数语句后要写 `;`
-- `if`、`for`、`while` 的代码块本身后通常不加 `;`
+- **刷题输入处理**：变量声明 + `cin/cout`
+- **分类讨论**：`if / else if / else`
+- **重复处理数据**：`for` / `while`
+- **封装重复逻辑**：函数
+- **存一组数据**：数组 / `vector`
+- **处理文本**：`string`
 
----
-
-## 六、现代 C++ 的基础习惯
-
-### 1. 空指针用 `nullptr`
-
-```cpp
-int* p = nullptr;
-```
-
-- 不再优先用 `NULL`
-
-### 2. 能用 `const` 就用 `const`
-
-- 提高可读性
-- 减少误修改
-
-### 3. 循环里优先前置 `++i`
-
-- 形成统一习惯
-- 对迭代器写法也更自然
-
-### 4. 命名清楚
-
-- 少用 `a`、`b`、`c` 做正式变量名
-- 优先用有意义名字：`count`、`sum`、`index`
-
----
-
-## 七、基础语法高频易错点
-
-1. `=` 是赋值，`==` 才是比较
-2. 两个整数相除，结果还是整数
-3. `switch` 容易漏 `break`
-4. `if (x = 1)` 通常是错误写法，要警惕
-5. 变量先定义再使用
-6. 注意作用域，不要出了 `{}` 还访问局部变量
-7. 字符用单引号：`'A'`，字符串用双引号：`"A"`
-
----
-
-## 八、最简模板
-
-### 变量 + 判断 + 循环
+## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-int n = 5;
-if (n > 0) {
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int n;
+	cin >> n;
+
+	vector<int> a(n);
 	for (int i = 0; i < n; ++i) {
-		cout << i << '\\n';
+		cin >> a[i];
 	}
+
+	for (int i = 0; i < n; ++i) {
+		cout << a[i] << '\\n';
+	}
+
+	return 0;
 }
 ```
 
-### 现代基础写法
+## 📌 One-liner Summary（一句话总结）
 
-```cpp
-const int n{10};
-auto x = n;
-```
-
-<aside> 📌
-
-这一节要形成的不是“背概念”，而是看到一段代码时，能立刻分清：**变量是什么、条件怎么判断、循环怎么执行、哪里最容易写错。**
-
-</aside>
+👉 C++ 基础语法的核心不是背关键字，而是把 **类型、控制流、函数和数据结构入口** 这几块写稳定，让程序能正确表达你的思路。

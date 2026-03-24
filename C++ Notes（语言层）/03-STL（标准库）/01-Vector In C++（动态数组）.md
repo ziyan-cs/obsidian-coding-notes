@@ -1,415 +1,134 @@
-#cpp #STL #容器 #vector
-## 一页速览
+#cpp #stl #vector
 
-- **`vector`**：C++ 里最常用的动态数组
-- **核心特点**：长度可变，支持自动扩容
-- **核心优势**：比普通数组更灵活
-- **常见操作**：增删元素、访问元素、遍历、排序
-- **高频接口**：`push_back`、`pop_back`、`size`、`empty`、`front`、`back`
-- **高频场景**：刷题存数据、动态读入、图论邻接表、配合排序与查找
-- **最常错**：越界访问、`size()` 和下标边界写错、把 `pop_back()` 当成有返回值、误以为 `vector` 永不扩容
+## ⚡ TL;DR（快速决策）
 
-## 一、先总后分：这一节到底学什么
+- 需要可变长度顺序容器 → `vector`
+- 需要随机访问元素 → `vector[i]`
+- 频繁尾插 → `push_back()` 很合适
+- 预先知道大致容量 → `reserve()` 减少扩容开销
+- 插入 / 删除中间元素很多 → `vector` 往往不是最优选择
 
-### 1. `vector` 解决什么问题
+## 🧩 Core Idea（核心本质）
 
-- 普通数组长度固定，不够灵活
-- 很多题目里数据个数运行时才知道
-- 这时 `vector` 比普通数组更方便
+- **本质**：`vector` 是连续内存上的可变长数组
+- **关键机制**：元素连续存储，尾部扩容时可能整体搬迁到更大内存块
+- **核心优势**：随机访问快，尾插高效，接口统一，和 STL 算法配合自然
 
-### 2. `vector` 最核心看什么
+## 🔧 Usage Patterns（可复用代码模板）
 
-- 怎么定义
-- 怎么加入和删除元素
-- 怎么访问和遍历
-- 和普通数组有什么区别
-
-### 3. 当前阶段先抓主线
-
-- 会定义 `vector`
-- 会写最常见的增删查改
-- 会遍历 `vector`
-- 会把它当成刷题默认容器之一
-
----
-
-## 二、`vector` 是什么
-
-### 1. 基本理解
-
-- `vector` 可以理解成“更灵活的数组”
-- 元素通常连续存放
-- 支持自动扩容
+### 1. 最基础定义
 
 ```cpp
-#include <vector>
-vector<int> v;
+vector<int> nums;
 ```
 
-### 2. 当前阶段怎么理解
-
-- 它和数组一样，能按下标访问
-- 但比数组多了很多方便操作
-- 尤其适合数据量不固定的场景
-
-### 3. 当前阶段先记一句话
-
-- **`vector` = 支持动态扩容的数组**
-
----
-
-## 三、`vector` 的定义与初始化
-
-### 1. 空 `vector`
+### 2. 初始化
 
 ```cpp
-vector<int> v;
+vector<int> a = {1, 2, 3};
+vector<int> b(5);
+vector<int> c(5, 7);
 ```
 
-### 2. 指定大小
+### 3. 尾部添加与访问
 
 ```cpp
-vector<int> v(5);
+nums.push_back(10);
+nums.push_back(20);
+cout << nums[0] << '\\n';
+cout << nums.back() << '\\n';
 ```
 
-- 长度是 `5`
-- 元素默认初始化为 `0`
-
-### 3. 指定大小和初值
+### 4. 遍历
 
 ```cpp
-vector<int> v(5, 10);
-```
-
-- 长度是 `5`
-- 每个元素都是 `10`
-
-### 4. 直接初始化
-
-```cpp
-vector<int> v = {1, 2, 3, 4, 5};
-```
-
-### 5. 当前阶段先记
-
-- **最常见的就是这 4 种写法**
-
----
-
-## 四、`vector` 的访问方式
-
-### 1. 下标访问
-
-```cpp
-vector<int> v = {10, 20, 30};
-cout << v[0] << '\\n'; // 10
-cout << v[2] << '\\n'; // 30
-```
-
-### 2. 头尾访问
-
-```cpp
-cout << v.front() << '\\n';
-cout << v.back() << '\\n';
-```
-
-### 3. 当前阶段怎么理解
-
-- `v[i]`：访问第 `i` 个元素
-- `front()`：第一个元素
-- `back()`：最后一个元素
-
-### 4. 最常错的地方
-
-- 下标还是从 `0` 开始
-- 最后一个下标是 `size() - 1`
-
----
-
-## 五、`vector` 的常见操作
-
-### 1. 尾部加入元素 `push_back`
-
-```cpp
-v.push_back(10);
-v.push_back(20);
-```
-
-### 2. 尾部删除元素 `pop_back`
-
-```cpp
-v.pop_back();
-```
-
-- 删除最后一个元素
-- **没有返回值**
-
-### 3. 获取长度 `size`
-
-```cpp
-cout << v.size() << '\\n';
-```
-
-### 4. 判空 `empty`
-
-```cpp
-if (v.empty()) {
-	cout << "empty" << '\\n';
-}
-```
-
-### 5. 清空 `clear`
-
-```cpp
-v.clear();
-```
-
-### 6. 当前阶段先记
-
-- **做题最常用：`push_back`、`pop_back`、`size`、`empty`**
-
----
-
-## 六、`vector` 的遍历
-
-### 1. 下标遍历
-
-```cpp
-for (int i = 0; i < v.size(); ++i) {
-	cout << v[i] << '\\n';
-}
-```
-
-### 2. 范围 `for` 遍历
-
-```cpp
-for (int x : v) {
+for (int x : nums) {
 	cout << x << '\\n';
 }
-```
 
-### 3. 引用遍历
-
-```cpp
-for (int& x : v) {
-	x *= 2;
+for (int i = 0; i < nums.size(); ++i) {
+	cout << nums[i] << '\\n';
 }
 ```
 
-### 4. 当前阶段怎么理解
-
-- 只读遍历：`for (int x : v)`
-- 要修改元素：`for (int& x : v)`
-
----
-
-## 七、`vector` 和数组的区别
-
-|对比项|数组|`vector`|
-|---|---|---|
-|长度|固定|可变|
-|访问|下标访问|下标访问|
-|扩容|不支持|支持自动扩容|
-|常用操作|较少|很多现成接口|
-
-### 当前阶段先记结论
-
-- **长度固定**想数组
-- **长度不固定**优先想 `vector`
-
----
-
-## 八、`vector` 最常见应用
-
-### 1. 动态读入数据
+### 5. 常用接口
 
 ```cpp
-int n;
-cin >> n;
-vector<int> v;
-for (int i = 0; i < n; ++i) {
-	int x;
-	cin >> x;
-	v.push_back(x);
-}
+cout << nums.size() << '\\n';
+cout << nums.empty() << '\\n';
+nums.pop_back();
+nums.clear();
 ```
 
-### 2. 配合排序
+### 6. 排序
 
 ```cpp
-sort(v.begin(), v.end());
+sort(nums.begin(), nums.end());
 ```
 
-### 3. 存二维数据
+### 7. 预留容量
+
+```cpp
+vector<int> nums;
+nums.reserve(1000);
+```
+
+### 8. 二维 `vector`
 
 ```cpp
 vector<vector<int>> grid(3, vector<int>(4, 0));
 ```
 
-### 4. 当前阶段怎么理解
+## ⚠️ Pitfalls（高频错误）
 
-- `vector` 经常和 `sort`、循环、函数传参一起出现
-- 刷题里出现频率非常高
+- `nums[i]` 不做边界检查，越界就是未定义行为
+- 扩容后旧指针、引用、迭代器可能失效
+- `clear()` 清的是元素，不一定释放容量
+- 误以为 `resize()` 和 `reserve()` 一样，它们语义完全不同
+- 中间位置频繁插入 / 删除会导致大量元素搬移
+- `pop_back()` 只能删最后一个元素，且空 `vector` 不能直接调
+- `size()` 返回无符号类型，和负数比较时要小心
+- 以为 `vector` 默认初始化后就一定有元素，空 `vector` 不能直接访问下标
 
----
+## 🚀 Performance / Tips（性能优化）
 
-## 九、`vector` 与函数
+- 预计数据量较大时优先 `reserve()`，减少重复扩容
+- 频繁尾插是 `vector` 的强项，中间插删不是
+- 需要高频头插 / 头删时，不要第一反应就用 `vector`
+- 遍历时读多写少可以直接 range-based for
+- 大对象放进 `vector` 时要关注拷贝 / 移动成本
 
-### 1. 值传递
+## 🧪 Common Scenarios（常见使用场景）
+
+- **刷题存输入数组**：`vector<int>`
+- **动态维护一组元素**：尾插、排序、遍历
+- **图的邻接表**：`vector<vector<int>>`
+- **二维网格 / DP 表**：二维 `vector`
+- **与 STL 算法联动**：`sort`、`reverse`、`lower_bound`
+
+## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-void printVec(vector<int> v) {
-	...
-}
-```
+#include <bits/stdc++.h>
+using namespace std;
 
-- 会拷贝一份
-- 数据大时开销更高
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 
-### 2. 引用传递
+	vector<int> nums = {3, 1, 2};
+	nums.push_back(4);
+	sort(nums.begin(), nums.end());
 
-```cpp
-void printVec(const vector<int>& v) {
-	for (int x : v) {
-		cout << x << '\\n';
+	for (int x : nums) {
+		cout << x << ' ';
 	}
+	cout << '\\n';
+
+	return 0;
 }
 ```
 
-- 不会拷贝整个容器
-- 只读时最推荐
+## 📌 One-liner Summary（一句话总结）
 
-### 3. 当前阶段先记
-
-- **函数参数里，大 `vector` 优先写 `const vector<int>&`**
-
----
-
-## 十、扩容先有印象
-
-### 1. `vector` 为什么能变长
-
-- 因为内部会在空间不够时重新申请更大的空间
-- 再把旧数据搬过去
-
-### 2. 当前阶段怎么理解
-
-- 扩容对你来说通常是自动完成的
-- 你先会用就行
-- 深层底层原理以后再补
-
-### 3. 现阶段先记结论
-
-- **`vector` 很方便，但本质上不是“无限白送空间”**
-
----
-
-## 十一、当前阶段最常见写法
-
-### 1. 定义并初始化
-
-```cpp
-vector<int> v = {1, 2, 3};
-```
-
-### 2. 动态加入元素
-
-```cpp
-v.push_back(10);
-v.push_back(20);
-```
-
-### 3. 遍历输出
-
-```cpp
-for (int i = 0; i < v.size(); ++i) {
-	cout << v[i] << '\\n';
-}
-```
-
-### 4. 排序
-
-```cpp
-sort(v.begin(), v.end());
-```
-
----
-
-## 十二、现代 C++ 的基础习惯
-
-### 1. 刷题里优先考虑 `vector`
-
-- 很多时候它比裸数组更安全、更灵活
-
-### 2. 遍历时注意类型和边界
-
-- `v.size()` 常和循环条件一起写
-- 不要写出越界下标
-
-### 3. 修改元素时优先用引用遍历
-
-```cpp
-for (int& x : v) {
-	x += 1;
-}
-```
-
-### 4. 以后会继续补
-
-- `insert`
-- `erase`
-- 迭代器
-- `reserve`
-- 但当前阶段先把基础操作学稳
-
----
-
-## 十三、高频易错点
-
-1. `vector` 下标仍然从 `0` 开始
-2. 最后一个元素位置是 `size() - 1`
-3. `pop_back()` 删除末尾元素，但不返回值
-4. 空 `vector` 时不能乱用 `front()`、`back()`、`pop_back()`
-5. `v.size()` 和下标边界容易写错
-6. `vector` 能自动扩容，但不是无限没有代价
-7. 函数传参时直接值传递可能有额外拷贝
-8. 排序常写 `sort(v.begin(), v.end())`
-
----
-
-## 十四、最简模板
-
-### 定义模板
-
-```cpp
-#include <vector>
-vector<int> v;
-```
-
-### 加入元素模板
-
-```cpp
-v.push_back(10);
-v.push_back(20);
-```
-
-### 遍历模板
-
-```cpp
-for (int i = 0; i < v.size(); ++i) {
-	cout << v[i] << '\\n';
-}
-```
-
-### 排序模板
-
-```cpp
-#include <algorithm>
-sort(v.begin(), v.end());
-```
-
-<aside> 📌
-
-这一节真正要掌握的，不只是“`vector` 是什么”，而是看到题目时能立刻判断：**数据量是不是动态的、该不该优先用 `vector`、当前操作是在尾部增删、遍历，还是在配合排序处理数据。**
-
-</aside>
+👉 `vector` 的核心不是“能存很多元素”，而是它提供了 **连续内存 + 动态扩容 + 随机访问** 这组非常适合刷题和通用开发的能力。
