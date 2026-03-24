@@ -63,7 +63,7 @@ cin.tie(nullptr);
 
 ```cpp
 double x = 3.1415926;
-cout << fixed << setprecision(2) << x << '\\n';
+cout << fixed << setprecision(2) << x << '\n';
 ```
 
 ### 7. 文件输入输出
@@ -74,7 +74,7 @@ ofstream ofs("output.txt");
 
 string line;
 while (getline(ifs, line)) {
-	ofs << line << '\\n';
+	ofs << line << '\n';
 }
 ```
 
@@ -120,7 +120,7 @@ int main() {
 
 	int x;
 	cin >> x;
-	cout << x << '\\n';
+	cout << x << '\n';
 
 	return 0;
 }
