@@ -22,7 +22,7 @@
 int x;
 string s;
 cin >> x >> s;
-cout << x << ' ' << s << '\\n';
+cout << x << ' ' << s << '\n';
 ```
 
 ### 2. 读取整行
@@ -37,7 +37,7 @@ getline(cin, line);
 ```cpp
 int n;
 cin >> n;
-cin.ignore(numeric_limits<streamsize>::max(), '\\n');
+cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 string line;
 getline(cin, line);
@@ -48,7 +48,7 @@ getline(cin, line);
 ```cpp
 int x;
 while (cin >> x) {
-	cout << x << '\\n';
+	cout << x << '\n';
 }
 ```
 
