@@ -21,7 +21,7 @@
 ```cpp
 int x = 10;
 int* p = &x;
-cout << *p << '\\n';
+cout << *p << '\n';
 ```
 
 ### 2. 通过指针修改值
@@ -30,7 +30,7 @@ cout << *p << '\\n';
 int x = 10;
 int* p = &x;
 *p = 20;
-cout << x << '\\n';
+cout << x << '\n';
 ```
 
 ### 3. 最基础引用
@@ -39,7 +39,7 @@ cout << x << '\\n';
 int x = 10;
 int& ref = x;
 ref = 20;
-cout << x << '\\n';
+cout << x << '\n';
 ```
 
 ### 4. 函数参数用引用修改外部变量
@@ -62,7 +62,7 @@ int get_size(const vector<int>& nums) {
 
 ```cpp
 if (p != nullptr) {
-	cout << *p << '\\n';
+	cout << *p << '\n';
 }
 ```
 
@@ -72,14 +72,14 @@ if (p != nullptr) {
 int x = 10;
 int* p = &x;
 int** pp = &p;
-cout << **pp << '\\n';
+cout << **pp << '\n';
 ```
 
 ### 8. 动态分配先有印象
 
 ```cpp
 int* p = new int(42);
-cout << *p << '\\n';
+cout << *p << '\n';
 delete p;
 p = nullptr;
 ```
@@ -136,10 +136,10 @@ int main() {
 
 	int x = 10;
 	int* p = &x;
-	cout << *p << '\\n';
+	cout << *p << '\n';
 
 	add_one(x);
-	cout << x << '\\n';
+	cout << x << '\n';
 
 	return 0;
 }
