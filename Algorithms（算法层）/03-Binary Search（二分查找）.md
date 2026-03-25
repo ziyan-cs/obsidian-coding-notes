@@ -155,7 +155,7 @@ int main() {
 	while (l <= r) {
 		int mid = l + (r - l) / 2;
 		if (a[mid] == target) {
-			cout << mid << '\\n';
+			cout << mid << '\n';
 			break;
 		}
 		if (a[mid] < target) l = mid + 1;
