@@ -221,7 +221,7 @@ int main() {
 
 	vector<int> nums = {1, 2, 3};
 	dfs(nums);
-	cout << ans.size() << '\\n';
+	cout << ans.size() << '\n';
 
 	return 0;
 }
