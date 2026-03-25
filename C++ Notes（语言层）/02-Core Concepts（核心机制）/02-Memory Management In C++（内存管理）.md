@@ -27,7 +27,7 @@ vector<int> nums = {1, 2, 3};
 
 ```cpp
 int* p = new int(42);
-cout << *p << '\\n';
+cout << *p << '\n';
 delete p;
 p = nullptr;
 ```
@@ -48,7 +48,7 @@ struct FileGuard {
 
 ```cpp
 auto p = make_unique<int>(42);
-cout << *p << '\\n';
+cout << *p << '\n';
 ```
 
 ### 5. `shared_ptr` 共享所有权
@@ -56,14 +56,14 @@ cout << *p << '\\n';
 ```cpp
 auto p = make_shared<int>(42);
 auto q = p;
-cout << *q << '\\n';
+cout << *q << '\n';
 ```
 
 ### 6. 只借用对象，不转移所有权
 
 ```cpp
 void print_size(const vector<int>& nums) {
-	cout << nums.size() << '\\n';
+	cout << nums.size() << '\n';
 }
 ```
 
@@ -131,10 +131,10 @@ int main() {
 	cin.tie(nullptr);
 
 	auto p = make_unique<int>(42);
-	cout << *p << '\\n';
+	cout << *p << '\n';
 
 	vector<int> nums = {1, 2, 3};
-	cout << nums.size() << '\\n';
+	cout << nums.size() << '\n';
 
 	return 0;
 }
