@@ -20,11 +20,11 @@
 
 ```cpp
 if (x > 0) {
-	cout << "positive" << '\\n';
+	cout << "positive" << '\n';
 } else if (x == 0) {
-	cout << "zero" << '\\n';
+	cout << "zero" << '\n';
 } else {
-	cout << "negative" << '\\n';
+	cout << "negative" << '\n';
 }
 ```
 
@@ -33,13 +33,13 @@ if (x > 0) {
 ```cpp
 switch (op) {
 	case '+':
-		cout << "add" << '\\n';
+		cout << "add" << '\n';
 		break;
 	case '-':
-		cout << "sub" << '\\n';
+		cout << "sub" << '\n';
 		break;
 	default:
-		cout << "unknown" << '\\n';
+		cout << "unknown" << '\n';
 }
 ```
 
@@ -47,7 +47,7 @@ switch (op) {
 
 ```cpp
 for (int i = 0; i < n; ++i) {
-	cout << i << '\\n';
+	cout << i << '\n';
 }
 ```
 
@@ -56,7 +56,7 @@ for (int i = 0; i < n; ++i) {
 ```cpp
 int i = 0;
 while (i < n) {
-	cout << i << '\\n';
+	cout << i << '\n';
 	++i;
 }
 ```
@@ -66,7 +66,7 @@ while (i < n) {
 ```cpp
 int x = 0;
 do {
-	cout << x << '\\n';
+	cout << x << '\n';
 	++x;
 } while (x < 3);
 ```
@@ -76,7 +76,7 @@ do {
 ```cpp
 for (int i = 0; i < n; ++i) {
 	if (a[i] == target) {
-		cout << i << '\\n';
+		cout << i << '\n';
 		break;
 	}
 }
@@ -87,7 +87,7 @@ for (int i = 0; i < n; ++i) {
 ```cpp
 for (int i = 0; i < n; ++i) {
 	if (a[i] < 0) continue;
-	cout << a[i] << '\\n';
+	cout << a[i] << '\n';
 }
 ```
 
@@ -96,7 +96,7 @@ for (int i = 0; i < n; ++i) {
 ```cpp
 int x;
 while (cin >> x) {
-	cout << x << '\\n';
+	cout << x << '\n';
 }
 ```
 
@@ -151,7 +151,7 @@ int main() {
 
 	for (int i = 0; i < n; ++i) {
 		if (i % 2 == 0) {
-			cout << i << '\\n';
+			cout << i << '\n';
 		}
 	}
 

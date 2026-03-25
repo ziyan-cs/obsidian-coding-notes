@@ -33,7 +33,7 @@ struct TreeNode {
 ```cpp
 void preorder(TreeNode* root) {
 	if (root == nullptr) return;
-	cout << root->val << '\\n';
+	cout << root->val << '\n';
 	preorder(root->left);
 	preorder(root->right);
 }
@@ -170,7 +170,7 @@ int main() {
 	root->left = new TreeNode(2);
 	root->right = new TreeNode(3);
 
-	cout << max_depth(root) << '\\n';
+	cout << max_depth(root) << '\n';
 
 	return 0;
 }

@@ -29,7 +29,7 @@ const int n = 100;
 ```cpp
 int x = 10;
 const int& r = x;
-cout << r << '\\n';
+cout << r << '\n';
 // r = 20; // ❌ 不能通过 r 修改 x
 ```
 
@@ -37,7 +37,7 @@ cout << r << '\\n';
 
 ```cpp
 void print(const string& s) {
-	cout << s << '\\n';
+	cout << s << '\n';
 }
 ```
 
@@ -45,7 +45,7 @@ void print(const string& s) {
 
 ```cpp
 const string s = "hello";
-cout << s.size() << '\\n';
+cout << s.size() << '\n';
 ```
 
 ### 5. 指向常量的指针
@@ -84,7 +84,7 @@ class Person {
 public:
 	string name;
 	void show() const {
-		cout << name << '\\n';
+		cout << name << '\n';
 	}
 };
 ```
@@ -125,7 +125,7 @@ const vector<int>& v
 
 ```cpp
 for (const auto& x : vec) {
-	cout << x << '\\n';
+	cout << x << '\n';
 }
 ```
 
@@ -170,7 +170,7 @@ bool empty() const
 using namespace std;
 
 void print(const string& s) {
-	cout << s << '\\n';
+	cout << s << '\n';
 }
 
 int main() {
@@ -182,7 +182,7 @@ int main() {
 	const string& ref = name;
 
 	print(ref);
-	cout << n << '\\n';
+	cout << n << '\n';
 
 	return 0;
 }

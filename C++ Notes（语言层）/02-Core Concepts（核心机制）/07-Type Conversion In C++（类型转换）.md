@@ -203,9 +203,9 @@ int main() {
 	double y = 3.9;
 	int z = static_cast<int>(y);
 
-	cout << ans << '\\n';
-	cout << x << '\\n';
-	cout << z << '\\n';
+	cout << ans << '\n';
+	cout << x << '\n';
+	cout << z << '\n';
 
 	return 0;
 }

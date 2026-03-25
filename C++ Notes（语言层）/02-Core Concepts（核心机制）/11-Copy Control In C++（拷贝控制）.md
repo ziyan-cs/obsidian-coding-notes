@@ -65,7 +65,7 @@ public:
 class A {
 public:
 	~A() {
-		cout << "destruct" << '\\n';
+		cout << "destruct" << '\n';
 	}
 };
 ```
@@ -250,7 +250,7 @@ int main() {
 	Buffer c(20);
 	c = a;
 
-	cout << *a.data << ' ' << *b.data << ' ' << *c.data << '\\n';
+	cout << *a.data << ' ' << *b.data << ' ' << *c.data << '\n';
 	return 0;
 }
 ```

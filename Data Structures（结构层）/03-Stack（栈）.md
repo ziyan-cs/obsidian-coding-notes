@@ -22,7 +22,7 @@
 stack<int> st;
 st.push(1);
 st.push(2);
-cout << st.top() << '\\n';
+cout << st.top() << '\n';
 st.pop();
 ```
 
@@ -30,7 +30,7 @@ st.pop();
 
 ```cpp
 if (!st.empty()) {
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 }
 ```
 
@@ -38,7 +38,7 @@ if (!st.empty()) {
 
 ```cpp
 while (!st.empty()) {
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 	st.pop();
 }
 ```
@@ -64,7 +64,7 @@ return st.empty();
 vector<int> st;
 st.push_back(1);
 st.push_back(2);
-cout << st.back() << '\\n';
+cout << st.back() << '\n';
 st.pop_back();
 ```
 
@@ -140,11 +140,11 @@ int main() {
 	st.push(1);
 	st.push(2);
 
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 	st.pop();
 
 	if (!st.empty()) {
-		cout << st.top() << '\\n';
+		cout << st.top() << '\n';
 	}
 
 	return 0;

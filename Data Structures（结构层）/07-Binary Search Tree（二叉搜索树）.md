@@ -178,7 +178,7 @@ int main() {
 	root->left = new TreeNode(2);
 	root->right = new TreeNode(6);
 
-	cout << (search_bst(root, 2) != nullptr) << '\\n';
+	cout << (search_bst(root, 2) != nullptr) << '\n';
 
 	return 0;
 }

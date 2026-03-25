@@ -173,7 +173,7 @@ int main() {
 	g[3].push_back(2);
 
 	dfs(1);
-	cout << vis[3] << '\\n';
+	cout << vis[3] << '\n';
 
 	return 0;
 }

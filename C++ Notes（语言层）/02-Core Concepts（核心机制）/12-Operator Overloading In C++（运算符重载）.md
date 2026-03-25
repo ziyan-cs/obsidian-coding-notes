@@ -286,8 +286,8 @@ int main() {
 	Point a(1, 2), b(3, 4);
 	Point c = a + b;
 
-	cout << c << '\\n';
-	cout << (a == b) << '\\n';
+	cout << c << '\n';
+	cout << (a == b) << '\n';
 
 	return 0;
 }

@@ -32,7 +32,7 @@ struct ListNode {
 ```cpp
 ListNode* cur = head;
 while (cur != nullptr) {
-	cout << cur->val << '\\n';
+	cout << cur->val << '\n';
 	cur = cur->next;
 }
 ```
@@ -164,7 +164,7 @@ int main() {
 		cout << cur->val << ' ';
 		cur = cur->next;
 	}
-	cout << '\\n';
+	cout << '\n';
 
 	return 0;
 }

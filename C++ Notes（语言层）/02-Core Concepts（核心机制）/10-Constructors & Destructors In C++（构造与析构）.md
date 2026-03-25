@@ -81,11 +81,11 @@ public:
 class Person {
 public:
 	Person() {
-		cout << "构造函数调用" << '\\n';
+		cout << "构造函数调用" << '\n';
 	}
 
 	~Person() {
-		cout << "析构函数调用" << '\\n';
+		cout << "析构函数调用" << '\n';
 	}
 };
 ```
@@ -200,15 +200,15 @@ public:
 	int age;
 
 	Person() : name("unknown"), age(0) {
-		cout << "默认构造" << '\\n';
+		cout << "默认构造" << '\n';
 	}
 
 	Person(string n, int a) : name(n), age(a) {
-		cout << "带参构造" << '\\n';
+		cout << "带参构造" << '\n';
 	}
 
 	~Person() {
-		cout << "析构函数" << '\\n';
+		cout << "析构函数" << '\n';
 	}
 };
 
@@ -219,7 +219,7 @@ int main() {
 	Person p1;
 	Person p2("YAN", 18);
 
-	cout << p2.name << ' ' << p2.age << '\\n';
+	cout << p2.name << ' ' << p2.age << '\n';
 	return 0;
 }
 ```

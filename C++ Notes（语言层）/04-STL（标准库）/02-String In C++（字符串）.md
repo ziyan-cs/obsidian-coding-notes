@@ -39,19 +39,19 @@ getline(cin, line);
 ### 4. 访问字符
 
 ```cpp
-cout << s[0] << '\\n';
-cout << s.back() << '\\n';
+cout << s[0] << '\n';
+cout << s.back() << '\n';
 ```
 
 ### 5. 遍历字符串
 
 ```cpp
 for (char ch : s) {
-	cout << ch << '\\n';
+	cout << ch << '\n';
 }
 
 for (int i = 0; i < s.size(); ++i) {
-	cout << s[i] << '\\n';
+	cout << s[i] << '\n';
 }
 ```
 
@@ -142,10 +142,10 @@ int main() {
 
 	string s = "cba";
 	sort(s.begin(), s.end());
-	cout << s << '\\n';
+	cout << s << '\n';
 
 	if (s.find("ab") != string::npos) {
-		cout << "found" << '\\n';
+		cout << "found" << '\n';
 	}
 
 	return 0;

@@ -24,14 +24,14 @@
 class Animal {
 public:
 	void eat() {
-		cout << "eat" << '\\n';
+		cout << "eat" << '\n';
 	}
 };
 
 class Dog : public Animal {
 public:
 	void bark() {
-		cout << "bark" << '\\n';
+		cout << "bark" << '\n';
 	}
 };
 ```
@@ -119,8 +119,8 @@ public:
 };
 
 Derived d;
-cout << d.x << '\\n';        // 2
-cout << d.Base::x << '\\n';  // 1
+cout << d.x << '\n';        // 2
+cout << d.Base::x << '\n';  // 1
 ```
 
 ### 8. 多层继承
@@ -220,7 +220,7 @@ public:
 	Person(string n) : name(n) {}
 
 	void showName() {
-		cout << name << '\\n';
+		cout << name << '\n';
 	}
 };
 
@@ -231,7 +231,7 @@ public:
 	Student(string n, int s) : Person(n), score(s) {}
 
 	void showScore() {
-		cout << score << '\\n';
+		cout << score << '\n';
 	}
 };
 

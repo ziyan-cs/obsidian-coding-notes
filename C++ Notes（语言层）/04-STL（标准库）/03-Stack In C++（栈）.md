@@ -27,22 +27,22 @@ stack<int> st;
 ```cpp
 st.push(10);
 st.push(20);
-cout << st.top() << '\\n';
+cout << st.top() << '\n';
 st.pop();
 ```
 
 ### 3. 判空与大小
 
 ```cpp
-cout << st.empty() << '\\n';
-cout << st.size() << '\\n';
+cout << st.empty() << '\n';
+cout << st.size() << '\n';
 ```
 
 ### 4. 循环弹栈
 
 ```cpp
 while (!st.empty()) {
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 	st.pop();
 }
 ```
@@ -56,7 +56,7 @@ for (char ch : s) {
 		st.push(ch);
 	} else if (ch == ')') {
 		if (st.empty()) {
-			cout << "invalid" << '\\n';
+			cout << "invalid" << '\n';
 			break;
 		}
 		st.pop();
@@ -70,7 +70,7 @@ for (char ch : s) {
 vector<int> st;
 st.push_back(10);
 st.push_back(20);
-cout << st.back() << '\\n';
+cout << st.back() << '\n';
 st.pop_back();
 ```
 
@@ -126,9 +126,9 @@ int main() {
 	stack<int> st;
 	st.push(1);
 	st.push(2);
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 	st.pop();
-	cout << st.top() << '\\n';
+	cout << st.top() << '\n';
 
 	return 0;
 }

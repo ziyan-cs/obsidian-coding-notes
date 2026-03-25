@@ -35,27 +35,27 @@ vector<int> c(5, 7);
 ```cpp
 nums.push_back(10);
 nums.push_back(20);
-cout << nums[0] << '\\n';
-cout << nums.back() << '\\n';
+cout << nums[0] << '\n';
+cout << nums.back() << '\n';
 ```
 
 ### 4. 遍历
 
 ```cpp
 for (int x : nums) {
-	cout << x << '\\n';
+	cout << x << '\n';
 }
 
 for (int i = 0; i < nums.size(); ++i) {
-	cout << nums[i] << '\\n';
+	cout << nums[i] << '\n';
 }
 ```
 
 ### 5. 常用接口
 
 ```cpp
-cout << nums.size() << '\\n';
-cout << nums.empty() << '\\n';
+cout << nums.size() << '\n';
+cout << nums.empty() << '\n';
 nums.pop_back();
 nums.clear();
 ```
@@ -123,7 +123,7 @@ int main() {
 	for (int x : nums) {
 		cout << x << ' ';
 	}
-	cout << '\\n';
+	cout << '\n';
 
 	return 0;
 }

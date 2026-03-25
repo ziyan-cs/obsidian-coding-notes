@@ -33,7 +33,7 @@ enum Color {
 ```cpp
 Color c = Red;
 if (c == Green) {
-	cout << "green" << '\\n';
+	cout << "green" << '\n';
 }
 ```
 
@@ -73,7 +73,7 @@ enum class Color {
 ```cpp
 Color c = Color::Red;
 if (c == Color::Green) {
-	cout << "green" << '\\n';
+	cout << "green" << '\n';
 }
 ```
 
@@ -218,10 +218,10 @@ int main() {
 	Status s = Status::Running;
 
 	if (s == Status::Running) {
-		cout << "running" << '\\n';
+		cout << "running" << '\n';
 	}
 
-	cout << static_cast<int>(s) << '\\n';
+	cout << static_cast<int>(s) << '\n';
 
 	return 0;
 }

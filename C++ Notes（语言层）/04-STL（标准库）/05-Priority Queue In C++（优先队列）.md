@@ -23,7 +23,7 @@ priority_queue<int> pq;
 pq.push(3);
 pq.push(1);
 pq.push(5);
-cout << pq.top() << '\\n';
+cout << pq.top() << '\n';
 ```
 
 ### 2. 小根堆
@@ -33,21 +33,21 @@ priority_queue<int, vector<int>, greater<int>> pq;
 pq.push(3);
 pq.push(1);
 pq.push(5);
-cout << pq.top() << '\\n';
+cout << pq.top() << '\n';
 ```
 
 ### 3. 判空与大小
 
 ```cpp
-cout << pq.empty() << '\\n';
-cout << pq.size() << '\\n';
+cout << pq.empty() << '\n';
+cout << pq.size() << '\n';
 ```
 
 ### 4. 循环取堆顶
 
 ```cpp
 while (!pq.empty()) {
-	cout << pq.top() << '\\n';
+	cout << pq.top() << '\n';
 	pq.pop();
 }
 ```
@@ -58,7 +58,7 @@ while (!pq.empty()) {
 priority_queue<pair<int, int>> pq;
 pq.push({5, 2});
 pq.push({3, 7});
-cout << pq.top().first << ' ' << pq.top().second << '\\n';
+cout << pq.top().first << ' ' << pq.top().second << '\n';
 ```
 
 ### 6. 小根堆存 `pair`
@@ -67,7 +67,7 @@ cout << pq.top().first << ' ' << pq.top().second << '\\n';
 priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 pq.push({5, 2});
 pq.push({3, 7});
-cout << pq.top().first << ' ' << pq.top().second << '\\n';
+cout << pq.top().first << ' ' << pq.top().second << '\n';
 ```
 
 ### 7. Top K 基础模型

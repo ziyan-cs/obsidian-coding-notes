@@ -22,7 +22,7 @@
 queue<int> q;
 q.push(1);
 q.push(2);
-cout << q.front() << '\\n';
+cout << q.front() << '\n';
 q.pop();
 ```
 
@@ -30,7 +30,7 @@ q.pop();
 
 ```cpp
 if (!q.empty()) {
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 }
 ```
 
@@ -38,7 +38,7 @@ if (!q.empty()) {
 
 ```cpp
 while (!q.empty()) {
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 	q.pop();
 }
 ```
@@ -93,7 +93,7 @@ while (!q.empty()) {
 deque<int> q;
 q.push_back(1);
 q.push_back(2);
-cout << q.front() << '\\n';
+cout << q.front() << '\n';
 q.pop_front();
 ```
 
@@ -153,11 +153,11 @@ int main() {
 	q.push(1);
 	q.push(2);
 
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 	q.pop();
 
 	if (!q.empty()) {
-		cout << q.front() << '\\n';
+		cout << q.front() << '\n';
 	}
 
 	return 0;

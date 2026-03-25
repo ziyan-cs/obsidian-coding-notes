@@ -40,7 +40,7 @@ getline(cin, s);
 ### 4. 下标访问字符
 
 ```cpp
-cout << s[0] << '\\n';
+cout << s[0] << '\n';
 s[1] = 'a';
 ```
 
@@ -48,7 +48,7 @@ s[1] = 'a';
 
 ```cpp
 for (int i = 0; i < s.size(); ++i) {
-	cout << s[i] << '\\n';
+	cout << s[i] << '\n';
 }
 ```
 
@@ -56,7 +56,7 @@ for (int i = 0; i < s.size(); ++i) {
 
 ```cpp
 for (char c : s) {
-	cout << c << '\\n';
+	cout << c << '\n';
 }
 ```
 
@@ -83,9 +83,9 @@ if (a < b) {
 
 ```cpp
 string s = "abcdef";
-cout << s.size() << '\\n';
-cout << s.substr(2, 3) << '\\n';
-cout << s.find("cd") << '\\n';
+cout << s.size() << '\n';
+cout << s.substr(2, 3) << '\n';
+cout << s.find("cd") << '\n';
 ```
 
 ### 10. 反转字符串

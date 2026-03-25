@@ -173,9 +173,9 @@ int main() {
 	pii p = {1, 2};
 	vi nums = {1, 2, 3};
 
-	cout << x << '\\n';
-	cout << p.first << ' ' << p.second << '\\n';
-	cout << nums.size() << '\\n';
+	cout << x << '\n';
+	cout << p.first << ' ' << p.second << '\n';
+	cout << nums.size() << '\n';
 
 	return 0;
 }

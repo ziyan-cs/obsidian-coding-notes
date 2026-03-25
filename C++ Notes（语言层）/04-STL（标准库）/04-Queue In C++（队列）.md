@@ -27,23 +27,23 @@ queue<int> q;
 ```cpp
 q.push(10);
 q.push(20);
-cout << q.front() << '\\n';
-cout << q.back() << '\\n';
+cout << q.front() << '\n';
+cout << q.back() << '\n';
 q.pop();
 ```
 
 ### 3. 判空与大小
 
 ```cpp
-cout << q.empty() << '\\n';
-cout << q.size() << '\\n';
+cout << q.empty() << '\n';
+cout << q.size() << '\n';
 ```
 
 ### 4. 循环出队
 
 ```cpp
 while (!q.empty()) {
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 	q.pop();
 }
 ```
@@ -86,7 +86,7 @@ while (!q.empty()) {
 deque<int> q;
 q.push_back(10);
 q.push_back(20);
-cout << q.front() << '\\n';
+cout << q.front() << '\n';
 q.pop_front();
 ```
 
@@ -130,9 +130,9 @@ int main() {
 	queue<int> q;
 	q.push(1);
 	q.push(2);
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 	q.pop();
-	cout << q.front() << '\\n';
+	cout << q.front() << '\n';
 
 	return 0;
 }

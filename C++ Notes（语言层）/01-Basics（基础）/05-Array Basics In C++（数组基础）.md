@@ -25,7 +25,7 @@ int a[5] = {1, 2, 3, 4, 5};
 ### 2. 下标访问与修改
 
 ```cpp
-cout << a[0] << '\\n';
+cout << a[0] << '\n';
 a[2] = 10;
 ```
 
@@ -33,7 +33,7 @@ a[2] = 10;
 
 ```cpp
 for (int i = 0; i < n; ++i) {
-	cout << a[i] << '\\n';
+	cout << a[i] << '\n';
 }
 ```
 
@@ -148,7 +148,7 @@ int main() {
 	}
 
 	for (int i = 0; i < n; ++i) {
-		cout << a[i] << '\\n';
+		cout << a[i] << '\n';
 	}
 
 	return 0;

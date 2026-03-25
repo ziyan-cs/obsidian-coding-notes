@@ -33,7 +33,7 @@ struct TreeNode {
 ```cpp
 void preorder(TreeNode* root) {
 	if (root == nullptr) return;
-	cout << root->val << '\\n';
+	cout << root->val << '\n';
 	preorder(root->left);
 	preorder(root->right);
 }
@@ -45,7 +45,7 @@ void preorder(TreeNode* root) {
 void inorder(TreeNode* root) {
 	if (root == nullptr) return;
 	inorder(root->left);
-	cout << root->val << '\\n';
+	cout << root->val << '\n';
 	inorder(root->right);
 }
 ```
@@ -57,7 +57,7 @@ void postorder(TreeNode* root) {
 	if (root == nullptr) return;
 	postorder(root->left);
 	postorder(root->right);
-	cout << root->val << '\\n';
+	cout << root->val << '\n';
 }
 ```
 
@@ -71,7 +71,7 @@ void level_order(TreeNode* root) {
 	while (!q.empty()) {
 		TreeNode* cur = q.front();
 		q.pop();
-		cout << cur->val << '\\n';
+		cout << cur->val << '\n';
 		if (cur->left) q.push(cur->left);
 		if (cur->right) q.push(cur->right);
 	}
@@ -112,7 +112,7 @@ void preorder_iter(TreeNode* root) {
 	while (!st.empty()) {
 		TreeNode* cur = st.top();
 		st.pop();
-		cout << cur->val << '\\n';
+		cout << cur->val << '\n';
 		if (cur->right) st.push(cur->right);
 		if (cur->left) st.push(cur->left);
 	}
@@ -132,7 +132,7 @@ void inorder_iter(TreeNode* root) {
 		}
 		cur = st.top();
 		st.pop();
-		cout << cur->val << '\\n';
+		cout << cur->val << '\n';
 		cur = cur->right;
 	}
 }
@@ -203,7 +203,7 @@ int main() {
 	root->right = new TreeNode(3);
 
 	inorder(root);
-	cout << '\\n';
+	cout << '\n';
 
 	return 0;
 }

@@ -24,14 +24,14 @@
 class Animal {
 public:
 	void speak() {
-		cout << "Animal speak" << '\\n';
+		cout << "Animal speak" << '\n';
 	}
 };
 
 class Dog : public Animal {
 public:
 	void speak() {
-		cout << "Dog bark" << '\\n';
+		cout << "Dog bark" << '\n';
 	}
 };
 ```
@@ -42,14 +42,14 @@ public:
 class Animal {
 public:
 	virtual void speak() {
-		cout << "Animal speak" << '\\n';
+		cout << "Animal speak" << '\n';
 	}
 };
 
 class Dog : public Animal {
 public:
 	void speak() override {
-		cout << "Dog bark" << '\\n';
+		cout << "Dog bark" << '\n';
 	}
 };
 ```
@@ -75,7 +75,7 @@ ref.speak();
 class Cat : public Animal {
 public:
 	void speak() override {
-		cout << "Cat meow" << '\\n';
+		cout << "Cat meow" << '\n';
 	}
 };
 ```
@@ -108,7 +108,7 @@ public:
 class Dog : public Animal {
 public:
 	void speak() override {
-		cout << "Dog bark" << '\\n';
+		cout << "Dog bark" << '\n';
 	}
 };
 ```
@@ -121,7 +121,7 @@ public:
 class Base {
 public:
 	virtual ~Base() {
-		cout << "Base destruct" << '\\n';
+		cout << "Base destruct" << '\n';
 	}
 };
 
@@ -224,7 +224,7 @@ using namespace std;
 class Animal {
 public:
 	virtual void speak() {
-		cout << "Animal speak" << '\\n';
+		cout << "Animal speak" << '\n';
 	}
 
 	virtual ~Animal() = default;
@@ -233,14 +233,14 @@ public:
 class Dog : public Animal {
 public:
 	void speak() override {
-		cout << "Dog bark" << '\\n';
+		cout << "Dog bark" << '\n';
 	}
 };
 
 class Cat : public Animal {
 public:
 	void speak() override {
-		cout << "Cat meow" << '\\n';
+		cout << "Cat meow" << '\n';
 	}
 };
 
