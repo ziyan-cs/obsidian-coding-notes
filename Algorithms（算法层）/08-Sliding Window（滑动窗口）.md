@@ -182,7 +182,7 @@ int main() {
 		ans = max(ans, r - l + 1);
 	}
 
-	cout << ans << '\\n';
+	cout << ans << '\n';
 	return 0;
 }
 ```
