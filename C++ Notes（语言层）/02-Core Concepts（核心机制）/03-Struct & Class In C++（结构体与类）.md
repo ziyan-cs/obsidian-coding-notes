@@ -29,7 +29,7 @@ struct Point {
 
 ```cpp
 Point p{1, 2};
-cout << p.x << ' ' << p.y << '\\n';
+cout << p.x << ' ' << p.y << '\n';
 ```
 
 ### 3. 最基础 `class`
@@ -190,11 +190,11 @@ int main() {
 	cin.tie(nullptr);
 
 	Point p{1, 2};
-	cout << p.sum() << '\\n';
+	cout << p.sum() << '\n';
 
 	Counter c;
 	c.add_one();
-	cout << c.get() << '\\n';
+	cout << c.get() << '\n';
 
 	return 0;
 }
