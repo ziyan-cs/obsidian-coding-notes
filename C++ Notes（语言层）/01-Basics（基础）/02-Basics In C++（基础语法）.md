@@ -41,7 +41,7 @@ cout << n << ' ' << s << '\n';
 if (x > 0) {
 	cout << "positive" << '\n';
 } else if (x == 0) {
-	cout << "zero" << '\\n';
+	cout << "zero" << '\n';
 } else {
 	cout << "negative" << '\n';
 }
@@ -119,7 +119,7 @@ cin.tie(nullptr);
 ```
 
 - 大整数优先先想 `long long`
-- 输出换行优先用 `\\n`，少用 `endl`
+- 输出换行优先用 `\n`，少用 `endl`
 - 不确定变量初值时，显式初始化，不靠默认行为
 - 能拆函数就拆函数，主逻辑会更稳定
 
