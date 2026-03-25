@@ -207,7 +207,7 @@ int main() {
 
 	Counter c;
 	c.add_one();
-	cout << c.get() << '\\n';
+	cout << c.get() << '\n';
 
 	return 0;
 }
