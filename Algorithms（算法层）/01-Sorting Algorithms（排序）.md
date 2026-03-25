@@ -141,7 +141,7 @@ int main() {
 	for (int x : nums) {
 		cout << x << ' ';
 	}
-	cout << '\\n';
+	cout << '\n';
 
 	return 0;
 }
