@@ -39,7 +39,7 @@ int fact(int n) {
 ```cpp
 void print_array(int a[], int n, int i) {
 	if (i == n) return;
-	cout << a[i] << '\\n';
+	cout << a[i] << '\n';
 	print_array(a, n, i + 1);
 }
 ```
@@ -156,7 +156,7 @@ int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr);
 
-	cout << fact(5) << '\\n';
+	cout << fact(5) << '\n';
 
 	return 0;
 }
