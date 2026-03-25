@@ -36,7 +36,7 @@ int l = 0, r = a.size() - 1;
 while (l < r) {
 	int sum = a[l] + a[r];
 	if (sum == target) {
-		cout << l << ' ' << r << '\\n';
+		cout << l << ' ' << r << '\n';
 		break;
 	}
 	if (sum < target) ++l;
@@ -172,7 +172,7 @@ int main() {
 	while (l < r) {
 		int sum = nums[l] + nums[r];
 		if (sum == target) {
-			cout << l << ' ' << r << '\\n';
+			cout << l << ' ' << r << '\n';
 			break;
 		}
 		if (sum < target) ++l;
