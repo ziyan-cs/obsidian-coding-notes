@@ -1,162 +1,145 @@
-#cpp #stl #set-map
+#stl #set #map #cpp #tree-structure
 
 ## ⚡ TL;DR（快速决策）
 
-- 需要自动去重 + 有序存储 → `set`
-- 需要键值映射 + 按键有序 → `map`
-- 只关心“是否存在” → 优先想 `set`
-- 需要“计数 / 频率统计” → 优先想 `map`
-- 需要更快平均性能且不关心顺序 → 再考虑 `unordered_set` / `unordered_map`
+- `set`：**自动去重 + 自动有序**
+- `map`：**键值映射 + 按 key 自动有序**
+- 一看到这些需求，要优先想到它们：
+    - 需要自动去重
+    - 需要有序存储
+    - 需要“值 -> 信息”的映射
+    - 需要按 key 查找、统计、维护顺序
+- 如果要无序但更快，通常改想 `unordered_set` / `unordered_map`
+- 如果你需要“有序 + 去重 / 映射”，默认先想 `set` / `map`
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：`set` 管“唯一元素集合”，`map` 管“键到值的映射关系”
-- **关键机制**：底层通常基于平衡树，自动维护有序性
-- **核心优势**：插入、删除、查找统一，适合动态维护去重、映射和频率信息
+- `set` 存的是值，本质像“自动排序的去重集合”
+- `map` 存的是键值对，本质像“自动排序的字典”
+- 它们底层通常是平衡二叉搜索树
+- 所以特点是：
+    - 自动有序
+    - 查找、插入、删除都比较稳定
+- 一句话理解：
+    - **`set` 管值，`map` 管键值对。**
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 最基础 `set`
+1. `set` 基础使用
 
 ```cpp
-set<int> s;
-s.insert(3);
-s.insert(1);
-s.insert(3);
-```
+#include <iostream>
+#include <set>
+using namespace std;
 
-### 2. 最基础 `map`
+int main() {
+    set<int> s;
+    s.insert(3);
+    s.insert(1);
+    s.insert(3);
 
-```cpp
-map<string, int> mp;
-mp["Tom"] = 95;
-mp["Jerry"] = 88;
-```
-
-### 3. 判断是否存在
-
-```cpp
-if (s.count(3)) {
-	cout << "found" << '\\n';
-}
-
-if (mp.count("Tom")) {
-	cout << "found" << '\\n';
+    for (int x : s) cout << x << ' ';
+    return 0;
 }
 ```
 
-### 4. 查找元素
+1. `map` 基础使用
 
 ```cpp
-auto it = s.find(3);
-if (it != s.end()) {
-	cout << *it << '\\n';
+#include <iostream>
+#include <map>
+using namespace std;
+
+int main() {
+    map<string, int> mp;
+    mp["alice"] = 90;
+    mp["bob"] = 85;
+
+    cout << mp["alice"] << '\\n';
+    return 0;
 }
 ```
 
-### 5. 遍历 `set`
+1. 查找与计数
 
 ```cpp
-for (int x : s) {
-	cout << x << '\\n';
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    set<int> s = {1, 3, 5};
+    cout << s.count(3) << '\\n';
+    cout << s.count(4) << '\\n';
+    return 0;
 }
 ```
 
-### 6. 遍历 `map`
+1. 遍历 `map`
 
 ```cpp
-for (auto& [key, value] : mp) {
-	cout << key << ' ' << value << '\\n';
-}
-```
+#include <iostream>
+#include <map>
+using namespace std;
 
-### 7. 频率统计
+int main() {
+    map<string, int> mp;
+    mp["a"] = 1;
+    mp["b"] = 2;
 
-```cpp
-map<int, int> cnt;
-for (int x : nums) {
-	cnt[x]++;
-}
-```
-
-### 8. 删除元素
-
-```cpp
-s.erase(3);
-mp.erase("Tom");
-```
-
-### 9. 安全读取 `map`
-
-```cpp
-auto it = mp.find("Tom");
-if (it != mp.end()) {
-	cout << it->second << '\\n';
+    for (auto [k, v] : mp) {
+        cout << k << ' ' << v << '\\n';
+    }
+    return 0;
 }
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- `set` 里元素唯一，重复插入不会报错，只是不会重复存
-- `map[key]` 在 key 不存在时会自动创建默认值，这是高频坑
-- 只想查询时直接用 `mp[key]`，可能意外修改容器状态
-- `find()` 找不到时返回的是 `end()`，不是 `nullptr`
-- `set` / `map` 是有序容器，但不是按插入顺序保存
-- 误以为它们和 `unordered_*` 行为完全一样，顺序与复杂度都不同
-- 删除元素后，相关迭代器可能失效，不能继续乱用
-- 频率统计时忘记值默认从 `0` 开始，逻辑容易重复初始化
+- `set` 会自动去重
+- `map[key]` 如果 key 不存在，可能自动创建默认值
+- 它们默认是有序的，但不是按插入顺序
+- 复杂度通常不是 $O(1)$，而是 $O(\log n)$
+- 如果只想查是否存在且不关心顺序，可能更适合哈希容器
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 需要顺序时用 `set` / `map`，只求平均更快查找时考虑 `unordered_*`
-- `count()` 适合做存在性判断，`find()` 适合拿到迭代器继续操作
-- 频率统计、离散映射、去重，是 `set/map` 的高频强项
-- 只读查询 `map` 时优先 `find()`，避免 `mp[key]` 的副作用
-- 大多数刷题里，先把“要不要有序”这件事想清楚，再选 `set/map` 还是 `unordered_*`
+- 高频复杂度记忆：
+    - 插入：$O(log n)$
+    - 删除：$O(log n)$
+    - 查找：$O(log n)$
+- 实战建议：
+    - 要有序就先想 `set` / `map`
+    - 要更快平均复杂度就想 `unordered_*`
+    - `map` 很适合做离散映射、频次统计、有序查询
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **数组去重**：`set`
-- **判重 / 是否出现过**：`set`
-- **频率统计**：`map`
-- **字符串或编号映射**：`map`
-- **按顺序输出去重结果**：`set`
-- **按 key 顺序遍历统计结果**：`map`
+- 去重并保持有序
+- 字典映射
+- 频次统计
+- 按 key 排序输出
+- 区间 / 前驱后继类树结构题基础
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
+#include <map>
+#include <set>
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
+    set<int> s = {3, 1, 2, 2};
+    map<string, int> mp;
+    mp["x"] = 10;
 
-	set<int> s;
-	s.insert(3);
-	s.insert(1);
-	s.insert(3);
-
-	map<int, int> cnt;
-	for (int x : {1, 2, 2, 3}) {
-		cnt[x]++;
-	}
-
-	for (int x : s) {
-		cout << x << ' ';
-	}
-	cout << '\\n';
-
-	for (auto& [key, value] : cnt) {
-		cout << key << ':' << value << ' ';
-	}
-	cout << '\\n';
-
-	return 0;
+    for (int x : s) cout << x << ' ';
+    cout << '\\n' << mp["x"] << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 `set` 和 `map` 的核心不是“会几个接口”，而是先判断你要解决的是 **去重、判重、计数，还是键值映射**，然后再决定是否需要“自动有序”这个特性。
+- **`set` 和 `map` 就是：基于有序树结构实现的集合与映射容器。**
