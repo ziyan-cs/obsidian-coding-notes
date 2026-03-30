@@ -1,229 +1,293 @@
-#cpp #class #constructor #destructor
+#stl #unordered-set #unordered-map #hash #cpp
 
 ## ⚡ TL;DR（快速决策）
 
-- **构造函数**：对象创建时自动调用，用来完成初始化
-- **析构函数**：对象销毁时自动调用，用来完成清理
-- 学这一节最重要的是分清：**什么时候自动调用、能不能重载、有没有返回类型、栈对象和堆对象析构时机是否一样**
-- 构造函数最常见类型：**默认构造、带参构造、拷贝构造**
-- 入门阶段最容易错的不是定义，而是：**把构造函数当普通函数、忘记初始化列表、堆对象 `new` 了却不 `delete`**
-- 如果一个类自己管理资源，构造与析构往往必须成对考虑
+- `unordered_set` 和 `unordered_map` 本质是：**基于哈希表实现的无序容器**
+- 一看到这些需求，要优先想到它们：
+    - 判重 / 去重
+    - 查某个值是否存在
+    - 统计出现次数
+    - 做“值 -> 信息”的快速映射
+- 它们和 `set` / `map` 的核心区别：
+    - `set` / `map`：**有序**，通常 $O(\log n)$
+    - `unordered_set` / `unordered_map`：**无序**，平均 $O(1)$
+- 如果题目重点是“快速查找”，而不是“有序输出”，优先先想哈希容器
+- 高频使用：
+    - `unordered_set`：只关心值是否出现
+    - `unordered_map`：关心 key 对应的 value
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：构造函数负责“对象生下来时怎么初始化”，析构函数负责“对象离开时怎么收尾”
-- **关键机制**：它们会在对象生命周期的开始和结束被自动调用
-- **核心价值**：让对象从创建到销毁都保持“状态完整、资源成对管理”
-- **一句理解**：构造是“把对象准备好”，析构是“把对象收拾干净”
+- 哈希容器的核心思想是：
+    - 把 key 通过哈希函数映射到某个桶里
+    - 从而实现平均意义上的快速查找、插入、删除
+- `unordered_set`：
+    - 只存 key
+    - 自动去重
+- `unordered_map`：
+    - 存 key-value
+    - key 唯一，value 可修改
+- 一句话理解：
+    - **`unordered_set` 管“有没有”，`unordered_map` 管“对应是什么”。**
+- 关键特征：
+    - 无序
+    - 平均快
+    - 不支持按大小顺序遍历
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 最基础类 + 默认构造
+1. `unordered_set` 基础使用
 
 ```cpp
-class Person {
-public:
-	string name;
-	int age;
+#include <iostream>
+#include <unordered_set>
+using namespace std;
 
-	Person() {
-		name = "unknown";
-		age = 0;
-	}
-};
-```
-
-### 2. 带参构造
-
-```cpp
-class Person {
-public:
-	string name;
-	int age;
-
-	Person(string n, int a) {
-		name = n;
-		age = a;
-	}
-};
-```
-
-### 3. 初始化列表写法（更推荐）
-
-```cpp
-class Person {
-public:
-	string name;
-	int age;
-
-	Person(string n, int a) : name(n), age(a) {}
-};
-```
-
-### 4. 拷贝构造
-
-```cpp
-class Person {
-public:
-	string name;
-
-	Person(string n) : name(n) {}
-
-	Person(const Person& other) {
-		name = other.name;
-	}
-};
-```
-
-### 5. 析构函数
-
-```cpp
-class Person {
-public:
-	Person() {
-		cout << "构造函数调用" << '\\n';
-	}
-
-	~Person() {
-		cout << "析构函数调用" << '\\n';
-	}
-};
-```
-
-### 6. 栈对象调用时机
-
-```cpp
 int main() {
-	Person p;
-	return 0;
+    unordered_set<int> st;
+    st.insert(3);
+    st.insert(1);
+    st.insert(3);
+
+    cout << st.count(3) << '\\n';
+    cout << st.count(2) << '\\n';
+    return 0;
 }
 ```
 
-- `p` 创建时自动调用构造
-- `main` 结束时自动调用析构
+要点：
 
-### 7. 堆对象调用时机
+- `insert()` 插入元素
+- `count(x)` 判断是否存在
+- 自动去重
+
+1. `unordered_map` 基础使用
 
 ```cpp
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
 int main() {
-	Person* p = new Person();
-	delete p;
-	return 0;
+    unordered_map<string, int> mp;
+    mp["alice"] = 90;
+    mp["bob"] = 85;
+
+    cout << mp["alice"] << '\\n';
+    return 0;
 }
 ```
 
-- `new Person()` 时调用构造
-- `delete p` 时调用析构
+要点：
 
-### 8. 动态数组对应关系
+- `mp[key]` 可以访问和修改 value
+- 很适合做“名字 -> 分数”“数字 -> 次数”这类映射
+
+1. 统计频次
 
 ```cpp
-Person* arr = new Person[3];
-delete[] arr;
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums = {1, 2, 2, 3, 3, 3};
+    unordered_map<int, int> freq;
+
+    for (int x : nums) {
+        ++freq[x];
+    }
+
+    for (auto [k, v] : freq) {
+        cout << k << ' ' << v << '\\n';
+    }
+    return 0;
+}
 ```
 
-- `new[]` 对 `delete[]`
-- 不要写成 `delete arr`
+要点：
+
+- 频次统计是 `unordered_map` 超高频场景
+- `++freq[x]` 是常见写法
+
+1. 判重问题
+
+```cpp
+#include <iostream>
+#include <unordered_set>
+#include <vector>
+using namespace std;
+
+bool containsDuplicate(const vector<int>& nums) {
+    unordered_set<int> st;
+    for (int x : nums) {
+        if (st.count(x)) return true;
+        st.insert(x);
+    }
+    return false;
+}
+```
+
+要点：
+
+- 一边遍历一边判断是否已出现
+- 这是哈希容器最经典的题型之一
+
+1. Two Sum 模板
+
+```cpp
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+vector<int> twoSum(const vector<int>& nums, int target) {
+    unordered_map<int, int> pos;
+
+    for (int i = 0; i < (int)nums.size(); ++i) {
+        int need = target - nums[i];
+        if (pos.count(need)) {
+            return {pos[need], i};
+        }
+        pos[nums[i]] = i;
+    }
+
+    return {};
+}
+```
+
+要点：
+
+- 核心是把“找另一半”变成哈希查询
+- `值 -> 下标` 是极高频模型
+
+1. 遍历 `unordered_map`
+
+```cpp
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<string, int> mp;
+    mp["x"] = 1;
+    mp["y"] = 2;
+
+    for (auto [k, v] : mp) {
+        cout << k << ' ' << v << '\\n';
+    }
+    return 0;
+}
+```
+
+要点：
+
+- 遍历顺序**不固定**
+- 不要对输出顺序有假设
+
+1. 预留空间优化
+
+```cpp
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    unordered_map<int, int> mp;
+    mp.reserve(100000);
+
+    for (int i = 0; i < 10; ++i) {
+        mp[i] = i * i;
+    }
+
+    cout << mp[3] << '\\n';
+    return 0;
+}
+```
+
+要点：
+
+- 元素很多时，`reserve()` 可以减少 rehash 次数
+- 在数据量大时比较常见
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 构造函数**没有返回类型**，连 `void` 都不能写
-- 构造函数名必须和类名完全一致
-- 析构函数名是 `~类名`，也**没有返回类型**
-- 一个类可以有多个构造函数，但**只能有一个析构函数**
-- 构造函数可以重载，析构函数不能重载
-- 析构函数不能带参数
-- 定义了堆对象却忘记 `delete`，析构函数就不会按预期执行
-- `new[]` 必须配 `delete[]`，不能和 `delete` 混用
-- 不要把“对象销毁”和“指针变量销毁”混为一谈
-- 如果类里有指针资源，默认拷贝可能只是浅拷贝，后面容易出问题
+- 最常见错误 1：误以为它们是有序的
+    - `unordered_*` 默认**无序**
+    - 不能拿它们做有序输出
+- 最常见错误 2：把 `mp[key]` 当纯查询
+    - 如果 key 不存在，`mp[key]` 会自动创建默认值
+- 最常见错误 3：复杂度理解绝对化
+    - 平均是 $O(1)$
+    - 但不是任何情况都严格常数
+- 最常见错误 4：遍历顺序写死
+    - 不同环境下顺序都可能不同
+- 最常见错误 5：该用 `set/map` 时硬用哈希容器
+    - 如果题目需要有序，哈希容器就不合适
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 成员初始化优先考虑**初始化列表**：
-
-```cpp
-Person(string n, int a) : name(n), age(a) {}
-```
-
-它通常比“先默认构造、再赋值”更自然也更高效
-
-- 对于 `const` 成员、引用成员，**必须**用初始化列表：
-
-```cpp
-class A {
-public:
-	const int x;
-	A(int v) : x(v) {}
-};
-```
-
-- 如果类不需要手动管理资源，很多时候直接用标准库类型（如 `string`、`vector`）会更省心
-- 高频记忆规则：
-
-```cpp
-构造：对象创建时调用
-析构：对象销毁时调用
-栈对象：离开作用域自动析构
-堆对象：delete 时析构
-```
-
-- 如果一个类自己申请了堆内存，至少要开始警惕：
-
-```cpp
-拷贝构造
-拷贝赋值
-析构函数
-```
-
-也就是常说的 Rule of Three 的前置理解
+- 高频复杂度记忆：
+    
+    - 插入：平均 $O(1)$
+    - 删除：平均 $O(1)$
+    - 查找：平均 $O(1)$
+- 实战建议：
+    
+    - 只关心“是否存在”时优先 `unordered_set`
+    - 需要“key -> value”映射时优先 `unordered_map`
+    - 数据量大时可考虑 `reserve()`
+- 如果题目需要：
+    
+    - 排序输出
+    - 前驱 / 后继
+    - 有序遍历
+    
+    那就该考虑 `set` / `map`
+    
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **对象创建时给默认值**：默认构造函数
-- **创建对象时直接传入数据**：带参构造函数
-- **用已有对象初始化新对象**：拷贝构造函数
-- **对象离开作用域时自动清理**：析构函数
-- **类里管理文件 / 动态内存 / 句柄等资源**：构造负责获取，析构负责释放
-- **刷题中自定义类 / 结构体时**：常见带参构造、初始化列表
-- **面向对象题目里**：这部分是类对象生命周期的基础
+- 判重
+- 去重
+- 频次统计
+- 哈希映射
+- Two Sum
+- 字符串 / 数字统计
+- 快速存在性查询
+
+## 🆚 Unordered Set & Unordered Map vs 其他常见容器
+
+- **vs Set / Map**
+    - `set/map`：有序，通常 $O(\log n)$
+    - `unordered_*`：无序，平均 $O(1)$
+- **vs Vector**
+    - `vector`：顺序存储，查找常常要线性扫
+    - `unordered_*`：更适合快速查找
+- **vs Array 计数**
+    - 数组适合值域小且连续
+    - 哈希容器适合值域大、离散、不连续
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 using namespace std;
 
-class Person {
-public:
-	string name;
-	int age;
-
-	Person() : name("unknown"), age(0) {
-		cout << "默认构造" << '\\n';
-	}
-
-	Person(string n, int a) : name(n), age(a) {
-		cout << "带参构造" << '\\n';
-	}
-
-	~Person() {
-		cout << "析构函数" << '\\n';
-	}
-};
-
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
+    unordered_set<int> st = {1, 2, 3};
+    unordered_map<string, int> mp;
+    mp["a"] = 10;
 
-	Person p1;
-	Person p2("YAN", 18);
-
-	cout << p2.name << ' ' << p2.age << '\\n';
-	return 0;
+    cout << st.count(2) << '\\n';
+    cout << mp["a"] << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 C++ 构造与析构的核心不是“会写两个特殊函数”，而是把 **对象何时初始化、何时销毁、资源何时获取与释放** 这几件事想清楚，让对象生命周期完整、稳定、可控。
+- **`unordered_set` 和 `unordered_map` 就是：基于哈希表实现、平均查找很快但默认无序的 STL 容器。**
