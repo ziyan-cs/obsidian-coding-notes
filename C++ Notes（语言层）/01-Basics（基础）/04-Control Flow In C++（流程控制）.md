@@ -1,164 +1,104 @@
-#cpp #basics #control-flow 
+#cpp #control-flow #if #loop #switch
 
 ## ⚡ TL;DR（快速决策）
 
-- 条件分支 → `if / else if / else`
-- 多分支离散值判断 → `switch`
-- 已知次数重复 → `for`
-- 未知次数、按条件重复 → `while`
-- 流程控制题真正关键通常不在语法，而在“条件是否准确、循环是否收敛、边界是否正确”
+- 流程控制本质是：**决定代码按什么顺序执行**
+- 核心内容只有几类：
+    - 条件判断：`if / else`
+    - 循环：`for / while`
+    - 分支：`switch`
+    - 跳转：`break / continue / return`
+- 一看到“分情况处理”“重复执行”，就进入流程控制思维
+- 基础控制流写稳，后面所有算法代码才稳
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：流程控制是在决定程序“按什么条件执行、重复执行、提前结束或跳过某一步”
-- **关键机制**：通过分支和循环，把静态代码变成随输入变化而变化的执行路径
-- **核心目标**：把判断、重复、终止和状态更新写清楚，让程序逻辑稳定可控
+- 默认代码是顺序执行
+- 流程控制负责让程序：
+    - 按条件走不同分支
+    - 重复执行某段代码
+    - 提前结束或跳过某些步骤
+- 一句话理解：
+    - **流程控制就是程序的行进路线图。**
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 条件分支 `if / else`
+1. `if / else`
 
 ```cpp
 if (x > 0) {
-	cout << "positive" << '\n';
+    cout << "positive\\n";
 } else if (x == 0) {
-	cout << "zero" << '\n';
+    cout << "zero\\n";
 } else {
-	cout << "negative" << '\n';
+    cout << "negative\\n";
 }
 ```
 
-### 2. `switch` 多分支
+1. `for` 循环
 
 ```cpp
-switch (op) {
-	case '+':
-		cout << "add" << '\n';
-		break;
-	case '-':
-		cout << "sub" << '\n';
-		break;
-	default:
-		cout << "unknown" << '\n';
+for (int i = 0; i < 5; ++i) {
+    cout << i << '\\n';
 }
 ```
 
-### 3. `for` 循环
+1. `while` 循环
 
 ```cpp
-for (int i = 0; i < n; ++i) {
-	cout << i << '\n';
+int x = 3;
+while (x > 0) {
+    cout << x << '\\n';
+    --x;
 }
 ```
 
-### 4. `while` 循环
+1. `break` 和 `continue`
 
 ```cpp
-int i = 0;
-while (i < n) {
-	cout << i << '\n';
-	++i;
-}
-```
-
-### 5. `do-while` 先有印象
-
-```cpp
-int x = 0;
-do {
-	cout << x << '\n';
-	++x;
-} while (x < 3);
-```
-
-### 6. `break` 提前退出
-
-```cpp
-for (int i = 0; i < n; ++i) {
-	if (a[i] == target) {
-		cout << i << '\n';
-		break;
-	}
-}
-```
-
-### 7. `continue` 跳过当前轮
-
-```cpp
-for (int i = 0; i < n; ++i) {
-	if (a[i] < 0) continue;
-	cout << a[i] << '\n';
-}
-```
-
-### 8. 常见刷题读入循环
-
-```cpp
-int x;
-while (cin >> x) {
-	cout << x << '\n';
+for (int i = 0; i < 10; ++i) {
+    if (i == 3) continue;
+    if (i == 7) break;
 }
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- `=` 是赋值，`==` 才是比较，条件里最容易写错
-- `if` / `else` 逻辑顺序写错，后面分支可能永远进不到
-- 循环变量忘记更新，直接死循环
-- `for (int i = 0; i <= n; ++i)` 很容易越界
-- `switch` 忘记 `break`，会继续穿透到下一个分支
-- `continue` 只跳过当前轮，不会结束整个循环
-- `break` 只退出当前这一层循环，不会直接退出所有嵌套循环
-- 条件写得太复杂时，逻辑 bug 往往比语法 bug 更多
+- 条件写错成赋值：`=` 和 `==` 混淆
+- 循环边界写错导致少一轮 / 多一轮
+- `while` 忘记更新变量，造成死循环
+- `break` 和 `continue` 作用别混
+- 大括号省略后容易读错逻辑
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 条件判断先追求正确和清晰，再谈写短
-- 多重判断如果是离散常量分支，可以优先考虑 `switch`
-- 写循环前优先先想清：
-
-```cpp
-循环变量是谁
-循环何时结束
-每轮更新什么
-```
-
-- 嵌套循环里如果能提早 `break`，通常能少做很多无效工作
-- 刷题里很多错误并不是“不会算法”，而是流程控制边界没写稳
+- 先保证逻辑清晰，再谈简写
+- 边界条件一定要单独检查
+- 嵌套层数太深时，考虑拆函数
+- 循环题里最常见 bug 基本都在边界
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **分类讨论**：`if / else if / else`
-- **菜单 / 操作符判断**：`switch`
-- **遍历数组 / 字符串**：`for`
-- **条件驱动处理**：`while`
-- **读到 EOF**：`while (cin >> x)`
-- **搜索到答案提前停止**：`break`
-- **过滤无效数据**：`continue`
+- 分类讨论
+- 枚举遍历
+- 多组输入处理
+- 循环统计
+- 提前终止搜索
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	int n;
-	cin >> n;
-
-	for (int i = 0; i < n; ++i) {
-		if (i % 2 == 0) {
-			cout << i << '\n';
-		}
-	}
-
-	return 0;
+    for (int i = 1; i <= 5; ++i) {
+        if (i % 2 == 0) cout << i << '\\n';
+    }
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 C++ 流程控制的核心不是记住 `if`、`for`、`while` 这些关键字，而是把 **条件、循环、更新和终止时机** 写准确，让程序执行路径始终符合你的预期。
+- **流程控制就是：通过判断、循环和跳转来决定程序执行路径。**

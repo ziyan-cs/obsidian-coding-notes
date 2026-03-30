@@ -1,131 +1,115 @@
-#cpp #basics #io
+#cpp #basics #input-output #cin #cout
 
 ## ⚡ TL;DR（快速决策）
 
-- 读数字、单词、基础类型 → `cin >>`
-- 读整行文本 → `getline`
-- `cin >>` 和 `getline` 混用 → 先 `cin.ignore(...)`
-- 大输入量 → `ios::sync_with_stdio(false); cin.tie(nullptr);`
-- 需要格式化输出 → `fixed << setprecision(n)`
+- C++ 输入输出的核心是：**用 `cin` 读入，用 `cout` 输出**
+- 一看到这些需求，要优先想到这些工具：
+    - 读整数 / 浮点数 / 字符串：`cin`
+    - 输出结果：`cout`
+    - 读整行：`getline`
+    - 调试输出：`cerr`
+- 算法题里最常用：
+    - `cin >> x`
+    - `cout << x << '\\n'`
+- 数据量大时，常配合：
+    - `ios::sync_with_stdio(false);`
+    - `cin.tie(nullptr);`
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：C++ 输入输出是基于 _stream_ 的缓冲系统
-- **关键机制**：`cin` / `cout` 操作的是缓冲区，不是每次都直接和终端交互
-- **核心区别**：`cin >>` 以空白符为分隔，`getline` 读取整行
+- 输入输出本质是程序和外部数据交换信息的方式
+- C++ 标准输入输出流：
+    - `cin`：标准输入
+    - `cout`：标准输出
+    - `cerr`：标准错误输出
+- 一句话理解：
+    - **`cin` 负责读，`cout` 负责写。**
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 基础输入输出
+1. 最基础输入输出
 
 ```cpp
-int x;
-string s;
-cin >> x >> s;
-cout << x << ' ' << s << '\n';
-```
+#include <iostream>
+using namespace std;
 
-### 2. 读取整行
-
-```cpp
-string line;
-getline(cin, line);
-```
-
-### 3. 混用 `cin >>` 和 `getline`
-
-```cpp
-int n;
-cin >> n;
-cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-string line;
-getline(cin, line);
-```
-
-### 4. 多组输入
-
-```cpp
-int x;
-while (cin >> x) {
-	cout << x << '\n';
+int main() {
+    int x;
+    cin >> x;
+    cout << x << '\\n';
+    return 0;
 }
 ```
 
-### 5. 高性能 IO
+1. 多变量输入
+
+```cpp
+int a, b;
+cin >> a >> b;
+cout << a + b << '\\n';
+```
+
+1. 字符串输入
+
+```cpp
+string s;
+cin >> s;
+cout << s << '\\n';
+```
+
+1. 读一整行
+
+```cpp
+string line;
+getline(cin, line);
+cout << line << '\\n';
+```
+
+1. 快速 I/O
 
 ```cpp
 ios::sync_with_stdio(false);
 cin.tie(nullptr);
-```
-
-### 6. 格式化输出
-
-```cpp
-double x = 3.1415926;
-cout << fixed << setprecision(2) << x << '\n';
-```
-
-### 7. 文件输入输出
-
-```cpp
-ifstream ifs("input.txt");
-ofstream ofs("output.txt");
-
-string line;
-while (getline(ifs, line)) {
-	ofs << line << '\n';
-}
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- `cin >>` 后直接 `getline`，通常会先读到残留换行
-- 高频输出时反复用 `endl`，会多做一次刷新，性能差于 `\n`
-- `cin >> s` 读不到空格后的内容
-- 没开快速 IO 时，大数据输入输出可能卡常
-- 浮点输出不设精度，结果可能不符合题目要求
-- 文件流打开失败不检查，可能直接读写空内容
+- `cin >> s` 读不到空格
+- `getline` 和 `cin` 混用时容易读到空行
+- 输出格式别漏空格和换行
+- 大数据时忘记开快速 I/O 可能超时
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 大输入量默认先写：
-
-```cpp
-ios::sync_with_stdio(false);
-cin.tie(nullptr);
-```
-
-- 输出换行优先用 `\n`，不要默认用 `endl`
-- 竞赛 / 刷题里，`cin/cout` 开了快速 IO 后通常够用
-- 需要严格格式控制时，优先想到 `<iomanip>`
+- 常规题直接 `cin/cout` 就够用
+- 数据量大时加快速 I/O
+- 调试时可用 `cerr`
+- 输出换行常用 `\\n`，比 `endl` 更轻量
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **刷题标准输入**：`cin >>`
-- **读取一句话 / 含空格字符串**：`getline`
-- **读到 EOF**：`while (cin >> x)`
-- **高频读写**：快速 IO
-- **日志 / 文件处理**：`ifstream` / `ofstream`
+- 读一组数据
+- 多组测试输入
+- 字符串与整行处理
+- 调试信息输出
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-	int x;
-	cin >> x;
-	cout << x << '\n';
-
-	return 0;
+    int a, b;
+    cin >> a >> b;
+    cout << a + b << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 C++ 输入输出的核心不是记 API，而是先判断：**你读的是单词、整行，还是大规模数据流**，然后选对 `cin >>`、`getline` 和缓冲策略。
+- **C++ 输入输出就是：用 `cin` 读数据，用 `cout` 输出结果。**

@@ -1,143 +1,107 @@
-#cpp #basics #functions 
+#cpp #functions #basics #parameter #return-value
 
 ## ⚡ TL;DR（快速决策）
 
-- 重复逻辑 → 抽成函数
-- 只读大对象参数 → `const T&`
-- 需要修改外部变量 → 引用 `T&` 或指针
-- 只返回一个结果 → `return`
-- 函数题大多数问题不在“不会写”，而在参数传递、返回值设计和副作用控制
+- 函数本质是：**把一段可复用逻辑封装起来**
+- 一看到这些需求，要优先想到函数：
+    - 某段逻辑会重复出现
+    - 想把主程序拆得更清楚
+    - 想传入参数并返回结果
+- 函数三要素：
+    - 返回值类型
+    - 函数名
+    - 参数列表
+- 代码一复杂，就该主动拆函数
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：函数是对一段可复用逻辑的封装
-- **关键机制**：输入靠参数传递，输出靠返回值或引用修改
-- **核心目标**：把“逻辑拆分 + 接口清晰 + 副作用可控”这三件事做好
+- 函数就是“输入一些东西，处理后返回结果”
+- 有些函数只做事，不返回值：`void`
+- 一句话理解：
+    - **函数是程序里的可复用模块。**
+- 好函数能让主程序更短、更清晰、更易调试
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 最基础函数
+1. 基础函数
 
 ```cpp
+#include <iostream>
+using namespace std;
+
 int add(int a, int b) {
-	return a + b;
+    return a + b;
+}
+
+int main() {
+    cout << add(2, 3) << '\\n';
 }
 ```
 
-### 2. 无返回值函数
+1. `void` 函数
 
 ```cpp
-void print_yes() {
-	cout << "YES" << '\n';
+void hello() {
+    cout << "hello\\n";
 }
 ```
 
-### 3. 只读大对象参数
+1. 引用参数
 
 ```cpp
-int get_length(const string& s) {
-	return s.size();
+void addOne(int& x) {
+    ++x;
 }
 ```
 
-### 4. 通过引用修改外部变量
+1. 默认参数
 
 ```cpp
-void add_one(int& x) {
-	++x;
-}
-```
-
-### 5. 数组 / `vector` 作为参数
-
-```cpp
-int sum_vector(const vector<int>& nums) {
-	int sum = 0;
-	for (int x : nums) sum += x;
-	return sum;
-}
-```
-
-### 6. 返回布尔值做判断
-
-```cpp
-bool is_even(int x) {
-	return x % 2 == 0;
-}
-```
-
-### 7. 刷题里拆函数
-
-```cpp
-bool check(int x) {
-	return x >= 0;
-}
-
-void solve() {
-	int x;
-	cin >> x;
-	cout << check(x) << '\n';
+int power(int a, int b = 2) {
+    int ans = 1;
+    while (b--) ans *= a;
+    return ans;
 }
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 大对象按值传递会拷贝，性能和语义都可能不合适
-- 需要修改外部变量却写成值传递，函数内改了外面不变
-- `void` 函数里误以为能返回结果
-- 返回局部数组 / 局部变量地址会出问题
-- 函数声明和定义参数类型不一致会报错
-- 同名变量遮蔽外部变量时，逻辑容易写乱
-- 递归函数漏掉出口，本质也是函数设计错误
-- 函数做了太多事，后期难维护、难调试
+- 忘记写返回值
+- 返回值类型和实际返回内容不匹配
+- 形参和实参概念混乱
+- 不想改原变量时别乱用引用
+- 函数声明和定义签名要一致
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 大对象参数默认先想：
-
-```cpp
-const string& s
-const vector<int>& nums
-```
-
-- 有修改需求才用非常量引用
-- 函数名尽量体现语义，如 `is_valid`、`get_sum`、`build_graph`
-- 刷题时优先把“判断逻辑”和“主流程”拆开，`main` / `solve` 会更干净
-- 小函数通常更利于调试和复用
+- 逻辑重复两次以上时，优先考虑抽函数
+- 大对象传参时常用 `const &`
+- 函数命名要尽量表达含义
+- 调试时，函数拆分越清晰越好定位问题
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **重复计算逻辑**：抽成函数
-- **判定型问题**：写 `check()` / `is_xxx()`
-- **刷题主流程**：写 `solve()`
-- **处理容器**：参数传 `const vector<int>&`
-- **需要回写结果**：引用参数 / 返回结构体或 `pair`
+- 数值计算
+- 判定函数 `check()`
+- 搜索 / DP / 图论中的子逻辑拆分
+- 输入输出辅助函数
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-int add(int a, int b) {
-	return a + b;
-}
-
-void solve() {
-	int a, b;
-	cin >> a >> b;
-	cout << add(a, b) << '\n';
+int square(int x) {
+    return x * x;
 }
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	solve();
-	return 0;
+    cout << square(5) << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 C++ 函数的核心不是“能封装代码”，而是把 **输入、输出、修改范围和职责边界** 设计清楚，让逻辑可复用、可读、可维护。
+- **函数就是：把一段逻辑封装起来，通过参数输入，并在需要时返回结果。**
