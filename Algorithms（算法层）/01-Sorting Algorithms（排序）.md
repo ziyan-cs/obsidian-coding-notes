@@ -1,152 +1,126 @@
-#algorithm #sorting #comparison-sort
+#algorithm #sorting #comparison-sort #stable-sort #cpp
 
 ## ⚡ TL;DR（快速决策）
 
-- 数据规模不大、直接调用标准库 → 优先 `sort`
-- 需要稳定排序 → 先确认是否必须稳定，再考虑 `stable_sort` 或特定稳定算法
-- 需要 Top K / 第 k 小，不一定要全排序 → 先想堆、快速选择、二分答案
-- 题目核心是“排完后更容易处理” → 排序通常是预处理，而不是最终目标
-- 排序题真正关键通常不在“背算法流程”，而在“什么时候该排序、排什么字段、排序后怎么利用顺序性”
+- 排序本质是：**把一组无序数据按某种规则重排成有序序列**
+- 一看到这些需求，要优先想到排序：
+    - 从小到大 / 从大到小输出
+    - 去重前预处理
+    - 区间合并、贪心、二分前置步骤
+    - 需要把“乱序问题”变成“有序问题”
+- 排序不只是最终目的，很多时候是**问题求解的前处理**
+- 常见分类：
+    - 比较排序：冒泡、选择、插入、归并、快速、堆排
+    - 非比较排序：计数、桶、基数（有前提）
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：排序是在重排数据，使其满足某种全局顺序关系
-- **关键机制**：一旦数据有序，很多问题会从暴力枚举转成双指针、二分、贪心或线性扫描
-- **核心价值**：排序往往不是终点，而是把问题转化成“更容易处理的结构”
+- 排序的目标是建立顺序关系
+- 一旦序列有序，很多操作就会变简单：
+    - 查找更快
+    - 相邻关系更清晰
+    - 去重更方便
+    - 区间问题更自然
+- 一句话理解：
+    - **排序就是把“杂乱无章”变成“规则清晰”。**
+- 做题时要先问自己：
+    - 需要稳定性吗？
+    - 需要原地吗？
+    - 数据范围和复杂度要求是什么？
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 标准升序排序
+1. `sort` 基础使用
 
 ```cpp
-sort(nums.begin(), nums.end());
-```
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
 
-### 2. 降序排序
-
-```cpp
-sort(nums.begin(), nums.end(), greater<int>());
-```
-
-### 3. 自定义排序规则
-
-```cpp
-sort(a.begin(), a.end(), [](const auto& x, const auto& y) {
-	return x.second < y.second;
-});
-```
-
-### 4. 稳定排序
-
-```cpp
-stable_sort(a.begin(), a.end(), [](const auto& x, const auto& y) {
-	return x.first < y.first;
-});
-```
-
-### 5. 排序后去重
-
-```cpp
-sort(nums.begin(), nums.end());
-nums.erase(unique(nums.begin(), nums.end()), nums.end());
-```
-
-### 6. 排序后双指针
-
-```cpp
-sort(nums.begin(), nums.end());
-int l = 0, r = nums.size() - 1;
-while (l < r) {
-	int sum = nums[l] + nums[r];
-	if (sum == target) break;
-	if (sum < target) ++l;
-	else --r;
+int main() {
+    vector<int> a = {5, 2, 4, 1, 3};
+    sort(a.begin(), a.end());
+    for (int x : a) cout << x << ' ';
 }
 ```
 
-### 7. 结构体排序先有印象
+1. 自定义降序
 
 ```cpp
-struct Node {
-	int x;
-	int y;
-};
+sort(a.begin(), a.end(), greater<int>());
+```
 
-sort(a.begin(), a.end(), [](const Node& p, const Node& q) {
-	if (p.x != q.x) return p.x < q.x;
-	return p.y < q.y;
+1. 自定义比较器
+
+```cpp
+sort(a.begin(), a.end(), [](const pair<int,int>& x, const pair<int,int>& y) {
+    if (x.first != y.first) return x.first < y.first;
+    return x.second < y.second;
 });
 ```
 
-### 8. 常见排序算法骨架先有印象
+1. 稳定排序
 
 ```cpp
-// 冒泡：相邻交换
-// 选择：每轮选最小
-// 插入：把当前元素插到前面有序区
-// 归并：分治 + 合并
-// 快排：分治 + 划分
-// 堆排：反复取堆顶
+stable_sort(a.begin(), a.end(), cmp);
+```
+
+1. 去重常见套路
+
+```cpp
+sort(a.begin(), a.end());
+a.erase(unique(a.begin(), a.end()), a.end());
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 排序后原下标通常会丢失，题目需要原位置时要先保留索引
-- 自定义比较器必须满足严格弱序，否则排序结果可能异常
-- 以为所有排序都稳定，其实 `sort` 默认不稳定
-- 去重时只写 `unique()` 不配合 `erase()`，容器大小不会真的变
-- 排序对象是 `pair` / 结构体时，别忽略次关键字
-- 排序后再做二分、双指针前，要先确认排序方向和后续逻辑一致
-- 很多题并不需要“完全排序”，全排可能是过度计算
-- 把“排序算法题”和“用排序解决问题”混为一谈，会导致复习重点失焦
+- 最常见错误 1：比较器不满足严格弱序，导致结果异常
+- 最常见错误 2：以为 `sort` 是稳定排序，其实默认不是
+- 最常见错误 3：排序后忘了原下标信息丢失
+- 最常见错误 4：想去重却只用了 `unique`，没先排序
+- 最常见错误 5：复杂对象排序时比较规则没写完整
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 刷题默认优先想标准库 `sort`，不要先手写排序算法
-- 只有在题目明确考察排序原理时，才把重心放到冒泡、选择、插入、归并、快排、堆排本身
-- 需要稳定性时先确认是否必须保留相等元素原顺序
-- 需要部分最优结果时，优先考虑堆 / `nth_element` / 二分，不一定全排
-- 排序最常见的价值是制造：
-
-```cpp
-有序性
-可二分性
-可双指针性
-可线性扫描性
-```
+- `sort` 平均复杂度通常按 $O(n \log n)$ 记
+- `stable_sort` 常也可接受，但常数可能更大
+- 数据范围很小且离散时，计数排序可能更优
+- 高频经验：
+    - 能用库排序就优先用库排序
+    - 排序题很多本质是“排序 + 扫描”
+    - 排序后通常要关注相邻元素关系
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **数组排序**：升序 / 降序输出
-- **去重**：排序后去重
-- **区间题 / 贪心题**：按左端点或右端点排序
-- **双指针题**：排序后夹逼
-- **二分题**：排序后查边界
-- **结构体 / pair 排序**：多关键字排序
-- **面试基础题**：排序稳定性、时间复杂度、快排 / 归并 / 堆排特点
+- 数组从小到大排序
+- 区间按左端点排序
+- 贪心前按某关键字排序
+- 二分前预排序
+- 去重、离散化、排名处理
+
+## 🆚 Sorting vs Heap / Selection
+
+- 排序：得到整体有序结果
+- 堆：擅长动态维护当前最值，不保证整体有序
+- 选择算法：只关心第 k 大 / 小，不一定要完整排序
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	vector<int> nums = {5, 2, 4, 1, 3};
-	sort(nums.begin(), nums.end());
-
-	for (int x : nums) {
-		cout << x << ' ';
-	}
-	cout << '\n';
-
-	return 0;
+    vector<int> a = {4, 1, 3, 2};
+    sort(a.begin(), a.end());
+    for (int x : a) cout << x << ' ';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 排序的核心不是“把数据排好看”，而是先通过 **建立顺序** 把原问题转化成更容易做二分、双指针、贪心或线性扫描的问题。
+- **排序就是：按指定规则重排数据，让后续查找、比较和处理都更容易。**

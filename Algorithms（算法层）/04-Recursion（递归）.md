@@ -1,167 +1,123 @@
-#algorithm #recursion #dfs
+#algorithm #recursion #dfs #divide-and-conquer #function-call
 
 ## ⚡ TL;DR（快速决策）
 
-- 问题能拆成更小的同类子问题 → 先想递归
-- 数据结构天然自相似，如树、分治、回溯 → 递归高频
-- 写递归前先确定：函数含义、递归出口、子问题如何缩小
-- 递归题真正关键通常不在“会不会自己调用自己”，而在“每层到底表示什么”
-- 一旦子问题没有收敛到出口，递归就会失控
+- 递归本质是：**函数定义自己调用自己，把大问题拆成同类小问题**
+- 一看到这些特征，要优先想到递归：
+    - 树结构
+    - 分治问题
+    - 回溯搜索
+    - 数学定义天然递归
+- 递归最重要的不是“自己调自己”，而是：
+    - 终止条件
+    - 子问题定义
+    - 返回值含义
+- 写递归前先想清楚“函数到底在求什么”
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：递归是函数通过调用自己来解决更小规模的同类问题
-- **关键机制**：先定义当前函数表示什么，再把当前问题拆成更小的子问题，直到命中出口
-- **核心价值**：能把树、分治、搜索、数学定义类问题写得更自然、更接近问题结构本身
+- 递归通常包含三部分：
+    1. 函数定义
+    2. 终止条件
+    3. 递归转移
+- 一句话理解：
+    - **递归就是把当前问题交给规模更小的同类问题去完成。**
+- 递归特别适合处理：
+    - 树
+    - 分形结构
+    - 层层拆分的子问题
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 最基础递归骨架
-
-```cpp
-int solve(int n) {
-	if (出口条件) return 基础答案;
-	return solve(更小问题);
-}
-```
-
-### 2. 阶乘
+1. 阶乘
 
 ```cpp
 int fact(int n) {
-	if (n == 0) return 1;
-	return n * fact(n - 1);
+    if (n <= 1) return 1;
+    return n * fact(n - 1);
 }
 ```
 
-### 3. 递归遍历数组先有印象
+1. 递归遍历树
 
 ```cpp
-void print_array(int a[], int n, int i) {
-	if (i == n) return;
-	cout << a[i] << '\n';
-	print_array(a, n, i + 1);
+void dfs(TreeNode* root) {
+    if (!root) return;
+    dfs(root->left);
+    dfs(root->right);
 }
 ```
 
-### 4. 二叉树递归
+1. 分治求和
 
 ```cpp
-int max_depth(TreeNode* root) {
-	if (root == nullptr) return 0;
-	return max(max_depth(root->left), max_depth(root->right)) + 1;
+int sum(int l, int r) {
+    if (l == r) return a[l];
+    int mid = (l + r) >> 1;
+    return sum(l, mid) + sum(mid + 1, r);
 }
 ```
 
-### 5. 分治骨架
+1. 递归打印数组
 
 ```cpp
-int solve(int l, int r) {
-	if (l == r) return base_value;
-	int mid = (l + r) / 2;
-	int left = solve(l, mid);
-	int right = solve(mid + 1, r);
-	return merge(left, right);
+void print(int i) {
+    if (i == n) return;
+    cout << a[i] << ' ';
+    print(i + 1);
 }
-```
-
-### 6. 回溯型递归骨架
-
-```cpp
-void dfs(...) {
-	if (结束条件) {
-		// 收集答案
-		return;
-	}
-	for (每个选择) {
-		做选择;
-		dfs(...);
-		撤销选择;
-	}
-}
-```
-
-### 7. 记忆化递归先有印象
-
-```cpp
-int dfs(int x) {
-	if (memo[x] != -1) return memo[x];
-	if (出口条件) return 基础答案;
-	return memo[x] = 由更小问题得到的结果;
-}
-```
-
-### 8. 递归函数定义优先写清
-
-```cpp
-// dfs(u) 表示什么？
-// solve(l, r) 表示什么？
-// f(n) 表示什么？
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 递归出口漏掉，直接无限调用
-- 子问题没有变小，递归不会收敛
-- 函数含义没定义清楚，导致递归体越写越乱
-- 返回值递归里漏写 `return`
-- 把“当前层该做什么”和“子问题返回什么”混在一起
-- 递归顺序不同，结果可能完全不同
-- 递归不一定高效，重复子问题多时要考虑记忆化或 DP
-- 调试递归时只盯某一层，容易看不清整体调用关系
+- 最常见错误 1：没有终止条件，导致无限递归
+- 最常见错误 2：终止条件写错，导致少算 / 多算
+- 最常见错误 3：函数含义不清，返回值乱套
+- 最常见错误 4：子问题没有变小
+- 最常见错误 5：递归层数过深导致栈溢出
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 写递归前优先先想清：
-
-```cpp
-函数表示什么
-出口是什么
-子问题如何缩小
-```
-
-- 树题、分治题、回溯题，通常优先先想递归表达
-- 递归真正高频的价值是：
-
-```cpp
-表达树结构
-表达分治过程
-表达搜索过程
-```
-
-- 重复子问题明显时，优先考虑记忆化搜索
-- 如果递归过程总是写乱，先把调用树画出来再落代码
+- 递归的时间复杂度取决于递归树结构
+- 递归空间通常和调用深度有关
+- 高频经验：
+    - 先用一句话定义函数
+    - 再写终止条件
+    - 最后才写递归调用
+- 对某些深度很大的问题，可能需要改成迭代
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **树问题**：遍历、统计、判断结构
-- **分治问题**：归并排序、快速排序、区间拆分
-- **回溯问题**：排列、组合、子集、路径搜索
-- **数学定义问题**：阶乘、斐波那契、汉诺塔
-- **记忆化搜索**：自顶向下 DP
-- **DFS**：图和树的深度优先搜索
+- 树遍历
+- 分治
+- 回溯
+- 数学递推问题
+- DFS 搜索
+
+## 🆚 Recursion vs Iteration
+
+- 递归：写法自然，适合树和分治
+- 迭代：更节省调用栈，适合深度很大场景
+- 核心区别：
+    - **递归把状态放在调用栈里，迭代常把状态手动维护在数据结构里。**
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-int fact(int n) {
-	if (n == 0) return 1;
-	return n * fact(n - 1);
+int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n - 1) + fib(n - 2);
 }
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	cout << fact(5) << '\n';
-
-	return 0;
+    cout << fib(5) << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 递归的核心不是“函数调用自己”，而是先把问题定义成 **更小规模的同类子问题**，再用清晰的函数含义和递归出口把整个求解过程稳定地串起来。
+- **递归就是：通过函数不断处理规模更小的同类问题，直到到达终止条件。**
