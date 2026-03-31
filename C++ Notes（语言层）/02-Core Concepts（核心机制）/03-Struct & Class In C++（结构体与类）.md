@@ -1,205 +1,107 @@
-#cpp #oop #struct-class
+#cpp #struct #class #oop #encapsulation
 
 ## ⚡ TL;DR（快速决策）
 
-- 只是聚合数据、默认公开成员 → `struct`
-- 需要封装行为、控制访问权限 → `class`
-- 数据和操作天然属于同一个抽象 → 写成类
-- 只是临时数据模型 / 题目节点结构 → `struct` 往往更直接
-- `struct` 和 `class` 本质差异很小，核心区别主要是默认访问权限
+- `struct` 和 `class` 本质都是：**把数据和操作组织在一起的自定义类型**
+- 最大语法区别：
+    - `struct` 默认公有
+    - `class` 默认私有
+- 一看到这些需求，要优先想到它们：
+    - 想把多个相关数据打包
+    - 想定义对象行为
+    - 想进行封装和抽象
+- 在 C++ 里，`struct` 不只是“纯数据”，也能有函数
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：`struct` 和 `class` 都是在定义自定义类型，把数据和行为组织到一起
-- **关键机制**：成员变量描述状态，成员函数描述行为，访问控制决定外部能看到什么
-- **核心区别**：`struct` 默认 `public`，`class` 默认 `private`
+- 它们都可以拥有：
+    - 成员变量
+    - 成员函数
+    - 构造函数
+    - 访问控制
+- 一句话理解：
+    - **类 / 结构体就是程序员自定义的数据类型。**
+- 设计意义：
+    - 让数据和操作绑定在一起
+    - 提高可读性与可维护性
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 最基础 `struct`
+1. `struct` 基础
 
 ```cpp
 struct Point {
-	int x;
-	int y;
+    int x, y;
+    void print() {
+        cout << x << ' ' << y << '\\n';
+    }
 };
 ```
 
-### 2. `struct` 直接创建对象
+1. `class` 基础
+
+```cpp
+class Person {
+private:
+    string name;
+public:
+    void setName(const string& s) { name = s; }
+    string getName() const { return name; }
+};
+```
+
+1. 创建对象
 
 ```cpp
 Point p{1, 2};
-cout << p.x << ' ' << p.y << '\n';
+p.print();
 ```
 
-### 3. 最基础 `class`
+1. `struct` 与 `class` 默认访问差别
 
 ```cpp
-class Counter {
-private:
-	int value;
-
-public:
-	Counter() : value(0) {}
-
-	void add_one() {
-		++value;
-	}
-
-	int get() const {
-		return value;
-	}
-};
-```
-
-### 4. 构造函数初始化成员
-
-```cpp
-struct User {
-	string name;
-	int age;
-
-	User(string n, int a) : name(n), age(a) {}
-};
-```
-
-### 5. 成员函数放在类里
-
-```cpp
-struct Rect {
-	int w;
-	int h;
-
-	int area() const {
-		return w * h;
-	}
-};
-```
-
-### 6. 只读成员函数 `const`
-
-```cpp
-class Box {
-private:
-	int value;
-
-public:
-	Box(int v) : value(v) {}
-
-	int get() const {
-		return value;
-	}
-};
-```
-
-### 7. 刷题里的节点结构
-
-```cpp
-struct ListNode {
-	int val;
-	ListNode* next;
-
-	ListNode(int x) : val(x), next(nullptr) {}
-};
-```
-
-### 8. 类外实现成员函数
-
-```cpp
-class Student {
-private:
-	string name;
-
-public:
-	Student(string n);
-	string get_name() const;
-};
-
-Student::Student(string n) : name(n) {}
-
-string Student::get_name() const {
-	return name;
-}
+struct A { int x; };   // 默认 public
+class B { int x; };    // 默认 private
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 以为 `struct` 和 `class` 是两种完全不同的机制，其实核心能力几乎一样
-- 忘了 `class` 默认是 `private`，导致外部不能直接访问成员
-- 构造函数没初始化成员，状态可能不完整
-- 成员函数不加 `const`，导致常对象不能调用
-- 把本该公开的数据全塞进 `private`，又不提供接口，类型会很难用
-- 把本该封装的内部状态全暴露成 `public`，后期维护会失控
-- 在刷题里把简单节点结构也过度面向对象化，反而增加阅读负担
-- 忘记 `this` 背后的语义，成员函数本质上是在操作当前对象
+- 以为 `struct` 不能写函数
+- 不清楚默认访问权限差异
+- 成员初始化和赋值混为一谈
+- 访问私有成员方式错误
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 简单数据载体优先用 `struct`，更轻、更直观
-- 有明显不变量或访问约束时再上 `class` 封装
-- 构造函数优先用初始化列表：
-
-```cpp
-User(string n, int a) : name(n), age(a) {}
-```
-
-- 只读成员函数尽量加 `const`，接口语义更清晰
-- 大对象传参到成员函数或普通函数时，优先 `const T&`
+- `struct` / `class` 的核心是设计，不是直接性能优化
+- 小型数据聚合常用 `struct`
+- 更强调封装和接口时常用 `class`
+- 先关注语义清晰，再关注形式选择
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **刷题节点定义**：链表 / 树节点用 `struct`
-- **几何 / 坐标 / 区间模型**：简单聚合数据用 `struct`
-- **封装状态与行为**：业务对象用 `class`
-- **需要访问控制**：用 `private + public` 设计接口
-- **需要构造规则**：写构造函数和成员函数
+- 点、边、节点等数据建模
+- 用户自定义对象
+- 封装状态和行为
+- 图论 / 几何 / 模拟题中的自定义类型
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 struct Point {
-	int x;
-	int y;
-
-	int sum() const {
-		return x + y;
-	}
-};
-
-class Counter {
-private:
-	int value;
-
-public:
-	Counter() : value(0) {}
-
-	void add_one() {
-		++value;
-	}
-
-	int get() const {
-		return value;
-	}
+    int x, y;
 };
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	Point p{1, 2};
-	cout << p.sum() << '\n';
-
-	Counter c;
-	c.add_one();
-	cout << c.get() << '\n';
-
-	return 0;
+    Point p{3, 4};
+    cout << p.x << ' ' << p.y << '\\n';
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 `struct` 和 `class` 的核心不是二选一地背区别，而是先判断：**你是在定义一个简单数据模型，还是在定义一个需要封装状态和行为的抽象类型。**
+- **`struct` 与 `class` 的核心就是：定义包含数据和行为的自定义类型。**

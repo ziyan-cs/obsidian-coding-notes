@@ -1,145 +1,95 @@
-#cpp #memory #lifetime
+#cpp #memory-management #stack #heap #raii
 
 ## ⚡ TL;DR（快速决策）
 
-- 不确定对象该活多久 → 先想生命周期，不要先想 `new`
-- 局部临时数据 → 栈上对象
-- 需要跨作用域拥有资源 → 优先 RAII / 智能指针，不要裸 `new/delete`
-- 只借用对象，不拥有资源 → 引用 / 裸指针 / `const T&`
-- 一看到悬空、泄漏、重复释放、越界 → 先从所有权和生命周期排查
+- 内存管理本质是：**明确对象在哪里创建、活多久、由谁释放**
+- 一看到这些问题，要优先想到内存管理：
+    - 对象生命周期
+    - `new/delete`
+    - 栈区 / 堆区
+    - 资源泄漏、悬空引用
+- 现代 C++ 的核心理念不是“手写 delete”，而是：**RAII + 智能指针**
 
 ## 🧩 Core Idea（核心本质）
 
-- **本质**：内存管理是在管理“对象何时创建、何时销毁、谁负责释放”
-- **关键机制**：C++ 依赖作用域、对象生命周期、RAII、拷贝 / 移动语义共同控制资源
-- **核心目标**：让资源获取与释放绑定，避免泄漏、悬空和未定义行为
+- 常见存储区域理解：
+    - 栈：局部对象，自动释放
+    - 堆：动态分配，需要管理释放
+    - 全局 / 静态区：程序全过程存在
+- 一句话理解：
+    - **内存管理就是管理对象的生命周期和所有权。**
+- 根本问题：
+    - 什么时候创建
+    - 什么时候销毁
+    - 谁负责销毁
 
 ## 🔧 Usage Patterns（可复用代码模板）
 
-### 1. 栈上对象（默认首选）
+1. 栈对象
 
 ```cpp
+int x = 10;
 string s = "hello";
-vector<int> nums = {1, 2, 3};
 ```
 
-### 2. 动态分配与释放（理解用，不是首选）
+1. 堆对象
 
 ```cpp
 int* p = new int(42);
-cout << *p << '\n';
+cout << *p << '\\n';
 delete p;
-p = nullptr;
 ```
 
-### 3. RAII：资源绑定到对象生命周期
+1. 动态数组
 
 ```cpp
-struct FileGuard {
-	FILE* fp;
-	FileGuard(const char* name) : fp(fopen(name, "r")) {}
-	~FileGuard() {
-		if (fp) fclose(fp);
-	}
-};
+int* a = new int[5];
+delete[] a;
 ```
 
-### 4. `unique_ptr` 独占所有权
+1. RAII 思想
 
 ```cpp
-auto p = make_unique<int>(42);
-cout << *p << '\n';
-```
-
-### 5. `shared_ptr` 共享所有权
-
-```cpp
-auto p = make_shared<int>(42);
-auto q = p;
-cout << *q << '\n';
-```
-
-### 6. 只借用对象，不转移所有权
-
-```cpp
-void print_size(const vector<int>& nums) {
-	cout << nums.size() << '\n';
-}
-```
-
-### 7. 返回对象而不是返回裸内存
-
-```cpp
-vector<int> build_array() {
-	return {1, 2, 3};
-}
-```
-
-### 8. 动态数组优先用容器
-
-```cpp
-vector<int> nums(n);
+vector<int> v = {1, 2, 3};
+// 离开作用域自动析构
 ```
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 返回局部变量地址 / 引用，会产生悬空引用或悬空指针
-- `new` 了却忘记 `delete`，直接内存泄漏
-- `delete` 后继续访问指针，变成悬空指针
-- 同一块内存重复 `delete`，属于严重错误
-- `new[]` 和 `delete[]`，`new` 和 `delete` 不能混用
-- 以为“指针不为空就一定有效”，其实悬空指针也可能非空
-- 容器扩容后旧迭代器 / 指针 / 引用可能失效
-- `shared_ptr` 循环引用会导致资源不释放
+- `new` 后忘记 `delete`
+- `delete` 和 `delete[]` 混用
+- 释放后继续使用指针
+- 返回局部对象地址
+- 误把“能运行”当“生命周期正确”
 
 ## 🚀 Performance / Tips（性能优化）
 
-- 默认优先：
-
-```cpp
-直接对象 > 容器 > 智能指针 > 裸 new/delete
-```
-
-- 需要动态对象时优先：
-
-```cpp
-make_unique<T>()
-make_shared<T>()
-```
-
-- 大对象传参优先用 `const T&`，减少拷贝
-- 频繁扩容的容器优先 `reserve()`，减少重分配
-- 刷题和日常代码里，裸 `new/delete` 应尽量少出现
+- 能用自动对象就优先不用裸 `new`
+- 资源管理优先 RAII
+- 标准容器通常比手写动态数组更稳
+- 智能指针优先于裸资源管理
 
 ## 🧪 Common Scenarios（常见使用场景）
 
-- **局部计算变量**：栈对象
-- **动态长度数据**：`vector` / `string`
-- **树 / 链表节点基础理解**：指针
-- **资源自动释放**：RAII
-- **明确独占所有权**：`unique_ptr`
-- **多个对象共享资源**：`shared_ptr`
+- 动态创建对象
+- 资源生命周期管理
+- 容器与对象所有权
+- 对象析构时自动释放资源
 
 ## 🧾 Minimal Template（最小可运行模板）
 
 ```cpp
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	auto p = make_unique<int>(42);
-	cout << *p << '\n';
-
-	vector<int> nums = {1, 2, 3};
-	cout << nums.size() << '\n';
-
-	return 0;
+    int* p = new int(100);
+    cout << *p << '\\n';
+    delete p;
+    return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-👉 C++ 内存管理的核心不是记住 `new/delete`，而是先想清楚 **对象归谁拥有、会活多久、由谁释放**，然后优先用作用域、容器和 RAII 把释放动作自动化。
+- **内存管理就是：管理对象的创建位置、生命周期以及资源释放责任。**
