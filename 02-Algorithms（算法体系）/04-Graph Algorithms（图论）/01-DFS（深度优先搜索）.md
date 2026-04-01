@@ -55,7 +55,7 @@ using namespace std;
 vector<vector<int>> g;
 
 void dfs(int u, int parent) {
-    cout << u << '\\n';
+    cout << u << '\n';
     for (int v : g[u]) {
         if (v == parent) continue;
         dfs(v, u);
@@ -94,7 +94,7 @@ vector<bool> vis;
 
 void dfs(int u) {
     vis[u] = true;
-    cout << u << '\\n';
+    cout << u << '\n';
 
     for (int v : g[u]) {
         if (vis[v]) continue;
@@ -160,7 +160,7 @@ int main() {
         }
     }
 
-    cout << components << '\\n';
+    cout << components << '\n';
     return 0;
 }
 ```
@@ -211,7 +211,7 @@ int main() {
         }
     }
 
-    cout << islands << '\\n';
+    cout << islands << '\n';
     return 0;
 }
 ```
@@ -253,7 +253,7 @@ int main() {
     g[3] = {2, 4};
     g[4] = {3};
 
-    cout << dfs(1, 4) << '\\n';
+    cout << dfs(1, 4) << '\n';
     return 0;
 }
 ```
@@ -277,7 +277,7 @@ void dfs(int idx) {
     if (idx == (int)nums.size()) {
         cout << "{ ";
         for (int x : path) cout << x << ' ';
-        cout << "}\\n";
+        cout << "}\n";
         return;
     }
 
@@ -313,7 +313,7 @@ vector<bool> used(3, false);
 void dfs() {
     if ((int)path.size() == (int)nums.size()) {
         for (int x : path) cout << x << ' ';
-        cout << '\\n';
+        cout << '\n';
         return;
     }
 

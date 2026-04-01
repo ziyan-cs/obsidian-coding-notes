@@ -63,7 +63,7 @@ void bfs(int root) {
         int u = q.front();
         q.pop();
 
-        cout << u << '\\n';
+        cout << u << '\n';
         for (int v : g[u]) {
             q.push(v);
         }
@@ -107,7 +107,7 @@ void bfs(int start) {
         int u = q.front();
         q.pop();
 
-        cout << u << '\\n';
+        cout << u << '\n';
         for (int v : g[u]) {
             if (vis[v]) continue;
             vis[v] = true;
@@ -177,7 +177,7 @@ int main() {
     g[5] = {3};
 
     bfs(1);
-    cout << dist[4] << '\\n';
+    cout << dist[4] << '\n';
     return 0;
 }
 ```
@@ -234,7 +234,7 @@ int main() {
         }
     }
 
-    cout << components << '\\n';
+    cout << components << '\n';
     return 0;
 }
 ```
@@ -287,7 +287,7 @@ void bfs(int sx, int sy) {
 int main() {
     dist.assign(n, vector<int>(m, -1));
     bfs(0, 0);
-    cout << dist[2][3] << '\\n';
+    cout << dist[2][3] << '\n';
     return 0;
 }
 ```
@@ -342,7 +342,7 @@ int main() {
         }
     }
 
-    cout << dist[1][1] << '\\n';
+    cout << dist[1][1] << '\n';
     return 0;
 }
 ```
@@ -386,7 +386,7 @@ int bfs(int start, int target) {
 }
 
 int main() {
-    cout << bfs(2, 9) << '\\n';
+    cout << bfs(2, 9) << '\n';
     return 0;
 }
 ```
@@ -501,7 +501,7 @@ int main() {
     g[5] = {3};
 
     bfs(1);
-    cout << dist[4] << '\\n';
+    cout << dist[4] << '\n';
     return 0;
 }
 ```
