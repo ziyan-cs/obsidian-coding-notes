@@ -53,7 +53,7 @@
 - 典型写法：
 
 ```cpp
-cout << v.size() << '\\n';
+cout << v.size() << '\n';
 ```
 
 - 高频提醒：
@@ -66,7 +66,7 @@ cout << v.size() << '\\n';
 
 ```cpp
 if (v.empty()) {
-    cout << "empty\\n";
+    cout << "empty\n";
 }
 ```
 
