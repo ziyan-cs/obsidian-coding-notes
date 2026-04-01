@@ -45,13 +45,13 @@ int main() {
 }
 ```
 
-1. 自定义降序
+2. 自定义降序
 
 ```cpp
 sort(a.begin(), a.end(), greater<int>());
 ```
 
-1. 自定义比较器
+3. 自定义比较器
 
 ```cpp
 sort(a.begin(), a.end(), [](const pair<int,int>& x, const pair<int,int>& y) {
@@ -60,13 +60,13 @@ sort(a.begin(), a.end(), [](const pair<int,int>& x, const pair<int,int>& y) {
 });
 ```
 
-1. 稳定排序
+4. 稳定排序
 
 ```cpp
 stable_sort(a.begin(), a.end(), cmp);
 ```
 
-1. 去重常见套路
+5. 去重常见套路
 
 ```cpp
 sort(a.begin(), a.end());
