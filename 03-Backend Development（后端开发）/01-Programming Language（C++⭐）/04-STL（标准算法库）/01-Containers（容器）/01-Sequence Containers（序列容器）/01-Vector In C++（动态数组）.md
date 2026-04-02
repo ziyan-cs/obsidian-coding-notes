@@ -46,8 +46,8 @@ int main() {
     vector<int> c(5, 7);       // 5 个 7
     vector<int> d = {1, 2, 3};
 
-    cout << b.size() << '\\n';
-    cout << c[0] << '\\n';
+    cout << b.size() << '\n';
+    cout << c[0] << '\n';
     return 0;
 }
 ```
@@ -57,7 +57,7 @@ int main() {
 - `vector<int> a;` 最常见
 - `vector<int> b(n, val)` 是高频初始化方式
 
-1. 末尾插入与删除
+2. 末尾插入与删除
 
 ```cpp
 #include <iostream>
@@ -84,7 +84,7 @@ int main() {
 - `pop_back()`：删除最后一个元素
 - 尾部操作是 `vector` 最舒服的使用方式
 
-1. 下标访问 / 遍历
+3. 下标访问 / 遍历
 
 ```cpp
 #include <iostream>
@@ -97,7 +97,7 @@ int main() {
     for (int i = 0; i < (int)v.size(); ++i) {
         cout << v[i] << ' ';
     }
-    cout << '\\n';
+    cout << '\n';
 
     for (int x : v) {
         cout << x << ' ';
@@ -113,7 +113,7 @@ int main() {
     - 范围 for
 - `v[i]` 不检查越界，写题时要自己小心
 
-1. 常用成员函数
+4. 常用成员函数
 
 ```cpp
 #include <iostream>
@@ -123,13 +123,13 @@ using namespace std;
 int main() {
     vector<int> v = {3, 1, 4};
 
-    cout << v.size() << '\\n';
-    cout << v.empty() << '\\n';
-    cout << v.front() << '\\n';
-    cout << v.back() << '\\n';
+    cout << v.size() << '\n';
+    cout << v.empty() << '\n';
+    cout << v.front() << '\n';
+    cout << v.back() << '\n';
 
     v.clear();
-    cout << v.empty() << '\\n';
+    cout << v.empty() << '\n';
     return 0;
 }
 ```
@@ -141,7 +141,7 @@ int main() {
 - `front()` / `back()`：首尾元素
 - `clear()`：清空元素
 
-1. 二维 `vector`
+5. 二维 `vector`
 
 ```cpp
 #include <iostream>
@@ -153,7 +153,7 @@ int main() {
     vector<vector<int>> grid(n, vector<int>(m, 0));
 
     grid[1][2] = 5;
-    cout << grid[1][2] << '\\n';
+    cout << grid[1][2] << '\n';
     return 0;
 }
 ```
@@ -163,7 +163,7 @@ int main() {
 - 图、网格、DP 表里特别常见
 - 这是算法题超高频写法
 
-1. 排序 + 去重
+6. 排序 + 去重
 
 ```cpp
 #include <algorithm>
@@ -188,7 +188,7 @@ int main() {
 - `unique` 只是把重复元素移到后面
 - 真正去重还要配合 `erase`
 
-1. 预留空间优化
+7. 预留空间优化
 
 ```cpp
 #include <iostream>
@@ -203,7 +203,7 @@ int main() {
         v.push_back(i);
     }
 
-    cout << v.size() << '\\n';
+    cout << v.size() << '\n';
     return 0;
 }
 ```
@@ -284,7 +284,7 @@ int main() {
     v.erase(unique(v.begin(), v.end()), v.end());
 
     for (int x : v) cout << x << ' ';
-    cout << '\\n';
+    cout << '\n';
 
     return 0;
 }
