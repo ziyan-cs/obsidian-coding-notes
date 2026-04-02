@@ -34,19 +34,19 @@ int add(int a, int b) {
 }
 
 int main() {
-    cout << add(2, 3) << '\\n';
+    cout << add(2, 3) << '\n';
 }
 ```
 
-1. `void` 函数
+2. `void` 函数
 
 ```cpp
 void hello() {
-    cout << "hello\\n";
+    cout << "hello\n";
 }
 ```
 
-1. 引用参数
+3. 引用参数
 
 ```cpp
 void addOne(int& x) {
@@ -54,7 +54,7 @@ void addOne(int& x) {
 }
 ```
 
-1. 默认参数
+4. 默认参数
 
 ```cpp
 int power(int a, int b = 2) {
@@ -97,7 +97,7 @@ int square(int x) {
 }
 
 int main() {
-    cout << square(5) << '\\n';
+    cout << square(5) << '\n';
     return 0;
 }
 ```

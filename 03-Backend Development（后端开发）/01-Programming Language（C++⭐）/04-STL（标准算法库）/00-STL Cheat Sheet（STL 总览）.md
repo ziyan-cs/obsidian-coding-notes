@@ -1,391 +1,493 @@
-#cpp #stl #cheat-sheet #containers #algorithms
+#cpp #stl #cheat-sheet #algorithms #containers
 
 ## ⚡ TL;DR（快速决策）
 
-- 这是一篇 **函数汇总型笔记**
-- 使用方式：
-    - 需要快速确认容器的增删查改接口时查阅
-    - 需要回顾 STL 常见写法时查阅
-    - 需要确认函数名、返回值或适用边界时查阅
-- 如果只记 20%，优先记住这些：
+- 这篇笔记的目标是：**把 STL 中真正值得掌握、且高频可用的函数系统化汇总起来**
+- 学 STL 不应只背零散 API，而应先建立三层结构：
+    - 容器：数据放在哪里
+    - 迭代器：如何访问数据
+    - 算法：如何处理数据
+- 如果只抓最重要的 20%，优先掌握：
     - `sort`
-    - `lower_bound`
-    - `upper_bound`
+    - `lower_bound` / `upper_bound`
+    - `binary_search`
     - `find`
+    - `count`
     - `accumulate`
-    - `push_back`
-    - `emplace_back`
+    - `min_element` / `max_element`
+    - `reverse`
+    - `unique`
     - `erase`
-- 一句话理解：
-    - **这篇笔记集中整理常用 STL 函数及其使用边界。**
+    - `next_permutation`
+    - `copy`
+    - `transform`
+    - `push_back` / `emplace_back`
+    - `map.find` / `unordered_map.find`
+- 学习顺序建议：
+    - 先掌握顺序容器高频接口
+    - 再掌握算法库核心函数
+    - 最后掌握关联容器与组合套路
 
 ## 🧩 Core Idea（核心本质）
 
-- STL 使用中的常见问题通常不在于完全陌生，而在于：
-    - 已有思路，但无法快速定位对应函数
-    - 知道函数名，但不清楚返回值或适用容器
-    - 能写出代码，但容易忽略边界条件与迭代器规则
-- 因此这篇 Cheat Sheet 重点整理四类信息：
-    - 函数作用
-    - 典型写法
-    - 常见适用容器
-    - 高频坑点
+- STL 的真正价值不在于“提供很多函数”，而在于：
+    - 用统一迭代器接口连接不同容器
+    - 用通用算法处理不同数据结构
+    - 用抽象接口降低重复代码
 - 一句话理解：
-    - **应将 STL 理解为可组合的工具体系，而不是彼此孤立的函数清单。**
+    - **STL = 容器 + 迭代器 + 算法 + 函数对象 的可组合工具体系。**
+- 使用 STL 时，优先问三个问题：
+    - 数据放在哪种容器里？
+    - 当前问题是否依赖有序性？
+    - 有没有现成算法可以直接表达意图？
 
-## 🗂️ 使用方式（阅读路径）
+## 🗂️ 阅读路径
 
-1. 容器基础状态接口：阅读“容器通用操作”
-2. 插入类接口：阅读“插入操作”
-3. 删除类接口：阅读“删除操作”
-4. 查找类接口：阅读“查找操作”
-5. 优先掌握最常用函数：阅读“最重要的 20% 函数”
-6. 直接迁移到题目实现：优先阅读“高频组合套路”
+1. 先看“容器高频通用操作”建立基础手感
+2. 再看“算法总览”掌握 STL 的核心能力
+3. 刷题 / 面试优先看“最重要的算法函数⭐”
+4. 真正写题时重点看“高频组合套路⭐”
 
 ---
 
-## 1. 容器通用操作
+## 1. 容器高频通用操作
 
-### 1.1 `size()`
+### 1.1 状态接口
 
-- 作用：返回容器当前元素个数
-- 常见容器：`vector`、`string`、`deque`、`list`、`set`、`map`、`unordered_map`
-- 典型写法：
+- `size()`：返回元素个数
+- `empty()`：判断是否为空
+- `clear()`：清空容器
+- `front()` / `back()`：访问头尾元素
+- `begin()` / `end()`：返回迭代器区间
 
-```cpp
-cout << v.size() << '\n';
-```
-
-- 高频提醒：
-    - 返回值通常是无符号类型，和 `int` 比较时注意类型问题
-
-### 1.2 `empty()`
-
-- 作用：判断容器是否为空
-- 典型写法：
+典型写法：
 
 ```cpp
-if (v.empty()) {
-    cout << "empty\n";
+if (!v.empty()) {
+    cout << v.front() << ' ' << v.back() << '\\n';
 }
 ```
 
-- 高频提醒：
-    - 判断空容器时，优先用 `empty()` 而不是 `size() == 0`
+### 1.2 插入与删除
 
-### 1.3 `begin()` / `end()`
+- `push_back()`：尾插元素
+- `emplace_back()`：原地构造尾插
+- `insert()`：在指定位置或按 key 插入
+- `erase()`：删除位置 / 区间 / key
+- `pop_back()` / `pop_front()`：弹出头尾元素（视容器而定）
 
-- 作用：返回起始迭代器和尾后迭代器
-- 典型写法：
+典型写法：
 
 ```cpp
-for (auto it = v.begin(); it != v.end(); ++it) {
-    cout << *it << ' ';
+vector<pair<int,int>> edges;
+edges.emplace_back(1, 2);
+```
+
+### 1.3 容器选择直觉
+
+- `vector`：默认首选，顺序存储，随机访问快
+- `deque`：头尾操作都方便
+- `list`：链表，适合频繁中间插删，但随机访问差
+- `set` / `map`：有序、自动维护排序，查找通常 $O(\log n)$
+- `unordered_set` / `unordered_map`：哈希结构，平均查找通常 $O(1)$
+- `queue` / `stack` / `priority_queue`：受限接口的容器适配器
+
+### 1.4 高频提醒
+
+- `vector` 没有 `pop_front()`
+- `map[key]` 在 key 不存在时会插入默认值
+- 需要“只查询不插入”时优先 `find()`
+- 顺序容器 `erase()` 后迭代器可能失效
+
+---
+
+## 2. STL 算法总览
+
+### 2.1 为什么算法库重要
+
+- 同样是“查找 / 排序 / 变换 / 统计”，STL 已经提供了稳定且表达力很强的现成实现
+- 许多题目难点并不在算法原理，而在于：
+    - 是否知道对应 STL 函数
+    - 是否知道前提条件
+    - 是否知道返回值和边界语义
+
+### 2.2 按功能理解算法
+
+- 查找类：`find`、`count`、`binary_search`
+- 二分边界类：`lower_bound`、`upper_bound`
+- 排序类：`sort`、`stable_sort`、`nth_element`
+- 最值类：`min`、`max`、`min_element`、`max_element`
+- 变换类：`copy`、`transform`、`fill`
+- 删除整理类：`remove`、`remove_if`、`unique`
+- 反转重排类：`reverse`、`rotate`、`next_permutation`
+- 数值类：`accumulate`、`iota`、`partial_sum`
+- 集合类：`merge`、`set_union`、`set_intersection`
+- 堆类：`make_heap`、`push_heap`、`pop_heap`
+
+---
+
+## 3. 最重要的算法函数 ⭐
+
+### 3.1 查找与统计
+
+#### `find`
+
+- 作用：线性查找某个值
+- 复杂度：通常 $O(n)$
+
+```cpp
+auto it = find(v.begin(), v.end(), x);
+if (it != v.end()) {
+    // 找到
 }
 ```
 
-- 高频提醒：
-    - `end()` 指向的是“最后一个元素后面”，不能直接解引用
+#### `count`
 
-### 1.4 `clear()`
-
-- 作用：清空容器中的全部元素
-- 典型写法：
+- 作用：统计某个值出现次数
 
 ```cpp
-v.clear();
+int cnt = count(v.begin(), v.end(), x);
 ```
 
-- 高频提醒：
-    - 清空后 `size()` 变 0，但底层容量不一定立刻缩掉（如 `vector`）
+#### `count_if`
 
-### 1.5 `swap()`
-
-- 作用：交换两个容器内容
-- 典型写法：
+- 作用：统计满足条件的元素个数
 
 ```cpp
-vector<int> a = {1, 2}, b = {3, 4};
-a.swap(b);
+int cnt = count_if(v.begin(), v.end(), [](int x){ return x % 2 == 0; });
 ```
 
-- 高频提醒：
-    - 比手动复制交换更高效，也常用于“快速清空技巧”
+#### `all_of` / `any_of` / `none_of`
 
----
-
-## 2. 插入操作
-
-### 2.1 `push_back()`
-
-- 作用：在尾部插入一个元素
-- 典型容器：`vector`、`string`、`deque`, `list`
-- 典型写法：
+- 作用：整体判断区间是否全部 / 至少一个 / 一个都没有满足条件
 
 ```cpp
-v.push_back(5);
+bool ok = all_of(v.begin(), v.end(), [](int x){ return x > 0; });
 ```
 
-- 高频提醒：
-    - `vector` 中最常用的尾插接口之一就是它
+### 3.2 二分与有序区间
 
-### 2.2 `insert()`
+#### `lower_bound`
 
-- 作用：在指定位置插入元素
-- 典型写法：
-
-```cpp
-v.insert(v.begin() + 1, 99);
-set<int> s;
-s.insert(10);
-map<int, int> mp;
-mp.insert({1, 100});
-```
-
-- 高频提醒：
-    - 顺序容器的 `insert` 常要传迭代器位置
-    - 关联容器的 `insert` 更像“按键值插入”
-
-### 2.3 `emplace()` / `emplace_back()` ⭐
-
-- 作用：原地构造元素，减少中间临时对象
-- 典型写法：
-
-```cpp
-vector<pair<int, int>> v;
-v.emplace_back(1, 2);
-
-map<int, string> mp;
-mp.emplace(1, "hello");
-```
-
-- 高频提醒：
-    - 对 `pair` 和自定义对象尤其高效
-    - 在题目实现中，`emplace_back` 往往比 `push_back(make_pair(...))` 更直接
-
----
-
-## 3. 删除操作
-
-### 3.1 `erase()`
-
-- 作用：删除指定位置或指定范围元素
-- 典型写法：
-
-```cpp
-v.erase(v.begin() + 2);
-v.erase(v.begin(), v.begin() + 3);
-mp.erase(1);
-s.erase(10);
-```
-
-- 高频提醒：
-    - 顺序容器删除后，后面的迭代器可能失效
-    - `map` / `set` 的 `erase(key)` 是按键删
-
-### 3.2 `pop_back()`
-
-- 作用：删除尾部元素
-- 典型写法：
-
-```cpp
-v.pop_back();
-```
-
-- 高频提醒：
-    - `pop_back()` 不返回被删元素
-    - 删之前若要用值，先 `back()` 再删
-
-### 3.3 `pop_front()`
-
-- 作用：删除头部元素
-- 常见容器：`deque`、`list`
-- 典型写法：
-
-```cpp
-dq.pop_front();
-```
-
-- 高频提醒：
-    - `vector` 没有 `pop_front()`
-    - 头删高频需求时，`deque` 往往比 `vector` 更合适
-
----
-
-## 4. 查找操作
-
-### 4.1 `find()`（算法库）
-
-- 作用：在线性区间中查找某个值
-- 头文件：`<algorithm>`
-- 典型写法：
-
-```cpp
-auto it = find(v.begin(), v.end(), 5);
-if (it != v.end()) cout << "found\\n";
-```
-
-- 高频提醒：
-    - 这是线性查找，复杂度通常是 $O(n)$
-    - 对有序区间想找边界，常优先考虑二分相关函数
-
-### 4.2 `lower_bound()` ⭐
-
-- 作用：返回“第一个 >= target”的位置
+- 作用：返回第一个 `>= x` 的位置
 - 前提：区间必须有序
-- 典型写法：
 
 ```cpp
-sort(v.begin(), v.end());
-auto it = lower_bound(v.begin(), v.end(), 5);
+auto it = lower_bound(v.begin(), v.end(), x);
 ```
 
-- 高频提醒：
-    - 没排序就用，结果不可靠
-    - 它是二分查找家族里最常用的一个
+#### `upper_bound`
 
-### 4.3 `upper_bound()`
-
-- 作用：返回“第一个 > target”的位置
-- 典型写法：
+- 作用：返回第一个 `> x` 的位置
 
 ```cpp
-auto it = upper_bound(v.begin(), v.end(), 5);
+auto it = upper_bound(v.begin(), v.end(), x);
 ```
 
-- 高频提醒：
-    - 结合 `lower_bound()`，可以快速求某个值的出现区间
+#### `binary_search`
 
-### 4.4 `map.find()`
-
-- 作用：在 `map` / `unordered_map` 中按 key 查找
-- 典型写法：
+- 作用：判断有序区间中是否存在某值
 
 ```cpp
-auto it = mp.find(3);
-if (it != mp.end()) {
-    cout << it->second << '\\n';
-}
+bool exists = binary_search(v.begin(), v.end(), x);
 ```
 
-- 高频提醒：
-    - `mp[key]` 会在 key 不存在时创建新元素
-    - 只想查询是否存在时，优先 `find()`
+#### `equal_range`
 
----
+- 作用：同时返回某值的左右边界区间
 
-## 5. 排序
+```cpp
+auto [L, R] = equal_range(v.begin(), v.end(), x);
+```
 
-### 5.1 `sort()` ⭐
+### 3.3 排序与选择
 
-- 作用：对区间排序
-- 常见容器：`vector`、`string`、数组区间
-- 头文件：`<algorithm>`
-- 典型写法：
+#### `sort`
+
+- 作用：排序，默认升序
 
 ```cpp
 sort(v.begin(), v.end());
 sort(v.begin(), v.end(), greater<int>());
 ```
 
-- 高频提醒：
-    - `sort` 底层要求随机访问迭代器，所以不能直接排 `list`
-    - 自定义比较器时要确保逻辑稳定且满足严格弱序
+#### `stable_sort`
 
-### 5.2 `list.sort()`
+- 作用：稳定排序；相等元素的相对顺序保持不变
+- 适合“先按次关键字排，再按主关键字稳定排序”的场景
 
-- 作用：链表自己的排序函数
-- 典型写法：
+#### `nth_element`
 
-```cpp
-list<int> lst = {3, 1, 2};
-lst.sort();
-```
-
-- 高频提醒：
-    - `list` 要用成员函数 `sort()`，不能直接用算法库 `sort(lst.begin(), lst.end())`
-
----
-
-## 6. 最重要的 20% 函数 ⭐
-
-### 6.1 `sort`
-
-- 用途：排序、贪心前处理、去重前准备、二分前准备
-
-### 6.2 `lower_bound`
-
-- 用途：第一个 `>= x`，找边界、离散化、二分定位
-
-### 6.3 `upper_bound`
-
-- 用途：第一个 `> x`，统计区间出现次数常用
-
-### 6.4 `find`
-
-- 用途：线性查找，适合小范围或无需有序前提时
-
-### 6.5 `accumulate`
-
-- 头文件：`<numeric>`
-- 用途：快速求和
-- 典型写法：
+- 作用：把第 `n` 小元素放到正确位置，左右两边仅保证相对大小关系
+- 典型用途：快速找第 k 小 / 第 k 大
 
 ```cpp
-int sum = accumulate(v.begin(), v.end(), 0);
+nth_element(v.begin(), v.begin() + k, v.end());
 ```
 
-- 高频提醒：
-    - 初值类型会影响结果类型，求大和时常改成 `0LL`
+#### `partial_sort`
 
-### 6.6 `push_back`
+- 作用：只把前一部分排好
+- 适合求前 k 小元素
 
-- 用途：尾插基础操作，序列构造中的高频接口
+#### `is_sorted`
 
-### 6.7 `emplace_back`
+- 作用：判断区间是否有序
 
-- 用途：原地构造，插入 `pair` 和对象时尤其常用
+### 3.4 最值与区间性质
 
-### 6.8 `erase`
+#### `min` / `max`
 
-- 用途：删元素、配合 `unique` 去重、删区间
+```cpp
+int a = min(x, y);
+int b = max(x, y);
+```
 
-<aside> ⭐
+#### `min_element` / `max_element`
 
-如果希望优先掌握最常用的 STL 组合，建议先熟悉下面几组模式：
+- 作用：返回最小 / 最大元素迭代器
 
-**`sort + lower_bound`**
+```cpp
+auto mn = min_element(v.begin(), v.end());
+auto mx = max_element(v.begin(), v.end());
+```
 
-**`sort + unique + erase`**
+#### `minmax_element`
 
-**`find + end` 进行存在性判断**
+- 作用：一次得到最小和最大元素位置
 
-**`accumulate` 进行区间求和**
+#### `clamp`
 
-</aside>
+- 作用：把值限制在某个区间内
 
----
+```cpp
+x = clamp(x, 0, 100);
+```
 
-## 7. 高频组合套路（实践价值最高的部分）
+### 3.5 变换与复制
 
-### 7.1 排序 + 去重
+#### `copy`
+
+- 作用：复制区间
+
+```cpp
+copy(v.begin(), v.end(), back_inserter(ans));
+```
+
+#### `transform`
+
+- 作用：按规则变换每个元素
+
+```cpp
+transform(v.begin(), v.end(), v.begin(), [](int x){ return x * 2; });
+```
+
+#### `fill`
+
+- 作用：把区间填成同一值
+
+```cpp
+fill(v.begin(), v.end(), 0);
+```
+
+#### `replace` / `replace_if`
+
+- 作用：替换满足条件的元素
+
+### 3.6 删除整理类
+
+#### `remove`
+
+- 作用：把“不想要的值”移到后面，返回新的逻辑结尾
+- 重点：**它不真正缩容**
+
+```cpp
+v.erase(remove(v.begin(), v.end(), x), v.end());
+```
+
+#### `remove_if`
+
+- 作用：按条件移除，常与 `erase` 配套
+
+#### `unique`
+
+- 作用：去除相邻重复元素，返回新的逻辑结尾
+- 若想真正“全局去重”，通常先 `sort` 再 `unique`
 
 ```cpp
 sort(v.begin(), v.end());
 v.erase(unique(v.begin(), v.end()), v.end());
 ```
 
-- 场景：去重、离散化预处理
+### 3.7 反转与排列
 
-### 7.2 二分找位置
+#### `reverse`
+
+- 作用：反转区间
+
+#### `rotate`
+
+- 作用：循环旋转区间
+
+#### `next_permutation`
+
+- 作用：生成下一个字典序排列
 
 ```cpp
+sort(v.begin(), v.end());
+do {
+    // 使用当前排列
+} while (next_permutation(v.begin(), v.end()));
+```
+
+#### `prev_permutation`
+
+- 作用：生成上一个字典序排列
+
+### 3.8 数值类算法
+
+#### `accumulate`
+
+- 头文件：`<numeric>`
+- 作用：累加 / 可扩展为自定义折叠
+
+```cpp
+long long sum = accumulate(v.begin(), v.end(), 0LL);
+```
+
+- 高频提醒：
+    - 初值类型决定结果类型
+
+#### `iota`
+
+- 作用：顺序填充递增值
+
+```cpp
+iota(v.begin(), v.end(), 0);
+```
+
+#### `partial_sum`
+
+- 作用：生成前缀和序列
+
+#### `adjacent_difference`
+
+- 作用：生成相邻差分序列
+
+### 3.9 集合与有序区间算法
+
+- 前提通常是：**参与运算的区间有序**
+
+#### `merge`
+
+- 合并两个有序区间
+
+#### `set_union`
+
+- 求并集
+
+#### `set_intersection`
+
+- 求交集
+
+#### `set_difference`
+
+- 求差集
+
+### 3.10 堆相关算法
+
+#### `make_heap`
+
+- 把区间建成堆
+
+#### `push_heap`
+
+- 堆中插入新元素后维护堆性质
+
+#### `pop_heap`
+
+- 把堆顶移到末尾并维护剩余区间为堆
+
+#### `sort_heap`
+
+- 对堆排序
+
+---
+
+## 4. 关联容器最值得掌握的成员函数
+
+### 4.1 `set` / `map`
+
+- `find(key)`：查找 key
+- `count(key)`：判断是否存在（或计数）
+- `lower_bound(key)` / `upper_bound(key)`：有序边界查找
+- `insert(...)` / `emplace(...)`：插入
+- `erase(key)` / `erase(it)`：删除
+
+典型写法：
+
+```cpp
+map<int,int> mp;
+mp[3] = 10;
+auto it = mp.find(3);
+if (it != mp.end()) cout << it->second << '\\n';
+```
+
+### 4.2 `unordered_map` / `unordered_set`
+
+- 高频成员：
+    - `find`
+    - `count`
+    - `insert`
+    - `emplace`
+    - `erase`
+- 适合高频查找、无需维护有序性的场景
+
+高频提醒：
+
+- `unordered_map` 平均快，但最坏情况不一定优雅
+- 需要有序遍历、范围查询、边界查找时还是 `map` 更自然
+
+---
+
+## 5. 高频组合套路 ⭐
+
+### 5.1 排序 + 去重
+
+```cpp
+sort(v.begin(), v.end());
+v.erase(unique(v.begin(), v.end()), v.end());
+```
+
+- 场景：离散化、去重、预处理
+
+### 5.2 排序 + 二分查找
+
+```cpp
+sort(v.begin(), v.end());
 auto it = lower_bound(v.begin(), v.end(), x);
 ```
 
-- 场景：有序数组找边界、找插入点
+- 场景：边界定位、查找插入点、统计区间
 
-### 7.3 查某 key 是否存在
+### 5.3 统计某值出现次数
+
+```cpp
+int cnt = upper_bound(v.begin(), v.end(), x) - lower_bound(v.begin(), v.end(), x);
+```
+
+- 前提：有序
+
+### 5.4 remove-erase 惯用法
+
+```cpp
+v.erase(remove(v.begin(), v.end(), x), v.end());
+```
+
+- 场景：从顺序容器删除指定值
+
+### 5.5 map 查询存在性
 
 ```cpp
 if (mp.find(key) != mp.end()) {
@@ -393,48 +495,109 @@ if (mp.find(key) != mp.end()) {
 }
 ```
 
-- 场景：不想误创建 map 元素时
+- 场景：避免 `mp[key]` 意外插入
 
-### 7.4 快速求和
+### 5.6 accumulate 快速聚合
 
 ```cpp
 long long sum = accumulate(v.begin(), v.end(), 0LL);
 ```
 
-- 场景：数组和、前缀处理前的快速统计
-
-### 7.5 原地构造 `pair`
+### 5.7 next_permutation 枚举排列
 
 ```cpp
-vector<pair<int,int>> edges;
-edges.emplace_back(u, v);
+sort(v.begin(), v.end());
+do {
+    // 当前排列
+} while (next_permutation(v.begin(), v.end()));
 ```
 
-- 场景：图论边集、坐标、二元组存储
+### 5.8 iota + sort / shuffle 生成序列
+
+```cpp
+vector<int> p(n);
+iota(p.begin(), p.end(), 0);
+```
+
+---
+
+## 6. 学 STL 时最值得建立的判断框架
+
+### 6.1 先判断容器
+
+- 需要随机访问：优先想 `vector`
+- 需要有序查找：优先想 `set` / `map`
+- 需要哈希查找：优先想 `unordered_map` / `unordered_set`
+
+### 6.2 再判断有序性
+
+- 无序区间：优先线性算法或哈希
+- 有序区间：优先二分、集合算法、边界算法
+
+### 6.3 最后判断是否已有现成算法
+
+- 能用现成算法表达意图，就尽量不要手写低质量循环
+- STL 的价值之一正是：
+    - 意图更清楚
+    - 错误更少
+    - 代码更短
 
 ---
 
 ## ⚠️ Pitfalls（高频错误）
 
-- 对无序序列使用 `lower_bound` / `upper_bound`
-- 误以为 `erase` 删除后迭代器还一定有效
-- 误把 `mp[key]` 当纯查询接口，结果意外插入元素
-- 忘记 `pop_back()` / `pop_front()` 不返回值
-- `accumulate` 初值写成 `0`，结果在大数时仍按 `int` 计算
-- 把 `sort` 直接用于 `list`
+- 对无序区间使用 `lower_bound` / `upper_bound` / `binary_search`
+- 把 `remove` 误以为真正删除元素
+- 忘记 `unique` 只能去掉相邻重复
+- `accumulate` 初值类型错误，导致结果溢出或类型不对
+- 把 `map[key]` 当纯查询接口，导致插入默认值
+- 误用已失效迭代器
+- 把 `sort` 用在不支持随机访问迭代器的容器上
+- 只记函数名，不记前提条件与返回值语义
 
-## 🚀 Performance / Tips（性能优化）
+## 🚀 Performance / Tips（理解深化）
 
-- `find`：通常是 $O(n)$
-- `lower_bound` / `upper_bound`：有序区间上通常是 $O(\log n)$
-- `sort`：通常是 $O(n \log n)$
-- `map.find`：通常是 $O(\log n)$
-- `unordered_map.find`：平均通常是 $O(1)$
-- 使用建议：
-    - 先判断容器类型
-    - 再判断区间是否有序
-    - 最后选择线性查找、二分还是哈希
+- `find` / `count` 在线性区间通常是 $O(n)$
+- `lower_bound` / `upper_bound` / `binary_search` 在有序随机访问区间通常是 $O(\log n)$
+- `sort` 通常是 $O(n \log n)$
+- `nth_element` 常用于第 k 小问题，平均表现很好
+- `unordered_map.find` 平均通常是 $O(1)$
+- `map.find` 通常是 $O(\log n)$
+- 复杂度只是第一层，是否满足前提条件同样关键
+
+## 📚 学习优先级建议
+
+### 第一层：必须滚瓜烂熟
+
+- `sort`
+- `lower_bound` / `upper_bound`
+- `find`
+- `count`
+- `accumulate`
+- `reverse`
+- `unique + erase`
+- `map.find`
+- `push_back` / `emplace_back`
+
+### 第二层：刷题高频增强
+
+- `binary_search`
+- `min_element` / `max_element`
+- `transform`
+- `next_permutation`
+- `iota`
+- `remove_if`
+- `nth_element`
+
+### 第三层：理解拓展
+
+- `partial_sort`
+- `stable_sort`
+- `partial_sum`
+- `merge`
+- `set_union` / `set_intersection`
+- `make_heap` / `push_heap` / `pop_heap`
 
 ## 📌 One-liner Summary（一句话总结）
 
-- **这篇 STL Cheat Sheet 将最常用的 STL 函数按“增删查改 + 排序 + 组合模式”进行集中整理。**
+- **这篇 STL Cheat Sheet 的核心，是把真正有学习价值和实战价值的容器接口与算法函数按用途、前提和组合方式系统整理出来。**

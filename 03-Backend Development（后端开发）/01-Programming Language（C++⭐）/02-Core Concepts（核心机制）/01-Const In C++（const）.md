@@ -33,15 +33,15 @@
 const int MOD = 1000000007;
 ```
 
-1. 常量引用
+2. 常量引用
 
 ```cpp
 void print(const string& s) {
-    cout << s << '\\n';
+    cout << s << '\n';
 }
 ```
 
-1. 指针中的 `const`
+3. 指针中的 `const`
 
 ```cpp
 int x = 10;
@@ -49,7 +49,7 @@ const int* p1 = &x;
 int* const p2 = &x;
 ```
 
-1. `const` 成员函数
+4. `const` 成员函数
 
 ```cpp
 class A {
@@ -89,7 +89,7 @@ private:
 using namespace std;
 
 void show(const int& x) {
-    cout << x << '\\n';
+    cout << x << '\n';
 }
 
 int main() {

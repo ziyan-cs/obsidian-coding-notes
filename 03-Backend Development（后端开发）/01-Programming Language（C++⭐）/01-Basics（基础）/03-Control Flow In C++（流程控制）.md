@@ -27,15 +27,15 @@
 
 ```cpp
 if (x > 0) {
-    cout << "positive\\n";
+    cout << "positive\n";
 } else if (x == 0) {
-    cout << "zero\\n";
+    cout << "zero\n";
 } else {
-    cout << "negative\\n";
+    cout << "negative\n";
 }
 ```
 
-1. `for` 循环
+2. `for` 循环
 
 ```cpp
 for (int i = 0; i < 5; ++i) {
@@ -43,17 +43,17 @@ for (int i = 0; i < 5; ++i) {
 }
 ```
 
-1. `while` 循环
+3. `while` 循环
 
 ```cpp
 int x = 3;
 while (x > 0) {
-    cout << x << '\\n';
+    cout << x << '\n';
     --x;
 }
 ```
 
-1. `break` 和 `continue`
+4. `break` 和 `continue`
 
 ```cpp
 for (int i = 0; i < 10; ++i) {
@@ -93,7 +93,7 @@ using namespace std;
 
 int main() {
     for (int i = 1; i <= 5; ++i) {
-        if (i % 2 == 0) cout << i << '\\n';
+        if (i % 2 == 0) cout << i << '\n';
     }
     return 0;
 }

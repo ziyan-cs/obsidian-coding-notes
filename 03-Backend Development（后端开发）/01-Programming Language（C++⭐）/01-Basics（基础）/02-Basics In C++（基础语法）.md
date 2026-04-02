@@ -37,24 +37,24 @@ char c = 'A';
 bool ok = true;
 ```
 
-1. 常量
+2. 常量
 
 ```cpp
 const int MOD = 1000000007;
 ```
 
-1. 基本运算
+3. 基本运算
 
 ```cpp
 int a = 5, b = 2;
-cout << a + b << '\\n';
-cout << a - b << '\\n';
-cout << a * b << '\\n';
-cout << a / b << '\\n';
-cout << a % b << '\\n';
+cout << a + b << '\n';
+cout << a - b << '\n';
+cout << a * b << '\n';
+cout << a / b << '\n';
+cout << a % b << '\n';
 ```
 
-1. 注释
+4. 注释
 
 ```cpp
 // 单行注释
@@ -93,7 +93,7 @@ int main() {
     int a = 5;
     long long b = 10;
     double c = 2.5;
-    cout << a << ' ' << b << ' ' << c << '\\n';
+    cout << a << ' ' << b << ' ' << c << '\n';
     return 0;
 }
 ```

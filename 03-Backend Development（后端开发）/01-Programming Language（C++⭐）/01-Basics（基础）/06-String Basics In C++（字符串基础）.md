@@ -35,18 +35,18 @@ using namespace std;
 int main() {
     string s;
     cin >> s;
-    cout << s << '\\n';
+    cout << s << '\n';
 }
 ```
 
-1. 读整行
+2. 读整行
 
 ```cpp
 string line;
 getline(cin, line);
 ```
 
-1. 遍历字符
+3. 遍历字符
 
 ```cpp
 for (char c : s) {
@@ -54,19 +54,19 @@ for (char c : s) {
 }
 ```
 
-1. 拼接与截取
+4. 拼接与截取
 
 ```cpp
 string s = "abc";
 s += "def";
-cout << s.substr(1, 3) << '\\n';
+cout << s.substr(1, 3) << '\n';
 ```
 
-1. 查找
+5. 查找
 
 ```cpp
 if (s.find("ab") != string::npos) {
-    cout << "found\\n";
+    cout << "found\n";
 }
 ```
 
@@ -102,8 +102,8 @@ using namespace std;
 
 int main() {
     string s = "hello";
-    cout << s << '\\n';
-    cout << s.size() << '\\n';
+    cout << s << '\n';
+    cout << s.size() << '\n';
     return 0;
 }
 ```

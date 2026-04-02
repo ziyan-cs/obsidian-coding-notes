@@ -33,12 +33,12 @@ using namespace std;
 
 int main() {
     int a[5] = {1, 2, 3, 4, 5};
-    cout << a[0] << '\\n';
-    cout << a[4] << '\\n';
+    cout << a[0] << '\n';
+    cout << a[4] << '\n';
 }
 ```
 
-1. 遍历数组
+2. 遍历数组
 
 ```cpp
 for (int i = 0; i < 5; ++i) {
@@ -46,14 +46,14 @@ for (int i = 0; i < 5; ++i) {
 }
 ```
 
-1. 统计和
+3. 统计和
 
 ```cpp
 int sum = 0;
 for (int i = 0; i < n; ++i) sum += a[i];
 ```
 
-1. 二维数组
+4. 二维数组
 
 ```cpp
 int g[3][3] = {

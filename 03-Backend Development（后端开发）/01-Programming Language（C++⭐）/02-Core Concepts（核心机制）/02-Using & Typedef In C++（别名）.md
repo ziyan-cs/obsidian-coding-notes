@@ -30,21 +30,21 @@ typedef long long ll;
 typedef pair<int, int> PII;
 ```
 
-1. `using` 基础
+2. `using` 基础
 
 ```cpp
 using ll = long long;
 using PII = pair<int, int>;
 ```
 
-1. 模板别名
+3. 模板别名
 
 ```cpp
 template <typename T>
 using Vec = vector<T>;
 ```
 
-1. 提升可读性
+3. 提升可读性
 
 ```cpp
 using Graph = vector<vector<int>>;
@@ -82,7 +82,7 @@ using VI = vector<int>;
 int main() {
     ll x = 123456789;
     VI a = {1, 2, 3};
-    cout << x << ' ' << a.size() << '\\n';
+    cout << x << ' ' << a.size() << '\n';
     return 0;
 }
 ```

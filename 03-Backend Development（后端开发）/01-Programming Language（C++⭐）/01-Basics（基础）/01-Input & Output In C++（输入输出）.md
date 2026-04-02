@@ -36,36 +36,36 @@ using namespace std;
 int main() {
     int x;
     cin >> x;
-    cout << x << '\\n';
+    cout << x << '\n';
     return 0;
 }
 ```
 
-1. 多变量输入
+2. 多变量输入
 
 ```cpp
 int a, b;
 cin >> a >> b;
-cout << a + b << '\\n';
+cout << a + b << '\n';
 ```
 
-1. 字符串输入
+3. 字符串输入
 
 ```cpp
 string s;
 cin >> s;
-cout << s << '\\n';
+cout << s << '\n';
 ```
 
-1. 读一整行
+4. 读一整行
 
 ```cpp
 string line;
 getline(cin, line);
-cout << line << '\\n';
+cout << line << '\n';
 ```
 
-1. 快速 I/O
+5. 快速 I/O
 
 ```cpp
 ios::sync_with_stdio(false);
@@ -105,11 +105,11 @@ int main() {
 
     int a, b;
     cin >> a >> b;
-    cout << a + b << '\\n';
+    cout << a + b << '\n';
     return 0;
 }
 ```
 
 ## 📌 One-liner Summary（一句话总结）
 
-**C++ 输入输出就是：用 `cin` 读数据，用 `cout` 输出结果。**
+- **C++ 输入输出就是：用 `cin` 读数据，用 `cout` 输出结果。**
