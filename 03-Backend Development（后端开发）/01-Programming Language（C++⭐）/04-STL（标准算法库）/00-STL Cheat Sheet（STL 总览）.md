@@ -64,7 +64,7 @@
 
 ```cpp
 if (!v.empty()) {
-    cout << v.front() << ' ' << v.back() << '\\n';
+    cout << v.front() << ' ' << v.back() << '\n';
 }
 ```
 
@@ -431,7 +431,7 @@ iota(v.begin(), v.end(), 0);
 map<int,int> mp;
 mp[3] = 10;
 auto it = mp.find(3);
-if (it != mp.end()) cout << it->second << '\\n';
+if (it != mp.end()) cout << it->second << '\n';
 ```
 
 ### 4.2 `unordered_map` / `unordered_set`
