@@ -109,9 +109,9 @@ int toggleBit(int x, int k) {
 
 int main() {
     int x = 10;  // 1010
-    cout << setBit(x, 0) << '\\n';
-    cout << clearBit(x, 1) << '\\n';
-    cout << toggleBit(x, 2) << '\\n';
+    cout << setBit(x, 0) << '\n';
+    cout << clearBit(x, 1) << '\n';
+    cout << toggleBit(x, 2) << '\n';
     return 0;
 }
 ```
@@ -122,7 +122,7 @@ int main() {
 - 清为 0：`& ~`
 - 翻转：`^`
 
-1. 判断是不是 2 的幂
+4. 判断是不是 2 的幂
 
 ```cpp
 #include <iostream>
@@ -133,8 +133,8 @@ bool isPowerOfTwo(int x) {
 }
 
 int main() {
-    cout << isPowerOfTwo(8) << '\\n';
-    cout << isPowerOfTwo(10) << '\\n';
+    cout << isPowerOfTwo(8) << '\n';
+    cout << isPowerOfTwo(10) << '\n';
     return 0;
 }
 ```
@@ -144,7 +144,7 @@ int main() {
 - 2 的幂在二进制里只有一个 `1`
 - `x & (x - 1)` 会把最低位的一个 `1` 去掉
 
-1. 统计二进制中 1 的个数
+5. 统计二进制中 1 的个数
 
 ```cpp
 #include <iostream>
@@ -160,7 +160,7 @@ int countBits(int x) {
 }
 
 int main() {
-    cout << countBits(13) << '\\n';
+    cout << countBits(13) << '\n';
     return 0;
 }
 ```
@@ -170,7 +170,7 @@ int main() {
 - 每次循环去掉一个 `1`
 - 比一位一位检查更常见、更经典
 
-1. 只出现一次的数字（异或经典题）
+6. 只出现一次的数字（异或经典题）
 
 ```cpp
 #include <iostream>
@@ -178,14 +178,14 @@ int main() {
 using namespace std;
 
 int singleNumber(const vector<int>& nums) {
-    int x = 0;
-    for (int v : nums) x ^= v;
-    return x;
+    int eor = 0;
+    for (int v : nums) eor ^= v;
+    return eor;
 }
 
 int main() {
     vector<int> nums = {2, 1, 4, 2, 1};
-    cout << singleNumber(nums) << '\\n';
+    cout << singleNumber(nums) << '\n';
     return 0;
 }
 ```
@@ -195,7 +195,7 @@ int main() {
 - 成对出现的数会两两抵消
 - 最后剩下只出现一次的数
 
-1. 子集枚举（bitmask 高级高频）
+7. 子集枚举（bitmask 高级高频）
 
 ```cpp
 #include <iostream>
@@ -213,7 +213,7 @@ int main() {
                 cout << nums[i] << ' ';
             }
         }
-        cout << "}\\n";
+        cout << "}\n";
     }
 
     return 0;
@@ -226,7 +226,7 @@ int main() {
 - 总共有 `2^n` 个子集
 - 状态压缩 DP、搜索、组合枚举里特别常见
 
-1. 枚举一个集合的所有非空子集
+8. 枚举一个集合的所有非空子集
 
 ```cpp
 #include <iostream>
@@ -236,7 +236,7 @@ int main() {
     int mask = 13;  // 1101
 
     for (int sub = mask; sub; sub = (sub - 1) & mask) {
-        cout << sub << '\\n';
+        cout << sub << '\n';
     }
 
     return 0;

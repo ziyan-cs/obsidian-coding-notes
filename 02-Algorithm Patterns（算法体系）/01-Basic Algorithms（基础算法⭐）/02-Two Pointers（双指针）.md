@@ -44,7 +44,7 @@ bool twoSumSorted(const vector<int>& a, int target) {
 }
 ```
 
-1. 快慢指针去重
+2. 快慢指针去重
 
 ```cpp
 int removeDuplicates(vector<int>& nums) {
@@ -59,7 +59,7 @@ int removeDuplicates(vector<int>& nums) {
 }
 ```
 
-1. 回文判断
+3. 回文判断
 
 ```cpp
 bool isPalindrome(const string& s) {
@@ -72,7 +72,7 @@ bool isPalindrome(const string& s) {
 }
 ```
 
-1. 分离奇偶 / 划分数组
+4. 分离奇偶 / 划分数组
 
 ```cpp
 while (l < r) {
@@ -127,7 +127,7 @@ int main() {
         if (s < 9) ++l;
         else --r;
     }
-    cout << l << ' ' << r << '\\n';
+    cout << l << ' ' << r << '\n';
 }
 ```
 
