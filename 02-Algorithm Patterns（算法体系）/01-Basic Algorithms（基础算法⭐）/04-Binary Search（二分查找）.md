@@ -1,34 +1,20 @@
-#algorithm #binary-search #monotonicity #search #cpp
+#algorithm #binary-search #search #monotonicity
 
-## ⚡ TL;DR（快速决策）
+## 核心
 
-- 二分查找本质是：**利用单调性，每次把答案范围缩小一半**
-- 一看到这些特征，要优先想到二分：
-    - 有序数组查找
-    - 找第一个满足条件的位置
-    - 找最小可行值 / 最大可行值
-    - 答案空间具有单调性
-- 二分不是只能查数组，也可以二分答案
-- 题目里出现“最小的满足条件”“最大的合法值”，要高度敏感
+- 二分查找不是只会“查一个数”，而是：**在单调性上快速缩小答案区间**
+- 关键词：
+    - 有序数组
+    - 单调性
+    - 找边界
+    - 二分答案
 
-## 🧩 Core Idea（核心本质）
+## 必会三类
 
-- 二分的核心不是“中点”本身，而是：
-    - 左边一段一定不行 / 一定行
-    - 右边一段一定行 / 一定不行
-- 一句话理解：
-    - **只要问题具有单调分界线，就可以尝试二分。**
-- 二分常见对象：
-    - 下标
-    - 值域
-    - 时间、长度、答案空间
-
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 有序数组查找目标
+### 1. 经典查值
 
 ```cpp
-int binarySearch(const vector<int>& a, int target) {
+int binarySearch(vector<int>& a, int target) {
     int l = 0, r = (int)a.size() - 1;
     while (l <= r) {
         int mid = l + (r - l) / 2;
@@ -40,90 +26,81 @@ int binarySearch(const vector<int>& a, int target) {
 }
 ```
 
-1. 找第一个 >= target 的位置
+### 2. 找左边界
 
 ```cpp
-int l = 0, r = n - 1, ans = n;
-while (l <= r) {
-    int mid = l + (r - l) / 2;
-    if (a[mid] >= target) {
-        ans = mid;
-        r = mid - 1;
-    } else {
-        l = mid + 1;
-    }
-}
-```
-
-1. 二分答案
-
-```cpp
-while (l <= r) {
-    int mid = l + (r - l) / 2;
-    if (check(mid)) {
-        ans = mid;
-        r = mid - 1;
-    } else {
-        l = mid + 1;
-    }
-}
-```
-
-## ⚠️ Pitfalls（高频错误）
-
-- 最常见错误 1：循环不变量没想清楚
-- 最常见错误 2：`l <= r` 和 `l < r` 写法混乱
-- 最常见错误 3：更新边界时漏掉 `+1 / -1`
-- 最常见错误 4：中点写成 `(l + r) / 2` 导致潜在溢出
-- 最常见错误 5：题目根本没有单调性却强行二分
-
-## 🚀 Performance / Tips（性能优化）
-
-- 经典复杂度：$O(log n)$
-- 二分答案通常是 $O(\log V \cdot check)$
-- 高频经验：
-    - 先写 `check(mid)` 的含义
-    - 再决定二分的是“最小可行”还是“最大可行”
-    - 写完后一定手推边界样例
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 有序数组找目标
-- 找边界位置
-- 最小可行值 / 最大可行值
-- 长度、容量、时间的答案搜索
-- 旋转数组、峰值等变形题
-
-## 🆚 Binary Search vs Two Pointers
-
-- 二分靠“单调分界线”
-- 双指针靠“移动过程中可维护条件”
-- 两者都利用结构性质，但思路不同
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 3, 5, 7, 9};
-    int target = 7;
-    int l = 0, r = (int)a.size() - 1;
-    while (l <= r) {
+int lowerBound(vector<int>& a, int target) {
+    int l = 0, r = (int)a.size();
+    while (l < r) {
         int mid = l + (r - l) / 2;
-        if (a[mid] == target) {
-            cout << mid << '\\n';
-            return 0;
-        }
-        if (a[mid] < target) l = mid + 1;
-        else r = mid - 1;
+        if (a[mid] >= target) r = mid;
+        else l = mid + 1;
     }
-    cout << -1 << '\\n';
+    return l;
 }
 ```
 
-## 📌 One-liner Summary（一句话总结）
+### 3. 二分答案
 
-- **二分查找就是：利用单调性，每次排除一半范围来逼近目标答案。**
+- 前提：答案具有单调可判定性
+
+```cpp
+int binaryAnswer(int l, int r) {
+    while (l < r) {
+        int mid = l + (r - l) / 2;
+        if (check(mid)) r = mid;
+        else l = mid + 1;
+    }
+    return l;
+}
+```
+
+## 什么时候想到二分
+
+- 数组有序
+- 问“第一个满足条件的位置”
+- 问“最小的 x 使得 check(x) 成立”
+- 暴力枚举答案太慢，但答案区间明显且有单调性
+
+## 高频题型模板
+
+### 搜索插入位置
+
+```cpp
+int searchInsert(vector<int>& nums, int target) {
+    int l = 0, r = nums.size();
+    while (l < r) {
+        int mid = l + (r - l) / 2;
+        if (nums[mid] >= target) r = mid;
+        else l = mid + 1;
+    }
+    return l;
+}
+```
+
+### 在有序数组中统计出现次数
+
+```cpp
+int countTarget(vector<int>& a, int x) {
+    auto L = lower_bound(a.begin(), a.end(), x);
+    auto R = upper_bound(a.begin(), a.end(), x);
+    return R - L;
+}
+```
+
+## 高频坑点
+
+- 循环条件 `l <= r` 和 `l < r` 混用
+- 边界模板和 mid 更新不统一
+- 忘记二分答案的前提是“check 结果单调”
+- `mid = (l + r) / 2` 在极端情况下可能溢出
+
+## 只记这个
+
+- 有序数组找位置 -> 二分
+- 找边界 -> lower/upper bound 模板
+- 不在数组上也能二分，只要答案满足单调性
+
+## 一句话
+
+- **二分查找的核心不是折半本身，而是利用单调性把搜索空间快速砍半。**

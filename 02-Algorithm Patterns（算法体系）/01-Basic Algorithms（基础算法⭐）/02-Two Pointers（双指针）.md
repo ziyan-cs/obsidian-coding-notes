@@ -1,136 +1,107 @@
-#algorithm #two-pointers #array #string #optimization
+#algorithm #two-pointers #array #linked-list
 
-## ⚡ TL;DR（快速决策）
+## 核心
 
-- 双指针本质是：**用两个位置指针协同移动，减少重复枚举**
-- 一看到这些特征，要优先想到双指针：
-    - 有序数组中的两数之和
-    - 区间收缩 / 扩张
-    - 原地去重、分组、划分
-    - 回文判断、字符串匹配
-- 它的核心不是“两个指针”本身，而是：**通过移动规则降低复杂度**
-- 许多 $O(n^2)$ 枚举能被优化成 $O(n)$ 或 $O(n \log n)$
+- 两个位置指针按规则移动，不回退或少回退，降低枚举复杂度
+- 适用关键词：
+    - 有序数组
+    - 子数组 / 子序列
+    - 去重
+    - 左右夹逼
+    - 快慢指针
 
-## 🧩 Core Idea（核心本质）
+## 什么时候用
 
-- 双指针常见形态：
-    - 对撞指针：一左一右向中间移动
-    - 同向指针：快慢指针 / 滑动推进
-- 一句话理解：
-    - **让两个指针各司其职，共同缩小搜索范围。**
-- 双指针成立的关键通常是：
-    - 序列有序
-    - 某种单调性成立
-    - 可以在移动中维护区间性质
+- 一个指针不够，需要同时维护“左边界 + 右边界”
+- 问题本来是双重枚举，但可以通过移动规则减少重复计算
+- 链表判环、找中点、删除重复元素都常用双指针
 
-## 🔧 Usage Patterns（可复用代码模板）
+## 常见类型
 
-1. 有序数组两数之和
+### 1. 左右夹逼
+
+- 常用于有序数组求两数和、回文判断
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-bool twoSumSorted(const vector<int>& a, int target) {
-    int l = 0, r = (int)a.size() - 1;
-    while (l < r) {
-        int s = a[l] + a[r];
-        if (s == target) return true;
-        if (s < target) ++l;
-        else --r;
-    }
-    return false;
+int l = 0, r = n - 1;
+while (l < r) {
+    int s = a[l] + a[r];
+    if (s == target) break;
+    if (s < target) ++l;
+    else --r;
 }
 ```
 
-2. 快慢指针去重
+### 2. 快慢指针
+
+- 常用于链表中点、判环、原地去重
 
 ```cpp
-int removeDuplicates(vector<int>& nums) {
-    if (nums.empty()) return 0;
+ListNode* slow = head;
+ListNode* fast = head;
+while (fast && fast->next) {
+    slow = slow->next;
+    fast = fast->next->next;
+}
+```
+
+### 3. 同向双指针
+
+- 常用于去重、维护合法区间
+
+```cpp
+int j = 0;
+for (int i = 0; i < n; ++i) {
+    while (j < n && ok(i, j)) ++j;
+    // 处理区间 [i, j)
+}
+```
+
+## 高频题型模板
+
+### 有序数组两数之和
+
+```cpp
+vector<int> twoSumSorted(vector<int>& a, int target) {
+    int l = 0, r = (int)a.size() - 1;
+    while (l < r) {
+        int s = a[l] + a[r];
+        if (s == target) return {l, r};
+        if (s < target) ++l;
+        else --r;
+    }
+    return {};
+}
+```
+
+### 原地去重（有序数组）
+
+```cpp
+int removeDuplicates(vector<int>& a) {
+    if (a.empty()) return 0;
     int slow = 1;
-    for (int fast = 1; fast < (int)nums.size(); ++fast) {
-        if (nums[fast] != nums[fast - 1]) {
-            nums[slow++] = nums[fast];
+    for (int fast = 1; fast < (int)a.size(); ++fast) {
+        if (a[fast] != a[fast - 1]) {
+            a[slow++] = a[fast];
         }
     }
     return slow;
 }
 ```
 
-3. 回文判断
+## 高频坑点
 
-```cpp
-bool isPalindrome(const string& s) {
-    int l = 0, r = (int)s.size() - 1;
-    while (l < r) {
-        if (s[l] != s[r]) return false;
-        ++l; --r;
-    }
-    return true;
-}
-```
+- 没先确认数组是否有序，就直接左右夹逼
+- 区间是 `[l, r]` 还是 `[l, r)`` 写乱
+- 快慢指针判环时空指针判断不完整
+- 去重时 slow / fast 含义不清楚
 
-4. 分离奇偶 / 划分数组
+## 只记这个
 
-```cpp
-while (l < r) {
-    while (l < r && a[l] % 2 == 1) ++l;
-    while (l < r && a[r] % 2 == 0) --r;
-    if (l < r) swap(a[l], a[r]);
-}
-```
+- 有序数组配左右指针
+- 链表问题想快慢指针
+- 去重 / 合法区间想同向双指针
 
-## ⚠️ Pitfalls（高频错误）
+## 一句话
 
-- 最常见错误 1：没有单调性却硬套双指针
-- 最常见错误 2：指针移动条件写错导致死循环
-- 最常见错误 3：快慢指针覆盖数据时顺序错误
-- 最常见错误 4：对撞指针常忘记先排序
-- 最常见错误 5：边界条件 `l < r` / `l <= r` 混乱
-
-## 🚀 Performance / Tips（性能优化）
-
-- 经典对撞 / 同向双指针常见为 $O(n)$
-- 若前置要排序，则整体常是 $O(n \log n)$
-- 高频经验：
-    - 题目提“有序数组”时，对撞指针敏感度要高
-    - 原地去重、压缩、分组时，快慢指针很常见
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 两数之和（有序版）
-- 删除重复元素
-- 回文判断
-- 分区问题
-- 合并有序序列的线性扫描
-
-## 🆚 Two Pointers vs Sliding Window
-
-- 双指针更广，是总思维
-- 滑动窗口是双指针中专门处理“连续区间”的一种模型
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 4, 7, 11};
-    int l = 0, r = (int)a.size() - 1;
-    while (l < r) {
-        int s = a[l] + a[r];
-        if (s == 9) break;
-        if (s < 9) ++l;
-        else --r;
-    }
-    cout << l << ' ' << r << '\n';
-}
-```
-
-## 📌 One-liner Summary（一句话总结）
-
-- **双指针就是：通过两个指针的协同移动，利用单调性或结构性质高效缩小搜索范围。**
+- **双指针就是用两个位置状态协同移动，避免无意义的重复枚举。**

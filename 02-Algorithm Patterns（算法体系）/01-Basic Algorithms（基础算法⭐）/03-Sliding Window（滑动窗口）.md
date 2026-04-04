@@ -1,43 +1,49 @@
-#algorithm #sliding-window #two-pointers #substring #array
+#algorithm #sliding-window #two-pointers #substring
 
-## ⚡ TL;DR（快速决策）
+## 核心
 
-- 滑动窗口本质是：**维护一个连续区间，并在移动过程中动态更新区间信息**
-- 一看到这些特征，要优先想到滑动窗口：
+- 滑动窗口本质是：**维护一个连续区间，并在移动过程中动态更新答案**
+- 它是“双指针”的连续区间版本
+- 高频关键词：
     - 最长 / 最短子串
-    - 连续子数组满足某种条件
-    - 窗口左右端点会动态扩张和收缩
-- 滑动窗口是双指针的重要模型
-- 核心不是“窗口”两个字，而是：**区间连续且可以边移动边维护性质**
+    - 连续子数组
+    - 至多 / 至少 / 恰好
+    - 频次统计
 
-## 🧩 Core Idea（核心本质）
+## 适用前提
 
-- 通常用两个指针 `l`、`r` 表示当前窗口 `[l, r]`
-- `r` 右移：扩张窗口
-- `l` 右移：收缩窗口
-- 一句话理解：
-    - **一边移动边维护一个合法的连续区间。**
-- 做题关键：
-    - 窗口内维护什么信息
-    - 什么条件下扩张
-    - 什么条件下收缩
+- 题目要求的是连续区间
+- 左边界右移后，区间状态可以增量维护
+- 不想每次重新统计整个子数组
 
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 最长无重复子串
+## 标准模板
 
 ```cpp
-#include <iostream>
-#include <unordered_map>
-using namespace std;
+int l = 0;
+for (int r = 0; r < n; ++r) {
+    // 1. 扩张窗口，加入 a[r]
 
+    while (窗口不合法) {
+        // 2. 收缩窗口，移出 a[l]
+        ++l;
+    }
+
+    // 3. 用当前合法窗口更新答案
+}
+```
+
+## 常见题型
+
+### 1. 最长不重复子串
+
+```cpp
 int lengthOfLongestSubstring(string s) {
-    unordered_map<char, int> cnt;
-    int ans = 0;
-    for (int l = 0, r = 0; r < (int)s.size(); ++r) {
-        ++cnt[s[r]];
+    vector<int> cnt(256, 0);
+    int ans = 0, l = 0;
+    for (int r = 0; r < (int)s.size(); ++r) {
+        cnt[s[r]]++;
         while (cnt[s[r]] > 1) {
-            --cnt[s[l]];
+            cnt[s[l]]--;
             ++l;
         }
         ans = max(ans, r - l + 1);
@@ -46,79 +52,50 @@ int lengthOfLongestSubstring(string s) {
 }
 ```
 
-1. 和至少为 target 的最短子数组
+### 2. 长度最小的子数组和
 
 ```cpp
-int l = 0, sum = 0, ans = 1e9;
-for (int r = 0; r < n; ++r) {
-    sum += a[r];
-    while (sum >= target) {
-        ans = min(ans, r - l + 1);
-        sum -= a[l++];
+int minSubArrayLen(int target, vector<int>& nums) {
+    int l = 0, sum = 0, ans = INT_MAX;
+    for (int r = 0; r < (int)nums.size(); ++r) {
+        sum += nums[r];
+        while (sum >= target) {
+            ans = min(ans, r - l + 1);
+            sum -= nums[l++];
+        }
     }
+    return ans == INT_MAX ? 0 : ans;
 }
 ```
 
-1. 固定长度窗口
+### 3. 固定长度窗口
 
 ```cpp
-for (int i = 0; i < n; ++i) {
-    // 加入 a[i]
-    if (i >= k) {
-        // 移除 a[i-k]
+int maxSumK(vector<int>& a, int k) {
+    int sum = 0;
+    for (int i = 0; i < k; ++i) sum += a[i];
+    int ans = sum;
+    for (int r = k; r < (int)a.size(); ++r) {
+        sum += a[r] - a[r - k];
+        ans = max(ans, sum);
     }
+    return ans;
 }
 ```
 
-## ⚠️ Pitfalls（高频错误）
+## 高频坑点
 
-- 最常见错误 1：窗口维护信息更新不完整
-- 最常见错误 2：收缩条件和扩张条件写反
-- 最常见错误 3：并非所有子数组题都能滑动窗口，通常需要某种单调性
-- 最常见错误 4：左端点移动后忘记同步更新计数 / 和
-- 最常见错误 5：固定窗口和可变窗口模板混用
+- 没搞清楚是连续区间还是子序列
+- `while` 收缩条件写错，导致少缩或多缩
+- 窗口统计量没有增量更新，退化成暴力
+- “恰好 k 个” 常常转成“至多 k 个 - 至多 k-1 个”
 
-## 🚀 Performance / Tips（性能优化）
+## 只记这个
 
-- 许多滑动窗口题复杂度是 $O(n)$
-- 每个元素通常最多进窗口一次、出窗口一次
-- 高频经验：
-    - 连续区间问题先判断能否滑窗
-    - 定长窗口和变长窗口要区分
-    - 窗口内信息常用：计数、和、频率表、哈希表
+- 连续区间 -> 先想滑动窗口
+- 右指针负责扩张，左指针负责收缩
+- 窗口内统计必须能 O(1) 或均摊维护
 
-## 🧪 Common Scenarios（常见使用场景）
+## 一句话
 
-- 最长无重复子串
-- 最短覆盖子串
-- 固定长度窗口最值 / 平均值
-- 连续子数组和约束
-- 字符串频率匹配
-
-## 🆚 Sliding Window vs Two Pointers / Monotonic Queue
-
-- 滑动窗口是双指针中的连续区间模型
-- 单调队列常是滑动窗口的进一步优化工具，用于维护窗口最值
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 3, 4, 5};
-    int k = 3, sum = 0;
-    for (int i = 0; i < (int)a.size(); ++i) {
-        sum += a[i];
-        if (i >= k) sum -= a[i - k];
-        if (i >= k - 1) cout << sum << ' ';
-    }
-    return 0;
-}
-```
-
-## 📌 One-liner Summary（一句话总结）
-
-- **滑动窗口就是：通过移动连续区间的左右边界，在移动过程中维护区间性质并高效求解。**
+- **滑动窗口就是在连续区间上做动态维护，而不是每次重新枚举整个子数组。**
