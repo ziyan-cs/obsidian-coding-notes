@@ -1,6 +1,6 @@
 #algorithm #sorting #sort #comparison-sort #non-comparison-sort
 
-## ⚡ TL;DR
+## 核心
 
 - 排序先记 4 件事：
     - 时间复杂度
@@ -15,26 +15,7 @@
     - 计数排序
     - 基数排序
 
-## 1. 总分类
-
-### 比较排序
-
-- 冒泡排序
-- 选择排序
-- 插入排序
-- 希尔排序
-- 归并排序
-- 快速排序
-- 堆排序
-### 非比较排序
-
-- 计数排序
-- 桶排序
-- 基数排序
-
----
-
-## 2. 核心对比速记
+## 1. 核心对比速记
 
 - 冒泡：稳定，原地，$O(n^2)$
 - 选择：不稳定，原地，$O(n^2)$
@@ -49,9 +30,9 @@
 
 ---
 
-## 3. 每种排序都给代码
+## 2. 每种排序都给代码
 
-## 3.1 冒泡排序（Bubble Sort）
+## 2.1 冒泡排序（Bubble Sort）
 
 - 思想：相邻交换，大的往后冒
 - 稳定：是
@@ -73,7 +54,7 @@ void bubbleSort(vector<int>& a) {
 }
 ```
 
-## 3.2 选择排序（Selection Sort）
+## 2.2 选择排序（Selection Sort）
 
 - 思想：每轮选最小值放到前面
 - 稳定：否
@@ -92,7 +73,7 @@ void selectionSort(vector<int>& a) {
 }
 ```
 
-## 3.3 插入排序（Insertion Sort）⭐
+## 2.3 插入排序（Insertion Sort）⭐
 
 - 思想：维护前缀有序区，把当前值插进去
 - 稳定：是
@@ -112,7 +93,7 @@ void insertionSort(vector<int>& a) {
 }
 ```
 
-## 3.4 希尔排序（Shell Sort）
+## 2.4 希尔排序（Shell Sort）
 
 - 思想：按 gap 分组做插入排序
 - 稳定：否
@@ -133,7 +114,7 @@ void shellSort(vector<int>& a) {
 }
 ```
 
-## 3.5 归并排序（Merge Sort）⭐
+## 2.5 归并排序（Merge Sort）⭐
 
 - 思想：分治 + 合并两个有序区间
 - 稳定：是
@@ -161,7 +142,7 @@ void mergeSort(vector<int>& a, int l, int r) {
 }
 ```
 
-## 3.6 快速排序（Quick Sort）⭐
+## 2.6 快速排序（Quick Sort）⭐
 
 - 思想：partition 后递归左右区间
 - 稳定：否
@@ -182,7 +163,7 @@ void quickSort(vector<int>& a, int l, int r) {
 }
 ```
 
-## 3.7 堆排序（Heap Sort）⭐
+## 2.7 堆排序（Heap Sort）⭐
 
 - 思想：建大根堆，不断把堆顶放到末尾
 - 稳定：否
@@ -210,7 +191,7 @@ void heapSort(vector<int>& a) {
 }
 ```
 
-## 3.8 计数排序（Counting Sort）
+## 2.8 计数排序（Counting Sort）
 
 - 思想：统计每个值出现次数
 - 适用：值域小、整数
@@ -228,7 +209,7 @@ void countingSort(vector<int>& a) {
 }
 ```
 
-## 3.9 桶排序（Bucket Sort）
+## 2.9 桶排序（Bucket Sort）
 
 - 思想：先分桶，再对桶内排序
 - 适用：数据分布较均匀
@@ -250,7 +231,7 @@ void bucketSort(vector<float>& a) {
 }
 ```
 
-## 3.10 基数排序（Radix Sort）
+## 2.10 基数排序（Radix Sort）
 
 - 思想：按个位、十位、百位...稳定排序
 - 适用：非负整数、位数有限
@@ -274,7 +255,7 @@ void radixSort(vector<int>& a) {
 
 ---
 
-## 4. 最后只记这个选型
+## 3. 最后记住这个选型
 
 - 近乎有序、小规模：插入排序
 - 稳定排序：归并排序
@@ -286,7 +267,7 @@ void radixSort(vector<int>& a) {
 
 ---
 
-## 5. 高频坑点
+## 4. 高频坑点
 
 - 快排最坏会退化到 $O(n^2)$
 - `nth_element` 不是排序，它只是选第 k 小
