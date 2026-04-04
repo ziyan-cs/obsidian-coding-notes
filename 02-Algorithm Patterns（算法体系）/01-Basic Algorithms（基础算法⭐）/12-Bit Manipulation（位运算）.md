@@ -55,8 +55,8 @@ using namespace std;
 
 int main() {
     int x = 13;
-    if (x & 1) cout << "odd\\n";
-    else cout << "even\\n";
+    if (x & 1) cout << "odd\n";
+    else cout << "even\n";
     return 0;
 }
 ```
@@ -66,7 +66,7 @@ int main() {
 - 最低位是 `1` 表示奇数
 - 最低位是 `0` 表示偶数
 
-1. 判断第 k 位是否为 1
+2. 判断第 k 位是否为 1
 
 ```cpp
 #include <iostream>
@@ -78,8 +78,8 @@ bool getBit(int x, int k) {
 
 int main() {
     int x = 10;  // 二进制 1010
-    cout << getBit(x, 1) << '\\n';
-    cout << getBit(x, 2) << '\\n';
+    cout << getBit(x, 1) << '\n';
+    cout << getBit(x, 2) << '\n';
     return 0;
 }
 ```
@@ -89,7 +89,7 @@ int main() {
 - 先右移 `k` 位，把目标位移到最低位
 - 再与 `1` 做按位与
 
-1. 把第 k 位设为 1 / 设为 0 / 翻转
+3. 把第 k 位设为 1 / 设为 0 / 翻转
 
 ```cpp
 #include <iostream>
