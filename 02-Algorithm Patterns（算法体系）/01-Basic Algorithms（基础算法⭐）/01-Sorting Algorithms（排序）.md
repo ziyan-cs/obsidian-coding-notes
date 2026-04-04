@@ -2,12 +2,12 @@
 
 ## 核心
 
-- 排序先记 4 件事：
+- 排序记 4 件事：
     - 时间复杂度
     - 空间复杂度
     - 是否稳定
     - 是否原地
-- 必会核心：
+- 必会：
     - 插入排序
     - 归并排序
     - 快速排序
@@ -15,13 +15,13 @@
     - 计数排序
     - 基数排序
 
-## 1. 核心对比速记
+## 1. 方法对比
 
 - 冒泡：稳定，原地，$O(n^2)$
 - 选择：不稳定，原地，$O(n^2)$
 - 插入：稳定，原地，平均 $O(n^2)$，近乎有序时很强
-- 希尔：不稳定，原地，依赖 gap 序列
 - 归并：稳定，非原地，$O(n log n)$
+- 希尔：不稳定，原地，依赖 gap 序列
 - 快排：不稳定，通常原地，平均 $O(n log n)$，最坏 $O(n^2)$
 - 堆排：不稳定，原地，$O(n log n)$
 - 计数：可稳定，非原地，$O(n+k)$
@@ -93,28 +93,7 @@ void insertionSort(vector<int>& a) {
 }
 ```
 
-## 2.4 希尔排序（Shell Sort）
-
-- 思想：按 gap 分组做插入排序
-- 稳定：否
-
-```cpp
-void shellSort(vector<int>& a) {
-    int n = a.size();
-    for (int gap = n / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < n; ++i) {
-            int temp = a[i], j = i;
-            while (j >= gap && a[j - gap] > temp) {
-                a[j] = a[j - gap];
-                j -= gap;
-            }
-            a[j] = temp;
-        }
-    }
-}
-```
-
-## 2.5 归并排序（Merge Sort）⭐
+## 2.4 归并排序（Merge Sort）⭐
 
 - 思想：分治 + 合并两个有序区间
 - 稳定：是
@@ -141,6 +120,29 @@ void mergeSort(vector<int>& a, int l, int r) {
     }
 }
 ```
+
+## 2.5 希尔排序（Shell Sort）
+
+- 思想：按 gap 分组做插入排序
+- 稳定：否
+
+```cpp
+void shellSort(vector<int>& a) {
+    int n = a.size();
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; ++i) {
+            int temp = a[i], j = i;
+            while (j >= gap && a[j - gap] > temp) {
+                a[j] = a[j - gap];
+                j -= gap;
+            }
+            a[j] = temp;
+        }
+    }
+}
+```
+
+
 
 ## 2.6 快速排序（Quick Sort）⭐
 
@@ -260,7 +262,7 @@ void radixSort(vector<int>& a) {
 - 近乎有序、小规模：插入排序
 - 稳定排序：归并排序
 - 平均性能强：快速排序
-- 最坏情况稳、原地：堆排序
+- 最坏情况、稳、原地：堆排序
 - 值域小：计数排序
 - 整数按位：基数排序
 - 分布均匀：桶排序

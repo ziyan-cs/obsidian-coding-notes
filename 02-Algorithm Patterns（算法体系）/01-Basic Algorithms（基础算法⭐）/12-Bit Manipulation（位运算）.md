@@ -9,6 +9,12 @@
     - `^`
     - `~`
     - `<< >>`
+- 什么时候用：
+	- 状态压缩
+	- 奇偶
+	- 去重
+	- 异或
+	- lowbit
 
 ## 高频技巧
 
@@ -52,16 +58,32 @@ int lowbit(int x) {
 
 ## 高频例子
 
-### 只出现一次的数字
+### singleNumber
 
 ```cpp
 int singleNumber(vector<int>& nums) {
-    int ans = 0;
+    int  = 0;
     for (int x : nums) ans ^= x;
     return ans;
 }
 ```
 
+### singleNumber（进阶）
+ ```cpp
+ vector<int> singleNumber(vector<int>& nums) {
+	int eor = 0;
+	for (int x : nums) eor ^= x;  // 得到 a ^ b
+	
+	int onlyOne = eor & (-eor);
+	
+	int a = 0, b = 0; 
+	for (int x : nums) {
+		if (x & onlyOne != 0) a ^= x  // 该位为1的一组，异或出a 
+		else b ^= x;  // 该位为0的一组，异或出b 
+	} 
+	return {a, b}; 
+}
+ ```
 ### 枚举子集状态
 
 ```cpp
@@ -76,12 +98,8 @@ for (int mask = 0; mask < (1 << n); ++mask) {
 
 ## 高频坑点
 
-- `1 << k` 溢出，必要时写 `1LL << k`
-- 负数右移问题没考虑清楚
-- 不理解异或性质：
+- 避免`1 << k` 溢出，必要时写 `1LL << k`
+- 负数右移问题要考虑清楚
+- 要理解异或性质：
     - `a ^ a = 0`
     - `a ^ 0 = a`
-
-## 只记这个
-
-- 状态压缩、奇偶、去重异或、lowbit 都离不开位运算
