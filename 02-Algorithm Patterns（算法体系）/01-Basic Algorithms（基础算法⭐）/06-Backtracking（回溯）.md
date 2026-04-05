@@ -11,6 +11,7 @@
     - 路径搜索
 
 ## 经典题型：
+
 ### 1. 全排列（入门）
 
 ```cpp
@@ -45,20 +46,14 @@ void dfs(vector<int>& nums) {
 
 ```cpp
 void backtrack(vector<int>& candidates, int target, int start) {
-    // 和等于目标，加入结果，终止
 	if (target == 0) {
         res.push_back(path);
         return;
     }
-    // 剪枝：和超过目标，直接返回
     if (target < 0) return;
-    // 从start开始，避免重复组合
     for (int i = start; i < candidates.size(); ++i) {
-	    // 做选择
         path.push_back(candidates[i]);
-        // 递归（i不变，因为可以重复选）
         backtrack(candidates, target - candidates[i], i);
-        // 撤销选择
         path.pop_back();
     }
 }

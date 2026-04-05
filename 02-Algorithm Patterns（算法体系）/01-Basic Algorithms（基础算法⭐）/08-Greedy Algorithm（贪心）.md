@@ -9,7 +9,7 @@
     - 最少 / 最多
     - 局部最优推出全局最优
 
-## 常见套路
+## 经典题型：
 
 ### 1. 排序后贪心
 
@@ -21,8 +21,6 @@ for (auto& x : a) {
 ```
 
 ### 2. 区间问题
-
-- 按右端点排序最常见
 
 ```cpp
 int eraseOverlapIntervals(vector<vector<int>>& intervals) {
@@ -60,9 +58,3 @@ int findContentChildren(vector<int>& g, vector<int>& s) {
     return i;
 }
 ```
-
-## 高频坑点
-
-- 没证明正确性就强行贪心
-- 排序关键字选错
-- 题目其实应该用 DP，却误判成贪心

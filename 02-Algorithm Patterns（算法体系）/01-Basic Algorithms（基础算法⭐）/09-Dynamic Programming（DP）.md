@@ -64,10 +64,3 @@ int lengthOfLIS(vector<int>& nums) {
     return ans;
 }
 ```
-
-## 高频坑点
-
-- 状态定义含糊
-- 初始化漏掉
-- 维度压缩后更新顺序错
-- 把 DFS + 记忆化和迭代 DP 关系没想清楚

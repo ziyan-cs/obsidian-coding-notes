@@ -15,7 +15,7 @@
 ### 1. 归并排序
 
 ```cpp
-// 主函数：通用归并分治
+// 主函数：归并分治
 void merge(vector<int>& arr, int L, int R) {
     if (L == R) return;
     int M = L + ((R - L) >> 1);
@@ -44,12 +44,12 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
     }
 }
 ```
-**（LeetCode 912 ）**
+-->**（LeetCode 912 ）**
 
 ### 2. 统计逆序对
 
 ```cpp
-// 通用归并分治
+// 主函数：归并分治
 int merge(vector<int>& arr, int L, int R) {
     if (L >= R) return 0;
     int M = L + ((R - L) >> 1);
@@ -86,11 +86,21 @@ int mergeAdd(vector<int>& arr, int L, int M, int R) {
     return count;
 }
 ```
+-->**（LeetCode 315 ）**
+-->**（LeetCode 493 ）**
 
 ### 3. 快速排序（分治经典，和归并排序并列）
 
 ```cpp
-// 分区函数：把数组分成小于基准、大于基准两部分
+// 主函数：归并分治
+void solve(vector<int>& a, int l, int r) {
+    if (l >= r) return;
+    int mid = partition(a, l, r);
+    solve(a, l, mid - 1);
+    solve(a, mid + 1, r);
+}
+
+// 子函数：合并+排序
 int partition(vector<int>& a, int l, int r) {
     int pivot = a[r];
     int i = l - 1;
@@ -103,16 +113,8 @@ int partition(vector<int>& a, int l, int r) {
     swap(a[i + 1], a[r]);
     return i + 1;
 }
-
-// 主函数：分治快速排序，用solve统一主函数名（和你笔记风格一致）
-void solve(vector<int>& a, int l, int r) {
-    if (l >= r) return;
-    int mid = partition(a, l, r);
-    solve(a, l, mid - 1);
-    solve(a, mid + 1, r);
-}
 ```
--->**（LeetCode 912）**
+-->**（LeetCode 912 ）**
 
 ### 4. 最大子数组和（分治版）
 
@@ -120,7 +122,17 @@ void solve(vector<int>& a, int l, int r) {
 #include <climits> // INT_MIN的头文件 
 #include <algorithm> // max()的头文件
 
-// 计算跨中间的最大子数组和
+// 主函数：归并分治
+int solve(vector<int>& a, int l, int r) {
+    if (l == r) return a[l];
+    int mid = (l + r) >> 1;
+    int leftMax = solve(a, l, mid);
+    int rightMax = solve(a, mid + 1, r);
+    int crossMax = getCrossSum(a, l, mid, r);
+    return max(max(leftMax, rightMax), crossMax);
+}
+
+// 子函数：合并+求和
 int getCrossSum(vector<int>& a, int l, int mid, int r) {
     int leftSum = INT_MIN;
     int sum = 0;
@@ -137,17 +149,9 @@ int getCrossSum(vector<int>& a, int l, int mid, int r) {
     return leftSum + rightSum;
 }
 
-// 主函数：分治求最大子数组和，用solve统一主函数名
-int solve(vector<int>& a, int l, int r) {
-    if (l == r) return a[l];
-    int mid = (l + r) >> 1;
-    int leftMax = solve(a, l, mid);
-    int rightMax = solve(a, mid + 1, r);
-    int crossMax = getCrossSum(a, l, mid, r);
-    return max(max(leftMax, rightMax), crossMax);
-}
+
 ```
- -->**（LeetCode 53）**
+ -->**（LeetCode 53 ）**
 
 ## 高频坑点
 
