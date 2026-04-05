@@ -58,7 +58,7 @@ int lowbit(int x) {
 
 ## 高频例子
 
-### singleNumber（只出现一次的数字）
+### singleNumber 基础（只出现一次的数字）
 
 ```cpp
 int singleNumber(vector<int>& nums) {
@@ -74,7 +74,7 @@ int singleNumber(vector<int>& nums) {
 	int eor = 0;
 	for (int x : nums) eor ^= x;  // 得到 a ^ b
 	
-	int onlyOne = eor & (-eor);
+	long long onlyOne = eor & (-eor);
 	
 	int a = 0, b = 0; 
 	for (int x : nums) {
