@@ -78,7 +78,7 @@ int singleNumber(vector<int>& nums) {
 	
 	int a = 0, b = 0; 
 	for (int x : nums) {
-		if (x & onlyOne != 0) a ^= x  // 该位为1的一组，异或出a 
+		if (x & onlyOne != 0) a ^= x;  // 该位为1的一组，异或出a 
 		else b ^= x;  // 该位为0的一组，异或出b 
 	} 
 	return {a, b}; 
