@@ -58,7 +58,7 @@ int lowbit(int x) {
 
 ## 高频例子
 
-### singleNumber 基础（只出现一次的数字）
+### singleNumber 基础（只出现一次的数字 I）
 
 ```cpp
 int singleNumber(vector<int>& nums) {
@@ -67,6 +67,18 @@ int singleNumber(vector<int>& nums) {
     return ans;
 }
 ```
+**（ LeetCode 136题 ）**
+
+### singleNumber 拓展（只出现一次的数字 II）
+
+```cpp
+int singleNumber(vector<int>& nums) {
+    int  = 0;
+    for (int x : nums) ans ^= x;
+    return ans;
+}
+```
+**（ LeetCode 137题 ）**
 
 ### singleNumber 进阶（只出现一次的数字 III）
  ```cpp
@@ -84,6 +96,8 @@ int singleNumber(vector<int>& nums) {
 	return {a, b}; 
 }
  ```
+**（ LeetCode 260题 ）**
+
 ### 枚举子集状态
 
 ```cpp
