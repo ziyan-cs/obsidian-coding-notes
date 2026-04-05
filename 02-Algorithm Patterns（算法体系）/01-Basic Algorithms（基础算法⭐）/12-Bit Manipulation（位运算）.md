@@ -56,7 +56,7 @@ int lowbit(int x) {
 }
 ```
 
-## 高频例子
+## 经典例子
 
 ### singleNumber 基础（只出现一次的数字 I）
 
@@ -73,9 +73,17 @@ int singleNumber(vector<int>& nums) {
 
 ```cpp
 int singleNumber(vector<int>& nums) {
-    int  = 0;
-    for (int x : nums) ans ^= x;
-    return ans;
+	int ans;
+	for (int i = 0; i < 32; ++i) {
+		int cnt = 0;
+		for (int x : nums) {
+			cnt += (x >> i) & 1;
+		}
+		if (cnt % 3 !=0){
+			ans |= (1 << i);
+		}
+		return ans;
+	}
 }
 ```
 **（ LeetCode 137题 ）**
