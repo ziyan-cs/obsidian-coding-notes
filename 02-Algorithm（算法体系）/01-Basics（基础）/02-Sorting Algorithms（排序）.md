@@ -1,6 +1,6 @@
 #algorithm #sorting #sort #comparison-sort #non-comparison-sort
 
-## 核心
+## 核心：
 
 - 排序 4 要素：
     - 时间复杂度
@@ -11,7 +11,7 @@
     - 归并排序
     - 快速排序
 
-##  核心排序算法对比
+##  核心排序算法对比：
 
 - 插入：$O(n^2)$  $O(1)$                          稳定，原地    近乎有序时很强，适合小数据
 - 归并：$O(n log n)$  $O(n)$                     稳定，非原地   时间稳定，适合逆序对拓展
@@ -21,6 +21,7 @@
 - 希尔：$O(n log n)$  $O(1)$                  不稳定，原地   依赖 gap 序列
 - 桶排：$O(n)$  $O(n)$                        不稳定，非原地   依赖数据分布
 - 基数：$O(n)$  $O(n)$                           稳定，非原地   适合整数 / 定长串
+
 
 ---
 
@@ -142,10 +143,6 @@ void heapSort(vector<int>& arr) {
 
 ## 7. 计数排序（Counting Sort）
 
-- 思想：统计每个值出现次数
-- 适用：值域小、整数
-- 复杂度：$O(n+k)$
-
 ```cpp
 void countingSort(vector<int>& arr) {
     int minIdx = *max_element(arr.begin(), arr.end());
@@ -160,9 +157,6 @@ void countingSort(vector<int>& arr) {
 
 
 ## 8. 希尔排序（Shell Sort）
-
-- 思想：按 gap 分组做插入排序
-- 稳定：否
 
 ```cpp
 void shellSort(vector<int>& arr) {
@@ -182,9 +176,6 @@ void shellSort(vector<int>& arr) {
 
 ## 9. 桶排序（Bucket Sort）
 
-- 思想：先分桶，再对桶内排序
-- 适用：数据分布较均匀
-
 ```cpp
 void bucketSort(vector<float>& a) {
     int n = a.size();
@@ -203,9 +194,6 @@ void bucketSort(vector<float>& a) {
 ```
 
 ## 10. 基数排序（Radix Sort）
-
-- 思想：按个位、十位、百位...稳定排序
-- 适用：非负整数、位数有限
 
 ```cpp
 void radixSort(vector<int>& a) {
