@@ -58,7 +58,7 @@ int lowbit(int x) {
 
 ## 高频例子
 
-### singleNumber
+### singleNumber（只出现一次的数字）
 
 ```cpp
 int singleNumber(vector<int>& nums) {
@@ -68,7 +68,7 @@ int singleNumber(vector<int>& nums) {
 }
 ```
 
-### singleNumber（进阶）
+### singleNumber 进阶（只出现一次的数字 III）
  ```cpp
  vector<int> singleNumber(vector<int>& nums) {
 	int eor = 0;
