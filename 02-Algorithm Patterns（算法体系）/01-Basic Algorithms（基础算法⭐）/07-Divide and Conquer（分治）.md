@@ -7,6 +7,7 @@
     - 归并排序
     - 逆序对
     - 快速排序
+    - 最大子数组和
     - 线段树思想
     - 大问题拆小问题
 
@@ -17,7 +18,7 @@
 ```cpp
 // 主函数：归并分治
 void merge(vector<int>& arr, int L, int R) {
-    if (L == R) return;
+    if (L >= R) return;
     int M = L + ((R - L) >> 1);
     merge(arr, L, M);
     merge(arr, M + 1, R);
@@ -59,7 +60,7 @@ int merge(vector<int>& arr, int L, int R) {
     return left + right + cross;
 }
 
-// 子函数：合并+累加逆序对
+// 子函数：合并+两边排序+统计逆序对
 int mergeAdd(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -148,13 +149,5 @@ int getCrossSum(vector<int>& a, int l, int mid, int r) {
     }
     return leftSum + rightSum;
 }
-
-
 ```
  -->**（LeetCode 53 ）**
-
-## 高频坑点
-
-- 只会“分”，不会“合”
-- 边界条件没收好
-- 合并过程复杂度失控
