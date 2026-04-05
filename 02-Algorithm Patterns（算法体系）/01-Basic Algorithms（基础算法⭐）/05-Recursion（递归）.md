@@ -8,19 +8,27 @@
     - 当前层做什么
     - 子问题怎么缩小
 
-## 通用模板
+## 经典例子：
+
+### 1. 阶乘
 
 ```cpp
-int dfs(int x) {
-    if (终止条件) return 答案;
-    // 当前层逻辑
-    return dfs(更小子问题);
+long long fact(int n) {
+    if (n <= 1) return 1;
+    return n * fact(n - 1);
 }
 ```
 
-## 高频例子
+### 2. 斐波那契数列（入门）
 
-### 阶乘
+```cpp
+long long fact(int n) {
+    if (n <= 1) return 1;
+    return f
+}
+```
+
+### 3. **汉诺塔问题**（经典）
 
 ```cpp
 long long fact(int n) {
@@ -29,18 +37,31 @@ long long fact(int n) {
 }
 ```
 
-### 二叉树前序遍历
+### 4. 二叉树前序遍历（递归版，最经典）
 
 ```cpp
-void preorder(TreeNode* root) {
-    if (!root) return;
-    cout << root->val << ' ';
-    preorder(root->left);
-    preorder(root->right);
+void preOrder(TreeNode* root, vector<int>& res) {
+    if (root == nullptr) return;
+    res.push_back(root->val);  // 处理当前节点
+    preorder(root->left, res);  // 递归左子树
+    preorder(root->right, res);  // 递归右子树
 }
 ```
 
-### 递归反转字符串
+### 5. 链表反转（递归版）
+
+```cpp
+ListNode* reverseList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) return head;
+    ListNode* newHead = reverseList(head->next);  // 递归反转后续链表
+    head->next->next = head;  // 反转当前节点的指针
+    head->next = nullptr;
+    return newHead;
+}
+```
+
+
+### 5. 递归反转字符串
 
 ```cpp
 void reverseString(string& s, int l, int r) {

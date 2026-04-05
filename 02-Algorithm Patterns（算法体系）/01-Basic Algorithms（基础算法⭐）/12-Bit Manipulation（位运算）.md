@@ -67,7 +67,7 @@ int singleNumber(vector<int>& nums) {
     return ans;
 }
 ```
-**（ LeetCode 136题 ）**
+**（ LeetCode 136 ）**
 
 ### singleNumber 拓展（只出现一次的数字 II）
 
@@ -86,7 +86,7 @@ int singleNumber(vector<int>& nums) {
 	}
 }
 ```
-**（ LeetCode 137题 ）**
+**（ LeetCode 137 ）**
 
 ### singleNumber 进阶（只出现一次的数字 III）
  ```cpp
@@ -104,7 +104,7 @@ int singleNumber(vector<int>& nums) {
 	return {a, b}; 
 }
  ```
-**（ LeetCode 260题 ）**
+**（ LeetCode 260 ）**
 
 ### 枚举子集状态
 
