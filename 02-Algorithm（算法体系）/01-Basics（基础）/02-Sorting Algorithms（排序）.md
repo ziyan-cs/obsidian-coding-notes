@@ -30,10 +30,10 @@
 
 ```cpp
 void bubbleSort(vector<int>& arr) {
-    int len = arr.size();
-    for (int i = 0; i < len - 1; ++i) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; ++i) {
         bool swapped = false;
-        for (int j = 0; j < len - 1 - i; ++j) {
+        for (int j = 0; j < n - 1 - i; ++j) {
             if (arr[j] > arr[j + 1]) {
                 swap(arr[j], arr[j + 1]);
                 swapped = true;
@@ -49,10 +49,10 @@ void bubbleSort(vector<int>& arr) {
 
 ```cpp
 void selectionSort(vector<int>& arr) {
-    int len = arr.size();
-    for (int i = 0; i < len; ++i) {
+    int n = arr.size();
+    for (int i = 0; i < n; ++i) {
         int minIdx = i;
-        for (int j = i + 1; j < len; ++j) {
+        for (int j = i + 1; j < n; ++j) {
             if (arr[j] < arr[minIdx]) minIdx = j;
         }
         swap(arr[i], arr[minIdx]);
@@ -64,8 +64,8 @@ void selectionSort(vector<int>& arr) {
 
 ```cpp
 void insertSort(vector<int>& arr) {
-    int len = arr.size();
-    for (int i = 1; i < len; ++i) {
+    int n = arr.size();
+    for (int i = 1; i < n; ++i) {
         int key = arr[i];
         int j = i - 1;
         while (j >= 0 && arr[j] > key) {
@@ -90,11 +90,15 @@ void merge(vector<int>& arr, int L, int R) {
 
 void mergeSort(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
-    int index = 0, p1 = L, p2 = M + 1;
+    int index = 0;
+    int p1 = L;
+    int p2 = M + 1;
     while (p1 <= M && p2 <= R)
-        help[index++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
-    while (p1 <= M) help[index++] = arr[p1++];
-    while (p2 <= R) help[index++] = arr[p2++];
+	    help[index++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
+    while (p1 <= M) 
+	    help[index++] = arr[p1++];
+    while (p2 <= R) 
+	    help[index++] = arr[p2++];
     for (int i = 0; i < (int)help.size(); ++i)
         arr[L + i] = help[i];
 }
