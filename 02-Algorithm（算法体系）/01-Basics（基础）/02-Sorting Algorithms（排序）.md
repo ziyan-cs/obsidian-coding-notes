@@ -39,7 +39,6 @@ void bubbleSort(vector<int>& arr) {
                 swapped = true;
             }
         }
-        // 无交换则提前终止
         if (!swapped) break;
     }
 }
@@ -107,17 +106,25 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 ## 5. 快速排序（Quick Sort）⭐
 
 ```cpp
-void quickSort(vector<int>& arr, int l, int r) {
-    if (l >= r) return;
-    int i = l, j = r;
-    int pivot = a[(l + r) >> 1];
-    while (i <= j) {
-        while (arr[i] < pivot) ++i;
-        while (arr[j] > pivot) --j;
-        if (i <= j) swap(arr[i++], arr[j--]);
+void quickSortV2(vector<int>& arr, int L, int R) {
+    if (L >= R) return;
+    int p1 = L - 1;
+    int p2 = R;
+    int key = arr[R];
+    int i = L;
+    while (i < p2) {
+        if (arr[i] == key) {
+            ++i;
+        } else if (arr[i] < key) {
+            swap(arr[++p1], arr[i]);
+            ++i;
+        } else {
+            swap(arr[--p2], arr[i]);
+        }
     }
-    if (l < j) quickSort(arr, l, j);
-    if (i < r) quickSort(arr, i, r);
+    swap(arr[p2], arr[R]);
+    quickSortV2(arr, L, p1);
+    quickSortV2(arr, p2 + 1, R);
 }
 ```
 
