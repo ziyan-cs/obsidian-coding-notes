@@ -131,23 +131,28 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 ## 6. 堆排序（Heap Sort）⭐
 
 ```cpp
-void heapify(vector<int>& arr, int n, int i) {
-    int largest = i;
-    int l = i * 2 + 1, r = i * 2 + 2;
-    if (l < n && a[l] > arr[largest]) largest = l;
-    if (r < n && a[r] > arr[largest]) largest = r;
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        heapify(arr, n, largest);
+void heapify(vector<int>& arr, int index, int heapSize) {
+    int L = index * 2 + 1;
+    while (L < heapSize) {
+        int largest = L + 1 < heapSize && arr[L + 1] > arr[L] ? L + 1 : L;
+        largest = arr[index] > arr[largest] ? index : largest;
+        if (largest == index) return ;
+        swap(arr[index] ,arr[largest]);
+        index = largest;
+        L = index *2 + 1;
     }
 }
 
-void heapSort(vector<int>& arr) {
-    int len = arr.size();
-    for (int i = n / 2 - 1; i >= 0; --i) heapify(arr, n, i);
-    for (int i = n - 1; i > 0; --i) {
-        swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
+void heapSort(vector<int>& arr){
+    if (arr.empty() || (int)arr.size() < 2) return ;
+    for (int i = (int)arr.size() - 1; i > 0; --i) {
+        heapify(arr, i, arr.size());
+    }
+    int heapSize = arr.size();
+    swap(arr[0], arr[--heapSize]);
+    while (heapSize > 0) {
+        heapify(arr, 0, heapSize);
+        swap(arr[0], arr[--heapSize]);
     }
 }
 ```

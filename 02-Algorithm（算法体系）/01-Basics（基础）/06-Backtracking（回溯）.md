@@ -20,20 +20,15 @@ vector<int> path;
 vector<bool> used;
 
 void dfs(vector<int>& nums) {
-	// 路径长度等于数组长度，终止
     if (path.size() == nums.size()) {
         ans.push_back(path);
         return;
     }
-    // 遍历所有未选择的元素
     for (int i = 0; i < (int)nums.size(); ++i) {
         if (!used[i]) {
-	        // 做选择：把元素加入路径，标记已用
 	        used[i] = ture;
 	        path.push_back(nums[i]);
-	        // 递归
 	        dfs(nums);
-	        // 撤销选择（回溯）：恢复状态
 	        path.pop_back();
 	        used[i] = false;
 	    }
@@ -87,10 +82,3 @@ void dfs(int idx, vector<int>& nums, vector<int>& path, vector<vector<int>>& ans
 }
 ```
 **（LeetCode78 ）**
-
-## 高频坑点
-
-- 忘记撤销选择
-- 终止条件写错
-- 去重逻辑混乱
-- path / used 作用域不清楚

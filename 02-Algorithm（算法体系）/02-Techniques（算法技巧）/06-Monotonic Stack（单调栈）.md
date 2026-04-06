@@ -1,8 +1,8 @@
 #data-structure #monotonic-stack #stack #next-greater #optimization
 
-## ⚡ TL;DR（快速决策）
+## 核心
 
-- 单调栈本质是：**通过维持栈内单调性，在线性时间内处理最近更大 / 更小元素问题**
+- **通过维持栈内单调性，在线性时间内处理最近更大 / 更小元素问题**
 - 相关特征：
     - 下一个更大元素
     - 下一个更小元素
