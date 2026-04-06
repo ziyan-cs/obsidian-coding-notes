@@ -45,20 +45,20 @@ int hoarePartition(vector<int>& arr, int l, int r) {
 ### 1. 荷兰国旗问题
 
 ```cpp
-void quickSort(vector<int>& arr, int l, int r) {
-    if (l >= r) return;
-    // 随机选基准，避免最坏情况
-    srand(time(0));
-    int pivotIdx = l + rand() % (r - l + 1);
-    swap(arr[pivotIdx], arr[r]);
-    int pivot = arr[r];
-    
-    // 三路划分
-    auto [eqL, eqR] = netherlandsFlag(arr, l, r, pivot);
-    
-    // 递归排序左右区域，等于区域无需排序
-    quickSort(arr, l, eqL - 1);
-    quickSort(arr, eqR + 1, r);
+void dutchFlagSort(vector<int>& arr, int key) {
+    int i = 0;
+    int p1 = -1;
+    int p2 = arr.size();
+    while (i < p2) {
+        if (arr[i] == key) {
+            ++i;
+        } else if (arr[i] < key) {
+            swap(arr[++p1], arr[i]);
+            ++i;
+        } else {
+            swap(arr[--p2], arr[i]);
+        }
+    }
 }
 ```
 
@@ -85,27 +85,24 @@ pair<int, int> netherlandsFlag(vector<int>& arr, int l, int r, int pivot) {
 ### 3. 三路快排
 
 ```cpp
-  void quickSort(vector<int>& arr, int l, int r) {
-    if (l >= r) return;
-    // 随机选基准，避免最坏情况
-    srand(time(0));
-    int pivotIdx = l + rand() % (r - l + 1);
-    swap(arr[pivotIdx], arr[r]);
-    int pivot = arr[r];
-    
-    // 三路划分
-    auto [eqL, eqR] = netherlandsFlag(arr, l, r, pivot);
-    
-    // 递归排序左右区域，等于区域无需排序
-    quickSort(arr, l, eqL - 1);
-    quickSort(arr, eqR + 1, r);
+void quickSortV2(vector<int>& arr, int L, int R) {
+    if (L >= R) return;
+    int p1 = L - 1;
+    int p2 = R;
+    int key = arr[R];
+    int i = L;
+    while (i < p2) {
+        if (arr[i] == key) {
+            ++i;
+        } else if (arr[i] < key) {
+            swap(arr[++p1], arr[i]);
+            ++i;
+        } else {
+            swap(arr[--p2], arr[i]);
+        }
+    }
+    swap(arr[p2], arr[R]);
+    quickSortV2(arr, L, p1);
+    quickSortV2(arr, p2 + 1, R);
 }
 ```
-
-## 模板代码  
-- 两路 partition  
-- 三路 partition  
-  
-## 应用  
-- 快速排序  
-- 快速选择（第K大）

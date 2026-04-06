@@ -42,7 +42,6 @@ int lowerBound(vector<int>& a, int target) {
 
 ### 3. 二分答案
 
-- 前提：答案具有单调可判定性
 
 ```cpp
 int binaryAnswer(int l, int r) {
@@ -55,9 +54,9 @@ int binaryAnswer(int l, int r) {
 }
 ```
 
-## 高频题型模板：
+## 经典题型：
 
-### 搜索插入位置
+### 1. 搜索插入位置
 
 ```cpp
 int searchInsert(vector<int>& nums, int target) {
@@ -71,7 +70,7 @@ int searchInsert(vector<int>& nums, int target) {
 }
 ```
 
-### 在有序数组中统计出现次数
+### 2. 在有序数组中统计出现次数
 
 ```cpp
 int countTarget(vector<int>& a, int x) {
