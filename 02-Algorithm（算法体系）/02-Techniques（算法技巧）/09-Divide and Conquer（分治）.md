@@ -16,7 +16,6 @@
 ### 1. 归并排序
 
 ```cpp
-// 主函数：归并分治
 void merge(vector<int>& arr, int L, int R) {
     if (L >= R) return;
     int M = L + ((R - L) >> 1);
@@ -25,7 +24,6 @@ void merge(vector<int>& arr, int L, int R) {
     mergeSort(arr, L, M, R);
 }
 
-// 子函数：合并+两边排序
 void mergeSort(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -50,7 +48,6 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 ### 2. 统计逆序对
 
 ```cpp
-// 主函数：归并分治
 int merge(vector<int>& arr, int L, int R) {
     if (L >= R) return 0;
     int M = L + ((R - L) >> 1);
@@ -60,7 +57,6 @@ int merge(vector<int>& arr, int L, int R) {
     return left + right + cross;
 }
 
-// 子函数：合并+两边排序+统计逆序对
 int mergeAdd(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -93,7 +89,6 @@ int mergeAdd(vector<int>& arr, int L, int M, int R) {
 ### 3. 快速排序（分治经典，和归并排序并列）
 
 ```cpp
-// 主函数：归并分治
 void solve(vector<int>& a, int l, int r) {
     if (l >= r) return;
     int mid = partition(a, l, r);
@@ -101,7 +96,6 @@ void solve(vector<int>& a, int l, int r) {
     solve(a, mid + 1, r);
 }
 
-// 子函数：合并+排序
 int partition(vector<int>& a, int l, int r) {
     int pivot = a[r];
     int i = l - 1;
@@ -121,9 +115,7 @@ int partition(vector<int>& a, int l, int r) {
 
 ```cpp
 #include <climits> // INT_MIN的头文件 
-#include <algorithm> // max()的头文件
 
-// 主函数：归并分治
 int solve(vector<int>& a, int l, int r) {
     if (l == r) return a[l];
     int mid = (l + r) >> 1;
@@ -133,7 +125,6 @@ int solve(vector<int>& a, int l, int r) {
     return max(max(leftMax, rightMax), crossMax);
 }
 
-// 子函数：合并+求和
 int getCrossSum(vector<int>& a, int l, int mid, int r) {
     int leftSum = INT_MIN;
     int sum = 0;
