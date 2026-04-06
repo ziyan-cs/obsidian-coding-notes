@@ -1,98 +1,69 @@
-#data-structure #prefix-sum #range-sum #array #precompute
+#data-structure #prefix-sum #range-sum #array #precompute #algorithm #enumeration #simulation #bruteforce
 
-## ⚡ TL;DR（快速决策）
+## 核心
 
-- 前缀和本质是：**先预处理累计和，再用减法快速回答区间和问题**
-- 相关特征：
-    - 多次询问区间和
-    - 区间统计
-    - 子数组和、二维矩阵求和
-- 核心公式：
-    - 一维：`sum(l, r) = pre[r] - pre[l - 1]`
-    - 二维：配合容斥
-- 如果问题反复需要“这一段的总和”，优先想前缀和
+-  **预处理数组，快速计算任意区间的元素和**
+- sum_arr [ i + 1 ] = sum_arr [ i ] + arr [ i ]
 
-## 🧩 Core Idea（核心本质）
+## 什么时候用
 
-- `pre[i]` 表示前 `i` 个元素的和
-- 任意连续区间和都可以由两个前缀和相减得到
-- 一句话理解：
-    - **把“很多次求区间和”变成“一次预处理 + 常数次查询”。**
-- 优点：
-    - 朴素每次查询要扫一段
-    - 前缀和查询只要 O(1)
+- 多次查询数组任意区间的和
+- 统计、最长 / 最短子数组和
+- 维矩阵的区域和查询
+- - 需要快速计算区间和的场景
 
-## 🔧 Usage Patterns（可复用代码模板）
+## 高频模板
 
-1. 一维前缀和
+### 1. 一维前缀和（基础版）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 3, 4, 5};
-    int n = a.size();
-    vector<int> pre(n + 1, 0);
-
-    for (int i = 1; i <= n; ++i) {
-        pre[i] = pre[i - 1] + a[i - 1];
+vector<long long> buildPrefixSum(const vector<int>& arr) {
+    int n = arr.size();
+    vector<long long> s(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        s[i + 1] = s[i] + arr[i];
     }
+    return s;
+}
 
-    int l = 2, r = 4;  // 1-based
-    cout << pre[r] - pre[l - 1] << '\\n';
+long long querySum(const vector<long long>& s, int l, int r) {
+    return s[r + 1] - s[l];
 }
 ```
 
-1. 统计子数组和
+### 2. 二维前缀和（矩阵区域和）
 
 ```cpp
-// 某些题会把前缀和与哈希表结合
+vector<vector<long long>> build2DPrefixSum(const vector<vector<int>>& a) {
+    int n = a.size() - 1;
+    int m = a[0].size() - 1;
+    vector<vector<long long>> s(n + 1, vector<long long>(m + 1, 0));
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            s[i][j] = a[i][j] + s[i-1][j] + s[i][j-1] - s[i-1][j-1];
+        }
+    }
+    return s;
+}
+
+long long query2DSum(const vector<vector<long long>>& s, int x1, int y1, int x2, int y2) {
+    return s[x2][y2] - s[x1-1][y2] - s[x2][y1-1] + s[x1-1][y1-1];
+}
 ```
 
-1. 二维前缀和
+### 3. 哈希表优化（和为 K 的子数组）
 
 ```cpp
-pre[i][j] = pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1] + a[i][j];
-```
-
-## ⚠️ Pitfalls（高频错误）
-
-- 下标定义混乱，尤其是 0-based 和 1-based 混用
-- `pre[i]` 到底表示前 i 个还是到下标 i 为止，要先统一
-- 二维前缀和容易漏掉容斥里的减号
-- 数据范围大时前缀和可能爆 `int`，要考虑 `long long`
-
-## 🚀 Performance / Tips（性能优化）
-
-- 预处理：$O(n)$
-- 单次一维区间查询：$O(1)$
-- 二维前缀和对矩阵区间求和尤其高频
-- 高频经验：
-    - 一维多查询先想前缀和
-    - 二维矩阵多查询先想二维前缀和
-    - 若题目同时有修改和查询，前缀和未必足够，可能要树状数组 / 线段树
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 区间和查询
-- 子数组和问题
-- 二维矩阵求和
-- 统计满足条件的连续区间
-- 配合哈希优化子数组题
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {2, 4, 6, 8};
-    vector<int> pre(a.size() + 1, 0);
-    for (int i = 1; i <= (int)a.size(); ++i) pre[i] = pre[i - 1] + a[i - 1];
-    cout << pre[3] - pre[1] << '\\n';
+int subarraySum(vector<int>& nums, int k) {
+    unordered_map<long long, int> cnt;
+    cnt[0] = 1;
+    long long s = 0;
+    int ans = 0;
+    for (int x : nums) {
+        s += x;
+        if (cnt.count(s - k)) ans += cnt[s - k];
+        cnt[s]++;
+    }
+    return ans;
 }
 ```
