@@ -56,7 +56,7 @@ int lowbit(int x) {
 }
 ```
 
-# 2. 经典例子
+# 2. 案例
 
 ### singleNumber 基础（只出现一次的数字 I）
 

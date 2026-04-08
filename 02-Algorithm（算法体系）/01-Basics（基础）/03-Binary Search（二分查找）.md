@@ -54,7 +54,7 @@ int binaryAnswer(int l, int r) {
 }
 ```
 
-# 2. 经典题型：
+# 2. 案例：
 
 ### 2.1 搜索插入位置
 
