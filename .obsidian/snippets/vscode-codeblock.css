@@ -1,0 +1,23 @@
+/* 完全还原 VS Code Dark+ 代码块样式 */
+pre[class*="language-"] {
+    background-color: #1e1e1e !important;
+    border-radius: 6px !important;
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    font-family: "Consolas", "Monaco", monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    border: none !important;
+}
+code[class*="language-"] {
+    background-color: transparent !important;
+    color: #d4d4d4 !important;
+}
+/* 精准匹配 VS Code 语法高亮色 */
+.token.keyword { color: #ff6188 !important; }    /* 粉色（关键字） */
+.token.string { color: #fc9867 !important; }    /* 橙色（字符串） */
+.token.function { color: #dcdcaa !important; }  /* 黄色（函数） */
+.token.type { color: #4ec9b0 !important; }      /* 青色（类型） */
+.token.comment { color: #6a9955 !important; }  /* 灰色（注释） */
+.token.number { color: #b5cea8 !important; }   /* 浅绿（数字） */
+.token.variable { color: #9cdcfe !important; } /* 浅蓝（变量） */
