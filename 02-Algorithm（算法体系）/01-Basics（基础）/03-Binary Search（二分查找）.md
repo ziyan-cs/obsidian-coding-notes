@@ -1,6 +1,6 @@
 #algorithm #binary-search #search #monotonicity
 
-## 核心
+# 0. 核心
 
 - **在单调性上快速缩小答案区间**
 - 关键词：
@@ -9,9 +9,9 @@
     - 找边界
     - 二分答案
 
-## 必会三类：
+# 1. 必会三类：
 
-### 1. 经典查值
+### 1.1 经典查值
 
 ```cpp
 int binarySearch(vector<int>& a, int target) {
@@ -26,7 +26,7 @@ int binarySearch(vector<int>& a, int target) {
 }
 ```
 
-### 2. 找左边界
+### 1.2 找左边界
 
 ```cpp
 int lowerBound(vector<int>& a, int target) {
@@ -40,7 +40,7 @@ int lowerBound(vector<int>& a, int target) {
 }
 ```
 
-### 3. 二分答案
+### 1.3 二分答案
 
 
 ```cpp
@@ -54,9 +54,9 @@ int binaryAnswer(int l, int r) {
 }
 ```
 
-## 经典题型：
+# 2. 经典题型：
 
-### 1. 搜索插入位置
+### 2.1 搜索插入位置
 
 ```cpp
 int searchInsert(vector<int>& nums, int target) {
@@ -70,7 +70,7 @@ int searchInsert(vector<int>& nums, int target) {
 }
 ```
 
-### 2. 在有序数组中统计出现次数
+### 2.2 在有序数组中统计出现次数
 
 ```cpp
 int countTarget(vector<int>& a, int x) {

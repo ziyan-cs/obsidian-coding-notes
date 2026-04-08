@@ -11,7 +11,7 @@
     - 归并排序
     - 快速排序
 
-##  核心排序算法对比：
+# 1. 核心排序算法对比：
 
 - 插入：$O(n^2)$  $O(1)$                          稳定，原地    近乎有序时很强，适合小数据
 - 归并：$O(n log n)$  $O(n)$                     稳定，非原地   时间稳定，适合逆序对拓展
@@ -22,11 +22,9 @@
 - 桶排：$O(n)$  $O(n)$                        不稳定，非原地   依赖数据分布
 - 基数：$O(n)$  $O(n)$                           稳定，非原地   适合整数 / 定长串
 
-
 ---
-
-
-## 1. 冒泡排序（Bubble Sort）
+# 2. 案例
+### 2.1 冒泡排序（Bubble Sort）
 
 ```cpp
 void bubbleSort(vector<int>& arr) {
@@ -44,7 +42,7 @@ void bubbleSort(vector<int>& arr) {
 }
 ```
 
-## 2. 选择排序（Selection Sort）
+### 2.2 选择排序（Selection Sort）
 
 ```cpp
 void selectionSort(vector<int>& arr) {
@@ -59,7 +57,7 @@ void selectionSort(vector<int>& arr) {
 }
 ```
 
-## 3. 插入排序（Insertion Sort）⭐
+### 2.3 插入排序（Insertion Sort）⭐
 
 ```cpp
 void insertSort(vector<int>& arr) {
@@ -76,7 +74,7 @@ void insertSort(vector<int>& arr) {
 }
 ```
 
-## 4. 归并排序（Merge Sort）⭐
+### 2.4 归并排序（Merge Sort）⭐
 
 ```cpp
 void merge(vector<int>& arr, int L, int R) {
@@ -103,7 +101,7 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 }
 ```
 
-## 5. 快速排序（Quick Sort）⭐
+### 2.5 快速排序（Quick Sort）⭐
 
 ```cpp
 void quickSortV2(vector<int>& arr, int L, int R) {
@@ -128,7 +126,7 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 }
 ```
 
-## 6. 堆排序（Heap Sort）⭐
+### 2.6 堆排序（Heap Sort）⭐
 
 ```cpp
 void heapify(vector<int>& arr, int index, int heapSize) {
@@ -157,7 +155,7 @@ void heapSort(vector<int>& arr){
 }
 ```
 
-## 7. 计数排序（Counting Sort）
+### 2.7 计数排序（Counting Sort）
 
 ```cpp
 void countingSort(vector<int>& arr) {
@@ -172,7 +170,7 @@ void countingSort(vector<int>& arr) {
 ```
 
 
-## 8. 希尔排序（Shell Sort）
+### 2.8 希尔排序（Shell Sort）
 
 ```cpp
 void shellSort(vector<int>& arr) {
@@ -190,7 +188,7 @@ void shellSort(vector<int>& arr) {
 }
 ```
 
-## 9. 桶排序（Bucket Sort）
+### 2.9 桶排序（Bucket Sort）
 
 ```cpp
 void bucketSort(vector<float>& a) {
@@ -209,7 +207,7 @@ void bucketSort(vector<float>& a) {
 }
 ```
 
-## 10. 基数排序（Radix Sort）
+### 2.10 基数排序（Radix Sort）
 
 ```cpp
 void radixSort(vector<int>& a) {
