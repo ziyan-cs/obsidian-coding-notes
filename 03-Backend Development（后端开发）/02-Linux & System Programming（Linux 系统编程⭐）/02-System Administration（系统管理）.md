@@ -6,15 +6,15 @@
 
 ### 1.1 增删
 
-- `useradd [user]`：创建新用户（默认：`/home/[用户名]` ）
-- `useradd -d [/**/**/] [user]`： 指定家目录路径
-- `useradd -g [用户组名] -u [user]`： 指定用户组
-- `adduser [user]`:  *Ubuntu* 强烈推荐
-- `groupadd [用户组名]`：创建用户组
+- `useradd [user]`：创建新用户（默认家目录：`/home/[user]` ）
+- `useradd -d [home_path] [user]`： 指定自定义家目录路径
+- `useradd -g [group] -u [user]`： 指定所属用户组/UID
+- `adduser [user]`:  *Ubuntu* 交互式创建用户命令
+- `groupadd [group]`：创建新用户组
 
 - `userdel [user]`：删除用户（保留家目录，无法登录）
-- `userdel -r [user]`：删除用户（删除家目录）
-- `groupdel [用户组名]` ：删除用户组
+- `userdel -r [user]`：删除用户（删除家目录，彻底清除）
+- `groupdel [group]` ：删除用户组
 
 ### 1.2 修改
 - `passwd`：修改当前用户密码
@@ -24,9 +24,9 @@
 ### 1.3 切换
 
 - `su [user]`：仅切换用户身份，不切换环境
-- `su - [user]`：完整切换用户身份与环境
-- `exit`：退出进程
-- `logout`：退回最初登录的用户
+- `su - [user]`：完整切换用户身份与环境（推荐）
+- `exit`：退出当前登录会话
+- `logout`：退回最初登录的用户（退出登录 `Shell`）
 
 ### 1.4 查看
 
