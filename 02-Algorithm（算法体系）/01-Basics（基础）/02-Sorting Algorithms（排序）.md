@@ -1,6 +1,6 @@
 #algorithm #sorting #sort #comparison-sort #non-comparison-sort
 
-## 核心：
+# 0. 核心：
 
 - 排序 4 要素：
     - 时间复杂度
