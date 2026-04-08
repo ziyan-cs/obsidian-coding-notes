@@ -1,6 +1,6 @@
 #algorithm #recursion #dfs #divide
 
-## 核心
+# 0. 核心
 
 - **函数调用自己**
 - 递归想 3 件事：
@@ -19,7 +19,7 @@ long long fact(int n) {
 }
 ```
 
-### 2. 斐波那契数列（入门）
+### 2. 斐波那契数列
 
 ```cpp
 long long fib(int n) {
