@@ -1,23 +1,77 @@
-/* 完全还原 VS Code Dark+ 代码块样式 */
+/* 强制覆盖 Obsidian 原生样式，1:1 还原 VS Code Dark+ 代码块 */
 pre[class*="language-"] {
     background-color: #1e1e1e !important;
     border-radius: 6px !important;
-    padding: 16px !important;
-    margin: 16px 0 !important;
-    font-family: "Consolas", "Monaco", monospace !important;
+    padding: 1.2em 1.4em !important;
+    margin: 1.2em 0 !important;
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
     font-size: 14px !important;
-    line-height: 1.5 !important;
+    line-height: 1.6 !important;
     border: none !important;
+    overflow-x: auto !important;
 }
+
 code[class*="language-"] {
     background-color: transparent !important;
     color: #d4d4d4 !important;
+    text-shadow: none !important;
 }
-/* 精准匹配 VS Code 语法高亮色 */
-.token.keyword { color: #ff6188 !important; }    /* 粉色（关键字） */
-.token.string { color: #fc9867 !important; }    /* 橙色（字符串） */
-.token.function { color: #dcdcaa !important; }  /* 黄色（函数） */
-.token.type { color: #4ec9b0 !important; }      /* 青色（类型） */
-.token.comment { color: #6a9955 !important; }  /* 灰色（注释） */
-.token.number { color: #b5cea8 !important; }   /* 浅绿（数字） */
-.token.variable { color: #9cdcfe !important; } /* 浅蓝（变量） */
+
+/* 精准匹配 VS Code Dark+ 语法高亮色（强制覆盖所有优先级） */
+.cm-s-obsidian .token.keyword,
+.token.keyword {
+    color: #ff6188 !important;
+    font-weight: normal !important;
+}
+
+.cm-s-obsidian .token.string,
+.token.string {
+    color: #fc9867 !important;
+}
+
+.cm-s-obsidian .token.function,
+.token.function {
+    color: #dcdcaa !important;
+}
+
+.cm-s-obsidian .token.type,
+.token.type,
+.token.class-name {
+    color: #4ec9b0 !important;
+}
+
+.cm-s-obsidian .token.comment,
+.token.comment {
+    color: #6a9955 !important;
+    font-style: italic !important;
+}
+
+.cm-s-obsidian .token.number,
+.token.number {
+    color: #b5cea8 !important;
+}
+
+.cm-s-obsidian .token.variable,
+.token.variable {
+    color: #9cdcfe !important;
+}
+
+.cm-s-obsidian .token.operator,
+.token.operator {
+    color: #d4d4d4 !important;
+}
+
+.cm-s-obsidian .token.punctuation,
+.token.punctuation {
+    color: #d4d4d4 !important;
+}
+
+/* 修复 Obsidian 代码块行号/选中样式，和 VS Code 一致 */
+.cm-lineNumbers .cm-gutterElement {
+    color: #858585 !important;
+    background-color: #1e1e1e !important;
+}
+
+.cm-s-obsidian .cm-line.cm-active {
+    background-color: #2a2d2e !important;
+}
