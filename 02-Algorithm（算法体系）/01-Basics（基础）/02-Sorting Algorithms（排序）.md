@@ -143,20 +143,19 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 ### 2.6 堆排序（Heap Sort）⭐
 
 ```cpp
-
+// 主函数
 void heapSort(vector<int>& arr){
-    if (arr.empty() || (int)arr.size() < 2) return ;
+	int heapSize = arr.size();
     for (int i = (int)arr.size() - 1; i > 0; --i) {
         heapify(arr, i, arr.size());
     }
-    int heapSize = arr.size();
     swap(arr[0], arr[--heapSize]);
     while (heapSize > 0) {
         heapify(arr, 0, heapSize);
         swap(arr[0], arr[--heapSize]);
     }
 }
-
+// 子函数
 void heapify(vector<int>& arr, int index, int heapSize) {
     int L = index * 2 + 1;
     while (L < heapSize) {
@@ -167,6 +166,11 @@ void heapify(vector<int>& arr, int index, int heapSize) {
         index = largest;
         L = index *2 + 1;
     }
+}
+//对外接口
+void sortArray(vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return;
+    heapSort(arr);
 }
 ```
 
