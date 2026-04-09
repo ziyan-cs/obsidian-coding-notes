@@ -1,7 +1,8 @@
 {
   "enabledCssSnippets": [],
-  "cssTheme": "Blue Topaz",
+  "cssTheme": "AnuPpuccin",
   "accentColor": "#7460be",
   "theme": "obsidian",
-  "nativeMenus": true
+  "nativeMenus": true,
+  "monospaceFontFamily": "Fira Code"
 }

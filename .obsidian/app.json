@@ -1,7 +1,8 @@
 {
   "useMarkdownLinks": true,
   "newLinkFormat": "relative",
-  "promptDelete": false,
+  "promptDelete": true,
   "newFileLocation": "current",
-  "readableLineLength": false
+  "readableLineLength": false,
+  "trashOption": "local"
 }
