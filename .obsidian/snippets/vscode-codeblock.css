@@ -1,12 +1,12 @@
-/* 强制覆盖 Obsidian 原生样式，1:1 还原 VS Code Dark+ 代码块 */
+/* 1:1 还原 VS Code Dark+ 代码块（精准色值版） */
 pre[class*="language-"] {
     background-color: #1e1e1e !important;
-    border-radius: 6px !important;
-    padding: 1.2em 1.4em !important;
-    margin: 1.2em 0 !important;
-    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    border-radius: 4px !important;
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    font-family: "Consolas", "Monaco", monospace !important;
     font-size: 14px !important;
-    line-height: 1.6 !important;
+    line-height: 1.5 !important;
     border: none !important;
     overflow-x: auto !important;
 }
@@ -17,61 +17,56 @@ code[class*="language-"] {
     text-shadow: none !important;
 }
 
-/* 精准匹配 VS Code Dark+ 语法高亮色（强制覆盖所有优先级） */
-.cm-s-obsidian .token.keyword,
+/* 精准匹配 VS Code Dark+ 语法高亮色（和你截图完全一致） */
+/* 关键字（void/if/while/for/return 等）- 粉色 #ff6188 */
 .token.keyword {
     color: #ff6188 !important;
     font-weight: normal !important;
 }
 
-.cm-s-obsidian .token.string,
-.token.string {
-    color: #fc9867 !important;
-}
-
-.cm-s-obsidian .token.function,
+/* 函数名（merge/mergeSort/heapify/heapSort/swap 等）- 黄色 #dcdcaa */
 .token.function {
     color: #dcdcaa !important;
+    font-weight: normal !important;
 }
 
-.cm-s-obsidian .token.type,
+/* 类型/模板（vector<int>/int 等）- 青色 #4ec9b0 */
 .token.type,
-.token.class-name {
+.token.class-name,
+.token.template {
     color: #4ec9b0 !important;
 }
 
-.cm-s-obsidian .token.comment,
+/* 字符串/运算符/标点 - 白色 #d4d4d4 */
+.token.string,
+.token.operator,
+.token.punctuation {
+    color: #d4d4d4 !important;
+}
+
+/* 数字 - 浅绿 #b5cea8 */
+.token.number {
+    color: #b5cea8 !important;
+}
+
+/* 变量名（arr/L/R/M/help/index/p1/p2 等）- 浅蓝 #9cdcfe */
+.token.variable {
+    color: #9cdcfe !important;
+}
+
+/* 注释 - 灰色 #6a9955 */
 .token.comment {
     color: #6a9955 !important;
     font-style: italic !important;
 }
 
-.cm-s-obsidian .token.number,
-.token.number {
-    color: #b5cea8 !important;
+/* 布尔值 - 蓝色 #569cd6 */
+.token.boolean {
+    color: #569cd6 !important;
 }
 
-.cm-s-obsidian .token.variable,
-.token.variable {
-    color: #9cdcfe !important;
-}
-
-.cm-s-obsidian .token.operator,
-.token.operator {
-    color: #d4d4d4 !important;
-}
-
-.cm-s-obsidian .token.punctuation,
-.token.punctuation {
-    color: #d4d4d4 !important;
-}
-
-/* 修复 Obsidian 代码块行号/选中样式，和 VS Code 一致 */
-.cm-lineNumbers .cm-gutterElement {
-    color: #858585 !important;
-    background-color: #1e1e1e !important;
-}
-
-.cm-s-obsidian .cm-line.cm-active {
+/* 选中行样式（和 VS Code 一致） */
+.cm-line.cm-active,
+pre[class*="language-"] .line-highlight {
     background-color: #2a2d2e !important;
 }

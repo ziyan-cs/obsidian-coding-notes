@@ -1,5 +1,4 @@
 {
-  "enabledCssSnippets": [
-    "vscode-codeblock"
-  ]
+  "enabledCssSnippets": [],
+  "cssTheme": ""
 }
