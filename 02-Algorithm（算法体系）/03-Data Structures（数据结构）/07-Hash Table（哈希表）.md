@@ -73,7 +73,7 @@ void test() {
     mySet.insert(Node(1));
 }
 ```
-# 5. 高频模板
+# 5. 经典案例
 
 ### 5.1 去重（Set）
 
