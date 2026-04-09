@@ -1,40 +1,30 @@
 #data-structure #queue #fifo #linear-structure #cpp
 
-## ⚡ TL;DR（快速决策）
+# 0. 核心
 
 - **先进先出（FIFO）的受限线性结构**
+- **时间复杂度**：入队 / 出队 / 取队头 均为 $O(1)$
 - 相关特征：
     - 先来的先处理
     - 按层推进
     - 任务排队调度
     - 缓冲区、事件流处理
-- 核心限制：
-    - 队尾进
-    - 队头出
 
-## 🧩 Core Idea（核心本质）
+# 1. C++ 标准容器
 
-- 队列中的元素遵循严格先后顺序
-- 最早进入的元素最先离开
-- 一句话理解：
-    - **像现实中的排队：先来先服务。**
-
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 基础使用
+- `std::queue<T>` 的核心接口：
+- **特点**：适配器模式，仅暴露 FIFO 接口，不支持随机访问、迭代器遍历
 
 ```cpp
-#include <iostream>
-#include <queue>
-using namespace std;
-int main() {
-    queue<int> q;
-    q.push(10); q.push(20); q.push(30);
-    cout << q.front() << '\\n';
-    q.pop();
-    cout << q.front() << '\\n';
-}
+queue<int> q;
+q.push(x);    // 队尾入队
+q.pop();      // 队头出队
+q.front();    // 取队头元素
+q.back();     // 取队尾元素
+q.empty();    // 判断空
+q.size();     // 元素个数
 ```
+
 
 1. BFS 基础框架
 
@@ -64,42 +54,4 @@ while (!q.empty()) {
 ```cpp
 cout << q.front() << '\\n';
 cout << q.back() << '\\n';
-```
-
-## ⚠️ Pitfalls（高频错误）
-
-- 空队列上直接 `front()` / `back()` / `pop()`
-- `pop()` 不返回元素
-- 和栈顺序搞混
-- BFS 中忘记标记访问导致重复入队
-
-## 🚀 Performance / Tips（性能优化）
-
-- `push/pop/front/back` 常为 $O(1)$
-- BFS、层序遍历、调度问题特别常见
-- 如果需要两端操作，更适合 `deque`
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- BFS / 层序遍历
-- 任务调度
-- 缓冲区模型
-- 事件流处理
-- 模拟排队问题
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-#include <queue>
-using namespace std;
-int main() {
-    queue<int> q;
-    q.push(1); q.push(2); q.push(3);
-    while (!q.empty()) {
-        cout << q.front() << ' ';
-        q.pop();
-    }
-    return 0;
-}
 ```

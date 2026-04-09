@@ -1,6 +1,3 @@
----
-tags:
----
  #heap #priority-queue #complete-binary-tree #cpp
 
 
