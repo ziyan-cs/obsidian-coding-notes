@@ -33,6 +33,7 @@
 ### 2.1 冒泡排序（Bubble Sort）
 
 ```cpp
+// 对外接口
 void bubbleSort(vector<int>& arr) {
     int n = arr.size();
     for (int i = 0; i < n - 1; ++i) {
@@ -51,6 +52,7 @@ void bubbleSort(vector<int>& arr) {
 ### 2.2 选择排序（Selection Sort）
 
 ```cpp
+// 对外接口
 void selectionSort(vector<int>& arr) {
     int n = arr.size();
     for (int i = 0; i < n; ++i) {
@@ -66,6 +68,7 @@ void selectionSort(vector<int>& arr) {
 ### 2.3 插入排序（Insertion Sort）⭐
 
 ```cpp
+// 对外接口
 void insertSort(vector<int>& arr) {
     int n = arr.size();
     for (int i = 1; i < n; ++i) {
@@ -83,21 +86,16 @@ void insertSort(vector<int>& arr) {
 ### 2.4 归并排序（Merge Sort）⭐
 
 ```cpp
-//对外接口
-void mergeSort(vector<int>& arr) {
-    process(arr, 0, arr.size()-1);
-}
-
-// 主函数：递归分治
-void process(vector<int>& arr, int L, int R) {
+// 对外接口
+void mergeSort(vector<int>& arr, int L, int R) {
     if (L == R) return;
     int M = L + ((R - L) >> 1);
-    process(arr, L, M);
-    process(arr, M + 1, R);
+    mergeSort(arr, L, M);
+    mergeSort(arr, M + 1, R);
     merge(arr, L, M, R);
 }
 
-//子函数：合并
+// 子函数：合并
 void merge(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -117,6 +115,7 @@ void merge(vector<int>& arr, int L, int M, int R) {
 ### 2.5 快速排序（Quick Sort）⭐
 
 ```cpp
+// 对外接口
 void quickSortV2(vector<int>& arr, int L, int R) {
     if (L >= R) return;
     int p1 = L - 1;
@@ -145,17 +144,12 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 // 对外接口
 void heapSort(vector<int>& arr) {
 	if (arr.empty() || arr.size() < 2) return;
-    process(arr);
-}
-
-// 主函数：
-void process(vector<int>& arr){
 	int heapSize = arr.size();
-	// 建堆
+		
     for (int i = (int)arr.size() - 1; i > 0; --i) {
         heapify(arr, i, arr.size());
     }
-    // 排序
+	    
     swap(arr[0], arr[--heapSize]);
     while (heapSize > 0) {
         heapify(arr, 0, heapSize);
@@ -179,6 +173,7 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 ### 2.7 计数排序（Counting Sort）
 
 ```cpp
+// 对外接口
 void countingSort(vector<int>& arr) {
     int minIdx = *max_element(arr.begin(), arr.end());
     vector<int> cnt(minIdx + 1, 0);
