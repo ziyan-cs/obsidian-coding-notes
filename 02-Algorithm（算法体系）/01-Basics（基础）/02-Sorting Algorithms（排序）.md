@@ -10,7 +10,8 @@
 - 必会：
     - 归并排序
     - 快速排序
-
+- 目标：
+	- 充分利用 $O(N·log N)$ 和 $O(N^2)$ 排序的各自优势
 # 1. 排序算法对比：
 
 ---
@@ -115,9 +116,27 @@ void merge(vector<int>& arr, int L, int M, int R) {
 ### 2.5 快速排序（Quick Sort）⭐
 
 ```cpp
-// 对外接口
+// 对外接口 1.0
+void quickSortV1(vector<int>& arr, int L, int R) {
+    if (L >= R) return;
+    // partition
+    int p1 = L - 1;
+    int key = arr[R];
+    for (int i = L; i < R; ++i) {
+        if (arr[i] < key) {
+            swap(arr[++p1], arr[i]);
+        }
+    }
+    swap(arr[++p1], arr[R]);
+		
+    quickSortV1(arr, L, p1 - 1);
+    quickSortV1(arr, p1 + 1, R);
+}
+
+// 对外接口 2.0
 void quickSortV2(vector<int>& arr, int L, int R) {
     if (L >= R) return;
+    // partition
     int p1 = L - 1;
     int p2 = R;
     int key = arr[R];
@@ -133,8 +152,34 @@ void quickSortV2(vector<int>& arr, int L, int R) {
         }
     }
     swap(arr[p2], arr[R]);
+	    
     quickSortV2(arr, L, p1);
     quickSortV2(arr, p2 + 1, R);
+}
+
+// 对外接口 3.0
+void quickSortV3(vector<int>& arr, int L, int R) {
+    if (L >= R) return;
+    swap(arr[L + rand() % (R - L + 1)], arr[R]);
+    // partition
+    int p1 = L - 1;
+    int p2 = R;
+    int key = arr[R];
+    int i = L;
+    while (i < p2) {
+        if (arr[i] == key) {
+            ++i;
+        } else if (arr[i] < key) {
+            swap(arr[++p1], arr[i]);
+            ++i;
+        } else {
+            swap(arr[--p2], arr[i]);
+        }
+    }
+    swap(arr[p2], arr[R]);
+	    
+    quickSortV3(arr, L, p1);
+    quickSortV3(arr, p2 + 1, R);
 }
 ```
 
@@ -145,11 +190,9 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 void heapSort(vector<int>& arr) {
 	if (arr.empty() || arr.size() < 2) return;
 	int heapSize = arr.size();
-		
     for (int i = (int)arr.size() - 1; i > 0; --i) {
         heapify(arr, i, arr.size());
     }
-	    
     swap(arr[0], arr[--heapSize]);
     while (heapSize > 0) {
         heapify(arr, 0, heapSize);
