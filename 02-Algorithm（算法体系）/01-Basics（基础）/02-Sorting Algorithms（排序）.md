@@ -189,6 +189,7 @@ void countingSort(vector<int>& arr) {
 ### 2.8 希尔排序（Shell Sort）
 
 ```cpp
+// 对外接口
 void shellSort(vector<int>& arr) {
     int n = arr.size();
     for (int gap = n / 2; gap > 0; gap /= 2) {
@@ -207,6 +208,7 @@ void shellSort(vector<int>& arr) {
 ### 2.9 桶排序（Bucket Sort）
 
 ```cpp
+// 对外接口
 void bucketSort(vector<float>& a) {
     int n = a.size();
     vector<vector<float>> buckets(n);
@@ -226,6 +228,7 @@ void bucketSort(vector<float>& a) {
 ### 2.10 基数排序（Radix Sort）
 
 ```cpp
+// 对外接口
 void radixSort(vector<int>& a) {
     int mx = *max_element(a.begin(), a.end());
     for (int exp = 1; mx / exp > 0; exp *= 10) {
