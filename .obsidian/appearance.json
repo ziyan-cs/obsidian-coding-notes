@@ -1,4 +1,7 @@
 {
   "enabledCssSnippets": [],
-  "cssTheme": ""
+  "cssTheme": "Blue Topaz",
+  "accentColor": "#7460be",
+  "theme": "obsidian",
+  "nativeMenus": true
 }
