@@ -10,7 +10,7 @@
 
 # 1. 案例：
 
-### 1. 阶乘
+### 1.1 阶乘
 
 ```cpp
 long long fact(int n) {
@@ -19,7 +19,7 @@ long long fact(int n) {
 }
 ```
 
-### 2. 斐波那契数列
+### 1.2 斐波那契数列
 
 ```cpp
 long long fib(int n) {
@@ -28,7 +28,7 @@ long long fib(int n) {
 }
 ```
 
-### 3. 汉诺塔问题（经典）
+### 1.3 汉诺塔问题（经典）
 
 ```cpp
 // 把 n 个盘子从 from 移到 to，借助 aux
@@ -43,7 +43,7 @@ void hanoi(int n, char from, char aux, char to) {
 }
 ```
 
-### 4. 二叉树前序遍历（递归版，最经典）
+### 1.4 二叉树前序遍历（递归版，最经典）
 
 ```cpp
 struct TreeNode {
@@ -61,7 +61,7 @@ void preOrder(TreeNode* root, vector<int>& res) {
 }
 ```
 
-### 5. 二叉树中序遍历（递归版）
+### 1.5 二叉树中序遍历（递归版）
 
 ```cpp
 struct TreeNode {
@@ -79,7 +79,7 @@ void inOrder(TreeNode* root, vector<int>& res) {
 }
 ```
 
-### 6. 二叉树后序遍历（递归版）
+### 1.6 二叉树后序遍历（递归版）
 
 ```cpp
 struct TreeNode {
@@ -97,7 +97,7 @@ void postOrder(TreeNode* root, vector<int>& res) {
 }
 ```
 
-### 7. 链表反转（递归版）
+### 1.7 链表反转（递归版）
 
 ```cpp
 struct ListNode {
@@ -114,7 +114,7 @@ ListNode* reverseList(ListNode* head) {
 }
 ```
 
-### 8. 递归反转字符串
+### 1.8 递归反转字符串
 
 ```cpp
 void reverseString(string& s, int l, int r) {
