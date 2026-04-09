@@ -45,9 +45,10 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 ```
 -->**（LeetCode 912 ）**
 
-### 2. 统计逆序对
+### 2. 统计逆序对（小和问题）
 
 ```cpp
+// 主函数
 int merge(vector<int>& arr, int L, int R) {
     if (L >= R) return 0;
     int M = L + ((R - L) >> 1);
@@ -57,6 +58,7 @@ int merge(vector<int>& arr, int L, int R) {
     return left + right + cross;
 }
 
+// 子函数
 int mergeAdd(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -81,6 +83,12 @@ int mergeAdd(vector<int>& arr, int L, int M, int R) {
         arr[L + i] = help[i];
     }
     return count;
+}
+
+// 对外接口
+int reversePairs(vector<int>& arr) {
+    if (arr.empty() || arr.size() < 2) return 0;
+    return merge(arr, 0, arr.size() - 1);
 }
 ```
 -->**（LeetCode 315 ）**

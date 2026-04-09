@@ -83,6 +83,7 @@ void insertSort(vector<int>& arr) {
 ### 2.4 归并排序（Merge Sort）⭐
 
 ```cpp
+// 主函数
 void merge(vector<int>& arr, int L, int R) {
     if (L == R) return;
     int M = L + ((R - L) >> 1);
@@ -91,6 +92,7 @@ void merge(vector<int>& arr, int L, int R) {
     mergeSort(arr, L, M, R);
 }
 
+//子函数
 void mergeSort(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
@@ -105,6 +107,9 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
     for (int i = 0; i < (int)help.size(); ++i)
         arr[L + i] = help[i];
 }
+
+//对外接口
+
 ```
 
 ### 2.5 快速排序（Quick Sort）⭐
