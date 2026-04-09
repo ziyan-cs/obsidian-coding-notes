@@ -109,7 +109,10 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 }
 
 //对外接口
-
+void sortArray(vector<int>& arr) {
+    if (arr.empty() || arr.size() < 2) return;
+    merge(arr, 0, arr.size()-1);
+}
 ```
 
 ### 2.5 快速排序（Quick Sort）⭐
@@ -140,17 +143,6 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 ### 2.6 堆排序（Heap Sort）⭐
 
 ```cpp
-void heapify(vector<int>& arr, int index, int heapSize) {
-    int L = index * 2 + 1;
-    while (L < heapSize) {
-        int largest = L + 1 < heapSize && arr[L + 1] > arr[L] ? L + 1 : L;
-        largest = arr[index] > arr[largest] ? index : largest;
-        if (largest == index) return ;
-        swap(arr[index] ,arr[largest]);
-        index = largest;
-        L = index *2 + 1;
-    }
-}
 
 void heapSort(vector<int>& arr){
     if (arr.empty() || (int)arr.size() < 2) return ;
@@ -162,6 +154,18 @@ void heapSort(vector<int>& arr){
     while (heapSize > 0) {
         heapify(arr, 0, heapSize);
         swap(arr[0], arr[--heapSize]);
+    }
+}
+
+void heapify(vector<int>& arr, int index, int heapSize) {
+    int L = index * 2 + 1;
+    while (L < heapSize) {
+        int largest = L + 1 < heapSize && arr[L + 1] > arr[L] ? L + 1 : L;
+        largest = arr[index] > arr[largest] ? index : largest;
+        if (largest == index) return ;
+        swap(arr[index] ,arr[largest]);
+        index = largest;
+        L = index *2 + 1;
     }
 }
 ```
