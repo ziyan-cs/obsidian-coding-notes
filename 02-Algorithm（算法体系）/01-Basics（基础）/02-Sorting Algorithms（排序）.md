@@ -145,22 +145,24 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 // 对外接口
 void heapSort(vector<int>& arr) {
 	if (arr.empty() || arr.size() < 2) return;
-    heapSort(arr);
+    process(arr);
 }
 
-// 主函数
-void heapSort(vector<int>& arr){
+// 主函数：
+void process(vector<int>& arr){
 	int heapSize = arr.size();
+	// 建堆
     for (int i = (int)arr.size() - 1; i > 0; --i) {
         heapify(arr, i, arr.size());
     }
+    // 排序
     swap(arr[0], arr[--heapSize]);
     while (heapSize > 0) {
         heapify(arr, 0, heapSize);
         swap(arr[0], arr[--heapSize]);
     }
 }
-// 子函数
+// 子函数：堆化
 void heapify(vector<int>& arr, int index, int heapSize) {
     int L = index * 2 + 1;
     while (L < heapSize) {
