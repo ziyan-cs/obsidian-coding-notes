@@ -83,17 +83,22 @@ void insertSort(vector<int>& arr) {
 ### 2.4 归并排序（Merge Sort）⭐
 
 ```cpp
-// 主函数
-void merge(vector<int>& arr, int L, int R) {
-    if (L == R) return;
-    int M = L + ((R - L) >> 1);
-    merge(arr, L, M);
-    merge(arr, M + 1, R);
-    mergeSort(arr, L, M, R);
+//对外接口
+void mergeSort(vector<int>& arr) {
+    process(arr, 0, arr.size()-1);
 }
 
-//子函数
-void mergeSort(vector<int>& arr, int L, int M, int R) {
+// 主函数：递归分治
+void process(vector<int>& arr, int L, int R) {
+    if (L == R) return;
+    int M = L + ((R - L) >> 1);
+    process(arr, L, M);
+    process(arr, M + 1, R);
+    merge(arr, L, M, R);
+}
+
+//子函数：合并
+void merge(vector<int>& arr, int L, int M, int R) {
     vector<int> help(R - L + 1);
     int index = 0;
     int p1 = L;
@@ -106,12 +111,6 @@ void mergeSort(vector<int>& arr, int L, int M, int R) {
 	    help[index++] = arr[p2++];
     for (int i = 0; i < (int)help.size(); ++i)
         arr[L + i] = help[i];
-}
-
-//对外接口
-void sortArray(vector<int>& arr) {
-    if (arr.empty() || arr.size() < 2) return;
-    merge(arr, 0, arr.size()-1);
 }
 ```
 
@@ -143,6 +142,12 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 ### 2.6 堆排序（Heap Sort）⭐
 
 ```cpp
+// 对外接口
+void heapSort(vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return;
+    heapSort(arr);
+}
+
 // 主函数
 void heapSort(vector<int>& arr){
 	int heapSize = arr.size();
@@ -166,11 +171,6 @@ void heapify(vector<int>& arr, int index, int heapSize) {
         index = largest;
         L = index *2 + 1;
     }
-}
-//对外接口
-void sortArray(vector<int>& arr) {
-	if (arr.empty() || arr.size() < 2) return;
-    heapSort(arr);
 }
 ```
 
