@@ -16,16 +16,20 @@
 
 # 1. 核心容器
 
-- `unordered_map<Key, Value>`：
+### 1.1 哈希表
+
+- `unordered_map<Key, Value>`：（*Java* `HashMap`)
 	- 无序键值对
 	- 增删改查 $O(1)$
-- `unordered_set<Key>`：
+- `unordered_set<Key>`：（*Java* `HashSet`)
 	- 无序单值集合
 	- 去重 $O(1)$
-- `map<Key, Value>`：
+### 1.2 有序表
+
+- `map<Key, Value>`：（*Java* `TreeMap`)
 	- 有序键值对（红黑树）
 	- $O(log N)$
-- `set<Key>`：
+- `set<Key>`：（*Java* `TreeSet`)
 	- 有序单值集合
 	- $O(log N)$
 

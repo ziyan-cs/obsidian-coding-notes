@@ -1,6 +1,6 @@
 #algorithm #enumeration #simulation #bruteforce
 
-## 核心
+# 0. 核心
 
 - 枚举 = **按规则把所有候选答案试出来**
 - 模拟 = **按题目过程原样执行**

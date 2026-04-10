@@ -1,6 +1,6 @@
 #algorithm #sorting #sort #comparison-sort #non-comparison-sort
 
-# 0. 核心：
+# 0. 核心
 
 - 排序 4 要素：
     - 时间复杂度
@@ -12,7 +12,7 @@
     - 快速排序
 - 目标：
 	- 充分利用 $O(N·log N)$ 和 $O(N^2)$ 排序的各自优势
-# 1. 排序算法对比：
+# 1. 排序算法对比
 
 ---
 
