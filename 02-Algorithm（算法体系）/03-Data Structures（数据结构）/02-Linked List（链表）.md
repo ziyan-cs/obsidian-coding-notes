@@ -43,6 +43,7 @@ head = node;
 -  反转链表
 
 ```cpp
+// 时间 O(N) 空间 O(1)
 ListNode* reverseList(ListNode* head) {
     ListNode* prev = nullptr;
     ListNode* cur = head;
@@ -53,6 +54,19 @@ ListNode* reverseList(ListNode* head) {
         cur = nxt;
     }
     return prev;
+}
+```
+
+```cpp
+// 时间 O(N) 空间 O(N)
+ListNode* reverse(ListNode* pre,ListNode* cur){
+    if(cur == NULL) return pre;
+    ListNode* temp = cur->next;
+    cur->next = pre;
+    return reverse(cur,temp);
+}
+ListNode* reverseList(ListNode* head) {
+    return reverse(NULL, head);
 }
 ```
 
@@ -166,7 +180,9 @@ Node* copyRandomListHash(Node* head) {
 
     return map[head];
 }
+```
 
+```cpp
 //时间 O(N)，空间 O(1)
 Node* copyRandomList(Node* head) {
     if (!head) return nullptr;
@@ -201,5 +217,4 @@ Node* copyRandomList(Node* head) {
 
     return newHead;
 }
-
 ```
