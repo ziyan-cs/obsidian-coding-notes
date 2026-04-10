@@ -243,7 +243,7 @@ Node* getLoopNode(Node* head) {
 	}
 	return fast;
 }
-// 如果都无环返回第一个相交节点，如果不相交返回 null
+// 两个都无环，如果相交返回第一个相交节点，否则返回 null
 Node* noLoop(Node* head1, Node* head2) {
 	if (!head1 || !head2) {
 		return nullptr;
@@ -277,4 +277,5 @@ Node* noLoop(Node* head1, Node* head2) {
 	}
 	return cur1;
 }
+// 两个都有环，如果相交返回第一个相交节点，否则返回 null
 ```
