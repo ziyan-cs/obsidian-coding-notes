@@ -71,7 +71,82 @@ dummy.next = head;
 
 ### 3.1 判断否为回文
 
+```cpp
+bool isPalindrome(ListNode* head) {
+    if (!head || !head->next) return true;
 
+    ListNode *slow = head, *fast = head;
+    while (fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    ListNode* right = reverse(slow->next);
+    ListNode* left = head;
+    bool res = true;
+
+    while (right) {
+        if (left->val != right->val) {
+            res = false;
+            break;
+        }
+        left = left->next;
+        right = right->next;
+    }
+
+    slow->next = reverse(right);
+    return res;
+}
+```
 
 ### 3.2 荷兰国旗问题（链表版）
 
+```cpp
+ListNode* netherlandsFlag(ListNode* head, int pivot) {
+    ListNode *sh = NULL, *st = NULL;
+    ListNode *eh = NULL, *et = NULL;
+    ListNode *bh = NULL, *bt = NULL;
+
+    ListNode* cur = head;
+    while (cur) {
+        ListNode* next = cur->next;
+        cur->next = NULL;
+
+        if (cur->val < pivot) {
+            if (!sh) sh = st = cur;
+            else st = st->next = cur;
+        } else if (cur->val == pivot) {
+            if (!eh) eh = et = cur;
+            else et = et->next = cur;
+        } else {
+            if (!bh) bh = bt = cur;
+            else bt = bt->next = cur;
+        }
+        cur = next;
+    }
+
+    ListNode dummy(0);
+    ListNode* p = &dummy;
+
+    if (sh) { p->next = sh; p = st; }
+    if (eh) { p->next = eh; p = et; }
+    if (bh) { p->next = bh; }
+
+    return dummy.next;
+}
+```
+
+### 3.3 复制带随机指针的链表
+
+```cpp
+// rand：随机指针，可指向链表中任意节点，也可指向 null
+class Node {
+public:
+    int value;
+    Node* next;
+    Node* rand;
+    Node(int val) : value(val), next(nullptr), rand(nullptr) {}
+};
+
+
+```
