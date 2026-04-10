@@ -219,7 +219,7 @@ Node* copyRandomList(Node* head) {
 }
 ```
 
-### 3.4 判环问题
+### 3.4 相交链表
 
 ```cpp
 // 找到第一个入环节点，如果无环，返回 null
@@ -243,5 +243,38 @@ Node* getLoopNode(Node* head) {
 	}
 	return fast;
 }
-// 如果都无环返回第一个相交节点，如果不相交返回 nll
+// 如果都无环返回第一个相交节点，如果不相交返回 null
+Node* noLoop(Node* head1, Node* head2) {
+	if (!head1 || !head2) {
+		return nullptr;
+	}
+	Node* cur1 = head1;
+	Node* cur2 = head2;
+	int cnt = 0;
+	while (cur1->next) {
+		cnt++;
+		cur1 = cur1->next;
+	}
+	while (cur2->next) {
+		cnt--;
+		cur2 = cur2->next;
+	}
+	if (n > 0) {
+		cur1 = head1;
+		cur2 = head2;
+	} else {
+		cur1 = head2;
+		cur2 = head1;
+	}
+	cnt = abs(cnt);
+	while (cnt != 0) {
+		n--;
+		cur1 = cur1->next;
+	}
+	while (cur1 != cur2) {
+		cur1 = cur1->next;
+		cur2 = cur2->next;
+	}
+	return cur1;
+}
 ```
