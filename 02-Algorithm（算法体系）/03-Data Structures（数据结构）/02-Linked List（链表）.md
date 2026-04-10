@@ -90,11 +90,11 @@ bool isPalindrome(ListNode* head) {
         slow = slow->next;
         fast = fast->next->next;
     }
-
+	
     ListNode* right = reverse(slow->next);
     ListNode* left = head;
     bool res = true;
-
+	
     while (right) {
         if (left->val != right->val) {
             res = false;
@@ -103,7 +103,7 @@ bool isPalindrome(ListNode* head) {
         left = left->next;
         right = right->next;
     }
-
+	
     slow->next = reverse(right);
     return res;
 }
@@ -116,12 +116,12 @@ ListNode* netherlandsFlag(ListNode* head, int pivot) {
     ListNode *sh = NULL, *st = NULL;
     ListNode *eh = NULL, *et = NULL;
     ListNode *bh = NULL, *bt = NULL;
-
+		
     ListNode* cur = head;
     while (cur) {
         ListNode* next = cur->next;
         cur->next = NULL;
-
+		
         if (cur->val < pivot) {
             if (!sh) sh = st = cur;
             else st = st->next = cur;
@@ -134,10 +134,10 @@ ListNode* netherlandsFlag(ListNode* head, int pivot) {
         }
         cur = next;
     }
-
+		
     ListNode dummy(0);
     ListNode* p = &dummy;
-
+		
     if (sh) { p->next = sh; p = st; }
     if (eh) { p->next = eh; p = et; }
     if (bh) { p->next = bh; }
@@ -157,19 +157,19 @@ public:
     Node* rand;
     Node(int val) : value(val), next(nullptr), rand(nullptr) {}
 };
-
+	
 //时间 O(N)，空间 O(N)
 Node* copyRandomListHash(Node* head) {
     if (!head) return nullptr;
     unordered_map<Node*, Node*> map;
-
+		
     // 第一次遍历：创建所有克隆节点，存入哈希表
     Node* cur = head;
     while (cur) {
         map[cur] = new Node(cur->value);
         cur = cur->next;
     }
-
+		
     // 第二次遍历：设置next和rand指针
     cur = head;
     while (cur) {
@@ -177,7 +177,7 @@ Node* copyRandomListHash(Node* head) {
         map[cur]->rand = map[cur->rand];
         cur = cur->next;
     }
-
+		
     return map[head];
 }
 ```
@@ -186,7 +186,7 @@ Node* copyRandomListHash(Node* head) {
 //时间 O(N)，空间 O(1)
 Node* copyRandomList(Node* head) {
     if (!head) return nullptr;
-
+		
     // 1. 插入克隆节点：原节点后紧跟克隆节点
     Node* cur = head;
     while (cur) {
@@ -195,7 +195,7 @@ Node* copyRandomList(Node* head) {
         cur->next = clone;
         cur = clone->next;
     }
-
+		
     // 2. 设置克隆节点的rand指针
     cur = head;
     while (cur) {
@@ -203,7 +203,7 @@ Node* copyRandomList(Node* head) {
         clone->rand = cur->rand ? cur->rand->next : nullptr;
         cur = clone->next;
     }
-
+		
     // 3. 拆分链表，分离原链表与克隆链表
     Node* newHead = head->next;
     cur = head;
@@ -214,7 +214,7 @@ Node* copyRandomList(Node* head) {
         if (cur) cloneCur->next = cur->next;
         cloneCur = cloneCur->next;
     }
-
+		
     return newHead;
 }
 ```
