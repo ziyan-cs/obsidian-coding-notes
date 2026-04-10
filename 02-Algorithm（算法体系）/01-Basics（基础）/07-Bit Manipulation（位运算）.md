@@ -142,7 +142,7 @@ int singleNumber(vector<int>& nums) {
  ```
 **（ LeetCode 260 ）**
 
-# 3. 核心技巧应用
+# 3. 技巧应用
 
 ### 3.1 汉明重量（位 1 的个数）
 

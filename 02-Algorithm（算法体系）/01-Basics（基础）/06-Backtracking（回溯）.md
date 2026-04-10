@@ -10,9 +10,9 @@
     - 子集
     - 路径搜索
 
-# 1. 案例：
+# 1. 经典案例
 
-### 1. 全排列（入门）
+### 1.1 全排列（入门）
 
 ```cpp
 vector<vector<int>> ans;
@@ -37,7 +37,7 @@ void dfs(vector<int>& nums) {
 ```
 **（LeetCode 46）**
 
-### 2. 组合总和（回溯经典）
+### 1.2 组合总和（回溯经典）
 
 ```cpp
 void backtrack(vector<int>& candidates, int target, int start) {
@@ -55,7 +55,7 @@ void backtrack(vector<int>& candidates, int target, int start) {
 ```
 **（LeetCode 39）**
 
-### 3. N 皇后问题
+### 1.3 N 皇后问题
 
 ```cpp
 void dfs(int idx, vector<int>& nums, vector<int>& path, vector<vector<int>>& ans) {
@@ -69,7 +69,7 @@ void dfs(int idx, vector<int>& nums, vector<int>& path, vector<vector<int>>& ans
 ```
 **（LeetCode 51）**
 
-### 4. 子集
+### 1.4 子集
 
 ```cpp
 void dfs(int idx, vector<int>& nums, vector<int>& path, vector<vector<int>>& ans) {
