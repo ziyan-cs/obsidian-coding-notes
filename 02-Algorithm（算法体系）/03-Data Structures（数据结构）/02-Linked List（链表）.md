@@ -63,11 +63,7 @@ ListNode dummy(0);
 dummy.next = head;
 ```
 
-
 # 3. 经典案例
-
-### 3.1
-
 
 ### 3.1 判断否为回文
 
@@ -148,5 +144,62 @@ public:
     Node(int val) : value(val), next(nullptr), rand(nullptr) {}
 };
 
+//时间 O(N)，空间 O(N)
+Node* copyRandomListHash(Node* head) {
+    if (!head) return nullptr;
+    unordered_map<Node*, Node*> map;
+
+    // 第一次遍历：创建所有克隆节点，存入哈希表
+    Node* cur = head;
+    while (cur) {
+        map[cur] = new Node(cur->value);
+        cur = cur->next;
+    }
+
+    // 第二次遍历：设置next和rand指针
+    cur = head;
+    while (cur) {
+        map[cur]->next = map[cur->next];
+        map[cur]->rand = map[cur->rand];
+        cur = cur->next;
+    }
+
+    return map[head];
+}
+
+//时间 O(N)，空间 O(1)
+Node* copyRandomList(Node* head) {
+    if (!head) return nullptr;
+
+    // 1. 插入克隆节点：原节点后紧跟克隆节点
+    Node* cur = head;
+    while (cur) {
+        Node* clone = new Node(cur->value);
+        clone->next = cur->next;
+        cur->next = clone;
+        cur = clone->next;
+    }
+
+    // 2. 设置克隆节点的rand指针
+    cur = head;
+    while (cur) {
+        Node* clone = cur->next;
+        clone->rand = cur->rand ? cur->rand->next : nullptr;
+        cur = clone->next;
+    }
+
+    // 3. 拆分链表，分离原链表与克隆链表
+    Node* newHead = head->next;
+    cur = head;
+    Node* cloneCur = newHead;
+    while (cur) {
+        cur->next = cloneCur->next;
+        cur = cur->next;
+        if (cur) cloneCur->next = cur->next;
+        cloneCur = cloneCur->next;
+    }
+
+    return newHead;
+}
 
 ```
