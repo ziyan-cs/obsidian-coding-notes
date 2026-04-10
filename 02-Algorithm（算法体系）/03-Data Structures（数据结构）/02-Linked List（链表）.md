@@ -219,4 +219,29 @@ Node* copyRandomList(Node* head) {
 }
 ```
 
-### 3.4 链表相交问题
+### 3.4 判环问题
+
+```cpp
+// 找到第一个入环节点，如果无环，返回 null
+Node* getLoopNode(Node* head) {
+	if (!head || !head->next || !head->next->next) {
+		return nullptr;
+	}
+	Node* slow = head->next;
+	Node* fast = head->next->next;
+	while (slow != fast) {
+		if (!slow->next || !fast->next->next) {
+			return nullptr;
+		}
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	fast = head;
+	while (slow != fast) {
+		slow = sloe->next;
+		fast = fast->next;
+	}
+	return fast;
+}
+// 如果都无环返回第一个相交节点，如果不相交返回 nll
+```
