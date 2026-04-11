@@ -222,7 +222,7 @@ Node* copyRandomList(Node* head) {
 ### 3.4 相交链表
 
 ```cpp
-// 找到第一个入环节点，如果无环，返回 null
+// 判断有无环：如果有环，返回第一个入环节点；如果无环，返回 null
 Node* getLoopNode(Node* head) {
 	if (!head || !head->next || !head->next->next) {
 		return nullptr;
@@ -243,9 +243,12 @@ Node* getLoopNode(Node* head) {
 	}
 	return fast;
 }
-// 两个都无环，如果相交返回第一个相交节点，否则返回 null
+
+// 1. 一个有环一个无环：不可能相交，直接返回 null
+
+// 2. 两个都无环：如果相交，返回第一个相交节点；如果不想交，返回 null
 Node* noLoop(Node* head1, Node* head2) {
-	if (!head1 || !head2) {
+		if (!head1 || !head2) {
 		return nullptr;
 	}
 	Node* cur1 = head1;
@@ -277,5 +280,50 @@ Node* noLoop(Node* head1, Node* head2) {
 	}
 	return cur1;
 }
-// 两个都有环，如果相交返回第一个相交节点，否则返回 null
+
+// 3. 两个都有环：如果相交，返回第一个相交节点；如果不相交，返回 null
+Node* bothLoop(Node* head1, Node* loop1, Node* head2, Node* loop2) {
+	Node* cur1 = head1;
+	Node* cur2 = head2;
+	if (loop1 != loop2) {
+		cur1 = loop1;
+		cur2 = loop2;
+		int cnt = 0;
+		while (cur1->next) {
+			cnt++;
+			cur1 = cur1->next;
+		}
+		while (cur2->next) {
+			cnt--;
+			cur2 = cur2->next;
+		}
+		if (n > 0) {
+			cur1 = head1;
+			cur2 = head2;
+		} else {
+			cur1 = head2;
+			cur2 = head1;
+		}
+		cnt = abs(cnt);
+		while (cnt != 0) {
+			n--;
+			cur1 = cur1->next;
+		}
+		while (cur1 != cur2) {
+			cur1 = cur1->next;
+			cur2 = cur2->next;
+		}
+		return cur1;
+	} else {
+		cur1 = loop1->next;
+		while (cur1 != loop1) {
+			if (cur1 == loop2) {
+				return loop1;
+			}
+			cur1 = cur1->next;
+		}
+		return nullptr;
+	}
+	
+
 ```
