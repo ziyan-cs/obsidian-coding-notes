@@ -8,12 +8,12 @@
     - 输出结果：`cout`
     - 读整行：`getline`
     - 调试输出：`cerr`
+- 数据量大时：
+    - `ios::sync_with_stdio(false);`
+    - `cin.tie(nullptr);`
 - 算法题常用：
     - `cin >> x`
     - `cout << x << '\n'`
-- 数据量大时，常配合：
-    - `ios::sync_with_stdio(false);`
-    - `cin.tie(nullptr);`
 
 # 1. I/O 基础
 
