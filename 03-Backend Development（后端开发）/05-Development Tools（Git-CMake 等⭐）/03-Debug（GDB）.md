@@ -2,11 +2,14 @@
 
 # 0. 核心
 
-1. 使用 **VSCode** + **CMake** 插件，图形化操作
-2. 编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
-3. **CMake: 配置** ( `Ctrl + Shift + P` ) 
-	- 读取配置，在 `build` 目录生成构建系统文件
+1. **VSCode** + **CMake** 插件：
+	- 全程图形化操作
+2. 编写 `CMakeLists.txt`：
+	- 定义编译规则、C++ 标准、调试信息
+3. CMake: 配置 ( `Ctrl + Shift + P` ) 
+	- 读取配置，在 `build` 生成构建文件
 4. 点击左下角按钮，启动调试 / 运行
+	- 一键启动编译、调试、运行
 
 # 1. 环境配置
 
@@ -15,7 +18,8 @@
 ```cpp
 # 强制指定使用 C++17 标准
 set(CMAKE_CXX_STANDARD 17)
-# 生成compile_commands.json，供 IDE 做代码补全、跳转
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# 生成compile_commands.json，供 VSCode/Clangd 做代码补全、跳转、静态分析
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ```
   
