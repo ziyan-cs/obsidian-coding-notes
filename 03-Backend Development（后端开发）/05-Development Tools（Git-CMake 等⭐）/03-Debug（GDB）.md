@@ -4,7 +4,7 @@
 
 1. 使用 **VSCode** + **CMake** 插件，图形化操作
 2. 编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
-3. **CMake**: 配置：`Ctrl + Shift + P` 后输入并选择配置
+3. **CMake: 配置** ( `Ctrl + Shift + P` ) 
 	- 读取配置，在 `build` 目录生成构建系统文件
 4. 点击左下角按钮，启动调试 / 运行
 
