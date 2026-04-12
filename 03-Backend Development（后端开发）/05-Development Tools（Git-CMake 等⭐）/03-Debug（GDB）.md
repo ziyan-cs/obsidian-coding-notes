@@ -1,36 +1,33 @@
 
 
-# 0. 核心逻辑
+# 0. 核心
 
-- **不再使用命令行 GDB**：直接使用 VSCode 自带的 **C/C++ 扩展** 调试。
-- **CMake 配合**：必须保证 `CMAKE_EXPORT_COMPILE_COMMANDS ON` 和 `-g` 参数，否则 VSCode 无法解析代码。
+-  VSCode **C/C++ 扩展** + **CMake 配置文件**
 
-# 1. 环境配置（只需一次）
+# 1. 环境配置
 
-- **前提**：确保你的 `CMakeLists.txt` 里有以下配置（你已经有了）：
+- 确保 `CMakeLists.txt` 配置：
 
-    ```cpp
-    set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # 必须开启，否则VSCode代码跳转失效
-    ```
-    
-- **插件**：在 VSCode 安装插件 **`C/C++ Extension Pack`**（微软官方）。
-
-# 2. VSCode 左下角操作区（懒人操作区）
+```cpp
+# 强制指定使用 C++17 标准
+set(CMAKE_CXX_STANDARD 17)
+# 生成compile_commands.json，供 IDE 做代码补全、跳转
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+```
+  
+# 2. VSCode 使用
 
 - **生成 (Build)** ⚙：
-
-    - 作用：执行 `cmake --build .`。
-    - 效果：自动编译代码，生成可执行文件。
+    - 作用：执行 `cmake --build .`
+    - 效果：自动编译代码，生成可执行文件
 
 - **调试 (Debug)** 🐞：
-    
     - 作用：一键启动调试。
-    - 效果：自动加载 `launch.json` 配置，程序运行并暂停在断点处。
+    - 效果：自动加载 `launch.json` 配置，程序运行并暂停在断点处
 
 - **运行 (Run)** ▶️：
-    
-    - 作用：直接运行程序（无需调试，查看输出）。
+    - 作用：直接运行程序（无需调试，查看输出）
+
 ##### 3. 调试面板（Ctrl+Shift+P -> 开始调试）
 
 | 操作       | 简写 / 按钮  | 作用                                 |
