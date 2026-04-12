@@ -2,7 +2,10 @@
 
 # 0. 核心
 
--  VSCode **C/C++ 扩展** + **CMake 配置文件**
+-  使用 VSCode + CMake 插件
+- 不需要手动创建 launch.json
+-  编写 `CMakeLists.txt` 配置文件
+- 插件自动读取 `CMakeLists.txt` 完成所有调试配置
 
 # 1. 环境配置
 
