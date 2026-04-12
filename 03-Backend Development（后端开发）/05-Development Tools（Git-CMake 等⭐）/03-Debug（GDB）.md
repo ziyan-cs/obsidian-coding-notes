@@ -2,10 +2,9 @@
 
 # 0. 核心
 
--  使用 VSCode + CMake 插件
-- 不需要手动创建 launch.json
--  编写 `CMakeLists.txt` 配置文件
-- 插件自动读取 `CMakeLists.txt` 完成所有调试配置
+-  编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
+- **插件自动解析**：VSCode CMake 插件读取配置，自动生成调试环境
+- **一键调试运行**：点击左下角按钮，直接启动调试 / 运行
 
 # 1. 环境配置
 
