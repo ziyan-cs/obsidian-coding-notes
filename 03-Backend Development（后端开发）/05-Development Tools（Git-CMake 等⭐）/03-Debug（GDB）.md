@@ -19,7 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 - ⚙**生成 (Build)** ：
     - 作用：执行 `cmake --build .`
-    - 效果：自动编译代码，生成 `.exe` 可执行文件到`build` 目录
+    - 效果：自动编译代码，生成  `文件名/项目名/main.exe` 可执行文件到`build` 目录
 
 - 🐞**调试 (Debug)** ：
     - 作用：一键启动调试。

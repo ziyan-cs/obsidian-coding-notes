@@ -26,14 +26,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # 5. 把对应目录加入头文件搜索路径
 include_directories(include)
 
-# 方案1：单文件编译(目标名和源文件名一致)
+# 方案1：单文件编译(目标名和源文件名一致) ->文件名.exe
 add_executable("文件名" src/"文件名".cpp)
 
-# 方案2：多文件自动编译(自动收集src目录下所有.cpp文件)
+# 方案2：多文件自动编译(自动收集src目录下所有.cpp文件) ->项目名.exe
 file(GLOB_RECURSE SOURCES src/ *.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# 方案3：通用可执行文件（固定 main 入口）
+# 方案3：通用可执行文件(固定 main 入口) ->main.exe
 add_executable(main src/main.cpp)
 ```
 
