@@ -2,9 +2,9 @@
 
 # 0. 核心
 
-1. **VSCode + CMake 插件**，全程图形化操作
+1. 使用 **VSCode** + **CMake** 插件，图形化操作
 2. 编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
-3. `Ctrl + Shift + P` 输入并选择 `CMake: 配置`：
+3. **CMake**: 配置：`Ctrl + Shift + P` 后输入并选择配置
 	- 读取配置，在 `build` 目录生成构建系统文件
 4. 点击左下角按钮，启动调试 / 运行
 
@@ -19,10 +19,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ```
   
-# 2. VSCode 
+# 2. 日常开发操作
 
 - ⚙**生成 (Build)** ：
-    - 作用：执行 `cmake --build .`
+    - 作用：编译最新代码，更新 `build` 目录下的可执行文件
     - 效果：自动编译代码，生成  `文件名/项目名/main.exe` 可执行文件到`build` 目录
 
 - 🐞**调试 (Debug)** ：
@@ -30,7 +30,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
     - 效果：自动加载 `launch.json` 配置，程序运行并暂停在断点处
 
 - ▶️**运行 (Run)** ：
-    - 作用：直接运行程序（无需调试，查看输出）
+    - 作用：直接执行程序，查看输出结果
 
 # 3. 调试面板（Ctrl+Shift+P -> 开始调试）
 
