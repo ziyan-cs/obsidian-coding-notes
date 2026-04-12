@@ -2,10 +2,11 @@
 
 # 0. 核心
 
-1. 编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
-2. 插件自动解析：VSCode CMake 插件读取配置，自动生成调试环境
-	`Ctrl + Shift + P`：CMake：
-3. 一键调试运行：点击左下角按钮，直接启动调试 / 运行
+1. **VSCode + CMake 插件**，全程图形化操作
+2. 编写 `CMakeLists.txt`：配置编译规则、C++ 标准、调试信息
+3. `Ctrl + Shift + P` 输入并选择 `CMake: 配置`：
+	- 读取配置，在 `build` 目录生成构建系统文件
+4. 点击左下角按钮，启动调试 / 运行
 
 # 1. 环境配置
 
@@ -18,7 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ```
   
-# 2. VSCode 使用
+# 2. VSCode 
 
 - ⚙**生成 (Build)** ：
     - 作用：执行 `cmake --build .`
@@ -31,7 +32,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 - ▶️**运行 (Run)** ：
     - 作用：直接运行程序（无需调试，查看输出）
 
-##### 3. 调试面板（Ctrl+Shift+P -> 开始调试）
+# 3. 调试面板（Ctrl+Shift+P -> 开始调试）
 
 | 操作       | 简写 / 按钮  | 作用                                 |
 | :------- | :------- | :--------------------------------- |
