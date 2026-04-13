@@ -35,11 +35,21 @@
 
 ### 1.2 修改
 
-- 修改
+- 修改用户
 	- `passwd`：修改当前用户密码
 	- `passwd [user_name]`：修改用户密码
+	- `usermod -l [new_user_name] [old_user_name]`：修改用户名
+	- `usermod -d [home_path] -m [user_name]`：修改家目录并移动文件
+		
 	- `usermod -g [group_name] [user_name]`：修改用户主组
-	- `groupmod`：修改组名、GID
+	- `usermod -aG [group_name] [user_name]`：添加附加组
+	- `gpasswd -d [user_name] [group_name]`：取消附加组
+	- `usermod -G "" [user_name]`：一次性清空所有附加组 
+
+- 修改组
+	- `groupmod -n [new_group_name] [old_group_name]`：修改组名
+	- `groupmod -g [new_GID] [group_name]`：修改组 GID
+	- `groupmod -f [new_GID] [group_name]`：强制修改 GID（即使 GID 已被占用）
 
 ### 1.3 切换
 
@@ -66,21 +76,18 @@
 
 # 2. 权限管理
 
-### 2.0 核心
-
-- Linux 文件权限三角色：
+- 文件的关系
 	- 所有者 `u` ：文件创建者，默认拥有最高权限
 	- 所属组 `g` ：所有者归属的组，组内用户共享组权限
 	- 其他用户 `o` ：所属组以外的所有用户
-- 权限位：`r`（读）、`w`（写）、`x`（执行），对应数字 4/2/1
-- 文件分配了所属组后，再设置组权限
+	- （文件分配了所属组后，即所有者进组，再设置组权限）
 
-### 2.1 权限查看与修改
-
-ls -l：查看文件的所有者、所属组、权限位
-chown：修改文件的所有者 / 所属组（chown user:group file）
-chmod：修改文件权限（符号法：chmod g+rwx file；数字法：chmod 755 file）
-umask：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
+- 文件权限查看与修改
+	- `ls -l`：查看文件所有者、所属组、权限位（ `w` `r` `x` ）
+	- `chown [user_name] [file_name]`：修改文件所有者
+	- `chown [group_name] [file_name]`：修改文件所属组
+	- `chmod`：修改文件权限（符号法：chmod g+rwx file；数字法：chmod 755 file）
+	- `umask`：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
 
 ### 2.2 特殊权限（进阶）
 
