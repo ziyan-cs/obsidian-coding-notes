@@ -242,7 +242,7 @@ Node* getLoopNode(Node* head) {
 
 // 1. 一个有环一个无环：不可能相交，直接返回 null
 
-// 2. 两个都无环：如果相交，返回第一个相交节点；如果不想交，返回 null
+  
 Node* noLoop(Node* head1, Node* head2) {
 	if (!head1 || !head2) {
 		return nullptr;
