@@ -9,37 +9,55 @@
 	- -> 服务运维
 	- -> 配置调优
 
-# 1. 用户 & 组管理
+# 1. 用户 & 用户组管理
+
+### 1.0 核心
+
+- Linux 用户组的本质：用户的集合，用于批量权限管理
+- 分类：
+	- 主组（用户创建时默认所属组，`/etc/passwd` 中 `GID` 对应）
+	- 附加组（用户额外加入的组，`/etc/group` 中记录）
+-  核心配置文件：`/etc/group`（组信息）、`/etc/gshadow`（组密码）
 
 ### 1.1 增删
 
-- `useradd [user]`：创建新用户（默认家目录：`/home/[user]` ）
-- `useradd -d [home_path] [user]`： 指定自定义家目录路径
-- `useradd -g [group] -u [user]`： 指定所属用户组/UID
-- `adduser [user]`:  *Ubuntu* 交互式创建用户命令
-- `groupadd [group]`：创建新用户组
+- 添加
+	- `useradd [user]`：创建新用户（默认家目录：`/home/[user]` ）
+	- `useradd -d [home_path] [user]`： 指定自定义家目录路径
+	- `useradd -g [group] -u [user]`： 指定所属用户组/UID
+	- `adduser [user]`:  *Ubuntu* 交互式创建用户命令
+	- `groupadd [group]`：创建新用户组
 
-- `userdel [user]`：删除用户（保留家目录，无法登录）
-- `userdel -r [user]`：删除用户（删除家目录，彻底清除）
-- `groupdel [group]` ：删除用户组
+- 删除
+	- `userdel [user]`：删除用户（保留家目录，无法登录）
+	- `userdel -r [user]`：删除用户（删除家目录，彻底清除）
+	- `groupdel [group]` ：删除用户组
 
 ### 1.2 修改
 
-- `passwd`：修改当前用户密码
-- `passwd [user]`：修改用户密码
-- `usermod -g [group] [user]`：修改用户主组
+- 修改
+	- `passwd`：修改当前用户密码
+	- `passwd [user]`：修改用户密码
+	- `usermod -g [group] [user]`：修改用户主组
+	- `groupmod`：修改组名、GID
 
 ### 1.3 切换
 
-- `su [user]`：仅切换用户身份，不切换环境
-- `su - [user]`：完整切换用户身份与环境（推荐）
-- `exit`：退回上一级用户
-- `logout`：退回最初登录系统的用户
+- 切换
+	- `su [user]`：仅切换用户身份，不切换环境
+	- `su - [user]`：完整切换用户身份与环境（推荐）
+	- `newgrp`：临时切换用户的有效组（用于新文件的默认所属组）
+
+- 回退
+	- `exit`：退回上一级用户
+	- `logout`：退回最初登录系统的用户
 
 ### 1.4 查看
 
 - `id`：查看当前用户 `UID GID 组`
 - `id [user]`：查看用户 `UID GID 组`
+
+- `cat /etc/group`：查看系统所有组
 
 - `Whoami`：查看当前有效用户身份
 - `Who am i`：查看最初登录系统的用户身份
@@ -48,6 +66,25 @@
 
 # 2. 权限管理
 
+### 2.0 核心
+
+- Linux 文件权限三角色：
+	- 所有者 `u` ：文件创建者，默认拥有最高权限
+	- 所属组 `g` ：所有者归属的用户组，组内用户共享组权限
+	- 其他用户 `o` ：所属组以外的所有用户
+- 权限位：r（读）、w（写）、x（执行），对应数字 4/2/1
+- 核心逻辑：先有用户组，再给文件分配所属组，最后设置组权限
+
+### 2.1 权限查看与修改
+
+ls -l：查看文件的所有者、所属组、权限位
+chown：修改文件的所有者 / 所属组（chown user:group file）
+chmod：修改文件权限（符号法：chmod g+rwx file；数字法：chmod 755 file）
+umask：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
+
+### 2.2 特殊权限（进阶）
+
+SUID/SGID/ 粘滞位（SGID 用于目录，让新文件继承目录的所属组）
 
 # 3. 服务管理
 
