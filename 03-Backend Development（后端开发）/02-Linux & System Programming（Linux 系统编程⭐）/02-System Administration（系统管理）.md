@@ -9,37 +9,36 @@
 	- -> 服务运维
 	- -> 配置调优
 
-# 1. 用户 & 用户组管理
+# 1. 用户 & 组管理
 
 ### 1.0 核心
 
-- Linux 用户组的本质：用户的集合，用于批量权限管理
-- 分类：
-	- 主组（用户创建时默认所属组，`/etc/passwd` 中 `GID` 对应）
-	- 附加组（用户额外加入的组，`/etc/group` 中记录）
--  核心配置文件：`/etc/group`（组信息）、`/etc/gshadow`（组密码）
+- 组：用户的集合，用于批量权限管理
+	- 主组 `UID`：默认身份组，用户只有 1 个，创建文件时的默认所属组
+	- 附加组 `GID`：额外权限组，用户可以有多个，仅用于给用户自身额外的文件权限
 
-### 1.1 增删
+### 1.1 增删用户 & 组
 
-- 创建
+- 创建用户 & 组
 	- `useradd [user_name]`：创建新用户（默认家目录：`/home/[user_name]` ）
 	- `useradd -d [home_path] [user_name]`： 指定自定义家目录路径
 	- `useradd -g [group_name] -u [user_name]`： 指定所属用户组/UID
 	- `adduser [user_name]`:  *Ubuntu* 交互式创建用户命令
 	- `groupadd [group_name]`：创建新用户组
 
-- 删除
+- 删除用户 & 组
 	- `userdel [user_name]`：删除用户（保留家目录，无法登录）
 	- `userdel -r [user_name]`：删除用户（删除家目录，彻底清除）
 	- `groupdel [group_name]` ：删除用户组
 
-### 1.2 修改
+### 1.2 修改用户 & 组
 
 - 修改用户
 	- `passwd`：修改当前用户密码
 	- `passwd [user_name]`：修改用户密码
 	- `usermod -l [new_user_name] [old_user_name]`：修改用户名
 	- `usermod -d [home_path] -m [user_name]`：修改家目录并移动文件
+		- 提醒：新家目录需要有足够权限访问
 		
 	- `usermod -g [group_name] [user_name]`：修改用户主组
 	- `usermod -aG [group_name] [user_name]`：添加附加组
@@ -51,7 +50,7 @@
 	- `groupmod -g [new_GID] [group_name]`：修改组 GID
 	- `groupmod -f [new_GID] [group_name]`：强制修改 GID（即使 GID 已被占用）
 
-### 1.3 切换
+### 1.3 切换用户
 
 - 切换
 	- `su [user_name]`：仅切换用户身份，不切换环境
@@ -62,34 +61,47 @@
 	- `exit`：退回上一级用户
 	- `logout`：退回最初登录系统的用户
 
-### 1.4 查看
+### 1.4 查看信息
 
 - `id`：查看当前用户 `UID GID 组`
 - `id [user_name]`：查看用户 `UID GID 组`
-
-- `cat /etc/group`：查看系统所有组
 
 - `Whoami`：查看当前有效用户身份
 - `Who am i`：查看最初登录系统的用户身份
 - `who`：查看所有当前登录系统的用户
 - `w`：`who` 的增强版，额外显示用户的操作、负载等信息
 
+- `cat /etc/group`：查看系统所有组信息
 # 2. 权限管理
 
-- 与文件关系
-	- 所有者 `u` ：文件创建者，默认拥有最高权限
-	- 所属组 `g` ：所有者归属的组，组内用户共享组权限
-	- 其他用户 `o` ：所属组以外的所有用户
-	- （文件分配了所属组后，即所有者进组，再设置组权限）
+### 2.1 与文件关系
 
-- 文件权限查看与修改
-	- `ls -l`：查看文件所有者、所属组、权限位（ `w` `r` `x` ）
-	- `chown [user_name] [file_name]`：修改文件所有者
-	- `chgrp [group_name] [file_name]`：修改文件所属组
-	- `chmod`：修改文件权限（符号法：chmod g+rwx file；数字法：chmod 755 file）
-	- `umask`：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
+- 所有者 `u` ：默认是文件创建者
+- 所属组 `g` ：默认是文件创建者的主组
+	- 改文件所属组 = **附加组**（实现共享权限）
+- 其他用户 `o` ：陌生人权限
 
-### 2.2 特殊权限（进阶）
+- （确认文件的所属组后，再设置组权限）
+
+### 2.2 文件权限查看与修改
+
+- `ls -l`：查看文件所有者、所属组、权限位
+	-  `r/4` `w/2` `x/1` 对应权限位总和为权限值
+
+- **`chown [user_name]:[group_name] [file_name]`**：同时修改
+	- `chown [user_name] [file_name]`：单独修改文件所有者
+	- `chgrp [group_name] [file_name]`：单独修改文件所属组
+
+- 符号法修改文件权限
+	- `chmod g+rwx [file_name]`：给组添加读写执行权限
+	- `chmod o-r [file_name]`：移除其他用户读权限
+
+- 数字法修改文件权限
+	- `chmod 755 [file_name]`：（总和为权限值）
+
+- `umask`：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
+
+### 2.3 特殊权限
 
 SUID/SGID/ 粘滞位（SGID 用于目录，让新文件继承目录的所属组）
 
