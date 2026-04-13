@@ -1,4 +1,5 @@
 
+
 ```cpp
 double myPow(double x, int n) {
 	long long N = n;
