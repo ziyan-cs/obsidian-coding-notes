@@ -1,3 +1,9 @@
+# Obsidian 工作区配置（个人布局，不上传）
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+
+# Obsidian 本地数据库（不上传）
 journal.db
+
+# Obsidian 回收站（.trash 目录，不上传）
+.trash/
