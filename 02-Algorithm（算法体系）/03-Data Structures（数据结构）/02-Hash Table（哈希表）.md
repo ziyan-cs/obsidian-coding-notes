@@ -26,10 +26,10 @@
 	- 去重 $O(1)$
 ### 1.2 有序表
 
-- `map<Key, Value>`：（*Java* `TreeMap`)
+- `map<key, value>`：（ *Java* `TreeMap` )
 	- 有序键值对（红黑树）
 	- $O(log N)$
-- `set<Key>`：（*Java* `TreeSet`)
+- `set<key>`：（ *Java* `TreeSet` )
 	- 有序单值集合
 	- $O(log N)$
 

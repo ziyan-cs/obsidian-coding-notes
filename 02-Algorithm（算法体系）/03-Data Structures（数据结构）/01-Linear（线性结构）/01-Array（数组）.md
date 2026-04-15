@@ -1,4 +1,4 @@
-#data-structure #array #index #sequence #cpp
+
 
 # 0. 核心
 
@@ -40,13 +40,13 @@ for (int x : nums) ++cnt[x];
 # 3. 经典应用场景
 
 - **前缀和 / 差分**：
-	[03-Prefix Sum（前缀和）](../02-Techniques（算法技巧）/03-Prefix%20Sum（前缀和）.md)
+	[03-Prefix Sum（前缀和）](../../02-Techniques（算法技巧）/03-Prefix%20Sum（前缀和）.md)
 
 - **计数排序 / 桶排序**：
-	[02-Sorting Algorithms（排序）](../01-Basics（基础）/02-Sorting%20Algorithms（排序）.md)
+	[02-Sorting Algorithms（排序）](../../01-Basics（基础）/02-Sorting%20Algorithms（排序）.md)
 
 - **哈希表底层**：
-	[07-Hash Table（哈希表）](07-Hash%20Table（哈希表）.md)
+	[02-Hash Table（哈希表）](../02-Hash%20Table（哈希表）.md)
 
 - **栈、队列的顺序实现**：
 	[03-Stack（栈）](03-Stack（栈）.md)
@@ -56,4 +56,4 @@ for (int x : nums) ++cnt[x];
 	
 
 - **滑动窗口**：
-	[02-Sliding Window（滑动窗口）](../02-Techniques（算法技巧）/02-Sliding%20Window（滑动窗口）.md)
+	[02-Sliding Window（滑动窗口）](../../02-Techniques（算法技巧）/02-Sliding%20Window（滑动窗口）.md)

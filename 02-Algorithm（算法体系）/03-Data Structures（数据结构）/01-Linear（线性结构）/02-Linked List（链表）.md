@@ -1,4 +1,4 @@
-#data-structure #linked-list #pointer #node #cpp
+
 
 # 0. 核心
 

@@ -21,13 +21,38 @@
 ## 🔧 Usage Patterns（可复用代码模板）
 
 1. 前序遍历
-
+- 递归实现
 ```cpp
 void preorder(TreeNode* root) {
     if (!root) return;
     cout << root->val << ' ';
     preorder(root->left);
     preorder(root->right);
+}
+```
+
+- 圈占实现
+
+```cpp
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> res;       // 保存遍历结果
+    stack<TreeNode*> st;   // 栈，用来模拟递归
+    if (root == NULL) return res;
+    st.push(root);  // 根节点先入栈
+    while (!st.empty()) {
+        // 1. 出栈 → 访问
+        TreeNode* cur = st.top();
+        st.pop();
+        res.push_back(cur->val);
+        // 2. 先压右，再压左（栈后进先出，保证下次先访问左）
+        if (cur->right != NULL) {
+            st.push(cur->right);
+        }
+        if (cur->left != NULL) {
+            st.push(cur->left);
+        }
+    }
+    return res;
 }
 ```
 
@@ -67,57 +92,3 @@ while (!q.empty()) {
     q.push(cur->right);
 }
 ```
-
-## ⚠️ Pitfalls（高频错误）
-
-- 递归访问顺序写反
-- 层序遍历忘记判空
-- 中序有序只对 BST 成立
-- 迭代写法中栈 / 队列用错
-
-## 🚀 Performance / Tips（性能优化）
-
-- 遍历整棵树通常是 $O(n)$
-- 递归写法最自然，迭代常配栈 / 队列
-- 高频经验：
-    - 要根节点先处理：前序
-    - 要最后合并子树：后序
-    - 要有序输出 BST：中序
-    - 要按层推进：层序
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 输出遍历序列
-- 统计节点数 / 树高 / 子树信息
-- 构造树、恢复树
-- 层序打印
-- 路径与递归信息合并
-
-## 🧾 Minimal Template（最小可运行模板）
-
-```cpp
-#include <iostream>
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-};
-void preorder(TreeNode* r) {
-    if (!r) return;
-    cout << r->val << ' ';
-    preorder(r->left);
-    preorder(r->right);
-}
-int main() {
-    TreeNode* root = new TreeNode(1);
-    root->left = new TreeNode(2);
-    root->right = new TreeNode(3);
-    preorder(root);
-}
-```
-
-## 📌 One-liner Summary（一句话总结）
-
-- **二叉树遍历就是：按前序、中序、后序或层序等固定规则访问整棵树。**

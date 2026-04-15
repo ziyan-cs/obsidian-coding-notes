@@ -1,9 +1,8 @@
 #cpp #basics #input-output #cin #cout
 
-# 0. 核心
 
 - **程序和外部数据交换信息的方式**
-- 应用场景：
+- 通用：
     - 读整数 / 浮点数 / 字符串：`cin`
     - 输出结果：`cout`
     - 读整行：`getline`
