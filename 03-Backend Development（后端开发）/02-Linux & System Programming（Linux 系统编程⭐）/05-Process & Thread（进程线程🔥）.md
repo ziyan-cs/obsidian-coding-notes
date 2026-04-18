@@ -1,6 +1,5 @@
 
 
-
 # 0. 核心（进程模型）
 
 - 本质
@@ -24,7 +23,15 @@
 
 ### ps
 
-
+- `ps`：查看进程
+	- `-aux`：（所有进程）
+	- `USER`-`PID`-`PPID`-`%CPU`/`%MEM`-`VSZ`/`RSS`
+	- `STAT`：进程状态
+	- `COMMAND (CMD)`：程序所在路径
+	- `-ef`：（含PPID父进程的所有进程）
+- `pstree`：查看进程树
+	- `-p`：显示 `PID`
+	- `-u`：显示进程数
 
 ### netstart / ss
 
@@ -36,35 +43,36 @@
 	- `-p`：（显示进程 PID /名称）
 - `netstat -anp | grep :8080`：查看占用8080端口的进程
 
-- `ss -tulnp`：查看监听的TCP / UDP端口（推荐替代netstat） 
+- `ss -tulnp`：查看所有 TCP/UDP 监听端口
 - `ss -antp | grep :8080`：查看8080端口的连接状态
-
 
 ### kill
 
-- `kill [..] [PID]`：发送信号 (15)，终止进程
+- `kill [PID]`：发送信号 (15)，终止进程
 	- `-9`：（强制终止）
 	- `-l`：（列出系统支持的所有信号）
+- `pidof [process_name]` 获取进程名
 - `killall [process_name]`：批量终止
 - `pkill [process_name]`：模糊匹配，终止进程
 
 # 5. 进程状态（🔥）
 
-- 进程状态模型：
-	- `R`
-	- `R`
-	- `R`
-	- `R`
-	- `R`
+- **STAT**
+	- `R` 运行态
+	- `S` 可中断睡眠
+	- `D` 不可中断睡眠
+	- `T` 停止态
+	- `Z` 僵尸态
+
 - 常用信号与进程行为
 	- `SIGINT(2)`
 	- `SIGTERM(15)`
 	- `SIGKILL(9)`
 	- `SIGCHLD(17)`
 
-# 5. 线程（pthread🔥）
+# 6. 线程（pthread🔥）
 
-# 6. 线程同步
+# 7. 线程同步
 
 ### mutex
 
