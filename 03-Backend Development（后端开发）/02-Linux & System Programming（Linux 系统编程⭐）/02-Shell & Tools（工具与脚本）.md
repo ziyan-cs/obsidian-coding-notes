@@ -1,6 +1,6 @@
 
 
-# 1. Shell Basics
+# 1. Shell 基础语法
 ### 什么是 Shell（bash/zsh）
 
 - `Shell` 是 **用户与操作系统内核交互的命令行解释器**
