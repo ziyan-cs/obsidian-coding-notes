@@ -44,7 +44,7 @@
 name="my_script"      # 可被 unset
 readonly year="nihao" # 不可被 unset
 A=`date`              # 反引号 看作命名
-A=$(date)             # 等价
+A=$(date)             # $( )  看作命名
 ```
 
 ```bash
@@ -72,13 +72,14 @@ echo $MY_VAR
 
 ### 数值运算（expr / $(( )) / let）
 
-- `$((2+3))`
 ```bash
+# 求 (2+3)*4
 TEMP=`expr 2 + 3`
 RES1=`expr $TEMP \* 4`
-RES2=$((2+3-4))
-RES3=$[2+3-4]
+RES2=$(((2+3)*4))
+RES3=$[(2+3)*4]
 ```
+
 ### 输入输出
 
 ```bash
@@ -92,10 +93,6 @@ echo "你好，$name"
 echo "第1个参数: $1" 
 echo "所有参数: $@"
 ```
-
-
-
-
 
 ### 条件判断（if）
 
