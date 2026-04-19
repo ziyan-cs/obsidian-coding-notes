@@ -1,10 +1,9 @@
 
 
-# 0. 核心
+# 1. 速览
 
-# 1. 文件配置
 
-### 1.1 标准 CMakeLists.txt 模板
+# 2. 标准 CMakeLists.txt 模板
 
 - 文件名 `CMakeLists.txt`
 - 选择编译方案：要注释掉另外两种
@@ -42,7 +41,7 @@ add_executable(main src/main.cpp)
 target_link_libraries( "目标名" pthread)
 ```
 
-### 1.2 项目目录结构
+# 3. 项目目录结构
 
 ```cpp
 Project根目录/
@@ -52,8 +51,7 @@ Project根目录/
 └── CMakeLists.txt  # 配置文件
 ```
 
-### 1.3 日常编辑命令
-
+# 4. 日常编辑命令
 
 ```cpp
 # 1. 进入编译目录
