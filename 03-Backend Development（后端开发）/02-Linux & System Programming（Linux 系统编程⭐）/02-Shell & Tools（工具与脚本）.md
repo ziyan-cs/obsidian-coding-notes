@@ -11,14 +11,12 @@
     - 权限
     - 输入输出流
 
-
-
 ### 执行流程
-
 
 ### 环境变量（🔥）
 
-- `echo [环境变量]`：查看系统环境变量
+- `set`：查看所有系统环境变量
+- `echo $[变量名]`：查看对应系统环境变量
 	- `$PATH`：命令搜索路径
 	- `$HOME`：当前用户家目录
 	- `$USER`：登录用户名
@@ -28,19 +26,83 @@
 	- `$HOSTNAME`：主机名
 
 # 2. Shell Script（核心🔥）
+
 ### 脚本结构（#!）
 
+首行指定解释器：
+
+```bash
+#!/bin/bash
+```
 
 ### 变量
-- 普通变量
-- 环境变量
+
+```bash
+// 普通变量,直接定义
+
+name="my_script"
+readonly year="nihao"
+echo $name
+unset name
+// 环境变量,全局有效
+
+export MY_VAR="hello"
+echo $MY_VAR
+```
 
 ### 输入输出
--  read
-- 参数 $1 $@
+
+```bash
+// read：读取用户输入
+
+read -p "请输入名字：" name
+echo "你好，$name"
+
+// 脚本参数：`$1`（第 1 个参数）、`$@`（所有参数）
+
+echo "第1个参数: $1" 
+echo "所有参数: $@"
+```
+
 ### 条件判断（if）
+
+```bash
+if [ 条件 ]; then
+  # 条件成立执行
+elif [ 条件 ]; then
+  # 其他条件成立执行
+else
+  # 所有条件不成立执行
+fi
+```
+
 ### 循环（for / while）
+
+```bash
+for i in 1 2 3 4 5; do
+  echo "数字: $i"
+done
+```
+
+```bash
+count=1
+while [ $count -le 5 ]; do
+  echo "计数: $count"
+  count=$((count + 1))
+done
+```
+
 ### 函数
+
+```bash
+function 函数名() {
+  # 函数体
+  echo "函数执行"
+}
+
+# 调用函数
+函数名
+```
 
 # 3. Text Processing（🔥重点）
 ### grep（必须精通🔥）
