@@ -72,6 +72,13 @@ echo $MY_VAR
 
 ### 数值运算（expr / $(( )) / let）
 
+- `$((2+3))`
+```bash
+TEMP=`expr 2 + 3`
+RES1=`expr $TEMP \* 4`
+RES2=$((2+3-4))
+RES3=$[2+3-4]
+```
 ### 输入输出
 
 ```bash
