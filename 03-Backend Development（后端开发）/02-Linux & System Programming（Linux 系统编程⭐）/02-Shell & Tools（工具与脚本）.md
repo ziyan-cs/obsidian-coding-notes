@@ -29,100 +29,140 @@
 
 ### 脚本结构（#!）
 
+- `#!/bin/bash`：必须是脚本的第一行
+- `#!/usr/bin/env bash`：兼容性更好
+	- 自动找到系统里的 `bash` 路径
+- `set -euo pipefail`：严格模式
+	- 提前发现变量未定义、命令错误等问题
+
+- 赋值语句：`SUM=0` 不能有空格
+- 算术运算：`expr 1 + 2` 必须有空格
+- 条件判断：`[]` / `[[]]` / `test` 必须有
+- 命令和参数之间：`echo "$@"`必须有
+- 字符串拼接：变量和字符串之间不能有
+	- `"helllo,$name"`
+
+- 双引号：保留空格，解析变量，最常用
+- 单引号：原样输出
+- `$( )`：执行命令推荐用
+- 不加引号：简单值，不能有空格
+
 ```bash
-# 首行指定解释器
-#!/bin/bash
+# 单行注释
 :<<!
-注释内容
+多行注释
 !
 ```
 
-### 变量与特殊变量
+### 变量
 
 ```bash
-# 1. 普通变量
-name="my_script"      # 可被 unset
-readonly year="nihao" # 不可被 unset
-A=`date`              # 反引号 看作命名
-A=$(date)             # $( )  看作命名
+# 1. 普通变量和只读变量
+name="Alex"         # 可修改,可 unset
+readonly year="20"  # 不可修改,不可 unset
+dt=$(date)          # 命令替换复制
 ```
 
 ```bash
 # 2. 位置参数变量
-echo "$0"           # 该脚本名
-echo "1=$1 2=$2"    # 接收.sh后面输入的参数
-echo "所有参数=$@"    # 单独分开
-echo "$*"            # 整合成一个字符串
-echo "参数个数=$#"    # 接收的参数数
+echo "$0"            # 脚本自身文件名
+echo "$1 $2 ${10}"   # .sh 后面输入的参数
+echo "$@"            # 单独分开 "a" "b" "c"
+echo "$*"            # 整合成一个字符串 "abc"
+echo "$#"    # 接收的参数数
 ```
 
 ```bash
 # 3. 预定义变量
-$$ # 当前进程 PID
-$! # 前一个后台进程的 PID
-$? # 前一个进程的退出状态码 
-   # 成功(0) 失败(非0)
+$$      # 当前脚本 / Shell 进程的 PID
+$!      # 上一个后台进程的 PID
+$?      # 上一个进程的退出状态码 (0) (非0)
 ```
 
 ```bash
 # 4. 环境变量
-export MY_VAR="hello"
-echo $MY_VAR
+MY_AGE=20
+export MY_AGE
+echo $MY_AGE
 ```
 
 ### 数值运算（expr / $(( )) / let）
 
 ```bash
-# 求 (2+3)*4
-TEMP=`expr 2 + 3`
-RES1=`expr $TEMP \* 4`
-RES2=$(((2+3)*4))
-RES3=$[(2+3)*4]
+# 1. expr 兼容 POSIX
+EMP=$(expr 2 + 3)
+RES1=$(expr $TEMP \* 4) 
+echo $RES1
 ```
-
-### 输入输出（read / echo）
 
 ```bash
-# read：读取用户输入
-read -p "请输入名字：" name
-echo "你好，$name"
-
-# 脚本参数：`$1`（第 1 个参数）、`$@`（所有参数）
-echo "第1个参数: $1" 
-echo "所有参数: $@"
+# 2. $((...)) 强推！
+RES2=$(((2+3)*4))
+echo $RES2
+# 仅支持整数运算,不支持浮点数
 ```
+
+```bash
+# 3. $[...] 过时
+RES3=$[(2+3)*4]
+echo $RES3
+```
+
+```bash
+# 4. let 直接赋值
+let "RES4=(2+3)*4"
+echo $RES4
+# 加上 " "
+```
+ 
+### 输入输出（read / echo）
+
+- `read -p "请输入名字：" name`：指定提示符
+- `read -t 10 -p "输入num1=" num1`：额外指定等待时间 (s)
 
 ### 条件判断与测试
 
-#### 条件测试语法（`[]` / `[[]]`/ test）
+#### `[[ ]]` / `(( ))`
 
-- `[ condition ]`：条件的首尾必须有空格
-- `[ 非空字符串 ]` = 真（0）；`[ 空字符串 ]` = 假（1）
-- `[ 1 -eq 1 ]` = 真（0）；`[ 1 -eq 2 ]` = 假（1）。
-	- `=`/`==`/`!=`：字符串比较（必须加""）
-	- `-z`：字符串为空返回真（ `-n` 相反）
-	- `-eq` `-ne` `-gt` `-lt` `-ge` -`le`：数值比较
-	- `&&` `|` `!`：逻辑运算符
-	- `-e`：文件 / 目录是否存在
-	- `-f`：文件是否存在
-	- `-d`：目录是否存在
-	- `-r`/`-w`/`-x`：分别判断文件权限
+- `[[ ]]`：支持 `&& ||` 连写，不支持 `> >= < <=`
+	- 用于字符串 / 文件判断
+- `(( ))`：支持 `&& ||` 连写，也支持 `> >= < <=`
+	- 用于数值 + 逻辑运算，以及 `if` `for` `while`
+- `[ ]`：兼容 POSIX，`test` 命令的别名
+	- 用于字符串 / 文件判断
+
+- 字符串判断
+	- `[[ "$str" == "hello" ]]`:相同返回真（0）
+	- ``[[ -z "$str" ]]``：为空返回真（0）
+	- ``[[ -n "$str" ]]``：非空返回真（0）
+
+- 数值判断
+	- `if (( a > 1 ));`
+	- `if (( a > b && a > c ));`
+	- `-eq` `-ne` `-gt` `-lt` `-ge` -`le`：兼容
+
+- 文件 / 目录判断
+	- `[[ -e "$path" ]]`：文件 / 目录是否存在
+	- `[[ -f "$file" ]]`：文件是否存在
+	- `[[ -d "$dir" ]]`：目录是否存在
+	- `[[ -x "$file" ]]`：判断文件权限
 
 #### if / elif / else
 
 ```bash
 #!/bin/bash
-if [ $# -lt 2 ]; then
+if (( $# < 2 )); then
 	echo "用法：$0 <数字1> <数字2>" 
 	exit 1 
 fi
 
-if [ $1 -ge $2 ]; then
-    echo "$1 大于等于 $2"
+if (( $1 >= $2 )); then
+	echo "$1 大于等于 $2"
 else
     echo "$1 小于 $2"
 fi
 ```
+
 #### case
 
 ```bash
@@ -143,29 +183,45 @@ esca
 ### 循环（for / while）
 
 ```bash
-for i in 1 2 3 4 5; do
-  echo "数字: $i"
+#!/bin/bash
+for i in "$@"; do
+	echo "$i"
 done
 ```
 
 ```bash
-count=1
-while [ $count -le 5 ]; do
-  echo "计数: $count"
-  count=$((count + 1))
+#!/bin/bash
+SUM=0
+for (( i=0; i<=100; i++)); do
+	((SUM += i))
+done
+echo "$SUM"
+```
+
+```bash
+#!/bin/bash
+CNT=1
+while (( CNT <= 5 )); do
+	echo "计数: $CNT"
+	((CNT++))
 done
 ```
 
 ### 函数
 
 ```bash
-function 函数名() {
-  # 函数体
-  echo "函数执行"
+#!/bin/bash
+function put() {
+	echo "求两数之和"
 }
-
-# 调用函数
-函数名
+function add() {
+    local a=$1      # local 定义局部变量
+    local b=$2
+    echo $((a + b)) # 有返回值
+}
+RES=$(add 3 5)
+put
+echo "3 + 5 = $RES"
 ```
 
 # 3. Text Processing（🔥重点）
