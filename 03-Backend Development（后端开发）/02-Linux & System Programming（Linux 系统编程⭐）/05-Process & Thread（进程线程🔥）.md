@@ -30,10 +30,10 @@
 	- `-efL`：查看线程（LWP 轻量级进程ID）
 	- `USER`-`PID`-`PPID`-`%CPU`/`%MEM`-`VSZ`/`RSS`
 	- `STAT`：进程状态
-	- `TTY`：
-	- `COMMAND (CMD)`：程序所在路径
+	- `TTY`：完整终端名称
+	- `COMMAND (CMD)`：启动程序所用命令和参数
 - 常用
-	- `ps aux | grep`
+	- `ps -aux | grep`
 	- `ps -efL`
 
 - `pstree`：静态查看进程树
