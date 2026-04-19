@@ -29,7 +29,7 @@
 
 ### 脚本结构（#!）
 
-首行指定解释器：
+- 首行指定解释器：
 
 ```bash
 #!/bin/bash
@@ -38,13 +38,16 @@
 ### 变量
 
 ```bash
-// 普通变量,直接定义
+# 普通变量,直接定义
 
-name="my_script"
-readonly year="nihao"
-echo $name
+name="my_script" # 可被 unset
+readonly year="nihao" # 不可被 unset
+A=`date` # 反引号,结果看作命名
+A=$(date) # 等价,结果看作命名
 unset name
-// 环境变量,全局有效
+echo $year
+
+# 环境变量,全局有效
 
 export MY_VAR="hello"
 echo $MY_VAR
@@ -53,12 +56,12 @@ echo $MY_VAR
 ### 输入输出
 
 ```bash
-// read：读取用户输入
+# read：读取用户输入
 
 read -p "请输入名字：" name
 echo "你好，$name"
 
-// 脚本参数：`$1`（第 1 个参数）、`$@`（所有参数）
+# 脚本参数：`$1`（第 1 个参数）、`$@`（所有参数）
 
 echo "第1个参数: $1" 
 echo "所有参数: $@"
