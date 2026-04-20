@@ -243,8 +243,6 @@ echo "3 + 5 = $RES"
 
 ### wc
 
-[01-命令体系 wc](01-Fundamentals（基础）/01-命令体系.md)
-
 ### cut
 ### tr
 
