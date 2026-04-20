@@ -1,7 +1,7 @@
 
 
 # 1. Shell 基础语法
-### 什么是 Shell（bash/zsh）
+### bash / zsh
 
 - `Shell` 是 **用户与操作系统内核交互的命令行解释器**
 
@@ -24,6 +24,15 @@
 	- `$SHELL`：当前使用的 shell
 	- `$LANG`：系统语言
 	- `$HOSTNAME`：主机名
+
+- 配置系统环境变量
+	- `vim /etc/profile`
+	- `export [变量名]=[dir_path]`
+		- 定义软件根目录
+	- `export PATH=$[变量名]/bin:$PATH`
+		- 把命令目录加入 **PATH**
+	- `source /etc/profile`
+	- `echo $[变量名]`：验证
 
 # 2. Shell Script（核心🔥）
 
