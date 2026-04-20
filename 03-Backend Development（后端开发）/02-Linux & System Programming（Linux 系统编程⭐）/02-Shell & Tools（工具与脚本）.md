@@ -30,7 +30,7 @@
 ### 脚本结构（#!）
 
 - `#!/bin/bash`：必须是脚本的第一行
-- `#!/usr/bin/env bash`：兼容性更好
+- `#!/usr/bin/env bash`：更通用、兼容性更好
 	- 自动找到系统里的 `bash` 路径
 - `set -euo pipefail`：严格模式
 	- 提前发现变量未定义、命令错误等问题
