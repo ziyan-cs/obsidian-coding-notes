@@ -91,6 +91,8 @@
 
 - 生效方式：保存后 `:source ~/.vimrc` 或重启 Vim
 
+- `:noh`：去除语法高亮
+
 ```shell
 # 基础配置
 set number          # 显示行号
@@ -99,13 +101,9 @@ set shiftwidth=4    # 自动缩进宽度4
 set expandtab       # Tab 转为空格
 set autoindent      # 自动缩进
 set smartindent     # 智能缩进
-set cursorline      # 高亮当前行
-set mouse=a         # 启用鼠标
-syntax enable       # 语法高亮
-set encoding=utf-8  # 编码
 set hlsearch        # 搜索高亮
 set incsearch       # 边输入边搜索
+set encoding=utf-8  # 编码
 ```
-
 
 # 5. 与系统交互（编译/运行）
