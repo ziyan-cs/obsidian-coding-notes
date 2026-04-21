@@ -5,37 +5,62 @@
 
 ### TCP server 生命周期  
 
->socket( ) → bind( ) → listen( ) → accept( ) → read( ) / write( ) → close( )
+>socket( ) → bind( ) → listen( ) → accept( ) →
+>read( ) / write( ) → close( )
 
 ### TCP client 生命周期
 
->socket( ) → connect( ) → write( ) / read( ) → close( )
+>socket( ) → connect( ) →
+>write( ) / read( ) → close( )
   
 # 2. 通信模型  
 
-### 一次请求是怎么走的  
+### 一次请求的完整流转
 
-1. 建立连接：客户端调用 connect()，与服务器完成三次握手，建立 TCP 连接。
-2. 客户端发送请求：客户端调用 write()，数据通过内核协议栈层层封装后发送给服务器。
-3. 服务器接收请求：服务器从 accept() 返回的套接字中 read() 数据。
-4. 服务器处理并响应：服务器处理请求，调用 write() 发送响应数据。
-5. 客户端接收响应：客户端调用 read() 获取服务器响应。
-6. 断开连接：双方完成数据交互后，调用 close()，通过四次挥手断开连接。
+>建立连接 →
+>     客户端发送请求 → 服务器接收请求 →
+>     服务器处理并响应 → 客户端接收响应 →
+>断开连接
 
-### 数据如何从 client 到 server  
-  
-1. 客户端应用层：调用 write() 写入数据，数据进入内核发送缓冲区。
-2. 传输层：加上 TCP 头部（源 / 目的端口、序列号、校验和等）。
-3. 网络层：加上 IP 头部（源 / 目的 IP 地址），根据路由表选择下一跳。
-4. 数据链路层：加上 MAC 头部，根据 ARP 协议找到下一跳的 MAC 地址。
-5. 物理层：转为比特流，通过网络设备传输。
-6. 服务器端：数据到达后，从下到上逐层解封装，最终数据被拷贝到服务器应用层的 read() 缓冲区。
+ 1. 客户端调用 `connect()`，与服务器完成三次握手，建立 TCP 连接
+
+2. 客户端调用 `write()`，数据通过内核协议栈层层封装后发送给服务器
+
+3. 服务器从 `accept()` 返回的套接字中 `read()` 数据
+
+4. 服务器处理请求，调用 `write()` 发送响应数据
+
+5. 客户端调用 `read()` 获取服务器响应
+
+6. 双方完成数据交互后，调用 `close()`，通过四次挥手断开连接
+
+### client → server 的数据传输过程
+
+>客户端应用层 → 传输层 → 网络层 → 数据链路层 → 
+>     物理层 → 服务器物理层 →
+> 数据链路层 → 网络层 → 传输层 → 服务器应用层
+
+1. 客户端应用层：调用 `write()` 写入数据，数据进入内核发送缓冲区
+
+2. 传输层：加上 TCP 头部（端口、序列号、校验和）
+
+3. 网络层：加上 IP 头部（IP 地址），选择路由下一跳
+
+4. 数据链路层：加上 MAC 头部，通过 ARP 找到下一跳 MAC 地址
+
+5. 物理层：转为比特流，通过网络设备传输
+
+6. 服务器端：从物理层到应用层逐层解封装，最终数据被拷贝到服务器 read() 的缓冲区
 
 # 3. 接口语义（🔥）
 
 ```c
-// 包含接口的系统库
-#include <sys/socket.h>
+#include <stdio.h>        // 输入输出：printf, perror
+#include <stdlib.h>       // 通用：exit, malloc
+#include <unistd.h>       // 系统调用：close, read, write
+#include <sys/socket.h>   // 🔥 核心：socket, bind, listen, accept, connect...
+#include <netinet/in.h>   // 🔥 结构：sockaddr_in, htons, htonl...
+#include <arpa/inet.h>    // 🔥 转换：inet_ntoa, inet_addr...
 ```
 
 ### socket
@@ -142,10 +167,27 @@ if (listen(sockfd, 128) == -1) { // backlog 设为 128 (常用值)
 // 函数原型
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 
-
+// 接受客户端连接
+struct sockaddr_in client_addr;
+socklen_t client_len = sizeof(client_addr);
+int connfd = accept(sockfd, (struct sockaddr*)&client_addr, &client_len);
+if (connfd == -1) {
+    perror("accept error");
+    continue;
+}
+printf("new connection from %s:%d\n",
+       inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 ```
+
+- `addr`：输出参数，存储客户端地址信息（可传 `NULL` ）
+
+- `addrlen`：输入输出参数，地址结构体长度（可传 `NULL` ）
+
 ### connect
 
+```c
+
+```
 
 ### read / recv
 
@@ -156,5 +198,5 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 ### TCP client 模板  
   
 # 5. 问题分析（🔥）  
-### 阻塞在哪里？  
-### 为什么只能一个客户端？
+### 阻塞分析（accept/recv/connect）
+### 单客户端限制问题（串行模型缺陷）
