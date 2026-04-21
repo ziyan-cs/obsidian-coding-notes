@@ -443,8 +443,11 @@ network:
 
 ### crontab 定时任务（🔥）
 
+- `systemctl start crond`：启动守护进程
+
 - **crond + crontab**：后台进程 和 命令行工具
-- `crontab -e`：编辑
+
+- `crontab -e`：进入编辑
 - `crontab -l`：查看
 - `crontab -r`：清空
 - `crontab -u [user_name] [..]`：（指定用户）
@@ -458,87 +461,79 @@ network:
 
 ### at 一次性任务
 
+- `systemctl start atd`：启动守护进程
+
 - **atd + at**：后台进程 和 命令行工具
+
 - `atq`：查看
 - `atrm`：清空
 - `at -c [ID]`：指定查看
-- `atrm [ID]`：指定删除
 
-- `at [..] [时]`：定时任务格式
-	- `-m`：（完成时邮件提醒）
-	- `-v`：（显示将被执行时间）
-	- `-q [队列]`：使用指定的队列
-	- `-f [file_name]`：从指定文件读入任务而不是从标准输入读入
-	- `-t [时间参数]`：以时间参数的形式提交要运行的任务
-		
-	- `04:00`：到点执行，时间已过则第二天执行（时间点）
-	- `2pm`：指定上 / 下午时间 `[num]am` 和 `[num]pm`（时间点）
-	- `midnight` 0 点、`noon` 12 点、`teatime` 16 点（时间点）
-	- `04:00 [日期]`：必须跟在指定时间点后（日期）
-		- `yy-mm-dd`：年 - 月 - 日（`2026-04-15`）
-		- `mm/dd/yy`：月 / 日 / 年（`04/15/2026`）
-		- `dd.mm.yy`：日 .  月 .  年（`15.04.2026`）
-	- `today` 今天 `tomorrow` 明天（日期）
+- `at [..] [时间] [日期]`：定时任务格式
+	- `-m`：任务完成时邮件提醒
+	- `-f [file_name]`：从指定文件读取任务
+	- `hh:mm`：具体时间点（如 `04:00`）
+	- `[am/pm]`：上 / 下午（如 `2pm`）
+	- `midnight` 0 点、`noon` 12 点
+	-  `today` / `tomorrow`
+	- `yy-mm-dd`：年 - 月 - 日
 	- `now + [num] [time_units]`（直接指定）
-		- `minutes`：分钟
-		- `hours`：小时
-		- `days`：天
-		- `weeks`：周
-		
-	- 按两次 `Ctrl + D` 结束输入
+		- `minutes`、`hours`、`days`、`weeks`
+
+- 按两次 `Ctrl + D` 结束输入
 
 # 9. 日志与故障排查
 
 ### 认证与登录日志
 
-- `/var/log/auth.log`
+- **/var/log/auth.log**
 	- SSH 登录 / 失败
 	- su、sudo 切换用户
 	- 密码修改、权限提升操作
 	- （对应 CentOS 的 `/var/log/secure` ）
 
-- `/var/log/btmp`
+- **/var/log/btmp**
 	- 所有错误登录尝试
 	- 只能使用 `lastb` 查看
 
-- `/var/log/wtmp`
+- **/var/log/wtmp**
 	- 所有用户的登录、注销
 	- 系统启动、重启、关机事件
 	- 只能使用 `last` 查看
 
-- `/var/log/lastlog`
+- **/var/log/lastlog**
 	- 每个用户最后一次登录时间
 	- 使用 `lastlog` 查看
 
-- `/var/run/utmp`
+- **/var/run/utmp**
 	- 当前正在登录的用户信息，实时变化
 	- 使用 `w` `who` `users` 查看
 
 ### 系统通用日志
 
-- `/var/log/syslog`
+- **/var/log/syslog**
 	- 系统服务启动 / 异常
 	- 定时任务（cron）输出
 	- 内核以外的大部分系统消息
 	- （对应 CentOS 的 `/var/log/messages` ）
 
-- `/var/log/boot.log`
+- **/var/log/boot.log**
 	- 系统启动过程日志，记录开机时服务启动、硬件检测等信息
 
-- `/var/log/dmesg`
+- **/var/log/dmesg**
 	- 记录内核自检、硬件驱动相关信息
 	- 使用 `dmesg` 查看
 
 ### 服务与应用日志
 
-- `/var/log/syslog`
+- **/var/log/syslog**
 	- 定时任务日志
 	- （对应 CentOS 的 `/var/log/cron` ）
 
-- `/var/log/mail.log`
+- **/var/log/mail.log**
 	- 邮件服务日志，不配置邮件服务的话通常是空的
 
-- `/var/log/cups/`
+- **/var/log/cups/**
 	- 打印服务日志，服务器环境一般用不到
 
 ### journalctl / tail / grep

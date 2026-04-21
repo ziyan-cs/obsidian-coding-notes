@@ -11,7 +11,9 @@
     - 权限
     - 输入输出流
 
-### 执行流程
+### 脚本执行流程
+
+
 
 ### 环境变量（🔥）
 
@@ -34,9 +36,9 @@
 	- `source /etc/profile`
 	- `echo $[变量名]`：验证
 
-# 2. Shell Script（核心🔥）
+# 2. Shell 脚本结构（核心🔥）
 
-### 脚本结构（#!）
+### 脚本结构
 
 - `#!/bin/bash`：必须是脚本的第一行
 - `#!/usr/bin/env bash`：更通用、兼容性更好
@@ -63,7 +65,7 @@
 !
 ```
 
-### 变量
+### 变量定义与使用
 
 ```bash
 # 1. 普通变量和只读变量
@@ -95,7 +97,7 @@ export MY_AGE
 echo $MY_AGE
 ```
 
-### 数值运算（expr / $(( )) / let）
+### 数值运算 expr / $(( )) / let
 
 ```bash
 # 1. expr 兼容 POSIX
@@ -124,14 +126,14 @@ echo $RES4
 # 加上 " "
 ```
  
-### 输入输出（read / echo）
+### 输入输出 read / echo
 
 - `read -p "请输入名字：" name`：指定提示符
 - `read -t 10 -p "输入num1=" num1`：额外指定等待时间 (s)
 
-### 条件判断与测试
+# 3. 控制流程
 
-#### `[[ ]]` / `(( ))`
+### `[ ]` / `[[ ]]` / `(( ))`
 
 - `[[ ]]`：支持 `&& ||` 连写，不支持 `> >= < <=`
 	- 用于字符串 / 文件判断
@@ -156,7 +158,7 @@ echo $RES4
 	- `[[ -d "$dir" ]]`：目录是否存在
 	- `[[ -x "$file" ]]`：判断文件权限
 
-#### if / elif / else
+### if / elif / else
 
 ```bash
 #!/bin/bash
@@ -172,7 +174,7 @@ else
 fi
 ```
 
-#### case
+### case 分支
 
 ```bash
 #!/bin/bash
@@ -189,7 +191,7 @@ echo "Others..."
 esca
 ```
 
-### 循环（for / while）
+### for / while 循环
 
 ```bash
 #!/bin/bash
@@ -216,7 +218,7 @@ while (( CNT <= 5 )); do
 done
 ```
 
-### 函数
+### 函数定义与调用
 
 ```bash
 #!/bin/bash
@@ -233,29 +235,24 @@ put
 echo "3 + 5 = $RES"
 ```
 
-# 3. Text Processing（🔥重点）
-### grep（必须精通🔥）
-### awk（重点🔥）
-### sed（了解→进阶）
-### sort / uniq
+# 4. 高级工具（🔥）
 
-# 4. Pipe & Redirect（核心🔥）
+### 管道 |
 
-### |
-### >
-### >>
-### 2>
+- `|`：前标准输出作为后标准输入，只传正常输出
+- `ps aux | grep sshd`
+- `netstat -tulpn | grep :80`
+- `tail -f /var/log/syslog | grep "error"
 
-# 5. 常用工具（工程能力🔥）
+### 重定向：> / >> / 2> / &>
 
-### xargs
 
-### wc
+### 文本工具实战
 
-### cut
-### tr
+- `grep` / `awk` / `sed` / `sort` / `uniq` 组合使用
 
-# 6. 实战脚本（必须写🔥）
+
+# 5. 实战脚本（必须写🔥）
 ### 日志分析脚本
 ### 批量处理文件
-### 自动编译脚本
+### 自动备份 / 编译脚本
