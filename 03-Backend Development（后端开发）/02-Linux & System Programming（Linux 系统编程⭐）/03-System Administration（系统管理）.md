@@ -451,7 +451,7 @@ sudo netplan apply
 - `crontab -l`：查看
 - `crontab -r`：清空
 
-- `* * * * * [命令/脚本路径]`：定时任务格式
+- `* * * * * [命令/脚本路径]`：设置定时任务
 	- 分 - 时 - 日 - 月 - 周（0 / 7  均为周日）
 	- `*`：任意时间点
 	- `,`：分隔多个时间点
@@ -462,21 +462,17 @@ sudo netplan apply
 
 - `systemctl start atd`：启动守护进程
 
-- **atd + at**：后台进程 和 命令行工具
-
 - `atq`：查看
-- `atrm`：清空
-- `at -c [ID]`：指定查看
+- `atrm [ID]`：指定删除
 
-- `at [..] [时间] [日期]`：定时任务格式
+- `at [时间]`：提交定时任务
 	- `-m`：任务完成时邮件提醒
 	- `-f [file_name]`：从指定文件读取任务
-	- `hh:mm`：具体时间点（如 `04:00`）
-	- `[am/pm]`：上 / 下午（如 `2pm`）
-	- `midnight` 0 点、`noon` 12 点
-	-  `today` / `tomorrow`
+	- `hh:mm`：具体时间点
+	- `[am/pm]`：上 / 下午
+	- `midnight` / `noon` 、`today` / `tomorrow`
 	- `yy-mm-dd`：年 - 月 - 日
-	- `now + [num] [time_units]`（直接指定）
+	- `now + [num] [time_units]`
 		- `minutes`、`hours`、`days`、`weeks`
 
 - 按两次 `Ctrl + D` 结束输入

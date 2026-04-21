@@ -42,8 +42,8 @@
 
 ### 插入模式
 
-- 编辑模式不能用 `Ctrl+S` ，会导致终端卡死
-	- `Ctrl+Q` 恢复
+- 编辑模式不能用 `Ctrl + S` ，会导致终端卡死
+	- `Ctrl + Q` 恢复
 
 ### 命令模式
 
@@ -59,7 +59,7 @@
 
 - 行号设置
 	- `:set nu`：设置文件行号
-	- `set nonu`：取消文件行号
+	- `:set nonu`：取消文件行号
 
 - `:5`：光标跳到第 5 行
 
@@ -68,11 +68,44 @@
 	- `:q`：退出
 	- `:q!`：强制退出不保存
 	- `:wq`：保存并退出（ `zz` 快捷键）
-	- `:w [file_name]`：另存为新文件 
-	- `:e [file_name]`：打开另一个文件
+	- `:w [file']`：另存为新文件 
+	- `:e [file']`：打开另一个文件
 
 # 3. 多文件与分屏
 
+- `vim [file1] [file2]`
+	- `:n` 下一个文件
+	- `:N` 上一个文件
+	- `:ls` 列出所有打开的文件
+	- `:b [文件名/序号]` 直接切换到指定文件
+
+- `vim -o file1 file2` / `:sp`：水平分屏
+- `vim -O file1 file2` 或 `:vsp`：垂直分屏
+- `Ctrl + w` 后按 `h/j/k/l` / 方向键：切换窗口
+- `:q`：关闭当前窗口
+- `:qa`：关闭所有窗口
+
 # 4. 配置（.vimrc🔥）
+
+- 配置文件路径：`~/.vimrc`
+
+- 生效方式：保存后 `:source ~/.vimrc` 或重启 Vim
+
+```shell
+# 基础配置
+set number          # 显示行号
+set tabstop=4       # Tab 宽度4
+set shiftwidth=4    # 自动缩进宽度4
+set expandtab       # Tab 转为空格
+set autoindent      # 自动缩进
+set smartindent     # 智能缩进
+set cursorline      # 高亮当前行
+set mouse=a         # 启用鼠标
+syntax enable       # 语法高亮
+set encoding=utf-8  # 编码
+set hlsearch        # 搜索高亮
+set incsearch       # 边输入边搜索
+```
+
 
 # 5. 与系统交互（编译/运行）
