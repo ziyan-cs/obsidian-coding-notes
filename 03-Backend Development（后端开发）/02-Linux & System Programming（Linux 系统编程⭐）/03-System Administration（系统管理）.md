@@ -92,23 +92,20 @@
 
 - 修改文件权限
 1. 所有者与所属组
-	- 同时修改：`chown [user_name]:[group_name] [file_name/dir_name]`
-	- 修改文件 / 目录 所有者：`chown [user_name] [file_name/dir_name]`
-	- 修改文件 / 目录 所属组：`chgrp [group_name] [file_name/dir_name]`
+	- `chown [user_name]:[group_name] [file_name/dir_name]`
+	- `chown [user_name] [file_name/dir_name]`
+	- `chgrp [group_name] [file_name/dir_name]`
 		- 对目录修改：`chown -R [] [dir_name]`（递归操作文件和子目录）
 
 2. 符号法修改文件权限
 	- `chmod [用户范围][操作符][权限符] [file_name/dir_name]`
-		- 如 `chmod g+rwx [file_name/dir_name]`：给所属组添加读、写、执行权限
-		- 如 `chmod o-r [file_name/dir_name]`：移除其他用户读权限
-	- 用户范围：`u` 、`g` 、`o` 、`a`
-	- 操作符：`+` 添加、`-` 移除、`=` 设置
-	- 权限符：可读 `r` = 4、可写 `w` = 2、`x` = 1、无权限 `-` = 0
+	- `u`  `g`  `o`  `a`
+	- `+` 添加、`-` 移除、`=` 设置
 
 3. 数字法修改文件权限
 	- `chmod 755 [file_name]`：（三组权限值的各自和）
+	- `r` = 4  `w` = 2   `x` = 1   `-` = 0
 
-- `umask`：默认权限掩码（控制新文件 / 目录的默认所有者、组权限）
 ### umask 默认权限（🔥）
 
 - 类似「权限掩码」，控制新创建文件 / 目录的默认权限
