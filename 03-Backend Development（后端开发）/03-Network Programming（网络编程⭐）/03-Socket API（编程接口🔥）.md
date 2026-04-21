@@ -3,16 +3,17 @@
 
 # 1. 整体流程（🔥最重要）  
 
-### 1.1 TCP server 生命周期  
+### TCP server 生命周期  
+
 >socket( ) → bind( ) → listen( ) → accept( ) → read( ) / write( ) → close( )
 
-### 1.2 TCP client 生命周期  
+### TCP client 生命周期
+
 >socket( ) → connect( ) → write( ) / read( ) → close( )
-  
   
 # 2. 通信模型  
 
-### 2.1 一次请求是怎么走的  
+### 一次请求是怎么走的  
 
 1. 建立连接：客户端调用 connect()，与服务器完成三次握手，建立 TCP 连接。
 2. 客户端发送请求：客户端调用 write()，数据通过内核协议栈层层封装后发送给服务器。
@@ -21,7 +22,7 @@
 5. 客户端接收响应：客户端调用 read() 获取服务器响应。
 6. 断开连接：双方完成数据交互后，调用 close()，通过四次挥手断开连接。
 
-### 2.2 数据如何从 client 到 server  
+### 数据如何从 client 到 server  
   
 1. 客户端应用层：调用 write() 写入数据，数据进入内核发送缓冲区。
 2. 传输层：加上 TCP 头部（源 / 目的端口、序列号、校验和等）。
@@ -30,42 +31,125 @@
 5. 物理层：转为比特流，通过网络设备传输。
 6. 服务器端：数据到达后，从下到上逐层解封装，最终数据被拷贝到服务器应用层的 read() 缓冲区。
 
+# 3. 接口语义（🔥）
 
-# 3. 接口语义（🔥）  
-### 3.1 socket 创建  
+```c
+// 包含接口的系统库
+#include <sys/socket.h>
+```
 
-→ 创建通信端点（客户端 or 服务端起点）
+### socket
 
-- **作用**：创建一个套接字，是所有网络通信的起点。
-- **参数**：`domain`（地址族，如 `AF_INET` 表示 IPv4）、`type`（套接字类型，如 `SOCK_STREAM` 表示 TCP）、`protocol`（协议，通常为 0）。
+- 作用：创建一个服务端 / 客户端套接字
+	- 返回文件描述符 ( `Linux` ) / 的句柄 ( `Windows` )
 
-### 3.2 bind 本质  
+```c
+// 函数原型
+int socket(int domain, int type, int protocol);
 
-→ 将 socket 绑定到 IP + port
+// 创建 TCP 套接字
+int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+if (sockfd == -1) {
+    perror("socket error");
+    exit(EXIT_FAILURE);
+}
+```
 
-- **作用**：将套接字与服务器的特定 IP 地址和端口号绑定。
-- **本质**：
-    - 告诉操作系统：“请将这个端口号分配给我这个进程”。
-    - 让客户端知道 “我应该连哪个地址和端口” 才能找到这个服务。
-- **注意**：客户端一般不需要 `bind()`，系统会自动分配一个临时端口。
+- `domain`：通信域（协议族 / 地址族 ）
+	- 规定通信范围和地址格式
+	- `AF_INET`：IPv4 互联网通信
+	- `AF_INET6`：IPv6 互联网通信
+	- `AF_UNIX`：本地进程间通信
+		- 地址格式：文件路径 `/tmp/socket`
+	- 告诉内核：“使用什么规则来识别通信双方”
 
-### 3.3 listen 作用  
+- `type`：套接字类型
+	- 规定数据传输方式和可靠性保证
+	- `SOCK_STREAM`：可靠、有序、双线的字节流（默认 TCP）
+	- `SOCK_DGRAM`：不可靠、无序、有数据边界的数据报（默认 UDP）
+	- `SOCK_RAW`：原始套接字（直接操作 IP 层）
+	- 告诉内核：“需要什么服务来传输数据”
 
-→ 将 socket 转换为监听状态
+- `protoal`：具体协议
+	- 同一 `domain` 同一 `type`，进一步指定协议
+	- `0`：选择默认协议（大部分情况选择 `0` ）
+	- `IPPROTO_TCP`：明确指定 TCP
+	- `IPPROTO_UDP`：明确指定 UDP
+	- `IPPROTO_IP`：原始 IP 协议
+	- 当 `type` 不够精确，用 `protocol` 细化
 
-- **作用**：将一个未连接的套接字转换为被动套接字，使其可以接收客户端连接。
-- **参数 `backlog`**：指定内核中等待连接队列的最大长度。
-- **本质**：开启 “监听模式”，让操作系统开始处理客户端的连接请求。
+### bind
 
-### 3.4 accept 返回  
+- 作用：将套接字与服务器的特定 IP 地址和端口号绑定。
+	- 客户端系统自动分配一个临时端口，一般不需要 `bind()`
 
-→ 获取一个新的连接（返回新的 socket🔥）
+```c
+// 函数原型
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
-- **作用**：从监听套接字的已完成连接队列中取出一个连接请求。
-- **返回值**：成功返回一个**新的文件描述符**，这个新描述符专门用于和客户端通信。
-- **关键点**：
-    - 原来的监听套接字 `socket_fd` 继续监听，新的通信由 `conn_fd` 负责。
-    - 这就是服务器能支持多客户端连接的基础。
+// 绑定 IPv4 地址和端口
+struct sockaddr_in addr;
+addr.sin_family = AF_INET;
+addr.sin_port = htons(8080); // 主机字节序转网络字节序
+addr.sin_addr.s_addr = INADDR_ANY; // 绑定本机所有网卡(0.0.0.0)
+bind(sockfd, (struct sockaddr*)&addr, sizeof(addr));
+
+if (bind(sockfd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+    perror("bind error");
+    close(sockfd);
+    exit(EXIT_FAILURE);
+}
+```
+
+- `sockfd`：`socket()` 函数返回的文件描述符
+
+- `addr`：通用地址结构指针
+	- `sockaddr_in`：IPv4 使用的结构替
+	- `sockaddr_in6`：IPv6 使用的结构体
+	- `sockaddr_un`：Unix 域使用的结构体
+
+- `addrlen`：地址结构体的实际长度
+
+### listen
+
+- 作用：将套接字状态从 `CLOSED` 变为 `LISTEN`
+	- 内核为该套接字维护两个队列，处理 TCP 三次握手
+	- 收到的 `SYN` 包由内核自动处理握手，完成的连接放入队列
+
+```c
+// 函数原型
+int listen(int sockfd; int backlog);
+
+// 开启监听
+if (listen(sockfd, 128) == -1) { // backlog 设为 128 (常用值)
+    perror("listen error");
+    close(sockfd);
+    exit(EXIT_FAILURE);
+}
+```
+
+- `sockfd`：`socket` 函数返回的文件描述符
+
+- `backlog`：未完成队列 + 已完成队列的最大长度
+	- 未完成队列：`SYN` 已接收，`SYN+ACK` 未发送
+	- 已完成队列：三次握手完成，等待 `accept()` 取走
+
+### accept 
+
+- 作用：从已完成连接队列中取出一个连接，创建新的套接字用于通信
+
+```c
+// 函数原型
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+
+
+```
+### connect
+
+
+### read / recv
+
+### write / send
 
 # 4. 代码模板（🔥）  
 ### TCP server 模板  
