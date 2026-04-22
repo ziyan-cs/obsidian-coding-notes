@@ -1,7 +1,5 @@
 {
-  "enabledCssSnippets": [
-    "vscode-codeblock"
-  ],
+  "enabledCssSnippets": [],
   "cssTheme": "AnuPpuccin",
   "accentColor": "#7460be",
   "theme": "obsidian",
