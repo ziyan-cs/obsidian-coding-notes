@@ -185,13 +185,12 @@ printf("new connection from %s:%d\n",
 
 ### connect
 
-```c
-
-```
 
 ### read / recv
 
+
 ### write / send
+
 
 # 4. 代码模板（🔥）  
 ### TCP server 模板  
