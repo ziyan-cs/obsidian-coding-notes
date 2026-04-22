@@ -1,6 +1,6 @@
 #cpp #stl #cheat-sheet #algorithms #containers
 
-## ⚡ TL;DR（快速决策）
+#   0. 核心
 
 - **STL = 容器 + 迭代器 + 算法 + 函数对象 的可组合工具体系。**
 - 三层结构：
@@ -35,7 +35,7 @@
 
 # 1. 容器高频通用操作
 
-### 1.1 状态接口
+### 状态接口
 
 - `size()`：返回元素个数
 - `empty()`：判断是否为空
@@ -43,15 +43,7 @@
 - `front()` / `back()`：访问头尾元素
 - `begin()` / `end()`：返回迭代器区间
 
-典型写法：
-
-```cpp
-if (!v.empty()) {
-    cout << v.front() << ' ' << v.back() << '\n';
-}
-```
-
-### 1.2 插入与删除
+### 插入与删除
 
 - `push_back()`：尾插元素
 - `emplace_back()`：原地构造尾插
@@ -59,14 +51,7 @@ if (!v.empty()) {
 - `erase()`：删除位置 / 区间 / key
 - `pop_back()` / `pop_front()`：弹出头尾元素（视容器而定）
 
-典型写法：
-
-```cpp
-vector<pair<int,int>> edges;
-edges.emplace_back(1, 2);
-```
-
-### 1.3 容器选择直觉
+### 容器选择直觉
 
 - `vector`：默认首选，顺序存储，随机访问快
 - `deque`：头尾操作都方便
@@ -75,7 +60,7 @@ edges.emplace_back(1, 2);
 - `unordered_set` / `unordered_map`：哈希结构，平均查找通常 $O(1)$
 - `queue` / `stack` / `priority_queue`：受限接口的容器适配器
 
-### 1.4 高频提醒
+### 高频提醒
 
 - `vector` 没有 `pop_front()`
 - `map[key]` 在 key 不存在时会插入默认值
@@ -85,16 +70,16 @@ edges.emplace_back(1, 2);
 
 # 2. STL 算法总览
 
-- 查找类：`find`、`count`、`binary_search`
-- 二分边界类：`lower_bound`、`upper_bound`
-- 排序类：`sort`、`stable_sort`、`nth_element`
-- 最值类：`min`、`max`、`min_element`、`max_element`
-- 变换类：`copy`、`transform`、`fill`
-- 删除整理类：`remove`、`remove_if`、`unique`
-- 反转重排类：`reverse`、`rotate`、`next_permutation`
-- 数值类：`accumulate`、`iota`、`partial_sum`
-- 集合类：`merge`、`set_union`、`set_intersection`
-- 堆类：`make_heap`、`push_heap`、`pop_heap`
+- 查找：`find`、`count`、`binary_search`
+- 二分边界：`lower_bound`、`upper_bound`
+- 排序：`sort`、`stable_sort`、`nth_element`
+- 最值：`min`、`max`、`min_element`、`max_element`
+- 变换：`copy`、`transform`、`fill`
+- 删除整理：`remove`、`remove_if`、`unique`
+- 反转重排：`reverse`、`rotate`、`next_permutation`
+- 数值：`accumulate`、`iota`、`partial_sum`
+- 集合：`merge`、`set_union`、`set_intersection`
+- 堆：`make_heap`、`push_heap`、`pop_heap`
 
 # 3. 最重要的算法函数 ⭐
 
@@ -385,7 +370,7 @@ iota(v.begin(), v.end(), 0);
 
 ---
 
-## 4. 关联容器最值得掌握的成员函数
+# 4. 关联容器最值得掌握的成员函数
 
 ### 4.1 `set` / `map`
 
@@ -421,7 +406,7 @@ if (it != mp.end()) cout << it->second << '\n';
 
 ---
 
-## 5. 高频组合套路 ⭐
+# 5. 高频组合套路 ⭐
 
 ### 5.1 排序 + 去重
 
