@@ -93,7 +93,7 @@ use [库名];
 select database();
 ```
 
-### 
+### 数据表操作
 
 # 
 `select * from [表名]`;
