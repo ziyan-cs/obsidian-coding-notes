@@ -55,8 +55,9 @@
 # 3. 接口语义（🔥）
 
 ```c
-#include <stdio.h>        // 输入输出：printf, perror
-#include <stdlib.h>       // 通用：exit, malloc
+#include <iostream>
+#include <cstdio>        // 输入输出：printf, perror
+#include <cstdlib>       // 通用：exit, malloc
 #include <unistd.h>       // 系统调用：close, read, write
 #include <sys/socket.h>   // 🔥 核心：socket, bind, listen, accept, connect...
 #include <netinet/in.h>   // 🔥 结构：sockaddr_in, htons, htonl...
