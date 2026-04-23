@@ -186,12 +186,148 @@ printf("new connection from %s:%d\n",
 
 ### connect
 
+- 作用：客户端向服务器发起 TCP 连接请求，触发三次握手
 
-### read / recv
+```cpp
+// 函数原型
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
+// 客户端连接服务器
+struct sockaddr_in server_addr;
+server_addr.sin_family = AF_INET;
+server_addr.sin_port = htons(8080);
+server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-### write / send
+if (connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1) {
+    perror("connect error");
+    close(sockfd);
+    exit(EXIT_FAILURE);
+}
+```
 
+- `sockfd`：客户端 `socket()` 函数返回的文件描述符
+
+- `addr`：指向服务器地址结构的指针
+    - `sockaddr_in`：IPv4 使用的结构体
+
+- `addrlen`：服务器地址结构体的实际长度
+
+### write / read
+
+- 作用：在已连接的套接字上发送 / 接收数据（TCP 流数据读写）
+
+```cpp
+// 函数原型
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+
+// 发送数据
+const char *msg = "Hello Server!";
+ssize_t send_len = send(connfd, msg, strlen(msg), 0);
+if (send_len == -1) {
+    perror("send error");
+    close(connfd);
+    continue;
+}
+
+// 接收数据
+char buf[1024] = {0};
+ssize_t recv_len = recv(connfd, buf, sizeof(buf)-1, 0);
+if (recv_len == -1) {
+    perror("recv error");
+    close(connfd);
+    continue;
+} else if (recv_len == 0) {
+    printf("client disconnected\n");
+    close(connfd);
+    continue;
+}
+buf[recv_len] = '\0';
+```
+
+- `sockfd`：`accept()` 返回的已连接套接字（或客户端 `socket()` 返回的套接字）
+
+- `buf`：数据缓冲区指针（发送时为 const，接收时为非 const）
+
+- `len`：要发送 / 接收的数据长度
+
+- `flags`：标志位，常用 `0`（默认阻塞读写）
+    - `MSG_NOSIGNAL`：发送失败时不触发 SIGPIPE 信号（常用）
+
+- 返回值：
+    - 成功：返回实际发送 / 接收的字节数
+    - 失败：返回 `-1`
+    - `recv` 返回 `0`：表示对端已关闭连接
+
+### send / recv
+
+- 作用：在已连接的套接字上发送 / 接收数据（TCP 流数据读写）
+
+```cpp
+// 函数原型
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+
+// 发送数据
+const char *msg = "Hello Server!";
+ssize_t send_len = send(connfd, msg, strlen(msg), 0);
+if (send_len == -1) {
+    perror("send error");
+    close(connfd);
+    continue;
+}
+
+// 接收数据
+char buf[1024] = {0};
+ssize_t recv_len = recv(connfd, buf, sizeof(buf)-1, 0);
+if (recv_len == -1) {
+    perror("recv error");
+    close(connfd);
+    continue;
+} else if (recv_len == 0) {
+    printf("client disconnected\n");
+    close(connfd);
+    continue;
+}
+buf[recv_len] = '\0';
+```
+
+- `sockfd`：`accept()` 返回的已连接套接字（或客户端 `socket()` 返回的套接字）
+
+- `buf`：数据缓冲区指针（发送时为 const，接收时为非 const）
+
+- `len`：要发送 / 接收的数据长度
+
+- `flags`：标志位，常用 `0`（默认阻塞读写）
+    - `MSG_NOSIGNAL`：发送失败时不触发 SIGPIPE 信号（常用）
+
+- 返回值：
+    - 成功：返回实际发送 / 接收的字节数
+    - 失败：返回 `-1`
+    - `recv` 返回 `0`：表示对端已关闭连接
+
+### close
+
+- 作用：关闭一个文件描述符，释放对应的套接字资源
+    - 关闭监听套接字：不再接受新连接
+    - 关闭已连接套接字：终止 TCP 连接，释放资源
+
+```cpp
+// 函数原型
+int close(int fd);
+
+// 关闭已连接套接字
+close(connfd);
+
+// 关闭监听套接字（服务退出时）
+close(sockfd);
+```
+
+- `fd`：要关闭的文件描述符（监听 sockfd 或已连接 connfd）
+
+- 注意：
+    - 多进程 / 多线程环境下，需要确保所有进程都 close 后，套接字才会真正释放
+    - 主动 close 会触发四次挥手流程
 
 # 4. 代码模板（🔥）  
 ### TCP server 模板  
