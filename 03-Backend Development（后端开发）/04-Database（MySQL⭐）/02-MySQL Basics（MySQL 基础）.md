@@ -89,10 +89,13 @@ exit;
 show databases;
 
 # 创建数据库
-create database 库名;
+create database [库名];
 
-# 创建数据库（指定字符集） 
-create database 库名 default character set utf8mb4;
+# 创建数据库 (指定字符集）)
+create database [库名] default character set utf8mb4;
+
+# 创建数据库 (同时指定字符集和校验规则）)
+create database [库名] default character set utf8mb4 collate utf8mb4_general_ci;
 
 # 删除数据库
 drop database [库名];
@@ -127,7 +130,7 @@ drop table [表名];
 # 修改表名
 rename table [旧表名] to [新表名];
 
-# 修改表结构（添加字段）
+# 修改表结构 (添加字段)
 alter table [表名] add column [字段名] [类型];
 
 # 修改字段类型
