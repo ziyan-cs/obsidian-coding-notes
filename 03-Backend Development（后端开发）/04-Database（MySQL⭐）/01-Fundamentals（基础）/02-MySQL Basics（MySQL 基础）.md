@@ -1,6 +1,5 @@
 
 
-
 # 1. 核心配置与目录
 
 ### 程序安装目录
@@ -69,12 +68,20 @@ bind-address=127.0.0.1
 - **sys**
     - 简化性能查看的系统库
 
-# 3. MySQL 常用命令
+# 3. MySQL 连接与退出
 
-### 连接与退出
 
-```cpp
-# 登录 MySQL
+```sql
+# 测试网络联通性
+ping [主机IP]
+
+# 测试端口连通性
+Test-NetConnection [主机IP] -Port 3306
+
+# 远程连接 MySQL
+mysql -h [主机IP] -P [端口号] -u [用户名] -p
+
+# 本地登录 MySQL
 mysql -u root -p
 
 # 退出 MySQL
@@ -82,87 +89,9 @@ quit;
 exit;
 ```
 
-### 数据库操作
+# 4. ### 配置与状态查询
 
-```cpp
-# 查看所有数据库
-show databases;
-
-# 创建数据库
-create database [库名];
-
-# 创建数据库 (指定字符集）)
-create database [库名] default character set utf8mb4;
-
-# 创建数据库 (同时指定字符集和校验规则）)
-create database [库名] default character set utf8mb4 collate utf8mb4_general_ci;
-
-# 删除数据库
-drop database [库名];
-
-# 用/切换数据库
-use [库名];
-
-# 查看当前使用的数据库
-select database();
-```
-
-### 数据表操作
-
-```cpp
-# 查看当前库的所有表
-show tables;
-
-# 查看表结构
-desc 表名;
-show create table [表名];
-
-# 创建表
-create table [表名] (
-    id int primary key auto_increment,
-    name varchar(50) not null,
-    age int
-);
-
-# 删除表
-drop table [表名];
-
-# 修改表名
-rename table [旧表名] to [新表名];
-
-# 修改表结构 (添加字段)
-alter table [表名] add column [字段名] [类型];
-
-# 修改字段类型
-alter table [表名] modify column [字段名] [新类型];
-
-# 删除字段
-alter table [表名] drop column [字段名];
-```
-
-### 数据增删改查（CRUD）
-
-```cpp
-# 增：插入数据
-insert into [表名] (字段1, 字段2) values (值1, 值2);
-
-# 删：删除数据
-delete from [表名] where [条件];
-
-# 改：更新数据
-update [表名] set [字段1]=[值1] where [条件];
-
-# 查：查询数据
-select * from [表名];                  # 查询所有
-select [字段1],[字段2] from [表名];         # 查询指定字段
-select * from [表名] where [条件];        # 条件查询
-select * from [表名] order by [字段] asc; # 排序 (asc升序/desc降序)
-select * from [表名] limit 10;          # 限制条数
-```
-
-### 配置与状态查询
-
-```cpp
+```sql
 # 查看当前端口号 (默认3306)
 show variables like 'port';
 
@@ -178,17 +107,3 @@ select user();
 # 查看数据库版本
 select version();
 ```
-
-### 远程连接命令
-
-```cpp
-# 测试网络联通性
-ping [主机IP]
-
-# 测试端口连通性
-Test-NetConnection [主机IP] -Port 3306
-
-# 远程连接 MySQL
-mysql -h [主机IP] -P [端口号] -u [用户名] -p
-```
-
