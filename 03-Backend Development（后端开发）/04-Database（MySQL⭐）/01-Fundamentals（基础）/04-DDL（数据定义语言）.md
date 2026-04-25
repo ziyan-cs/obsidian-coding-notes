@@ -68,7 +68,6 @@ ALTER TABLE [表名] ADD COLUMN [字段名] [类型] AFTER [指定字段名] COM
 -- 示例3：添加到表开头
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型] FIRST COMMENT '身份证号';
 
-
 -- 修改字段类型
 ALTER TABLE [表名] MODIFY COLUMN [字段名] [新类型];
 
