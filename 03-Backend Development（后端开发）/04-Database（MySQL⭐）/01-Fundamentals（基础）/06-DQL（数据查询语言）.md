@@ -106,10 +106,77 @@ SELECT * FROM [表名] LIMIT offset, n;
 
 ### 字符串函数
 
+```sql
+-- 拼接字符串
+SELECT CONCAT([字符串1], [字符串2]) FROM [表名];
 
+-- 截取子串
+SELECT SUBSTRING([字段], [起始位置], [长度]) FROM [表名];
+
+-- 去除两端空格
+SELECT TRIM([字段]) FROM [表名];
+
+-- 字符串长度（字节）
+SELECT LENGTH([字段]) FROM [表名];
+
+-- 大小写转换
+SELECT UPPER([字段]) FROM [表名];
+SELECT LOWER([字段]) FROM [表名];
+
+-- 替换字符串
+SELECT REPLACE([字段], [旧内容], [新内容]) FROM [表名];
+```
+
+- 了解
+- `CHARSET()`、`STRCMP()`、`INSTR()`、`LEFT()`/`RIGHT()`
 
 ### 数学函数
 
+```sql
+-- 四舍五入
+SELECT ROUND([数值], [小数位数]) FROM [表名];
+
+-- 取绝对值
+SELECT ABS([数值]) FROM [表名];
+
+-- 取模
+SELECT MOD([被除数], [除数]) FROM [表名];
+
+-- 随机数
+SELECT RAND() FROM [表名];
+```
+
+- 了解
+- `CEIL()`/`FLOOR()`、`SQRT()`
+
 ### 日期时间函数
 
+```sql
+-- 当前日期时间
+SELECT NOW() FROM [表名];
+
+-- 日期格式化
+SELECT DATE_FORMAT([日期], '%Y-%m-%d') FROM [表名];
+
+-- 计算日期差
+SELECT DATEDIFF([日期1], [日期2]) FROM [表名];
+
+-- 日期加减
+SELECT DATE_ADD([日期], INTERVAL [数值] DAY) FROM [表名];
+```
+
+- 了解
+- `HOUR()`/`MINUTE()`/`SECOND()`、`DATE_SUB()`
+
 ### 流程控制函数
+
+```sql
+-- 条件判断
+SELECT IF([条件], [值1], [值2]) FROM [表名];
+
+-- 空值替换
+SELECT IFNULL([字段], [默认值]) FROM [表名];
+
+-- 多条件分支
+SELECT CASE WHEN [条件1] THEN [结果1] ELSE [结果2] END FROM [表名];
+```
