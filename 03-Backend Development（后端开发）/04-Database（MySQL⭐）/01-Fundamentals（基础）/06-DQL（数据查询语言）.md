@@ -1,38 +1,30 @@
 
-# 1. 数据查询
 
-### 基础查询
+# 1. 基础查询
 
 ```sql
--- 查询表中所有字段
+-- 所有
 SELECT * FROM [表名];
 
--- 查询指定字段
+-- 指定
 SELECT [字段名1], [字段名2] FROM [表名];
 
--- 给字段起别名
-SELECT [字段名] AS [别名] FROM [表名];
-
--- 字段运算查询
+-- 字段运算
 SELECT [字段1] + [字段2] FROM [表名];
 
--- 去重查询
+-- 别名
+SELECT [字段名] AS [别名] FROM [表名];
+
+-- 去重
 SELECT DISTINCT [字段名] FROM [表名];
 ```
 
-### 条件查询
+# 2. 条件查询
 
-```sql
--- 基础条件查询
-SELECT * FROM [表名] WHERE [条件];
+### where 子句
 
--- 排序查询（ASC：默认升序 ; DESC：降序）
-SELECT * FROM [表名] ORDER BY [字段名] ASC;
-SELECT * FROM [表名] ORDER BY [字段名] DESC;
-```
 
-# 2. where 子句运算符
-
+### 运算符
 - 比较运算符
 	- `> < >= <= =`、`<> / !=`
 	- `BETWEEN ... AND ...`：区间查询（包含首尾）
@@ -43,7 +35,47 @@ SELECT * FROM [表名] ORDER BY [字段名] DESC;
 - 逻辑运算符
 	- `AND`、`OR`、`NOT`
 
-### 3. 模糊查询通配符
-
+```sql
+-- 基础条件查询
+SELECT * FROM [表名] WHERE [条件];
+```
 - `%`：匹配任意个字符（包含 0 个）
 - `_`：匹配单个字符
+
+
+
+
+
+# 3. 排序与分类
+
+### order by
+
+```sql
+-- ASC: 升序 (默认)
+SELECT * FROM [表名] ORDER BY [字段名] ASC;
+-- DESC: 降序
+SELECT * FROM [表名] ORDER BY [字段名] DESC;
+
+```
+
+### limit
+
+```sql
+
+```
+
+# 4. 聚合函数
+
+### count
+
+
+### sum
+
+
+### avg
+
+
+### max
+
+
+### min
