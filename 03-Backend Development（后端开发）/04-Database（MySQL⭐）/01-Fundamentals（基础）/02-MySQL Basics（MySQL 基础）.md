@@ -101,6 +101,9 @@ show variables like 'character_set_server';
 # 查看数据目录
 show variables like 'datadir';
 
+# 查看当前数据库
+select database();
+
 # 查看当前用户
 select user();
 
