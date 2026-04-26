@@ -26,7 +26,7 @@ SELECT DISTINCT [字段名] FROM [表名];
 -- 基础条件查询
 SELECT * FROM [表名] WHERE [条件];
 
--- 排序查询（ASC：升序，默认；DESC：降序）
+-- 排序查询（ASC：默认升序 ; DESC：降序）
 SELECT * FROM [表名] ORDER BY [字段名] ASC;
 SELECT * FROM [表名] ORDER BY [字段名] DESC;
 ```
@@ -36,7 +36,7 @@ SELECT * FROM [表名] ORDER BY [字段名] DESC;
 - 比较运算符
 	- `> < >= <= =`、`<> / !=`
 	- `BETWEEN ... AND ...`：区间查询（包含首尾）
-	- `IN(值1,值2)`：包含指定值
+	- `IN( 值1, 值2)`：包含指定值
 	- `LIKE`：模糊查询
 	- `IS NULL`：判断为空
 
