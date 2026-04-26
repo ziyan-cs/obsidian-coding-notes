@@ -179,30 +179,32 @@ SELECT SQRT([数值]) FROM [表名];
 ### 日期时间函数
 
 ```sql
--- 当前日期时间
+-- 获取当前日期时间
 SELECT CURRENT_DATE() FROM DUAL;      -- 当前日期（YYYY-MM-DD）
 SELECT CURRENT_TIME() FROM DUAL;      -- 当前时间（HH:MM:SS）
 SELECT NOW() / CURRENT_TIMESTAMP() FROM DUAL; -- 当前完整日期时间
 
--- 日期时间提取（按字段提取）
+-- 提取日期时间 / 年月日时分秒
 SELECT DATE([datetime]) FROM DUAL;    -- 提取日期（YYYY-MM-DD）
 SELECT TIME([datetime]) FROM DUAL;    -- 提取时间（HH:MM:SS）
 SELECT YEAR([datetime]), MONTH([datetime]), DAY([datetime]) FROM DUAL; -- 提取年/月/日
 SELECT HOUR([datetime]), MINUTE([datetime]), SECOND([datetime]) FROM DUAL; -- 提取时/分/秒
 
--- 日期增减
-SELECT DATE_ADD([date], INTERVAL [数值] [单位]) FROM DUAL; -- 日期加（单位支持 YEAR/MONTH/DAY/HOUR等）
-SELECT DATE_SUB([date], INTERVAL [数值] [单位]) FROM DUAL; -- 日期减
+-- 日期加减计算
+SELECT DATE_ADD([date], INTERVAL [数值] [单位]) FROM DUAL;  -- 日期加
+SELECT DATE_SUB([date], INTERVAL [数值] [单位]) FROM DUAL;  -- 日期减
 
--- 差值计算
-SELECT DATEDIFF([date1], [date2]) FROM DUAL;  -- 计算两个日期相差天数（仅比日期，忽略时间）
-SELECT TIMEDIFF([time1], [time2]) FROM DUAL;  -- 计算两个时间差
+-- 日期差 / 时间差
+SELECT DATEDIFF([date1], [date2]) FROM DUAL;   -- 计算两个日期相差天数（忽略时间）
+SELECT TIMEDIFF([time1], [time2]) FROM DUAL;   -- 计算两个时间差
 
--- 格式化与转换（高频配对）
+-- 日期 ↔ 字符串 互逆转换
 SELECT DATE_FORMAT([datetime], '[格式串]') FROM DUAL; -- 日期→格式字符串
-SELECT STR_TO_DATE([字符串], '[格式串]') FROM DUAL;   -- 字符串→格式日期
-SELECT UNIX_TIMESTAMP([datetime]) FROM DUAL;        -- 日期→Unix时间戳
-SELECT FROM_UNIXTIME([时间戳]) FROM DUAL;            -- Unix时间戳→日期
+SELECT STR_TO_DATE('[字符串]', '[格式串]') FROM DUAL;   -- 字符串→格式日期
+
+-- 日期 ↔ 时间戳 互逆转换
+SELECT UNIX_TIMESTAMP([datetime]) FROM DUAL;    -- 日期→Unix时间戳
+SELECT FROM_UNIXTIME([时间戳]) FROM DUAL;        -- Unix时间戳→日期
 ```
 
 - 了解
