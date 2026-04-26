@@ -43,21 +43,21 @@ SELECT * FROM [表名] WHERE [条件];
 # 3. 聚合函数
 
 ```sql
--- count：统计行数
+-- 统计行数
 SELECT COUNT(*) FROM [表名];
 SELECT COUNT([字段名]) FROM [表名];
 SELECT COUNT(DISTINCT [字段名]) FROM [表名];
 
--- sum：求和
+-- 求和
 SELECT SUM([字段名]) FROM [表名];
 
--- avg：求平均值
+-- 求平均值
 SELECT AVG([字段名]) FROM [表名];
 
--- max：求最大值
+-- 求最大值
 SELECT MAX([字段名]) FROM [表名];
 
--- min：求最小值
+-- 求最小值
 SELECT MIN([字段名]) FROM [表名];
 ```
 
@@ -108,7 +108,7 @@ SELECT * FROM [表名] LIMIT offset, n;
 
 ```sql
 -- 拼接字符串
-SELECT CONCAT([字符串1], [字符串2]) FROM [表名];
+SELECT CONCAT([字符串1], [字符串2], [...]) FROM [表名];
 
 -- 截取子串
 SELECT SUBSTRING([字段], [起始位置], [长度]) FROM [表名];
@@ -116,19 +116,30 @@ SELECT SUBSTRING([字段], [起始位置], [长度]) FROM [表名];
 -- 去除两端空格
 SELECT TRIM([字段]) FROM [表名];
 
--- 字符串长度（字节）
+-- 去除左侧空格
+SELECT LTRIM([字段]) FROM [表名];
+
+-- 去除右侧空格
+SELECT RTRIM([字段]) FROM [表名];
+
+-- 字符串长度（按字节）
 SELECT LENGTH([字段]) FROM [表名];
 
--- 大小写转换
+-- 字符串长度（按字符）
+SELECT CHAR_LENGTH([字段]) FROM [表名];
+
+-- 转大写
 SELECT UPPER([字段]) FROM [表名];
+
+-- 转小写
 SELECT LOWER([字段]) FROM [表名];
 
--- 替换字符串
+-- 替换指定字符串
 SELECT REPLACE([字段], [旧内容], [新内容]) FROM [表名];
 ```
 
 - 了解
-- `CHARSET()`、`STRCMP()`、`INSTR()`、`LEFT()`/`RIGHT()`
+- `CHARSET()`、`STRCMP()`、`INSTR()`、`LEFT()`/`RIGHT()`、`LPAD()`/`RPAD()`
 
 ### 数学函数
 
@@ -136,47 +147,79 @@ SELECT REPLACE([字段], [旧内容], [新内容]) FROM [表名];
 -- 四舍五入
 SELECT ROUND([数值], [小数位数]) FROM [表名];
 
+-- 数字格式化（带千分位，返回字符串）
+SELECT FORMAT([数值], [小数位数]) FROM [表名];
+
+-- 任意进制互转
+SELECT CONV([数值/字符串], [原进制], [目标进制]) FROM [表名];
+
+-- 向上取整（两种写法）
+SELECT CEIL([数值]) FROM [表名];
+SELECT CEILING([数值]) FROM [表名];
+
+-- 向下取整
+SELECT FLOOR([数值]) FROM [表名];
+
 -- 取绝对值
 SELECT ABS([数值]) FROM [表名];
 
--- 取模
+-- 取模运算
 SELECT MOD([被除数], [除数]) FROM [表名];
 
--- 随机数
+-- 生成 0~1 随机数
 SELECT RAND() FROM [表名];
+
+-- 求平方根
+SELECT SQRT([数值]) FROM [表名];
 ```
 
 - 了解
-- `CEIL()`/`FLOOR()`、`SQRT()`
+- `POW()`、`EXP()`、`LOG()`、`SIN()`、`COS()`、`TAN()`
 
 ### 日期时间函数
 
 ```sql
 -- 当前日期时间
-SELECT NOW() FROM [表名];
+SELECT CURRENT_DATE() FROM DUAL;      -- 当前日期（YYYY-MM-DD）
+SELECT CURRENT_TIME() FROM DUAL;      -- 当前时间（HH:MM:SS）
+SELECT NOW() / CURRENT_TIMESTAMP() FROM DUAL; -- 当前完整日期时间
 
--- 日期格式化
-SELECT DATE_FORMAT([日期], '%Y-%m-%d') FROM [表名];
+-- 日期时间提取（按字段提取）
+SELECT DATE([datetime]) FROM DUAL;    -- 提取日期（YYYY-MM-DD）
+SELECT TIME([datetime]) FROM DUAL;    -- 提取时间（HH:MM:SS）
+SELECT YEAR([datetime]), MONTH([datetime]), DAY([datetime]) FROM DUAL; -- 提取年/月/日
+SELECT HOUR([datetime]), MINUTE([datetime]), SECOND([datetime]) FROM DUAL; -- 提取时/分/秒
 
--- 计算日期差
-SELECT DATEDIFF([日期1], [日期2]) FROM [表名];
+-- 日期增减
+SELECT DATE_ADD([date], INTERVAL [数值] [单位]) FROM DUAL; -- 日期加（单位支持 YEAR/MONTH/DAY/HOUR等）
+SELECT DATE_SUB([date], INTERVAL [数值] [单位]) FROM DUAL; -- 日期减（等价于 DATE_ADD(..., -数值 单位)）
 
--- 日期加减
-SELECT DATE_ADD([日期], INTERVAL [数值] DAY) FROM [表名];
+-- 差值计算（DATEDIFF 与 TIMEDIFF 维度不同）
+SELECT DATEDIFF([date1], [date2]) FROM DUAL;   -- 计算两个日期相差天数（仅比日期，忽略时间）
+SELECT TIMEDIFF([time1], [time2]) FROM DUAL;  -- 计算两个时间差（返回 HH:MM:SS 格式）
+
+-- 格式化与转换（高频配对）
+SELECT DATE_FORMAT([datetime], '[格式串]') FROM DUAL; -- 日期按格式串转为字符串（如 %Y-%m-%d %H:%i:%s）
+SELECT STR_TO_DATE([字符串], '[格式串]') FROM DUAL;   -- 按格式串将字符串转为日期（与 DATE_FORMAT 互逆）
+SELECT UNIX_TIMESTAMP([datetime]) FROM DUAL;         -- 日期转Unix时间戳
+SELECT FROM_UNIXTIME([时间戳]) FROM DUAL;             -- Unix时间戳转回日期（与 UNIX_TIMESTAMP 互逆）
 ```
 
 - 了解
-- `HOUR()`/`MINUTE()`/`SECOND()`、`DATE_SUB()`
+- `HOUR()`、`MINUTE()`、`SECOND()`、`DAYNAME()`、`MONTHNAME()`、`WEEK()`
 
 ### 流程控制函数
 
 ```sql
 -- 条件判断
-SELECT IF([条件], [值1], [值2]) FROM [表名];
+SELECT IF([条件], [成立值], [不成立值]) FROM [表名];
 
 -- 空值替换
 SELECT IFNULL([字段], [默认值]) FROM [表名];
 
--- 多条件分支
-SELECT CASE WHEN [条件1] THEN [结果1] ELSE [结果2] END FROM [表名];
+-- 多条件分支判断
+SELECT CASE WHEN [条件1] THEN [结果1] WHEN [条件2] THEN [结果2] ELSE [默认结果] END FROM [表名];
+
+-- 空值判断
+SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 ```
