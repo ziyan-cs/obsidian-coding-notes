@@ -1,6 +1,6 @@
 
 
-# 1. MySQL 数据类型（列类型）
+# 1. MySQL 字段类型（列类型）
 
 ### 数值类型
 
@@ -90,28 +90,16 @@ CREATE TABLE user (
 
 # 2. 字段约束与主键设计
 
+### 基础约束
+
 ```sql
--- 创建表（完整规范写法）
-CREATE TABLE [表名] (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    age INT,
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 单列主键（直接）
-CREATE TABLE [表名] (id INT PRIMARY KEY);
--- 单列主键
-CREATE TABLE [表名] (id INT, PRIMARY KEY(id));
--- 复合主键
-CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id,name));
-
 -- 非空约束：字段值不可为空（允许多个NULL）
 CREATE TABLE [表名] (name VARCHAR(50) NOT NULL);
 
 -- 唯一约束：字段值不可重复（允许一个NULL）
 CREATE TABLE [表名] (phone VARCHAR(11) UNIQUE);
 
--- 自增约束：AUTO_INCREMENT，只能用于整数主键/唯一非空键
+-- 自增约束：AUTO_INCREMENT，只能用于整数主键/唯一键
 CREATE TABLE [表名] (id INT PRIMARY KEY AUTO_INCREMENT);
 CREATE TABLE [表名] (id INT NOT NULL UNIQUE AUTO_INCREMENT);
 
@@ -120,6 +108,47 @@ CREATE TABLE [表名] (status TINYINT DEFAULT 1);
 
 -- 检查约束：限制字段值范围
 CREATE TABLE [表名] (age INT CHECK(age>=18 AND age<=60));
+```
+
+### 主键设计
+
+```sql
+-- 单列主键（直接）
+CREATE TABLE [表名] (id INT PRIMARY KEY);
+-- 单列主键
+CREATE TABLE [表名] (id INT, PRIMARY KEY(id));
+-- 复合主键
+CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id,name));
+```
+
+### 外键约束
+
+- 保证多表之间数据引用完整性
+
+```sql
+-- 1. 创建表时定义外键（推荐）
+CREATE TABLE [从表名] (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    [外键字段] INT,
+    FOREIGN KEY ([外键字段]) REFERENCES [主表名]([主表主键])
+);
+
+-- 2. 表创建完成后添加外键
+ALTER TABLE [从表名] ADD CONSTRAINT [自定义外键名]
+FOREIGN KEY ([从表外键字段]) REFERENCES [主表名]([主表主键]);
+
+-- 3. 带级联操作的外键（常用）
+CREATE TABLE [从表名] (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    [外键字段] INT,
+    FOREIGN KEY ([外键字段]) 
+    REFERENCES [主表名]([主表主键])
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- 4. 删除外键约束
+ALTER TABLE [从表名] DROP FOREIGN KEY [外键名];
 ```
 
 # 3. 表结构优化与规范
