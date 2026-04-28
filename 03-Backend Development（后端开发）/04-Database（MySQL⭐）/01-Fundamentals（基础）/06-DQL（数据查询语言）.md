@@ -261,15 +261,22 @@ WHERE [表别名1].[关联字段] = [表别名2].[关联字段];
 ### 子查询
 
 ```sql
--- 标量子查询：返回单个值，用于WHERE条件
+-- 标量子查询：返回单个值
 SELECT * FROM [表1] WHERE [字段] = (SELECT [字段] FROM [表2] WHERE [条件]);
 
--- 列子查询：返回一列值，搭配IN/ANY/ALL使用
+-- 多行子查询：返回单列多行
 SELECT * FROM [表1] WHERE [字段] IN (SELECT [字段] FROM [表2] WHERE [条件]);
-SELECT * FROM [表1] WHERE [字段] ANY (SELECT [字段] FROM [表2] WHERE [条件]);
-SELECT * FROM [表1] WHERE [字段] ALL (SELECT [字段] FROM [表2] WHERE [条件]);
 
--- 表子查询：返回临时表，用于FROM子句（必须加别名）
+-- ANY子查询：满足其一即可
+SELECT * FROM [表1] WHERE [字段] [运算符] ANY (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- ALL子查询：全部满足才成立
+SELECT * FROM [表1] WHERE [字段] [运算符] ALL (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- 多列子查询：返回多列多行，需字段列表完全匹配
+SELECT * FROM [表1] WHERE ([字段1], [字段2]) IN (SELECT [字段1], [字段2] FROM [表2] WHERE [条件]);
+
+-- 表子查询（临时表）：返回临时表（必须加别名）
 SELECT * FROM (SELECT [字段], 聚合函数([字段]) FROM [表1] GROUP BY [分组字段]) AS [临时表别名] WHERE [聚合字段] [条件];
 ```
 
