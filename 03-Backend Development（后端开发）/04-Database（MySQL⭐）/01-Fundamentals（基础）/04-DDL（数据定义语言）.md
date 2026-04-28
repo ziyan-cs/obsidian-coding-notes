@@ -44,7 +44,7 @@ SHOW CREATE TABLE [表名];
 CREATE TABLE [表名] (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
-    age INT
+    age INT,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 修改表的字段集与校验规则

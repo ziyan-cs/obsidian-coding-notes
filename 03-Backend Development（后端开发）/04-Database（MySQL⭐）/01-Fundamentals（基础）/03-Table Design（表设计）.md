@@ -90,6 +90,37 @@ CREATE TABLE user (
 
 # 2. 字段约束与主键设计
 
+```sql
+-- 创建表（完整规范写法）
+CREATE TABLE [表名] (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    age INT,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 单列主键（直接）
+CREATE TABLE [表名] (id INT PRIMARY KEY);
+-- 单列主键
+CREATE TABLE [表名] (id INT, PRIMARY KEY(id));
+-- 复合主键
+CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id,name));
+
+-- 非空约束：字段值不可为空（允许多个NULL）
+CREATE TABLE [表名] (name VARCHAR(50) NOT NULL);
+
+-- 唯一约束：字段值不可重复（允许一个NULL）
+CREATE TABLE [表名] (phone VARCHAR(11) UNIQUE);
+
+-- 自增约束：AUTO_INCREMENT，只能用于整数主键/唯一非空键
+CREATE TABLE [表名] (id INT PRIMARY KEY AUTO_INCREMENT);
+CREATE TABLE [表名] (id INT NOT NULL UNIQUE AUTO_INCREMENT);
+
+-- 默认值约束：字段未指定值时自动填充
+CREATE TABLE [表名] (status TINYINT DEFAULT 1);
+
+-- 检查约束：限制字段值范围
+CREATE TABLE [表名] (age INT CHECK(age>=18 AND age<=60));
+```
 
 # 3. 表结构优化与规范
 
