@@ -1,5 +1,5 @@
 
-# 1. 数据库操作
+# 数据库操作
 
 ```sql
 -- 查看所有数据库
@@ -17,6 +17,9 @@ CREATE DATABASE [库名]
 DEFAULT CHARACTER SET utf8mb4 
 COLLATE utf8mb4_general_ci;
 
+-- 修改数据库字符集与校验规则
+ALTER DATABASE [库名] DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- 删除数据库
 DROP DATABASE [库名];
 
@@ -27,7 +30,7 @@ USE [库名];
 SELECT DATABASE();
 ```
 
-# 2. 数据表操作
+# 数据表操作
 
 ```sql
 -- 查看当前库的所有表
@@ -44,6 +47,9 @@ CREATE TABLE [表名] (
     age INT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 修改表的字段集与校验规则
+ALTER TABLE [表名] DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 -- 修改表名
 RENAME TABLE [旧表名] TO [新表名];
 
@@ -51,7 +57,7 @@ RENAME TABLE [旧表名] TO [新表名];
 DROP TABLE [表名];
 ```
 
-# 3. 字段操作
+# 字段操作
 
 ```sql
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型];
@@ -60,9 +66,9 @@ ALTER TABLE [表名] ADD COLUMN [字段名] [类型];
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型] [NOT NULL/DEFAULT/COMMENT];
 
 -- 示例1：在末尾添加字段（默认） 
-ALTER TABLE [表名] ADD COLUMN [字段名] [类型] COMMENT [字段名];
+ALTER TABLE [表名] ADD COLUMN [字段名] [类型] COMMENT '字段说明';
 
--- 示例2：在指定字段后添加（MySQL 支持，其他数据库不通用）
+-- 示例2：在指定字段后添加
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型] AFTER [指定字段名] COMMENT '邮箱';
 
 -- 示例3：添加到表开头
@@ -71,7 +77,7 @@ ALTER TABLE [表名] ADD COLUMN [字段名] [类型] FIRST COMMENT '身份证号
 -- 修改字段类型
 ALTER TABLE [表名] MODIFY COLUMN [字段名] [新类型];
 
--- 修改字段名（必须用 CHANGE COLUMN）
+-- 修改字段名
 ALTER TABLE [表名] CHANGE COLUMN [旧字段名] [新字段名] [类型];
 
 -- 删除字段
