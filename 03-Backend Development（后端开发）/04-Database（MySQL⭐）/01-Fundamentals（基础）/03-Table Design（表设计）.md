@@ -93,48 +93,52 @@ CREATE TABLE user (
 ### 基础约束
 
 ```sql
--- 非空约束：字段值不可为空（允许多个NULL）
+-- 非空约束：字段值不可为NULL
 CREATE TABLE [表名] (name VARCHAR(50) NOT NULL);
 
 -- 唯一约束：字段值不可重复（允许一个NULL）
 CREATE TABLE [表名] (phone VARCHAR(11) UNIQUE);
 
--- 自增约束：AUTO_INCREMENT，只能用于整数主键/唯一键
+-- 自增约束：AUTO_INCREMENT，仅支持整数主键/唯一键
 CREATE TABLE [表名] (id INT PRIMARY KEY AUTO_INCREMENT);
-CREATE TABLE [表名] (id INT NOT NULL UNIQUE AUTO_INCREMENT);
+CREATE TABLE [表名] (id INT UNIQUE AUTO_INCREMENT);
 
--- 默认值约束：字段未指定值时自动填充
+-- 默认值约束：未指定值时自动填充
 CREATE TABLE [表名] (status TINYINT DEFAULT 1);
 
--- 检查约束：限制字段值范围
-CREATE TABLE [表名] (age INT CHECK(age>=18 AND age<=60));
+-- 检查约束：限制字段值范围（MySQL 8.0+）
+CREATE TABLE [表名] (age INT CHECK(age >= 18 AND age <= 60));
 ```
 
 ### 主键设计
 
 ```sql
--- 单列主键（直接）
+-- 单列主键（直接定义）
 CREATE TABLE [表名] (id INT PRIMARY KEY);
--- 单列主键
+
+-- 单列主键（字段与约束分离）
 CREATE TABLE [表名] (id INT, PRIMARY KEY(id));
--- 复合主键
-CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id,name));
+
+-- 复合主键（多列组合唯一）
+CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id, name));
 ```
 
 ### 外键约束
 
 - 保证多表之间数据引用完整性
+- 外键字段必须引用主表的主键/唯一键
 
 ```sql
 -- 1. 创建表时定义外键（推荐）
 CREATE TABLE [从表名] (
     id INT PRIMARY KEY AUTO_INCREMENT,
     [外键字段] INT,
-    FOREIGN KEY ([外键字段]) REFERENCES [主表名]([主表主键])
+    FOREIGN KEY ([外键字段]) REFERENCES [主表名]([主表主键/唯一键])
 );
 
 -- 2. 表创建完成后添加外键
-ALTER TABLE [从表名] ADD CONSTRAINT [自定义外键名]
+ALTER TABLE [从表名]
+ADD CONSTRAINT [自定义外键名]
 FOREIGN KEY ([从表外键字段]) REFERENCES [主表名]([主表主键]);
 
 -- 3. 带级联操作的外键（常用）
@@ -143,8 +147,8 @@ CREATE TABLE [从表名] (
     [外键字段] INT,
     FOREIGN KEY ([外键字段]) 
     REFERENCES [主表名]([主表主键])
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON DELETE CASCADE   -- 主表删除时，从表数据级联删除
+    ON UPDATE CASCADE   -- 主表主键更新时，从表数据级联更新
 );
 
 -- 4. 删除外键约束
