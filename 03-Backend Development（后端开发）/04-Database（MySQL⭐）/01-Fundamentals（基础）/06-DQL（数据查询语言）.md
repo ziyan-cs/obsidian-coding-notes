@@ -6,13 +6,13 @@
 -- 查询所有字段
 SELECT * FROM [表名];
 
--- 查询指定字段
+-- 指定字段查询
 SELECT [字段名1], [字段名2] FROM [表名];
 
 -- 字段运算查询
 SELECT [字段1] + [字段2] FROM [表名];
 
--- 字段别名
+-- 别名
 SELECT [字段名] AS [别名] FROM [表名];
 
 -- 去重查询
@@ -21,24 +21,33 @@ SELECT DISTINCT [字段名] FROM [表名];
 
 # 2. 条件过滤
 
-- 在数据分组 / 聚合之前，按行过滤原始数据
-
 ```sql
 -- 基础条件查询
 SELECT * FROM [表名] WHERE [条件];
+
+-- 比较运算符 > < >= <= = <> !=
+SELECT * FROM [表名] WHERE [字段] > [值];
+SELECT * FROM [表名] WHERE [字段] <> [值];
+
+-- BETWEEN ... AND 区间查询（包含首尾）
+SELECT * FROM [表名] WHERE [字段] BETWEEN [值1] AND [值2];
+
+-- IN 匹配指定值
+SELECT * FROM [表名] WHERE [字段] IN ([值1], [值2], [值3]);
+
+-- LIKE 模糊查询（%匹配任意字符，_匹配单个字符）
+SELECT * FROM [表名] WHERE [字段] LIKE '%关键词%';
+SELECT * FROM [表名] WHERE [字段] LIKE 'A_';
+
+-- IS NULL / IS NOT NULL 判断空值
+SELECT * FROM [表名] WHERE [字段] IS NULL;
+SELECT * FROM [表名] WHERE [字段] IS NOT NULL;
+
+-- 逻辑运算符 AND OR NOT
+SELECT * FROM [表名] WHERE [条件1] AND [条件2];
+SELECT * FROM [表名] WHERE [条件1] OR [条件2];
+SELECT * FROM [表名] WHERE NOT [条件];
 ```
-
-- 比较运算符
-	- `> < >= <= =`、`<> / !=`
-	- `BETWEEN ... AND ...`：区间查询（包含首尾）
-	- `IN( 值1, 值2)`：匹配指定值
-	- `LIKE`：模糊查询
-		- `%`：匹配任意个字符（包含 0 个）
-		- `_`：匹配单个字符
-	- `IS NULL`：判断是否为空
-
-- 逻辑运算符
-	- `AND`、`OR`、`NOT`
 
 # 3. 聚合函数
 
@@ -67,17 +76,15 @@ SELECT MIN([字段名]) FROM [表名];
 
 ```sql
 -- 按指定字段分组 
-SELECT [分组字段], 聚合函数([字段名]) FROM [表名] GROUP BY [分组字段];
+SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分组字段];
 ```
 
 ### having
 
 ```sql
 -- 分组后过滤结果
-SELECT [分组字段], 聚合函数([字段名]) 
-FROM [表名] 
-GROUP BY [分组字段] 
-HAVING 聚合函数([字段名]) [条件];
+SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分组字段] 
+	HAVING [聚合函数]([字段名]) [条件];
 ```
 
 # 5. 排序与分页
@@ -228,6 +235,38 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 # 7. 多表查询
 
+### 子查询
+
+```sql
+-- 标量子查询：返回单个值
+SELECT * FROM [表1] WHERE [字段] = (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- 多行子查询：返回单列多行
+SELECT * FROM [表1] WHERE [字段] IN (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- ANY子查询：满足其一即可
+SELECT * FROM [表1] WHERE [字段] [运算符] ANY (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- ALL子查询：全部满足才成立
+SELECT * FROM [表1] WHERE [字段] [运算符] ALL (SELECT [字段] FROM [表2] WHERE [条件]);
+
+-- 多列子查询：返回多列多行，需字段列表完全匹配
+SELECT * FROM [表1] WHERE ([字段1], [字段2]) IN (SELECT [字段1], [字段2] FROM [表2] WHERE [条件]);
+
+-- 表子查询（临时表）：返回临时表（必须加别名）
+SELECT * FROM (SELECT [字段], 聚合函数([字段]) FROM [表1] GROUP BY [分组字段]) AS [临时表别名] WHERE [聚合字段] [条件];
+```
+
+### 联合查询
+
+```sql
+-- UNION：合并结果集并去重
+SELECT [字段列表] FROM [表1]UNION SELECT [字段列表] FROM [表2];
+
+-- UNION ALL：合并结果集不去重
+SELECT [字段列表] FROM [表1] UNION ALL SELECT [字段列表] FROM [表2];
+```
+
 ### 连接查询
 
 ````sql
@@ -257,39 +296,3 @@ SELECT [表别名1].[字段], [表别名2].[字段]
 FROM [表名] [表别名1], [表名] [表别名2]
 WHERE [表别名1].[关联字段] = [表别名2].[关联字段];
 ````
-
-### 子查询
-
-```sql
--- 标量子查询：返回单个值
-SELECT * FROM [表1] WHERE [字段] = (SELECT [字段] FROM [表2] WHERE [条件]);
-
--- 多行子查询：返回单列多行
-SELECT * FROM [表1] WHERE [字段] IN (SELECT [字段] FROM [表2] WHERE [条件]);
-
--- ANY子查询：满足其一即可
-SELECT * FROM [表1] WHERE [字段] [运算符] ANY (SELECT [字段] FROM [表2] WHERE [条件]);
-
--- ALL子查询：全部满足才成立
-SELECT * FROM [表1] WHERE [字段] [运算符] ALL (SELECT [字段] FROM [表2] WHERE [条件]);
-
--- 多列子查询：返回多列多行，需字段列表完全匹配
-SELECT * FROM [表1] WHERE ([字段1], [字段2]) IN (SELECT [字段1], [字段2] FROM [表2] WHERE [条件]);
-
--- 表子查询（临时表）：返回临时表（必须加别名）
-SELECT * FROM (SELECT [字段], 聚合函数([字段]) FROM [表1] GROUP BY [分组字段]) AS [临时表别名] WHERE [聚合字段] [条件];
-```
-
-### 联合查询
-
-```sql
--- UNION：合并结果集并自动去重
-SELECT [字段列表] FROM [表1]
-UNION
-SELECT [字段列表] FROM [表2];
-
--- UNION ALL：合并结果集不去重（性能更高）
-SELECT [字段列表] FROM [表1]
-UNION ALL
-SELECT [字段列表] FROM [表2];
-```
