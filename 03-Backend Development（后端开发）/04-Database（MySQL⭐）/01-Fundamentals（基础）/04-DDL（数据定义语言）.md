@@ -28,6 +28,9 @@ USE [库名];
 
 -- 查看当前使用的数据库
 SELECT DATABASE();
+
+-- 查看指定数据库的字符集、校验规则 
+SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '库名';
 ```
 
 # 数据表操作
@@ -55,6 +58,9 @@ RENAME TABLE [旧表名] TO [新表名];
 
 -- 删除表
 DROP TABLE [表名];
+
+-- 查看指定数据表的设置
+SHOW TABLE STATUS LIKE '表名';
 ```
 
 # 字段操作
@@ -82,4 +88,7 @@ ALTER TABLE [表名] CHANGE COLUMN [旧字段名] [新字段名] [类型];
 
 -- 删除字段
 ALTER TABLE [表名] DROP COLUMN [字段名];
+
+-- 查字段全套信息
+SHOW FULL COLUMNS FROM [表名];
 ```
