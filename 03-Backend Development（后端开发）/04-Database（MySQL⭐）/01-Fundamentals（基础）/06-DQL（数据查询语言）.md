@@ -266,6 +266,8 @@ SELECT * FROM [表1] WHERE [字段] = (SELECT [字段] FROM [表2] WHERE [条件
 
 -- 列子查询：返回一列值，搭配IN/ANY/ALL使用
 SELECT * FROM [表1] WHERE [字段] IN (SELECT [字段] FROM [表2] WHERE [条件]);
+SELECT * FROM [表1] WHERE [字段] ANY (SELECT [字段] FROM [表2] WHERE [条件]);
+SELECT * FROM [表1] WHERE [字段] ALL (SELECT [字段] FROM [表2] WHERE [条件]);
 
 -- 表子查询：返回临时表，用于FROM子句（必须加别名）
 SELECT * FROM (SELECT [字段], 聚合函数([字段]) FROM [表1] GROUP BY [分组字段]) AS [临时表别名] WHERE [聚合字段] [条件];
