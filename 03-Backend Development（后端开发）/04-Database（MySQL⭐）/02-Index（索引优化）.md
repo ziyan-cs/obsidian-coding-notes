@@ -14,7 +14,7 @@ SHOW INDEX FROM [表名];
 
 ---
 
-# 2. 索引类型（按功能划分）
+# 2. 索引类型
 
 ### 主键索引（Primary Key Index）
 
@@ -78,7 +78,7 @@ CREATE TABLE [表名] (
 ALTER TABLE [表名] ADD INDEX idx_user_goods(user_id, goods_id);
 ```
 
-### 全文索引（Fulltext Index）
+### 全文索引（FULLTEXT）
 
 - 用于文本字段的模糊查询（`MATCH AGAINST`）
 - 支持中文分词，比 `LIKE '%xxx%'` 效率高很多

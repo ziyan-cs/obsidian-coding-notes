@@ -116,7 +116,6 @@ CREATE TABLE [表名] (age INT CHECK(age >= 18 AND age <= 60));
 
 - 一个表只有一个主键，分为单列主键与复合主键
 - 主键字段具备 `NOT NULL` + `UNIQUE` 双重约束
-- INNODB 中，主键会自动创建聚簇索引，是表数据的物理存储顺序
 
 ```sql
 -- 单列主键（直接定义）
