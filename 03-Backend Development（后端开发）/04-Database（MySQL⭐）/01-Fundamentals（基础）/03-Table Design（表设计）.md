@@ -1,6 +1,6 @@
 
 
-# 1. MySQL 字段类型（列类型）
+# 1. 字段类型（列类型）
 
 ### 数值类型
 
@@ -107,6 +107,7 @@ CREATE TABLE [表名] (id INT UNIQUE AUTO_INCREMENT);
 CREATE TABLE [表名] (status TINYINT DEFAULT 1);
 
 -- 检查约束：限制字段值范围（MySQL 8.0+）
+CREATE TABLE [表名] (sex INT CHECK(sex in('man', 'woman')));
 CREATE TABLE [表名] (age INT CHECK(age >= 18 AND age <= 60));
 ```
 
@@ -154,6 +155,7 @@ CREATE TABLE [从表名] (
 -- 4. 删除外键约束
 ALTER TABLE [从表名] DROP FOREIGN KEY [外键名];
 ```
+
 
 # 3. 表结构优化与规范
 

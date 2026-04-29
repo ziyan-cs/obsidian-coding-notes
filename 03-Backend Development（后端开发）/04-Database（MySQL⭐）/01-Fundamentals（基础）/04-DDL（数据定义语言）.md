@@ -1,5 +1,5 @@
 
-# 数据库操作
+# 1. 数据库操作
 
 ```sql
 -- 查看所有数据库
@@ -33,7 +33,7 @@ SELECT DATABASE();
 SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '库名';
 ```
 
-# 数据表操作
+# 2. 数据表操作
 
 ```sql
 -- 查看当前库的所有表
@@ -63,7 +63,7 @@ DROP TABLE [表名];
 SHOW TABLE STATUS LIKE '表名';
 ```
 
-# 字段操作
+# 3. 字段操作
 
 ```sql
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型];
