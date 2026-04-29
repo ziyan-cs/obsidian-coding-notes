@@ -47,6 +47,17 @@ git log                # 完整历史
 git log --oneline      # 精简历史（推荐）
 ```
 
+```cpp
+# commit 注释
+feat：新增功能
+fix：修复 Bug
+refactor：重构代码（不改功能，只改结构）
+docs：文档修改
+style：格式调整（空格、换行，不影响代码逻辑）
+test：添加 / 修改测试用例
+chore：构建工具 / 依赖 / 配置修改（比如 CMake、VSCode 设置）
+```
+
 # 4. 远程仓库关联
 
 ```cpp
