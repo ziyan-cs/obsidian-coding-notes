@@ -16,24 +16,26 @@ SHOW INDEX FROM [表名];
 
 # 2. 索引类型
 
-### 主键索引（Primary Key Index）
-
-- 基于主键自动创建的索引，一张表**只能有一个**
-- 同时具备 `NOT NULL + UNIQUE` 约束
-- InnoDB 中，主键索引就是**聚簇索引**，决定数据的物理存储顺序
+- 主键索引（Primary Key Index）
+	
+	- 基于主键自动创建，一张表只能有一个 
+	- 天然具备 `NOT NULL + UNIQUE` 约束 
+	- InnoDB 中为聚簇索引，决定数据物理存储顺序
 
 ```sql
 -- 创建表时定义主键索引（自动创建聚簇索引）
 CREATE TABLE [表名] (
     id INT PRIMARY KEY AUTO_INCREMENT
 );
+
+-- 表创建完成后添加主键索引
+ALTER TABLE [表名] ADD   ;
 ```
 
-### 唯一索引（Unique Index）
-
-- 字段值不可重复（允许一个 NULL）
-- 一张表可以有多个唯一索引
-- 非聚簇索引，不决定数据物理存储顺序
+- 唯一索引（Unique Index）
+	
+	- 字段值不可重复（允许一个 NULL）
+	- 一张表可建多个，非聚簇索引
 
 ```sql
 -- 创建表时定义唯一索引
@@ -45,10 +47,11 @@ CREATE TABLE [表名] (
 ALTER TABLE [表名] ADD UNIQUE INDEX idx_phone(phone);
 ```
 
-### 普通索引（Normal Index）
-
-- 无唯一性约束，仅用于加速查询
-- 一张表可以有多个普通索引
+- 普通索引（Normal Index）
+	
+	- 基于主键自动创建，一张表只能有一个 
+	- 天然具备 `NOT NULL + UNIQUE` 约束 
+	- InnoDB 中为聚簇索引，决定数据物理存储顺序
 
 ```sql
 -- 创建表时定义普通索引
@@ -61,10 +64,10 @@ CREATE TABLE [表名] (
 ALTER TABLE [表名] ADD INDEX idx_name(name);
 ```
 
-### 复合索引（联合索引）
-
-- 由多个字段组合而成的索引，遵循**最左匹配原则**
-- 适用于多条件查询场景，可覆盖多个查询条件
+- 复合索引（联合索引）
+	
+	- 由多个字段组合而成的索引，遵循**最左匹配原则**
+	- 适用于多条件查询场景，可覆盖多个查询条件
 
 ```sql
 -- 创建复合索引
@@ -78,10 +81,10 @@ CREATE TABLE [表名] (
 ALTER TABLE [表名] ADD INDEX idx_user_goods(user_id, goods_id);
 ```
 
-### 全文索引（FULLTEXT）
-
-- 用于文本字段的模糊查询（`MATCH AGAINST`）
-- 支持中文分词，比 `LIKE '%xxx%'` 效率高很多
+- 全文索引（FULLTEXT）
+	
+	- 用于文本字段的模糊查询（`MATCH AGAINST`）
+	- 支持中文分词，比 `LIKE '%xxx%'` 效率高很多
 
 ```sql
 -- 创建全文索引（MySQL 5.6+ InnoDB 支持）
