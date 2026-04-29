@@ -99,9 +99,10 @@ CREATE TABLE [表名] (name VARCHAR(50) NOT NULL);
 -- 唯一约束：字段值不可重复（允许一个NULL）
 CREATE TABLE [表名] (phone VARCHAR(11) UNIQUE);
 
--- 自增约束：AUTO_INCREMENT，仅支持整数主键/唯一键
+-- 自增约束：仅支持整数主键/唯一键，可以设置默认自增值
+--          按照当前字段最大值自增
 CREATE TABLE [表名] (id INT PRIMARY KEY AUTO_INCREMENT);
-CREATE TABLE [表名] (id INT UNIQUE AUTO_INCREMENT);
+CREATE TABLE [表名] (id INT UNIQUE AUTO_INCREMENT = 100);
 
 -- 默认值约束：未指定值时自动填充
 CREATE TABLE [表名] (status TINYINT DEFAULT 1);
@@ -112,6 +113,10 @@ CREATE TABLE [表名] (age INT CHECK(age >= 18 AND age <= 60));
 ```
 
 ### 主键设计
+
+- 一个表只有一个主键，分为单列主键与复合主键
+- 主键字段具备 `NOT NULL` + `UNIQUE` 双重约束
+- INNODB 中，主键会自动创建聚簇索引，是表数据的物理存储顺序
 
 ```sql
 -- 单列主键（直接定义）
@@ -126,8 +131,8 @@ CREATE TABLE [表名] (id INT, name VARCHAR(20), PRIMARY KEY(id, name));
 
 ### 外键约束
 
-- 保证多表之间数据引用完整性
-- 外键字段必须引用主表的主键/唯一键
+- 保证多表之间数据引用完整性，防止无效数据插入
+- 外键字段必须引用主表的 `PRIMARY KEY` 或 `UNIQUE KEY`，且字段类型必须匹配
 
 ```sql
 -- 1. 创建表时定义外键（推荐）
