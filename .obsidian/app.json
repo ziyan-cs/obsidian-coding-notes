@@ -4,6 +4,6 @@
   "promptDelete": false,
   "newFileLocation": "current",
   "readableLineLength": false,
-  "trashOption": "local",
+  "trashOption": "system",
   "spellcheck": false
 }
