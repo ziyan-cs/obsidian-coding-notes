@@ -45,6 +45,8 @@
 **结论：** `read()` 返回 1 字节是完全正确的行为，不是 bug。
 消息边界的界定责任在应用层协议（后续 HTTP 解析阶段将正式处理此问题）。
 
+[file-20260504125704438](assets/file-20260504125704438.png)
+
 >整完展开 → [02-insights/tcp-byte-stream](../02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
