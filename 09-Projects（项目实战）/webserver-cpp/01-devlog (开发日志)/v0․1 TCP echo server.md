@@ -2,6 +2,8 @@
 
 > 开发环境见 [00-overview (总览)](/09-Projects（项目实战）/webserver-cpp/00-overview%20(总览).md)
 
+> 版本仓库见 [webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/tree/ecf1d0356dc558bcb81dd8dd4ec19684879ba130)
+
 > 完成时间：2026-05-04 
 > 对应 tag：v0.1 
 > 状态：已完成 ✅
@@ -55,9 +57,9 @@
 - 宿主机通过 Telnet 连接虚拟机（端口 8080），跨局域网通信正常
 - 输入 `Hello`，服务器端 `read()` 被触发 5 次，每次仅收到 1 字节
 
-![终端运行截图](/assets/file-20260504155346267.png)
+![终端运行截图](/assets/{date-YYYYMMDDHHmmss}.png)
 
->此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](../02-insights%20(知识)/tcp-byte-stream.md)
+>此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](09-Projects（项目实战）/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
 
