@@ -45,16 +45,16 @@
 **结论：** `read()` 返回 1 字节是完全正确的行为，不是 bug。
 消息边界的界定责任在应用层协议（后续 HTTP 解析阶段将正式处理此问题）。
 
->完整展开 → [02-insights/tcp-byte-stream](../02-insights%20(知识)/tcp-byte-stream.md)
-
 ---
 
-## 验证方式
+## 验证
 
 - 宿主机通过 Telnet 连接虚拟机，跨局域网通信正常
 - 服务器终端可观测到每条消息的完整收发日志
 
 ![终端运行截图](/assets/file-20260504155346267.png)
+
+>此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](../02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
 
