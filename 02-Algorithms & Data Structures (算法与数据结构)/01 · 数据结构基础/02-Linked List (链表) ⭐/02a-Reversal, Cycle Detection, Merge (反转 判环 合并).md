@@ -1,5 +1,3 @@
-# Linked List Operations
-
 
 # 0. 核心
 
@@ -37,7 +35,7 @@ node->next = head;
 head = node;
 ```
 
--  反转链表
+### 反转链表
 
 ```cpp
 // 时间 O(N) 空间 O(1)

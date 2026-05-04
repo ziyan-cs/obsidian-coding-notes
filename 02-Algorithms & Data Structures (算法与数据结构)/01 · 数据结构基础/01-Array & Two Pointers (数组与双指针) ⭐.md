@@ -1,5 +1,4 @@
-# Array & Two Pointers
-#algorithm #two-pointers #array #linked-list
+
 
 ## 核心
 
