@@ -1,17 +1,15 @@
 # ==============================================
-# Obsidian 核心忽略规则（笔记仓库专用）
+# Obsidian 忽略规则
 # ==============================================
 
-# 1. 个人工作区布局（不上传）
+# 1. 个人工作区布局
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 
-# 2. 插件安装包、本地缓存（只保留插件列表，不存安装包）
+# 2. 插件安装包、本地缓存
 .obsidian/plugins/*
-# 例外：如果有自定义开发的插件，可单独放行，否则全部忽略
-# !.obsidian/plugins/my-custom-plugin/
 
-# 3. 主题安装包（只保留主题选择，不存安装包）
+# 3. 主题安装包
 .obsidian/themes/*
 
 # 4. 本地缓存、回收站、临时文件
@@ -19,7 +17,7 @@ journal.db
 .trash/
 .obsidian/cache/
 
-# 5. 系统/IDE 临时文件（通用忽略）
+# 5. 系统/IDE 临时文件
 .DS_Store
 Thumbs.db
 .vscode/
@@ -28,12 +26,15 @@ Thumbs.db
 *~
 *.tmp
 
+# 6. 软路由
+R4S/OpenWrt*.md
+
 # ==============================================
-# 以下文件被保留并上传
+# 以下文件被保留上传
 # ==============================================
 # .obsidian/app.json
 # .obsidian/appearance.json
 # .obsidian/community-plugins.json
 # .obsidian/core-plugins.json
 # .obsidian/graph.json
-# .obsidian/snippets/ （自定义CSS，如需忽略可加 .obsidian/snippets/*）
+# .obsidian/snippets/
