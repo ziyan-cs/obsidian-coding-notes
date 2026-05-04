@@ -1,9 +1,10 @@
 {
   "useMarkdownLinks": true,
-  "newLinkFormat": "relative",
-  "promptDelete": false,
+  "newLinkFormat": "absolute",
+  "promptDelete": true,
   "newFileLocation": "current",
   "readableLineLength": false,
   "trashOption": "system",
-  "spellcheck": false
+  "spellcheck": false,
+  "attachmentFolderPath": "assets"
 }
