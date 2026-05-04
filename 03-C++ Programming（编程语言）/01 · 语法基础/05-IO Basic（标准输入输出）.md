@@ -2,19 +2,16 @@
 
 
 
-    - 读整行：`getline`
-    - 调试输出：`cerr`
-- 数据量大时：
-    - `ios::sync_with_stdio(false);`
-    - `cin.tie(nullptr);`
+ 
 
 # 1. I/O 基础
 
 - `cin`：标准输入
 - `cout`：标准输出
 - `cerr`：标准错误，输出控制台
-	- 例如 `cerr << "错误：数据格式异常" << endl;`
-- `clog`：直接输出到控制台，可被重定向到文件，常用于调试日志
+- `clog`：输出控制台，可被重定向到文件，常用于调试日志
+- `ios::sync_with_stdio(false);`
+- `cin.tie(nullptr);`
 
 # 3. 核心 I/O 操作
 
