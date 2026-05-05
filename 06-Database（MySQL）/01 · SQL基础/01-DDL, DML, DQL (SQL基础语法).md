@@ -162,13 +162,13 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ```sql
 -- 查看当前数据库
-select database();
+SELECT DATABASE();
 
 -- 查看当前用户
-select user();
+SELECT USER();
 
 -- 查看数据库版本
-select version();
+SELECT VERSION();
 
 -- 查询所有字段
 SELECT * FROM [表名];
