@@ -12,7 +12,7 @@
 
 这是项目奠基版本，目标是用 C++ 将 TCP Socket 理论落地，同时搭好后续模块化扩展的框架。
 
-1. 以 [《TCP/IP 网络编程》](09-My%20Projects%20(项目实战)/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [个人笔记](05-Network%20Programming%20(网络编程）/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
+1. 以 [《TCP/IP 网络编程》](09-My%20Projects%20(项目实战)/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [04a-socket, bind, listen, accept, connect (核心API)](05-Network%20Programming%20(网络编程）/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
 2. `CMakeLists.txt` 参考成熟工程示例，按多模块可扩展结构规划
 3. 参照后端服务器通用设计范式，为并发模型、日志模块等后续演进预留接口
 
