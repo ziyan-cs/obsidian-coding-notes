@@ -6,13 +6,13 @@
 
 > 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/blob/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55/README.md)
 
-> 开发环境见 [00-overview (总览)](/09-My%20Projects%20(项目实战)/webserver-cpp/00-overview%20(总览).md)
+> 开发环境见 [00-overview (总览)](/09-My%20Projects/webserver-cpp/00-overview%20(总览).md)
 
 ## 实现概述
 
 这是项目奠基版本，目标是用 C++ 将 TCP Socket 理论落地，同时搭好后续模块化扩展的框架。
 
-1. 以 [《TCP/IP 网络编程》](09-My%20Projects%20(项目实战)/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [个人笔记](05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
+1. 以 [《TCP/IP 网络编程》](09-My%20Projects/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [个人笔记](05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
 2. `CMakeLists.txt` 参考成熟工程示例，按多模块可扩展结构规划
 3. 参照后端服务器通用设计范式，为并发模型、日志模块等后续演进预留接口
 
@@ -66,7 +66,7 @@
 
 <img src="/assets/file-20260506161744859.png" alt="终端运行截图" width="700">
 
->TCP 字节流无消息边界的直接体现，详见 → [tcp-byte-stream](09-My%20Projects%20(项目实战)/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
+>TCP 字节流无消息边界的直接体现，详见 → [tcp-byte-stream](09-My%20Projects/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
 
