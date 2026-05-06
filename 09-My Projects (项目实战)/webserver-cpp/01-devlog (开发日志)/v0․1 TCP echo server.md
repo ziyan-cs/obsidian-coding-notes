@@ -55,7 +55,7 @@
 
 **结论：** 是正确行为，不是 bug。
 
->延伸阅读 → 
+>延伸阅读 → [02e-粘包问题与解决](05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md)]
 
 ---
 
