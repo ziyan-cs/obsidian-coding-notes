@@ -4,7 +4,7 @@
 > 对应 tag：v0.1 
 > 状态：已完成 ✅
 
-> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/tree/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55)
+> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/blob/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55/README.md)
 
 > 开发环境见 [00-overview (总览)](/09-My%20Projects%20(项目实战)/webserver-cpp/00-overview%20(总览).md)
 
@@ -12,11 +12,11 @@
 
 这是项目奠基版本，目标是用 C++ 将 TCP Socket 理论落地，同时搭好后续模块化扩展的框架。
 
-1. 以《TCP/IP 网络编程》为主要参考梳理系统调用语义，结合个人笔记手动实现核心逻辑
+1. 以 [《TCP/IP 网络编程》](09-My%20Projects%20(项目实战)/webserver-cpp/03-refs%20(参考资料).md) 为主要参考梳理系统调用语义，结合个人笔记手动实现核心逻辑
 2. CMakeLists.txt 参考成熟工程示例，按多模块可扩展结构规划。
 3. 参照后端服务器通用设计范式，为并发模型、日志模块等后续演进预留接口
 
-`main` 仅作逻辑入口，与业务代码解耦；当前阶段聚焦 server 模块，`echo` 回声功能作为内置逻辑验证通路。
+`main` 仅作逻辑入口，与业务代码解耦；当前阶段聚焦 `server` 模块，echo 回声功能作为内置逻辑验证通路。
 
 **完整调用链：**
 `socket()` → `setsockopt()` → `bind()` → `listen()` → `accept()` → `recv() / send()` → `close()` 
