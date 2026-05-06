@@ -61,7 +61,7 @@
 - 宿主机通过 Telnet 连接虚拟机（端口 8080），跨局域网通信
 - 输入 `Hello`，服务器端 `recv()` 触发 5 次，每次仅收到 1 个字节
 
-![终端运行截图](/assets/{date-YYYYMMDDHHmmss}.png)
+![终端运行截图](/assets/file-20260506161744859.png)
 
 >此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](09-Projects（项目实战）/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
 
