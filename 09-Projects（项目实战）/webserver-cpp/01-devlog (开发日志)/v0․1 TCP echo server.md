@@ -3,7 +3,7 @@
 > 对应 tag：v0.1 
 > 状态：已完成 ✅
 
-> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/tree/ecf1d0356dc558bcb81dd8dd4ec19684879ba130)
+> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/tree/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55)
 
 > 开发环境见 [00-overview (总览)](/09-Projects（项目实战）/webserver-cpp/00-overview%20(总览).md)
 
