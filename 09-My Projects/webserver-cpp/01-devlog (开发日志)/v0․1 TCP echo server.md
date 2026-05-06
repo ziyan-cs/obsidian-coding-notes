@@ -12,7 +12,7 @@
 
 这是项目奠基版本，目标是用 C++ 将 TCP Socket 理论落地，同时搭好后续模块化扩展的框架。
 
-1. 以 [《TCP/IP 网络编程》](09-My%20Projects/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [个人笔记](05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
+1. 以 [《TCP/IP 网络编程》](/09-My%20Projects/webserver-cpp/03-refs%20(参考资料).md) 为主要参考，结合 [个人笔记](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md) 手动实现核心逻辑
 2. `CMakeLists.txt` 参考成熟工程示例，按多模块可扩展结构规划
 3. 参照后端服务器通用设计范式，为并发模型、日志模块等后续演进预留接口
 
@@ -55,7 +55,7 @@
 
 **结论：** 是正确行为，不是 bug。
 
->延伸阅读 → [02e-粘包问题与解决](05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md)
+>延伸阅读 → [02e-粘包问题与解决](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md)
 
 ---
 
@@ -66,7 +66,7 @@
 
 <img src="/assets/file-20260506161744859.png" alt="终端运行截图" width="700">
 
->TCP 字节流无消息边界的直接体现，详见 → [tcp-byte-stream](09-My%20Projects/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
+>TCP 字节流无消息边界的直接体现，详见 → [tcp-byte-stream](/09-My%20Projects/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
 
