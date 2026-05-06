@@ -6,7 +6,7 @@
 
 > 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/tree/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55)
 
-> 开发环境见 [00-overview (总览)](/09-Projects（项目实战）/webserver-cpp/00-overview%20(总览).md)
+> 开发环境见 [00-overview (总览)](/09-My%20Projects%20(项目实战)/webserver-cpp/00-overview%20(总览).md)
 
 ## 实现概述
 
@@ -67,7 +67,7 @@
 
 <img src="/assets/file-20260506161744859.png" alt="终端运行截图" width="600">
 
->此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](09-Projects（项目实战）/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
+>此为 TCP 字节流无消息边界的直接体现，详见 → [02-insights/tcp-byte-stream](09-My%20Projects%20(项目实战)/webserver-cpp/02-insights%20(知识)/tcp-byte-stream.md)
 
 ---
 
