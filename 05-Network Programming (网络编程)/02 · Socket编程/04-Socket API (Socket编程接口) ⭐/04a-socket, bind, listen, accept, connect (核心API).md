@@ -1,16 +1,16 @@
 
 
-# 1. 整体流程（🔥最重要）  
+# 1. 函数调用链🔥
 
 ### TCP server 生命周期  
 
 >socket( ) → bind( ) → listen( ) → accept( ) →
->read( ) / write( ) → close( )
+>recv( ) / send( ) → close( )
 
 ### TCP client 生命周期
 
 >socket( ) → connect( ) →
->write( ) / read( ) → close( )
+>recv( ) / send( ) → close( )
   
 # 2. 通信模型  
 
@@ -51,7 +51,7 @@
 
 6. 服务器端：从物理层到应用层逐层解封装，最终数据被拷贝到服务器 read() 的缓冲区
 
-# 3. 接口语义（🔥）
+# 3. 接口语义🔥
 
 ```c
 #include <iostream>
@@ -63,49 +63,37 @@
 #include <arpa/inet.h>    // 🔥 转换：inet_ntoa, inet_addr...
 ```
 
-### socket
+### socket( )
 
-- 作用：创建一个服务端 / 客户端套接字
-	- 返回文件描述符 ( `Linux` ) / 的句柄 ( `Windows` )
+- 创建一个服务端 / 客户端套接字
 
 ```c
-// 函数原型
 int socket(int domain, int type, int protocol);
-
-// 创建 TCP 套接字
-int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-if (sockfd == -1) {
-    perror("socket error");
-    exit(EXIT_FAILURE);
-}
 ```
 
-- `domain`：通信域（协议族 / 地址族 ）
-	- 规定通信范围和地址格式
-	- `AF_INET`：IPv4 互联网通信
-	- `AF_INET6`：IPv6 互联网通信
+- `domain`：协议族 / 地址族（通信范围和地址格式）
+	- `AF_INET`：IPv4 通信
+	- `AF_INET6`：IPv6 通信
 	- `AF_UNIX`：本地进程间通信
-		- 地址格式：文件路径 `/tmp/socket`
-	- 告诉内核：“使用什么规则来识别通信双方”
 
-- `type`：套接字类型
-	- 规定数据传输方式和可靠性保证
-	- `SOCK_STREAM`：可靠、有序、双线的字节流（默认 TCP）
-	- `SOCK_DGRAM`：不可靠、无序、有数据边界的数据报（默认 UDP）
+- `type`：套接字类型（数据传输方式和可靠性保证）
+	- `SOCK_STREAM`：可靠、有序、双线的字节流（TCP）
+	- `SOCK_DGRAM`：不可靠、无序、有数据边界的数据报（UDP）
 	- `SOCK_RAW`：原始套接字（直接操作 IP 层）
-	- 告诉内核：“需要什么服务来传输数据”
 
-- `protoal`：具体协议
-	- 同一 `domain` 同一 `type`，进一步指定协议
-	- `0`：选择默认协议（大部分情况选择 `0` ）
+- `protoal`：具体协议（同意协议族下，进一步指定协议）
+	- `0`：选择默认协议（大部分情况选择）
 	- `IPPROTO_TCP`：明确指定 TCP
 	- `IPPROTO_UDP`：明确指定 UDP
 	- `IPPROTO_IP`：原始 IP 协议
-	- 当 `type` 不够精确，用 `protocol` 细化
 
-### bind
+### setsockopt( )
 
-- 作用：将套接字与服务器的特定 IP 地址和端口号绑定。
+
+
+### bind( )
+
+- 套接字与服务器的特定 IP 地址和端口号绑定。
 	- 客户端系统自动分配一个临时端口，一般不需要 `bind()`
 
 ```c
@@ -118,24 +106,16 @@ addr.sin_family = AF_INET;
 addr.sin_port = htons(8080); // 主机字节序转网络字节序
 addr.sin_addr.s_addr = INADDR_ANY; // 绑定本机所有网卡(0.0.0.0)
 bind(sockfd, (struct sockaddr*)&addr, sizeof(addr));
-
-if (bind(sockfd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-    perror("bind error");
-    close(sockfd);
-    exit(EXIT_FAILURE);
-}
 ```
 
-- `sockfd`：`socket()` 函数返回的文件描述符
-
 - `addr`：通用地址结构指针
-	- `sockaddr_in`：IPv4 使用的结构替
-	- `sockaddr_in6`：IPv6 使用的结构体
+	- `sockaddr_in`：IPv4 地址结构体
+	- `sockaddr_in6`：IPv6 地址结构体
 	- `sockaddr_un`：Unix 域使用的结构体
 
 - `addrlen`：地址结构体的实际长度
 
-### listen
+### listen( )
 
 - 作用：将套接字状态从 `CLOSED` 变为 `LISTEN`
 	- 内核为该套接字维护两个队列，处理 TCP 三次握手
@@ -152,8 +132,6 @@ if (listen(sockfd, 128) == -1) { // backlog 设为 128 (常用值)
     exit(EXIT_FAILURE);
 }
 ```
-
-- `sockfd`：`socket` 函数返回的文件描述符
 
 - `backlog`：未完成队列 + 已完成队列的最大长度
 	- 未完成队列：`SYN` 已接收，`SYN+ACK` 未发送
