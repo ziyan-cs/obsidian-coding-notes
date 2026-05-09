@@ -46,7 +46,7 @@
 
 ### 阶段一：慢启动（Slow Start）
 
-```
+```txt
 cwnd 初始值 = 1 MSS
 每收到一个 ACK：cwnd += 1 MSS（指数增长）
 每过一个 RTT：cwnd 翻倍
@@ -58,7 +58,7 @@ cwnd 初始值 = 1 MSS
 
 ### 阶段二：拥塞避免（Congestion Avoidance）
 
-```
+```txt
 当 cwnd ≥ ssthresh：
 每收到一个 ACK：cwnd += MSS * MSS / cwnd（线性增长）
 每过一个 RTT：cwnd += 1 MSS
@@ -68,7 +68,7 @@ cwnd 初始值 = 1 MSS
 
 ### 阶段三：快重传（Fast Retransmit）
 
-```
+```txt
 收到 3 个重复 ACK（对同一个序列号）→ 立即重传对应报文段
 不等超时计时器，减少等待时间
 ```
@@ -79,7 +79,7 @@ cwnd 初始值 = 1 MSS
 
 触发快重传后（收到 3 个重复 ACK）：
 
-```
+```txt
 ssthresh = cwnd / 2
 cwnd = ssthresh（不回到 1，从一半继续线性增长）
 进入拥塞避免阶段
@@ -87,14 +87,14 @@ cwnd = ssthresh（不回到 1，从一半继续线性增长）
 
 对比超时（RTO）触发时：
 
-```
+```txt
 ssthresh = cwnd / 2
 cwnd = 1 MSS（回到慢启动起点）
 ```
 
 ### 完整流程图
 
-```
+```txt
 cwnd
  ^
  |         /

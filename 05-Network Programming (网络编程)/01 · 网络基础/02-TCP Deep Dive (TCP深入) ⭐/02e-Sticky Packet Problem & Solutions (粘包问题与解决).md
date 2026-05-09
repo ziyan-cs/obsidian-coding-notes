@@ -4,14 +4,14 @@
 
 **粘包（Sticky Packet）**：接收方在读取数据时，无法正确区分出原始的消息边界，多个消息被"粘"在一起，或一个消息被拆成多段读取。
 
-```
+```txt
 发送方发了两条消息：
 [Hello][World]
 
 接收方可能读到：
 情况A：[HelloWorld]          ← 两条粘在一起
 情况B：[Hel] [loWorld]       ← 一条被拆开
-情况C：[Hello][Wor] [ld]     ← 混合情况
+情况C：[Hello] [Wor] [ld]     ← 混合情况
 ```
 
 ---
@@ -103,9 +103,7 @@ TLV（Type-Length-Value）结构：
 
 对于**低延迟场景**（如游戏、实时通信），可以禁用 Nagle 算法，让小包立即发送：
 
-c
-
-```c
+```cpp
 int flag = 1;
 setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 ```
@@ -116,8 +114,6 @@ setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 ---
 
 ## 粘包处理的代码模式（以 Go 为例）
-
-go
 
 ```go
 // 读取完整消息（方案三：头部 + 长度）

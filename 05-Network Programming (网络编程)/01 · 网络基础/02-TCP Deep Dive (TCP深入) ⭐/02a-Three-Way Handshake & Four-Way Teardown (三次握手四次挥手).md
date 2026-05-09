@@ -11,18 +11,10 @@ TCP 连接建立需要三次报文交换，目的是**双方互相确认对方�
    |                               |   服务端：LISTEN → SYN_RCVD
    |<--- SYN+ACK (SEQ=y,ACK=x+1)---|
    |                               |
-   |---- ACK (ACK=y+1) ----------->|   客户端：SYN_SENT → ESTABLISHED
+   |---- ACK (SEQ=x+1,ACK=y+1) --->|   客户端：SYN_SENT → ESTABLISHED
    |                               |   服务端：SYN_RCVD → ESTABLISHED
    |                               |
 ```
-
-## 每一步的含义
-
-|步骤|报文|含义|
-|---|---|---|
-|第一次|客户端发 SYN|"我想连接你，我的初始序列号是 x"|
-|第二次|服务端发 SYN+ACK|"收到，我同意；我的初始序列号是 y，我期待你下一个字节是 x+1"|
-|第三次|客户端发 ACK|"收到你的确认，我期待你下一个字节是 y+1"|
 
 ## 为什么必须三次，不能两次？
 
@@ -45,16 +37,17 @@ TCP 连接建立需要三次报文交换，目的是**双方互相确认对方�
 TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以需要四次。
 
 ```
-主动关闭方                      被动关闭方
+【主动关闭方】                    【被动关闭方】
   |                               |
-  |---- FIN (seq=u) ------------> |   主动方：ESTABLISHED → FIN_WAIT_1
+  |---- FIN (SEQ=u) ------------->|   主动方：ESTABLISHED → FIN_WAIT_1
   |                               |   被动方：ESTABLISHED → CLOSE_WAIT
-  |<--- ACK (ack=u+1) -----------|
+  |<--- ACK (ACK=u+1) ------------|
   |                               |   主动方：FIN_WAIT_1 → FIN_WAIT_2
-  |                    （被动方可能还有数据要发）
-  |<--- FIN (seq=v) -------------|   被动方：CLOSE_WAIT → LAST_ACK
+  |                               |   被动方:发完缓冲区剩余数据
   |                               |
-  |---- ACK (ack=v+1) ----------->|   主动方：FIN_WAIT_2 → TIME_WAIT
+  |<--- FIN (SEQ=v) --------------|   被动方：CLOSE_WAIT → LAST_ACK
+  |                               |
+  |---- ACK (ACK=v+1) ----------->|   主动方：FIN_WAIT_2 → TIME_WAIT
   |                               |   被动方：LAST_ACK → CLOSED
   |      等待 2MSL 后              |
   |   主动方：TIME_WAIT → CLOSED   |
@@ -68,7 +61,7 @@ TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以
 
 ## TIME_WAIT 为什么等 2MSL？
 
-- **MSL**（Maximum Segment Lifetime）：报文在网络中的最大存活时间，通常 60s
+- **MSL**：报文在网络中的最大存活时间，通常 60s
 - 等待 2MSL 的两个原因：
     1. **确保最后一个 ACK 能到达对端**：若对端没收到最后的 ACK，会重发 FIN，2MSL 足够接收重传并再次 ACK
     2. **让旧连接的所有报文在网络中消失**：防止新连接收到旧连接的延迟报文
