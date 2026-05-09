@@ -49,8 +49,8 @@ TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以
   |                               |
   |---- ACK (ACK=v+1) ----------->|   主动方：FIN_WAIT_2 → TIME_WAIT
   |                               |   被动方：LAST_ACK → CLOSED
-  |      等待 2MSL 后              |
-  |   主动方：TIME_WAIT → CLOSED   |
+  |      等待 2MSL                |
+  |   主动方：TIME_WAIT → CLOSED  |
 ```
 
 ## 为什么需要四次，不能三次？
