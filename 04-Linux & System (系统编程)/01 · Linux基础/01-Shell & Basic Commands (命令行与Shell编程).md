@@ -291,3 +291,96 @@
 - `Ctrl+R`（搜索历史命令）
 - `Ctrl+L`：（清屏）
 - `Ctrl+A` / `Ctrl+E`：（跳到行首/行尾）
+
+## Shell 基础
+
+Shell 是用户与内核之间的命令解释器。常见 Shell：`bash`（最普遍）、`zsh`、`sh`（POSIX 标准）。
+
+```bash
+echo $SHELL          # 查看当前 Shell
+chsh -s /bin/zsh     # 切换默认 Shell
+```
+
+## 文件与目录
+
+```bash
+ls -alh              # 列出所有文件（含隐藏），人类可读大小
+tree 
+cd ..                # 回到上一个目录
+pwd                  # 打印当前路径
+mkdir -p a/b/c       # 递归创建目录
+cp -r src/ dst/      # 递归复制目录
+mv old new           # 移动/重命名
+rm -rf dir/          # 递归强制删除（危险！）
+ln -s target link    # 创建软链接
+```
+
+## 文件查看
+
+```bash
+cat file             # 输出全文
+less file            # 分页查看（q 退出，/搜索）
+head -n 20 file      # 前 20 行
+tail -f file         # 实时追踪文件末尾（看日志）
+wc -l file           # 统计行数
+```
+
+## 查找
+
+```bash
+find . -name "*.cpp" -type f          # 按名称查找文件
+find . -mtime -1                      # 最近 1 天修改的文件
+find . -size +100M                    # 大于 100MB 的文件
+find . -name "*.o" -delete            # 查找并删除
+which gcc                             # 查找命令路径
+whereis gcc                           # 查找命令、源码、手册位置
+```
+
+## 重定向与管道
+
+
+```bash
+cmd > file           # 标准输出重定向（覆盖）
+cmd >> file          # 追加
+cmd 2> err.log       # 标准错误重定向
+cmd > out.log 2>&1   # 标准输出和错误都重定向到同一文件
+cmd1 | cmd2          # 管道：cmd1 的输出作为 cmd2 的输入
+tee file             # 同时输出到终端和文件
+```
+
+## Shell 脚本要点
+
+
+```bash
+#!/bin/bash
+set -euo pipefail    # 遇到错误立即退出，未定义变量报错，管道失败也报错
+
+# 变量
+NAME="world"
+echo "Hello, ${NAME}!"
+
+# 条件
+if [ -f "file.txt" ]; then
+    echo "file exists"
+fi
+
+# 循环
+for f in *.cpp; do
+    echo "Processing $f"
+done
+
+# 函数
+greet() {
+    local msg=$1      # local 限制变量作用域
+    echo "Hi, $msg"
+}
+greet "Alice"
+
+# 特殊变量
+$0    # 脚本名
+$1~$9 # 位置参数
+$#    # 参数个数
+$?    # 上一条命令的退出状态（0=成功）
+$$    # 当前脚本 PID
+$@    # 所有参数列表
+```

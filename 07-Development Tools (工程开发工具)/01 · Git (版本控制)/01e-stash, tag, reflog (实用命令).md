@@ -1,107 +1,69 @@
 
+## git stash（临时搁置）
 
-# 1. 速览
+将当前工作区和暂存区的改动临时保存，让工作区恢复干净：
 
-- **Git**：分布式版本控制系统
-	- （跟踪代码修改、协作开发）
-- **GitHub**：基于 Git 的远程代码托管平台
-	- （代码共享、协作的核心场所）
-- 工作区域
-	- 工作区：实际编写代码的目录
-	- 暂存区：临时存放待提交的修改的区域
-	- 本地仓库：本地存储历史版本的区域 `.git` 目录
-	- 远端仓库：托管在 **GitHub** 等平台的区域
-
->流程：*工作区 → 暂存区 → 本地仓库 → 远程仓库
-
-
-# 2. 环境配置
-
-```cpp
-# 配置全局用户名（GitHub 账号名）
-git config --global user.name "你的GitHub用户名"
-
-# 配置全局邮箱（GitHub 绑定邮箱）
-git config --global user.email "你的GitHub邮箱"
+```bash
+git stash                    # 保存当前改动
+git stash push -m "wip: 登录功能"  # 附加描述
+git stash list               # 查看所有 stash
+git stash pop                # 恢复最近一次 stash（并删除）
+git stash apply stash@{1}    # 恢复指定 stash（不删除）
+git stash drop stash@{0}     # 删除指定 stash
+git stash branch feature/new # 从 stash 创建新分支
 ```
 
-# 3. 本地仓库操作
+典型场景：正在开发功能，突然需要切换分支修 bug，先 stash 保存进度。
 
-```cpp
-# 1. 初始化本地仓库（新项目仅一次）
-git init
+> `git stash` 默认不保存 untracked 文件，需要 `git stash -u` 才包含。
 
-# 2. 文件添加到暂存区
-git add [file_name]        # 添加单个文件
-git add .             # 添加当前目录所有文件（常用）
+---
 
-# 3. 提交到本地仓库
-git commit            # 系统提示写提交说明
-git commit -m "提交说明（如：init/debug/feat）"
+## git tag（标签）
 
-# 4. 查看状态
-git status
+为特定 commit 打上永久标记，常用于标识版本发布：
 
-# 5. 查看提交历史
-git log                # 完整历史
-git log --oneline      # 精简历史（推荐）
+```bash
+# 轻量标签（只是一个指针）
+git tag v1.0.0
+
+# 附注标签（推荐，包含作者、日期、说明）
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git tag -a v1.0.0 abc1234    # 为历史 commit 打标签
+
+git tag                      # 列出所有标签
+git show v1.0.0              # 查看标签详情
+git push origin v1.0.0       # 推送单个标签（tag 默认不随 push 上传）
+git push origin --tags       # 推送所有标签
+git tag -d v1.0.0            # 删除本地标签
+git push origin :refs/tags/v1.0.0  # 删除远端标签
 ```
 
-```cpp
-# commit 注释
-feat：新增功能
-fix：修复 Bug
-refactor：重构代码（不改功能，只改结构）
-docs：文档修改
-style：格式调整（空格、换行，不影响代码逻辑）
-test：添加 / 修改测试用例
-chore：构建工具 / 依赖 / 配置修改（比如 CMake、VSCode 设置）
+---
+
+## git reflog（操作日志 / 后悔药）
+
+记录本地所有 HEAD 的移动历史，即使 commit 被 reset 也能找回：
+
+```bash
+git reflog                   # 查看 HEAD 的所有历史移动记录
+git reflog show main         # 查看某个分支的移动记录
 ```
 
-# 4. 远程仓库关联
+输出示例：
 
-```cpp
-# 1. 关联远程仓库（只需关联一次）
-git remote add origin [GitHub仓库地址]
-
-# 2. 推送代码
-git push -u origin main  # 首次推送
-git push origin main     # 日常推送
-
-# 3. 拉取远程代码（协作时必用）
-git pull origin main     # 拉取 main 分支并合并
+```
+abc1234 HEAD@{0}: commit: feat: add login
+def5678 HEAD@{1}: reset: moving to HEAD~1
+ghi9012 HEAD@{2}: commit: wip: half-done feature
 ```
 
-# 5. 分支管理（协作必用)
+**找回误删的 commit：**
 
-```cpp
-# 1. 查看分支
-git branch
-
-# 2. 创建分支
-git branch [分支名]
-
-# 3. 切换分支
-git checkout [分支名]
-
-# 4. 创建并切换分支（常用）
-git checkout -b [分支名]
-
-# 5. 合并分支（切换到主分支再合并）
-git checkout main        # 先切到主分支
-git merge [分支名]        # 合并指定分支到主分支
-
-# 6. 删除分支
-git branch -d [分支名]    # 删除已合并的分支
+```bash
+git reset --hard HEAD@{2}    # 回到 reset 之前的状态
+# 或者
+git checkout -b rescue ghi9012  # 从丢失的 commit 创建新分支
 ```
 
-# 6. 克隆项目
-
-- 已有关联账号 / 邮箱前提，不用 `git init` 
-- 创建一个包含完整历史、所有文件、本地仓库 `.git` 的本地目录
-
-```cpp
-# 1. 新建/进入空文件夹 
-# 2. 直接执行：
-   git clone [GitHub仓库地址]
-```
+> reflog 是本地的，克隆新仓库没有 reflog。默认保留 90 天。

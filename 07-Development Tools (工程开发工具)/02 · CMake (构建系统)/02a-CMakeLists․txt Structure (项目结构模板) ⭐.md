@@ -1,68 +1,72 @@
 
+> 核心考点：最小可用结构、各指令的作用与顺序
 
-# 1. 速览
+## 最小工程模板
 
+```cmake
+cmake_minimum_required(VERSION 3.20)         # 声明最低 CMake 版本
+project(MyProject VERSION 1.0 LANGUAGES CXX) # 项目名、版本、语言
 
-# 2. 标准 CMakeLists.txt 模板
+set(CMAKE_CXX_STANDARD 17)                 # C++ 标准
+set(CMAKE_CXX_STANDARD_REQUIRED ON)        # 强制要求，找不到就报错
+set(CMAKE_CXX_EXTENSIONS OFF)              # 禁用 GNU 扩展，使用纯标准
 
-- 文件名 `CMakeLists.txt`
-- 选择编译方案：要注释掉另外两种
+# 收集源文件
+add_executable(myapp
+    src/main.cpp
+    src/utils.cpp
+)
 
-```cpp
-# 1. 指定最低支持的 CMake 版本（兼容主流环境，3.10最稳妥）
-cmake_minimum_required(VERSION 3.10)
-
-# 2. 定义项目名称，会自动设置${PROJECT_NAME}变量
-project("项目名")
-
-# 3. 强制指定使用 C++17 标准
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# 4. 开启编译命令导出（方便VSCode等IDE代码补全、跳转）
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# 5. 把对应目录加入头文件搜索路径
-include_directories(include)
-
-# 方案1：单文件编译(目标名和源文件名一致) ->文件名.exe
-add_executable("文件名" src/"文件名".cpp)
-
-# 方案2：多文件自动编译(自动收集src目录下所有.cpp文件) ->项目名.exe
-file(GLOB_RECURSE SOURCES src/ *.cpp)
-add_executable(${PROJECT_NAME} ${SOURCES})
-
-# 方案3：通用可执行文件(固定 main 入口) ->main.exe
-add_executable(main src/main.cpp)
+# 或者构建库
+add_library(mylib STATIC
+    src/mylib.cpp
+)
 ```
 
-```cpp
-# 补充：链接库（例如链接 pthread 线程库） 
-target_link_libraries( "目标名" pthread)
+## 典型多目录项目结构
+
+```
+MyProject/
+├── CMakeLists.txt          ← 根 CMakeLists
+├── src/
+│   ├── CMakeLists.txt      ← 子目录
+│   └── main.cpp
+├── lib/
+│   ├── CMakeLists.txt
+│   └── mylib.cpp
+├── include/
+│   └── mylib.h
+└── tests/
+    ├── CMakeLists.txt
+    └── test_main.cpp
 ```
 
-# 3. 项目目录结构
+根 CMakeLists.txt：
 
-```cpp
-Project根目录/
-├── build/          # 编译目录（必须单独创建）
-├── include/        # 头文件目录（.h/.hpp）
-├── src/            # 源文件（.cpp）
-└── CMakeLists.txt  # 配置文件
+```cmake
+cmake_minimum_required(VERSION 3.20)
+project(MyProject)
+
+add_subdirectory(lib)    # 处理 lib/CMakeLists.txt
+add_subdirectory(src)    # 处理 src/CMakeLists.txt
+add_subdirectory(tests)
 ```
 
-# 4. 日常编辑命令
+## 常用变量
 
-```cpp
-# 1. 进入编译目录
-cd build
+```cmake
+${PROJECT_NAME}           # 项目名
+${PROJECT_SOURCE_DIR}     # 根 CMakeLists.txt 所在目录
+${CMAKE_CURRENT_SOURCE_DIR}  # 当前 CMakeLists.txt 所在目录
+${CMAKE_BINARY_DIR}       # 构建目录（通常是 build/）
+${CMAKE_INSTALL_PREFIX}   # 安装路径（默认 /usr/local）
+```
 
-# 2. 生成构建文件（.. 指代上级目录下的 CMakeLists.txt）
-cmake ..
+## 构建流程
 
-# 3. 编译
-make
-
-# 4. 运行可执行文件
-./main
+```bash
+mkdir build && cd build
+cmake ..                  # 配置阶段：生成 Makefile / Ninja 文件
+cmake --build .           # 构建阶段：实际编译
+cmake --install .         # 安装（可选）
 ```
