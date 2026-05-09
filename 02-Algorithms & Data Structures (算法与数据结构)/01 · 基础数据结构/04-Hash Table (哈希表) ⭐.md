@@ -1,138 +1,73 @@
-# Hash Table
-#algorithm #hash #unordered_map #unordered_set
 
+> 核心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
 
-# 0. 核心
+## 哈希表原理
 
-- **用空间换时间**
-- 哈希函数将数据映射到数组下标，实现极速的存在性判断与映射查询
-- 性能：
-	- 平均 / 最好： $O(1)$（常数级，极快）
-	- 最坏：$O(N)$（严重哈希冲突，极少出现）
-- 高频应用场景：
-    - 去重
-    - 计数
-    - 映射
-    - 前缀和 + 哈希
+将 key 通过哈希函数映射到数组下标，实现 O(1) 平均查找。
 
-# 1. 核心容器
+**冲突解决：**
 
-### 1.1 哈希表
+- **链地址法（Chaining）**：每个槽存链表，冲突元素追加到链表（Python dict、Java HashMap）
+- **开放寻址法（Open Addressing）**：冲突时线性探测/二次探测找下一个空槽（Python 3.6+ dict 使用紧凑实现）
 
-- `unordered_map<Key, Value>`：（*Java* `HashMap`)
-	- 无序键值对
-	- 增删改查 $O(1)$
-- `unordered_set<Key>`：（*Java* `HashSet`)
-	- 无序单值集合
-	- 去重 $O(1)$
-### 1.2 有序表
+**负载因子（Load Factor）= 已存元素 / 总槽数**，超过阈值（通常 0.75）触发扩容（rehash）。
 
-- `map<key, value>`：（ *Java* `TreeMap` )
-	- 有序键值对（红黑树）
-	- $O(log N)$
-- `set<key>`：（ *Java* `TreeSet` )
-	- 有序单值集合
-	- $O(log N)$
+## 常见使用模式
 
-# 3. 核心对比
+python
 
-| 特性    | 哈希表(unordered_) | 有序表(map/set)  |
-| ----- | --------------- | ------------- |
-| 顺序    | 无序              | 有序            |
-| 时间    | 平均 $O(1)$       | 稳定 $O(log N)$ |
-| Key要求 | 需哈希实现           | 需比较实现         |
-| 适用场景  | 极速增删改查          | 排序/范围查找       |
-| 内存占用  | 较高              | 较低            |
-
-# 4. 自定义类存入哈希表
- 
-必须手动提供哈希逻辑：
 ```cpp
+#include <unordered_map>
 #include <unordered_set>
-#include <functional> // 必须包含
 
-// 1. 定义自定义类
-struct Node {
-    int value;
-    Node(int v) : value(v) {}
-
-    // 必须重载 == ，用于哈希表内部的去重比较
-    bool operator==(const Node& other) const {
-        return value == other.value;
-    }
-};
-
-// 2. 为自定义类特化 std::hash
-namespace std {
-    template<> struct hash<Node> {
-        size_t operator()(const Node& node) const {
-            // 根据业务逻辑生成哈希值，常用 Objects.hash 或 位运算
-            return hash<int>()(node.value); 
-        }
-    };
-}
-
-// 3. 直接使用
-void test() {
-    unordered_set<Node> mySet;
-    mySet.insert(Node(1));
-}
-```
-# 5. 经典案例
-
-### 5.1 去重（Set）
-
-```cpp
-unordered_set<int> st;
-for (int x : nums) st.insert(x);
-```
-
-### 5.2 计数（Map）
-
-```cpp
-unordered_map<int, int> cnt;
-for (int x : nums) cnt[x]++;
-```
-
-### 5.3 两数之和
-
-```cpp
-// 
+// 两数之和
 vector<int> twoSum(vector<int>& nums, int target) {
-    unordered_map<int, int> mp;
-    for (int i = 0; i < (int)nums.size(); ++i) {
+    unordered_map<int, int> seen;  // value → index
+    for (int i = 0; i < (int)nums.size(); i++) {
         int need = target - nums[i];
-        // 检查是否已经遍历过所需的数
-        if (mp.find(need) != mp.end()) { 
-            return {mp[need], i};
-        }
-        // 没找到就把当前数存进去，供后续查找
-        mp[nums[i]] = i;
+        if (seen.count(need)) return {seen[need], i};
+        seen[nums[i]] = i;
     }
     return {};
 }
+
+// 字母异位词分组
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    unordered_map<string, vector<string>> groups;
+    for (auto& s : strs) {
+        string key = s;
+        sort(key.begin(), key.end());
+        groups[key].push_back(s);
+    }
+    vector<vector<string>> res;
+    for (auto& [k, v] : groups) res.push_back(v);
+    return res;
+}
+
+// 自定义哈希（pair 作 key）
+struct PairHash {
+    size_t operator()(const pair<int,int>& p) const {
+        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 16);
+    }
+};
+unordered_map<pair<int,int>, int, PairHash> mp;
 ```
 
-### 5.4 最长连续序列（Hard）
+## C++ unordered_map
 
 ```cpp
-int longestConsecutive(vector<int>& nums) {
-    unordered_set<int> st(nums.begin(), nums.end());
-    int maxLen = 0;
-    
-    for (int num : st) {
-        // 关键：如果是序列的起点 (num-1 不存在)，才开始计算
-        if (st.find(num - 1) == st.end()) { 
-            int currentNum = num;
-            int currentLen = 1;
-            
-            while (st.find(currentNum + 1) != st.end()) {
-                currentNum++;
-                currentLen++;
-            }
-            maxLen = max(maxLen, currentLen);
-        }
+#include <unordered_map>
+unordered_map<string, int> freq;
+freq["hello"]++;
+freq.count("hello");      // 是否存在（0 或 1）
+freq.find("world");       // 返回迭代器
+freq.erase("hello");
+
+// 自定义哈希（对 pair 等非内置类型）
+struct PairHash {
+    size_t operator()(const pair<int,int>& p) const {
+        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 16);
     }
-    return maxLen;
-}
+};
+unordered_map<pair<int,int>, int, PairHash> mp;
 ```

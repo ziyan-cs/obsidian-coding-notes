@@ -1,85 +1,94 @@
 
+> 核心考点：双指针的四种模式、滑动窗口、前缀和
 
-## 核心
+## 双指针四种模式
 
-- **两个位置指针按规则移动，降低枚举复杂度**
-- 适用关键词：
-    - 有序数组
-    - 子数组 / 子序列
-    - 去重
-    - 左右夹逼
-    - 快慢指针
-- 什么时候用
-	- 需要同时维护 “ 左边界 + 右边界 ”
-	- 链表判环、找中点、删除重复元素
-	- 问题本来是双重枚举，但可以通过移动规则减少重复计算
+### 模式一：对撞指针（左右夹逼）
 
-## 常见题型
+两指针从两端向中间移动，适合**有序数组**的搜索问题：
 
-### 1. 左右夹逼
+python
 
 ```cpp
-int l = 0, r = n - 1;
-while (l < r) {
-    int s = a[l] + a[r];
-    if (s == target) break;
-    if (s < target) ++l;
-    else --r;
-}
-```
-
-### 2. 快慢指针
-
-- 常用于链表中点、判环、原地去重
-
-```cpp
-ListNode* slow = head;
-ListNode* fast = head;
-while (fast && fast->next) {
-    slow = slow->next;
-    fast = fast->next->next;
-}
-```
-
-### 3. 同向双指针
-
-- 常用于去重、维护合法区间
-
-```cpp
-int j = 0;
-for (int i = 0; i < n; ++i) {
-    while (j < n && ok(i, j)) ++j;
-}
-```
-
-## 高频题型模板
-
-### 1. 有序数组两数之和
-
-```cpp
-vector<int> twoSumSorted(vector<int>& a, int target) {
-    int l = 0, r = (int)a.size() - 1;
+// 有序数组两数之和
+vector<int> twoSum(vector<int>& nums, int target) {
+    int l = 0, r = (int)nums.size() - 1;
     while (l < r) {
-        int s = a[l] + a[r];
-        if (s == target) return {l, r};
-        if (s < target) ++l;
-        else --r;
+        int s = nums[l] + nums[r];
+        if      (s == target) return {l, r};
+        else if (s < target)  l++;
+        else                  r--;
     }
     return {};
 }
 ```
 
-### 2. 原地去重（有序数组）
+典型题：Two Sum II、三数之和、盛最多水的容器、回文判断。
+
+### 模式二：快慢指针
+
+两指针同向，速度不同，用于**链表环检测、找中点**（详见链表章节）。
+
+### 模式三：滑动窗口
+
+维护一个可变长度的窗口 `[l, r]`，右指针扩张，左指针收缩：
 
 ```cpp
-int removeDuplicates(vector<int>& a) {
-    if (a.empty()) return 0;
-    int slow = 1;
-    for (int fast = 1; fast < (int)a.size(); ++fast) {
-        if (a[fast] != a[fast - 1]) {
-            a[slow++] = a[fast];
+// 长度最小的子数组（子数组和 >= target）
+int minSubArrayLen(int target, vector<int>& nums) {
+    int l = 0, total = 0, res = INT_MAX;
+    for (int r = 0; r < (int)nums.size(); r++) {
+        total += nums[r];
+        while (total >= target) {
+            res = min(res, r - l + 1);
+            total -= nums[l++];
         }
     }
-    return slow;
+    return res == INT_MAX ? 0 : res;
 }
 ```
+
+**无重复字符的最长子串（变长窗口 + 哈希）：**
+
+```cpp
+// 无重复字符的最长子串
+int lengthOfLongestSubstring(string s) {
+    unordered_map<char, int> seen;
+    int l = 0, res = 0;
+    for (int r = 0; r < (int)s.size(); r++) {
+        if (seen.count(s[r]) && seen[s[r]] >= l)
+            l = seen[s[r]] + 1;
+        seen[s[r]] = r;
+        res = max(res, r - l + 1);
+    }
+    return res;
+}
+```
+
+### 模式四：快速分区（原地操作）
+
+```cpp
+// 颜色分类 0/1/2，O(n) 时间 O(1) 空间
+void sortColors(vector<int>& nums) {
+    int lo = 0, mid = 0, hi = (int)nums.size() - 1;
+    while (mid <= hi) {
+        if      (nums[mid] == 0) swap(nums[lo++], nums[mid++]);
+        else if (nums[mid] == 1) mid++;
+        else                     swap(nums[mid], nums[hi--]);
+    }
+}
+```
+
+## 前缀和
+
+```cpp
+// 构建前缀和，O(1) 区间查询
+vector<int> prefix(nums.size() + 1, 0);
+for (int i = 0; i < (int)nums.size(); i++)
+    prefix[i + 1] = prefix[i] + nums[i];
+
+// 区间 [l, r] 的和
+int rangeSum = prefix[r + 1] - prefix[l];
+```
+
+二维前缀和、差分数组是进阶变体，用于范围加减操作。

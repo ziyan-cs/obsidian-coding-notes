@@ -1,16 +1,4 @@
 
-# 0. 核心
-
-- **通过指针把一个个节点串起来的线性结构**
-- 相关特征：
-    - 频繁插入 / 删除节点
-    - 重点在“连接关系”而不是随机访问
-    - 反转链表、合并链表、判环、找中点
-
-# 1. 高频技巧
-
-- 节点定义
-
 ```cpp
 struct ListNode {
     int val;
@@ -19,306 +7,91 @@ struct ListNode {
 };
 ```
 
--  遍历链表
+## 反转链表（迭代）
 
 ```cpp
-for (ListNode* cur = head; cur; cur = cur->next) {
-    cout << cur->val << ' ';
-}
-```
-
--  头插法
-
-```cpp
-ListNode* node = new ListNode(5);
-node->next = head;
-head = node;
-```
-
-### 反转链表
-
-```cpp
-// 时间 O(N) 空间 O(1)
 ListNode* reverseList(ListNode* head) {
     ListNode* prev = nullptr;
-    ListNode* cur = head;
-    while (cur) {
-        ListNode* nxt = cur->next;
-        cur->next = prev;
-        prev = cur;
-        cur = nxt;
+    ListNode* curr = head;
+    while (curr) {
+        ListNode* nxt = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nxt;
     }
     return prev;
 }
 ```
 
-```cpp
-// 时间 O(N) 空间 O(N)
-ListNode* reverse(ListNode* pre,ListNode* cur){
-    if(cur == NULL) return pre;
-    ListNode* temp = cur->next;
-    cur->next = pre;
-    return reverse(cur,temp);
-}
-ListNode* reverseList(ListNode* head) {
-    return reverse(NULL, head);
-}
-```
+**反转区间 [left, right]（92题）：** 找到 left-1 位置的节点，断开后反转子链表，再拼接。
 
-1. Dummy（哨兵）节点
+## 环检测（Floyd 判圈）
 
 ```cpp
-ListNode dummy(0);
-dummy.next = head;
-```
-
-# 2. 经典案例
-
-### 3.1 判断否为回文
-
-```cpp
-bool isPalindrome(ListNode* head) {
-    if (!head || !head->next) return true;
-
-    ListNode *slow = head, *fast = head;
-    while (fast->next && fast->next->next) {
+bool hasCycle(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+    while (fast && fast->next) {
         slow = slow->next;
         fast = fast->next->next;
+        if (slow == fast) return true;
     }
-	
-    ListNode* right = reverse(slow->next);
-    ListNode* left = head;
-    bool res = true;
-	
-    while (right) {
-        if (left->val != right->val) {
-            res = false;
-            break;
+    return false;
+}
+
+// 找环入口
+ListNode* detectCycle(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) {
+            slow = head;
+            while (slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+            return slow;  // 入口节点
         }
-        left = left->next;
-        right = right->next;
     }
-	
-    slow->next = reverse(right);
-    return res;
+    return nullptr;
 }
 ```
 
-### 3.2 荷兰国旗问题（链表版）
+**原理：** 设链表头到环入口距离为 a，环长为 b。相遇时 slow 走了 a+k，fast 走了 a+k+nb（n 圈），因 fast=2×slow，所以 nb=a+k，即从相遇点再走 a 步回到入口。
+
+## 合并两个有序链表
 
 ```cpp
-ListNode* netherlandsFlag(ListNode* head, int pivot) {
-    ListNode *sh = NULL, *st = NULL;
-    ListNode *eh = NULL, *et = NULL;
-    ListNode *bh = NULL, *bt = NULL;
-		
-    ListNode* cur = head;
-    while (cur) {
-        ListNode* next = cur->next;
-        cur->next = NULL;
-		
-        if (cur->val < pivot) {
-            if (!sh) sh = st = cur;
-            else st = st->next = cur;
-        } else if (cur->val == pivot) {
-            if (!eh) eh = et = cur;
-            else et = et->next = cur;
-        } else {
-            if (!bh) bh = bt = cur;
-            else bt = bt->next = cur;
-        }
-        cur = next;
-    }
-		
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     ListNode dummy(0);
-    ListNode* p = &dummy;
-		
-    if (sh) { p->next = sh; p = st; }
-    if (eh) { p->next = eh; p = et; }
-    if (bh) { p->next = bh; }
+    ListNode* curr = &dummy;
+    while (l1 && l2) {
+        if (l1->val <= l2->val) { curr->next = l1; l1 = l1->next; }
+        else                    { curr->next = l2; l2 = l2->next; }
+        curr = curr->next;
+    }
+    curr->next = l1 ? l1 : l2;
+    return dummy.next;
+}
 
+// 合并 K 个有序链表（最小堆）
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    auto cmp = [](ListNode* a, ListNode* b){ return a->val > b->val; };
+    priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
+    for (auto node : lists)
+        if (node) pq.push(node);
+
+    ListNode dummy(0);
+    ListNode* curr = &dummy;
+    while (!pq.empty()) {
+        curr->next = pq.top(); pq.pop();
+        curr = curr->next;
+        if (curr->next) pq.push(curr->next);
+    }
     return dummy.next;
 }
 ```
 
-### 3.3 复制带随机指针的链表
-
-```cpp
-// rand：随机指针，可指向链表中任意节点，也可指向 null
-class Node {
-public:
-    int value;
-    Node* next;
-    Node* rand;
-    Node(int val) : value(val), next(nullptr), rand(nullptr) {}
-};
-	
-//时间 O(N)，空间 O(N)
-Node* copyRandomListHash(Node* head) {
-    if (!head) return nullptr;
-    unordered_map<Node*, Node*> map;
-		
-    // 第一次遍历：创建所有克隆节点，存入哈希表
-    Node* cur = head;
-    while (cur) {
-        map[cur] = new Node(cur->value);
-        cur = cur->next;
-    }
-		
-    // 第二次遍历：设置next和rand指针
-    cur = head;
-    while (cur) {
-        map[cur]->next = map[cur->next];
-        map[cur]->rand = map[cur->rand];
-        cur = cur->next;
-    }
-		
-    return map[head];
-}
-```
-
-```cpp
-//时间 O(N)，空间 O(1)
-Node* copyRandomList(Node* head) {
-    if (!head) return nullptr;
-		
-    // 1. 插入克隆节点：原节点后紧跟克隆节点
-    Node* cur = head;
-    while (cur) {
-        Node* clone = new Node(cur->value);
-        clone->next = cur->next;
-        cur->next = clone;
-        cur = clone->next;
-    }
-		
-    // 2. 设置克隆节点的rand指针
-    cur = head;
-    while (cur) {
-        Node* clone = cur->next;
-        clone->rand = cur->rand ? cur->rand->next : nullptr;
-        cur = clone->next;
-    }
-		
-    // 3. 拆分链表，分离原链表与克隆链表
-    Node* newHead = head->next;
-    cur = head;
-    Node* cloneCur = newHead;
-    while (cur) {
-        cur->next = cloneCur->next;
-        cur = cur->next;
-        if (cur) cloneCur->next = cur->next;
-        cloneCur = cloneCur->next;
-    }
-		
-    return newHead;
-}
-```
-
-### 3.4 相交链表
-
-```cpp
-// 判断有无环：如果有环，返回第一个入环节点；如果无环，返回 null
-Node* getLoopNode(Node* head) {
-	if (!head || !head->next || !head->next->next) {
-		return nullptr;
-	}
-	Node* slow = head->next;
-	Node* fast = head->next->next;
-	while (slow != fast) {
-		if (!slow->next || !fast->next->next) {
-			return nullptr;
-		}
-		slow = slow->next;
-		fast = fast->next->next;
-	}
-	fast = head;
-	while (slow != fast) {
-		slow = sloe->next;
-		fast = fast->next;
-	}
-	return fast;
-}
-
-// 1. 一个有环一个无环：不可能相交，直接返回 null
-
-  
-Node* noLoop(Node* head1, Node* head2) {
-	if (!head1 || !head2) {
-		return nullptr;
-	}
-	Node* cur1 = head1;
-	Node* cur2 = head2;
-	int cnt = 0;
-	while (cur1->next) {
-		cnt++;
-		cur1 = cur1->next;
-	}
-	while (cur2->next) {
-		cnt--;
-		cur2 = cur2->next;
-	}
-	if (n > 0) {
-		cur1 = head1;
-		cur2 = head2;
-	} else {
-		cur1 = head2;
-		cur2 = head1;
-	}
-	cnt = abs(cnt);
-	while (cnt != 0) {
-		n--;
-		cur1 = cur1->next;
-	}
-	while (cur1 != cur2) {
-		cur1 = cur1->next;
-		cur2 = cur2->next;
-	}
-	return cur1;
-}
-
-// 3. 两个都有环：如果相交，返回第一个相交节点；如果不相交，返回 null
-Node* bothLoop(Node* head1, Node* loop1, Node* head2, Node* loop2) {
-	Node* cur1 = head1;
-	Node* cur2 = head2;
-	if (loop1 != loop2) {
-		cur1 = loop1;
-		cur2 = loop2;
-		int cnt = 0;
-		while (cur1->next) {
-			cnt++;
-			cur1 = cur1->next;
-		}
-		while (cur2->next) {
-			cnt--;
-			cur2 = cur2->next;
-		}
-		if (n > 0) {
-			cur1 = head1;
-			cur2 = head2;
-		} else {
-			cur1 = head2;
-			cur2 = head1;
-		}
-		cnt = abs(cnt);
-		while (cnt != 0) {
-			n--;
-			cur1 = cur1->next;
-		}
-		while (cur1 != cur2) {
-			cur1 = cur1->next;
-			cur2 = cur2->next;
-		}
-		return cur1;
-	} else {
-		cur1 = loop1->next;
-		while (cur1 != loop1) {
-			if (cur1 == loop2) {
-				return loop1;
-			}
-			cur1 = cur1->next;
-		}
-		return nullptr;
-	}
-	
-
-```
+**合并 K 个有序链表：** 用最小堆，初始将 K 个链表头入堆，每次取最小节点，将其 next 入堆，O(N log K)。

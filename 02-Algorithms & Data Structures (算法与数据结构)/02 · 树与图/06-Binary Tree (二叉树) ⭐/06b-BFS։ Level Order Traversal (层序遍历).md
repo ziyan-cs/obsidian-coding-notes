@@ -1,52 +1,49 @@
-# Binary Tree BFS
 
+>见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
 
-# 1. 树与二叉树基础
+层序遍历的变体：
 
-- 树的定义
-    
-    由 n 个结点构成的有限集合，有且仅有一个根结点；其余结点分为若干互不相交的子树。
-- 二叉树定义
-    
-    每个结点最多有两棵子树，且子树有左右之分，顺序不能颠倒。
+python
 
-# 2. 核心术语
-
-- 结点的度：结点拥有的子树个数
-- 树的度：所有结点中，最大的度
-- 叶子结点：度为 0 的结点
-- 分支结点：度不为 0 的结点
-- 深度 / 高度：
-    
-    - 深度：结点到根的路径长度（根深度为 1）
-    - 高度：结点到最远叶子的路径长度（叶子高度为 1）
-    
-
-# 3. 二叉树五大性质（必背）
-
-1. 第 `k` 层最多结点数：2k−1
-2. 高度为 `h` 的二叉树，结点总数最多：2h−1
-3. 任意二叉树：n0​=n2​+1（叶子数 = 度 2 结点数 + 1）
-4. 完全二叉树：若结点从 1 编号，`i` 的左孩子是 `2i`，右孩子是 `2i+1`，父结点是 `⌊i/2⌋`
-5. 完全二叉树高度：h=⌊log2​n⌋+1
-
-# 4. 两种特殊二叉树
-
-- **满二叉树**：每一层结点都达到最大值，所有叶子在最底层。
-- **完全二叉树**：前 `h-1` 层是满的，最后一层结点靠左连续排列。
-
-# 5. 二叉树存储结构
-
-- **顺序存储（数组）**：
-    
-    适合完全二叉树，用下标对应父子关系，空结点用占位符表示。
-- **链式存储（最常用）**：
-    
 ```cpp
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-};
+// 锯齿形层序
+vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    if (!root) return {};
+    queue<TreeNode*> q;
+    q.push(root);
+    vector<vector<int>> res;
+    bool l2r = true;
+    while (!q.empty()) {
+        int sz = q.size();
+        deque<int> level;
+        for (int i = 0; i < sz; i++) {
+            auto node = q.front(); q.pop();
+            if (l2r) level.push_back(node->val);
+            else     level.push_front(node->val);
+            if (node->left)  q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+        res.push_back(vector<int>(level.begin(), level.end()));
+        l2r = !l2r;
+    }
+    return res;
+}
+
+// 右视图
+vector<int> rightSideView(TreeNode* root) {
+    if (!root) return {};
+    queue<TreeNode*> q;
+    q.push(root);
+    vector<int> res;
+    while (!q.empty()) {
+        int sz = q.size();
+        for (int i = 0; i < sz; i++) {
+            auto node = q.front(); q.pop();
+            if (i == sz - 1) res.push_back(node->val);
+            if (node->left)  q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+    }
+    return res;
+}
 ```
