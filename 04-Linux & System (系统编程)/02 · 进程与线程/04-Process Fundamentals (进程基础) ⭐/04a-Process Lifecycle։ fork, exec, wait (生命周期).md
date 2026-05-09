@@ -113,10 +113,127 @@
 	- `SIGKILL(9)`
 	- `SIGCHLD(17)`
 
-# 6. 线程（pthread🔥）
 
-# 7. 线程同步
+> 核心考点：fork 的行为、COW 机制、exec 族函数、wait 的必要性
 
-### mutex
+## 进程的本质
 
-### semaphore
+进程是**程序的一次运行实例**，是操作系统资源分配的基本单位。每个进程有独立的：
+
+- 虚拟地址空间（代码段、数据段、堆、栈）
+- 文件描述符表
+- 信号处理表
+- PID、PPID（父进程 ID）
+
+---
+
+## fork()
+
+```c
+#include <unistd.h>
+pid_t pid = fork();
+```
+
+`fork()` 创建一个与父进程几乎完全相同的子进程：
+
+```
+父进程
+  │
+  ├─ fork() ─────────────────┐
+  │                          │
+  ↓ 父进程继续               ↓ 子进程（从 fork() 返回处开始执行）
+  pid > 0（子进程 PID）      pid == 0
+```
+
+```c
+pid_t pid = fork();
+if (pid < 0) {
+    perror("fork failed");
+} else if (pid == 0) {
+    // 子进程
+    printf("Child PID: %d\n", getpid());
+    exit(0);
+} else {
+    // 父进程
+    printf("Parent, child PID: %d\n", pid);
+}
+```
+
+### Copy-On-Write（COW，写时复制）
+
+fork 之后，父子进程**共享同一份物理内存页**，并不立即复制。只有当某方尝试**写入**时，才触发缺页中断，内核将该页复制一份给写入方。
+
+```
+fork 后：
+父进程页表 ──┐
+              ├──→ 共享物理页（只读标记）
+子进程页表 ──┘
+
+某方写入时：
+写入方 ──→ 缺页中断 ──→ 内核复制该页 ──→ 写入方使用新副本
+另一方 ──→ 继续使用原来的页
+```
+
+- ✅ fork 速度快，不用复制全部内存
+- ❌ 写入时有复制开销（大数据结构 fork 后立即写代价高）
+
+---
+
+## exec 族函数
+
+`exec` 用一个新程序**替换当前进程的地址空间**，但保留 PID：
+
+```c
+#include <unistd.h>
+
+execl("/bin/ls", "ls", "-l", NULL);     // 列出参数
+execlp("ls", "ls", "-l", NULL);         // 在 PATH 中查找
+execv("/bin/ls", argv);                  // 参数用数组
+execvp("ls", argv);                      // PATH + 数组
+execve("/bin/ls", argv, envp);           // 完整版（可指定环境变量）
+```
+
+- exec 成功后，原来的代码段、数据段、堆栈全部被替换
+- exec 失败才会返回（返回 -1）
+- 打开的文件描述符默认继承（除非设置 `FD_CLOEXEC`）
+
+**fork + exec = 创建新进程执行新程序（Shell 的工作方式）：**
+
+```c
+pid_t pid = fork();
+if (pid == 0) {
+    execvp("gcc", args);    // 子进程执行 gcc
+    perror("exec failed");
+    exit(1);
+} else {
+    wait(NULL);             // 父进程等待子进程结束
+}
+```
+
+---
+
+## wait / waitpid
+
+父进程必须调用 `wait` 来回收子进程资源，否则子进程变成**僵尸进程**：
+
+```c
+#include <sys/wait.h>
+
+pid_t wait(int *status);                          // 等待任意子进程
+pid_t waitpid(pid_t pid, int *status, int opts);  // 等待指定子进程
+
+// 检查退出状态
+int status;
+pid_t child = waitpid(pid, &status, 0);
+
+if (WIFEXITED(status))                    // 正常退出？
+    printf("exit code: %d\n", WEXITSTATUS(status));
+if (WIFSIGNALED(status))                  // 被信号杀死？
+    printf("signal: %d\n", WTERMSIG(status));
+```
+
+**非阻塞等待（轮询）：**
+
+```c
+waitpid(pid, &status, WNOHANG);   // 不阻塞，若子进程未结束返回 0
+```

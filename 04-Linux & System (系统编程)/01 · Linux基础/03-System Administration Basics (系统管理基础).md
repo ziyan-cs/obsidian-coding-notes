@@ -555,3 +555,61 @@ journalctl -k               # 查看内核日志（替代 dmesg）
 - `journalctl -u 服务名`：查看指定服务日志
 - `tail -f /var/log/syslog`：实时监控日志，排查定时任务、服务启动问题
 - `grep "error" /var/log/auth.log`：过滤错误信息，快速定位问题
+
+## 进程查看
+
+```bash
+ps aux               # 查看所有进程
+ps aux | grep nginx  # 过滤进程
+top                  # 动态查看（M 按内存排序，P 按 CPU）
+htop                 # 更友好的 top（需安装）
+pstree -p            # 以树形展示进程父子关系
+```
+
+## 系统资源
+
+```bash
+free -h              # 内存使用情况
+df -h                # 磁盘空间使用
+du -sh dir/          # 目录大小
+lscpu                # CPU 信息
+uname -a             # 内核版本和系统信息
+uptime               # 系统运行时间和负载
+vmstat 1             # 每秒刷新：CPU/内存/IO 统计
+iostat -x 1          # 磁盘 IO 统计
+```
+
+## 网络管理
+
+```bash
+ip addr              # 查看网卡和 IP（替代 ifconfig）
+ip route             # 查看路由表
+ss -tlnp             # 查看监听端口和对应进程（替代 netstat）
+ping host            # 连通测试
+curl -v URL          # HTTP 请求（-v 显示详情）
+wget URL             # 下载文件
+traceroute host      # 路由追踪
+```
+
+## 用户与权限管理
+
+```bash
+useradd -m alice     # 创建用户（-m 创建家目录）
+passwd alice         # 设置密码
+usermod -aG sudo alice  # 将 alice 加入 sudo 组
+su - alice           # 切换到 alice
+sudo cmd             # 以 root 权限执行
+visudo               # 安全编辑 sudoers 文件
+```
+
+## 服务管理（systemd）
+
+```bash
+systemctl start nginx     # 启动服务
+systemctl stop nginx      # 停止
+systemctl restart nginx   # 重启
+systemctl status nginx    # 查看状态
+systemctl enable nginx    # 开机自启
+systemctl disable nginx   # 取消自启
+journalctl -u nginx -f    # 查看服务日志（实时）
+```
