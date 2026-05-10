@@ -1,37 +1,5 @@
 {
-  "editor:insert-link": [
-    {
-      "modifiers": [
-        "Alt",
-        "Shift"
-      ],
-      "key": "L"
-    }
-  ],
-  "editor:toggle-bullet-list": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "-"
-    }
-  ],
-  "editor:toggle-numbered-list": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "1"
-    }
-  ],
-  "editor:toggle-blockquote": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "`"
-    }
-  ],
+  "editor:insert-link": [],
   "insert-current-date": [
     {
       "modifiers": [
@@ -50,14 +18,6 @@
   ],
   "editor:follow-link": [],
   "app:go-back": [],
-  "editor:insert-wikilink": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "L"
-    }
-  ],
   "editor:insert-mathblock": [
     {
       "modifiers": [
@@ -114,15 +74,6 @@
       "key": "ArrowLeft"
     }
   ],
-  "workspace:copy-url": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "C"
-    }
-  ],
   "workspace:close": [],
   "graph:open": [],
   "workspace:close-window": [],
@@ -142,5 +93,45 @@
       ],
       "key": "B"
     }
-  ]
+  ],
+  "editor:toggle-bullet-list": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "`"
+    }
+  ],
+  "editor:toggle-numbered-list": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "1"
+    }
+  ],
+  "workspace:goto-tab-1": [],
+  "workspace:copy-url": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "U"
+    }
+  ],
+  "editor:delete-paragraph": [],
+  "file-explorer:new-file": [],
+  "workspace:new-tab": [],
+  "markdown:add-metadata-property": [],
+  "workspace:goto-tab-2": [],
+  "workspace:goto-tab-3": [],
+  "workspace:goto-tab-4": [],
+  "workspace:goto-tab-5": [],
+  "workspace:goto-tab-6": [],
+  "workspace:goto-tab-7": [],
+  "workspace:goto-tab-8": [],
+  "workspace:previous-tab": [],
+  "workspace:next-tab": [],
+  "workspace:goto-last-tab": []
 }
