@@ -2,18 +2,6 @@
 
 # 1. Vim 使用
 
-### 1.基础操作
-
-- 模式分类
-	- 正常模式：移动光标、复制删除 
-	- 插入模式：编辑输入内容
-	- 命令模式：保存、退出、替换等
-
-- 模式切换
-	- `i`：进入插入模式
-	- `:`：进入底行命令模式
-	- `esc`：回退正常模式
-
 - 光标移动
 	- `w`：跳到下个单词开头
 	- `b`：跳到上个单词开头
@@ -79,26 +67,6 @@
 - `:q`：关闭当前窗口
 - `:qa`：关闭所有窗口
 
-### 3.  .vimrc🔥
-
-- 配置文件路径：`~/.vimrc`
-
-- 生效方式：保存后 `:source ~/.vimrc` 或重启 Vim
-
-- `:noh`：去除语法高亮
-
-```shell
-# 基础配置
-set number          # 显示行号
-set tabstop=4       # Tab 宽度4
-set shiftwidth=4    # 自动缩进宽度4
-set expandtab       # Tab 转为空格
-set autoindent      # 自动缩进
-set smartindent     # 智能缩进
-set hlsearch        # 搜索高亮
-set incsearch       # 边输入边搜索
-set encoding=utf-8  # 编码
-```
 
 ### 环境变量🔥
 
@@ -319,23 +287,6 @@ RES=$(add 3 5)
 put
 echo "3 + 5 = $RES"
 ```
-
-# 4. 高级工具🔥
-
-### 管道 |
-
-- `|`：前标准输出作为后标准输入，只传正常输出
-- `ps aux | grep sshd`
-- `netstat -tulpn | grep :80`
-- `tail -f /var/log/syslog | grep "error"
-
-### 重定向：> / >> / 2> / &>
-
-
-### 文本工具实战
-
-- `grep` / `awk` / `sed` / `sort` / `uniq` 组合使用
-
 
 ## Linux 文件系统层级
 

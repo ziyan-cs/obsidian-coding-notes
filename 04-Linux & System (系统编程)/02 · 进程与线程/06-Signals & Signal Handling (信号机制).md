@@ -9,19 +9,21 @@
 
 ## 常见信号
 
-|信号|编号|默认行为|常见来源|
-|---|---|---|---|
-|SIGINT|2|终止|Ctrl+C|
-|SIGTERM|15|终止|kill 命令默认|
-|SIGKILL|9|强制终止|不可捕获、不可忽略|
-|SIGSTOP|19|暂停|不可捕获、不可忽略|
-|SIGCONT|18|继续|恢复被暂停的进程|
-|SIGSEGV|11|Core dump|非法内存访问|
-|SIGABRT|6|Core dump|abort() 调用|
-|SIGCHLD|17|忽略|子进程状态改变|
-|SIGPIPE|13|终止|向已关闭的管道写入|
-|SIGALRM|14|终止|alarm() 定时器到期|
-|SIGUSR1/2|10/12|终止|用户自定义|
+| 分类       | 信号        | 编号    | 默认行为      | 常见来源            |
+| -------- | --------- | ----- | --------- | --------------- |
+| 优雅终止     | SIGINT    | 2     | 终止        | Ctrl+C          |
+|          | SIGTERM   | 15    | 终止        | kill 命令默认       |
+|          | SIGQUIT   | 3     | Core dump | Ctrl+\          |
+| 强制控制     | SIGKILL   | 9     | 强制终止      | 不可捕获            |
+|          | SIGSTOP   | 19    | 暂停        | 不可捕获            |
+|          | SIGCONT   | 18    | 继续        | 恢复暂停进程          |
+| 程序崩溃     | SIGSEGV   | 11    | Core dump | 非法内存访问          |
+|          | SIGABRT   | 6     | Core dump | `abort()` 调用    |
+|          | SIGFPE    | 8     | Core dump | 除零 / 浮点错误       |
+| 进程管理     | SIGCHLD   | 17    | 忽略        | 子进程状态改变         |
+| 网络 / IO  | SIGPIPE   | 13    | 终止        | 向已关闭管道写入        |
+| 定时 / 自定义 | SIGALRM   | 14    | 终止        | `alarm()` 定时器到期 |
+|          | SIGUSR1/2 | 10/12 | 终止        | 用户自定义信号         |
 
 ---
 

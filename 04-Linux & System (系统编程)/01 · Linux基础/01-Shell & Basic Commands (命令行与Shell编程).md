@@ -350,7 +350,6 @@ tee file             # 同时输出到终端和文件
 
 ## Shell 脚本要点
 
-
 ```bash
 #!/bin/bash
 set -euo pipefail    # 遇到错误立即退出，未定义变量报错，管道失败也报错
