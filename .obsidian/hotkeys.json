@@ -133,5 +133,6 @@
   "workspace:goto-tab-8": [],
   "workspace:previous-tab": [],
   "workspace:next-tab": [],
-  "workspace:goto-last-tab": []
+  "workspace:goto-last-tab": [],
+  "editor:toggle-checklist-status": []
 }
