@@ -4,7 +4,7 @@
 > 对应 tag：v0.1 
 > 状态：已完成 ✅
 
-> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/blob/f2a2f3f022a5ad0c1020350cb0f1a23c1d0f1b55/README.md)
+> 版本快照：[webserver-cpp-v0.1](https://github.com/ziyan-cs/webserver-cpp/blob/5ba43acc3f30c5f42a2109f6e7563a5869e450bf/README.md)
 
 > 开发环境见 [00-overview (总览)](/09-My%20Projects/webserver-cpp/00-overview%20(总览).md)
 
@@ -75,6 +75,14 @@
 3. 对于 TCP 字节流无边界的认知，从 “看过理论” 到 “踩坑验证”
 4. 掌握 CMake 多模块构建逻辑，理解根目录与子模块 `CMakeLists.txt` 的分工
 5. 实践类封装与职责分离，体会分层设计对调试效率的实际影响
+
+---
+
+## 口述整理
+
+这个项目是我大一独立完成的 C++ WebServer 基础版本，基于 POSIX Socket 实现阻塞 IO 模型。服务端按照套接字流程完成配置、绑定、监听，循环接受客户端连接，对收到的数据做原样返回。代码结构上 Config 类封装服务器启动配置，Server 类负责 socket 生命周期与 echo 主流程，main 只做初始化与启动，不含业务逻辑。
+
+这个版本的核心瓶颈是单次只能服务一个客户端，处理连接和数据收发全程阻塞，一个客户端卡住就拖垮整个服务器，下一个客户端必须等当前连接断开才能接入。这是v0.2引入epoll的直接动机。
 
 ---
 
