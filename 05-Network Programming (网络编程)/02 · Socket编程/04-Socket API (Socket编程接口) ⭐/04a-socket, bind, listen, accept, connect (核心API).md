@@ -104,7 +104,7 @@ bind(fd, (struct sockaddr*)&addr, sizeof(addr));
 
 ```cpp
 // 函数原型
-int listen(int sockfd; int backlog);
+int listen(int sockfd, int backlog);
 ```
 
 - `backlog`：**全连接队列**（Accept Queue）的最大长度
