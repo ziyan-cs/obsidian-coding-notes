@@ -1,3 +1,9 @@
+---
+tags:
+  - database
+  - optimization
+---
+
 > **核心考点**：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
 ## EXPLAIN 输出详解

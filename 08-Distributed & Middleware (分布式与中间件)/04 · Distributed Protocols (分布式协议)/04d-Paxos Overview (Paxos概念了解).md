@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - distributed-protocol
+---
+
 > **核心考点**：Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 ## Paxos 简介

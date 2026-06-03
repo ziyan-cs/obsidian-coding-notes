@@ -23,7 +23,11 @@
       "Bash(mv \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03e-perf։ CPU Profiling & Flamegraph \\(性能火焰图\\).md\" \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03e-perf：CPU Profiling & Flamegraph \\(性能火焰图\\).md\")",
       "Bash(mv \"07-Development Tools \\(工程开发工具\\)/04 · Other Tools \\(其他工具速查\\)/04b-Docker Basics։ Image & Container \\(Docker基础\\).md\" \"07-Development Tools \\(工程开发工具\\)/04 · Other Tools \\(其他工具速查\\)/04b-Docker Basics：Image & Container \\(Docker基础\\).md\")",
       "Bash(python3)",
-      "Bash(python3 -c \"print\\(1\\)\")"
+      "Bash(python3 -c \"print\\(1\\)\")",
+      "Bash(grep -rn '^```$' --include=\"*.md\" .)",
+      "Bash(grep -l \"^---$\")",
+      "Bash(python *)",
+      "Bash(node *)"
     ]
   }
 }

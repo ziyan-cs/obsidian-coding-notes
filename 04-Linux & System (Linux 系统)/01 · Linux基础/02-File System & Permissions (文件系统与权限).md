@@ -1,3 +1,9 @@
+---
+tags:
+  - linux
+  - basics
+---
+
 > **核心考点**：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
 
 ## Vim 使用

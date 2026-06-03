@@ -1,3 +1,9 @@
+---
+tags:
+  - devtools
+  - cmake
+---
+
 > **核心考点**：find_package 的两种模式（Module/Config）、搜索路径、如何编写 Find 脚本
 
 ## find_package 基础

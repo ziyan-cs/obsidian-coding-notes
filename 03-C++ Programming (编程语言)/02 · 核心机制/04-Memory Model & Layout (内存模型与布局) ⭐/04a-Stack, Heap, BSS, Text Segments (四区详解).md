@@ -1,3 +1,10 @@
+---
+tags:
+  - cpp
+  - core-mechanism
+  - memory-layout
+---
+
 > **核心考点**：进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
 
 ```

@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - engineering
+---
+
 > **核心考点**：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
 ## GDB 核心命令

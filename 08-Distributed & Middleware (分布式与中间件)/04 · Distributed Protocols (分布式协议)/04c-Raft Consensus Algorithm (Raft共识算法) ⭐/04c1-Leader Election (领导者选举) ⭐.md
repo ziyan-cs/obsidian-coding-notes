@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - distributed-protocol
+---
+
 > **核心考点**：Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 
 ## Raft 角色与任期

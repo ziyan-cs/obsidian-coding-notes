@@ -1,3 +1,9 @@
+---
+tags:
+  - algorithm
+  - practice
+---
+
 > **核心考点**：高频易错题整理、边界条件与 corner case 总结、常见陷阱复盘
 
 ## 使用说明

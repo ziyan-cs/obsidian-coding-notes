@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - modern-cpp
+---
+
 > **核心考点**：optional、variant、any 三种新型类型工具的适用场景
 
 ## std::optional（C++17）

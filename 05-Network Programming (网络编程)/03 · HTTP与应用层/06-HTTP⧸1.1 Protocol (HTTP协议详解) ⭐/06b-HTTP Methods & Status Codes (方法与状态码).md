@@ -1,3 +1,9 @@
+---
+tags:
+  - network
+  - http
+---
+
 > **核心考点**：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
 ## HTTP 请求方法

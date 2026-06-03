@@ -1,3 +1,9 @@
+---
+tags:
+  - database
+  - high-availability
+---
+
 > **核心考点**：主从复制 binlog 异步复制流程、半同步复制保证、主从延迟原因与解决方案
 
 ## 主从复制概述

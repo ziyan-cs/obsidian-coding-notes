@@ -1,3 +1,9 @@
+---
+tags:
+  - algorithm
+  - core-algorithm
+---
+
 > **核心考点**：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
 ## 最长递增子序列（LIS）

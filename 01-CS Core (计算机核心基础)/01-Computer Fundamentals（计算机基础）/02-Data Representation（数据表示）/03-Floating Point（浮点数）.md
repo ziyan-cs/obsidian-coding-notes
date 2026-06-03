@@ -1,3 +1,9 @@
+---
+tags:
+  - cs
+  - fundamentals
+---
+
 > **核心考点**：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
 
 ## IEEE 754 浮点数格式

@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - redis
+---
+
 > **核心考点**：dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
 ## Redis dict 结构

@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - concurrency
+---
+
 > **核心考点**：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
 ## 什么是无锁（Lock-Free）

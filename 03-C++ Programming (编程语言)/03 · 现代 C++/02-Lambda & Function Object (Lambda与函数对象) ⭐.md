@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - modern-cpp
+---
+
 > **核心考点**：捕获方式、泛型 lambda、std::function 的开销
 
 ## Lambda 基本语法

@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - mq
+---
+
 > **核心考点**：Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
 ## Kafka 核心概念

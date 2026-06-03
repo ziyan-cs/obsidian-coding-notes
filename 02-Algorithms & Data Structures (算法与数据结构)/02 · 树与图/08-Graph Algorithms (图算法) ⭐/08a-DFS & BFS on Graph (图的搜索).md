@@ -1,3 +1,9 @@
+---
+tags:
+  - algorithm
+  - tree-graph
+---
+
 > **核心考点**：图的邻接表/邻接矩阵、DFS 递归与 BFS 队列、visited 标记防环
 > **核心考点**：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 

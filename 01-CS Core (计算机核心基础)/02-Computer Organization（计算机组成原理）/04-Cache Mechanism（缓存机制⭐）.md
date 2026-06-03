@@ -1,3 +1,9 @@
+---
+tags:
+  - cs
+  - computer-org
+---
+
 > **核心考点**：Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
 
 ## Cache 基本结构

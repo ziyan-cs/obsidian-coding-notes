@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - distributed-protocol
+---
+
 > **核心考点**：分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
 
 ## 分布式事务场景

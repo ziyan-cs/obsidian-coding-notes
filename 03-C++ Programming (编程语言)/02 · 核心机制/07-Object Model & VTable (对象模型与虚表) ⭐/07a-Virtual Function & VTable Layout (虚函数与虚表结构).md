@@ -1,3 +1,10 @@
+---
+tags:
+  - cpp
+  - core-mechanism
+  - vtable
+---
+
 > **核心考点**：虚函数表结构、vptr 指针、单继承下的 VTable 布局
 
 ## 虚函数表（VTable）

@@ -1,3 +1,9 @@
+---
+tags:
+  - algorithm
+  - string-bit
+---
+
 > **核心考点**：KMP next 数组构建、匹配过程 O(n+m)、next 数组含义（最长公共前后缀）
 
 ## KMP 核心思想

@@ -1,3 +1,9 @@
+---
+tags:
+  - devtools
+  - debug
+---
+
 
 > **核心考点**：Memcheck 的错误类型、如何读报告、抑制误报
 

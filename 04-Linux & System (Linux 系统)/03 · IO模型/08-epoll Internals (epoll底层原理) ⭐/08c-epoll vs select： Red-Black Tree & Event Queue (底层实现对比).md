@@ -1,3 +1,9 @@
+---
+tags:
+  - linux
+  - io-model
+---
+
 > **核心考点**：epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
 
 ## select 的局限性

@@ -1,3 +1,9 @@
+---
+tags:
+  - database
+  - sql
+---
+
 > **核心考点**：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
 ## 联合查询

@@ -1,3 +1,9 @@
+---
+tags:
+  - network
+  - networking
+---
+
 > **核心考点**：为什么存在、带来什么问题、如何正确处理
 
 ## 为什么存在 TIME_WAIT？

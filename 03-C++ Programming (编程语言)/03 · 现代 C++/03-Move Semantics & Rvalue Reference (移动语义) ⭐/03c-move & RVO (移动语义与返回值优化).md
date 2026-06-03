@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - modern-cpp
+---
+
 > **核心考点**：std::move 的本质（右值引用转换）、RVO/NRVO 编译器优化、返回值优化触发条件
 
 ### std::move

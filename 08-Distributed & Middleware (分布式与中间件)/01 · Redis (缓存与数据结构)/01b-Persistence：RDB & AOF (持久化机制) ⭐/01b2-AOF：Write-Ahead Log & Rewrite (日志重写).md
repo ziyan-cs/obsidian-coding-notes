@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - redis
+---
+
 > **核心考点**：AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
 ## AOF 日志

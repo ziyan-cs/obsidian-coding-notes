@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - modern-cpp
+---
+
 > **核心考点**：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
 
 ## std::string_view（C++17）

@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - distributed-protocol
+---
+
 > **核心考点**：日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
 
 ## Raft 日志结构

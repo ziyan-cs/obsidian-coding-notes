@@ -1,3 +1,9 @@
+---
+tags:
+  - algorithm
+  - tree-graph
+---
+
 > **核心考点**：Dijkstra（堆优化）、Bellman-Ford（负权检测）、Floyd 多源最短路
 > **核心考点**：Dijkstra 非负权最短路（堆优化）、Bellman-Ford 负权最短路与检测、Floyd 多源最短路
 

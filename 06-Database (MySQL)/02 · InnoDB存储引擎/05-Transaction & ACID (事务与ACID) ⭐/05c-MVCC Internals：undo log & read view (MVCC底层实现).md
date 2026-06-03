@@ -1,3 +1,9 @@
+---
+tags:
+  - database
+  - innodb
+---
+
 > **核心考点**：MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
 ## MVCC 核心思想

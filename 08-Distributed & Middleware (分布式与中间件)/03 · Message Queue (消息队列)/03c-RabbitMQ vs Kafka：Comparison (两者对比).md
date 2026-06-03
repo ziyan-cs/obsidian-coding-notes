@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - mq
+---
+
 > **核心考点**：RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 
 ## 设计哲学对比

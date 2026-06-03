@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - redis
+---
+
 > **核心考点**：Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
 ## Redis 单线程模型

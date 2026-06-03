@@ -1,3 +1,9 @@
+---
+tags:
+  - cpp
+  - stl
+---
+
 > **核心考点**：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
 ## 适配器模式

@@ -1,3 +1,9 @@
+---
+tags:
+  - network
+  - socket
+---
+
 > **核心考点**：主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构

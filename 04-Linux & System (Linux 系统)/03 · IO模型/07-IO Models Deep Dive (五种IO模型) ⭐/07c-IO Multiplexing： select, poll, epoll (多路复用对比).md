@@ -1,3 +1,9 @@
+---
+tags:
+  - linux
+  - io-model
+---
+
 > **核心考点**：select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
 
 ## select

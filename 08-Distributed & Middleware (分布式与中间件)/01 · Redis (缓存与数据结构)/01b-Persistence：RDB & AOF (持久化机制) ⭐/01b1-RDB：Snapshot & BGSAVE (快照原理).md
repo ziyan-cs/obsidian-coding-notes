@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - redis
+---
+
 > **核心考点**：RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
 ## RDB 快照

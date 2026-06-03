@@ -1,3 +1,9 @@
+---
+tags:
+  - distributed
+  - distributed-protocol
+---
+
 > **核心考点**：Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 
 ## Raft 安全性保证

@@ -1,3 +1,9 @@
+---
+tags:
+  - database
+  - innodb
+---
+
 > **核心考点**：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
 ## Redo Log 的物理结构
