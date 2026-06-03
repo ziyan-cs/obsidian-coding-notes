@@ -9,7 +9,11 @@
       "Bash(cp /e/my_Personal/obsidian_coding_notes/\"02 · 核心机制\"/09-*.md ./\"02 · 核心机制\"/)",
       "Bash(cp /e/my_Personal/obsidian_coding_notes/\"02 · 核心机制\"/10-*.md ./\"02 · 核心机制\"/)",
       "Bash(cp /e/my_Personal/obsidian_coding_notes/\"03 · 现代 C++\"/09-*.md ./\"03 · 现代 C++\"/)",
-      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"03 · 现代 C++\"/10-*.md ./\"03 · 现代 C++\"/)"
+      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"03 · 现代 C++\"/10-*.md ./\"03 · 现代 C++\"/)",
+      "Bash(printf '%s\\\\n' \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/08-epoll Internals \\(epoll底层原理\\) ⭐/\"*.md)",
+      "Bash(rm \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/07-IO Models Deep Dive \\(五种IO模型\\) ⭐/07c-IO Multiplexing։ select, poll, epoll \\(多路复用对比\\).md\")",
+      "Bash(rm \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/08-epoll Internals \\(epoll底层原理\\) ⭐/08b-Level Trigger vs Edge Trigger։ LT⧸ET \\(触发模式\\).md\")",
+      "Bash(printf '%s\\\\n' *.md)"
     ]
   }
 }

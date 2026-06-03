@@ -1,383 +1,421 @@
 > **核心考点**：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
-# 帮助命令
 
-- `which [cmd]`：查看命令的 `PATH` 指定目录
+## 帮助命令
 
-- `type [cmd]`： 判断命令类型
-		
-	- `builtin` 内置命令：
-		- `Shell` 自带（对当前 `Shell` 执行）
-		- 如 `cd` `help` `type` `echo` `export`
-		
-	- `external` 外部命令：
-		- 独立二进制文件（在 `fork` 子进程执行）
-		- 如 `ls` `cat` `find` `date` `which`
+```bash
+which <cmd>          # 查找命令的 PATH 路径
+type <cmd>           # 判断命令类型：builtin（Shell 内置）或 external（外部二进制）
+  # builtin: cd, help, type, echo, export（Shell 自带，当前进程执行）
+  # external: ls, cat, find, date（独立二进制，fork 子进程执行）
 
-- `help [cmd]`
-	- 内置命令
+help <cmd>           # 查看内置命令帮助
+<cmd> --help         # 查看外部命令帮助
+man <cmd/config>     # 查看命令/配置文件手册（纯文本，快速查参数）
+info <cmd/tool>      # 查看 GNU 工具详细文档（结构化，超详细）
+```
 
-- `[cmd]--help`
-	- 外部命令
+## 文件与目录操作
 
-- `man [cmd/config]`
-	- 外部命令 / 配置文件 （所有）
-	- 纯文本、快速查参数
+### 路径与导航
 
-- `info [cmd/tool]`
-	- 外部命令 / 工具  （仅 **GNU** 开发的）
-	- 结构化、超详细
+```bash
+pwd                  # 查看当前绝对路径
+cd                   # 进入家目录
+cd ~                 # 进入家目录
+cd <dir>             # 切换至指定目录
+cd -                 # 返回上一个目录
+cd ..                # 回到上一级目录
+```
 
-# 文件 & 目录操作
+### 列出目录内容
 
-### 路径（绝对 / 相对）
+```bash
+ls                   # 读取目录 inode，列出子项
+ls -lh               # 列表显示，人类可读大小
+ls -a                # 显示所有文件（含隐藏文件）
+ls -t                # 按修改时间排序（最新在前）
+ls -S                # 按文件大小排序（最大在前）
+ls -R                # 递归子目录
 
-- `pwd`：查看当前绝对路径
-- `cd`：进入家目录
-- `cd ~`：进入家目录
-- `cd [dir_path]`：切换至指定目录
-- `cd ..`：回到上一级目录
+tree                 # 树形结构展示目录
+tree -L 2            # 指定递归深度
+tree -d              # 仅显示目录
+tree -I "node_modules" # 排除指定目录
+```
 
-### ls / tree
+### 创建与删除
 
-- `ls`：读取目录 **inode**， 列出目录子项
-	- `-l`：（列表）
-	- `-h`：（ K / M / G ）
-	- `-a`：（所有）
-	- `-t`：（新修改在前）
-	- `-S`：（大文件在前）
-	- `-R [num]`：（子目录深度，默认 1 ）
+```bash
+mkdir <dir>          # 创建单级目录
+mkdir -p a/b/c       # 递归创建多级目录
+touch <file>         # 创建空文件 / 更新文件时间戳
+```
 
-- `tree`：树形结构，展示目录结构
-	- `-f`：（文件绝对路径）
-	- `-h`：（ K / M / G ）
-	- `-a`：（所有）
-	- `-d`：（只目录）
-	- `-L [num]`：（子目录深度，默认 1）
-	- `-I "***"`：（排除指定）
+### 复制、移动、删除
 
-### mkdir / touch
+```bash
+cp <src> <dst>       # 复制文件
+cp -r <src> <dst>    # 递归复制目录
+cp -f <src> <dst>    # 强制覆盖
 
-- `mkdir [dir_path]`：创建单级目录
-	- `-p`：（多级目录）
-- `touch [file_name]`：创建空文件
+mv <src> <dst>       # 移动 / 重命名文件或目录
 
-### cp / mv / rm
+rm <file>            # 删除文件
+rm -r <dir>          # 递归删除目录
+rm -f <file>         # 强制删除（不提示）
+rm -rf <dir>         # 递归强制删除（危险！）
+```
 
-- `cp [src] [dst]`：复制文件 / 目录
-	- `-r`：（递归所有）
-	- `-f`：（强制覆盖）
+### 链接 🔥
 
-- `mv [src] [dst]`：移动 / 重命名文件 / 目录
-	- `-r`：（递归所有）
-	- `-f`：（强制覆盖）
+```bash
+ln -s <src> <dst>    # 创建软链接（快捷方式，可跨文件系统，支持目录）
+ln <src> <dst>       # 创建硬链接（文件备份，指向同一 inode，不可跨文件系统）
 
-- `rm [dir_path/file_name]`：删除文件 / 目录
-	- `-r`：（递归所有）
-	- `-f`：（强制删除）
+# 删除软链接时目录末尾不要加 /
+rm -rf <link_dst>
+```
 
-### ln软硬链接🔥
+## 文件内容查看
 
-- `ln -s [src] [dst]`：原文件 / 目录 快捷方式
-- `rm -rf [dst]`：删除软链接，目录末尾不加 `/`
+```bash
+cat <file>           # 全量输出文件内容
+cat -n <file>        # 显示行号
 
-- `ln [src] [dst]`：原文件 / 目录 文件备份
-- `rm -rf [dst]`：删除硬链接
+more <file>          # 分页查看（q 退出）
+less <file>          # 分页查看（功能更强）
+  # ↑/↓：上下滚动  PageUp/PageDown：翻页
+  # g：跳到开头  Shift+G：跳到末尾
+  # /keyword：向下搜索（n 下一个，N 上一个）
+  # ?keyword：向上搜索
+  # q：退出
 
-# 文件内容操作
+head -n 20 <file>    # 显示前 20 行（默认 10 行）
+tail -n 20 <file>    # 显示后 20 行（默认 10 行）
+tail -f <file>       # 实时追踪文件末尾（查看日志常用）
 
-### cat / more / less
+echo "text"          # 控制台输出
+echo "text" > file   # 重定向写入（覆盖）
+echo "text" >> file  # 重定向追加
 
-- `cat [file_name]`：全量输出
-	- `-n`：（显示行号）
+wc <file>            # 统计行数 + 单词数 + 字节数
+wc -l <file>         # 仅行数
+wc -w <file>         # 仅单词数
+wc -c <file>         # 仅字节数
+wc -L <file>         # 显示最长行的长度
+```
 
-- `more [file_name]`分页查看
-	- `q`：退出
+## 查找与过滤 🔥
 
-- `less [file_name]`：分页查看
-	- `↑`：上一行
-	- `↓ / Enter`：下一行
-	- `PageUp`：上一页
-	- `PageDown`：下一页
-	- `g`：跳到开头
-	- `Shift + G`：跳到末尾
-	- `/[关键字]`：往下搜（n 下一个，N 上一个）
-	- `?[关键字]`：往上搜
-	- `q`：退出
+### find — 文件查找
 
-### head / tail🔥
+```bash
+find <dir> -name "*.cpp"      # 按文件名查找
+find <dir> -type f             # 只查文件（f），目录（d）
+find <dir> -mtime -1           # 最近 1 天修改的文件
+find <dir> -size +100M         # 大于 100MB 的文件
+find <dir> -user alice         # 按所有者查找
+find <dir> -name "*.o" -delete # 查找并删除
+```
 
-- `head [..] [file_name]`：默认头 10 行
-	-  `-n [num]`：指定行数
+### locate — 快速数据库查找
 
-- `tail [..] [file_name]`：默认尾 10 行
-	- `-n [num]`：指定行数
-	- `-f`：追踪尾内容更新
+```bash
+updatedb                      # 更新文件名数据库
+locate <file>                 # 基于预建数据库快速查找
+```
 
-### echo / wc
+### grep — 文本搜索 🔥
 
-- `echo "内容"`：控制台输出
-- `echo "内容" > [file_name]`：输出重定向（覆盖）
-- `echo "内容" >> [file_name]`：追加
+```bash
+grep <pattern> <file>         # 在文件中搜索
+grep -n <pattern> <file>      # 显示匹配行号
+grep -i <pattern> <file>      # 忽略大小写
+grep -r <pattern> <dir>       # 递归搜索目录
+grep -v <pattern> <file>      # 反向匹配（显示不包含的行）
+grep -c <pattern> <file>      # 仅统计匹配行数
 
-- `wc [..] [file_name]`：统计 行数 + 单词数 + 字节数
-	- `-l`：仅行数 
-	- `-w`：仅单词数
-	- `-c`：仅字节数	
-	- `-m`：仅字符数
-	- `-L`：仅最长行的长度
+# 正则表达式
+grep "^start" <file>          # 以 start 开头
+grep "end$" <file>            # 以 end 结尾
+grep "." <file>               # 匹配任意单个字符
+grep "a*" <file>              # 匹配 a 出现 0 次或多次
+```
 
-# 查找与过滤
+### sort / uniq — 排序与去重
 
-### find🔥
+```bash
+sort <file>                   # 按行排序
+sort -n <file>                # 按数字大小排序
+sort -r <file>                # 倒序
+sort -k 2 <file>              # 按第 2 列排序
+sort -t ',' <file>            # 指定分隔符
 
-- `find [dir_path] 
-	- `[关键字] [file_name]`：关键字
-	- `-name [file_name]`：文件名
-	- `-user [user_name]` ：拥有者
-	- `-mtime [num]`：按修改时间（推荐）
-	- `-atime [num]`：按访问时间
-	- `-size [num]` ：按文件大小
-		- `+n` 大于  `-n` 小于 `n` 等于
+uniq <file>                   # 去重（必须先排序！）
+uniq -c <file>                # 显示重复次数
+uniq -d <file>                # 只显示重复行
+uniq -u <file>                # 只显示不重复行
+```
 
-### locate
+### awk — 按列处理 🔥
 
-- `updatedb`：首次运行前，创建 / 更新数据库
-- `lacate [file_name]`：基于预建数据库查找
+```bash
+awk '{print $1}' <file>       # 输出第 1 列（默认空格分隔）
+awk -F ',' '{print $1,$3}'    # 指定逗号分隔符，输出第 1、3 列
+awk '{sum+=$1} END {print sum}' # 计算第 1 列总和
 
-### grep🔥
+# 内置变量
+  # $0：整行内容  $1~$N：第 N 列  $NF：最后一列
+  # NR：当前行号  NF：当前行字段数
+  # BEGIN{}：处理前执行  END{}：处理后执行
+```
 
-- 正则表达式
-- `grep [..] 关键字 [dir_path/file_name]`
-	- `-n`：显示匹配行的行号
-	- `-i`：不区分字母大小写
-	- `-r`：递归查找目录下所有文件
-	- `-v`：反向匹配，显示不包含关键字的行
-	- `-c`：只输出匹配到的行数
-	- `^关键字`：匹配以关键字开头的行
-	- `关键字$`：匹配以关键字结尾的行
-	- `[a-z]`：匹配小写字母
-	- `.`：匹配任意单个字符
-	- `*`：匹配前一个字符 0 次或多次
+### sed — 流编辑器
 
-### sort / uniq
-
-- `sort [..] [file_name]`：对文本内容按行排序
-	- `-n`：按数字大小排序
-	- `-r`：倒序排序
-	- `-k`：按指定列排序
-	- `-u`：去重（同 uniq）
-	- `-t`：指定分隔符
-
-- `uniq [..] [file_name]`：去重、统计重复行（必须先排序）
-	- `-c`：显示重复次数
-	- `-d`：只显示重复行
-	- `-u`：只显示不重复行
-
-### awk
-
-- `awk`：按列提取、过滤、计算、格式化输出
-	- `-F "分隔符"`：指定列分隔符（默认空格 / 制表符）
-	- `$0`：整行内容
-	- `$1 ~ $N`：第 N 列
-	- `$NF`：最后一列
-	- `'{print $1}'`：输出指定列
-	- `NR`：当前行号
-	- `BEGIN{}`：处理前执行
-	- `END{}`：处理后执行
-
-### sed
-
-- `sed`：批量文本替换、删除、插入，不修改原文件
-	- `s/old/new/g`：全局替换
-	- `/pattern/d`：删除匹配行
-	- `-i`：直接修改文件（生产中慎用，可先备份）
+```bash
+sed 's/old/new/g' <file>      # 全局替换（不改原文件）
+sed -i 's/old/new/g' <file>   # 直接修改文件（慎用）
+sed '/pattern/d' <file>       # 删除匹配行
+sed -n '5,10p' <file>         # 打印第 5-10 行
+```
 
 ### cut / tr / xargs
 
-- `cut`：按字节 / 字符 / 字段提取文本
-    - `-d`：指定分隔符
-    - `-f`：指定要提取的列
-    - `-c`：按字符位置提取
-
-- `tr`：替换、删除、去重字符
-    - `'a-z' 'A-Z'`：大小写转换
-    - `-d`：删除字符
-    - `-s`：压缩重复字符
-
-- `xargs`：标准输入转为命令行参数
-	- `-I {}`：定义占位符
-	- `-n`：每次传递的参数个数
-
-# 压缩与解压
-
-### tar🔥
-
-- 选项
-    - `-c`：产生 `.tar` 打包文件
-    - `-v`：显示详细信息
-    - `-z`：打包并压缩
-    - `-x`：解包 **.tar** 文件
-    - `-f`：指定压缩后的文件名（必须放在最后）
-
-- 打包（**.tar** ）
-	- `tar -cvf [archive_name].tar [src]`：打包不压缩
-	- `tar -xvf [archive_name].tar`：解压
-
-- 打包且压缩（**.tar.gz** ）
-	- `tar -zcvf [archive_name].tar.gz [src]`：打包压缩
-	- `tar -zxvf [archive_name].tar.gz`：解压
-	- `tar -zxvf [archive_name].tar.gz -C [dst]`：解压到指定目录
-	- `tar -ztvf [archive_name].tar.gz`：查看包内文件，不解压
-
-- 高压缩率（**tar.bz2** ）
-	- `tar -jcvf [archive_name].tar.bz2 [src]`：打包高压缩
-	- `tar -jxvf [archive_name].tar.bz2`：解压
-
-- 注意
-	- `tar` 的 `-f` 参数必须放在最后，紧跟压缩包名
-	- `tar` 默认保留原文件，`gzip` 默认删除原文件
-	- 跨平台优先用 `.tar.gz` 或 `.zip`
-	- 归档大文件用 `.tar.bz2` 
-	- 解压前先查看包内文件，避免覆盖同名文件
-
-### gzip / bzip2
-
-- 单文件（**.gz** ）
-	- `gzip [file_name]`：压缩单个文件
-	- `gzip -k [file_name]`：（保留原文件）
-	- `gunzip [archive_name].gz`：解压到当前目录
-
-- 跨平台（**.zip** ）
-	- `zip -r [archive_name].zip [src]`：递归压缩目录/文件
-	- `unzip [archive_name].zip`：解压到当前目录
-	- `unzip [archive_name].zip -d [btc]`：（到指定目录）
-	- `unzip -l [archive_name].zip`：只查看
-
-# 系统信息
-
-### date / uptime
-
-- `date`：显示当前完整时间
-- `date "+%Y-%m-%d %H:%M:%S"`：显示自定义格式时间
-	- 多空格 / 多参数 必须加引号
-- `sudo date -s "字符串具体时间"`：设置当前时间
-- `hwclock -w`：同步网络时间
-- `ntpdate ntp.aliyun.com`
-
-- `uptime`：显示系统运行时间、当前用户数、负载信息 
-- `当前时间 运行时长 用户数 平均负载(1分钟/5分钟/15分钟)`
-
-### ifconfig / ip addr
-
-- `ifconfig`：查看所有网卡信息
-- `ifconfig [网卡名] down/up`：关闭 / 启用网卡
-
-- `ip addr`：查看所有网卡信息
-- `ip link`：查看网卡启用状态
-
-### history / 常用快捷键
-
-- `history`：显示所有
-- `history 10`：显示最近 10 个
-- `history -c`：清空 ⚠️
-- `!`：执行上一条
-- `!5`：执行编号 5 指令
-- `!!`：重复执行上一条
-
-- `Ctrl+C`（终止进程）
-- `Ctrl+Z`（后台挂起）
-- `Ctrl+R`（搜索历史命令）
-- `Ctrl+L`：（清屏）
-- `Ctrl+A` / `Ctrl+E`：（跳到行首/行尾）
-
-## Shell 基础
-
-Shell 是用户与内核之间的命令解释器。常见 Shell：`bash`（最普遍）、`zsh`、`sh`（POSIX 标准）。
-
 ```bash
-echo $SHELL          # 查看当前 Shell
-chsh -s /bin/zsh     # 切换默认 Shell
+cut -d ',' -f 1,3 <file>      # 按逗号分隔，提取第 1、3 列
+cut -c 1-5 <file>             # 按字符位置提取
+
+tr 'a-z' 'A-Z' < <file>       # 小写转大写
+tr -d '\n' < <file>           # 删除换行符
+tr -s ' ' < <file>            # 压缩连续空格
+
+xargs -n 1 < <file>           # 每行一个参数执行
+find . -name "*.tmp" | xargs rm  # 查找并删除（慎用）
+xargs -I {} cp {} /backup/    # 用 {} 作占位符
 ```
 
-## 文件与目录
+## 压缩与解压
+
+### tar 🔥
 
 ```bash
-ls -alh              # 列出所有文件（含隐藏），人类可读大小
-tree 
-cd ..                # 回到上一个目录
-pwd                  # 打印当前路径
-mkdir -p a/b/c       # 递归创建目录
-cp -r src/ dst/      # 递归复制目录
-mv old new           # 移动/重命名
-rm -rf dir/          # 递归强制删除（危险！）
-ln -s target link    # 创建软链接
+# 打包（.tar）
+tar -cvf archive.tar <dir>       # 打包不压缩
+tar -xvf archive.tar             # 解包
+
+# 打包并压缩（.tar.gz）⭐ 最常用
+tar -zcvf archive.tar.gz <dir>   # 打包 + gzip 压缩
+tar -zxvf archive.tar.gz         # 解压
+tar -zxvf archive.tar.gz -C /dst # 解压到指定目录
+tar -ztvf archive.tar.gz         # 查看包内文件（不解压）
+
+# 高压缩率（.tar.bz2）
+tar -jcvf archive.tar.bz2 <dir>  # 打包 + bzip2 压缩
+tar -jxvf archive.tar.bz2        # 解压
 ```
 
-## 文件查看
+> **注意**：`-f` 必须紧跟压缩包名，放在最后。跨平台优先用 `.tar.gz` 或 `.zip`。
+
+### gzip / bzip2 / zip
 
 ```bash
-cat file             # 输出全文
-less file            # 分页查看（q 退出，/搜索）
-head -n 20 file      # 前 20 行
-tail -f file         # 实时追踪文件末尾（看日志）
-wc -l file           # 统计行数
+gzip <file>                    # 压缩单个文件（默认删除原文件）
+gzip -k <file>                 # 压缩并保留原文件
+gunzip <file>.gz               # 解压
+
+zip -r archive.zip <dir>       # 递归压缩
+unzip archive.zip              # 解压到当前目录
+unzip archive.zip -d /dst      # 解压到指定目录
+unzip -l archive.zip           # 只查看压缩包内容
 ```
 
-## 查找
+## 系统信息
 
 ```bash
-find . -name "*.cpp" -type f          # 按名称查找文件
-find . -mtime -1                      # 最近 1 天修改的文件
-find . -size +100M                    # 大于 100MB 的文件
-find . -name "*.o" -delete            # 查找并删除
-which gcc                             # 查找命令路径
-whereis gcc                           # 查找命令、源码、手册位置
+date                           # 当前完整时间
+date "+%Y-%m-%d %H:%M:%S"      # 自定义格式
+sudo date -s "2026-06-03 12:00:00"  # 设置时间
+hwclock -w                     # 系统时间写入硬件
+
+uptime                         # 系统运行时长 + 用户数 + 平均负载
+
+ifconfig                       # 查看网卡信息（旧）
+ip addr                        # 查看网卡信息（新，推荐）
+ip link                        # 查看网卡启用状态
+
+history                        # 命令历史
+history 10                     # 最近 10 条
+history -c                     # 清空历史 ⚠️
+!!                             # 重复上一条命令
+!5                             # 执行编号 5 的命令
 ```
+
+### 常用快捷键
+
+| 快捷键 | 作用 |
+|--------|------|
+| `Tab` | 命令/文件名补全 |
+| `Ctrl + C` | 终止当前进程 |
+| `Ctrl + Z` | 后台挂起当前进程 |
+| `Ctrl + D` | 退出当前 Shell |
+| `Ctrl + L` | 清屏 |
+| `Ctrl + A` / `Ctrl + E` | 跳到行首 / 行尾 |
+| `Ctrl + U` / `Ctrl + K` | 删除光标前 / 后所有字符 |
+| `Ctrl + R` | 搜索历史命令 |
+| `Ctrl + S` | ⚠️ 会卡住终端（用 `Ctrl + Q` 恢复） |
 
 ## 重定向与管道
 
-
 ```bash
 cmd > file           # 标准输出重定向（覆盖）
-cmd >> file          # 追加
+cmd >> file          # 标准输出重定向（追加）
 cmd 2> err.log       # 标准错误重定向
-cmd > out.log 2>&1   # 标准输出和错误都重定向到同一文件
+cmd > out.log 2>&1   # 标准输出和错误合并重定向
+cmd > /dev/null      # 丢弃所有输出
+
 cmd1 | cmd2          # 管道：cmd1 的输出作为 cmd2 的输入
-tee file             # 同时输出到终端和文件
+cmd | tee file       # 同时输出到终端和文件
 ```
 
-## Shell 脚本要点
+## Shell 脚本基础
+
+### 脚本结构与执行
 
 ```bash
-#!/bin/bash
-set -euo pipefail    # 遇到错误立即退出，未定义变量报错，管道失败也报错
+#!/bin/bash                    # shebang，必须第一行
+#!/usr/bin/env bash            # 更通用的写法
 
-# 变量
-NAME="world"
-echo "Hello, ${NAME}!"
+set -euo pipefail              # 严格模式：出错即停、未定义变量报错、管道失败报错
+```
 
-# 条件
-if [ -f "file.txt" ]; then
-    echo "file exists"
+### 变量
+
+```bash
+# 变量定义（等号两边不能有空格）
+name="world"
+readonly year="2026"           # 只读变量
+local tmp=$1                   # 局部变量（函数内使用）
+
+# 使用变量
+echo "Hello, ${name}!"         # 推荐加 {} 避免歧义
+echo $name                     # 简单引用可省略 {}
+
+# 命令替换
+dt=$(date)                     # 推荐
+dt2=`date`                     # 旧写法，不推荐
+```
+
+### 特殊变量
+
+```bash
+$0       # 脚本自身文件名
+$1 ~ $9  # 位置参数（${10} 获取第 10 个参数）
+$#       # 参数个数
+$@       # 所有参数（独立列表："a" "b" "c"）
+$*       # 所有参数（单个字符串："a b c"）
+$?       # 上一条命令退出码（0=成功，非0=失败）
+$$       # 当前脚本 PID
+$!       # 上一个后台进程 PID
+```
+
+### 条件判断
+
+```bash
+# 字符串判断
+[[ "$str" == "hello" ]]        # 相等
+[[ -z "$str" ]]                # 为空
+[[ -n "$str" ]]                # 非空
+
+# 数值判断（推荐 (( ))）
+(( a > 1 ))                    # >, >=, <, <=, ==, !=
+(( a > b && a > c ))           # 支持 && 和 ||
+
+# 兼容写法
+[[ "$a" -eq "$b" ]]            # -eq, -ne, -gt, -lt, -ge, -le
+
+# 文件判断
+[[ -e "$path" ]]               # 存在（文件或目录）
+[[ -f "$path" ]]               # 是普通文件
+[[ -d "$path" ]]               # 是目录
+[[ -x "$file" ]]               # 可执行
+[[ -r "$file" ]]               # 可读
+```
+
+### 控制流程
+
+```bash
+# if
+if (( $# < 2 )); then
+    echo "Usage: $0 <arg1> <arg2>"
+    exit 1
 fi
 
-# 循环
-for f in *.cpp; do
-    echo "Processing $f"
+# for
+for i in "$@"; do
+    echo "$i"
 done
 
-# 函数
-greet() {
-    local msg=$1      # local 限制变量作用域
-    echo "Hi, $msg"
-}
-greet "Alice"
+for (( i=0; i<=100; i++ )); do
+    ((sum += i))
+done
 
-# 特殊变量
-$0    # 脚本名
-$1~$9 # 位置参数
-$#    # 参数个数
-$?    # 上一条命令的退出状态（0=成功）
-$$    # 当前脚本 PID
-$@    # 所有参数列表
+# while
+while (( cnt <= 5 )); do
+    echo "Count: $cnt"
+    ((cnt++))
+done
+
+# case
+case $1 in
+    "start") echo "Starting...";;
+    "stop")  echo "Stopping...";;
+    *)       echo "Unknown: $1";;
+esac
 ```
+
+### 函数
+
+```bash
+function greet() {
+    local name=$1              # local 限制变量作用域
+    echo "Hello, $name"
+}
+
+add() {
+    local a=$1 b=$2
+    echo $((a + b))            # 通过 echo 返回结果
+}
+
+result=$(add 3 5)
+greet "Alice"
+```
+
+### 数值运算
+
+```bash
+# 推荐：$(( )) — 仅支持整数
+result=$(((2 + 3) * 4))
+
+# expr — 兼容 POSIX，操作符前后必须有空格
+result=$(expr 2 + 3)
+
+# let — 直接赋值
+let "result = (2 + 3) * 4"
+```
+
+### 输入输出
+
+```bash
+read -p "Enter name: " name           # 带提示符
+read -t 10 -p "Enter number: " num    # 10 秒超时
+
+# 单引号：原样输出，不解析变量
+# 双引号：解析变量，保留空格
+# 无引号：简单值，有空格会分词
+```
+
+> **工程要点**：
+> - 脚本中始终使用 `set -euo pipefail` 及早暴露错误
+> - 变量引用始终加双引号 `"$var"` 防止分词问题
+> - `[[ ]]` 比 `[ ]` 功能更强，支持 `&&` `||` 和正则
+> - `$(( ))` 是最推荐的整数运算方式

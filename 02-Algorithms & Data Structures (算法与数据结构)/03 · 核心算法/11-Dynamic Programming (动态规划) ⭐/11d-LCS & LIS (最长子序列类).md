@@ -1,147 +1,141 @@
-> **核心考点**：LCS 二维 DP 与滚动数组、LIS 的 O(n log n) 耐心排序、双序列 DP 通用模式
-# LCS & LIS
-#algorithm #dp #linear-dp #sequence #optimization
+> **核心考点**：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
-## ⚡ TL;DR（快速决策）
+## 最长递增子序列（LIS）
 
-- 线性 DP 本质是：**状态排成一条线，当前位置答案由前面若干位置转移而来**
-- 一看到这些特征，要优先想到线性 DP：
-    - 数组 / 字符串从左到右处理
-    - 当前答案依赖前一个或前几个状态
-    - 求最优值、方案数、可行性
-    - 经典题像爬楼梯、打家劫舍、最长上升子序列
-- 线性 DP 的核心不是背公式，而是：
-    - 状态怎么定义
-    - 从哪里转移过来
-- 如果问题天然沿着下标推进，优先先想线性 DP
-
-## 🧩 Core Idea（核心本质）
-
-- “线性”表示状态通常按 `i = 1..n` 顺着推进
-- 常见状态定义：
-    - `dp[i]`：前 `i` 个元素的最优答案
-    - `dp[i]`：以 `i` 结尾的最优答案
-- 最核心三问：
-    1. `dp[i]` 表示什么？
-    2. `dp[i]` 从哪些旧状态转移？
-    3. 初始值是什么？
-- 一句话理解：
-    - **当前位置的答案，建立在前面已经算好的答案上。**
-
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 爬楼梯模板
+### O(n²) DP 解法
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    int n = 5;
-    vector<int> dp(n + 1, 0);
-    dp[0] = 1;
-    dp[1] = 1;
-
-    for (int i = 2; i <= n; ++i) {
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
-
-    cout << dp[n] << '\\n';
-}
-```
-
-1. 打家劫舍模板
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int rob(vector<int>& nums) {
-    int n = nums.size();
-    if (n == 0) return 0;
-    if (n == 1) return nums[0];
-
-    vector<int> dp(n, 0);
-    dp[0] = nums[0];
-    dp[1] = max(nums[0], nums[1]);
-
-    for (int i = 2; i < n; ++i) {
-        dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
-    }
-    return dp[n - 1];
-}
-```
-
-1. 最长上升子序列（朴素 DP）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
 int lengthOfLIS(vector<int>& nums) {
-    int n = nums.size();
-    vector<int> dp(n, 1);
-    int ans = 1;
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < i; ++j) {
-            if (nums[j] < nums[i]) {
+    int n = nums.size(), res = 1;
+    vector<int> dp(n, 1);           // dp[i] = 以 i 结尾的最长递增子序列长度
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] < nums[i])
                 dp[i] = max(dp[i], dp[j] + 1);
-            }
         }
-        ans = max(ans, dp[i]);
+        res = max(res, dp[i]);
     }
-    return ans;
+    return res;
 }
 ```
 
-## ⚠️ Pitfalls（高频错误）
+### O(n log n) 贪心 + 二分（重点）
 
-- `dp[i]` 定义不清，导致转移乱写
-- 初始值没设好，后面全错
-- “前 i 个”和“以 i 结尾”这两类状态别混
-- 下标从 0 还是从 1 开始要统一
-- 有些题可以滚动优化，但别一开始就为了省空间把逻辑写乱
-
-## 🚀 Performance / Tips（性能优化）
-
-- 常见复杂度：
-    - 简单线性 DP 常是 $O(n)$
-    - 双层转移常是 $O(n^2)$
-- 看到只依赖前几个状态时，可考虑滚动数组 / 变量优化
-- 做题顺序建议：
-    - 先写清状态定义
-    - 再写转移
-    - 再补初始化
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 爬楼梯
-- 打家劫舍
-- 最大子数组和
-- 最长上升子序列
-- 字符串线性 DP
-
-## 🧾 Minimal Template（最小可运行模板）
+维护 `tails[k]` = 长度为 k+1 的递增子序列的最小末尾元素：
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 3, 4};
-    int n = a.size();
-    vector<int> dp(n, 0);
-    dp[0] = a[0];
-    for (int i = 1; i < n; ++i) dp[i] = max(dp[i - 1], a[i]);
-    cout << dp[n - 1] << '\\n';
+int lengthOfLIS(vector<int>& nums) {
+    vector<int> tails;
+    for (int x : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), x);
+        if (it == tails.end()) tails.push_back(x);
+        else *it = x;                              // 更新最小末尾
+    }
+    return tails.size();
 }
 ```
 
-## 📌 One-liner Summary（一句话总结）
+**理解：** `tails` 不一定是正确的 LIS 序列，但**长度**一定正确。算法核心是让 tails 中的数尽可能小，以便后续能接更多数。
 
-- **线性 DP 就是：沿着序列顺序推进，让当前位置答案由前面的状态转移得到。**
+---
+
+## 最长公共子序列（LCS）
+
+```cpp
+int longestCommonSubsequence(string a, string b) {
+    int m = a.size(), n = b.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (a[i-1] == b[j-1])
+                dp[i][j] = dp[i-1][j-1] + 1;
+            else
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+    return dp[m][n];
+}
+```
+
+**短字符串优化：** 用 `min(m, n)` 决定方向，空间可优化为 O(min(m, n))。
+
+**最长公共子串（连续）的特例：**
+
+```cpp
+int longestCommonSubstring(string a, string b) {
+    int m = a.size(), n = b.size(), res = 0;
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (a[i-1] == b[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1;
+                res = max(res, dp[i][j]);
+            }  // 不相等时 dp[i][j] = 0（与 LCS 的区别）
+        }
+    }
+    return res;
+}
+```
+
+---
+
+## 编辑距离
+
+```cpp
+int minDistance(string a, string b) {
+    int m = a.size(), n = b.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int i = 0; i <= m; i++) dp[i][0] = i;     // 删除
+    for (int j = 0; j <= n; j++) dp[0][j] = j;     // 插入
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (a[i-1] == b[j-1])
+                dp[i][j] = dp[i-1][j-1];
+            else
+                dp[i][j] = 1 + min({dp[i-1][j],    // 删除
+                                    dp[i][j-1],    // 插入
+                                    dp[i-1][j-1]}); // 替换
+        }
+    }
+    return dp[m][n];
+}
+```
+
+---
+
+## 最长回文子序列
+
+```cpp
+int longestPalindromeSubseq(string s) {
+    int n = s.size();
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    for (int i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        for (int j = i + 1; j < n; j++) {
+            if (s[i] == s[j])
+                dp[i][j] = dp[i+1][j-1] + 2;
+            else
+                dp[i][j] = max(dp[i+1][j], dp[i][j-1]);
+        }
+    }
+    return dp[0][n-1];
+}
+// 也可用 s 和 reverse(s) 求 LCS
+```
+
+---
+
+## 题型速查
+
+| 题型 | 解法 | 复杂度 |
+|------|------|--------|
+| LIS（最长递增子序列） | 贪心 + 二分（tails 数组） | O(n log n) |
+| LCS（最长公共子序列） | 二维 DP，匹配+1，不匹配取 max | O(mn) |
+| 编辑距离 | 二维 DP，增删改取 min+1 | O(mn) |
+| 最长回文子序列 | 区间 DP 或 s + rev(s) 求 LCS | O(n²) |
+| 最长公共子串 | dp[i][j] = dp[i-1][j-1]+1，不等则归零 | O(mn) |
+| 最长重复子数组 | 同上，用一维滚动数组优化空间 | O(mn) |
+| 最大子数组和（Kadane） | cur = max(x, cur+x) | O(n) |
+
+> **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。

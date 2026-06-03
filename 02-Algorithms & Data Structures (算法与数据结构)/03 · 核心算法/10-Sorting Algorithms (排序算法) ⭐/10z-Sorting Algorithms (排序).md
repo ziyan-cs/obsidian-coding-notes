@@ -1,5 +1,4 @@
 > **核心考点**：十大排序算法的时间/空间/稳定性对比、基于比较与基于计数的分类、排序选型决策
-#algorithm #sorting #sort #comparison-sort #non-comparison-sort
 
 # 核心
 

@@ -1,147 +1,143 @@
-> **核心考点**：0-1 背包（逆序）、完全背包（正序）、多重背包二进制优化、状态压缩
-# Knapsack Problems
-#algorithm #dp #linear-dp #sequence #optimization
+> **核心考点**：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
-## ⚡ TL;DR（快速决策）
+## 背包问题核心框架
 
-- 线性 DP 本质是：**状态排成一条线，当前位置答案由前面若干位置转移而来**
-- 一看到这些特征，要优先想到线性 DP：
-    - 数组 / 字符串从左到右处理
-    - 当前答案依赖前一个或前几个状态
-    - 求最优值、方案数、可行性
-    - 经典题像爬楼梯、打家劫舍、最长上升子序列
-- 线性 DP 的核心不是背公式，而是：
-    - 状态怎么定义
-    - 从哪里转移过来
-- 如果问题天然沿着下标推进，优先先想线性 DP
+背包问题的本质：给定一组物品（每个有重量和价值），在容量限制下最大化总价值。
 
-## 🧩 Core Idea（核心本质）
+**核心三要素：**
+1. 物品数量（n）
+2. 背包容量（cap）
+3. 每种物品可选几次（0-1次 / 无限次 / 有限次）
 
-- “线性”表示状态通常按 `i = 1..n` 顺着推进
-- 常见状态定义：
-    - `dp[i]`：前 `i` 个元素的最优答案
-    - `dp[i]`：以 `i` 结尾的最优答案
-- 最核心三问：
-    1. `dp[i]` 表示什么？
-    2. `dp[i]` 从哪些旧状态转移？
-    3. 初始值是什么？
-- 一句话理解：
-    - **当前位置的答案，建立在前面已经算好的答案上。**
+---
 
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 爬楼梯模板
+## 0-1 背包（每种物品最多选一次）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
+int knapsack01(vector<int>& w, vector<int>& v, int cap) {
+    int n = w.size();
+    vector<int> dp(cap + 1, 0);
+    for (int i = 0; i < n; i++) {
+        for (int j = cap; j >= w[i]; j--) {     // 逆序：确保每个物品只用一次
+            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
+        }
+    }
+    return dp[cap];
+}
+```
 
-int main() {
-    int n = 5;
-    vector<int> dp(n + 1, 0);
+**为什么逆序？** `dp[j - w[i]]` 必须是**未考虑当前物品 i** 的状态。正序遍历时，容量小的位置已经被当前物品更新过，可能导致同一物品被多次使用。
+
+**恰好装满：** 初始化 `dp[0] = 0`，其余 `dp[j] = -INF`，只有能从 0 转移过来的状态才有效。
+
+---
+
+## 完全背包（每种物品无限次）
+
+```cpp
+int knapsackComplete(vector<int>& w, vector<int>& v, int cap) {
+    int n = w.size();
+    vector<int> dp(cap + 1, 0);
+    for (int i = 0; i < n; i++) {
+        for (int j = w[i]; j <= cap; j++) {     // 正序：允许同一物品多次使用
+            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
+        }
+    }
+    return dp[cap];
+}
+```
+
+**完全背包与 0-1 的唯一区别：** 容量遍历方向相反。
+
+**零钱兑换系列：**
+
+```cpp
+// 零钱兑换 I（求最少硬币数）
+int coinChange(vector<int>& coins, int amount) {
+    vector<int> dp(amount + 1, amount + 1);
+    dp[0] = 0;
+    for (int coin : coins)
+        for (int j = coin; j <= amount; j++)
+            dp[j] = min(dp[j], dp[j - coin] + 1);
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+
+// 零钱兑换 II（求组合数）
+int change(int amount, vector<int>& coins) {
+    vector<int> dp(amount + 1, 0);
     dp[0] = 1;
-    dp[1] = 1;
-
-    for (int i = 2; i <= n; ++i) {
-        dp[i] = dp[i - 1] + dp[i - 2];
-    }
-
-    cout << dp[n] << '\\n';
+    for (int coin : coins)                     // 先遍历物品 — 组合（不考虑顺序）
+        for (int j = coin; j <= amount; j++)
+            dp[j] += dp[j - coin];
+    return dp[amount];
 }
+// 若先遍历容量再遍历物品，结果为排列数（考虑顺序）
 ```
 
-1. 打家劫舍模板
+---
+
+## 多重背包（每种物品有限次）
+
+### 解法一：暴力拆成 0-1（容易超时）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int rob(vector<int>& nums) {
-    int n = nums.size();
-    if (n == 0) return 0;
-    if (n == 1) return nums[0];
-
-    vector<int> dp(n, 0);
-    dp[0] = nums[0];
-    dp[1] = max(nums[0], nums[1]);
-
-    for (int i = 2; i < n; ++i) {
-        dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
-    }
-    return dp[n - 1];
-}
-```
-
-1. 最长上升子序列（朴素 DP）
-
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int lengthOfLIS(vector<int>& nums) {
-    int n = nums.size();
-    vector<int> dp(n, 1);
-    int ans = 1;
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < i; ++j) {
-            if (nums[j] < nums[i]) {
-                dp[i] = max(dp[i], dp[j] + 1);
+int knapsackMultiple(vector<int>& w, vector<int>& v, vector<int>& cnt, int cap) {
+    vector<int> dp(cap + 1, 0);
+    for (int i = 0; i < w.size(); i++) {
+        for (int k = 0; k < cnt[i]; k++) {             // 拆成 cnt[i] 个独立物品
+            for (int j = cap; j >= w[i]; j--) {
+                dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
             }
         }
-        ans = max(ans, dp[i]);
     }
-    return ans;
+    return dp[cap];
 }
+// 时间复杂度 O(cap * sum(cnt))，数据量大时会超时
 ```
 
-## ⚠️ Pitfalls（高频错误）
+### 解法二：二进制优化（推荐）
 
-- `dp[i]` 定义不清，导致转移乱写
-- 初始值没设好，后面全错
-- “前 i 个”和“以 i 结尾”这两类状态别混
-- 下标从 0 还是从 1 开始要统一
-- 有些题可以滚动优化，但别一开始就为了省空间把逻辑写乱
-
-## 🚀 Performance / Tips（性能优化）
-
-- 常见复杂度：
-    - 简单线性 DP 常是 $O(n)$
-    - 双层转移常是 $O(n^2)$
-- 看到只依赖前几个状态时，可考虑滚动数组 / 变量优化
-- 做题顺序建议：
-    - 先写清状态定义
-    - 再写转移
-    - 再补初始化
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 爬楼梯
-- 打家劫舍
-- 最大子数组和
-- 最长上升子序列
-- 字符串线性 DP
-
-## 🧾 Minimal Template（最小可运行模板）
+将 cnt 个物品拆成 **1, 2, 4, ..., 2^k, 剩余** 个一组，每组作为一个 0-1 物品，覆盖 0..cnt 的所有组合：
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 3, 4};
-    int n = a.size();
-    vector<int> dp(n, 0);
-    dp[0] = a[0];
-    for (int i = 1; i < n; ++i) dp[i] = max(dp[i - 1], a[i]);
-    cout << dp[n - 1] << '\\n';
+int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int cap) {
+    vector<int> dp(cap + 1, 0);
+    for (int i = 0; i < w.size(); i++) {
+        int num = cnt[i];
+        // 二进制拆分
+        for (int k = 1; num > 0; k <<= 1) {
+            int take = min(k, num);
+            int weight = take * w[i];
+            int value  = take * v[i];
+            for (int j = cap; j >= weight; j--)
+                dp[j] = max(dp[j], dp[j - weight] + value);
+            num -= take;
+        }
+    }
+    return dp[cap];
 }
 ```
 
-## 📌 One-liner Summary（一句话总结）
+---
 
-- **线性 DP 就是：沿着序列顺序推进，让当前位置答案由前面的状态转移得到。**
+## 背包问题对比
+
+| 类型 | 容量遍历 | 物品遍历 | 时间复杂度 | 空间优化后 |
+|------|---------|---------|-----------|-----------|
+| 0-1 背包 | 逆序 | 外循环物品 | O(n·cap) | O(cap) |
+| 完全背包 | 正序 | 外循环物品 | O(n·cap) | O(cap) |
+| 多重背包（暴力） | 逆序 | 三层循环 | O(cap·Σcnt) | O(cap) |
+| 多重背包（二进制） | 逆序 | 拆后 0-1 | O(cap·Σlog(cnt)) | O(cap) |
+
+## 背包问题常见变体
+
+| 变体 | 解法要点 |
+|------|---------|
+| 求方案数 | `dp[j] += dp[j - w[i]]` |
+| 求能否装满 | `dp[j] = dp[j] \|\| dp[j - w[i]]` |
+| 恰好装满 | dp 初始化为 -INF，`dp[0] = 0` |
+| 二维费用 | `dp[j][k]` 两个维度都遍历容量 |
+| 分组背包 | 每组选一个，组内遍历时容量在外、物品在内 |
+| 依赖背包 | 转化为树形 DP + 分组背包 |
+
+> **工程要点**：背包问题的核心就两点——**物品在外还是容量在外**决定是组合还是排列，**容量正序还是逆序**决定是完全还是 0-1。面试时先写出暴力二维版本再优化为一维，不易出错。

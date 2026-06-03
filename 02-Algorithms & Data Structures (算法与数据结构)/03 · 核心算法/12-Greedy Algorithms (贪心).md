@@ -1,154 +1,156 @@
-> **核心考点**：贪心算法的局部最优推导全局最优、与 DP 的区别、区间调度/跳跃游戏经典例题
-# Divide and Conquer
-#algorithm #divide-and-conquer #recursion #merge-sort
+> **核心考点**：贪心局部最优推全局最优、排序预处理、区间调度、经典贪心问题证明思路
 
-## 核心
+## 贪心核心思想
 
-- 分治 = **拆分 + 合并的递归**
-- 关键词：
-    - 归并排序
-    - 逆序对
-    - 快速排序
-    - 最大子数组和
-    - 线段树思想
-    - 大问题拆小问题
+每一步都做出当前看起来最优的选择，希望最终结果全局最优。
 
-## 经典题型：
+**适用条件：**
+- **贪心选择性质**：全局最优可以通过一系列局部最优得到
+- **最优子结构**：子问题的最优解可以推导出原问题的最优解
 
-### 1. 归并排序
+**与 DP 的关系：** 贪心是 DP 的特例——每个子问题只做一个选择（无需考虑多种可能性）。能用贪心解决的问题一定可以用 DP 解决，但反之不一定。
 
-```cpp
-void merge(vector<int>& arr, int L, int R) {
-    if (L >= R) return;
-    int M = L + ((R - L) >> 1);
-    merge(arr, L, M);
-    merge(arr, M + 1, R);
-    mergeSort(arr, L, M, R);
-}
+---
 
-void mergeSort(vector<int>& arr, int L, int M, int R) {
-    vector<int> help(R - L + 1);
-    int index = 0;
-    int p1 = L;
-    int p2 = M + 1;
-    while (p1 <= M && p2 <= R) {
-        help[index++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
-    }
-    while (p1 <= M) {
-        help[index++] = arr[p1++];
-    }
-    while (p2 <= R) {
-        help[index++] = arr[p2++];
-    }
-    for (int i = 0; i < (int)help.size(); ++i) {
-        arr[L + i] = help[i];
-    }
-}
-```
--->**（LeetCode 912 ）**
+## 区间调度类
 
-### 2. 统计逆序对（小和问题）
+### 无重叠区间（选最多不重叠区间）
+
+按**结束时间**排序，优先选结束早的：
 
 ```cpp
-// 主函数
-int merge(vector<int>& arr, int L, int R) {
-    if (L >= R) return 0;
-    int M = L + ((R - L) >> 1);
-    int left = merge(arr, L, M);
-    int right = merge(arr, M + 1, R);
-    int cross = mergeAdd(arr, L, M, R);
-    return left + right + cross;
-}
-
-// 子函数
-int mergeAdd(vector<int>& arr, int L, int M, int R) {
-    vector<int> help(R - L + 1);
-    int index = 0;
-    int p1 = L;
-    int p2 = M + 1;
-    int count = 0;
-    while (p1 <= M && p2 <= R) {
-        if (arr[p1] > arr[p2]) {
-            count += M - p1 + 1;
-            help[index++] = arr[p2++];
-        } else {
-            help[index++] = arr[p1++];
+int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+    sort(intervals.begin(), intervals.end(),
+         [](auto& a, auto& b) { return a[1] < b[1]; });
+    int count = 1, end = intervals[0][1];
+    for (int i = 1; i < intervals.size(); i++) {
+        if (intervals[i][0] >= end) {   // 不重叠
+            count++;
+            end = intervals[i][1];
         }
     }
-    while (p1 <= M) {
-        help[index++] = arr[p1++];
-    }
-    while (p2 <= R) {
-        help[index++] = arr[p2++];
-    }
-    for (int i = 0; i < (int)help.size(); ++i) {
-        arr[L + i] = help[i];
-    }
-    return count;
-}
-
-// 对外接口
-int reversePairs(vector<int>& arr) {
-    if (arr.empty() || arr.size() < 2) return 0;
-    return merge(arr, 0, arr.size() - 1);
+    return intervals.size() - count;    // 最少删除数
 }
 ```
--->**（LeetCode 315 ）**
--->**（LeetCode 493 ）**
 
-### 3. 快速排序（分治经典，和归并排序并列）
+**选择策略：** 按结束时间最早 → 为后面留更多空间 → 能选最多区间。
+
+### 合并区间
+
+按**开始时间**排序，合并重叠区间：
 
 ```cpp
-void solve(vector<int>& a, int l, int r) {
-    if (l >= r) return;
-    int mid = partition(a, l, r);
-    solve(a, l, mid - 1);
-    solve(a, mid + 1, r);
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    sort(intervals.begin(), intervals.end());
+    vector<vector<int>> res;
+    for (auto& interval : intervals) {
+        if (res.empty() || interval[0] > res.back()[1])
+            res.push_back(interval);                     // 新区间
+        else
+            res.back()[1] = max(res.back()[1], interval[1]);  // 合并
+    }
+    return res;
 }
+```
 
-int partition(vector<int>& a, int l, int r) {
-    int pivot = a[r];
-    int i = l - 1;
-    for (int j = l; j < r; ++j) {
-        if (a[j] < pivot) {
-            i++;
-            swap(a[i], a[j]);
+### 插入区间
+
+```cpp
+vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+    vector<vector<int>> res;
+    int i = 0, n = intervals.size();
+    while (i < n && intervals[i][1] < newInterval[0])
+        res.push_back(intervals[i++]);               // 左边不重叠部分
+    while (i < n && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = min(newInterval[0], intervals[i][0]);
+        newInterval[1] = max(newInterval[1], intervals[i][1]);
+        i++;
+    }
+    res.push_back(newInterval);                      // 合并后的新区间
+    while (i < n) res.push_back(intervals[i++]);     // 右边不重叠部分
+    return res;
+}
+```
+
+---
+
+## 跳跃游戏类
+
+### 跳跃游戏（能否到达末尾）
+
+```cpp
+bool canJump(vector<int>& nums) {
+    int maxReach = 0;
+    for (int i = 0; i <= maxReach && i < nums.size(); i++) {
+        maxReach = max(maxReach, i + nums[i]);
+        if (maxReach >= nums.size() - 1) return true;
+    }
+    return false;
+}
+```
+
+### 跳跃游戏 II（最少步数）
+
+```cpp
+int jump(vector<int>& nums) {
+    int jumps = 0, curEnd = 0, farthest = 0;
+    for (int i = 0; i < nums.size() - 1; i++) {
+        farthest = max(farthest, i + nums[i]);
+        if (i == curEnd) {             // 到达当前跳的最远边界
+            jumps++;
+            curEnd = farthest;
         }
     }
-    swap(a[i + 1], a[r]);
-    return i + 1;
+    return jumps;
 }
 ```
--->**（LeetCode 912 ）**
 
-### 4. 最大子数组和（分治版）
+---
+
+## 分配问题类
+
+### 分发饼干
 
 ```cpp
-#include <climits> // INT_MIN的头文件 
-
-int solve(vector<int>& a, int l, int r) {
-    if (l == r) return a[l];
-    int mid = (l + r) >> 1;
-    int leftMax = solve(a, l, mid);
-    int rightMax = solve(a, mid + 1, r);
-    int crossMax = getCrossSum(a, l, mid, r);
-    return max(max(leftMax, rightMax), crossMax);
-}
-
-int getCrossSum(vector<int>& a, int l, int mid, int r) {
-    int leftSum = INT_MIN;
-    int sum = 0;
-    for (int i = mid; i >= l; --i) {
-        sum += a[i];
-        leftSum = max(leftSum, sum);
+int findContentChildren(vector<int>& g, vector<int>& s) {
+    sort(g.begin(), g.end());
+    sort(s.begin(), s.end());
+    int i = 0;
+    for (int j = 0; i < g.size() && j < s.size(); j++) {
+        if (s[j] >= g[i]) i++;   // 最小饼干喂给胃口最小的孩子
     }
-    int rightSum = INT_MIN;
-    sum = 0;
-    for (int i = mid + 1; i <= r; ++i) {
-        sum += a[i];
-        rightSum = max(rightSum, sum);
-    }
-    return leftSum + rightSum;
+    return i;
 }
 ```
- -->**（LeetCode 53 ）**
+
+### 加油站
+
+```cpp
+int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+    int total = 0, cur = 0, start = 0;
+    for (int i = 0; i < gas.size(); i++) {
+        total += gas[i] - cost[i];
+        cur += gas[i] - cost[i];
+        if (cur < 0) { cur = 0; start = i + 1; }  // 无法到达下一站
+    }
+    return total >= 0 ? start : -1;
+}
+```
+
+---
+
+## 经典题型速查
+
+| 题型 | 贪心策略 | 排序方式 |
+|------|---------|---------|
+| 无重叠区间 | 优先选结束早的 | 按 end 升序 |
+| 合并区间 | 有重叠就合并 | 按 start 升序 |
+| 跳跃游戏 | 维护最远可达位置 | 无需排序 |
+| 分发饼干 | 最小饼干喂最小胃口 | 两数组排序 |
+| 加油站 | 总油量不足必无解 | 一次遍历 |
+| 最大子数组和 | cur < 0 时就抛弃 | 无需排序 |
+| 任务调度器 | 优先安排频率最高的 | 按频率排序 |
+| 哈夫曼编码 | 每次合并最小的两个 | 最小堆 |
+| 最少箭矢戳气球 | 按结束位置射箭 | 按 end 升序 |
+
+> **工程要点**：面试中的贪心题通常需要先尝试**排序**或**堆**来辅助决策。证明贪心正确性常用**交换论证法**——假设最优解与贪心解不同，交换后不会使解变差。如果不确定能否贪心，先想 DP 再找贪心特征。

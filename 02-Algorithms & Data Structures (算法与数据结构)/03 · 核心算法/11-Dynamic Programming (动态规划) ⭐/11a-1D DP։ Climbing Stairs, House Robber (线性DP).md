@@ -1,147 +1,169 @@
-> **核心考点**：一维 DP 状态定义与转移方程、斐波那契类问题、滚动数组空间优化
-# Linear DP
-#algorithm #dp #linear-dp #sequence #optimization
+> **核心考点**：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
 
-## ⚡ TL;DR（快速决策）
+## 一维 DP 核心思想
 
-- 线性 DP 本质是：**状态排成一条线，当前位置答案由前面若干位置转移而来**
-- 一看到这些特征，要优先想到线性 DP：
-    - 数组 / 字符串从左到右处理
-    - 当前答案依赖前一个或前几个状态
-    - 求最优值、方案数、可行性
-    - 经典题像爬楼梯、打家劫舍、最长上升子序列
-- 线性 DP 的核心不是背公式，而是：
-    - 状态怎么定义
-    - 从哪里转移过来
-- 如果问题天然沿着下标推进，优先先想线性 DP
+一维 DP 的状态 `dp[i]` 通常表示**以第 i 个位置结尾**（或前 i 个）的最优解/方案数。关键是找到**递推关系**——当前状态如何由前一个或前几个状态转移而来。
 
-## 🧩 Core Idea（核心本质）
+**一般步骤：**
+1. 定义 `dp[i]` 的含义
+2. 找到递推关系（状态转移方程）
+3. 初始化边界条件
+4. 确定遍历顺序
 
-- “线性”表示状态通常按 `i = 1..n` 顺着推进
-- 常见状态定义：
-    - `dp[i]`：前 `i` 个元素的最优答案
-    - `dp[i]`：以 `i` 结尾的最优答案
-- 最核心三问：
-    1. `dp[i]` 表示什么？
-    2. `dp[i]` 从哪些旧状态转移？
-    3. 初始值是什么？
-- 一句话理解：
-    - **当前位置的答案，建立在前面已经算好的答案上。**
+## 爬楼梯系列
 
-## 🔧 Usage Patterns（可复用代码模板）
-
-1. 爬楼梯模板
+### 基础爬楼梯
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    int n = 5;
-    vector<int> dp(n + 1, 0);
-    dp[0] = 1;
-    dp[1] = 1;
-
-    for (int i = 2; i <= n; ++i) {
-        dp[i] = dp[i - 1] + dp[i - 2];
+// 爬楼梯：每次 1 或 2 阶，求到达顶部的方案数
+int climbStairs(int n) {
+    if (n <= 2) return n;
+    int a = 1, b = 2;           // dp[1], dp[2]
+    for (int i = 3; i <= n; i++) {
+        int c = a + b;          // dp[i] = dp[i-1] + dp[i-2]
+        a = b;
+        b = c;
     }
+    return b;
+}
+// 本质就是斐波那契数列，O(n) 时间，O(1) 空间
+```
 
-    cout << dp[n] << '\\n';
+**变体：**
+- 每次可走 1/2/3 阶：`dp[i] = dp[i-1] + dp[i-2] + dp[i-3]`
+- 最小花费爬楼梯：`dp[i] = min(dp[i-1], dp[i-2]) + cost[i]`
+- 每次可走 1..k 阶：`dp[i] = sum(dp[i-j] for j in 1..k)`
+
+### 最小花费爬楼梯
+
+```cpp
+int minCostClimbingStairs(vector<int>& cost) {
+    int n = cost.size();
+    int a = cost[0], b = cost[1];
+    for (int i = 2; i < n; i++) {
+        int c = min(a, b) + cost[i];
+        a = b;
+        b = c;
+    }
+    return min(a, b);
 }
 ```
 
-1. 打家劫舍模板
+## 打家劫舍系列
+
+### 打家劫舍 I（线性排列）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
+// 相邻房屋不能同时偷，求最大金额
 int rob(vector<int>& nums) {
     int n = nums.size();
-    if (n == 0) return 0;
     if (n == 1) return nums[0];
-
-    vector<int> dp(n, 0);
-    dp[0] = nums[0];
-    dp[1] = max(nums[0], nums[1]);
-
-    for (int i = 2; i < n; ++i) {
-        dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
+    int a = nums[0], b = max(nums[0], nums[1]);
+    for (int i = 2; i < n; i++) {
+        int c = max(b, a + nums[i]);    // 不偷 i vs 偷 i
+        a = b;
+        b = c;
     }
-    return dp[n - 1];
+    return b;
 }
+// dp[i] = max(dp[i-1], dp[i-2] + nums[i])
 ```
 
-1. 最长上升子序列（朴素 DP）
+### 打家劫舍 II（环形排列）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int lengthOfLIS(vector<int>& nums) {
+// 首尾相连，不能同时偷第一家 and 最后一家
+int robII(vector<int>& nums) {
     int n = nums.size();
-    vector<int> dp(n, 1);
-    int ans = 1;
+    if (n == 1) return nums[0];
+    // 分别计算：去掉第一家 / 去掉最后一家，取最大值
+    return max(robRange(nums, 0, n - 2), robRange(nums, 1, n - 1));
+}
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < i; ++j) {
-            if (nums[j] < nums[i]) {
-                dp[i] = max(dp[i], dp[j] + 1);
-            }
-        }
-        ans = max(ans, dp[i]);
+int robRange(vector<int>& nums, int l, int r) {
+    int a = 0, b = 0;
+    for (int i = l; i <= r; i++) {
+        int c = max(b, a + nums[i]);
+        a = b;
+        b = c;
     }
-    return ans;
+    return b;
 }
 ```
 
-## ⚠️ Pitfalls（高频错误）
-
-- `dp[i]` 定义不清，导致转移乱写
-- 初始值没设好，后面全错
-- “前 i 个”和“以 i 结尾”这两类状态别混
-- 下标从 0 还是从 1 开始要统一
-- 有些题可以滚动优化，但别一开始就为了省空间把逻辑写乱
-
-## 🚀 Performance / Tips（性能优化）
-
-- 常见复杂度：
-    - 简单线性 DP 常是 $O(n)$
-    - 双层转移常是 $O(n^2)$
-- 看到只依赖前几个状态时，可考虑滚动数组 / 变量优化
-- 做题顺序建议：
-    - 先写清状态定义
-    - 再写转移
-    - 再补初始化
-
-## 🧪 Common Scenarios（常见使用场景）
-
-- 爬楼梯
-- 打家劫舍
-- 最大子数组和
-- 最长上升子序列
-- 字符串线性 DP
-
-## 🧾 Minimal Template（最小可运行模板）
+### 打家劫舍 III（树形）
 
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> a = {1, 2, 3, 4};
-    int n = a.size();
-    vector<int> dp(n, 0);
-    dp[0] = a[0];
-    for (int i = 1; i < n; ++i) dp[i] = max(dp[i - 1], a[i]);
-    cout << dp[n - 1] << '\\n';
+// 二叉树，不能偷直接相连的两个节点
+pair<int,int> robTree(TreeNode* node) {
+    if (!node) return {0, 0};
+    auto l = robTree(node->left);
+    auto r = robTree(node->right);
+    int rob = node->val + l.first + r.first;      // 偷当前节点
+    int skip = max(l.first, l.second) + max(r.first, r.second);  // 不偷
+    return {skip, rob};  // first=不偷, second=偷
+}
+int robIII(TreeNode* root) {
+    auto res = robTree(root);
+    return max(res.first, res.second);
 }
 ```
 
-## 📌 One-liner Summary（一句话总结）
+## 其他经典一维 DP
 
-- **线性 DP 就是：沿着序列顺序推进，让当前位置答案由前面的状态转移得到。**
+### 最大子数组和（Kadane 算法）
+
+```cpp
+int maxSubArray(vector<int>& nums) {
+    int cur = 0, res = INT_MIN;
+    for (int x : nums) {
+        cur = max(x, cur + x);    // 要么从当前元素重新开始，要么延续之前的
+        res = max(res, cur);
+    }
+    return res;
+}
+```
+
+### 乘积最大子数组
+
+```cpp
+int maxProduct(vector<int>& nums) {
+    int res = nums[0], curMax = nums[0], curMin = nums[0];
+    for (int i = 1; i < nums.size(); i++) {
+        if (nums[i] < 0) swap(curMax, curMin);  // 负号翻转最大最小
+        curMax = max(nums[i], curMax * nums[i]);
+        curMin = min(nums[i], curMin * nums[i]);
+        res = max(res, curMax);
+    }
+    return res;
+}
+```
+
+### 解码方法
+
+```cpp
+int numDecodings(string s) {
+    int n = s.size();
+    int a = 1, b = s[0] != '0' ? 1 : 0;
+    for (int i = 2; i <= n; i++) {
+        int c = 0;
+        if (s[i-1] != '0') c += b;                      // 单独解码
+        int two = stoi(s.substr(i-2, 2));
+        if (two >= 10 && two <= 26) c += a;             // 两位一起解码
+        a = b; b = c;
+    }
+    return b;
+}
+```
+
+## 一维 DP 经典题型速查
+
+| 题型 | dp[i] 含义 | 递推 | 复杂度 |
+|------|-----------|------|--------|
+| 爬楼梯 | 到 i 阶的方案数 | `dp[i] = dp[i-1] + dp[i-2]` | O(n) |
+| 打家劫舍 | 前 i 间最大金额 | `dp[i] = max(dp[i-1], dp[i-2]+nums[i])` | O(n) |
+| 最大子数组和 | 以 i 结尾的最大和 | `dp[i] = max(nums[i], dp[i-1]+nums[i])` | O(n) |
+| 解码方法 | 前 i 个字符的解码数 | `dp[i] = dp[i-1] + dp[i-2]`（有条件） | O(n) |
+| 单词拆分 | 前 i 个字符是否可拆分 | `dp[i] = any(dp[j] && s[j:i] in dict)` | O(n²) |
+
+> **工程要点**：一维 DP 的核心是状态定义。大多数线性 DP 只需记录前几个状态，可以用滚动变量替代数组，将空间从 O(n) 优化到 O(1)。遇到新题先想：`dp[i]` 表示什么？怎么从 `dp[i-1]` 或 `dp[i-2]` 转移过来？
