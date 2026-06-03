@@ -1,6 +1,6 @@
 > **核心考点**：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
 
-## 1. std::atomic 基础
+## std::atomic 基础
 
 ```cpp
 #include <atomic>
@@ -22,7 +22,7 @@ counter++;                 // 等价于 fetch_add(1)
 counter += 5;
 ```
 
-## 2. 为什么 atomic 比 mutex 快？
+## 为什么 atomic 比 mutex 快？
 
 ```cpp
 // mutex 保护
@@ -45,7 +45,7 @@ void inc_atomic() {
 - `atomic fetch_add`：~5-15ns（一条 CPU 指令）
 - 注意：实际差异取决于**竞争程度**
 
-## 3. 内存序（Memory Order）— 核心难点
+## 内存序（Memory Order）— 核心难点
 
 ```cpp
 // 默认是 std::memory_order_seq_cst（最严格，最慢）
@@ -99,7 +99,7 @@ flag.store(true);  // 等价于 seq_cst
   B.read2
 ```
 
-## 4. CAS 操作 (Compare-Exchange)
+## CAS 操作 (Compare-Exchange)
 
 ```cpp
 std::atomic<int> value{0};
@@ -128,7 +128,7 @@ void atomic_push(Node* new_head) {
 }
 ```
 
-## 5. atomic 的局限性
+## atomic 的局限性
 
 ```cpp
 // ❌ atomic 类型不一定是 lock-free

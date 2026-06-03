@@ -1,6 +1,8 @@
+> **核心考点**：Cache 命中与未命中、时间/空间局部性、替换策略（LRU）、写策略（Write-through/Write-back）
+
 #computer-organization #cache #cache-mechanism #locality #performance
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 缓存机制的核心是：**利用局部性原理，把可能再次使用的数据提前放到更快的存储中**
 - Cache 不是额外“复制一份内存”这么简单，而是性能优化的关键桥梁

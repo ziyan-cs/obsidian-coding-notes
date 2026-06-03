@@ -1,6 +1,6 @@
 > **核心考点**：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
 
-## 1. 底层结构：红黑树
+## 底层结构：红黑树
 
 `map`、`set`、`multimap`、`multiset` 底层是**红黑树**（Red-Black Tree），一种近似平衡的 BST：
 
@@ -25,7 +25,7 @@
 
 > **STL 选择红黑树**的原因：map/set 是通用容器，需要同时兼顾查询和修改性能。红黑树的插入/删除重平衡代价更低（均摊 O(1) 次旋转）。
 
-## 2. map/set vs unordered_map/unordered_set
+## map/set vs unordered_map/unordered_set
 
 | | `map` (红黑树) | `unordered_map` (哈希表) |
 |---|---|---|
@@ -52,7 +52,7 @@ auto it2 = scores.upper_bound(3); // 第一个 > 3 的元素
 std::unordered_map<int, std::string> fast;
 ```
 
-## 3. 迭代器稳定性
+## 迭代器稳定性
 
 | 操作 | `map`/`set` | `unordered_map`/`unordered_set` |
 |------|-------------|----------------------------------|
@@ -60,7 +60,7 @@ std::unordered_map<int, std::string> fast;
 | 删除 | 仅被删节点 | 仅被删节点（rehash 除外） |
 | clear | 全部失效 | 全部失效 |
 
-## 4. map 的 operator[] 陷阱
+## map 的 operator[] 陷阱
 
 ```cpp
 // operator[] 在 key 不存在时会 **插入默认构造的值**
@@ -74,7 +74,7 @@ if (it != m.end()) { /* 存在 */ }
 int val = m.at("key");  // 不存在则抛 out_of_range
 ```
 
-## 5. 工程建议
+## 工程建议
 
 ```cpp
 // ✅ 需要有序遍历 → map/set

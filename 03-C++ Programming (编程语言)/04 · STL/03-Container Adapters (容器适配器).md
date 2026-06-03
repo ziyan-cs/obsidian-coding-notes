@@ -1,6 +1,6 @@
 > **核心考点**：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
-## 1. 适配器模式
+## 适配器模式
 
 容器适配器**封装**底层容器，只暴露特定接口：
 
@@ -10,7 +10,7 @@
 | `queue`（队列） | `deque` | FIFO |
 | `priority_queue`（优先队列） | `vector` | 大根堆（默认）|
 
-## 2. stack
+## stack
 
 ```cpp
 // 默认 deque 做底层，也可以指定 vector/list
@@ -29,7 +29,7 @@ s.empty(); s.size();
 - vector 尾部也是 O(1) 但可能重分配（拷贝所有元素）
 - list 尾部 O(1) 但内存开销大、缓存不友好
 
-## 3. queue
+## queue
 
 ```cpp
 std::queue<int> q;
@@ -39,7 +39,7 @@ q.front();  q.back();   // 访问队首/队尾
 
 **不支持迭代器遍历**— 只能逐个出队。
 
-## 4. priority_queue
+## priority_queue
 
 ```cpp
 // 默认大根堆（最大元素在 top）

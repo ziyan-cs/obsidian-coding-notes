@@ -1,6 +1,6 @@
 > **核心考点**：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
 
-## 1. 底层结构：Separate Chaining（链地址法）
+## 底层结构：Separate Chaining（链地址法）
 
 ```text
 bucket array (vector of linked lists):
@@ -21,7 +21,7 @@ bucket array (vector of linked lists):
 - `hash(key) % bucket_count` 决定元素放入哪个 bucket
 - 当 `load_factor > max_load_factor`（默认 1.0）时触发 rehash
 
-## 2. Load Factor & Rehash
+## Load Factor & Rehash
 
 ```cpp
 // load_factor = size / bucket_count
@@ -40,7 +40,7 @@ m.max_load_factor(0.75f);  // 自定义阈值
 - `insert` 后 `load_factor > max_load_factor` → 自动 rehash
 - `rehash(n)` / `reserve(n)` 显式调用
 
-## 3. 哈希函数
+## 哈希函数
 
 ```cpp
 // 标准库已提供基础类型的哈希
@@ -74,7 +74,7 @@ struct PairHash {
 - **高效计算**：不要为了"完美"而使用复杂的哈希（如加密哈希）
 - 不要返回常量——所有元素都在同一 bucket 退化为链表（O(N)）
 
-## 4. 性能关键操作
+## 性能关键操作
 
 | 操作 | 均摊复杂度 | 最坏情况 |
 |------|-----------|----------|
@@ -83,7 +83,7 @@ struct PairHash {
 | `erase` | O(1) | O(N) |
 | `rehash` | O(N) | — |
 
-## 5. 工程建议
+## 工程建议
 
 ```cpp
 // ✅ 预分配减少 rehash

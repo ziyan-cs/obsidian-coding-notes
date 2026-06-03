@@ -1,6 +1,8 @@
+> **核心考点**：取指-译码-取数-执行-写回五阶段、PC 驱动流程、不同指令类型对各阶段的依赖差异
+
 #computer-organization #instruction-cycle #fetch-decode-execute #cpu
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 指令执行流程的核心是：**CPU 周期性地取指、译码、执行并更新状态**
 - 一条指令的执行通常可分为：

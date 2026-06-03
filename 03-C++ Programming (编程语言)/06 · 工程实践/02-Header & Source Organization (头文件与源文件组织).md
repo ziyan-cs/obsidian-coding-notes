@@ -1,6 +1,6 @@
 > **核心考点**：头文件职责、源文件职责、include 顺序、模块化设计
 
-## 1. 头文件职责
+## 头文件职责
 
 ```cpp
 // foo.h — 接口声明
@@ -33,7 +33,7 @@ private:
 - const/constexpr 常量
 - extern 声明
 
-## 2. 源文件职责
+## 源文件职责
 
 ```cpp
 // foo.cpp — 实现
@@ -52,7 +52,7 @@ Foo::Foo(std::string name) : pImpl_(std::make_unique<Impl>()) {
 Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 ```
 
-## 3. Include 顺序规范
+## Include 顺序规范
 
 ```cpp
 // Google C++ Style Guide 推荐顺序：
@@ -65,7 +65,7 @@ Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 **为什么关联头文件放在第一个**：
 如果 `foo.h` 缺少某个 `#include`，编译 `foo.cpp` 时第一个报错，而不是在其他文件中报出难以定位的错误。
 
-## 4. Forward Declaration vs Include
+## Forward Declaration vs Include
 
 ```cpp
 // ✅ 只需要前向声明：
@@ -81,7 +81,7 @@ bar.someMethod();       // 调用成员函数
 sizeof(Bar);            // 获取大小
 ```
 
-## 5. 模块化组织
+## 模块化组织
 
 ```text
 project/
@@ -99,7 +99,7 @@ project/
         └── test_impl.cpp
 ```
 
-## 6. 常见陷阱
+## 常见陷阱
 
 ```cpp
 // ❌ 循环 include（A.h include B.h, B.h include A.h）

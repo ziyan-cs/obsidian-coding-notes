@@ -1,6 +1,6 @@
 > **核心考点**：STL 算法的分类、迭代器要求、Lambda 配合使用
 
-## 1. 分类速查
+## 分类速查
 
 ### 不修改序列的操作
 
@@ -79,7 +79,7 @@
 | `next_permutation` / `prev_permutation` | 全排列迭代 |
 | `lexicographical_compare` | 字典序比较 |
 
-## 2. Erase-Remove Idiom（核心模式）
+## Erase-Remove Idiom（核心模式）
 
 ```cpp
 // remove 不会真正删除元素！
@@ -96,7 +96,7 @@ v.erase(new_end, v.end());
 v.erase(std::remove(v.begin(), v.end(), 2), v.end());
 ```
 
-## 3. 自定义比较与 Lambda
+## 自定义比较与 Lambda
 
 ```cpp
 struct Person { std::string name; int age; };
@@ -118,7 +118,7 @@ std::sort(people.begin(), people.end(),
 // 但普通 STL 需要用 lambda 手动包装
 ```
 
-## 4. 算法性能指南
+## 算法性能指南
 
 | 算法 | 复杂度 | 注意 |
 |------|--------|------|

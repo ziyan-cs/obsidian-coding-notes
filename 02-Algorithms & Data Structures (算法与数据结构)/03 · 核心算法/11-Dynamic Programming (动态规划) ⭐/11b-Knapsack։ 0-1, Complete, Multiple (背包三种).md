@@ -1,3 +1,4 @@
+> **核心考点**：0-1 背包（逆序）、完全背包（正序）、多重背包二进制优化、状态压缩
 # Knapsack Problems
 #algorithm #dp #linear-dp #sequence #optimization
 

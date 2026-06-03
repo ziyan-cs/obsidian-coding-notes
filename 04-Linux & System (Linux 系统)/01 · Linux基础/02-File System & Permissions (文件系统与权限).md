@@ -1,6 +1,5 @@
-
-
-# 1. Vim 使用
+> **核心考点**：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
+# Vim 使用
 
 - 光标移动
 	- `w`：跳到下个单词开头
@@ -89,7 +88,7 @@
 	- `source /etc/profile`
 	- `echo $[变量名]`：验证
 
-# 2. Shell 脚本结构🔥
+# Shell 脚本结构
 
 ### 脚本结构
 
@@ -121,14 +120,14 @@
 ### 变量定义与使用
 
 ```bash
-# 1. 普通变量和只读变量
+# 普通变量和只读变量
 name="Alex"         # 可修改,可 unset
 readonly year="20"  # 不可修改,不可 unset
 dt=$(date)          # 命令替换复制
 ```
 
 ```bash
-# 2. 位置参数变量
+# 位置参数变量
 echo "$0"            # 脚本自身文件名
 echo "$1 $2 ${10}"   # .sh 后面输入的参数
 echo "$@"            # 单独分开 "a" "b" "c"
@@ -137,14 +136,14 @@ echo "$#"    # 接收的参数数
 ```
 
 ```bash
-# 3. 预定义变量
+# 预定义变量
 $$      # 当前脚本 / Shell 进程的 PID
 $!      # 上一个后台进程的 PID
 $?      # 上一个进程的退出状态码 (0) (非0)
 ```
 
 ```bash
-# 4. 环境变量
+# 环境变量
 MY_AGE=20
 export MY_AGE
 echo $MY_AGE
@@ -153,27 +152,27 @@ echo $MY_AGE
 ### 数值运算 expr / $(( )) / let
 
 ```bash
-# 1. expr 兼容 POSIX
+# expr 兼容 POSIX
 EMP=$(expr 2 + 3)
 RES1=$(expr $TEMP \* 4) 
 echo $RES1
 ```
 
 ```bash
-# 2. $((...)) 强推！
+# $((...)) 强推！
 RES2=$(((2+3)*4))
 echo $RES2
 # 仅支持整数运算,不支持浮点数
 ```
 
 ```bash
-# 3. $[...] 过时
+# $[...] 过时
 RES3=$[(2+3)*4]
 echo $RES3
 ```
 
 ```bash
-# 4. let 直接赋值
+# let 直接赋值
 let "RES4=(2+3)*4"
 echo $RES4
 # 加上 " "
@@ -184,7 +183,7 @@ echo $RES4
 - `read -p "请输入名字：" name`：指定提示符
 - `read -t 10 -p "输入num1=" num1`：额外指定等待时间 (s)
 
-# 3. 控制流程
+# 控制流程
 
 ### `[ ]` / `[[ ]]` / `(( ))`
 

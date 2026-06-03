@@ -1,6 +1,6 @@
 > **核心考点**：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
 
-## 1. 性能分析的原则
+## 性能分析的原则
 
 ```text
 1. 先测量，再优化（不要猜测瓶颈）
@@ -23,7 +23,7 @@ public:
 };
 ```
 
-## 2. perf（Linux 性能分析利器）
+## perf（Linux 性能分析利器）
 
 ```bash
 # 采样 profiling（默认按 CPU 周期采样）
@@ -53,7 +53,7 @@ Overhead  Command  Shared Object     Symbol
 
 → **瓶颈明确**：`process_request` 占 45%，优先优化它。
 
-## 3. perf 热点分析实战
+## perf 热点分析实战
 
 ```bash
 # 生成火焰图
@@ -71,7 +71,7 @@ perf script | ./FlameGraph/stackcollapse-perf.pl > out.folded
 - 关注 **宽顶** → 函数本身消耗大
 - 关注 **宽塔** → 调用链消耗大
 
-## 4. 常见性能瓶颈与优化
+## 常见性能瓶颈与优化
 
 ```cpp
 // 1. 不必要的拷贝
@@ -101,7 +101,7 @@ for (auto& item : vec) process(item);   // cache hit ✓
 // ✅ 考虑 CRTP / std::variant + visit
 ```
 
-## 5. Google Benchmark（微基准测试）
+## Google Benchmark（微基准测试）
 
 ```cpp
 // 安装：https://github.com/google/benchmark
@@ -120,7 +120,7 @@ BENCHMARK(BM_VectorPushBack)->Arg(1000)->Arg(10000)->Arg(100000);
 BENCHMARK_MAIN();
 ```
 
-## 6. Google PerfTools（tcmalloc）
+## Google PerfTools（tcmalloc）
 
 ```bash
 # CPU Profiler
@@ -131,7 +131,7 @@ pprof --text ./main main.prof
 HEAPPROFILE=main.heap ./main
 ```
 
-## 7. 性能优化清单
+## 性能优化清单
 
 | 检查项 | 工具 |
 |--------|------|

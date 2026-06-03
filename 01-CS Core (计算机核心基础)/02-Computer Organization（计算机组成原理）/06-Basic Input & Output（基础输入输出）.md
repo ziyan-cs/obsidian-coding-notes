@@ -1,6 +1,8 @@
+> **核心考点**：程序控制 I/O/中断驱动 I/O/DMA 三种模式、设备控制器的作用、CPU 与 I/O 协同方式
+
 #computer-organization #io #input-output #interrupt #dma
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 输入输出的核心是：**让计算机与外部世界交换信息**
 - I/O 不只是“设备连上就能用”，而是涉及：

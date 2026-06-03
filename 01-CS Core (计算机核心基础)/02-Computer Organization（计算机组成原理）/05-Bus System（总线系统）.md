@@ -1,6 +1,8 @@
+> **核心考点**：数据/地址/控制三类总线分工、总线仲裁、共享通道的竞争与带宽瓶颈
+
 #computer-organization #bus #bus-system #data-path #hardware
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 总线系统的核心是：**为 CPU、内存和 I/O 设备提供共享的数据传输通道**
 - 若只抓重点，应优先记住三类总线信号：

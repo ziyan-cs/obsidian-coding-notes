@@ -1,3 +1,4 @@
+> **核心考点**：位运算常用技巧（获取/设置/清除/翻转位）、Brian Kernighan 算法、枚举子集与状态压缩
 # Bit Manipulation
 #cs #bitwise #binary #operations #low-level
 

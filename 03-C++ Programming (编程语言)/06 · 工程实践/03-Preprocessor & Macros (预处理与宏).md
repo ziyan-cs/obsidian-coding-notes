@@ -1,6 +1,6 @@
 > **核心考点**：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
-## 1. 预处理指令概览
+## 预处理指令概览
 
 ```cpp
 // 文件包含
@@ -29,7 +29,7 @@
 #error "message"     // 编译错误
 ```
 
-## 2. 宏的陷阱（务必注意）
+## 宏的陷阱（务必注意）
 
 ```cpp
 // ❌ 问题 1：运算符优先级
@@ -58,7 +58,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
 #define REQUIRE(cond) do { if (!(cond)) return false; } while(0)
 ```
 
-## 3. 条件编译的典型用途
+## 条件编译的典型用途
 
 ```cpp
 // 调试日志
@@ -93,7 +93,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
     Class& operator=(const Class&) = delete;
 ```
 
-## 4. 常用预定义宏
+## 常用预定义宏
 
 ```cpp
 __FILE__             // 当前文件名
@@ -108,7 +108,7 @@ assert(ptr != nullptr);         // 运行时断言（NDEBUG 时消除）
 static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 ```
 
-## 5. 宏 vs C++ 特性
+## 宏 vs C++ 特性
 
 | 目的 | 宏 | C++ 替代 |
 |------|-----|---------|

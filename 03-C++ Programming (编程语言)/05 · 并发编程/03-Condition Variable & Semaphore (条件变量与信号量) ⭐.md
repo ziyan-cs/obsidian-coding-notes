@@ -1,6 +1,6 @@
 > **核心考点**：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
-## 1. 条件变量（condition_variable）
+## 条件变量（condition_variable）
 
 ```cpp
 #include <condition_variable>
@@ -32,7 +32,7 @@ void consumer() {
 }
 ```
 
-## 2. 虚假唤醒（Spurious Wakeup）
+## 虚假唤醒（Spurious Wakeup）
 
 ```cpp
 // wait 的第二种形式是 while 循环 + wait 的语法糖：
@@ -49,7 +49,7 @@ cv.wait(lock, [] { return ready; });
 - 操作系统层面：线程可能从 `wait` 返回但条件并未满足
 - 必须**始终在循环中检查条件**，不能假设被唤醒就是条件满足了
 
-## 3. notify_one vs notify_all
+## notify_one vs notify_all
 
 | | `notify_one` | `notify_all` |
 |--|-------------|--------------|
@@ -57,7 +57,7 @@ cv.wait(lock, [] { return ready; });
 | 适用场景 | 单生产者-单消费者 | 多生产者-多消费者 / barrier 模式 |
 | 性能 | 更好（只唤醒一个） | 较差的惊群效应 |
 
-## 4. 信号量（Semaphore, C++20）
+## 信号量（Semaphore, C++20）
 
 ```cpp
 #include <semaphore>
@@ -74,7 +74,7 @@ void worker(int id) {
 }
 ```
 
-## 5. 条件变量 vs 信号量
+## 条件变量 vs 信号量
 
 | | 条件变量 | 信号量（C++20） |
 |--|---------|----------------|
@@ -92,7 +92,7 @@ void worker(int id) {
 // C++20 提供了 std::counting_semaphore
 ```
 
-## 6. 工程陷阱
+## 工程陷阱
 
 ```cpp
 // ❌ 在持有锁时 notify

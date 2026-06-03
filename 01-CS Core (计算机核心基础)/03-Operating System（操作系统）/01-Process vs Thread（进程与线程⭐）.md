@@ -1,6 +1,8 @@
+> **核心考点**：进程是资源分配单位、线程是 CPU 调度单位、隔离 vs 共享的设计权衡、切换成本差异
+
 #os #process #thread #concurrency #scheduling
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 进程是：**资源分配的基本单位**
 - 线程是：**CPU 调度的基本单位**

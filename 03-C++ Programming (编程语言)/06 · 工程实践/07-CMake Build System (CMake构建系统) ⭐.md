@@ -1,6 +1,6 @@
 > **核心考点**：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 
-## 1. 最小 CMake 项目
+## 最小 CMake 项目
 
 ```cmake
 # CMakeLists.txt — 项目根目录
@@ -23,7 +23,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j$(nproc)
 ```
 
-## 2. 目标导向（Target-Based）设计
+## 目标导向（Target-Based）设计
 
 ```cmake
 # CMake 3.x 的基本单元是"目标"（target）
@@ -55,7 +55,7 @@ target_link_libraries(main PRIVATE mylib)
 | `PUBLIC` | ✅ 应用 | ✅ 传递 |
 | `INTERFACE` | ❌ 不应用 | ✅ 仅传递（适合头文件库）|
 
-## 3. 常用构建配置
+## 常用构建配置
 
 ```cmake
 # Debug / Release / RelWithDebInfo / MinSizeRel
@@ -72,7 +72,7 @@ if(BUILD_TESTING)
 endif()
 ```
 
-## 4. 查找与使用外部库
+## 查找与使用外部库
 
 ```cmake
 # 方法 1：find_package（系统已安装的库）
@@ -90,7 +90,7 @@ FetchContent_MakeAvailable(nlohmann_json)
 target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)
 ```
 
-## 5. 现代 CMake 最佳实践
+## 现代 CMake 最佳实践
 
 ```cmake
 # ⚠️ 不要这样做：
@@ -106,7 +106,7 @@ target_compile_options(mylib PRIVATE -Wall -Wextra)
 target_compile_definitions(mylib PRIVATE DEBUG)
 ```
 
-## 6. 项目目录结构
+## 项目目录结构
 
 ```text
 project/
@@ -135,7 +135,7 @@ add_subdirectory(src)
 add_subdirectory(tests)
 ```
 
-## 7. 常用 CMake 变量
+## 常用 CMake 变量
 
 ```cmake
 # 项目信息

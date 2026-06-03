@@ -1,6 +1,8 @@
+> **核心考点**：CPU 的控制器/运算器/寄存器三大组件、取指-译码-执行循环、PC 决定指令执行顺序
+
 #computer-organization #cpu #execution-model #register #alu
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - CPU 执行模型的核心是：**取指、译码、执行，并在寄存器与内存之间搬运和处理数据**
 - CPU 不直接“理解程序逻辑”，而是执行一条条机器指令

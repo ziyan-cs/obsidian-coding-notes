@@ -1,6 +1,8 @@
+> **核心考点**：信号量的计数机制、P/V 操作语义、二值信号量与计数信号量、信号量用于互斥与同步的区别
+
 #os #semaphore #synchronization #producer-consumer #concurrency
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 信号量的核心是：**通过计数器协调多个执行流对资源或顺序的访问**
 - 它既可以用于互斥，也可以用于同步

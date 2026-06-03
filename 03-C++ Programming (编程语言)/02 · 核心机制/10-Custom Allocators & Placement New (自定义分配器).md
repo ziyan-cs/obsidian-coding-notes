@@ -1,6 +1,6 @@
 > **核心考点**：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
-## 1. Placement New
+## Placement New
 
 ```cpp
 #include <new>  // placement new 所需头文件
@@ -24,7 +24,7 @@ operator delete(buffer);  // 只释放内存，不调用析构
 // 不要混用 placement new 和普通 delete！
 ```
 
-## 2. 标准分配器接口（std::allocator）
+## 标准分配器接口（std::allocator）
 
 ```cpp
 // std::allocator 的典型实现（简化版）
@@ -49,7 +49,7 @@ std::vector<int, MyAllocator<int>> custom_vec;
 // 但注意：标准容器默认使用 std::allocator，替换需谨慎
 ```
 
-## 3. 实现自定义分配器
+## 实现自定义分配器
 
 ```cpp
 // 简单的池分配器（线性分配，不释放单个对象）
@@ -81,7 +81,7 @@ std::vector<int, LinearAllocator<int>> v;
 // 适合：短期任务、需要避免内存碎片的场景
 ```
 
-## 4. 有状态的分配器（C++11+）
+## 有状态的分配器（C++11+）
 
 ```cpp
 // C++11 前，分配器必须是无状态的
@@ -118,7 +118,7 @@ public:
 // 使用前需要注意：容器拷贝时需要决定使用哪个分配器
 ```
 
-## 5. 重载 operator new 和 operator delete
+## 重载 operator new 和 operator delete
 
 ```cpp
 // 全局重载（影响巨大，很少使用）
@@ -145,7 +145,7 @@ public:
 };
 ```
 
-## 6. 分配器适配器
+## 分配器适配器
 
 ```cpp
 #include <scoped_allocator>  // C++11
@@ -161,7 +161,7 @@ using ScopedVec = std::vector<String,
     std::scoped_allocator_adaptor<MyAllocator<String>>>;
 ```
 
-## 7. 何时需要自定义分配器？
+## 何时需要自定义分配器？
 
 | 场景 | 推荐方案 |
 |------|---------|

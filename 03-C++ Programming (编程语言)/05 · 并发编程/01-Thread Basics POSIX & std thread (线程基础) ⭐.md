@@ -1,6 +1,6 @@
 > **核心考点**：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 
-## 1. std::thread 基础
+## std::thread 基础
 
 ```cpp
 #include <thread>
@@ -23,7 +23,7 @@ public:
 };
 ```
 
-## 2. 线程生命周期管理
+## 线程生命周期管理
 
 ```cpp
 std::thread t(worker, 42);
@@ -41,7 +41,7 @@ t.detach(); // 分离，线程在后台运行，t 不再关联线程
 - `joinable()` 检查线程是否可被 join
 - `detach` 后的线程无法再获取其状态
 
-## 3. 参数传递陷阱
+## 参数传递陷阱
 
 ```cpp
 // ❌ 危险：传递引用时忘记用 std::ref
@@ -56,7 +56,7 @@ Data d;
 std::thread t(process, std::cref(d));  // ✅ 确保 d 在线程执行期间存活
 ```
 
-## 4. 线程与 POSIX pthread 的关系
+## 线程与 POSIX pthread 的关系
 
 ```cpp
 // std::thread 底层封装了 pthread（Linux/macOS）或 Windows Threads
@@ -71,7 +71,7 @@ t.detach();
 unsigned int n = std::thread::hardware_concurrency();  // 逻辑 CPU 核心数
 ```
 
-## 5. std::jthread (C++20)
+## std::jthread (C++20)
 
 ```cpp
 // C++20 引入：自动 join + 可取消
@@ -86,7 +86,7 @@ std::jthread jt([](std::stop_token st) {
 jt.request_stop();
 ```
 
-## 6. 线程 ID 与异常安全
+## 线程 ID 与异常安全
 
 ```cpp
 // 获取当前线程 ID

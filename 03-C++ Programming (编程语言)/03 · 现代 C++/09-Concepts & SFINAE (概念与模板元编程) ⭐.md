@@ -1,6 +1,6 @@
 > **核心考点**：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
 
-## 1. Concept 基础（C++20）
+## Concept 基础（C++20）
 
 ```cpp
 #include <concepts>
@@ -31,7 +31,7 @@ void print(const HasSize auto& container) {
 std::integral auto half(std::integral auto x) { return x / 2; }
 ```
 
-## 2. 常用标准 Concepts
+## 常用标准 Concepts
 
 ```cpp
 // 核心 concepts
@@ -56,7 +56,7 @@ concept SortableContainer = requires(T c) {
 } && std::regular<T>;
 ```
 
-## 3. requires 表达式的三种形式
+## requires 表达式的三种形式
 
 ```cpp
 // 1. 简单需求：成员存在
@@ -81,7 +81,7 @@ concept LargeIntegral = std::integral<T> && requires {
 };
 ```
 
-## 4. SFINAE（Substitution Failure Is Not An Error）
+## SFINAE（Substitution Failure Is Not An Error）
 
 ```cpp
 // 最基础的 enable_if 用法
@@ -100,7 +100,7 @@ template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
 void func(T val);
 ```
 
-## 5. 更多 SFINAE 技法
+## 更多 SFINAE 技法
 
 ```cpp
 // 检测成员是否存在（传统 SFINAE）
@@ -122,7 +122,7 @@ auto process(const T& t) -> decltype(t.size(), void(), t[0]) {
 }
 ```
 
-## 6. Concepts 如何改进 SFINAE
+## Concepts 如何改进 SFINAE
 
 | 方面 | 传统 SFINAE | C++20 Concepts |
 |------|------------|----------------|
@@ -150,7 +150,7 @@ concept Container = requires(T t) {
 void print(const Container auto& c) { /* ... */ }
 ```
 
-## 7. 工程建议
+## 工程建议
 
 ```cpp
 // ✅ 如果你用 C++20，优先用 Concepts 而非 SFINAE

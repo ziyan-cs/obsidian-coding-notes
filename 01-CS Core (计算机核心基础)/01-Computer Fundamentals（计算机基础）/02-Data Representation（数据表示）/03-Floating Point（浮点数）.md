@@ -1,6 +1,8 @@
+> **核心考点**：IEEE 754 浮点数表示、精度误差根源、符号/指数/尾数结构、浮点数不能直接比较
+
 #cs #floating-point #ieee754 #precision #data-representation
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 浮点数本质是：**在有限 bit 中近似表示实数**
 - 浮点数的核心特征不是“能表示小数”，而是：

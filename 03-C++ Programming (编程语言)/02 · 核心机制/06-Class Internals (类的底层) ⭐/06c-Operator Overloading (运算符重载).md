@@ -1,6 +1,6 @@
+> **核心考点**：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
 
 ```cpp
-class Vec2 {
 public:
     double x, y;
     Vec2(double x=0, double y=0) : x(x), y(y) {}

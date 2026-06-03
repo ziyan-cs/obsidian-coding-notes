@@ -1,3 +1,4 @@
+> **核心考点**：LCS 二维 DP 与滚动数组、LIS 的 O(n log n) 耐心排序、双序列 DP 通用模式
 # LCS & LIS
 #algorithm #dp #linear-dp #sequence #optimization
 

@@ -1,6 +1,6 @@
 > **核心考点**：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
-## 1. 三种异常安全保证
+## 三种异常安全保证
 
 ```cpp
 // 1. 基本保证：抛出异常后，对象处于合法状态
@@ -23,7 +23,7 @@ public:
 };
 ```
 
-## 2. noexcept
+## noexcept
 
 ```cpp
 // noexcept 有两种作用：
@@ -56,7 +56,7 @@ std::vector<Good> v2;
 // 所以：移动构造函数必须标记 noexcept！
 ```
 
-## 3. 栈展开（Stack Unwinding）
+## 栈展开（Stack Unwinding）
 
 ```cpp
 struct Cleanup {
@@ -83,7 +83,7 @@ int main() {
 2. 每退出一层，该层栈上所有对象的析构函数被调用
 3. 找到匹配的 `catch` 后，进入异常处理
 
-## 4. 异常安全编程指南
+## 异常安全编程指南
 
 ```cpp
 // ✅ 使用 RAII 管理资源（异常安全的核心）
@@ -110,7 +110,7 @@ void wrapper() {
 void swap(Foo&) noexcept;
 ```
 
-## 5. 异常 vs 错误码
+## 异常 vs 错误码
 
 | | 异常 | 错误码 |
 |--|------|--------|

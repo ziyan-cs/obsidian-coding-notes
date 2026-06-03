@@ -1,3 +1,4 @@
+> **核心考点**：贪心算法的局部最优推导全局最优、与 DP 的区别、区间调度/跳跃游戏经典例题
 # Divide and Conquer
 #algorithm #divide-and-conquer #recursion #merge-sort
 

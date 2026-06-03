@@ -1,6 +1,6 @@
 > **核心考点**：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
-## 1. 测试金字塔
+## 测试金字塔
 
 ```text
          ╱╲
@@ -18,7 +18,7 @@
 | 集成测试 | 秒级 | 中 | 中 |
 | E2E 测试 | 分钟级 | 少 | 高 |
 
-## 2. Google Test 基础
+## Google Test 基础
 
 ```cpp
 #include <gtest/gtest.h>
@@ -54,7 +54,7 @@ TEST_F(MyTest, CanQuery) {
 }
 ```
 
-## 3. 断言速查
+## 断言速查
 
 | 断言 | 用途 |
 |------|------|
@@ -68,7 +68,7 @@ TEST_F(MyTest, CanQuery) {
 
 `ASSERT_*` 版本在失败时**终止当前测试**（而非继续）。`EXPECT_*` 则继续执行后续行。
 
-## 4. GMock
+## GMock
 
 ```cpp
 #include <gmock/gmock.h>
@@ -117,7 +117,7 @@ EXPECT_CALL(mock, method(Eq("exact"), _))
     .Times(Exactly(2));                   // 精确调用 2 次
 ```
 
-## 5. Catch2 轻量测试框架
+## Catch2 轻量测试框架
 
 ```cpp
 // Catch2 是 header-only，更轻量
@@ -143,7 +143,7 @@ TEST_CASE("vectors can be resized") {
 }
 ```
 
-## 6. 测试驱动开发（TDD）流程
+## 测试驱动开发（TDD）流程
 
 ```text
 1. 写一个失败的测试（RED）
@@ -152,7 +152,7 @@ TEST_CASE("vectors can be resized") {
 4. 重复
 ```
 
-## 7. 测试覆盖率
+## 测试覆盖率
 
 ```bash
 # GCC 覆盖率工具
@@ -164,7 +164,7 @@ lcov -c -d . -o coverage.info
 genhtml -o report coverage.info
 ```
 
-## 8. 工程实践
+## 工程实践
 
 ```cpp
 // ✅ 测试应当：

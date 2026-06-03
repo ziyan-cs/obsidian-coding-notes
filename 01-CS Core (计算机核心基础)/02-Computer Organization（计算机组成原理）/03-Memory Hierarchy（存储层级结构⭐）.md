@@ -1,6 +1,8 @@
+> **核心考点**：寄存器→Cache→主存→外存的分层结构、速度/容量/成本三角权衡、局部性原理
+
 #computer-organization #memory-hierarchy #cache #ram #storage
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - 存储层级结构的核心是：**用多层速度、容量、成本不同的存储共同构成整体系统**
 - 典型层次：

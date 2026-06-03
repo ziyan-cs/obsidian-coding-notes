@@ -1,6 +1,6 @@
 > **核心考点**：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
 
-## 1. 什么是 RAII
+## 什么是 RAII
 
 RAII（Resource Acquisition Is Initialization）：**在构造函数中获取资源，在析构函数中释放资源**。
 
@@ -32,7 +32,7 @@ void good() {
 2. 资源在析构函数中释放
 3. 资源不能离开对象独立存在（禁用拷贝或正确管理生命周期）
 
-## 2. RAII 管理的资源类型
+## RAII 管理的资源类型
 
 ```cpp
 // RAII 不只管理内存——管理所有需要成对获取/释放的资源
@@ -65,7 +65,7 @@ public:
 // 5. POSIX 信号量/socket/其他系统资源
 ```
 
-## 3. 智能指针是 RAII 的典型应用
+## 智能指针是 RAII 的典型应用
 
 ```cpp
 // unique_ptr：独占所有权
@@ -81,7 +81,7 @@ auto sptr = std::make_shared<Foo>();     // 引用计数 = 1
 // 引用计数 = 0 时自动 delete
 ```
 
-## 4. RAII + 异常安全的黄金法则
+## RAII + 异常安全的黄金法则
 
 ```cpp
 // 使用 RAII 包装所有资源 → 自动获得基本异常安全保证
@@ -115,7 +115,7 @@ public:
 };
 ```
 
-## 5. RAII 的常见错误
+## RAII 的常见错误
 
 ```cpp
 // ❌ 错误 1：RAII 类没有正确处理拷贝
@@ -155,7 +155,7 @@ public:
 };
 ```
 
-## 6. 工程习惯
+## 工程习惯
 
 ```cpp
 // ✅ 每次看到"配对操作"（open/close, lock/unlock, new/delete, malloc/free）

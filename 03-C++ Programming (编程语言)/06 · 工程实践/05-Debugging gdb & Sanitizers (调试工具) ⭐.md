@@ -1,6 +1,6 @@
 > **核心考点**：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
-## 1. GDB 核心命令
+## GDB 核心命令
 
 ```bash
 # 编译时加 -g 开启调试符号
@@ -41,7 +41,7 @@ gdb> p variable           # 查看变量
 gdb> l                    # 看附近源码
 ```
 
-## 2. AddressSanitizer (ASan)
+## AddressSanitizer (ASan)
 
 ```bash
 # 编译时开启（GCC/Clang 4.8+）
@@ -70,7 +70,7 @@ int* r = &a;
 delete r;       // ✅ ASan 检测：delete on stack variable
 ```
 
-## 3. 其他 Sanitizers
+## 其他 Sanitizers
 
 ```bash
 # 未定义行为检测（UB Sanitizer）
@@ -96,7 +96,7 @@ int a = 0;
 int b = 1 / a;    // division by zero
 ```
 
-## 4. Core Dump 分析
+## Core Dump 分析
 
 ```bash
 # 开启 core dump
@@ -113,7 +113,7 @@ gdb ./main core.1234
 # print *this — 查看当前对象
 ```
 
-## 5. Valgrind 基础
+## Valgrind 基础
 
 ```bash
 # Memcheck：检测内存错误

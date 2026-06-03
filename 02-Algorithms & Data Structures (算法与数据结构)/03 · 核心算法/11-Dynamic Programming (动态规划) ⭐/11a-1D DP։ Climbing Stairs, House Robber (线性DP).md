@@ -1,3 +1,4 @@
+> **核心考点**：一维 DP 状态定义与转移方程、斐波那契类问题、滚动数组空间优化
 # Linear DP
 #algorithm #dp #linear-dp #sequence #optimization
 

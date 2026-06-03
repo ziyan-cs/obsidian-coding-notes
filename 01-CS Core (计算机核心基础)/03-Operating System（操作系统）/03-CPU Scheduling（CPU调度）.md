@@ -1,6 +1,8 @@
+> **核心考点**：FCFS/SJF/Round Robin/Priority 四种调度算法、调度目标的多指标权衡、时间片与上下文切换成本
+
 #os #cpu-scheduling #scheduler #process #thread
 
-## ⚡ TL;DR（快速决策）
+## TL;DR（快速决策）
 
 - CPU 调度的核心是：**决定下一个由谁获得 CPU 执行权**
 - 调度目标通常包括：

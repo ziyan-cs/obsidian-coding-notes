@@ -1,6 +1,6 @@
 > **核心考点**：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
-## 1. 什么是无锁（Lock-Free）
+## 什么是无锁（Lock-Free）
 
 ```cpp
 // 有锁版本
@@ -25,7 +25,7 @@ void push(int val) {
 - 任意线程挂起不会阻塞其他线程的进度
 - 系统中至少有一个线程能在有限步内完成操作
 
-## 2. 无锁栈（Lock-Free Stack）
+## 无锁栈（Lock-Free Stack）
 
 ```cpp
 template<typename T>
@@ -57,7 +57,7 @@ public:
 };
 ```
 
-## 3. ABA 问题
+## ABA 问题
 
 ```cpp
 // ABA 问题场景：
@@ -78,7 +78,7 @@ std::atomic<TaggedPointer> head_;
 // - 或用 std::atomic<std::shared_ptr<T>> (C++20)
 ```
 
-## 4. 内存管理难题
+## 内存管理难题
 
 ```cpp
 // 无锁结构的最大问题：何时释放内存？
@@ -94,7 +94,7 @@ std::atomic<TaggedPointer> head_;
 // 4. Epoch-Based Reclamation (EBR)
 ```
 
-## 5. 何时用无锁？
+## 何时用无锁？
 
 | 适合无锁 | 不适合无锁 |
 |---------|-----------|
@@ -109,7 +109,7 @@ std::atomic<TaggedPointer> head_;
 // "Lock-free programming is like a sharp knife — useful but easy to cut yourself"
 ```
 
-## 6. C++ 中的无锁设施
+## C++ 中的无锁设施
 
 | 设施 | 说明 |
 |------|------|
