@@ -1,5 +1,5 @@
 
-> 核心考点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
+> **核心考点**：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
 
 ## 现代 CMake 的核心思想
 

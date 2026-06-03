@@ -16,7 +16,14 @@
       "Bash(printf '%s\\\\n' *.md)",
       "Bash(mv \"01-编译链接加载.md\" \"01-Compilation & Linking \\(编译链接加载\\).md\")",
       "Bash(mv \"02-指令执行周期.md\" \"02-Instruction Cycle \\(指令执行周期\\).md\")",
-      "Bash(cat)"
+      "Bash(cat)",
+      "Bash(mv \"05-Network Programming \\(网络编程\\)/02 · Socket编程/05-Reactor & Proactor Pattern \\(事件驱动模型\\) ⭐/05c-Multi Reactor Multi Thread։ one loop per thread \\(主从reactor\\).md\" \"05-Network Programming \\(网络编程\\)/02 · Socket编程/05-Reactor & Proactor Pattern \\(事件驱动模型\\) ⭐/05c-Multi Reactor Multi Thread： one loop per thread \\(主从reactor\\).md\")",
+      "Bash(mv \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03a-GDB Essentials։ breakpoint, watch, backtrace \\(GDB核心用法\\) ⭐.md\" \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03a-GDB Essentials：breakpoint, watch, backtrace \\(GDB核心用法\\) ⭐.md\")",
+      "Bash(mv \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03c-Valgrind։ Memory Leak Detection \\(内存泄漏检测\\) ⭐.md\" \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03c-Valgrind：Memory Leak Detection \\(内存泄漏检测\\) ⭐.md\")",
+      "Bash(mv \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03e-perf։ CPU Profiling & Flamegraph \\(性能火焰图\\).md\" \"07-Development Tools \\(工程开发工具\\)/03 · Debug & Profiling \\(调试与性能分析\\)/03e-perf：CPU Profiling & Flamegraph \\(性能火焰图\\).md\")",
+      "Bash(mv \"07-Development Tools \\(工程开发工具\\)/04 · Other Tools \\(其他工具速查\\)/04b-Docker Basics։ Image & Container \\(Docker基础\\).md\" \"07-Development Tools \\(工程开发工具\\)/04 · Other Tools \\(其他工具速查\\)/04b-Docker Basics：Image & Container \\(Docker基础\\).md\")",
+      "Bash(python3)",
+      "Bash(python3 -c \"print\\(1\\)\")"
     ]
   }
 }

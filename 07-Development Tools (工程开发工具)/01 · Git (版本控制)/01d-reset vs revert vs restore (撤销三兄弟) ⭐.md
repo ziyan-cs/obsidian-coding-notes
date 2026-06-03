@@ -1,5 +1,5 @@
 
-> 核心考点：三者的作用范围、是否改写历史、适用场景
+> **核心考点**：三者的作用范围、是否改写历史、适用场景
 
 ## 速查
 
@@ -34,8 +34,6 @@ git reset --hard  HEAD~1   # 移动 HEAD + 清空暂存区 + 丢弃工作区改�
 ## git revert
 
 创建一个新 commit，内容是指定 commit 的**逆操作**，历史不被改写：
-
-bash
 
 ```bash
 git revert abc1234          # 撤销某个 commit，产生新的 revert commit

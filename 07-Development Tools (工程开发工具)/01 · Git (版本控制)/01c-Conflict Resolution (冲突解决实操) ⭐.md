@@ -1,5 +1,4 @@
-
-> 核心考点：冲突何时产生、冲突标记含义、解决流程
+> **核心考点**：冲突何时产生、冲突标记含义、解决流程、高级合并策略
 
 ## 冲突何时产生
 
@@ -28,11 +27,53 @@ git add conflicted_file.cpp  # 标记已解决
 git commit                   # 完成合并（message 自动生成）
 ```
 
-## 实用工具
+## 高级技巧
+
+### 合并策略
 
 ```bash
-git mergetool               # 打开图形化合并工具（vimdiff / vscode 等）
-git checkout --ours file    # 直接取当前分支版本
-git checkout --theirs file  # 直接取对方分支版本
-git diff --conflict=diff3   # 显示三方对比（共同祖先 + 两方改动）
+git merge -s recursive -X theirs feature   # 冲突全取对方版本
+git merge -s recursive -X ours feature     # 冲突全取自己版本
+git merge -s ours feature                  # 完全忽略对方（仅记合并事实）
 ```
+
+### 快速选择
+
+```bash
+git checkout --ours file      # 取当前分支版本
+git checkout --theirs file    # 取对方分支版本
+git checkout --merge file     # 重新标记冲突
+```
+
+### 合并工具
+
+```bash
+git mergetool                    # 图形化合并工具
+git config merge.tool vscode     # 设置默认工具
+git config merge.conflictstyle diff3  # 三方对比（显示共同祖先）
+```
+
+### git rerere（复用解决方案）
+
+```bash
+git config --global rerere.enabled true
+# 相同冲突再次出现时自动应用上次方案
+```
+
+### 中止合并
+
+```bash
+git merge --abort     # 回到 merge 前
+git rebase --abort    # 回到 rebase 前
+```
+
+## 避免冲突的实践
+
+| 实践 | 说明 |
+|------|------|
+| 频繁同步主干 | 经常 rebase/merge 最新代码，减少积压 |
+| 小粒度提交 | 每次改动范围小，冲突概率低 |
+| 职责划分清晰 | 不同人不同模块，减少同时改同一文件 |
+| 统一格式化 | 统一缩进风格，减少伪冲突 |
+
+> **工程要点**：冲突不可怕，关键是理解每段代码去留的业务逻辑。`git log --merge -p` 可查看冲突文件的双方提交历史辅助决策。不要盲目 ours/theirs。
