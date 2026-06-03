@@ -1,0 +1,148 @@
+> **核心考点**：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
+
+## 1. std::atomic 基础
+
+```cpp
+#include <atomic>
+
+std::atomic<int> counter{0};
+// 普通 int 的 read-modify-write 不是线程安全的：
+// ++counter 在多线程中会出错（load → inc → store 不是原子的）
+
+// ✅ atomic 的 ++ 是原子的
+counter.fetch_add(1);      // 原子自增
+counter.fetch_sub(1);      // 原子自减
+counter.load();            // 原子加载
+counter.store(42);         // 原子存储
+counter.exchange(10);      // 原子交换（返回旧值）
+counter.compare_exchange_weak(old, new);  // CAS
+
+// 简写运算符：
+counter++;                 // 等价于 fetch_add(1)
+counter += 5;
+```
+
+## 2. 为什么 atomic 比 mutex 快？
+
+```cpp
+// mutex 保护
+std::mutex mtx;
+int shared = 0;
+void inc_mutex() {
+    std::lock_guard lock(mtx);
+    ++shared;  // 涉及系统调用（用户态→内核态→用户态）
+}
+
+// atomic：无锁，只在用户态完成
+std::atomic<int> atomic_shared{0};
+void inc_atomic() {
+    ++atomic_shared;  // 编译为 lock add 或 CAS 循环，纯用户态指令
+}
+```
+
+**性能量级**（粗略对比）：
+- `mutex lock/unlock`：~25-50ns（系统调用+上下文切换）
+- `atomic fetch_add`：~5-15ns（一条 CPU 指令）
+- 注意：实际差异取决于**竞争程度**
+
+## 3. 内存序（Memory Order）— 核心难点
+
+```cpp
+// 默认是 std::memory_order_seq_cst（最严格，最慢）
+std::atomic<int> a{0}, b{0};
+int x = 0, y = 0;
+
+// 六种内存序：
+std::memory_order_relaxed;   // 无顺序约束
+std::memory_order_consume;   // 数据依赖（实践中 ≈ relaxed，不推荐使用）
+std::memory_order_acquire;   // 保证之后的读取不会重排到此操作之前
+std::memory_order_release;   // 保证之前的写入不会重排到此操作之后
+std::memory_order_acq_rel;   // acquire + release（用于 read-modify-write）
+std::memory_order_seq_cst;   // 顺序一致性（默认，最严格）
+```
+
+### 常见场景
+
+```cpp
+// 场景 1：只要求原子性，不要求顺序 → relaxed（计数器）
+std::atomic<long> counter{0};
+counter.fetch_add(1, std::memory_order_relaxed);
+
+// 场景 2：生产者-消费者 → release/acquire（传递数据）
+std::atomic<bool> ready{false};
+Data data;
+
+// 线程 1（生产者）
+data.prepare();                     // 普通写
+ready.store(true, std::memory_order_release);  // 释放语义
+
+// 线程 2（消费者）
+while (!ready.load(std::memory_order_acquire));  // 获取语义
+// ✅ 保证：线程 2 看到 data.prepare() 的所有副作用
+process(data);
+
+// 场景 3：全同步 → seq_cst（默认，最易理解但最慢）
+flag.store(true);  // 等价于 seq_cst
+```
+
+### Acquire-Release 语义图
+
+```text
+线程 A（Release）:
+  A.write1
+  A.write2
+  flag.store(true, release)  ← 之前的写不能重排到后面
+    
+线程 B（Acquire）:
+  while (!flag.load(acquire));  ← 之后的读不能重排到前面
+  B.read1     ← 保证看到 A.write1/A.write2
+  B.read2
+```
+
+## 4. CAS 操作 (Compare-Exchange)
+
+```cpp
+std::atomic<int> value{0};
+
+// 期望值 passed by reference
+int expected = 0;
+int desired = 42;
+
+if (value.compare_exchange_weak(expected, desired)) {
+    // value == expected(=0) → value 被设置为 desired(=42)
+} else {
+    // value != expected → expected 被更新为 value 的当前值
+}
+
+// compare_exchange_weak vs strong：
+// weak: 可能虚假失败（硬件原因），需要循环重试
+// strong: 不会虚假失败，更贵
+// 通常 CAS 循环中用 weak，单次用 strong
+
+// CAS 循环实现无锁栈
+void atomic_push(Node* new_head) {
+    Node* old_head = head_.load();
+    do {
+        new_head->next = old_head;
+    } while (!head_.compare_exchange_weak(old_head, new_head));
+}
+```
+
+## 5. atomic 的局限性
+
+```cpp
+// ❌ atomic 类型不一定是 lock-free
+// 可以通过 is_lock_free() 检查
+std::atomic<LargeStruct> big;
+if (big.is_lock_free()) {
+    // 硬件级别原子操作
+} else {
+    // 内部用了 mutex！
+}
+
+// ❌ atomic 不支持复合操作（除非用 CAS 循环）
+// 不能同时修改两个 atomic 变量
+// atomic 不能用于 std::vector 等容器（不可拷贝/移动）
+```
+
+> **面试重点**：为什么需要内存序？现代 CPU 和编译器会重排指令。`release` 保证之前的写不会被重排到该操作之后；`acquire` 保证之后的读不会被重排到该操作之前。两者配合形成 **happens-before** 关系。
