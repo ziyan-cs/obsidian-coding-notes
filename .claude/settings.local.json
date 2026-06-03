@@ -13,7 +13,10 @@
       "Bash(printf '%s\\\\n' \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/08-epoll Internals \\(epoll底层原理\\) ⭐/\"*.md)",
       "Bash(rm \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/07-IO Models Deep Dive \\(五种IO模型\\) ⭐/07c-IO Multiplexing։ select, poll, epoll \\(多路复用对比\\).md\")",
       "Bash(rm \"04-Linux & System \\(Linux 系统\\)/03 · IO模型/08-epoll Internals \\(epoll底层原理\\) ⭐/08b-Level Trigger vs Edge Trigger։ LT⧸ET \\(触发模式\\).md\")",
-      "Bash(printf '%s\\\\n' *.md)"
+      "Bash(printf '%s\\\\n' *.md)",
+      "Bash(mv \"01-编译链接加载.md\" \"01-Compilation & Linking \\(编译链接加载\\).md\")",
+      "Bash(mv \"02-指令执行周期.md\" \"02-Instruction Cycle \\(指令执行周期\\).md\")",
+      "Bash(cat)"
     ]
   }
 }
