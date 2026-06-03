@@ -63,42 +63,34 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
 
 ### 联合共识（Joint Consensus）
 
-```go
-// 两阶段变更：
+```
+联合共识（Joint Consensus）两阶段变更：
 
-// 阶段 1：进入 Cold+New（联合共识）
-// Leader 提交 Cold+new
-// - 选举需要 Cold 多数 AND Cnew 多数
-// - 日志复制需要 Cold 多数 OR Cnew 多数（任一组多数即可提交）
+阶段 1：进入 Cold+New
+  - 选举需要 Cold 多数 AND Cnew 多数
+  - 日志复制需要 Cold 多数 OR Cnew 多数
 
-// 阶段 2：完全切换到 Cnew
-// Cold+new 提交后，Leader 提交 Cnew
-// - 所有节点使用新配置
-// - 成员变更完成
+阶段 2：完全切换到 Cnew
+  - Leader 提交 Cnew，所有节点使用新配置
 
-
-// 单节点变更（简化方案，etcd 使用）
-// 一次只增删一个节点
-// 因为一次只变一个，新旧配置的多数派一定有交集
-// 从 3 节点扩容：A,B,C -> A,B,C,D（添加 D）
-//         多数派：A,B 与 A,B,D 有交集 A,B
-// 一次加一个，逐个添加，无需联合共识
+单节点变更（etcd 使用，简化方案）：
+  一次只增删一个节点 → 新旧多数派必有交集
+  3→4 扩容：A,B,C → A,B,C,D
+  多数派交集：{A,B} ∩ {A,B,D} = {A,B}  ✅
+  逐个添加，无需联合共识
 ```
 
 ---
 
 ## 节点恢复
 
-```go
-// Follower/Candidate 长时间未收到 Leader 消息
-// 超时后发起选举
-// 如果节点落后太多（日志差距极大）
-// Leader 通过 InstallSnapshot RPC 发送快照
-
-// 节点重启后：
-// 1. 从磁盘恢复持久化状态（currentTerm, votedFor, log[]）
-// 2. 从快照恢复状态机
-// 3. 以 Follower 身份启动
+```
+节点恢复流程：
+1. Follower/Candidate 超时未收到 Leader 消息 → 发起选举
+2. 若落后太多 → Leader 通过 InstallSnapshot RPC 发送快照
+3. 重启后从磁盘恢复持久化状态（currentTerm, votedFor, log[]）
+4. 从快照恢复状态机
+5. 以 Follower 身份启动
 ```
 
 ---

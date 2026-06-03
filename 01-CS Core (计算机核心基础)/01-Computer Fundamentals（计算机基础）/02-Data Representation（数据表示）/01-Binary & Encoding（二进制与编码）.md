@@ -8,19 +8,26 @@ tags:
 
 ## 进制转换
 
-```python
-# 任意进制转十进制：按权展开
-# 十进制转任意进制：除基取余法
+```cpp
+// 任意进制转十进制：按权展开
+// 例如：0b1101 = 1*8 + 1*4 + 0*2 + 1*1 = 13
+int toDecimal(string_view num, int base) {
+    int val = 0;
+    for (char c : num) val = val * base + (isdigit(c) ? c - '0' : c - 'a' + 10);
+    return val;
+}
 
-# n 进制数 转 10 进制
-val = sum(digit * base^i for i, digit in enumerate(reversed(digits)))
-
-# 10 进制转 n 进制
-digits = []
-while val > 0:
-    digits.append(val % base)
-    val //= base
-# 反转得到最高位到最低位
+// 十进制转 n 进制：除基取余法
+string fromDecimal(int val, int base) {
+    string digits;
+    while (val > 0) {
+        int r = val % base;
+        digits.push_back(r < 10 ? '0' + r : 'a' + r - 10);
+        val /= base;
+    }
+    reverse(digits.begin(), digits.end());
+    return digits.empty() ? "0" : digits;
+}
 ```
 
 | 进制 | 前缀 | 例子 |

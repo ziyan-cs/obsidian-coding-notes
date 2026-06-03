@@ -58,15 +58,15 @@ Leader 崩溃 -> 从 ISR（In-Sync Replicas）中选举新 Leader
 
 ## 消费者端
 
-```java
-// 手动提交 offset（处理完再提交）
-while (true) {
-    ConsumerRecords records = consumer.poll(100);
-    for (ConsumerRecord record : records) {
-        process(record);       // 先处理
+```cpp
+// 手动提交 offset（处理完再提交，librdkafka 回调模式）
+class ConsumerCb : public RdKafka::ConsumeCb {
+    void consume_cb(RdKafka::Message& msg, void*) override {
+        if (msg.err()) return;                  // 出错跳过
+        process(msg.payload(), msg.len());       // 先处理
+        // librdkafka 内部自动管理 offset，或手动存储
     }
-    consumer.commitSync();     // 处理完再提交
-}
+};
 ```
 
 ### 端到端 Exactly Once

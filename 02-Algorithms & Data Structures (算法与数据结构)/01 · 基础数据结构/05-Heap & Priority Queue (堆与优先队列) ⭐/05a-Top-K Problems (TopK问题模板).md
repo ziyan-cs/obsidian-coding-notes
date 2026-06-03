@@ -43,12 +43,12 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
 
 ### 最小堆求 Top-K 最大值
 
-```python
+```cpp
 vector<int> topKLargest(vector<int>& nums, int k) {
     priority_queue<int, vector<int>, greater<int>> minH;
     for (int x : nums) {
         minH.push(x);
-        if ((int)minH.size() > k) minH.pop();  // 弹出最小值，保留最大 K 个
+        if ((int)minH.size() > k) minH.pop();
     }
     vector<int> res;
     while (!minH.empty()) { res.push_back(minH.top()); minH.pop(); }
@@ -79,16 +79,13 @@ int findKthLargest(vector<int>& nums, int k) {
 
 ### 经典变体
 
-python
-
-```python
-# 前 K 个高频元素
+```cpp
+// 前 K 个高频元素
 vector<int> topKFrequent(vector<int>& nums, int k) {
     unordered_map<int,int> freq;
     for (int x : nums) freq[x]++;
-    // 最小堆，按频率
     using P = pair<int,int>;
-    priority_queue<P, vector<P>, greater<P>> pq;
+    priority_queue<P, vector<P>, greater<P>> pq;  // 按频率最小堆
     for (auto& [val, cnt] : freq) {
         pq.push({cnt, val});
         if ((int)pq.size() > k) pq.pop();
@@ -97,8 +94,10 @@ vector<int> topKFrequent(vector<int>& nums, int k) {
     while (!pq.empty()) { res.push_back(pq.top().second); pq.pop(); }
     return res;
 }
+```
 
-# 数据流中的第 K 大（动态插入）
+```cpp
+// 数据流中的第 K 大
 class KthLargest {
     priority_queue<int, vector<int>, greater<int>> minH;
     int k;
@@ -112,17 +111,24 @@ public:
         return minH.top();
     }
 };
+```
 
-# 合并 K 个有序链表（堆应用）
-def merge_k_lists(lists):
-    heap, dummy = [], ListNode(0)
-    for i, node in enumerate(lists):
-        if node: heapq.heappush(heap, (node.val, i, node))
-    curr = dummy
-    while heap:
-        val, i, node = heapq.heappop(heap)
-        curr.next = node
-        curr = curr.next
-        if node.next: heapq.heappush(heap, (node.next.val, i, node.next))
-    return dummy.next
+```cpp
+// 合并 K 个有序链表
+struct Cmp {
+    bool operator()(ListNode* a, ListNode* b) { return a->val > b->val; }
+};
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    priority_queue<ListNode*, vector<ListNode*>, Cmp> pq;
+    for (auto* node : lists)
+        if (node) pq.push(node);
+    ListNode dummy(0), *cur = &dummy;
+    while (!pq.empty()) {
+        auto* node = pq.top(); pq.pop();
+        cur->next = node;
+        cur = cur->next;
+        if (node->next) pq.push(node->next);
+    }
+    return dummy.next;
+}
 ```

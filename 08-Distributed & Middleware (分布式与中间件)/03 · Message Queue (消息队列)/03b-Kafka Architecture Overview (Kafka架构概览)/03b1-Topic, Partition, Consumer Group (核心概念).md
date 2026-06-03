@@ -39,16 +39,21 @@ offset: 0     1     2     3     4     5
 
 ## 分区与消息路由
 
-```java
+```cpp
 // 生产者决定消息写入哪个分区
-// 1. 指定分区 -> 直接写入
-ProducerRecord("topic", 0, "key", "value");
+// 1. 指定分区 -> 直接写入（librdkafka API）
+rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
+    RD_KAFKA_V_PARTITION(0),
+    RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 
-// 2. 有 key -> hash(key) % 分区数 （相同key保证同一分区）
-ProducerRecord("topic", "user123", "value");
+// 2. 有 key -> hash(key) % 分区数 （相同 key 保证同一分区）
+rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
+    RD_KAFKA_V_KEY("user123", 7),
+    RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 
-// 3. 无 key -> 轮询（round-robin）
-ProducerRecord("topic", "value");
+// 3. 无 key -> 轮询（round-robin，librdkafka 自动处理）
+rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
+    RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 ```
 
 ---

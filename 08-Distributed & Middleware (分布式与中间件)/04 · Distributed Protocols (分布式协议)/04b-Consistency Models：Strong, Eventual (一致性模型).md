@@ -51,28 +51,31 @@ N = 副本数，W = 写确认数，R = 读取数
 
 ### 强一致写
 
-```python
-# 写入所有副本（或过半数 W > N/2）
-def write(key, value):
-    acks = 0
-    for replica in replicas:
-        if replica.write(key, value):
-            acks += 1
-    return acks >= W  # W 个确认才返回成功
+```cpp
+// 强一致写：W 个副本确认才返回成功（Quorum 机制）
+bool write(const string& key, const string& value) {
+    int acks = 0;
+    for (auto& replica : replicas)
+        if (replica.write(key, value)) acks++;
+    return acks >= W_;
+}
 ```
 
 ### 最终一致读
 
-```python
-# 动态决策读取策略（DynamoDB 风格）
-def read(key, consistency='eventual'):
-    if consistency == 'strong':
-        # 强一致读：读所有副本，选最新版本
-        results = [r.read(key) for r in all_replicas]
-        return resolve_conflict(results)  # Vector Clock 解决冲突
-    else:
-        # 最终一致读：读任意副本
-        return any_replica.read(key)
+```cpp
+// 动态决策读取策略（DynamoDB 风格）
+string read(const string& key, bool strong = false) {
+    if (strong) {
+        // 强一致读：读所有副本，选最新版本
+        vector<string> results;
+        for (auto& r : allReplicas)
+            results.push_back(r.read(key));
+        return resolveConflict(results);   // Vector Clock 解决冲突
+    }
+    // 最终一致读：读任意副本
+    return anyReplica().read(key);
+}
 ```
 
 ### Vector Clock（向量时钟）

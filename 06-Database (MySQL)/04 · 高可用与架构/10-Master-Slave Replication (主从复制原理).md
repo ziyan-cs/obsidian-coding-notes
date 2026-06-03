@@ -158,15 +158,17 @@ WHERE variable_name = 'Seconds_Behind_Master';
 ```
 
 **应用层读写分离的延迟处理：**
-```java
-// 写入主库后立即读取 → 强制从主库读
+```cpp
+// 写入主库后立即读取 → 强制从主库读（暂时绕过从库）
 User user = masterDb.query("SELECT * FROM user WHERE id = ?", id);
 
-// 写入后等待 100ms 再从库读（适用于延迟可接受的场景）
-Thread.sleep(100);
+// 写入后等待 100ms 再从库读
+std::this_thread::sleep_for(100ms);
 User user = slaveDb.query("SELECT * FROM user WHERE id = ?", id);
 
-// 或使用"主库写后 cookie 标记"，从库读不到时回退到主库
+// 或：主库写后记录时间戳，从库读时比较延迟
+auto writeTs = std::chrono::steady_clock::now();
+// ... 从库读取检查 repl lag，未追上则回退主库
 ```
 
 > **工程要点**：主从复制的核心矛盾——异步复制可能丢数据，半同步复制增加延迟。大多数业务选择异步复制 + 监控告警（接受秒级延迟的可能性）。对于不能接受任何数据丢失的业务，使用半同步复制或 MySQL InnoDB Cluster。**排查主从延迟的首选命令：** `SHOW SLAVE STATUS\G` 看 `Seconds_Behind_Master` 和 `Slave_SQL_Running_State`。

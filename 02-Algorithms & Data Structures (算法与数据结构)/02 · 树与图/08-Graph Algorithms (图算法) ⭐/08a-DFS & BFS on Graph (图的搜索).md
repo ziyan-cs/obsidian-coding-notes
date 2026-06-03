@@ -4,24 +4,21 @@ tags:
   - tree-graph
 ---
 
-> **核心考点**：图的邻接表/邻接矩阵、DFS 递归与 BFS 队列、visited 标记防环
 > **核心考点**：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 
 ### 图的表示
 
-python
+```cpp
+// 邻接表（稀疏图，最常用）
+vector<vector<int>> adj(n);
+for (auto& e : edges) {
+    adj[e[0]].push_back(e[1]);
+    adj[e[1]].push_back(e[0]);   // 无向图
+}
 
-```python
-# 邻接表（稀疏图，最常用）
-graph = defaultdict(list)
-for u, v in edges:
-    graph[u].append(v)
-    graph[v].append(u)    # 无向图
-
-# 邻接矩阵（稠密图，边数接近 n²）
-n = 5
-matrix = [[0]*n for _ in range(n)]
-matrix[u][v] = weight
+// 邻接矩阵（稠密图）
+vector<vector<int>> matrix(n, vector<int>(n, 0));
+matrix[u][v] = weight;
 ```
 
 ### 图 DFS 模板

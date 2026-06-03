@@ -35,20 +35,29 @@ tags:
   请求 → 写数据库 → 删除缓存（或更新缓存）
 ```
 
-```python
-# Cache-Aside 读
-def get_user(user_id):
-    user = redis.get(f"user:{user_id}")
-    if user:
-        return user
-    user = db.query("SELECT * FROM user WHERE id = ?", user_id)
-    redis.setex(f"user:{user_id}", 3600, user)  # 1h 过期
-    return user
+```cpp
+// Cache-Aside 读（C++ + hiredis）
+string getUser(int userId) {
+    redisReply* reply = (redisReply*)redisCommand(c,
+        "GET user:%d", userId);
+    if (reply && reply->type == REDIS_REPLY_STRING) {
+        string val = reply->str;
+        freeReplyObject(reply);
+        return val;
+    }
+    freeReplyObject(reply);
 
-# Cache-Aside 写
-def update_user(user_id, data):
-    db.execute("UPDATE user SET ... WHERE id = ?", user_id, data)
-    redis.delete(f"user:{user_id}")  # 删除缓存，而非更新
+    // 缓存未命中 → 查数据库 → 写缓存
+    User user = db.query("SELECT * FROM user WHERE id = ?", userId);
+    redisCommand(c, "SETEX user:%d 3600 %s", userId, user.toJson().c_str());
+    return user.toJson();
+}
+
+// Cache-Aside 写
+void updateUser(int userId, const string& data) {
+    db.execute("UPDATE user SET ... WHERE id = ?", userId, data);
+    redisCommand(c, "DEL user:%d", userId);  // 删除缓存，而非更新
+}
 ```
 
 **为什么写时删除缓存而不是更新缓存？**

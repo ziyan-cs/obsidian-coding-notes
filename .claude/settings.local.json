@@ -27,7 +27,9 @@
       "Bash(grep -rn '^```$' --include=\"*.md\" .)",
       "Bash(grep -l \"^---$\")",
       "Bash(python *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(grep -rn '```python\\\\|```java\\\\|```go\\\\|```rust\\\\|```javascript\\\\|```typescript\\\\|```php\\\\|```ruby' --include=\"*.md\" .)",
+      "Bash(grep -rn '```python\\\\|```java\\\\|```go\\\\|```rust\\\\|```javascript\\\\|```typescript' --include=\"*.md\" .)"
     ]
   }
 }

@@ -58,25 +58,24 @@ Term 1        Term 2        Term 3          Term 4
    -> 重置其他节点的选举超时
 ```
 
-```go
-// 选举超时逻辑（伪代码）
-func (n *Node) runElectionTimer() {
-    timeout := random(150ms, 300ms)  // 随机超时
-    select {
-    case <-time.After(timeout):
-        n.startElection()  // 超时 -> 发起选举
-    case <-n.heartbeatCh:
-        // 收到 Leader 心跳 -> 重置定时器
+```cpp
+// 选举超时逻辑（C++ + condition_variable）
+void Node::runElectionTimer() {
+    auto timeout = randomDuration(150ms, 300ms);  // 随机超时
+    unique_lock lock(mtx_);
+    if (cv_.wait_for(lock, timeout) == cv_status::timeout) {
+        startElection();  // 超时 -> 发起选举
     }
+    // 收到 Leader 心跳 -> cv_ 被 notify -> 重置定时器
 }
 
-func (n *Node) startElection() {
-    n.currentTerm += 1
-    n.role = Candidate
-    n.votedFor = n.id  // 投自己
+void Node::startElection() {
+    currentTerm_++;
+    role_ = CANDIDATE;
+    votedFor_ = id_;  // 投自己
     
-    votes := 1
-    for peer := range peers {
+    int votes = 1;
+    for (auto& peer : peers_) {
         go func() {
             if requestVote(peer, n.currentTerm) {
                 votes += 1

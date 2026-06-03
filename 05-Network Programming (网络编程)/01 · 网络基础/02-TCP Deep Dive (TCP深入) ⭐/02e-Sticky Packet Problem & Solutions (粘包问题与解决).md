@@ -119,28 +119,48 @@ setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
 
 ---
 
-## 粘包处理的代码模式（以 Go 为例）
+## 粘包处理的代码模式（C++ 实现）
 
-```go
-// 读取完整消息（方案三：头部 + 长度）
-func readMessage(conn net.Conn) ([]byte, error) {
+```cpp
+// 读取完整消息（方案三：头部 + 长度字段）
+// 返回 0 成功，-1 连接关闭/出错
+int readMessage(int fd, vector<char>& out) {
     // 1. 读取 4 字节头部，获取消息长度
-    header := make([]byte, 4)
-    if _, err := io.ReadFull(conn, header); err != nil {
-        return nil, err
+    uint32_t netLen;
+    ssize_t n = read(fd, &netLen, sizeof(netLen));
+    if (n <= 0) return -1;                         // 关闭或错误
+    size_t remain = sizeof(netLen) - (size_t)n;
+    while (remain > 0) {                           // 处理拆包：头部可能没读完
+        n = read(fd, (char*)&netLen + sizeof(netLen) - remain, remain);
+        if (n <= 0) return -1;
+        remain -= (size_t)n;
     }
-    length := binary.BigEndian.Uint32(header)
+    uint32_t bodyLen = ntohl(netLen);              // 网络字节序转主机字节序
 
-    // 2. 按长度读取消息体（io.ReadFull 保证读满）
-    body := make([]byte, length)
-    if _, err := io.ReadFull(conn, body); err != nil {
-        return nil, err
+    // 2. 按长度读取消息体
+    out.resize(bodyLen);
+    remain = bodyLen;
+    char* ptr = out.data();
+    while (remain > 0) {
+        n = read(fd, ptr, remain);
+        if (n <= 0) return -1;
+        ptr += n;
+        remain -= (size_t)n;
     }
-    return body, nil
+    return 0;
+}
+
+// 发送消息（长度头部 + 消息体）
+void sendMessage(int fd, const char* data, uint32_t len) {
+    uint32_t netLen = htonl(len);                  // 主机转网络字节序
+    vector<iovec> iov(2);
+    iov[0] = {&netLen, sizeof(netLen)};
+    iov[1] = {(void*)data, len};
+    writev(fd, iov.data(), (int)iov.size());        // 聚集写，减少系统调用
 }
 ```
 
-> `io.ReadFull` 是关键：它会循环读取直到读满指定字节数，正确处理了"一次 read 没读完"的拆包情况。
+> **关键点：** C++ 中 `read()` 不保证一次读满指定字节数（拆包），必须循环读取直到收满。`writev` 聚集写避免多次 syscall。网络字节序用 `htonl`/`ntohl` 转换，保证跨平台兼容。
 
 ---
 
