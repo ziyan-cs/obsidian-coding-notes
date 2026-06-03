@@ -4,7 +4,12 @@
       "Bash(awk '{if \\($1 == 0\\) print $2}')",
       "Bash(awk '{if \\($1 > 0\\) print $2}')",
       "Bash(python3 -c \"import os; print\\('Python OK'\\)\")",
-      "Bash(python -c \"import os; print\\('Python OK'\\)\")"
+      "Bash(python -c \"import os; print\\('Python OK'\\)\")",
+      "Bash(mv /e/my_Personal/obsidian_coding_notes/\"06 · 工程实践\"/* .)",
+      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"02 · 核心机制\"/09-*.md ./\"02 · 核心机制\"/)",
+      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"02 · 核心机制\"/10-*.md ./\"02 · 核心机制\"/)",
+      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"03 · 现代 C++\"/09-*.md ./\"03 · 现代 C++\"/)",
+      "Bash(cp /e/my_Personal/obsidian_coding_notes/\"03 · 现代 C++\"/10-*.md ./\"03 · 现代 C++\"/)"
     ]
   }
 }
