@@ -136,3 +136,13 @@ server {
 ```
 
 > **工程要点**：TLS 握手的主要成本是首次的 2-RTT（TLS 1.2）。生产环境通过会话复用（Session ID/Session Ticket）减少握手次数。对于移动端和 API 服务，TLS 1.3 的 0-RTT 能显著降低首字节延迟。注意 0-RTT 有重放攻击风险，需要应用层幂等性保护。
+
+---
+
+## 关联笔记
+
+- [HTTP⧸2 Key Features (HTTP2核心特性了解)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/08-HTTP⧸2%20Key%20Features%20(HTTP2核心特性了解).md)
+- [gRPC & Protobuf (RPC框架与序列化)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/09-gRPC%20&%20Protobuf%20(RPC框架与序列化)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)

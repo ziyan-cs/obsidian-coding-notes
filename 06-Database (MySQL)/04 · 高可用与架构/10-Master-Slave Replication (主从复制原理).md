@@ -172,3 +172,13 @@ auto writeTs = std::chrono::steady_clock::now();
 ```
 
 > **工程要点**：主从复制的核心矛盾——异步复制可能丢数据，半同步复制增加延迟。大多数业务选择异步复制 + 监控告警（接受秒级延迟的可能性）。对于不能接受任何数据丢失的业务，使用半同步复制或 MySQL InnoDB Cluster。**排查主从延迟的首选命令：** `SHOW SLAVE STATUS\G` 看 `Seconds_Behind_Master` 和 `Slave_SQL_Running_State`。
+
+---
+
+## 关联笔记
+
+- [Sharding & Partitioning Overview (分库分表概念)](/06-Database%20(MySQL)/04%20·%20高可用与架构/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)
+- [MySQL vs Redis：Caching Strategy (缓存策略对比)](/06-Database%20(MySQL)/04%20·%20高可用与架构/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

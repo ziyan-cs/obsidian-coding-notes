@@ -67,3 +67,13 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 - `x * 32` = `x << 5`（快 ~10 倍）
 - `x % 16` = `x & 15`（仅当除数为 2 的幂时）
 - 现代编译器会自动优化这些，手动优化的收益越来越小
+
+---
+
+## 关联笔记
+
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)
+- [Integer Representation（整数表示）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/02-Integer%20Representation（整数表示）.md)
+- [Floating Point（浮点数）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/03-Floating%20Point（浮点数）.md)
+- [Data Storage（数据存储）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/05-Data%20Storage（数据存储）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

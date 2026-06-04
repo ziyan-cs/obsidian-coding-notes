@@ -148,3 +148,13 @@ Performance counter stats for './prog':
 ```
 
 > **工程要点**：三把刀各有所长——strace 看"程序在做什么系统调用"，gdb 看"程序内部状态是什么"，perf 看"程序时间花在哪"。排查问题时先从 strace/perf 宏观定位，再到 gdb 微观确认。**不要上来就用 gdb 单步调试几万行的服务器程序。**
+
+---
+
+## 关联笔记
+
+- [System Calls Overview (常用系统调用速查)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/10-System%20Calls%20Overview%20(常用系统调用速查).md)
+- [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
+- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)

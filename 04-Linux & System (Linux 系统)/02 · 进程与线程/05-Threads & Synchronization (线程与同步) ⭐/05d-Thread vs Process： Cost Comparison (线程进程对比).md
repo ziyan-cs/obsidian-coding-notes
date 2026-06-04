@@ -36,3 +36,13 @@ tags:
 进程切换额外还需： 4. 切换 CR3（页表基址寄存器）→ TLB 全部失效（代价最大） 5. 切换文件描述符表等内核资源
 
 > **TLB 失效**是进程切换比线程切换慢的核心原因。现代 CPU 用 ASID（地址空间标识符）标记 TLB 条目，可部分缓解这个问题。
+
+---
+
+## 关联笔记
+
+- [POSIX Thread： pthread_create & lifecycle (线程生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md)
+- [Mutex & Condition Variable (互斥锁与条件变量)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md)
+- [Deadlock： Causes & Prevention (死锁原理与预防)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+- [Semaphore： POSIX & System V (信号量)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05e-Semaphore：%20POSIX%20&%20System%20V%20(信号量).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)

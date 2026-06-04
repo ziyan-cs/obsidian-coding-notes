@@ -22,3 +22,13 @@ tags:
 |Concepts|C++20|约束模板参数类型，替代 SFINAE|
 |Ranges|C++20|可组合的惰性序列操作|
 |Coroutines|C++20|协程支持，异步编程|
+
+---
+
+## 关联笔记
+
+- [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/01-Type%20Deduction%20(类型推导).md)
+- [Lambda & Function Object (Lambda与函数对象)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/02-Lambda%20&%20Function%20Object%20(Lambda与函数对象)%20⭐.md)
+- [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+- [constexpr & Compile-time Computation (编译期计算)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/06-constexpr%20&%20Compile-time%20Computation%20(编译期计算).md)
+- [optional & variant (新类型工具)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/07-optional%20&%20variant%20(新类型工具).md)

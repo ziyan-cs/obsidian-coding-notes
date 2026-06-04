@@ -114,3 +114,12 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 |冲突处理|一次性解决|逐 commit 解决|逐 commit 解决|
 |适用场景|功能合并、保留历史|整理本地提交|跨分支移植特定修复|
 
+---
+
+## 关联笔记
+
+- [01b2-Git Flow & Feature Branch Workflow (团队协作流)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b2-Git%20Flow%20&%20Feature%20Branch%20Workflow%20(团队协作流).md)
+- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- [Conflict Resolution (冲突解决实操)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
+- [reset vs revert vs restore (撤销三兄弟)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
+- [stash, tag, reflog (实用命令)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)

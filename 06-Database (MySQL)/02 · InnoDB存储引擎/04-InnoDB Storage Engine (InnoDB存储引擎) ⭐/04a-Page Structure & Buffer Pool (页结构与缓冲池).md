@@ -122,3 +122,13 @@ innodb_page_cleaners = 8
 ```
 
 > **工程要点**：Buffer Pool 命中率是数据库性能的核心指标——命中率 > 99% 意味着内存够大，磁盘 IO 压力小。如果命中率持续低于 95%，考虑增大 innodb_buffer_pool_size。改进型 LRU 的 old_blocks_time 机制对大表扫描场景非常关键，设置为 1000ms 可以有效减少扫描对缓存的冲击。
+
+---
+
+## 关联笔记
+
+- [B+ Tree Index Structure (B+树索引结构)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md)
+- [Clustered vs Secondary Index (聚簇索引与二级索引)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+- [Index Pushdown & Covering Index (索引下推与覆盖索引)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04d-Index%20Pushdown%20&%20Covering%20Index%20(索引下推与覆盖索引).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)

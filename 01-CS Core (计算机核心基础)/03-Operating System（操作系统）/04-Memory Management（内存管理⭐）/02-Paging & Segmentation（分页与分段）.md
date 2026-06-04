@@ -157,3 +157,13 @@ Linux 内核为小块对象分配优化的机制，预分配大小固定的缓�
 | 伙伴系统的外部碎片 | 虽为固定大小，但长期运行仍可能碎片化 |
 
 > **工程要点**：分配器选择——频繁分配小对象用 SLAB/kmalloc-cache；大块分配用伙伴系统（2^n 对齐）。了解 `cat /proc/buddyinfo` 可诊断内存碎片化程度。DMA 区域通常需要连续物理内存（`__GFP_DMA`）。
+
+---
+
+## 关联笔记
+
+- [Virtual Memory（虚拟内存）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/04-Memory%20Management（内存管理⭐）/01-Virtual%20Memory（虚拟内存）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)

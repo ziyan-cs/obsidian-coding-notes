@@ -94,3 +94,13 @@ for (int i = 0; i < n; i++) {
 - **epoll**：Linux 高并发服务器的首选，支持百万级 fd
 
 > **工程要点**：epoll 的高效不在于"快"，而在于"不浪费"——它只通知你真正有事件的 fd，避免了遍历全部 fd 的开销。当连接数少且活跃度高时，select/poll 和 epoll 性能差异不大；连接数多但活跃度低时（如 C10K 问题），epoll 优势明显。
+
+---
+
+## 关联笔记
+
+- [Blocking vs Non-blocking IO (阻塞与非阻塞)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07a-Blocking%20vs%20Non-blocking%20IO%20(阻塞与非阻塞).md)
+- [Synchronous vs Asynchronous IO (同步与异步)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07b-Synchronous%20vs%20Asynchronous%20IO%20(同步与异步).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
+- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)

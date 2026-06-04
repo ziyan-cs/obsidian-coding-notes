@@ -185,3 +185,13 @@ public:
 | 序列化方式 | JSON / protobuf / MessagePack |
 
 > **工程要点**：生产环境推荐使用 Pipeline 批量操作（可提升 5-10 倍吞吐）。注意 Pipeline 无事务性，中间失败不影响后续命令。超时时间设为 200-500ms 较为合理，避免长时间等待。
+
+---
+
+## 关联笔记
+
+- [Expiration & Eviction Strategy (过期与淘汰策略)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01c-Expiration%20&%20Eviction%20Strategy%20(过期与淘汰策略)%20⭐.md)
+- [Redis Single Thread Model (单线程模型为何高性能)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)
+- [01a3-skiplist：Sorted Set Internals (跳表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)

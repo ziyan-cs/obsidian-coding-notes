@@ -63,3 +63,13 @@ ALU 输出标志位：
 | **硬布线** | 组合逻辑电路直接产生控制信号 | 快但复杂，难扩展 |
 | **微程序** | 将控制信号存为 ROM 中的微指令 | 灵活易扩展，相对慢 |
 | 现代 CPU | 硬布线为主 + 少数复杂指令用微码 | 兼顾性能与复杂度 |
+
+---
+
+## 关联笔记
+
+- [Instruction Cycle（指令执行流程）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/02-Instruction%20Cycle（指令执行流程）.md)
+- [Memory Hierarchy（存储层级结构）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/03-Memory%20Hierarchy（存储层级结构⭐）.md)
+- [Cache Mechanism（缓存机制）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/04-Cache%20Mechanism（缓存机制⭐）.md)
+- [Bus System（总线系统）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/05-Bus%20System（总线系统）.md)
+- [Basic Input & Output（基础输入输出）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/06-Basic%20Input%20&%20Output（基础输入输出）.md)

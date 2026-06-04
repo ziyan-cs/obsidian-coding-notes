@@ -118,3 +118,13 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 | 客户端请求何时返回 | 日志提交+应用到状态机后 |
 
 > **工程要点**：Raft 写性能受限于多数派中最慢的节点。生产环境通常 3-5 节点，3 节点允许 1 故障，5 节点允许 2 故障。磁盘 I/O 是 Raft 的主要瓶颈——建议 SSD。批量写入可大幅提升吞吐（如 etcd 的 txn 合并多个操作）。
+
+---
+
+## 关联笔记
+
+- [04c1-Leader Election (领导者选举)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md)
+- [04c3-Safety & Membership Change (安全性保证)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c3-Safety%20&%20Membership%20Change%20(安全性保证).md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)
+- [01a3-skiplist：Sorted Set Internals (跳表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)

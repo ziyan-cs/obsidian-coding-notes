@@ -244,3 +244,13 @@ COPY .devcontainer/CMakePresets.json /workspace/
 | IWYU | 头文件管理 | ★☆☆ 有余力再加 |
 
 > **工程要点**：这些工具的价值排序是**频率 × 节省时间**。clang-format 每天触发几十次，ccache 每次编译都在省钱，值得第一时间配好。Google Benchmark 在 CI 中跑，对比每次 PR 的性能变化，发现退化立即告警。
+
+---
+
+## 关联笔记
+
+- [Makefile Basics (Makefile基础)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
+- [Docker Basics：Image & Container (Docker基础)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
+- [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
+- [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
+- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)

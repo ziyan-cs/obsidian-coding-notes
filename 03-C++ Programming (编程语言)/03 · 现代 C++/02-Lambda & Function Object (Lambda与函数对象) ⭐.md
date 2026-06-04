@@ -122,3 +122,13 @@ void process(std::vector<int>& v, F pred) {
     v.erase(std::remove_if(v.begin(), v.end(), pred), v.end());
 }
 ```
+
+---
+
+## 关联笔记
+
+- [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+- [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/01-Type%20Deduction%20(类型推导).md)
+- [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+- [constexpr & Compile-time Computation (编译期计算)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/06-constexpr%20&%20Compile-time%20Computation%20(编译期计算).md)
+- [optional & variant (新类型工具)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/07-optional%20&%20variant%20(新类型工具).md)

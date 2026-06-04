@@ -61,3 +61,13 @@ int a[N];
 for (int i = 0; i < N; i++) total += a[i];
 // 大量 L3/主存访问，~100ns/次 → 慢约 100 倍
 ```
+
+---
+
+## 关联笔记
+
+- [CPU Execution Model（CPU执行模型）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/01-CPU%20Execution%20Model（CPU执行模型）.md)
+- [Instruction Cycle（指令执行流程）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/02-Instruction%20Cycle（指令执行流程）.md)
+- [Cache Mechanism（缓存机制）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/04-Cache%20Mechanism（缓存机制⭐）.md)
+- [Bus System（总线系统）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/05-Bus%20System（总线系统）.md)
+- [Basic Input & Output（基础输入输出）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/06-Basic%20Input%20&%20Output（基础输入输出）.md)

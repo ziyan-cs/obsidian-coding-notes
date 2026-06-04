@@ -173,3 +173,13 @@ int numDecodings(string s) {
 | 单词拆分 | 前 i 个字符是否可拆分 | `dp[i] = any(dp[j] && s[j:i] in dict)` | O(n²) |
 
 > **工程要点**：一维 DP 的核心是状态定义。大多数线性 DP 只需记录前几个状态，可以用滚动变量替代数组，将空间从 O(n) 优化到 O(1)。遇到新题先想：`dp[i]` 表示什么？怎么从 `dp[i-1]` 或 `dp[i-2]` 转移过来？
+
+---
+
+## 关联笔记
+
+- [Knapsack： 0-1, Complete, Multiple (背包三种)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
+- [Interval DP (区间DP)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
+- [LCS & LIS (最长子序列类)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11d-LCS%20&%20LIS%20(最长子序列类).md)
+- [Array & Two Pointers (数组与双指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
+- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)

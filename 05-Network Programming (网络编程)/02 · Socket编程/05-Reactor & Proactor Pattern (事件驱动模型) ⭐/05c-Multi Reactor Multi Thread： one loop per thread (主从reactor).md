@@ -95,3 +95,13 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 | Muduo（陈硕）   | 主从 Reactor，one loop per thread                                  |
 | Node.js     | 单 Reactor 单线程（libuv event loop）+ 线程池（libuv threadpool，处理文件 I/O） |
 | Tokio（Rust） | 主从 Reactor 多线程（work-stealing 调度）                                |
+
+---
+
+## 关联笔记
+
+- [Single Reactor Single Thread (单reactor单线程)](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐/05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md)
+- [Single Reactor Multi Thread (单reactor多线程)](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐/05b-Single%20Reactor%20Multi%20Thread%20(单reactor多线程).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)

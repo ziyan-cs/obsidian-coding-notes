@@ -124,3 +124,13 @@ ssthresh|-----/----------  ← 拥塞避免（线性）
 |Reno（经典）|基于丢包，收到 3 dup ACK 或超时才降速|
 |CUBIC（Linux 默认）|基于丢包，用三次函数增长，高带宽长延迟（BDP 大）场景更好|
 |BBR（Google）|基于带宽和 RTT 建模，不依赖丢包，在有随机丢包的网络中表现更好|
+
+---
+
+## 关联笔记
+
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)
+- [TIME_WAIT：Why & How to Handle (TIME_WAIT原因与处理)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02c-TIME_WAIT：Why%20&%20How%20to%20Handle%20(TIME_WAIT原因与处理).md)
+- [Sticky Packet Problem & Solutions (粘包问题与解决)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

@@ -154,3 +154,13 @@ CREATE TABLE order (
 ```
 
 > **工程要点**：**不要过早分库分表。** 绝大多数团队在单表 5000 万行以下可以通过索引优化、缓存、读写分离解决。分库分表会引入分布式事务、跨节点查询、ID 生成等复杂度。如果必须分片，推荐 ShardingSphere 或 MyCat 作为中间件层。核心原则：**选择一个好的 Sharding Key 比实现分片本身更重要**——选错 Sharding Key 会导致大量跨节点查询，使系统性能倒退。
+
+---
+
+## 关联笔记
+
+- [Master-Slave Replication (主从复制原理)](/06-Database%20(MySQL)/04%20·%20高可用与架构/10-Master-Slave%20Replication%20(主从复制原理).md)
+- [MySQL vs Redis：Caching Strategy (缓存策略对比)](/06-Database%20(MySQL)/04%20·%20高可用与架构/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

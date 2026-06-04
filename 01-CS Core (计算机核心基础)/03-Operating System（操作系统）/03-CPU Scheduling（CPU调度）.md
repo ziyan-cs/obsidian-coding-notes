@@ -148,3 +148,13 @@ static const int prio_to_weight[40] = {
 | 实时调度 | Linux: SCHED_FIFO / SCHED_RR（优先级 1-99） |
 
 > **工程要点**：交互式任务（I/O 密集）优先级应高于 CPU 密集型——这是 MLFQ 的设计基础，CFS 通过 sleeper fairness 也实现了类似效果。生产环境可通过 `chrt` 设置实时优先级，但需谨慎避免 CPU 密集型实时任务锁死系统。
+
+---
+
+## 关联笔记
+
+- [OS Overview（操作系统总览）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/00-OS%20Overview（操作系统总览）.md)
+- [Process vs Thread（进程与线程）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/01-Process%20vs%20Thread（进程与线程⭐）.md)
+- [Context Switching（上下文切换）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/02-Context%20Switching（上下文切换）.md)
+- [File System Basics（文件系统基础）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/06-File%20System%20Basics（文件系统基础）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

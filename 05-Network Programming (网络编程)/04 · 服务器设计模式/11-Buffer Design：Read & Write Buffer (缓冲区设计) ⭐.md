@@ -200,3 +200,13 @@ ssize_t n = writev(fd, iov, iovcnt);
 - **Redis**：`sds`（简单动态字符串），用空间预分配消除 realloc 热点
 
 > **工程要点**：Buffer 设计的核心是**减少数据拷贝**和**避免缓冲区溢出**。Compact + 翻倍扩容是最常用的组合——每次读操作前先 compact（将未读数据移到头部），空间不够时翻倍扩容。对于高性能场景，使用 `readv`/`writev` 实现零拷贝发送，避免用户空间的数据拼接。
+
+---
+
+## 关联笔记
+
+- [Connection Pool Design (连接池设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md)
+- [Server Performance：Benchmarking with wrk (压测)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md)
+- [Graceful Shutdown (优雅关闭)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md)
+- [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

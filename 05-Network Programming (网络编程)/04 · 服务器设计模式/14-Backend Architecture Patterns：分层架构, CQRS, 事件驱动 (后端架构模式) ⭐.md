@@ -224,3 +224,13 @@ bus.publish(OrderCreated{1001, 42, 9900});
 | 分布式事务方案 | 单体：2PC；微服务：Saga（编排/编排） |
 
 > **工程要点**：C++ 后端服务不要过度设计——先分层架构，大了再拆微服务。gRPC 是 C++ 微服务间通信最佳选择。消息队列不只是做异步，更是服务的"防洪堤"（削峰填谷）。**不要为了微服务而微服务**，3 个以下服务用单体 + 分层就行。
+
+---
+
+## 关联笔记
+
+- [Connection Pool Design (连接池设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md)
+- [Buffer Design：Read & Write Buffer (缓冲区设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md)
+- [Server Performance：Benchmarking with wrk (压测)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md)
+- [Graceful Shutdown (优雅关闭)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

@@ -59,3 +59,13 @@ for (int j = 0; j < n; j++)     // ❌ 每步跨一整行，空间局部性极�
 | 通用 vs 专用 | CPU vs GPU vs ASIC |
 
 > **工程要点**：系统思维意味着理解"没有免费的午餐"——每项优化都有代价，关键是识别真正的瓶颈（Amdahl 定律），并从多层级（算法→代码→编译→架构）分析问题。
+
+---
+
+## 关联笔记
+
+- [Basic Performance（性能基础）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/04-Basic%20Performance（性能基础）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)

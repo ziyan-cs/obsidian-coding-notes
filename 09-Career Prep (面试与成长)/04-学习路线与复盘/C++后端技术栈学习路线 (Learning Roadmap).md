@@ -11,7 +11,7 @@ tags:
 
 ### C++ 语言
 
-```
+
 1. 语法基础（指针、引用、const、static）
    → [Variables, Types & Operators](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
 
@@ -26,11 +26,11 @@ tags:
 
 5. STL 容器原理（vector/map/unordered_map 底层）
    → [STL Cheat Sheet](/03-C++%20Programming%20(编程语言)/04%20·%20STL/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
-```
+
 
 ### 计算机基础
 
-```
+
 1. 操作系统（进程线程、内存管理、文件系统）
    → [OS Overview（操作系统总览）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/00-OS%20Overview（操作系统总览）.md)
 
@@ -39,7 +39,7 @@ tags:
 
 3. Linux 基础（Shell、文件系统、权限）
    → [Shell & Basic Commands（命令行与Shell编程）](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
-```
+
 
 **里程碑：** 能徒手写一个线程安全的 LRU Cache，说出 STL 容器的底层实现。
 
@@ -49,7 +49,7 @@ tags:
 
 ### 网络编程
 
-```
+
 1. Socket API + epoll
    → [socket, bind, listen, accept（核心API）](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md)
 
@@ -64,11 +64,11 @@ tags:
 
 5. 服务器设计（定时器、连接池、缓冲区）
    → [Connection Pool Design（连接池设计）](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md)
-```
+
 
 ### 数据库
 
-```
+
 1. SQL 基础 + 多表查询
    → [DDL, DML, DQL（SQL基础语法）](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
 
@@ -80,11 +80,11 @@ tags:
 
 4. Redis（数据结构、持久化、缓存模式）
    → [SDS：Simple Dynamic String（简单动态字符串）](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
-```
+
 
 ### Linux 系统编程
 
-```
+
 1. IO 模型（阻塞/非阻塞/多路复用/异步）
    → [Blocking vs Non-blocking IO（阻塞与非阻塞）](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07a-Blocking%20vs%20Non-blocking%20IO%20(阻塞与非阻塞).md)
 
@@ -96,7 +96,7 @@ tags:
 
 4. 系统调用 + 动态库
    → [System Calls Overview（常用系统调用速查）](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/10-System%20Calls%20Overview%20(常用系统调用速查).md)
-```
+
 
 **里程碑：** 基于 epoll 实现一个 echo 服务器、轻量级 HTTP 服务器。
 
@@ -106,7 +106,7 @@ tags:
 
 ### 分布式
 
-```
+
 1. CAP / BASE / PACELC
    → [04a-CAP Theorem](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md)
 
@@ -121,11 +121,11 @@ tags:
 
 5. Nginx 架构 + 反向代理
    → [Nginx Architecture（架构模型）](/08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md)
-```
+
 
 ### 并发与性能
 
-```
+
 1. 并发编程（线程、锁、条件变量、原子操作）
    → [Thread Basics（线程基础）](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/01-Thread%20Basics%20POSIX%20&%20std%20thread%20(线程基础)%20⭐.md)
 
@@ -134,11 +134,11 @@ tags:
 
 3. 工具链（GDB、perf、Sanitizer）
    → [GDB Essentials（GDB核心用法）](/07-Development%20Tools%20(工程开发工具)/03%20·%20Debug%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
-```
+
 
 ### 工程能力
 
-```
+
 1. CMake + 包管理
    → [CMakeLists.txt Structure（项目结构模板）](/07-Development%20Tools%20(工程开发工具)/02%20·%20CMake%20(构建系统)/02a-CMakeLists․txt%20Structure%20(项目结构模板)%20⭐.md)
 
@@ -151,7 +151,7 @@ tags:
 
 4. 可观测性（日志 + 指标 + 追踪）
    → [09-Observability](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/09-Observability：Logging,%20Metrics,%20Tracing%20(可观测性)%20⭐.md)
-```
+
 
 **里程碑：** 设计并实现一个具备完整可观测性的分布式 key-value 缓存服务。
 
@@ -159,7 +159,7 @@ tags:
 
 ## 阶段四：面试冲刺（1-2 个月）
 
-```
+
 1. C++ 后端高频 100 题（本文件夹）
    → [C++后端面试高频100题](/09-Career%20Prep%20(面试与成长)/01-八股文（面试知识）/01-C++专项面试⭐/C++后端面试高频100题%20⭐.md)
 
@@ -171,7 +171,7 @@ tags:
 
 4. 系统设计
    → [C++后端面试高频100题（最后 5 题）](/09-Career%20Prep%20(面试与成长)/01-八股文（面试知识）/01-C++专项面试⭐/C++后端面试高频100题%20⭐.md)
-```
+
 
 ---
 

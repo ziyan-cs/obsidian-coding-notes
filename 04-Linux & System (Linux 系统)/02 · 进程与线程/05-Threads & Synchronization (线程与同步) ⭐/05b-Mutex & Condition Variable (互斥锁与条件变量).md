@@ -116,3 +116,13 @@ pthread_rwlock_unlock(&rwlock);
 ```
 
 适合：**读多写少**的场景（如配置、缓存）。写多时写者频繁等待，反而不如 mutex。
+
+---
+
+## 关联笔记
+
+- [POSIX Thread： pthread_create & lifecycle (线程生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md)
+- [Deadlock： Causes & Prevention (死锁原理与预防)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+- [Thread vs Process： Cost Comparison (线程进程对比)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05d-Thread%20vs%20Process：%20Cost%20Comparison%20(线程进程对比).md)
+- [Semaphore： POSIX & System V (信号量)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05e-Semaphore：%20POSIX%20&%20System%20V%20(信号量).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)

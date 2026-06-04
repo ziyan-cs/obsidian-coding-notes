@@ -94,3 +94,13 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 ```
 
 > **工程要点**：WAL 是现代数据库的基石——通过将随机写转化为顺序写来大幅提升写入性能。`innodb_flush_log_at_trx_commit=1` 是唯一保证不丢数据的设置，对应核心交易场景。非核心场景可设为 2（容灾 1 秒数据丢失换取 5-10 倍写入性能提升）。redo log 是物理日志（记录"页上改了啥"），undo log 是逻辑日志（记录"SQL 反操作"）——两者相辅相成。
+
+---
+
+## 关联笔记
+
+- [Redo Log：Crash Recovery (崩溃恢复)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md)
+- [Binlog vs Redo Log：Differences (两者区别)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07c-Binlog%20vs%20Redo%20Log：Differences%20(两者区别).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

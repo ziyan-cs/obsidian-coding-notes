@@ -41,3 +41,13 @@ while (std::getline(fin, line)) { ... }
 fout << "result: " << 42 << '\n';
 // RAII：fin/fout 析构时自动关闭
 ```
+
+---
+
+## 关联笔记
+
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+- [Array & String(数组与字符串)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/04-Array%20&%20String(数组与字符串).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)

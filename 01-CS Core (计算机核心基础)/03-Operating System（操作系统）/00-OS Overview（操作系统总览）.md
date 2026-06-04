@@ -99,3 +99,13 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 | 操作系统的设计哲学 | 机制（mechanism）与策略（policy）分离 |
 
 > **工程要点**：系统调用是用户态与内核态的唯一入口，每次 syscall 涉及特权级切换（ring 3 → ring 0），是性能关键路径。批量系统调用（如 readv/writev）比多次单调用明显更快。
+
+---
+
+## 关联笔记
+
+- [Process vs Thread（进程与线程）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/01-Process%20vs%20Thread（进程与线程⭐）.md)
+- [Context Switching（上下文切换）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/02-Context%20Switching（上下文切换）.md)
+- [CPU Scheduling（CPU调度）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/03-CPU%20Scheduling（CPU调度）.md)
+- [File System Basics（文件系统基础）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/06-File%20System%20Basics（文件系统基础）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

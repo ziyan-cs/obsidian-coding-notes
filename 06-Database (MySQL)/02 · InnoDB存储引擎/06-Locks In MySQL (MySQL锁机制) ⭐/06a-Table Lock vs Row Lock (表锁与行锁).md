@@ -115,3 +115,13 @@ SELECT * FROM performance_schema.data_lock_waits\G
 ```
 
 > **工程要点**：InnoDB 的行锁只有通过索引才能生效——没有索引的 WHERE 条件会退化为表锁，这是性能灾难的常见原因。大表 DELETE/UPDATE 操作尤其需要注意：一次操作影响 1 万行的范围更新会在短时间内加大量行锁，可能耗尽锁内存或引发大量锁等待。建议分批处理（如 LIMIT 1000 循环）。
+
+---
+
+## 关联笔记
+
+- [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)
+- [Deadlock Detection & avoidance (死锁检测)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

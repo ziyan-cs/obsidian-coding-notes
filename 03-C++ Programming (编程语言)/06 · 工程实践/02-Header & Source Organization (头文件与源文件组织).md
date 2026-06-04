@@ -122,3 +122,13 @@ project/
 ```
 
 > **工程要点**：编译时间是大型 C++ 项目的重要成本。头文件之间的依赖关系直接影响增量编译速度。优先用 **前向声明**，其次用 **Pimpl 惯用法**（将实现细节对用户隐藏），最后才考虑重构成模块。
+
+---
+
+## 关联笔记
+
+- [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+- [Preprocessor & Macros (预处理与宏)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/03-Preprocessor%20&%20Macros%20(预处理与宏).md)
+- [Exception Handling (异常处理)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/04-Exception%20Handling%20(异常处理).md)
+- [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+- [Performance Profiling perf & valgrind (性能分析)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/06-Performance%20Profiling%20perf%20&%20valgrind%20(性能分析)%20⭐.md)

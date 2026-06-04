@@ -161,3 +161,13 @@ pt-query-digest /var/log/mysql/slow.log
 ```
 
 > **工程要点**：慢查询处理的黄金流程——1) `long_query_time=0.5` 开启慢查询日志；2) `pt-query-digest` 分析并找到 TOP N 慢 SQL；3) `EXPLAIN` 分析执行计划；4) 根据索引失效原因优化索引或重写 SQL；5) 验证优化效果。**不要试图一次优化所有慢查询——投入产出比最高的永远是执行频率高、单次耗时长的查询。**
+
+---
+
+## 关联笔记
+
+- [Table Design (表设计)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/03-Table%20Design%20(表设计).md)
+- [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)
+- [Index Design Principles (索引设计原则)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)

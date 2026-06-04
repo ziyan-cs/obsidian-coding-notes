@@ -75,3 +75,13 @@ std::vector<MyString> v;
 v.push_back(MyString("hello"));
 // 若移动构造未标 noexcept：push_back 扩容时用拷贝，性能损失！
 ```
+
+---
+
+## 关联笔记
+
+- [Lvalue vs Rvalue (左值右值区分)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03a-Lvalue%20vs%20Rvalue%20(左值右值区分).md)
+- [move & RVO (移动语义与返回值优化)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03c-move%20&%20RVO%20(移动语义与返回值优化).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

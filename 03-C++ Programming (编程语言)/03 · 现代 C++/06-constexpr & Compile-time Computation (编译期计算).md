@@ -86,3 +86,13 @@ consteval int square(int n) { return n * n; }
 constinit int g = 42;      // 全局变量，保证静态初始化
 g = 100;                    // 运行期可修改
 ```
+
+---
+
+## 关联笔记
+
+- [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+- [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/01-Type%20Deduction%20(类型推导).md)
+- [Lambda & Function Object (Lambda与函数对象)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/02-Lambda%20&%20Function%20Object%20(Lambda与函数对象)%20⭐.md)
+- [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+- [optional & variant (新类型工具)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/07-optional%20&%20variant%20(新类型工具).md)

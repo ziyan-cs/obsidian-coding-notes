@@ -194,3 +194,13 @@ int main() {
 | 死锁恢复代价 | 终止进程可能丢失数据，资源抢占需回滚 |
 
 > **工程要点**：实际开发中最实用的死锁预防就是**固定锁顺序**和 `std::lock(a, b)` 批量获取。Linux 内核有 `lockdep` 检测潜在死锁。分布式系统中的死锁更难检测，常用超时 + 重试策略。C++ 中 RAII 包装的 `lock_guard` 在异常时自动解锁，可避免忘记释放导致的隐式死锁。
+
+---
+
+## 关联笔记
+
+- [Mutex（互斥锁）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/01-Mutex（互斥锁）.md)
+- [Semaphore（信号量）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/02-Semaphore（信号量）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)

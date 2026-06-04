@@ -121,3 +121,13 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 ```
 
 > **工程要点**：Gap Lock 的锁定范围比想象的大——一个 WHERE 条件可能会锁住大半个索引树。典型故障：RR 级别下一个大范围 UPDATE 导致整个表无法插入新数据。排查手段：`SELECT * FROM performance_schema.data_locks` 查看具体锁范围。如果业务不要求 RR 的可重复读，使用 RC 级别可以完全避免 Gap Lock。
+
+---
+
+## 关联笔记
+
+- [Table Lock vs Row Lock (表锁与行锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md)
+- [Deadlock Detection & avoidance (死锁检测)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

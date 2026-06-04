@@ -199,3 +199,13 @@ void *health_check_thread(void *arg) {
 4. 监控连接等待超时率
 
 > **工程要点**：连接池的正确实现涉及多线程同步、健康检查、超时处理等多个维度。HikariCP（Java 最快连接池）的核心优化是使用**无锁队列**减少 CAS 竞争。对于 C++ 服务器，常见的方案是围绕 `std::queue` 或 `boost::lockfree::queue` 实现连接池，配合回调通知而非轮询。
+
+---
+
+## 关联笔记
+
+- [Buffer Design：Read & Write Buffer (缓冲区设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md)
+- [Server Performance：Benchmarking with wrk (压测)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md)
+- [Graceful Shutdown (优雅关闭)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md)
+- [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

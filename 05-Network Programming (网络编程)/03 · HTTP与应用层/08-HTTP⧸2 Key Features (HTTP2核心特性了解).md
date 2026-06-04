@@ -134,3 +134,13 @@ TCP 丢包时：
 这正是 HTTP/3 使用 QUIC（基于 UDP）的原因——在流级别处理丢包，不影响其他流。
 
 > **工程要点**：升级到 HTTP/2 对 HTTPS 网站的首屏性能有 10-30% 提升，主要来源于多路复用减少了连接数。但 HTTP/2 要求 TLS，且对慢速网络上的 TCP 队头阻塞仍然敏感。目前主流方向是 HTTP/2 + HTTP/3 双栈部署——HTTP/3 解决 TCP HOL 问题，HTTP/2 作为兼容过渡。
+
+---
+
+## 关联笔记
+
+- [HTTPS & TLS Overview (HTTPS原理概览)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
+- [gRPC & Protobuf (RPC框架与序列化)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/09-gRPC%20&%20Protobuf%20(RPC框架与序列化)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)

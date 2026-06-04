@@ -152,3 +152,13 @@ Saga 将一个大事务拆分为 N 个子事务，每个子事务有对应的补
 | 是否所有场景都需要分布式事务 | 不是——很多场景可接受最终一致性+补偿 |
 
 > **工程要点**：分布式事务的最大原则是**能不用的场景尽量不用**——通过业务设计规避分布式事务（如数据分区、本地事务合并）。如果必须用，优先考虑 Seata AT（低侵入）或 Saga（高性能）。支付等强一致场景考虑 TCC 或 2PC，但设计好降级和补偿机制。
+
+---
+
+## 关联笔记
+
+- [CAP Theorem & BASE Theory (CAP理论)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md)
+- [Consistency Models：Strong, Eventual (一致性模型)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
+- [Paxos Overview (Paxos概念了解)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04d-Paxos%20Overview%20(Paxos概念了解).md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)

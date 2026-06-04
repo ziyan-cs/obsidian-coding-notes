@@ -94,3 +94,13 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 |端口耗尽|大量短连接主动关闭|tcp_tw_reuse + 长连接|
 |服务重启失败|端口被 TIME_WAIT 占用|SO_REUSEADDR|
 |残留报文干扰|TIME_WAIT 本身的作用|不应跳过，依赖时间戳保护|
+
+---
+
+## 关联笔记
+
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)
+- [Flow Control & Congestion Control (流量控制与拥塞控制)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md)
+- [Sticky Packet Problem & Solutions (粘包问题与解决)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

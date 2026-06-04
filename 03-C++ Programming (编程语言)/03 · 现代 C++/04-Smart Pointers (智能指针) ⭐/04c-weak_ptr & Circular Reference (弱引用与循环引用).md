@@ -74,3 +74,13 @@ public:
 |拷贝|❌|✅|✅|
 |开销|零开销|控制块 + 原子操作|同 shared_ptr|
 |使用场景|默认首选|共享所有权|打破循环引用、缓存、观察者|
+
+---
+
+## 关联笔记
+
+- [unique ptr Ownership Model (独占所有权)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04a-unique%20ptr%20Ownership%20Model%20(独占所有权).md)
+- [shared ptr Reference Counting Internals (引用计数底层)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

@@ -88,3 +88,13 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 | 推荐场景 | 兜底保障         | 生产环境主要机制   |
 
 > 应用层心跳能检测到"进程卡死但 TCP 连接还在"的情况，SO_KEEPALIVE 检测不到。
+
+---
+
+## 关联笔记
+
+- [socket, bind, listen, accept, connect (核心API)](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md)
+- [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/04-Socket%20API%20(Socket编程接口)%20⭐/04b-Non-blocking%20Socket%20&%20O_NONBLOCK%20(非阻塞Socket).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
+- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)

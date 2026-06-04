@@ -206,3 +206,13 @@ void philosopher(int i) {
 | 语义 | 无资源计数 | 显式资源计数 |
 
 > **工程要点**：C++ 标准库没有信号量（C++20 才引入 `std::counting_semaphore`），多线程同步首选 `mutex + condition_variable`。信号量在生产者消费问题中自然表达资源计数，但信号量的 P/V 错序容易导致死锁——使用 `condition_variable` 时这类错误更少。
+
+---
+
+## 关联笔记
+
+- [Mutex（互斥锁）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/01-Mutex（互斥锁）.md)
+- [Deadlock（死锁）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/03-Deadlock（死锁）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)

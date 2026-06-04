@@ -72,3 +72,13 @@ struct Packed {
 | 磁盘 | ~10 ms | ~TB+ | 文件系统管理 |
 
 **时间差距约 10⁷ 倍**——这就是缓存至关重要的原因。
+
+---
+
+## 关联笔记
+
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)
+- [Integer Representation（整数表示）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/02-Integer%20Representation（整数表示）.md)
+- [Floating Point（浮点数）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/03-Floating%20Point（浮点数）.md)
+- [Bitwise Operations（位运算）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/04-Bitwise%20Operations（位运算）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

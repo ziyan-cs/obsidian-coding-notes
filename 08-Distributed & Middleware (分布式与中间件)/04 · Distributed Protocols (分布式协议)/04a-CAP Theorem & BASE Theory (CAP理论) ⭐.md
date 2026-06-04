@@ -108,3 +108,13 @@ MongoDB（强一致）：   PC/EC（写关注 majority）
 | AP 系统举例 | Cassandra、DynamoDB、Eureka |
 
 > **工程要点**：CAP 不是"三选二"的静态决策，而是**可以在不同操作级别做选择**（如关键数据强一致，非关键数据最终一致）。微服务中通常 BASE 为主，仅对支付等关键操作用强一致。
+
+---
+
+## 关联笔记
+
+- [Consistency Models：Strong, Eventual (一致性模型)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
+- [Paxos Overview (Paxos概念了解)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04d-Paxos%20Overview%20(Paxos概念了解).md)
+- [Distributed Transaction：2PC & Saga (分布式事务)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04e-Distributed%20Transaction：2PC%20&%20Saga%20(分布式事务).md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)

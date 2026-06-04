@@ -163,3 +163,13 @@ void mutex_lock(int *futex) {
 | `LOCK` 前缀作用 | 锁总线/缓存行，确保多核原子性 |
 
 > **工程要点**：临界区应尽可能小——只保护共享数据，不要在锁内做 I/O。优先用标准库 `std::mutex`（内部已优化，快速路径 ≈ 用户态原子操作，无需自旋锁除非性能分析证明必要）。`lock_guard`/`unique_lock` 确保异常安全（RAII）。
+
+---
+
+## 关联笔记
+
+- [Semaphore（信号量）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/02-Semaphore（信号量）.md)
+- [Deadlock（死锁）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/03-Deadlock（死锁）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)

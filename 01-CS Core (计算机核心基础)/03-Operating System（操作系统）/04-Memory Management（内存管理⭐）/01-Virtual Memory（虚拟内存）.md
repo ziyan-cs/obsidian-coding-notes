@@ -150,3 +150,13 @@ int main() {
 | 大页（HugePages） | 2MB/1GB 页，减少页表级数和 TLB miss |
 
 > **工程要点**：数据库、搜索引擎等内存敏感型应用通常启用 HugePages（2MB 页）以减少 TLB miss。`madvise(MADV_HUGEPAGE)` 可提示内核使用透明大页。监控 `/proc/meminfo` 的 `pgfault` / `pgmajfault` 判断是否过度缺页。
+
+---
+
+## 关联笔记
+
+- [Paging & Segmentation（分页与分段）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/04-Memory%20Management（内存管理⭐）/02-Paging%20&%20Segmentation（分页与分段）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)

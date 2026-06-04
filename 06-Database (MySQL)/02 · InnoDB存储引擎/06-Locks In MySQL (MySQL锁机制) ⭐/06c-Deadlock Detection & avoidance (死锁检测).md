@@ -150,3 +150,13 @@ SELECT * FROM sys.innodb_lock_waits\G
 ```
 
 > **工程要点**：死锁不可避免——高并发数据库系统一定会遇到死锁。关键是**应用层要有死锁重试机制**（通常重试 3 次足矣）。预防比处理更重要：统一加锁顺序、缩短事务执行时间、使用 RC 级别是三种最有效的预防手段。InnoDB 的等待图检测是主动的（每次锁等待都检查），因此死锁会被迅速发现（毫秒级），不会长时间死锁。
+
+---
+
+## 关联笔记
+
+- [Table Lock vs Row Lock (表锁与行锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md)
+- [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

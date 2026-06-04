@@ -166,3 +166,13 @@ TCP 数据到达 → buffer 写入 → parse() 逐字节消费
 ```
 
 > **工程要点**：实际生产中使用现成的高性能解析器（http_parser、llhttp），它们使用 goto 驱动的状态机（而非 switch-case）以获得极致性能。理解状态机原理比自己实现更重要——关键是**解析器不持有状态本身的语义**，只做字节级别的状态跳转，上层回调才是业务处理入口。
+
+---
+
+## 关联笔记
+
+- [Request & Response Structure (请求响应结构)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06a-Request%20&%20Response%20Structure%20(请求响应结构).md)
+- [HTTP Methods & Status Codes (方法与状态码)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06b-HTTP%20Methods%20&%20Status%20Codes%20(方法与状态码).md)
+- [Keep-Alive & Connection Management (长连接)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06c-Keep-Alive%20&%20Connection%20Management%20(长连接).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)

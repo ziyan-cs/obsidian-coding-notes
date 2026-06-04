@@ -80,3 +80,13 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 用于任意两个 fd 之间的零拷贝数据传输（不限于文件到 socket）。
 
 > **工程要点**：零拷贝的核心思路是避免数据在内核态和用户态之间来回拷贝。sendfile 对静态文件传输最有效，如果数据需要计算/修改（如压缩、加密），仍需要传统方式。Nginx 的静态文件服务正是利用 sendfile 实现高性能。
+
+---
+
+## 关联笔记
+
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
+- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)
+- [Process Lifecycle： fork, exec, wait (生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
+- [Process States & Scheduling (状态与调度)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)

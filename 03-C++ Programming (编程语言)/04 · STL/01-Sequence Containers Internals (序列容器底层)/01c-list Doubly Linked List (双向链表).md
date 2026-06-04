@@ -95,3 +95,13 @@ auto iter = pending.insert(pending.end(), {42});
 ```
 
 > **面试重点**：为什么 `list::size()` 在 C++11 前是 O(N)？原因是某些实现（GCC）为了让 `splice` 保持 O(1) 而不维护 `_M_size`。C++11 规定 `size()` 必须是 O(1)，因此 GCC 增加了 `_M_size` 计数器，splice 时手动调整。
+
+---
+
+## 关联笔记
+
+- [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+- [deque Block-based Storage (分块存储)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

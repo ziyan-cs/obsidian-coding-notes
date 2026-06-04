@@ -83,3 +83,13 @@ git rebase --abort    # 回到 rebase 前
 | 统一格式化 | 统一缩进风格，减少伪冲突 |
 
 > **工程要点**：冲突不可怕，关键是理解每段代码去留的业务逻辑。`git log --merge -p` 可查看冲突文件的双方提交历史辅助决策。不要盲目 ours/theirs。
+
+---
+
+## 关联笔记
+
+- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- [reset vs revert vs restore (撤销三兄弟)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
+- [stash, tag, reflog (实用命令)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
+- [CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01f-CI⧸CD%20for%20C++：GitHub%20Actions,%20Static%20Analysis,%20Automation%20(CI⧸CD流水线)%20⭐.md)
+- [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)

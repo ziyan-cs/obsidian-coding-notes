@@ -57,3 +57,13 @@ std::string bar() {
 // 正确做法：直接 return 局部变量，信任编译器 NRVO
 // 不要 return std::move(s)，那样会禁用 NRVO，反而可能多一次移动
 ```
+
+---
+
+## 关联笔记
+
+- [Lvalue vs Rvalue (左值右值区分)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03a-Lvalue%20vs%20Rvalue%20(左值右值区分).md)
+- [Move Constructor & Move Assignment (移动构造与移动赋值)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

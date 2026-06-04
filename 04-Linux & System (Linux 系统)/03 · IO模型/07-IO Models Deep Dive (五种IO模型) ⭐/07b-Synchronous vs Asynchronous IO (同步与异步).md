@@ -53,3 +53,13 @@ ssize_t ret = aio_return(&cb);
 3. 同步模型更易理解和调试
 
 > **工程要点**：面试中"阻塞/非阻塞"描述**调用行为**，"同步/异步"描述**拷贝主体**。大部分高性能网络框架是"非阻塞同步 IO + 多路复用"组合。
+
+---
+
+## 关联笔记
+
+- [Blocking vs Non-blocking IO (阻塞与非阻塞)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07a-Blocking%20vs%20Non-blocking%20IO%20(阻塞与非阻塞).md)
+- [IO Multiplexing： select, poll, epoll (多路复用对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
+- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)

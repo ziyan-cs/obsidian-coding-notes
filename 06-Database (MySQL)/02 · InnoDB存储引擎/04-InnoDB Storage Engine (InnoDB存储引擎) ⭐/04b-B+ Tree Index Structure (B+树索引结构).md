@@ -95,3 +95,13 @@ InnoDB 每页 16KB，假设：
 **页分裂成本高：** 涉及数据移动 + 父节点更新。顺序插入（自增主键）只在最右叶节点分裂，减少重平衡开销。
 
 > **工程要点**：B+ 树的高度决定了索引查找所需的 IO 次数。对于千万级表，3 层 B+ 树只需 2-3 次 IO 即可找到数据，这是关系数据库高效的核心原因。使用自增主键 + 较短的数据类型（INT 优于 BIGINT 优于 VARCHAR）可以最大化扇出，最小化树高。
+
+---
+
+## 关联笔记
+
+- [Page Structure & Buffer Pool (页结构与缓冲池)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04a-Page%20Structure%20&%20Buffer%20Pool%20(页结构与缓冲池).md)
+- [Clustered vs Secondary Index (聚簇索引与二级索引)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+- [Index Pushdown & Covering Index (索引下推与覆盖索引)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04d-Index%20Pushdown%20&%20Covering%20Index%20(索引下推与覆盖索引).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)

@@ -81,3 +81,13 @@ thread apply all bt
 # 用 perf 或 valgrind helgrind 检测
 valgrind --tool=helgrind ./myapp
 ```
+
+---
+
+## 关联笔记
+
+- [POSIX Thread： pthread_create & lifecycle (线程生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md)
+- [Mutex & Condition Variable (互斥锁与条件变量)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md)
+- [Thread vs Process： Cost Comparison (线程进程对比)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05d-Thread%20vs%20Process：%20Cost%20Comparison%20(线程进程对比).md)
+- [Semaphore： POSIX & System V (信号量)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05e-Semaphore：%20POSIX%20&%20System%20V%20(信号量).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)

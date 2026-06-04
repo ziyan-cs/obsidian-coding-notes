@@ -68,3 +68,13 @@ unordered 哈希表  飞一般的查找
 - `list::sort` 用归并排序，不是 `std::sort`
 - `stack`/`queue` 默认底层是 `deque` 不是 `vector`
 - `priority_queue` 默认底层是 `vector`
+
+---
+
+## 关联笔记
+
+- [Container Adapters (容器适配器)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/03-Container%20Adapters%20(容器适配器).md)
+- [Iterators & Iterator Categories (迭代器分类)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/04-Iterators%20&%20Iterator%20Categories%20(迭代器分类).md)
+- [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/05-Algorithm%20Library%20(算法库速查).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)

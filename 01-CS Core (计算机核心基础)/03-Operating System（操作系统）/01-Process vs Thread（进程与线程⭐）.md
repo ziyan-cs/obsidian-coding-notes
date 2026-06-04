@@ -132,3 +132,13 @@ int main() {
 | fork 后子进程获得的资源 | 文件描述符表复制（共享偏移量）、信号处理函数继承 |
 
 > **工程要点**：进程用于隔离，线程用于并行。现代高性能服务器常用**多进程 + 事件驱动**（Nginx）或**多线程 + 异步 I/O**（Redis）。创建线程/进程后必须 join/detach/wait，否则资源泄漏。
+
+---
+
+## 关联笔记
+
+- [OS Overview（操作系统总览）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/00-OS%20Overview（操作系统总览）.md)
+- [Context Switching（上下文切换）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/02-Context%20Switching（上下文切换）.md)
+- [CPU Scheduling（CPU调度）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/03-CPU%20Scheduling（CPU调度）.md)
+- [File System Basics（文件系统基础）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/06-File%20System%20Basics（文件系统基础）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

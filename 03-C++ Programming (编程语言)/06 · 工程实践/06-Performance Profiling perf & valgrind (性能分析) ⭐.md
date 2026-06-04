@@ -149,3 +149,13 @@ HEAPPROFILE=main.heap ./main
 | 分支预测失败 | `perf stat -e branch-misses` |
 
 > **工程要点**：永远不要凭直觉优化。**先用 perf 测量**，找到真正的热点。常见的"优化"（如手写循环展开、改用移位代替乘法）现代编译器已经做了。真正的瓶颈通常是：不必要的拷贝、缓存不友好、过多的动态分配。
+
+---
+
+## 关联笔记
+
+- [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+- [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
+- [Preprocessor & Macros (预处理与宏)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/03-Preprocessor%20&%20Macros%20(预处理与宏).md)
+- [Exception Handling (异常处理)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/04-Exception%20Handling%20(异常处理).md)
+- [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)

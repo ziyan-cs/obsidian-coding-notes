@@ -139,3 +139,13 @@ std::sort(people.begin(), people.end(),
 > - `std::sort` 在元素数量少时（<16）切换到插入排序（introsort 的优化）
 > - `std::find` 不要用在已排序区间上——`lower_bound` 快得多
 > - C++17 引入并行策略：`std::sort(std::execution::par, v.begin(), v.end())`
+
+---
+
+## 关联笔记
+
+- [Container Adapters (容器适配器)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/03-Container%20Adapters%20(容器适配器).md)
+- [Iterators & Iterator Categories (迭代器分类)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/04-Iterators%20&%20Iterator%20Categories%20(迭代器分类).md)
+- [STL Cheat Sheet (STL速查总览)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)

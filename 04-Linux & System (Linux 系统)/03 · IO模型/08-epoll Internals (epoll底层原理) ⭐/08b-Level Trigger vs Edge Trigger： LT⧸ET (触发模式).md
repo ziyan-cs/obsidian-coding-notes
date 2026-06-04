@@ -82,3 +82,13 @@ while (1) {
 - **一般项目**：推荐 LT 模式，编程简单不易出错，性能差异通常可接受
 
 > **工程要点**：ET 模式的核心问题是"怎么知道数据读完了"——只能通过 read 返回 EAGAIN 判断。这就要求 fd 必须是非阻塞的，否则最后一次无数据可读时 read 会阻塞线程。如果你发现 ET 模式下某些事件没触发，大概率是循环读逻辑不对或忘记设置非阻塞。
+
+---
+
+## 关联笔记
+
+- [epoll_create, epoll_ctl, epoll_wait (API详解)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08a-epoll_create,%20epoll_ctl,%20epoll_wait%20(API详解).md)
+- [epoll vs select： Red-Black Tree & Event Queue (底层实现对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)
+- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
+- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)

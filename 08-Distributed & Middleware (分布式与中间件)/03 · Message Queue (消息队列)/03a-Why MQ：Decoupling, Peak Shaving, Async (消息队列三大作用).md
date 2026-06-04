@@ -77,3 +77,13 @@ tags:
 | 最大坑 | 重复消费（一定要幂等）和消息堆积（监控消费延迟） |
 
 > **工程要点**：核心判断标准——是否需要异步+解耦。简单同步调用强行引入 MQ 是过度设计。
+
+---
+
+## 关联笔记
+
+- [RabbitMQ vs Kafka：Comparison (两者对比)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/03%20·%20Message%20Queue%20(消息队列)/03c-RabbitMQ%20vs%20Kafka：Comparison%20(两者对比).md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)
+- [01a3-skiplist：Sorted Set Internals (跳表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
+- [01a4-dict：Hash Table Rehashing (字典与渐进式rehash)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a4-dict：Hash%20Table%20Rehashing%20(字典与渐进式rehash)%20⭐.md)

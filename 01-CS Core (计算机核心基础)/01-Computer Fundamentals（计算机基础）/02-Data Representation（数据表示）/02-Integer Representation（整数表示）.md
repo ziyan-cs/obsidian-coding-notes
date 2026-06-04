@@ -52,3 +52,13 @@ uint32_t ui = us;          // 0x0000FFF0（补 0）
 int32_t x = 0x12345678;
 int16_t y = x;             // 0x5678（高位丢失）
 ```
+
+---
+
+## 关联笔记
+
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)
+- [Floating Point（浮点数）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/03-Floating%20Point（浮点数）.md)
+- [Bitwise Operations（位运算）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/04-Bitwise%20Operations（位运算）.md)
+- [Data Storage（数据存储）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/05-Data%20Storage（数据存储）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

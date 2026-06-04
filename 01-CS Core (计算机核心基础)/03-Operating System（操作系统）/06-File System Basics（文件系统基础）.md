@@ -206,3 +206,13 @@ int main() {
 | df 与 du 的区别 | df 看超级块统计，du 遍历目录计算（不一致时可能 inode 泄漏） |
 
 > **工程要点**：大量小文件场景（如 Git、邮件服务器），inode 可能先于磁盘空间耗尽 ⇒ `df -i` 检查 inode 使用率。ext4 格式时可调 `-I 256` 增大 inode 密度。文件系统层数过深（>5）会影响路径解析性能。
+
+---
+
+## 关联笔记
+
+- [OS Overview（操作系统总览）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/00-OS%20Overview（操作系统总览）.md)
+- [Process vs Thread（进程与线程）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/01-Process%20vs%20Thread（进程与线程⭐）.md)
+- [Context Switching（上下文切换）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/02-Context%20Switching（上下文切换）.md)
+- [CPU Scheduling（CPU调度）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/03-CPU%20Scheduling（CPU调度）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)

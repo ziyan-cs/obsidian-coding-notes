@@ -147,3 +147,13 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 | 依赖背包 | 转化为树形 DP + 分组背包 |
 
 > **工程要点**：背包问题的核心就两点——**物品在外还是容量在外**决定是组合还是排列，**容量正序还是逆序**决定是完全还是 0-1。面试时先写出暴力二维版本再优化为一维，不易出错。
+
+---
+
+## 关联笔记
+
+- [1D DP： Climbing Stairs, House Robber (线性DP)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
+- [Interval DP (区间DP)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
+- [LCS & LIS (最长子序列类)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/11-Dynamic%20Programming%20(动态规划)%20⭐/11d-LCS%20&%20LIS%20(最长子序列类).md)
+- [Array & Two Pointers (数组与双指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
+- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)

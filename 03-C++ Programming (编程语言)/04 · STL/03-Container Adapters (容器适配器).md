@@ -90,3 +90,13 @@ std::priority_queue<int> pq(data.begin(), data.end());  // O(N) 构造
 ```
 
 > **工程要点**：`priority_queue` **不是 stable 的**（相同优先级元素顺序不确定）。需要稳定优先队列时，可以用 `(priority, counter)` 做 pair 来解决。
+
+---
+
+## 关联笔记
+
+- [Iterators & Iterator Categories (迭代器分类)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/04-Iterators%20&%20Iterator%20Categories%20(迭代器分类).md)
+- [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/05-Algorithm%20Library%20(算法库速查).md)
+- [STL Cheat Sheet (STL速查总览)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)

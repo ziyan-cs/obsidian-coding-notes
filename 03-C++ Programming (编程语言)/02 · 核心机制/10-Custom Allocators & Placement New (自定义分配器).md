@@ -179,3 +179,13 @@ using ScopedVec = std::vector<String,
 | 99% 的日常场景 | **默认分配器就够了** |
 
 > **工程要点**：不要过早自定义分配器。默认的 `::operator new` 使用 `malloc`，性能已经很好。只有当 profiling 证明分配器是瓶颈时（大量小对象、高并发分配），才考虑自定义。PMR（Polymorphic Memory Resource, C++17）提供了更现代的内存资源管理方式，是新项目的首选。
+
+---
+
+## 关联笔记
+
+- [Const%2C Typedef %26 Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const%2C%20Typedef%20%26%20Enum%20(类型系统基础).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+- [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+- [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+- [OOP Principles (面向对象三大特性)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/05-OOP%20Principles%20(面向对象三大特性).md)

@@ -73,3 +73,13 @@ public:
 // 若声明了析构/拷贝构造/拷贝赋值，编译器不自动生成移动操作
 // → 五法则：要么全定义，要么全 default/delete
 ```
+
+---
+
+## 关联笔记
+
+- [Constructor & Destructor Order (构造析构顺序)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)
+- [Operator Overloading (运算符重载)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06c-Operator%20Overloading%20(运算符重载).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

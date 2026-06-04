@@ -96,3 +96,13 @@ Host: www.example.com
 ```
 
 > **工程要点**：HTTP 协议的头部以 `\r\n\r\n` 结束（空行），这是解析的终止边界。对于固定长度的请求体，Content-Length 指定精确字节数；对于变长内容（如 Server-Sent Events），使用 Transfer-Encoding: chunked。理解这一行终结的解析模型，是实现高性能 HTTP 状态机解析器的基础。
+
+---
+
+## 关联笔记
+
+- [HTTP Methods & Status Codes (方法与状态码)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06b-HTTP%20Methods%20&%20Status%20Codes%20(方法与状态码).md)
+- [Keep-Alive & Connection Management (长连接)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06c-Keep-Alive%20&%20Connection%20Management%20(长连接).md)
+- [State Machine Parser Implementation (状态机解析实现)](/05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06d-State%20Machine%20Parser%20Implementation%20(状态机解析实现).md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)

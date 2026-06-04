@@ -179,3 +179,13 @@ class Server {
 ```
 
 > **面试必问**："RAII 是什么？" — 用一句话回答：构造函数获取资源，析构函数释放资源。再补充"它让 C++ 不需要 finally 块，因为析构函数在栈展开时自动被调用"。如果要展示深度，可以提到 "RAII 是 C++ 异常安全的基础"。
+
+---
+
+## 关联笔记
+
+- [Const%2C Typedef %26 Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const%2C%20Typedef%20%26%20Enum%20(类型系统基础).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+- [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+- [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+- [OOP Principles (面向对象三大特性)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/05-OOP%20Principles%20(面向对象三大特性).md)

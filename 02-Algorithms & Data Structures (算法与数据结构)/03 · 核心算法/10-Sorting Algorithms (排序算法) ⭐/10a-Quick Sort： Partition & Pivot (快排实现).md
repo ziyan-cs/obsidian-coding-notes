@@ -79,3 +79,13 @@ void quickSortV3(vector<int>& arr, int L, int R) {
     quickSortV3(arr, p2 + 1, R);
 }
 ```
+
+---
+
+## 关联笔记
+
+- [Merge Sort & Inversion Count (归并排序)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/10-Sorting%20Algorithms%20(排序算法)%20⭐/10b-Merge%20Sort%20&%20Inversion%20Count%20(归并排序).md)
+- [Heap Sort (堆排序)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/10-Sorting%20Algorithms%20(排序算法)%20⭐/10c-Heap%20Sort%20(堆排序).md)
+- [Sorting Algorithms (排序)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/03%20·%20核心算法/10-Sorting%20Algorithms%20(排序算法)%20⭐/10z-Sorting%20Algorithms%20(排序).md)
+- [Array & Two Pointers (数组与双指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
+- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)

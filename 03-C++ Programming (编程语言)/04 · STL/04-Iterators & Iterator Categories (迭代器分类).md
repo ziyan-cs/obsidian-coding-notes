@@ -104,3 +104,13 @@ std::vector<int> data(in, end);
 ```
 
 > **面试重点**：为什么 `list::sort` 不使用标准 `std::sort`？因为 `std::sort` 需要**随机访问迭代器**（它使用快速排序/内省排序），而 `list` 只提供双向迭代器，所以 `list` 自带了基于归并排序的 `list::sort()`。
+
+---
+
+## 关联笔记
+
+- [Container Adapters (容器适配器)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/03-Container%20Adapters%20(容器适配器).md)
+- [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/05-Algorithm%20Library%20(算法库速查).md)
+- [STL Cheat Sheet (STL速查总览)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)

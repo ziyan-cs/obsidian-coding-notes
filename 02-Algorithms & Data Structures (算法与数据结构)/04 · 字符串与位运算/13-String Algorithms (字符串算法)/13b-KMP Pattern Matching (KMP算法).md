@@ -107,3 +107,13 @@ int minCycle(string& s) {
 | 最短回文串（前面补） | 反转后求最长匹配前缀 |
 
 > **工程要点**：KMP 的难点在理解 next 数组的含义——它是**模式串自身的匹配信息**。next 数组的构建过程本质上是模式串自己和自己做匹配。实际工程中字符串匹配多直接用语言内置 API 或 Boyer-Moore，KMP 更常见于算法面试和特定场景（如流式匹配）。
+
+---
+
+## 关联笔记
+
+- [Sliding Window (滑动窗口)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/04%20·%20字符串与位运算/13-String%20Algorithms%20(字符串算法)/13a-Sliding%20Window%20(滑动窗口)%20⭐.md)
+- [Array & Two Pointers (数组与双指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
+- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- [Fast & Slow Pointers (快慢指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+- [Monotonic Stack (单调栈)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)

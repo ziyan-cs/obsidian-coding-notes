@@ -30,3 +30,13 @@ void print(Args... args) {
 // 递归：注意栈溢出，深度过大改用迭代或尾递归
 int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 ```
+
+---
+
+## 关联笔记
+
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Array & String(数组与字符串)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/04-Array%20&%20String(数组与字符串).md)
+- [IO Basic(标准输入输出)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/05-IO%20Basic(标准输入输出).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)

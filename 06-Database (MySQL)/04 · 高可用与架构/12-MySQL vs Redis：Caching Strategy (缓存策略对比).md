@@ -208,3 +208,13 @@ C 端对一致性要求高的场景：
 ```
 
 > **工程要点**：缓存设计的三条经验——1) **一定要有过期时间**；没有过期时间的缓存是"内存泄漏"；2) **穿透、击穿、雪崩是三个完全不同的问题**，解决思路不同，面试时不要混淆；3) 99% 的场景用 **Cache-Aside + 删除缓存** 就够了，不需要更复杂的方案。写入时先写数据库再删缓存（而不是先删缓存再写数据库），降低并发读写不一致的概率。
+
+---
+
+## 关联笔记
+
+- [Master-Slave Replication (主从复制原理)](/06-Database%20(MySQL)/04%20·%20高可用与架构/10-Master-Slave%20Replication%20(主从复制原理).md)
+- [Sharding & Partitioning Overview (分库分表概念)](/06-Database%20(MySQL)/04%20·%20高可用与架构/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

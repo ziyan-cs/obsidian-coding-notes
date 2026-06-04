@@ -49,3 +49,13 @@ FetchContent_MakeAvailable(googletest)   # 下载并添加到构建
 
 target_link_libraries(my_test PRIVATE GTest::gtest_main)
 ```
+
+---
+
+## 关联笔记
+
+- [CMakeLists․txt Structure (项目结构模板)](/07-Development%20Tools%20(工程开发工具)/02%20·%20CMake%20(构建系统)/02a-CMakeLists․txt%20Structure%20(项目结构模板)%20⭐.md)
+- [target_link_libraries & include_directories (依赖管理)](/07-Development%20Tools%20(工程开发工具)/02%20·%20CMake%20(构建系统)/02b-target_link_libraries%20&%20include_directories%20(依赖管理)%20⭐.md)
+- [Build Types：Debug, Release, RelWithDebInfo (构建类型)](/07-Development%20Tools%20(工程开发工具)/02%20·%20CMake%20(构建系统)/02c-Build%20Types：Debug,%20Release,%20RelWithDebInfo%20(构建类型)%20⭐.md)
+- [CMake with vcpkg & Conan (包管理器集成)](/07-Development%20Tools%20(工程开发工具)/02%20·%20CMake%20(构建系统)/02e-CMake%20with%20vcpkg%20&%20Conan%20(包管理器集成).md)
+- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)

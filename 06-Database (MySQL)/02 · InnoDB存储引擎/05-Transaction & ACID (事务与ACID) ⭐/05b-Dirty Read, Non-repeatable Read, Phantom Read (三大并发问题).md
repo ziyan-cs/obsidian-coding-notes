@@ -116,3 +116,13 @@ SELECT * FROM performance_schema.data_lock_waits\G
 ```
 
 > **工程要点**：脏读在实践中很少遇到（RU 极少使用）。不可重复读在高并发写入场景很常见，RC 级别下如果业务要求同一事务内读一致性，需要应用层加锁。幻读最容易在"检查且插入"的场景出现（如注册时检查用户名是否存在），Gap Lock 在 RR 级别下防护，但在 RC 级别下需要用应用层唯一约束或悲观锁来防止。
+
+---
+
+## 关联笔记
+
+- [Isolation Levels：RU, RC, RR, Serializable (四种隔离级别)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05a-Isolation%20Levels：RU,%20RC,%20RR,%20Serializable%20(四种隔离级别).md)
+- [MVCC Internals：undo log & read view (MVCC底层实现)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)

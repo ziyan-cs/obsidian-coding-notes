@@ -151,3 +151,13 @@ int minSubArrayLen(int target, vector<int>& nums) {
 | 找所有字母异位词 | 固定 | 固定长度 len(p) | Windows 符合条件时 |
 
 > **工程要点**：滑动窗口本质是用双指针维护一个"可行解"区间，核心是两步——**右扩**进入新元素、**左缩**排出多余元素。注意更新结果的位置（收缩前还是收缩后）决定求最大值还是最小值。
+
+---
+
+## 关联笔记
+
+- [KMP Pattern Matching (KMP算法)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/04%20·%20字符串与位运算/13-String%20Algorithms%20(字符串算法)/13b-KMP%20Pattern%20Matching%20(KMP算法).md)
+- [Array & Two Pointers (数组与双指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
+- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- [Fast & Slow Pointers (快慢指针)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+- [Monotonic Stack (单调栈)](/02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)

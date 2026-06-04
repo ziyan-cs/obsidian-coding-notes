@@ -236,3 +236,13 @@ auto stub = UserService::NewStub(tracing_channel);
 | 三大支柱缺一不可 | 日志查单次异常、Metrics 看趋势告警、Tracing 串起全链路 |
 
 > **工程要点**：C++ 后端服务可观测性三板斧——spdlog（日志）、prometheus-cpp（指标）、opentelemetry-cpp（追踪）。优先级：日志 > 指标 > 追踪。至少先上日志和基础指标（QPS、延迟、错误率），再逐步补充链路追踪。不要试图一开始就全量追踪，先追踪关键接口（用户登录、下单等核心链路）。
+
+---
+
+## 关联笔记
+
+- [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+- [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
+- [Preprocessor & Macros (预处理与宏)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/03-Preprocessor%20&%20Macros%20(预处理与宏).md)
+- [Exception Handling (异常处理)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/04-Exception%20Handling%20(异常处理).md)
+- [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)

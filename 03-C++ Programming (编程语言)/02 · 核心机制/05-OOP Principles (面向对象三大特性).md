@@ -97,3 +97,13 @@ struct Circle : Shape<Circle> {
     double areaImpl() const { return 3.14159 * r * r; }
 };
 ```
+
+---
+
+## 关联笔记
+
+- [Const%2C Typedef %26 Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const%2C%20Typedef%20%26%20Enum%20(类型系统基础).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+- [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+- [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+- [Templates Basics (模板基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/08-Templates%20Basics%20(模板基础).md)

@@ -85,3 +85,13 @@ std::deque<std::function<void()>> tasks;
 ```
 
 > **必知**：`deque` 的 `operator[]` 虽然也是 O(1)，但常数比 `vector` 大得多（多一次指针跳转）。实测在连续随机访问场景 `deque` 比 `vector` 慢 2-5 倍。如果只做**双端操作**，`deque` 是正确选择；如果需要随机访问 + 双端操作，考虑 `vector + ring buffer` 或 `boost::circular_buffer`。
+
+---
+
+## 关联笔记
+
+- [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+- [list Doubly Linked List (双向链表)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)

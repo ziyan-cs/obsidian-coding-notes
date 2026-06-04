@@ -114,3 +114,13 @@ D4 ([A:3])         <- A 更新 v3（与 D3 冲突！需要合并）
 | 单调读 | 读到新数据后不会读到旧数据（防止"时光倒流"） |
 
 > **工程要点**：实际系统大多用最终一致性 + 关键路径强一致。如社交平台：发帖（最终一致），点赞数（最终一致），支付（强一致）。Quorum 的 W+R > N 是权衡一致性和性能的关键参数。
+
+---
+
+## 关联笔记
+
+- [CAP Theorem & BASE Theory (CAP理论)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md)
+- [Paxos Overview (Paxos概念了解)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04d-Paxos%20Overview%20(Paxos概念了解).md)
+- [Distributed Transaction：2PC & Saga (分布式事务)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04e-Distributed%20Transaction：2PC%20&%20Saga%20(分布式事务).md)
+- [01a1-SDS：Simple Dynamic String (简单动态字符串)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md)
+- [01a2-ziplist & listpack (压缩列表)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md)

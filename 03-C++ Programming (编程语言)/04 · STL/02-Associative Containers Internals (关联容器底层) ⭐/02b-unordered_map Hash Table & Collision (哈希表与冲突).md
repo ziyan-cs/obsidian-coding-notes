@@ -112,3 +112,13 @@ m.insert(batch.begin(), batch.end());
 ```
 
 > **面试重点**：哈希碰撞攻击——如果哈希函数对所有输入返回相同的值（或攻击者构造大量碰撞 key），`unordered_map` 退化为链表（O(N)）。C++11 后标准库使用**随机 seed** 的哈希函数缓解此问题，但自定义哈希函数仍可能容易受攻击。
+
+---
+
+## 关联笔记
+
+- [map & set Red-Black Tree (红黑树与有序容器)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02a-map%20&%20set%20Red-Black%20Tree%20(红黑树与有序容器).md)
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+- [Array & String(数组与字符串)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/04-Array%20&%20String(数组与字符串).md)

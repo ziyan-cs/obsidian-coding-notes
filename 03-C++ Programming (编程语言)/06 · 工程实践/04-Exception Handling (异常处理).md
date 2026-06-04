@@ -140,3 +140,13 @@ if (ec) { /* 处理不存在等预期情况 */ }
 ```
 
 > **工程要点**：编写异常安全代码的核心不是 try-catch，而是 **RAII**。资源在构造时获取，析构时释放——析构函数在栈展开时一定会被调用。现代 C++ 中极少需要写 try-catch，除非要做错误转换或日志记录。
+
+---
+
+## 关联笔记
+
+- [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+- [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
+- [Preprocessor & Macros (预处理与宏)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/03-Preprocessor%20&%20Macros%20(预处理与宏).md)
+- [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+- [Performance Profiling perf & valgrind (性能分析)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/06-Performance%20Profiling%20perf%20&%20valgrind%20(性能分析)%20⭐.md)

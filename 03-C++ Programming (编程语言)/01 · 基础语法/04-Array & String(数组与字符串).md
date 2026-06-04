@@ -57,3 +57,13 @@ std::stod("3.14");        // string → double
 // string_view（C++17，零拷贝只读视图）
 std::string_view sv = s;
 ```
+
+---
+
+## 关联笔记
+
+- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
+- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+- [IO Basic(标准输入输出)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/05-IO%20Basic(标准输入输出).md)
+- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)

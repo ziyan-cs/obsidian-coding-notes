@@ -138,3 +138,13 @@ ab -n 100000 -c 100 http://localhost:8080/
 6. **不要只看平均延迟**：P99 往往比平均延迟高 5-10 倍
 
 > **工程要点**：压测的核心是**找到系统的极限拐点**而非跑出最大 QPS。先小并发找到延迟基线，再逐步增加并发直到 QPS 增速放缓或延迟出现拐点——拐点处的并发数就是服务器的"最佳并发度"。在此基础上留 30-50% 余量作为生产配置。
+
+---
+
+## 关联笔记
+
+- [Connection Pool Design (连接池设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md)
+- [Buffer Design：Read & Write Buffer (缓冲区设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md)
+- [Graceful Shutdown (优雅关闭)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md)
+- [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md)
+- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)

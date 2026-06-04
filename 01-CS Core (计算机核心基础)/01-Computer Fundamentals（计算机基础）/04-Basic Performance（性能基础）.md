@@ -54,3 +54,13 @@ P = 可优化部分占比，S = 该部分的加速比
 | IPC | 每周期指令数（CPI 倒数） | CPU 效率 |
 | FLOPS | 每秒浮点运算次数 | 科学计算 |
 | IOPS | 每秒 I/O 操作数 | 存储性能 |
+
+---
+
+## 关联笔记
+
+- [System Thinking（系统思维）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/05-System%20Thinking（系统思维⭐）.md)
+- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
+- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
+- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)
+- [Binary & Encoding（二进制与编码）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/02-Data%20Representation（数据表示）/01-Binary%20&%20Encoding（二进制与编码）.md)

@@ -115,3 +115,13 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 ```
 
 > **工程要点**：ICP 是 MySQL 5.6 的里程碑优化——它将 WHERE 过滤下推到存储引擎层，减少回表次数。但 ICP 并不能完全替代覆盖索引，最彻底的优化仍然是"索引列覆盖查询的所有 SELECT 列"。实践中，先用覆盖索引满足高频查询，再通过 ICP 减少低频查询的回表代价。
+
+---
+
+## 关联笔记
+
+- [Page Structure & Buffer Pool (页结构与缓冲池)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04a-Page%20Structure%20&%20Buffer%20Pool%20(页结构与缓冲池).md)
+- [B+ Tree Index Structure (B+树索引结构)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md)
+- [Clustered vs Secondary Index (聚簇索引与二级索引)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
