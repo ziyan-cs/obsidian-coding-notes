@@ -28,7 +28,7 @@ data = DEVICE_DATA_REGISTER;
 ```
 CPU 执行程序 → 设备发出中断 → CPU 保存现场
     ↑                              ↓
-    └────── 恢复现场 ← 中断处理完成 ──┘
+    └────── Recovery现场 ← Interrupthandledone ──┘
 ```
 
 **典型流程：**

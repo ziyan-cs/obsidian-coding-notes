@@ -12,13 +12,13 @@ C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层�
 
 ```
 ┌─────────────────────────────────────┐
-│   接入层（Handler / Controller）     │  ← HTTP/gRPC 解析，参数校验
+│   Gateway（Handler / Controller）     │  ← HTTP/gRPC parse，参数校验
 ├─────────────────────────────────────┤
-│   业务层（Service / Use Case）       │  ← 核心业务逻辑，事务管理
+│   Service（Service / Use Case）       │  ← 核心Business Logic，Transactionmanage
 ├─────────────────────────────────────┤
-│   数据层（Repository / DAO）         │  ← 数据库/缓存/外部服务访问
+│   Data Layer（Repository / DAO）         │  ← Database/Cache/外部服务访问
 ├─────────────────────────────────────┤
-│   基础设施层（Infrastructure）       │  ← 连接池、配置、日志、Metrics
+│   Infrastructure层（Infrastructure）       │  ← Connection池、config、Log、Metrics
 └─────────────────────────────────────┘
 ```
 
@@ -61,10 +61,10 @@ server/
 
 ```
 ┌─────────┐     ┌──────────────┐     ┌──────────┐
-│ 客户端   │────>│ Command（写）  │────>│ 写模型    │
+│ Client   │────>│ Command（写）  │────>│ 写模型    │
 │         │     │ CreateOrder  │     │ (MySQL)  │
 │         │     └──────────────┘     └────┬─────┘
-│         │                              │ 异步同步
+│         │                              │ AsynchronousSynchronous
 │         │     ┌──────────────┐     ┌───▼──────┐
 │         │<────│ Query（读）   │<────│ 读模型    │
 │         │     │ GetOrder     │     │ (Redis)  │
@@ -178,34 +178,34 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ```
                     ┌────────────┐
-                    │  客户端      │
+                    │  Client      │
                     │ (App/Web)  │
                     └──────┬─────┘
                            │ HTTP/gRPC
                     ┌──────▼─────┐
-                    │  API 网关   │  ← Nginx/Envoy（限流、鉴权、路由）
+                    │  API 网关   │  ← Nginx/Envoy（Rate Limit、鉴权、Route）
                     └──────┬─────┘
                            │
               ┌────────────┼────────────┐
               │            │            │
         ┌─────▼────┐ ┌────▼───┐ ┌─────▼────┐
-        │ 用户服务   │ │ 订单服务 │ │ 支付服务   │  ← gRPC 通信
+        │ User服务   │ │ 订单服务 │ │ 支付服务   │  ← gRPC 通信
         │ (C++)    │ │ (C++)  │ │ (C++)    │
         └─────┬────┘ └────┬───┘ └─────┬────┘
               │            │            │
         ┌─────▼────┐ ┌────▼───┐ ┌─────▼────┐
-        │ 用户 DB   │ │ 订单 DB │ │ 支付 DB   │  ← 数据独立
+        │ User DB   │ │ 订单 DB │ │ 支付 DB   │  ← data独立
         │ (MySQL)  │ │(MySQL) │ │ (MySQL)  │
         └──────────┘ └────────┘ └──────────┘
               │            │            │
               └────────────┼────────────┘
-                           │ 异步
+                           │ Asynchronous
                     ┌──────▼──────┐
-                    │  消息队列     │  ← Kafka（事件驱动）
+                    │  消息Queue     │  ← Kafka（事件驱动）
                     └──────┬──────┘
                            │
                     ┌──────▼──────┐
-                    │  数据分析     │
+                    │  data分析     │
                     │  通知服务     │
                     └─────────────┘
 ```

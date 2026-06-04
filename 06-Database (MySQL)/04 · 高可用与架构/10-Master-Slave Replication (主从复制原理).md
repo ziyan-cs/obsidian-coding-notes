@@ -20,7 +20,7 @@ MySQL 主从复制用于**读写分离**、**数据备份**和**高可用切换*
          │                 │
          │ SQL Thread      │ ← 从库重放 relay log
          ↓                 │
-      数据更新              │
+      dataupdate              │
 ```
 
 ## 复制的三种线程
@@ -30,18 +30,18 @@ MySQL 主从复制用于**读写分离**、**数据备份**和**高可用切换*
 ```
 主库：
   Binlog Dump Thread
-    └─ 在事务提交时读取 binlog，发送给从库
-    └─ 每个从库对应一个 dump 线程
+    └─ 在TransactionCommit时Read binlog，Send给从库
+    └─ 每个从库对应一个 dump Thread
 
 从库：
   I/O Thread
-    └─ 连接到主库，请求 binlog
-    └─ 将接收到的 binlog 写入 relay log（中继日志）
+    └─ Connection到主库，Request binlog
+    └─ 将Receive到的 binlog Write relay log（中继Log）
 
   SQL Thread
-    └─ 从 relay log 读取事件
+    └─ 从 relay log Read事件
     └─ 在从库上重放 SQL
-    └─ 单线程执行（多线程复制是 MySQL 5.7+ 特性）
+    └─ Single Threadexecute（多Thread复制是 MySQL 5.7+ 特性）
 ```
 
 ## 复制流程详解
@@ -49,17 +49,17 @@ MySQL 主从复制用于**读写分离**、**数据备份**和**高可用切换*
 ```
 主库（Master）                    从库（Slave）
   │                                  │
-  │ 1. 事务提交                      │
-  │    (写入 binlog)                 │
+  │ 1. TransactionCommit                      │
+  │    (Write binlog)                 │
   │                                  │
   │ 2. Binlog Dump Thread            │
-  │    发送 binlog 事件 ───────────→ │ 3. I/O Thread
-  │                                  │    接收并写入 relay log
+  │    Send binlog 事件 ───────────→ │ 3. I/O Thread
+  │                                  │    Receive并Write relay log
   │                                  │
   │                                  │ 4. SQL Thread
-  │                                  │    读取 relay log 并执行
+  │                                  │    Read relay log 并execute
   │                                  │
-  │                                  │ 5. 数据应用到从库
+  │                                  │ 5. data应用到从库
 ```
 
 ## 复制模式
@@ -101,19 +101,19 @@ SHOW SLAVE STATUS\G
 
 延迟原因：
   1. 从库 SQL Thread 单线程重放
-     └─ 主库写入并发高 → 从库重放跟不上
+     └─ 主库WriteConcurrency高 → 从库重放跟不上
      └─ 解决办法：开启并行复制
 
   2. 从库硬件性能低于主库
-     └─ 解决办法：从库配置不低于主库
+     └─ 解决办法：从库config不低于主库
 
   3. 大事务
-     └─ 一个 UPDATE 影响 1000 万行 → 从库执行 10 秒
-     └─ 解决办法：拆分大事务
+     └─ 一个 UPDATE 影响 1000 万行 → 从库execute 10 秒
+     └─ 解决办法：拆分大Transaction
 
   4. 从库上的读负载
-     └─ 从库同时在服务读请求
-     └─ 解决办法：从库只做备份，不对外服务
+     └─ 从库同时在服务读Request
+     └─ 解决办法：从库只做Backup，不对外服务
 
   5. 锁竞争
      └─ 从库重放时与其他查询冲突

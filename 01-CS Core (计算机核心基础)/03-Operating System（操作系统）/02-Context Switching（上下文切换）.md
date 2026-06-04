@@ -13,13 +13,13 @@ CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状�
 ### 切换内容
 
 ```
-┌─ 当前进程（Running）──┐      ┌─ 目标进程（Ready）───┐
+┌─ 当前Process（Running）──┐      ┌─ 目标Process（Ready）───┐
 │  PC（程序计数器）       │      │  PC                  │
-│  通用寄存器（EAX,EBX..）│      │  通用寄存器           │
-│  栈指针（SP）           │      │  栈指针               │
-│  页表基址（CR3）        │      │  页表基址             │
-│  FPU/向量寄存器         │  →   │  FPU/向量寄存器       │
-│  内核栈                 │      │  内核栈               │
+│  通用Register（EAX,EBX..）│      │  通用Register           │
+│  栈ptr（SP）           │      │  栈ptr               │
+│  Page Table基址（CR3）        │      │  Page Table基址             │
+│  FPU/向量Register         │  →   │  FPU/向量Register       │
+│  Kernel栈                 │      │  Kernel栈               │
 └────────────────────────┘      └──────────────────────┘
          保存到 PCB                         恢复
 ```

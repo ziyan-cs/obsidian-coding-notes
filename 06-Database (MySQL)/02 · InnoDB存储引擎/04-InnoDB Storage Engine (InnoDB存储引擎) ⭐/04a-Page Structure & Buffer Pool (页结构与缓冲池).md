@@ -19,21 +19,21 @@ InnoDB 数据页结构：
   ├────────────────────────────────┤
   │ Infimum + Supremum Records     │ ← 虚拟记录：最小/最大边界
   ├────────────────────────────────┤
-  │ User Records (插入记录)         │ ← 实际数据，按主键顺序排列
+  │ User Records (inserted records)         │ ← actual data，按PK order
   │   ┌─ Record Header ───────┐   │
-  │   │ 变长字段长度列表       │   │
-  │   │ NULL 位图             │   │
-  │   │ 记录头信息 (next_rec) │   │ → 单向链表
+  │   │ var-length field list       │   │
+  │   │ NULL 位Graph             │   │
+  │   │ record header info (next_rec) │   │ → singly linked list
   │   └───────────────────────┘   │
   │   ┌─ Record Data ──────────┐  │
-  │   │ 隐藏列: DB_ROW_ID     │   │ ← 行 ID（无主键时使用）
-  │   │ 隐藏列: DB_TRX_ID     │   │ ← 事务 ID（MVCC 使用）
-  │   │ 隐藏列: DB_ROLL_PTR   │   │ ← 回滚指针（指向 undo log）
+  │   │ hidden col: DB_ROW_ID     │   │ ← row ID（无Primary Key时使用）
+  │   │ hidden col: DB_TRX_ID     │   │ ← transaction ID（MVCC 使用）
+  │   │ hidden col: DB_ROLL_PTR   │   │ ← rollback ptr（指向 undo log）
   │   └───────────────────────┘  │
   ├────────────────────────────────┤
   │ Free Space                    │ ← 空闲空间
   ├────────────────────────────────┤
-  │ Page Directory (页目录)        │ ← 槽（slot）指向每组最后记录
+  │ Page Directory (Page Directory)        │ ← slot（slot）指向每组最后记录
   ├────────────────────────────────┤
   │ File Trailer (8 bytes)        │ ← 校验和 + LSN，用于完整性
   └────────────────────────────────┘

@@ -158,17 +158,17 @@ public:
 └──────┬────────┘
        ↓
 ┌───────────────┐
-│  缓存抽象层     │  ← 统一接口，支持序列化/压缩/降级
+│  Cache抽象层     │  ← 统一接口，支持Serialize/Compress/Degrade
 │  CacheClient   │
 └──────┬────────┘
        ↓
 ┌───────────────┐
-│  Redis 连接池   │  ← 连接复用，避免频繁建立 TCP
+│  Redis Connection池   │  ← Connection复用，避免频繁建立 TCP
 │  (hiredis)     │
 └──────┬────────┘
        ↓
 ┌───────────────┐
-│  Redis 集群     │
+│  Redis Cluster     │
 └───────────────┘
 ```
 

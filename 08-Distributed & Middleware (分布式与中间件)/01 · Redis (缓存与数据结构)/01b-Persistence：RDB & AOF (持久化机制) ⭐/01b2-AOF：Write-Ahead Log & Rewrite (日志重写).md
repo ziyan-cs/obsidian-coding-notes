@@ -59,19 +59,19 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 主进程                             子进程
   │                                  │
   ├─ fork ──────────────────────────→│
-  │  子进程持有 fork 时的内存快照      │
+  │  child holds memory snapshot at fork      │
   │                                  │
-  ├─ 继续处理客户端请求                │
-  │  写操作 → 写入 AOF 缓冲区          │
-  │          + 写入 AOF 重写缓冲区      │
+  ├─ continue serving client requests                │
+  │  write op → write to AOF buf          │
+  │          + write to AOF rewrite buf      │
   │                                  │
-  │                                  ├─ 遍历 db，将数据转为
-  │                                  │  最简命令（如 LPUSH 合并）
-  │                                  │  写入临时 AOF 文件
+  │                                  ├─ Traverse db，将data转为
+  │                                  │  compact cmds (e.g. LPUSH merged)
+  │                                  │  Writetemp AOF 文件
   │                                  │
-  │←── 子进程完成 ───────────────────│
-  │  将重写缓冲区中的增量命令追加到      │
-  │  临时 AOF → rename 替换旧 AOF    │
+  │←── child done ───────────────────│
+  │  append rewrite-buf cmds to      │
+  │  temp AOF → rename replace old AOF    │
   └──────────────────────────────────┘
 ```
 
@@ -89,8 +89,8 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ```
 ┌─────────────────┬────────────────────────┐
-│  RDB 格式快照     │  AOF 增量命令            │
-│  (全量数据)       │  (重写之后的写操作)       │
+│  RDB 格式Snapshot     │  AOF buffered cmds            │
+│  (全量data)       │  (Rewrite之后的write op)       │
 └─────────────────┴────────────────────────┘
 ```
 

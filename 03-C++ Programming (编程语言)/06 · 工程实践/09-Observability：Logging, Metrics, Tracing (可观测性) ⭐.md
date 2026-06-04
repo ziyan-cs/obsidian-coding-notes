@@ -10,9 +10,9 @@ tags:
 
 ```
 可观测性（Observability）
-├── 日志（Logging）     → spdlog / loguru          → 发生了什么
-├── 指标（Metrics）     → Prometheus + grafana     → 趋势与告警
-└── 链路追踪（Tracing） → OpenTelemetry + Jaeger   → 请求全链路
+├── Log（Logging）     → spdlog / loguru          → 发生了什么
+├── Metrics（Metrics）     → Prometheus + grafana     → 趋势与Alert
+└── Tracing（Tracing） → OpenTelemetry + Jaeger   → Request全链路
 ```
 
 三者互补，缺一不可。
@@ -195,17 +195,17 @@ auto stub = UserService::NewStub(tracing_channel);
     │
     ▼
 ┌───────────────────────┐
-│  接入层               │
-│  - 创建 Span（Tracing）│
+│  Gateway               │
+│  - Create Span（Tracing）│
 │  - 记录 Request Count │
 │  - 计时 Duration     │
 └───────┬───────────────┘
         │
         ▼
 ┌───────────────────────┐
-│  业务逻辑              │
-│  - INFO 日志（关键事件）│
-│  - ERROR 日志（异常）  │
+│  Business Logic              │
+│  - INFO Log（关Key事件）│
+│  - ERROR Log（Exception）  │
 │  - 嵌套 Span（子操作） │
 └───────┬───────────────┘
         │
@@ -213,7 +213,7 @@ auto stub = UserService::NewStub(tracing_channel);
 ┌───────────────────────┐
 │  后端服务/DB          │
 │  - 慢查询 Warning     │
-│  - 连接池 Metrics     │
+│  - Connection池 Metrics     │
 └───────────────────────┘
 
 输出：

@@ -33,14 +33,14 @@ gcc main.c -o main
 
 ```
 ELF 目标文件：
-├── ELF 头（文件类型、入口点、段表偏移）
-├── .text    代码段（只读，机器指令）
-├── .data    已初始化全局/静态变量
-├── .bss     未初始化全局/静态变量（不占文件空间）
-├── .rodata  只读数据（字符串常量、switch 跳表）
-├── .symtab  符号表（函数名、全局变量名）
-├── .rel.text 重定位表（需要修正的地址）
-└── .debug   调试信息（gcc -g 时生成）
+├── ELF 头（文件type、入口点、段表offset）
+├── .text    Code（read-only，机器指令）
+├── .data    init global/static vars
+├── .bss     uninit global/static vars（不占文件empty间）
+├── .rodata  Read-only Data（字符串Const、switch Skip List）
+├── .symtab  符号表（函数名、global变量名）
+├── .rel.text 重定位表（需要修正的address）
+└── .debug   Debuginfo（gcc -g 时generate）
 ```
 
 ## 链接
