@@ -29,7 +29,9 @@
       "Bash(python *)",
       "Bash(node *)",
       "Bash(grep -rn '```python\\\\|```java\\\\|```go\\\\|```rust\\\\|```javascript\\\\|```typescript\\\\|```php\\\\|```ruby' --include=\"*.md\" .)",
-      "Bash(grep -rn '```python\\\\|```java\\\\|```go\\\\|```rust\\\\|```javascript\\\\|```typescript' --include=\"*.md\" .)"
+      "Bash(grep -rn '```python\\\\|```java\\\\|```go\\\\|```rust\\\\|```javascript\\\\|```typescript' --include=\"*.md\" .)",
+      "Bash(]*)",
+      "Bash('\\)\\) console.log\\(Line' '+\\(i+1\\)+:' HAS backtick in '\"+text+\"\\); *)"
     ]
   }
 }
