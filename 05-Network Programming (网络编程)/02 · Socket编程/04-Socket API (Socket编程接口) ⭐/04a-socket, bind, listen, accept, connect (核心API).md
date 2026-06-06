@@ -20,7 +20,7 @@ socket( ) → connect( ) → recv( ) / send( ) → close( )
 【服务端】                           【客户端】
 ─────────────────────────────────────────────────────
 socket()                           socket()
-   │                                  │
+   │                                                  │
 bind()                             connect() ─────────┐
    │                                                  │
 listen()                                              │
