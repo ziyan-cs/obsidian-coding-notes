@@ -35,21 +35,21 @@ g++ main.cpp -o main
 ```text
 ELF 目标文件结构：
 ┌──────────────┐
-│ ELF Header   │  文件头（魔数、入口address、节区表位置）
+│ ELF Header   │  文件头（魔数、入口地址、节区表位置）
 ├──────────────┤
-│ .text        │  Code（read-only，机器指令）
+│ .text        │  代码段（只读，机器指令）
 ├──────────────┤
-│ .rodata      │  Read-only Data（字符串Const、const 变量）
+│ .rodata      │  只读数据（字符串常量、const 变量）
 ├──────────────┤
-│ .data        │  init global/static vars
+│ .data        │  已初始化全局/静态变量
 ├──────────────┤
-│ .bss         │  uninit global/static vars（不占文件empty间）
+│ .bss         │  未初始化全局/静态变量（不占文件空间）
 ├──────────────┤
-│ .symtab      │  符号表（函数名、global变量名）
+│ .symtab      │  符号表（函数名、全局变量名）
 ├──────────────┤
-│ .rel.text    │  重定位表（需要modify的address）
+│ .rel.text    │  重定位表（需要修改的地址）
 ├──────────────┤
-│ .debug       │  Debuginfo（-g 时generate）
+│ .debug       │  调试信息（-g 时生成）
 └──────────────┘
 ```
 

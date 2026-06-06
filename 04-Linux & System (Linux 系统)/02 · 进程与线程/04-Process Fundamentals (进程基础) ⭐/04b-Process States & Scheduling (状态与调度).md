@@ -12,11 +12,11 @@ tags:
               fork()
 CREATED ──────────────────> READY
                               │
-              Schedule器选中        │  Wait I/O / Signal / Lock
+              调度器选中        │  等待 I/O / 信号 / 锁
               ↓               ↓
            RUNNING ─────────> WAITING/BLOCKED
               │                    │
-              │ Time Slice耗尽           │ 条件full足
+              │ 时间片耗尽           │ 条件满足
               ↓                    ↓
             READY <─────────────── READY
               │

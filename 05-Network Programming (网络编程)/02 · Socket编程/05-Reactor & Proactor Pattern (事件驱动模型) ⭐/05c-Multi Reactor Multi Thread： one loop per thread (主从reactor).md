@@ -12,29 +12,20 @@ tags:
 
 ```txt
 ┌─────────────────────────────────────────────────────────────┐
-<<<<<<< HEAD
 │  主线程（Main Reactor）                                       │
 │  ┌──────────────────┐                                         │
 │  │  Main Reactor    │  只负责 accept 新连接                   │
 │  │  (epoll on       │                                         │
 │  │  listening fd)   │                                         │
 │  └────────┬─────────┘                                         │
-=======
-│  Main Thread（Main Reactor）                                       │
-│  ┌──────────────────┐                                       │
-│  │  Main Reactor    │  只负责 accept 新Connection                   │
-│  │  (epoll on       │                                       │
-│  │  listening fd)   │                                       │
-│  └────────┬─────────┘                                       │
->>>>>>> origin/main
 └───────────┼─────────────────────────────────────────────────┘
-            │ 将新Connection分发给某个 Sub Reactor
+            │ 将新连接分发给某个 Sub Reactor
      ┌──────┼───────┬──────────────┐
      ↓      ↓       ↓              ↓
 ┌─────────┐ ┌─────────┐     ┌─────────┐
 │Sub      │ │Sub      │ ... │Sub      │   每个 Sub Reactor
-│Reactor 1│ │Reactor 2│     │Reactor N│   Running在独立Thread
-│(epoll)  │ │(epoll)  │     │(epoll)  │   负责所AllocateConnection的
+│Reactor 1│ │Reactor 2│     │Reactor N│   运行在独立线程
+│(epoll)  │ │(epoll)  │     │(epoll)  │   负责所分配连接的
 │         │ │         │     │         │   全部 I/O 事件
 │Handler  │ │Handler  │     │Handler  │
 │(read/   │ │(read/   │     │(read/   │
@@ -44,11 +35,7 @@ tags:
    线程1       线程2              线程N
                     ↕（可选：业务复杂时再加线程池）
               ┌───────────┐
-<<<<<<< HEAD
               │  线程池     │
-=======
-              │  Thread Pool    │
->>>>>>> origin/main
               │（CPU密集型）│
               └───────────┘
 ```

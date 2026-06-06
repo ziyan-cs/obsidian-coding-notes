@@ -18,13 +18,13 @@ tags:
   │   SET balance=0         │
   │   WHERE id=1            │
   │                         │
-  │── (uncommitted) ────────────→│── SELECT balance FROM account WHERE id=1
+  │── (未提交) ────────────→│── SELECT balance FROM account WHERE id=1
   │                         │    → 读到 0（脏数据！）
   │                         │
   ├── ROLLBACK（回滚）       │
-  │   balance Recovery到 100    │
+  │   balance 恢复到 100    │
   │                         │
-  │                         │── Business Logic基于 balance=0 做了error的决策
+  │                         │── 业务逻辑基于 balance=0 做了错误的决策
 ```
 
 **发生条件：** 隔离级别为 RU（Read Uncommitted）。
@@ -75,7 +75,7 @@ tags:
   │                         │
   ├── SELECT * FROM user    │
   │   WHERE age > 20        │
-  │   → 11 行（多了一行！）   │  ← Phantom Read
+  │   → 11 行（多了一行！）   │  ← 幻读
   ├── COMMIT                │
 ```
 

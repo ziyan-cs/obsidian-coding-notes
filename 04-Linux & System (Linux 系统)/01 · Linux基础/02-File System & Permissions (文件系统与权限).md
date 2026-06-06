@@ -130,10 +130,10 @@ echo $APP_HOME                      # 验证
 ```
 -rwxr-xr--  1  alice  dev  4096  May 1  main.cpp
  ↑↑↑↑↑↑↑↑↑      ↑     ↑
- │││└──┘└──┘    User   组
- │││ 组Permission 其他Permission
- ││└─ UserPermission（rwx）
- │└─ 文件type（- 普通文件，d Directory，l Symlink）
+ │││└──┘└──┘    用户   组
+ │││ 组权限 其他权限
+ ││└─ 用户权限（rwx）
+ │└─ 文件类型（- 普通文件，d 目录，l 软链接）
  └─ 第1位
 ```
 

@@ -18,9 +18,9 @@ Derived 对象
 ┌──────────────┐
 │  vptr ───────┼──→  Derived::VTable
 ├──────────────┤       ├─ [0] Derived::speak()
-│  Base Members    │       ├─ [1] Derived::~Derived()
+│  Base 成员    │       ├─ [1] Derived::~Derived()
 ├──────────────┤       └─ [2] Base::otherVirtual()  ← 未覆盖则继承
-│  DerivedMembers  │
+│  Derived成员  │
 └──────────────┘
 ```
 

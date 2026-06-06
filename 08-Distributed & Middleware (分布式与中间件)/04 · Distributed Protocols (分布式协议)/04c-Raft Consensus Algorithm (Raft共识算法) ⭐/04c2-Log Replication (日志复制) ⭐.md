@@ -16,7 +16,7 @@ Leader 视角的日志：
   Term:  1     1     1     2     2     3     3
   Index: 1     2     3     4     5     6     7
         ┌────┬────┬────┬────┬────┬────┬────┐
-        │x=3 │y=1 │y=9 │x=2 │x=5 │z=3 │z=7 │  -> 应用到state机
+        │x=3 │y=1 │y=9 │x=2 │x=5 │z=3 │z=7 │  -> 应用到状态机
         └────┴────┴────┴────┴────┴────┴────┘
          已提交并应用              已提交   未提交（未同步多数）
 ```
@@ -34,12 +34,12 @@ Client         Leader               Follower
   │              │ AppendEntries RPC ──┤  ← 并行发送给所有 Follower
   │              │  (entries, commitIndex)
   │              │◄────────────────────┤  ← Follower 追加到本地日志后回复
-  │              │  (majority acked)          │
+  │              │  (多数确认)          │
   │              │ Apply to state machine
   │              │                     │
   │◄── Response ─┤                     │
   │              │ 下一条 AppendEntries │
-  │              │  (with updated commitIndex) ──→ Follower Commit
+  │              │  (包含更新的 commitIndex) ──→ Follower 提交
 ```
 
 **关键点：**

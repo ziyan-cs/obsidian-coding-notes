@@ -112,7 +112,7 @@ HTTP/2 压缩后：约 30-50 字节
 ```
 依赖树示例：
   :root
-   ├── index.html（default权重 16）
+   ├── index.html（默认权重 16）
    ├── style.css（依赖于 index.html，权重 128）
    └── app.js（依赖于 index.html，权重 32）
 ```

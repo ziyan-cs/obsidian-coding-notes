@@ -10,8 +10,8 @@ tags:
 
 ```
          ┌───────────────────┐
-         │     Master Process    │  ← Readconfig、manage worker
-         │  (root Permission)       │
+         │     Master 进程    │  ← 读取配置、管理 worker
+         │  (root 权限)       │
          └──────┬────────────┘
                 │ fork
     ┌───────────┼───────────┐

@@ -25,7 +25,7 @@ bind()                             connect() ─────────┐
    │                                                  │
 listen()                                              │
    │                                                  │
-accept() ◄─────────────── TCP 3-Way Handshake ────────────────┘
+accept() ◄─────────────── TCP 三次握手 ────────────────┘
    │
 read()/write()  ◄────────── 数据传输 ──────────►  read()/write()
    │
@@ -118,14 +118,14 @@ int listen(int sockfd, int backlog);
 客户端 SYN 到达
        ↓
 ┌─────────────────────┐
-│  Half-openQueue          │  SYN_RCVD state，Wait第3-Way Handshake ACK
-│  (SYN Queue)        │  size由 /proc/sys/net/ipv4/tcp_max_syn_backlog control
+│  半连接队列          │  SYN_RCVD 状态，等待第三次握手 ACK
+│  (SYN Queue)        │  大小由 /proc/sys/net/ipv4/tcp_max_syn_backlog 控制
 └─────────┬───────────┘
-          │ 3-Way Handshakedone
+          │ 三次握手完成
           ↓
 ┌─────────────────────┐
-│  EstablishedQueue          │  ESTABLISHED state，Wait accept() 取走
-│  (Accept Queue)     │  size = min(backlog, somaxconn)
+│  全连接队列          │  ESTABLISHED 状态，等待 accept() 取走
+│  (Accept Queue)     │  大小 = min(backlog, somaxconn)
 └─────────┬───────────┘
           │ accept() 调用
           ↓
