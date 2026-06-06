@@ -12,8 +12,6 @@ tags:
 
 两指针从两端向中间移动，适合**有序数组**的搜索问题：
 
-python
-
 ```cpp
 // 有序数组两数之和
 vector<int> twoSum(vector<int>& nums, int target) {
