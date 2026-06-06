@@ -44,16 +44,16 @@ epoll 通过内核内建数据结构消除了 select 的 O(n) 瓶颈：
 
 ```
 epoll 实例（struct eventpoll）:
-  ├── 红黑树 (rbr): 存储所有注册的 fd → epitem
-  │   ├─ 节点: fd + 关注事件类型
-  │   ├─ 插入 O(log n) — epoll_ctl ADD
-  │   ├─ 删除 O(log n) — epoll_ctl DEL
-  │   └─ 修改 O(log n) — epoll_ctl MOD
+  ├── Red-Black Tree (rbr): 存储所有注册的 fd → epitem
+  │   ├─ 节点: fd + 关注事件type
+  │   ├─ insert O(log n) — epoll_ctl ADD
+  │   ├─ delete O(log n) — epoll_ctl DEL
+  │   └─ modify O(log n) — epoll_ctl MOD
   │
-  └── 就绪链表 (rdllist): 存储有事件发生的 fd
-      ├─ 内核驱动（网卡中断）回调 → ep_poll_callback
-      ├─ 将就绪 epitem 加入 rdllist
-      └─ epoll_wait 直接从链表取数据 — O(k)
+  └── ReadyLinked List (rdllist): 存储有事件发生的 fd
+      ├─ Kernel驱动（网卡Interrupt）回调 → ep_poll_callback
+      ├─ 将Ready epitem 加入 rdllist
+      └─ epoll_wait 直接从Linked List取data — O(k)
 
 关键：fd_set 只需注册一次（epoll_ctl ADD），
       后续 epoll_wait 不再有拷贝开销。

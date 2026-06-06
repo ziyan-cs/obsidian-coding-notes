@@ -29,19 +29,19 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 ```
 父进程（redis-server）          子进程（bgsave）
     │                              │
-    ├─ fork() 复制页表 ───────────→│
-    │  父子共享所有物理页（只读）    │
+    ├─ fork() 复制Page Table ───────────→│
+    │  parent&child share pages (read-only)    │
     │                              │
-    ├─ 正常处理客户端请求           │
-    │  写操作 → 触发 COW           │
-    │  复制修改的页                 │
+    ├─ serve client requests           │
+    │  write op → trigger COW           │
+    │  copy modified pages                 │
     │                              │
-    │                              ├─ 遍历所有 db，序列化
-    │                              │  写入临时文件 temp-{pid}.rdb
+    │                              ├─ iterate all dbs, serialize
+    │                              │  write to temp file temp-{pid}.rdb
     │                              │
-    │                              ├─ 完成 → rename 替换旧 rdb
-    │                              │  通知父进程
-    │                              └─ 退出
+    │                              ├─ done → rename replace old rdb
+    │                              │  notify parent
+    │                              └─ exit
 ```
 
 **COW 代价：** fork 后如果有大量写入，每个写操作的页（默认 4KB）都会触发复制，增加内存和延迟。`info persistence` 可监控 `rdb_changes_since_last_save`。
@@ -50,14 +50,14 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 
 ```
 ┌──────────┬──────────┬──────────┬──────────┬──────────┐
-│ "REDIS"  │ RDB版本  │ 辅助字段 │ 数据库数据│ EOF标志  │
+│ "REDIS"  │ RDBVersion  │ 辅助字段 │ Databasedata│ EOFflag  │
 │ 0006     │ 5 字节   │   ...    │  key-val  │ 8 字节   │
 └──────────┴──────────┴──────────┴──────────┴──────────┘
                       ↓
            ┌──────────────────┐
            │ SELECTDB 0        │
            │  key-value 对      │
-           │  类型编码 + key + 值 │
+           │  typeEncode + key + Value │
            │  EXPIRETIME 等    │
            └──────────────────┘
 ```

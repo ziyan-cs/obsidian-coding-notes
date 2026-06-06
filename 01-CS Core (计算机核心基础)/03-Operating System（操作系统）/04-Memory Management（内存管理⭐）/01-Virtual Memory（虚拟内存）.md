@@ -14,6 +14,7 @@ tags:
 ```
 进程 A 虚拟地址空间          物理内存
 ┌────────────────┐         ┌────────────┐
+<<<<<<< HEAD
 │  0x0000 - 0x3FFF ├────────┤  页框 0     │
 │                                         │         ├────────────┤
 │  0x4000 - 0x7FFF │         │  页框 1    │
@@ -21,6 +22,15 @@ tags:
 │  0x8000 - 0xBFFF │         │  页框 2    │
 │                                         │         ├────────────┤
 │  0xC000 - 0xFFFF │         │  页框 3    │
+=======
+│  0x0000 - 0x3FFF ├────────┤  Page Frame 0    │
+│                  │         ├────────────┤
+│  0x4000 - 0x7FFF │         │  Page Frame 1    │
+│                  │    →    ├────────────┤
+│  0x8000 - 0xBFFF │         │  Page Frame 2    │
+│                  │         ├────────────┤
+│  0xC000 - 0xFFFF │         │  Page Frame 3    │
+>>>>>>> origin/main
 └────────────────┘         └────────────┘
        ↓ 页表映射（MMU）
 ```
@@ -58,9 +68,9 @@ MMU 内部的页表缓存，缓存最近使用的虚拟-物理地址映射：
 ```
 访问虚拟地址
     │
-    ├── TLB 命中（≈ 0.5-1 cycle）→ 直接得到物理地址 ✓
+    ├── TLB 命中（≈ 0.5-1 cycle）→ 直接得到物理address ✓
     │
-    └── TLB 未命中 → 硬件遍历页表（多级内存访问 ≈ 10-100 cycles）
+    └── TLB 未命中 → 硬件TraversePage Table（多级Memory访问 ≈ 10-100 cycles）
                       → 更新 TLB → 重试指令
 ```
 
@@ -76,11 +86,11 @@ MMU 内部的页表缓存，缓存最近使用的虚拟-物理地址映射：
     ▼
 CPU 触发缺页异常（Page Fault Handler）
     │
-    ├── 有效访问（数据在磁盘交换区）→ 从磁盘读取到物理内存
-    │      │  → 更新页表 → 重新执行指令
-    │      └── 如果物理内存不足 → 页面置换 → 换出旧页
+    ├── valid access (data on swap)→ load from disk to physical mem
+    │      │  → update page table → re-execute instruction
+    │      └── if out of physical mem → page eviction → swap out old page
     │
-    └── 无效访问（段错误）→ SIGSEGV → 进程终止
+    └── invalid访问（Segfault）→ SIGSEGV → ProcessTerminated
 ```
 
 ```cpp

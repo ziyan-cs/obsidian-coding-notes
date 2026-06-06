@@ -10,11 +10,11 @@ tags:
 
 ```
 表达式
-├── 左值（lvalue）：有名字、有持久地址，可以取地址
-│       变量名、解引用 *p、数组下标 a[i]、前置++
-└── 右值（rvalue）：临时对象，即将销毁
-        ├── 纯右值（prvalue）：字面量 42、临时对象 std::string("hi")、后置 i++
-        └── 将亡值（xvalue）：std::move(x)、函数返回右值引用
+├── Lvalue（lvalue）：有名字、有持久address，可以取address
+│       变量名、解引用 *p、Array下标 a[i]、前置++
+└── Rvalue（rvalue）：临时对象，即将销毁
+        ├── 纯Rvalue（prvalue）：字面量 42、临时对象 std::string("hi")、后置 i++
+        └── 将亡Value（xvalue）：std::move(x)、函数ReturnRvalue引用
 ```
 
 ```cpp

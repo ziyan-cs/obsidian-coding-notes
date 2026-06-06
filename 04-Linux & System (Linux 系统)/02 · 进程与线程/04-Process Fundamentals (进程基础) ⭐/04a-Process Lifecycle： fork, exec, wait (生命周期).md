@@ -61,9 +61,9 @@ fork 之后，父子进程**共享同一份物理内存页**，并不立即复�
 
 ```
 fork 后：
-父进程页表 ──┐
+父ProcessPage Table ──┐
               ├──→ 共享物理页（只读标记）
-子进程页表 ──┘
+子ProcessPage Table ──┘
 
 某方写入时：
 写入方 ──→ 缺页中断 ──→ 内核复制该页 ──→ 写入方使用新副本
@@ -160,11 +160,11 @@ while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
               fork()
 CREATED ──────────────────> READY
                               │
-              调度器选中        │  等待 I/O / 信号
+              Schedule器选中        │  Wait I/O / Signal
               ↓               ↓
            RUNNING ─────────> BLOCKED
               │                    │
-              │ 时间片耗尽           │ 条件满足
+              │ Time Slice耗尽           │ 条件full足
               ↓                    ↓
             READY <───────────────
               │

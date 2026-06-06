@@ -9,6 +9,7 @@ tags:
 
 ```
 
+<<<<<<< HEAD
 ┌─────────────────────────────────┐ 高地址
 │         栈（Stack）                 │  向下增长
 │  局部变量、函数参数、返回地址       │
@@ -17,13 +18,28 @@ tags:
 ├─────────────────────────────────┤
 │         堆（Heap）                  │  向上增长
 │  new/malloc 动态分配                │
+=======
+┌─────────────────────────────────┐ High Addr
+│         栈（Stack）              │  grows downward
+│  local vars、func params、return addr       │
 ├─────────────────────────────────┤
-│  BSS 段（未初始化全局/静态变量）    │  程序启动时清零
+│              ↕ growth toward each other       │
 ├─────────────────────────────────┤
-│  Data 段（已初始化全局/静态变量）   │
+│         Heap（Heap）               │  grows upward
+│  new/malloc dynamic             │
+>>>>>>> origin/main
 ├─────────────────────────────────┤
+│  BSS 段（uninit global/static vars）    │  zeroed at startup
+├─────────────────────────────────┤
+│  Data 段（init global/static vars）   │
+├─────────────────────────────────┤
+<<<<<<< HEAD
 │  Text 段（代码段）                  │  只读，存储指令
 └─────────────────────────────────┘ 低地址
+=======
+│  Text 段（Code）                │  read-only，存储指令
+└─────────────────────────────────┘ Low Addr
+>>>>>>> origin/main
 ```
 
 ```cpp

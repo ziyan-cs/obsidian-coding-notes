@@ -11,9 +11,15 @@ tags:
 
 ```
 ┌──────────────┐    git add     ┌──────────────┐    git commit    ┌──────────────┐
+<<<<<<< HEAD
 │  Working Tree │ ────────────> │    Index      │ ───────────────> │  Repository       │
 │  （工作区）    │               │  （暂存区/索引）│                  │  （本地仓库）  │
 │              │ <──────────── │               │ <─────────────── │                    │
+=======
+│  Working Tree │ ────────────> │    Index      │ ───────────────> │  Repository  │
+│  （Working Tree）    │               │  （Index/Stage/Index）│                  │  （Local Repo）  │
+│              │ <──────────── │               │ <─────────────── │              │
+>>>>>>> origin/main
 └──────────────┘  git restore   └──────────────┘  git restore      └──────────────┘
                                                     --staged
 ```

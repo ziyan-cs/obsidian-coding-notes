@@ -28,8 +28,8 @@ InnoDB 的每行记录有三个隐藏列：
   ┌────────────┬──────────┬──────────┐
   │ DB_TRX_ID  │ DB_ROLL_PTR │ DB_ROW_ID │
   ├────────────┼──────────┼──────────┤
-  │ 最后修改的  │ 指向 undo │ 自增行 ID  │
-  │ 事务 ID    │ log 纪录  │（无主键时）│
+  │ 最后modify的  │ 指向 undo │ 自增row ID  │
+  │ transaction ID    │ log 纪录  │（无Primary Key时）│
   └────────────┴──────────┴──────────┘
   └─────────────────────────────────────┘
   ┌─────────────────────────────────────┐
@@ -48,17 +48,17 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 行记录的多版本链：
 
   ┌──────────────────────────┐
-  │ 最新版本（当前行数据）     │ ← DB_TRX_ID=100, 数据: balance=0
+  │ latest version（current row data）     │ ← DB_TRX_ID=100, data: balance=0
   └──────────┬───────────────┘
              │ DB_ROLL_PTR
   ┌──────────▼───────────────┐
   │ undo log: TRX_ID=80     │ ← 旧版本，数据: balance=100
-  │ 记录修改前的 balance=100 │
+  │ before-image of balance=100 │
   └──────────┬───────────────┘
              │ DB_ROLL_PTR
   ┌──────────▼───────────────┐
   │ undo log: TRX_ID=50     │ ← 更旧的版本，数据: balance=200
-  │ 记录修改前的 balance=200 │
+  │ before-image of balance=200 │
   └──────────────────────────┘
 ```
 
@@ -68,10 +68,10 @@ Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当
 
 ```
 Read View 结构：
-  ├── creator_trx_id：创建此 Read View 的事务 ID
-  ├── m_ids：活跃事务 ID 列表（未提交的事务）
-  ├── min_trx_id：m_ids 中的最小值
-  └── max_trx_id：下一个要分配的事务 ID（大于所有活跃事务）
+  ├── creator_trx_id：creator trx of this Read Viewtransaction ID
+  ├── m_ids：active trx IDs 列表（uncommitted的Transaction）
+  ├── min_trx_id：m_ids 中的min value
+  └── max_trx_id：next要Allocate的transaction ID（大于所有活跃Transaction）
 ```
 
 **可见性判断规则（判断 DB_TRX_ID）：**

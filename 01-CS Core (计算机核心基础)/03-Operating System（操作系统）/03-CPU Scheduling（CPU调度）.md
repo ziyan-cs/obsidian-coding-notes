@@ -84,11 +84,11 @@ void rr(vector<Process>& procs, int quantum) {
 
 ```
          ┌──────────────────────┐
-Level 0  │    RR (quantum=8)    │ 优先级最高
+Level 0  │    RR (quantum=8)    │ Priority最高
          ├──────────────────────┤
 Level 1  │   RR (quantum=16)    │
          ├──────────────────────┤
-Level 2  │      FCFS            │ 优先级最低
+Level 2  │      FCFS            │ Priority最低
          └──────────────────────┘
 
 规则：1. 高优先级先执行

@@ -46,7 +46,7 @@ TLS 方案：
   │←─── ServerHelloDone ────────│  通知客户端：服务器发送完毕
   │                              │
   │───── ClientKeyExchange ────→│  客户端用服务端公钥加密 premaster_secret
-  │                              │  （一个随机数，只有服务端能解密）
+  │                              │  （一个随机数，只有Server能Decrypt）
   │                              │
   │                              │  双方都计算：master_secret =
   │                              │    PRF(premaster_secret, random_C, random_S)
@@ -58,7 +58,7 @@ TLS 方案：
   │←─── ChangeCipherSpec ───────│  通知：后续通信将加密
   │←─── Finished ──────────────│  加密的握手消息完整性校验
   │                              │
-  │══════ 加密通信开始 ══════════│  使用 AES/GCM 等对称加密
+  │══════ Encrypt通信开始 ══════════│  使用 AES/GCM 等对称Encrypt
 ```
 
 ## 数字证书与 CA
@@ -69,7 +69,7 @@ TLS 方案：
 证书链：
   根 CA（自签名，预置在浏览器/操作系统中）
     └── 中间 CA（由根 CA 签发）
-          └── 服务器证书（由中间 CA 签发）
+          └── 服务器Certificate（由中间 CA 签发）
 
 证书内容：
   - 域名（CN / SAN）

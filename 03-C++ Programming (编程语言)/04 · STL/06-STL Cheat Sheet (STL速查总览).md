@@ -12,13 +12,13 @@ tags:
 需要连续内存？
 ├── 是 → 随机访问为主？→ vector ⭐
 │       双端操作？    → deque
-│       固定大小编译期已知？→ array
-└── 否 → 保持迭代器稳定？
-        ├── 是 → 双向遍历？→ list
-        │        单向遍历？→ forward_list
-        └── 否 → 排序/范围查询？
+│       固定sizeCompile-time已知？→ array
+└── 否 → 保持Iterator稳定？
+        ├── 是 → 双向Traverse？→ list
+        │        单向Traverse？→ forward_list
+        └── 否 → Sort/范围查询？
                 ├── 是 → map / set / multiset ⭐
-                └── 否 → O(1) 查找？→ unordered_map / unordered_set ⭐
+                └── 否 → O(1) Search？→ unordered_map / unordered_set ⭐
 ```
 
 ## 复杂度对比
