@@ -40,23 +40,23 @@ TLS 方案：
   │                              │
   │───── ClientHello ──────────→ │  客户端发送：支持的 TLS 版本、加密套件列表、
   │                              │             随机数 random_C
-  │←─── ServerHello ────────────│  服务端选择：TLS 版本、加密套件、
+  │←─── ServerHello ──────────── │  服务端选择：TLS 版本、加密套件、
   │                              │             随机数 random_S
-  │←─── Certificate ────────────│  服务端发送数字证书（含公钥）
-  │←─── ServerHelloDone ────────│  通知客户端：服务器发送完毕
+  │←─── Certificate ──────────── │  服务端发送数字证书（含公钥）
+  │←─── ServerHelloDone ──────── │  通知客户端：服务器发送完毕
   │                              │
-  │───── ClientKeyExchange ────→│  客户端用服务端公钥加密 premaster_secret
+  │───── ClientKeyExchange ────→ │  客户端用服务端公钥加密 premaster_secret
   │                              │  （一个随机数，只有服务端能解密）
   │                              │
   │                              │  双方都计算：master_secret =
   │                              │    PRF(premaster_secret, random_C, random_S)
   │                              │  再衍生出：会话密钥（对称密钥）
   │                              │
-  │───── ChangeCipherSpec ─────→│  通知：后续通信将加密
-  │───── Finished ─────────────→│  加密的握手消息完整性校验
+  │───── ChangeCipherSpec ─────→ │  通知：后续通信将加密
+  │───── Finished ─────────────→ │  加密的握手消息完整性校验
   │                              │
-  │←─── ChangeCipherSpec ───────│  通知：后续通信将加密
-  │←─── Finished ──────────────│  加密的握手消息完整性校验
+  │←─── ChangeCipherSpec ─────── │  通知：后续通信将加密
+  │←─── Finished ──────────────  │  加密的握手消息完整性校验
   │                              │
   │══════ 加密通信开始 ══════════│  使用 AES/GCM 等对称加密
 ```

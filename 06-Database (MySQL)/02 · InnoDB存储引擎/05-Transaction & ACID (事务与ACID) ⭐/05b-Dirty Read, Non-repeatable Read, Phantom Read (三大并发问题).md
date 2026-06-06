@@ -40,14 +40,14 @@ tags:
   事务 A                   事务 B
   ├── BEGIN                 │
   ├── SELECT balance        │
-  │   WHERE id=1            │
-  │   → 100                 │
-  │                         │
+  │   WHERE id=1              │
+  │   → 100                   │
+  │                           │
   │                         ├── UPDATE account SET balance=0 WHERE id=1
   │                         ├── COMMIT
-  │                         │
+  │                           │
   ├── SELECT balance        │
-  │   WHERE id=1            │
+  │   WHERE id=1              │
   │   → 0（和上次不一样！）   │
   ├── COMMIT                │
 ```
@@ -67,14 +67,14 @@ tags:
   事务 A                   事务 B
   ├── BEGIN                 │
   ├── SELECT * FROM user    │
-  │   WHERE age > 20        │
-  │   → 10 行               │
-  │                         │
+  │   WHERE age > 20          │
+  │   → 10 行                 │
+  │                           │
   │                         ├── INSERT INTO user(name, age) VALUES('Bob', 25)
   │                         ├── COMMIT
-  │                         │
+  │                           │
   ├── SELECT * FROM user    │
-  │   WHERE age > 20        │
+  │   WHERE age > 20          │
   │   → 11 行（多了一行！）   │  ← 幻读
   ├── COMMIT                │
 ```

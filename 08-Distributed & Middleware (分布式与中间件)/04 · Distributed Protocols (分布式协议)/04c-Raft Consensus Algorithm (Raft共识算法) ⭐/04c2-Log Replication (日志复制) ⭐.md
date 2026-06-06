@@ -27,19 +27,19 @@ Leader 视角的日志：
 
 ```
 Client         Leader               Follower
-  │              │                     │
+  │              │                      │
   ├── Propose ──→│                     │
-  │              │ Append to local log │
-  │              │                     │
-  │              │ AppendEntries RPC ──┤  ← 并行发送给所有 Follower
-  │              │  (entries, commitIndex)
-  │              │◄────────────────────┤  ← Follower 追加到本地日志后回复
+  │              │ Append to local log  │
+  │              │                      │
+  │                                     │ AppendEntries RPC ──┤  ← 并行发送给所有 Follower
+  │                                     │  (entries, commitIndex)
+  │                                     │◄────────────────────┤  ← Follower 追加到本地日志后回复
   │              │  (多数确认)          │
-  │              │ Apply to state machine
-  │              │                     │
-  │◄── Response ─┤                     │
+  │                                     │ Apply to state machine
+  │              │                      │
+  │◄── Response ─┤                      │
   │              │ 下一条 AppendEntries │
-  │              │  (包含更新的 commitIndex) ──→ Follower 提交
+  │                                     │  (包含更新的 commitIndex) ──→ Follower 提交
 ```
 
 **关键点：**
@@ -96,12 +96,12 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 - 当前状态机状态（如 KV 数据库的全部键值）
 - 最后一条已提交日志的 index 和 term
 
-     ┌──────────────────────────────┐
+     ┌───────────────────────────────┐
      │          Snapshot             │
      │  lastIncludedIndex = 5        │
      │  lastIncludedTerm = 2         │
      │  state machine data: {...}    │
-     └──────────────────────────────┘
+     └───────────────────────────────┘
      ↑ 可以丢弃 index <= 5 的日志 
 ```
 
