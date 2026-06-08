@@ -10,16 +10,21 @@ status: 🌱
 
 网络编程中，数据以流的形式到达，无法预知每次 `read()` 会收到多少数据：
 
-```
-TCP 流可能分段：
-  read → "GET /ind"
-  read → "ex.html"
-  read → " HTTP/1.1\r\nHost: "
-
-Buffer 的作用：
-  1. 暂存未处理完的数据
-  2. 提供连续的、可扩展的内存空间
-  3. 管理读写位置，避免数据拷贝
+```mermaid
+graph LR
+    subgraph ReadBuf["读缓冲区"]
+        RBUF["环形缓冲区 / kbuf<br/>read_pos → write_pos"]
+    end
+    subgraph WriteBuf["写缓冲区"]
+        WBUF["环形缓冲区 / kbuf<br/>write_pos → send_pos"]
+    end
+    NET["网卡 / socket"] -->|epoll 可读| RBUF
+    RBUF -->|read / 解析| APP["应用层处理"]
+    APP -->|编码 / 序列化| WBUF
+    WBUF -->|epoll 可写| NET
+    
+    style ReadBuf fill:#e3f2fd
+    style WriteBuf fill:#fce4ec
 ```
 
 ## Buffer 核心结构

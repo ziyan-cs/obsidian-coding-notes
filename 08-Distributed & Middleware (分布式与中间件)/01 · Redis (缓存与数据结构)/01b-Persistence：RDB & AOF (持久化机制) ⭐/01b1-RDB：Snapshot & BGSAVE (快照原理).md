@@ -27,22 +27,22 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 
 ### BGSAVE 写时复制（COW）
 
-```
-父进程（redis-server）          子进程（bgsave）
-    │                                │
-    ├─ fork() 复制页表 ───────────→│
-    │  父子共享所有物理页（只读）    │
-    │                                │
-    ├─ 正常处理客户端请求           │
-    │  写操作 → 触发 COW             │
-    │  复制修改的页                  │
-    │                                │
-    │                              ├─ 遍历所有 db，序列化
-    │                                │  写入临时文件 temp-{pid}.rdb
-    │                                │
-    │                              ├─ 完成 → rename 替换旧 rdb
-    │                                │  通知父进程
-    │                              └─ 退出
+```mermaid
+sequenceDiagram
+    participant Client as 客户端
+    participant Redis as Redis 主进程
+    participant Child as Fork 子进程
+    participant Disk as 磁盘
+    
+    Client->>Redis: BGSAVE 命令
+    Redis->>Redis: fork()
+    Redis->>Child: 子进程创建
+    Note over Redis: 父进程继续处理请求
+    Child->>Disk: 将内存数据写入临时 RDB 文件
+    Note over Child: 利用 Copy-on-Write<br/>fork 时共享内存页<br/>父进程修改时复制
+    Child->>Disk: 写入完成 → 重命名为 dump.rdb
+    Child->>Redis: 通知父进程完成
+    Redis->>Client: BGSAVE OK
 ```
 
 **COW 代价：** fork 后如果有大量写入，每个写操作的页（默认 4KB）都会触发复制，增加内存和延迟。`info persistence` 可监控 `rdb_changes_since_last_save`。

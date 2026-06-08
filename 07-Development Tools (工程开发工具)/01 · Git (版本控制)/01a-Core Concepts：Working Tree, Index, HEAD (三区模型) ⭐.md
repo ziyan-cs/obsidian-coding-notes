@@ -9,13 +9,28 @@ status: 🌱
 
 ## 三区模型
 
-```
-┌──────────────────────────────────────────────────────────────────────────────────────┐    git add     ┌──────────────┐    git commit    ┌──────────────┐
-│  Working Tree │ ────────────> │    Index      │ ───────────────> │  Repository       │
-│  （工作区）    │               │  （暂存区/索引）│                  │  （本地仓库）  │
-│              │ <──────────── │               │ <─────────────── │                    │
-└──────────────────────────────────────────────────────────────────────────────────────┘  git restore   └──────────────┘  git restore      └──────────────┘
-                                                    --staged
+```mermaid
+graph LR
+    subgraph WD["工作区 (Working Tree)"]
+        FILES["实际文件<br/>src/main.cpp"]
+    end
+    subgraph INDEX["暂存区 (Index/Staging)"]
+        BLOB["索引中的 blob<br/>管理待提交快照"]
+    end
+    subgraph REPO["本地仓库 (.git)"]
+        COMMIT["提交历史<br/>commit 对象 DAG"]
+        HEAD["HEAD → 当前分支<br/>指向最新 commit"]
+    end
+    
+    FILES -->|git add| BLOB
+    BLOB -->|git commit| COMMIT
+    COMMIT --> HEAD
+    HEAD -->|git checkout| FILES
+    HEAD -->|git reset| BLOB
+    
+    style WD fill:#e3f2fd
+    style INDEX fill:#fff3cd
+    style REPO fill:#d4edda
 ```
 
 |区域|别名|存储位置|含义|

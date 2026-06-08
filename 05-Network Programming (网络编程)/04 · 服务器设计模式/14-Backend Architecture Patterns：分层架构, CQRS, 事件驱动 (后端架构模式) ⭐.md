@@ -10,16 +10,28 @@ status: 🌱
 
 C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层：
 
-```
-┌──────────────────────────────────────┐
-│   接入层（Handler / Controller）     │  ← HTTP/gRPC 解析，参数校验
-├──────────────────────────────────────┤
-│   业务层（Service / Use Case）       │  ← 核心业务逻辑，事务管理
-├──────────────────────────────────────┤
-│   数据层（Repository / DAO）         │  ← 数据库/缓存/外部服务访问
-├──────────────────────────────────────┤
-│   基础设施层（Infrastructure）       │  ← 连接池、配置、日志、Metrics
-└──────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Layered["分层架构"]
+        L1["接入层<br/>(API Gateway / Nginx)"]
+        L2["逻辑层<br/>(业务服务)"]
+        L3["数据层<br/>(DB / Cache)"]
+    end
+    subgraph CQRS["CQRS"]
+        CMD["Command<br/>写: Insert/Update/Delete"]
+        QRY["Query<br/>读: Select"]
+    end
+    subgraph Event["事件驱动"]
+        PROD["生产者<br/>发布事件"]
+        MQ["消息队列<br/>(Kafka / RabbitMQ)"]
+        CONS["消费者<br/>异步处理"]
+    end
+    
+    L1 --> L2
+    L2 --> L3
+    
+    style CQRS fill:#fff3cd
+    style Event fill:#d4edda
 ```
 
 ### C++ 项目目录结构

@@ -56,24 +56,25 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 
 ### 重写过程
 
-```
-主进程                             子进程
-  │                                      │
-  ├─ fork ──────────────────────────→│
-  │  子进程持有 fork 时的内存快照        │
-  │                                      │
-  ├─ 继续处理客户端请求                │
-  │  写操作 → 写入 AOF 缓冲区            │
-  │          + 写入 AOF 重写缓冲区       │
-  │                                      │
-  │                                  ├─ 遍历 db，将数据转为
-  │                                      │  最简命令（如 LPUSH 合并）
-  │                                      │  写入临时 AOF 文件
-  │                                      │
-  │←── 子进程完成 ───────────────────    │
-  │  将重写缓冲区中的增量命令追加到      │
-  │  临时 AOF → rename 替换旧 AOF        │
-  └──────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Normal["正常写入"]
+        CMD["SET foo bar"] --> APPEND["追加到 AOF 缓冲区"]
+        APPEND --> SYNC["fsync 到磁盘<br/>(每秒/每次/从不)"]
+    end
+    subgraph Rewrite["AOF 重写"]
+        MEM["当前内存状态"] --> NEW_AOF["扫描内存生成最小命令集"]
+        OLD_AOF["旧 AOF 可能非常大"] --> BG_REWRITE["fork 子进程重写"]
+        BG_REWRITE --> MERGE["父进程增量缓冲 → 合并"]
+        MERGE --> DONE["新 AOF 替换旧文件"]
+    end
+    
+    style Rewrite fill:#e3f2fd
+    note right of NEW_AOF
+        例: 对 key 做了 1000 次 incr
+        → 重写为 SET key 1000
+        只保留最终状态
+    end note
 ```
 
 **重写优化：** 将多次命令合并为最少命令。例如 `RPUSH list A` `RPUSH list B` 合并为 `RPUSH list A B`。

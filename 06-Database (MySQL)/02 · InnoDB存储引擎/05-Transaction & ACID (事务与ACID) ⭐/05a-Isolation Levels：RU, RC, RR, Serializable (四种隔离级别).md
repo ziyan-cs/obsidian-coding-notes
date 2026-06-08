@@ -10,15 +10,29 @@ status: 🌱
 
 SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 
-```
-            ┌─────────────────────────────────────────┐
-            │  隔离级别  │ 脏读  │ 不可重复读 │ 幻读  │
-            ├───────────┼──────┼───────────┼──────┤
-            │ RU        │ 可能 │ 可能      │ 可能     │
-            │ RC        │ 避免 │ 可能      │ 可能     │
-            │ RR        │ 避免 │ 避免      │ 可能     │
-            │ Serializable │ 避免 │ 避免    │ 避免    │
-            └───────────┴──────┴───────────┴──────┘
+```mermaid
+graph TD
+    subgraph Levels["SQL 标准四种隔离级别"]
+        RU["READ UNCOMMITTED<br/>读未提交<br/>❌ 脏读 ❌ 不可重复读 ❌ 幻读"]
+        RC["READ COMMITTED<br/>读已提交<br/>✅ 无脏读 ❌ 不可重复读 ❌ 幻读"]
+        RR["REPEATABLE READ<br/>可重复读 (MySQL 默认)<br/>✅ 无脏读 ✅ 不可重复读 ❌ 幻读"]
+        SER["SERIALIZABLE<br/>串行化<br/>✅ 全部解决"]
+    end
+    RU -->|隔离性增强| RC -->|隔离性增强| RR -->|隔离性增强| SER
+    SER -->|并发性能降低| RR
+    RR -->|并发性能降低| RC
+    RC -->|并发性能降低| RU
+    
+    style RU fill:#f8d7da
+    style RC fill:#fff3cd
+    style RR fill:#d4edda
+    style SER fill:#cce5ff
+    
+    note right of RR
+        InnoDB 的 RR 级别通过
+        MVCC + Next-Key Lock
+        解决了幻读问题
+    end note
 ```
 
 ## RU（Read Uncommitted，读未提交）

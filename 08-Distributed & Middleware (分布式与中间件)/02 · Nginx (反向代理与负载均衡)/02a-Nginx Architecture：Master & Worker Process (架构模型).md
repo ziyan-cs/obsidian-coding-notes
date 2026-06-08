@@ -9,18 +9,33 @@ status: 🌱
 
 ## Nginx 进程模型
 
-```
-         ┌────────────────────┐
-         │     Master 进程    │  ← 读取配置、管理 worker
-         │  (root 权限)       │
-         └──────┬────────────┘
-                │ fork
-    ┌───────────┼───────────┐
-    ↓           ↓           ↓
- ┌──────────────────────────┐  ┌──────┐  ┌──────┐
- │worker│  │worker│  │worker│  ← 处理请求（普通用户）
- │  n   │  │  1   │  │  2   │
- └──────────────────────────┘  └──────┘  └──────┘
+```mermaid
+graph TD
+    MASTER["Master 进程<br/>(root)<br/>读取配置 → fork Worker"]
+    W1["Worker 1<br/>(普通用户)<br/>epoll 事件循环"]
+    W2["Worker 2<br/>(普通用户)<br/>epoll 事件循环"]
+    W3["Worker 3<br/>(普通用户)<br/>epoll 事件循环"]
+    CACHE["共享内存 / 缓存<br/>(所有 Worker 共享)"]
+    
+    MASTER -->|fork| W1
+    MASTER -->|fork| W2
+    MASTER -->|fork| W3
+    W1 --- CACHE
+    W2 --- CACHE
+    W3 --- CACHE
+    
+    CLIENT["客户端请求"] -->|竞争 accept| W1 & W2 & W3
+    
+    style MASTER fill:#e74c3c,color:#fff
+    style W1 fill:#3498db,color:#fff
+    style W2 fill:#3498db,color:#fff
+    style W3 fill:#3498db,color:#fff
+    note right of MASTER
+        一个 Master 管理多个 Worker
+        - 热加载配置 (reload)
+        - 平滑升级 (upgrade)
+        - Worker 崩溃时拉起
+    end note
 ```
 
 ### 各进程职责

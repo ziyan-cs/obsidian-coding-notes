@@ -8,16 +8,16 @@ status: 🌱
 
 ## 编译的四个阶段
 
-```text
-源文件(.cpp) 
-    ↓ -E
-预处理：展开 #include / #define / #if，生成 .i 文件
-    ↓ -S
-编译：词法/语法/语义分析 → 生成汇编 .s 文件
-    ↓ -c
-汇编：汇编 → 生成机器码 .o 目标文件（可重定位文件）
-    ↓ -o
-链接：目标文件 + 库 → 生成可执行文件
+```mermaid
+graph LR
+    SRC["source.cpp<br/>源码"] -->|预处理 (g++ -E)| PP["source.ii<br/>展开宏、头文件"]
+    PP -->|编译 (g++ -S)| ASM["source.s<br/>汇编代码"]
+    ASM -->|汇编 (g++ -c)| OBJ["source.o<br/>目标文件<br/>(二进制机器码)"]
+    OBJ -->|链接 (ld)| EXE["a.out<br/>可执行文件"]
+    LIB["静态库 .a<br/>动态库 .so"] -->|链接| EXE
+    
+    style SRC fill:#e3f2fd
+    style EXE fill:#4caf50,color:#fff
 ```
 
 ```bash

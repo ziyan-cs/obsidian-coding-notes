@@ -26,21 +26,25 @@ Leader 视角的日志：
 
 ## 日志复制流程
 
-```
-Client         Leader               Follower
-  │              │                      │
-  ├── Propose ──→│                     │
-  │              │ Append to local log  │
-  │              │                      │
-  │                                     │ AppendEntries RPC ──┤  ← 并行发送给所有 Follower
-  │                                     │  (entries, commitIndex)
-  │                                     │◄────────────────────┤  ← Follower 追加到本地日志后回复
-  │              │  (多数确认)          │
-  │                                     │ Apply to state machine
-  │              │                      │
-  │◄── Response ─┤                      │
-  │              │ 下一条 AppendEntries │
-  │                                     │  (包含更新的 commitIndex) ──→ Follower 提交
+```mermaid
+sequenceDiagram
+    participant Client as 客户端
+    participant L1 as Leader
+    participant F1 as Follower 1
+    participant F2 as Follower 2
+    
+    Client->>L1: 提案: SET x=3
+    L1->>L1: 追加日志到本地 (uncommitted)
+    L1->>F1: 发送 AppendEntries RPC
+    L1->>F2: 发送 AppendEntries RPC
+    F1->>L1: 返回成功
+    F2->>L1: 返回成功
+    Note over L1: 收到多数派成功 → 提交
+    L1->>L1: 日志状态 → committed
+    L1->>Client: 返回成功
+    L1->>F1: 下一条 AppendEntries (携带 commitIndex)
+    L1->>F2: 下一条 AppendEntries (携带 commitIndex)
+    Note over F1,F2: Follower 看到 commitIndex<br/>→ 应用到状态机
 ```
 
 **关键点：**

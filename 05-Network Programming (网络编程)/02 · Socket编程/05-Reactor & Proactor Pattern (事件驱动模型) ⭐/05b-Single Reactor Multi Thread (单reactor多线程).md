@@ -10,23 +10,28 @@ status: 🌱
 
 ## 模型结构
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    主线程                           │
-│  ┌──────────┐   ┌──────────┐   ┌────────────────┐   │
-│  │  Reactor │──>│ Acceptor │──>│    Handler     │   │
-│  │ (epoll)  │   │ (accept) │   │  (read/write)  │   │
-│  └──────────┘   └──────────┘   └───────┬────────┘   │
-└────────────────────────────────────────┼───────────┘
-                                          │ 业务逻辑分发
-                               ┌──────────▼──────────┐
-                               │     线程池            │
-                               │  ┌───┐ ┌───┐ ┌───┐    │
-                               │  │ T1│ │ T2│ │ T3│    │
-                               │  └───┘ └───┘ └───┘    │
-                               └──────────┬───────────┘
-                                          │ 处理完成，结果写回
-                                    Handler.write()
+```mermaid
+graph TD
+    subgraph MainThread["主线程 (Reactor)"]
+        RE["Reactor<br/>(epoll_wait)"]
+        DISPATCH["事件分发"]
+        ACC["Acceptor"]
+    end
+    subgraph ThreadPool["工作线程池"]
+        W1["Worker 1<br/>业务处理"]
+        W2["Worker 2<br/>业务处理"]
+        W3["Worker 3<br/>业务处理"]
+    end
+    
+    RE --> DISPATCH
+    DISPATCH -->|新连接| ACC
+    DISPATCH -->|IO可读| W1
+    DISPATCH -->|IO可读| W2
+    DISPATCH -->|IO可读| W3
+    ACC -->|注册fd| RE
+    
+    style RE fill:#4a90d9,color:#fff
+    style ThreadPool fill:#27ae60,color:#fff
 ```
 
 ## 核心代码结构

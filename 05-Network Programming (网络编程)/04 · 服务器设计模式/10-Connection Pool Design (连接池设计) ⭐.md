@@ -17,21 +17,33 @@ status: 🌱
 
 ## 连接池的核心职责
 
-```
-连接池内部结构：
-  ┌─────────────────────────────────┐
-  │      连接池管理器               │
-  │  ┌──────┐  ┌──────┐  ┌──────┐   │
-  │  │ conn │  │ conn │  │ conn │   │  ← 空闲连接列表
-  │  │  1   │  │  2   │  │  3   │   │
-  │  └──────┘  └──────┘  └──────┘   │
-  │  ┌──────┐  ┌──────┐             │
-  │  │ conn │  │ conn │             │  ← 活跃连接列表
-  │  │  4   │  │  5   │             │
-  │  └──────┘  └──────┘             │
-  │  min_idle=2, max_idle=10,       │
-  │  max_total=20, max_wait=30ms    │
-  └─────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph App["应用程序"]
+        T1["线程 1"]
+        T2["线程 2"]
+        T3["线程 3"]
+    end
+    subgraph Pool["连接池"]
+        IDLE["空闲连接队列<br/>( idle_connections )"]
+        BUSY["活跃连接集合<br/>( in_use )"]
+        MIN["最小连接数<br/>min_idle"]
+        MAX["最大连接数<br/>max_size"]
+    end
+    subgraph DB["数据库"]
+        DB1["MySQL 连接 1"]
+        DB2["MySQL 连接 2"]
+        DB3["MySQL 连接 3"]
+    end
+    
+    T1 & T2 & T3 -->|get()| IDLE
+    IDLE -->|取出| BUSY
+    BUSY -->|release()| IDLE
+    IDLE --- MIN
+    BUSY --- MAX
+    IDLE --> DB1 & DB2 & DB3
+    
+    style Pool fill:#3498db,color:#fff
 ```
 
 **核心参数：**

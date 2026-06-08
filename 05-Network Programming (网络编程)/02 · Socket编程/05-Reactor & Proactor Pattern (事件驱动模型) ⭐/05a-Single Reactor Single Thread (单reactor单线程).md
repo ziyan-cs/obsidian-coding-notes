@@ -10,23 +10,24 @@ status: 🌱
 
 ## 模型结构
 
-```
-┌─────────────────────────────────────────────┐
-│              单线程                         │
-│                                             │
-│  ┌──────────┐     ┌───────────────────┐     │
-│  │          │ 事件 │   Dispatch        │    │
-│  │  Reactor │───> │                   │     │
-│  │ (select/ │     │  ┌─────────────┐  │     │
-│  │  epoll)  │     │  │ Acceptor    │  │     │
-│  │          │     │  │（处理新连接） │  │   │
-│  └──────────┘     │  └─────────────┘  │     │
-│                   │  ┌─────────────┐  │     │
-│                   │  │ Handler     │  │     │
-│                   │  │（读/处理/写） │  │   │
-│                   │  └─────────────┘  │     │
-│                   └───────────────────┘     │
-└─────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph MainThread["单线程"]
+        RE["Reactor<br/>(epoll_wait 事件循环)"]
+        DISPATCH["事件分发"]
+        ACC["Acceptor<br/>处理新连接"]
+        H1["Handler A<br/>read → 处理 → write"]
+        H2["Handler B<br/>read → 处理 → write"]
+    end
+    
+    RE -->|事件到达| DISPATCH
+    DISPATCH -->|新连接| ACC
+    DISPATCH -->|IO事件| H1
+    DISPATCH -->|IO事件| H2
+    ACC -->|注册新 fd| RE
+    
+    style RE fill:#4a90d9,color:#fff
+    style DISPATCH fill:#e67e22,color:#fff
 ```
 
 ## 核心代码结构

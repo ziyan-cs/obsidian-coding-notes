@@ -82,41 +82,30 @@ Checkpoint 解决了两个问题：
 
 ## 崩溃恢复流程
 
-```
-MySQL 崩溃后重启的恢复流程：
-
-1. 定位 checkpoint
-   └→ 从 redo log 文件头读取最近一次 checkpoint 的 LSN
-
-2. 前滚（Redo Phase）
-   └→ 从 checkpoint LSN 开始，按顺序重放 redo log
-   └→ 将未刷盘的修改重新应用到 Buffer Pool
-   └→ 这个过程是幂等的——重复应用相同 redo log 不影响正确性
-
-3. 回滚（Undo Phase）
-   └→ 检查所有事务，查找 crash 时未提交的事务
-   └→ 通过 undo log 回滚这些未完成的事务
-   └→ 释放锁等资源
-
-4. 完成
-   └→ Buffer Pool 中的脏页在恢复完成后刷新到磁盘
-```
-
-**恢复状态机：**
-```
-MySQL 启动 → 检查是否需要恢复 → 否 → 正常启动
-                                ↓
-                              是
-                                ↓
-                   扫描 redo log → log_applied
-                                ↓
-                          执行前滚
-                                ↓
-                   扫描 undo → 查找未提交事务
-                                ↓
-                          执行回滚
-                                ↓
-                          启动完成
+```mermaid
+graph TD
+    CRASH["数据库崩溃"]
+    START["实例启动<br/>读取 checkpoint LSN"]
+    SCAN["扫描 redo log<br/>从 checkpoint 到末尾"]
+    subgraph REDO["REDO 阶段 (前滚)"]
+        REDO1["找出 page_lsn < redo_lsn 的页"]
+        REDO2["重新应用 redo log 中的变更"]
+    end
+    subgraph UNDO["UNDO 阶段 (回滚)"]
+        UNDO1["扫描 undo log 中未提交的事务"]
+        UNDO2["回滚未提交事务的修改"]
+    end
+    DONE["恢复完成<br/>数据一致性保证"]
+    
+    CRASH --> START --> SCAN --> REDO
+    REDO --> REDO1 --> REDO2
+    REDO2 --> UNDO
+    UNDO --> UNDO1 --> UNDO2 --> DONE
+    
+    style CRASH fill:#e74c3c,color:#fff
+    style DONE fill:#27ae60,color:#fff
+    style REDO fill:#e3f2fd
+    style UNDO fill:#fff3cd
 ```
 
 ## LSN（Log Sequence Number）

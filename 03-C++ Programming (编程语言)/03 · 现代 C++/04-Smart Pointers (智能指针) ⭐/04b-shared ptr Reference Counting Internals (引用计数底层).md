@@ -19,17 +19,34 @@ sp2.reset();                            // 计数 = 2
 
 ### 控制块（Control Block）
 
-```
-shared_ptr 对象
-┌──────────────────────────────────────────────┐         ┌──────────────────────┐
-│  ptr ───────┼──────>  │    Managed Object    │
-│  ctrl ──────┼──┐      └──────────────────────┘
-└─────────────┘  │
-                 └──> ┌──────────────────────┐
-                      │  strong ref count: 2 │
-                      │  weak   ref count: 1 │
-                      │  deleter / allocator │
-                      └──────────────────────┘
+```mermaid
+graph LR
+    subgraph SP1["shared_ptr A"]
+        PTR1["raw ptr → T"]
+        CB_PTR["控制块指针"]
+    end
+    subgraph SP2["shared_ptr B"]
+        PTR2["raw ptr → T"]
+        CB_PTR2["控制块指针"]
+    end
+    subgraph CB["控制块 (Control Block)<br/>堆上分配"]
+        REF_COUNT["引用计数 ref_count = 2"]
+        WEAK_COUNT["弱引用计数 weak_count = 0"]
+        DELETER["删除器 deleter"]
+        ALLOC["分配器 allocator"]
+    end
+    subgraph DATA["对象 T<br/>堆上"]
+        OBJ["实际数据"]
+    end
+    SP1 -->|共享| CB
+    SP2 -->|共享| CB
+    SP1 --> OBJ
+    SP2 --> OBJ
+    CB --> OBJ
+    note right of CB
+        ref_count 为 0 时释放 T
+        ref_count + weak_count 为 0 时释放控制块
+    end note
 ```
 
 - **make_shared**：一次分配，对象和控制块在同一块内存（更高效，缓存友好）

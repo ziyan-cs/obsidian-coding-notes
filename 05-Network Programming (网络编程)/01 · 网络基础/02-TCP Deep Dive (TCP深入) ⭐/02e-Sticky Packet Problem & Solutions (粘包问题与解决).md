@@ -10,14 +10,23 @@ status: 🌱
 
 **粘包（Sticky Packet）**：接收方在读取数据时，无法正确区分出原始的消息边界，多个消息被"粘"在一起，或一个消息被拆成多段读取。
 
-```txt
-发送方发了两条消息：
-[Hello][World]
-
-接收方可能读到：
-情况A：[HelloWorld]          ← 两条粘在一起
-情况B：[Hel] [loWorld]       ← 一条被拆开
-情况C：[Hello] [Wor] [ld]     ← 混合情况
+```mermaid
+graph TD
+    subgraph Send["发送方 (数据流)"]
+        M1["消息 A"]
+        M2["消息 B"]
+        M3["消息 C"]
+    end
+    TCP["TCP 字节流<br/>(可能合并/拆分)"]
+    subgraph Recv["接收方"]
+        CASE1["情况1: 正常<br/>[A] [B] [C]"]
+        CASE2["情况2: 粘包<br/>[AB] [C]"]
+        CASE3["情况3: 拆包<br/>[A] [BC]"]
+        CASE4["情况4: 乱序<br/>[A] [B的一半] [另一半]"]
+    end
+    M1 & M2 & M3 --> TCP --> CASE1 & CASE2 & CASE3 & CASE4
+    style CASE2 fill:#e74c3c,color:#fff
+    style CASE4 fill:#f39c12,color:#fff
 ```
 
 ---

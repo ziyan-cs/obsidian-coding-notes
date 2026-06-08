@@ -86,24 +86,20 @@ int main() {
 
 ## 上下文切换流程（Linux）
 
-```
-进程 A 运行中
-     │
-     ▼
-时钟中断（硬件）→ CPU 进入中断处理
-     │
-     ▼
-保存 A 的寄存器到 A 的 PCB（内核栈）
-     │
-     ▼
-switch_to (汇编):
-    ① 保存当前 CPU 寄存器 (push)
-    ② 切换内核栈指针 (SP = B's kernel stack)
-    ③ 加载 CR3（B 的页表）  ← TLB flush
-    ④ 恢复 B 的寄存器 (pop)
-     │
-     ▼
-进程 B 恢复运行
+```mermaid
+sequenceDiagram
+    participant P1 as 进程 A
+    participant OS as 内核 (调度器)
+    participant P2 as 进程 B
+    
+    P1->>P1: 用户态执行
+    P1->>OS: 中断 / 系统调用
+    OS->>OS: 保存 A 的寄存器<br/>到 PCB_A
+    OS->>OS: 切换页表 / 地址空间<br/>(TLB 刷新)
+    OS->>OS: 加载 B 的寄存器<br/>从 PCB_B
+    OS->>P2: 返回用户态
+    P2->>P2: 继续执行 B
+    Note over OS: 上下文切换 ≈ 1-10μs<br/>(无锁时 ≈ 缓存污染代价最大)
 ```
 
 **`switch_to` 汇编核心：**

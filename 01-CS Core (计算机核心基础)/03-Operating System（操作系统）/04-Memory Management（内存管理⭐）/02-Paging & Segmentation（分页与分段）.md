@@ -89,9 +89,21 @@ struct SegmentDescriptor {
 
 ## 段页式结合
 
-```
-逻辑地址 → 段 → 线性地址（虚拟地址）→ 分页 → 物理地址
-             分段单元（Segment Unit）    分页单元（Page Unit）
+```mermaid
+graph TD
+    subgraph Seg["分段"]
+        SEG_DIR["段表<br/>段号 → 基址+限长"]
+        LOGIC["逻辑地址: 段号:偏移"]
+        LOGIC --> SEG_DIR --> LINEAR["线性地址"]
+    end
+    subgraph Page["分页"]
+        DIR["页目录"]
+        TAB["页表"]
+        LINEAR --> DIR --> TAB --> FRAME["物理页框"]
+    end
+    FRAME --> PHYS["物理地址"]
+    style Seg fill:#e8f5e9
+    style Page fill:#e3f2fd
 ```
 
 **Linux 的实际做法：**

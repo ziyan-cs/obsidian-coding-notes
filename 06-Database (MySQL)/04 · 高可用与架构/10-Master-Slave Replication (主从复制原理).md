@@ -10,17 +10,23 @@ status: 🌱
 
 MySQL 主从复制用于**读写分离**、**数据备份**和**高可用切换**。
 
-```
-主库 Master → Binlog → 从库 Slave
-                  │
-         ┌────────┴────────┐
-         │ I/O Thread      │ ← 从库拉取 binlog
-         ↓                 │
-     Relay Log             │
-         │                 │
-         │ SQL Thread      │ ← 从库重放 relay log
-         ↓                 │
-      数据更新              │
+```mermaid
+sequenceDiagram
+    participant Master as Master (主库)
+    participant Binlog as Binlog
+    participant Slave as Slave (从库)
+    participant Relay as Relay Log
+    participant SQL as SQL Thread
+    
+    Master->>Binlog: 事务提交 → 写入 Binlog
+    Slave->>Master: IO Thread: 请求 Binlog
+    Master->>Slave: 发送 Binlog 事件
+    Slave->>Relay: 写入 Relay Log
+    Slave->>SQL: SQL Thread: 读取 Relay Log
+    SQL->>Slave: 重放 SQL → 保持数据一致
+    
+    Note over Master,Slave: 异步复制 (默认)<br/>半同步: 等至少一个从库 ACK
+    Note over Slave: 从库可能有复制延迟<br/>(秒级 ~ 分钟级)
 ```
 
 ## 复制的三种线程

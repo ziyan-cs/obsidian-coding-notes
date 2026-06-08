@@ -24,43 +24,29 @@ status: 🌱
 
 ## 状态转换图
 
-```txt
-                    ┌─────────┐
-                    │  CLOSED │
-                    └────┬────┘
-        被动打开 (服务端) │          主动打开 (客户端，发 SYN)
-                         ↓                     ↓
-                    ┌────────────────────────────────┐           ┌──────────┐
-                    │  LISTEN │           │ SYN_SENT │
-                    └────┬────┘           └────┬─────┘
-    收到 SYN，发 SYN+ACK │                      │ 收到 SYN+ACK，发 ACK
-                         ↓                     ↓
-                    ┌──────────────────────────────────┐         ┌─────────────┐
-                    │ SYN_RCVD │ ──────> │ ESTABLISHED │
-                    └──────────────────────────────────┘  收到ACK └─────┬───────┘
-                                               │
-	              ┌────────────────────────────┤
-	              │ 主动关闭                   │ 被动关闭
-	              │ 发 FIN                     │ 收到 FIN，发 ACK
-	              ↓                            ↓
-	        ┌──────────────────────────────────────────┐                 ┌────────────┐
-	        │ FIN_WAIT_1│                 │ CLOSE_WAIT │
-	        └─────┬─────┘                 └─────┬──────┘
-	   收到 ACK    │                             │ 应用层关闭，发 FIN
-	              ↓                             ↓
-	        ┌────────────────────────────────────────┐                 ┌──────────┐
-	        │ FIN_WAIT_2│                 │ LAST_ACK │
-	        └─────┬─────┘                 └─────┬────┘
- 收到 FIN，发 ACK │                             │ 收到 ACK
-	              ↓                             ↓
-	        ┌───────────┐                 ┌────────┐
-	        │ TIME_WAIT │                 │ CLOSED │
-	        └─────┬─────┘                 └────────┘
-	       2MSL   │
-	              ↓
-	         ┌────────┐
-	         │ CLOSED │
-	         └────────┘
+```mermaid
+stateDiagram-v2
+    [*] --> CLOSED
+    CLOSED --> LISTEN: passive open
+    CLOSED --> SYN_SENT: active open / connect
+    LISTEN --> SYN_RCVD: 收到 SYN
+    SYN_SENT --> ESTABLISHED: 收到 SYN+ACK
+    SYN_RCVD --> ESTABLISHED: 收到 ACK
+    SYN_RCVD --> CLOSED: timeout / RST
+    ESTABLISHED --> FIN_WAIT_1: active close
+    ESTABLISHED --> CLOSE_WAIT: passive close
+    FIN_WAIT_1 --> FIN_WAIT_2: 收到 ACK
+    FIN_WAIT_1 --> CLOSING: 收到 FIN
+    FIN_WAIT_1 --> TIME_WAIT: 收到 FIN+ACK
+    FIN_WAIT_2 --> TIME_WAIT: 收到 FIN
+    CLOSING --> TIME_WAIT: 收到 ACK
+    CLOSE_WAIT --> LAST_ACK: close
+    LAST_ACK --> CLOSED: 收到 ACK
+    TIME_WAIT --> CLOSED: 2MSL 超时
+    note right of TIME_WAIT
+        等待 2MSL 确保 ACK 到达
+        防止旧连接包干扰新连接
+    end note
 ```
 
 ## 重点状态深析

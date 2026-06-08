@@ -57,29 +57,23 @@ d.x = 42;    // 不再歧义，只有一个 A::x
 
 ### 布局示意
 
-```
-普通多继承 D 的布局：
-┌──────────┐
-│ B 子对象 │ ← 含 A 的一份副本
-│   A::x   │
-├──────────┤
-│ C 子对象 │ ← 含 A 的另一份副本（菱形问题）
-│   A::x   │
-├──────────┤
-│ D 自有   │
-└──────────┘
-
-虚继承 D 的布局：
-┌──────────┐
-│ B 子对象 │ ← vbptr → A 子对象
-├──────────┤
-│ C 子对象 │ ← vbptr → A 子对象（同一份！）
-├──────────┤
-│ D 自有   │
-├──────────┤
-│ A 子对象 │ ← 只有一份，放在最后
-│   A::x   │
-└──────────┘
+```mermaid
+graph TD
+    B["Base<br/>int data"]
+    D1["Derived1<br/>+ int d1_data"]
+    D2["Derived2<br/>+ int d2_data"]
+    DD["DerivedFinal<br/>+ int dd_data<br/>只有一个 Base 副本"]
+    B --> D1
+    B --> D2
+    D1 --> DD
+    D2 --> DD
+    note right of DD
+        虚继承: DerivedFinal 中
+        Base 子对象只有一份
+        通过偏移指针访问
+    end note
+    style DD fill:#d4edda
+    style B fill:#f8d7da
 ```
 
 ---

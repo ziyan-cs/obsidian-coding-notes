@@ -82,19 +82,19 @@ void rr(vector<Process>& procs, int quantum) {
 
 ### MLFQ（多级反馈队列）
 
-```
-         ┌──────────────────────┐
-Level 0  │    RR (quantum=8)    │ 优先级最高
-         ├──────────────────────┤
-Level 1  │   RR (quantum=16)    │
-         ├──────────────────────┤
-Level 2  │      FCFS            │ 优先级最低
-         └──────────────────────┘
-
-规则：1. 高优先级先执行
-     2. 用完时间片降级（发现 CPU 密集型）
-     3. 主动让出 CPU 保留优先级（发现 I/O 密集型）
-     4. 定期重置（防饥饿）
+```mermaid
+graph LR
+    subgraph Ready["就绪队列"]
+        P1["进程 P1<br/>(优先级 5)"]
+        P2["进程 P2<br/>(优先级 3)"]
+        P3["进程 P3<br/>(优先级 5)"]
+    end
+    Sched["调度器<br/>(选择算法)"] --> CPU["CPU 执行"]
+    CPU -->|时间片到| Preempt["重新入队"]
+    CPU -->|等待 IO| Block["阻塞队列"]
+    Block -->|IO 完成| Ready
+    Preempt --> Ready
+    style Sched fill:#ff9900,color:#fff
 ```
 
 ---
