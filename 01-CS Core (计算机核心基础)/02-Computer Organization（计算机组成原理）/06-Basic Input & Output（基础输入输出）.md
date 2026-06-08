@@ -81,10 +81,5 @@ DMA.interrupt_handler() {    // 传输完毕
 
 ---
 
-## 关联笔记
 
-- [CPU Execution Model（CPU执行模型）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/01-CPU%20Execution%20Model（CPU执行模型）.md)
-- [Instruction Cycle（指令执行流程）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/02-Instruction%20Cycle（指令执行流程）.md)
-- [Memory Hierarchy（存储层级结构）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/03-Memory%20Hierarchy（存储层级结构⭐）.md)
-- [Cache Mechanism（缓存机制）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/04-Cache%20Mechanism（缓存机制⭐）.md)
-- [Bus System（总线系统）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/05-Bus%20System（总线系统）.md)
+总线系统与CPU执行模型详见 → [Bus System（总线系统）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/05-Bus%20System（总线系统）.md) · [CPU Execution Model（CPU执行模型）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/01-CPU%20Execution%20Model（CPU执行模型）.md)

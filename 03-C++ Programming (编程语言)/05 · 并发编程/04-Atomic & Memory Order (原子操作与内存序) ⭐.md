@@ -155,10 +155,4 @@ if (big.is_lock_free()) {
 
 ---
 
-## 关联笔记
-
-- [Thread Basics POSIX & std thread (线程基础)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/01-Thread%20Basics%20POSIX%20&%20std%20thread%20(线程基础)%20⭐.md)
-- [Mutex & Lock (互斥锁与锁管理)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
-- [Condition Variable & Semaphore (条件变量与信号量)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md)
-- [Thread Pool Implementation (线程池手写)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/05-Thread%20Pool%20Implementation%20(线程池手写)%20⭐.md)
-- [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+无锁结构基于原子操作实现，详见 → [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)

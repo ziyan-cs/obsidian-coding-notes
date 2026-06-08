@@ -128,10 +128,4 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 ---
 
-## 关联笔记
-
-- [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
-- [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
-- [Exception Handling (异常处理)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/04-Exception%20Handling%20(异常处理).md)
-- [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
-- [Performance Profiling perf & valgrind (性能分析)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/06-Performance%20Profiling%20perf%20&%20valgrind%20(性能分析)%20⭐.md)
+编译过程中预处理阶段详见 → [Compilation & Linking (编译与链接)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)

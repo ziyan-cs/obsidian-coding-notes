@@ -108,10 +108,4 @@ m.emplace(std::piecewise_construct,
 
 ---
 
-## 关联笔记
-
-- [unordered_map Hash Table & Collision (哈希表与冲突)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02b-unordered_map%20Hash%20Table%20&%20Collision%20(哈希表与冲突).md)
-- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
-- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
-- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
-- [Array & String(数组与字符串)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/04-Array%20&%20String(数组与字符串).md)
+哈希表实现的关联容器对比详见 → [unordered_map Hash Table & Collision (哈希表与冲突)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02b-unordered_map%20Hash%20Table%20&%20Collision%20(哈希表与冲突).md)

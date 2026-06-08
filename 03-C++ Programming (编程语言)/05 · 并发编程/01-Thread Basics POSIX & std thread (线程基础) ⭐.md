@@ -117,10 +117,4 @@ try {
 
 ---
 
-## 关联笔记
-
-- [Mutex & Lock (互斥锁与锁管理)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
-- [Condition Variable & Semaphore (条件变量与信号量)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md)
-- [Atomic & Memory Order (原子操作与内存序)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
-- [Thread Pool Implementation (线程池手写)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/05-Thread%20Pool%20Implementation%20(线程池手写)%20⭐.md)
-- [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+互斥锁与锁管理详见 → [Mutex & Lock (互斥锁与锁管理)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
