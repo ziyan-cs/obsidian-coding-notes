@@ -10,23 +10,27 @@ status: 🌱
 
 ## 模型结构
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph MainThread["单线程"]
-        RE["Reactor<br/>(epoll_wait 事件循环)"]
-        DISPATCH["事件分发"]
-        ACC["Acceptor<br/>处理新连接"]
-        H1["Handler A<br/>read → 处理 → write"]
-        H2["Handler B<br/>read → 处理 → write"]
-    end
-    
-    RE -->|事件到达| DISPATCH
-    DISPATCH -->|新连接| ACC
-    DISPATCH -->|IO事件| H1
-    DISPATCH -->|IO事件| H2
-    ACC -->|注册新 fd| RE
-    
+```text
+┌───────────────────────────────────────────────┐
+│  Single Thread                                 │
+├───────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────┐   │
+│  │  Reactor (epoll_wait event loop)        │   │
+│  └──────────────────┬──────────────────────┘   │
+│                     │ event arrives             │
+│                     ▼                          │
+│  ┌─────────────────────────────────────────┐   │
+│  │  Event Dispatcher                       │   │
+│  └──────┬──────────────┬──────────────┬────┘   │
+│         │ new conn     │ I/O event   │ I/O ev  │
+│         ▼              ▼              ▼        │
+│  ┌──────────┐  ┌──────────────┐ ┌──────────┐  │
+│  │ Acceptor │  │ Handler A    │ │ Handler B│  │
+│  │accept()  │  │read→proc→wr │ │read→proc→│  │
+│  └────┬─────┘  └──────────────┘ └──────────┘  │
+│       │ register new fd                        │
+│       └──────────────→ Reactor                 │
+└───────────────────────────────────────────────┘
 ```
 
 ## 核心代码结构

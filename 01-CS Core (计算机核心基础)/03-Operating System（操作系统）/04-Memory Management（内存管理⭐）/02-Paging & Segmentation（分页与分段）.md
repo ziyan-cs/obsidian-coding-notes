@@ -89,20 +89,37 @@ struct SegmentDescriptor {
 
 ## 段页式结合
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Seg["分段"]
-        SEG_DIR["段表<br/>段号 → 基址+限长"]
-        LOGIC["逻辑地址: 段号:偏移"]
-        LOGIC --> SEG_DIR --> LINEAR["线性地址"]
-    end
-    subgraph Page["分页"]
-        DIR["页目录"]
-        TAB["页表"]
-        LINEAR --> DIR --> TAB --> FRAME["物理页框"]
-    end
-    FRAME --> PHYS["物理地址"]
+```text
+┌─────────────────────────────────────────────────┐
+│              SEGMENTATION                       │
+├─────────────────────────────────────────────────┤
+│  Logical Address (segment:offset)               │
+│         │                                       │
+│         ▼                                       │
+│  Segment Table (segment → base + limit)         │
+│         │                                       │
+│         ▼                                       │
+│  Linear Address                                 │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│                  PAGING                         │
+├─────────────────────────────────────────────────┤
+│  Linear Address                                 │
+│         │                                       │
+│         ▼                                       │
+│  Page Directory                                 │
+│         │                                       │
+│         ▼                                       │
+│  Page Table                                     │
+│         │                                       │
+│         ▼                                       │
+│  Physical Page Frame                            │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+          Physical Address
 ```
 
 **Linux 的实际做法：**

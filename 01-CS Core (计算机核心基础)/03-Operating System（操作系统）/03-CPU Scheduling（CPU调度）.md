@@ -82,19 +82,35 @@ void rr(vector<Process>& procs, int quantum) {
 
 ### MLFQ（多级反馈队列）
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph Ready["就绪队列"]
-        P1["进程 P1<br/>(优先级 5)"]
-        P2["进程 P2<br/>(优先级 3)"]
-        P3["进程 P3<br/>(优先级 5)"]
-    end
-    Sched["调度器<br/>(选择算法)"] --> CPU["CPU 执行"]
-    CPU -->|时间片到| Preempt["重新入队"]
-    CPU -->|等待 IO| Block["阻塞队列"]
-    Block -->|IO 完成| Ready
-    Preempt --> Ready
+```text
+┌────────────────────────────────────────────┐
+│  READY QUEUE                               │
+├────────────────────────────────────────────┤
+│  Process P1 (Priority 5)                   │
+│  Process P2 (Priority 3)                   │
+│  Process P3 (Priority 5)                   │
+└──────────────┬─────────────────────────────┘
+               │ dequeue
+               ▼
+┌──────────────┴─────────────────────────────┐
+│  SCHEDULER (Scheduling Algorithm)          │
+└──────────────┬─────────────────────────────┘
+               │ dispatch
+               ▼
+┌──────────────┴─────────────────────────────┐
+│  CPU EXECUTION                             │
+└──┬──────────────────────────────────────┬──┘
+   │ timeslice expired                     │ wait I/O
+   ▼                                      ▼
+┌──────────────┐                ┌──────────────────┐
+│ RE-ENQUEUE   │                │ BLOCKED QUEUE    │
+└──────┬───────┘                └────────┬─────────┘
+       │ re-enqueue                     │ I/O complete
+       └───────────────┬────────────────┘
+                       ▼
+              ┌────────┴────────┐
+              │  READY QUEUE    │
+              └─────────────────┘
 ```
 
 ---

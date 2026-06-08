@@ -10,32 +10,37 @@ status: 🌱
 
 每一层**隐藏下层实现细节**，仅暴露接口给上层：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph App["应用程序层"]
-        APP1["用户程序<br/>(浏览器 / 数据库 / 游戏)"]
-    end
-    subgraph Library["运行时库层"]
-        LIBC["标准 C 库 / C++ STL"]
-    end
-    subgraph OS["操作系统层"]
-        SYS["系统调用接口"]
-        KERN["内核核心<br/>进程管理 · 内存管理 · FS · 网络"]
-        DRV["设备驱动程序"]
-    end
-    subgraph HW["硬件层"]
-        CPU["CPU · MMU · Cache"]
-        MEM["主存 (RAM)"]
-        DEV["磁盘 · 网卡 · GPU"]
-    end
-    
-    APP1 --> LIBC
-    LIBC --> SYS
-    SYS --> KERN
-    KERN --> DRV
-    DRV --> HW
-    
+```text
+┌──────────────────────────────────────────────────┐
+│  APPLICATION LAYER                               │
+├──────────────────────────────────────────────────┤
+│  User programs (browser / database / game)       │
+└───────────────────┬──────────────────────────────┘
+                    │
+                    ▼
+┌───────────────────┴──────────────────────────────┐
+│  RUNTIME LIBRARY LAYER                           │
+├──────────────────────────────────────────────────┤
+│  Standard C Library / C++ STL                    │
+└───────────────────┬──────────────────────────────┘
+                    │
+                    ▼
+┌───────────────────┴──────────────────────────────┐
+│  OPERATING SYSTEM LAYER                          │
+├──────────────────────────────────────────────────┤
+│  System call interface                           │
+│  Kernel core: process mgmt, memory mgmt, FS, net │
+│  Device drivers                                  │
+└───────────────────┬──────────────────────────────┘
+                    │
+                    ▼
+┌───────────────────┴──────────────────────────────┐
+│  HARDWARE LAYER                                  │
+├──────────────────────────────────────────────────┤
+│  CPU, MMU, Cache                                 │
+│  Main memory (RAM)                               │
+│  Disk, NIC, GPU                                  │
+└──────────────────────────────────────────────────┘
 ```
 
 ## 抽象的好处与代价

@@ -45,63 +45,85 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 
 每次 UPDATE 产生一条 undo log，通过 DB_ROLL_PTR 串联成版本链：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    V1["最新版本（当前行数据）<br/>DB_TRX_ID=100<br/>balance=0"]
-    V2["undo log: TRX_ID=80<br/>旧版本<br/>balance=100"]
-    V3["undo log: TRX_ID=50<br/>更旧版本<br/>balance=200"]
-    
-    V1 -->|DB_ROLL_PTR| V2
-    V2 -->|DB_ROLL_PTR| V3
+```text
+┌───────────────────────────┐     DB_ROLL_PTR     ┌───────────────────────────┐
+│  Latest Version           │────────────────────►│  Undo Log                 │
+│  (current row data)       │                      │  TRX_ID = 80              │
+│  DB_TRX_ID = 100          │                      │  balance = 100            │
+│  balance = 0              │                      │  (previous version)       │
+└───────────────────────────┘                      └───────────┬───────────────┘
+                                                              │ DB_ROLL_PTR
+                                                              ▼
+                                                       ┌───────────────────────────┐
+                                                       │  Undo Log                 │
+                                                       │  TRX_ID = 50              │
+                                                       │  balance = 200            │
+                                                       │  (older version)          │
+                                                       └───────────────────────────┘
 ```
 
 ## Read View 可见性判断
 
 Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当前事务可见"。
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph ReadView["Read View 结构"]
-        creator["creator_trx_id: 创建此 Read View 的事务 ID"]
-        mids["m_ids: 活跃事务 ID 列表（未提交的事务）"]
-        minid["min_trx_id: m_ids 中的最小值"]
-        maxid["max_trx_id: 下一个要分配的事务 ID（大于所有活跃事务）"]
-    end
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  Read View Structure                                                 │
+├──────────────────────────────────────────────────────────────────────┤
+│  creator_trx_id: Transaction ID that created this Read View         │
+│  m_ids: List of active (uncommitted) transaction IDs                │
+│  min_trx_id: Minimum value in m_ids                                 │
+│  max_trx_id: Next transaction ID to be assigned                     │
+│              (greater than all active transactions)                  │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 **可见性判断规则（判断 DB_TRX_ID）：**
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    R1["DB_TRX_ID = creator_trx_id<br/>→ 当前事务自己的修改 → 可见"]
-    R2["DB_TRX_ID < min_trx_id<br/>→ 在 Read View 创建前已提交 → 可见"]
-    R3["DB_TRX_ID IN m_ids<br/>→ 其他活跃事务的修改 → 不可见"]
-    R4["DB_TRX_ID >= max_trx_id<br/>→ 在 Read View 创建后启动的 → 不可见"]
-    R5["其他情况<br/>→ 在 Read View 创建前已提交 → 可见"]
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  Visibility Rules (evaluated against DB_TRX_ID)                      │
+├──────────────────────────────────────────────────────────────────────┤
+│  Rule 1: DB_TRX_ID == creator_trx_id                                 │
+│    → Modification by current transaction → VISIBLE                  │
+│                                                                      │
+│  Rule 2: DB_TRX_ID < min_trx_id                                      │
+│    → Committed before Read View creation → VISIBLE                  │
+│                                                                      │
+│  Rule 3: DB_TRX_ID IN m_ids                                          │
+│    → Modified by another active transaction → INVISIBLE             │
+│                                                                      │
+│  Rule 4: DB_TRX_ID >= max_trx_id                                     │
+│    → Transaction started after Read View creation → INVISIBLE       │
+│                                                                      │
+│  Rule 5: Otherwise (not in m_ids, < max_trx_id)                      │
+│    → Committed before Read View creation → VISIBLE                  │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 **图示（事务时间线与可见性）：**
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph Timeline["事务时间线"]
-        T1["事务 1<br/>已提交<br/>小于 min_trx_id<br/>→ 可见"]
-        T2["事务 2<br/>活跃（在 m_ids）<br/>→ 不可见"]
-        T3["事务 3<br/>不在 m_ids 且 < max_trx_id<br/>→ 可见"]
-        T4["事务 4<br/>活跃（在 m_ids）<br/>→ 不可见"]
-        T5["事务 5（当前）"]
-        T6["事务 6<br/>>= max_trx_id<br/>→ 不可见"]
-    end
+```text
+Transaction Timeline (ordered by DB_TRX_ID)
 
-    T1 -->|"min_trx_id"| T2
-    T2 --> T3
-    T3 --> T4
-    T4 -->|"max_trx_id"| T5
-    T5 --> T6
+  Txn 1: committed, < min_trx_id → VISIBLE
+    │
+    │ min_trx_id boundary
+    ▼
+  Txn 2: active (IN m_ids) → INVISIBLE
+    │
+    ▼
+  Txn 3: not in m_ids, < max_trx_id → VISIBLE
+    │
+    ▼
+  Txn 4: active (IN m_ids) → INVISIBLE
+    │
+    │ max_trx_id boundary
+    ▼
+  Txn 5: current transaction
+    │
+    ▼
+  Txn 6: >= max_trx_id → INVISIBLE
 ```
 
 ## 快照读 vs 当前读

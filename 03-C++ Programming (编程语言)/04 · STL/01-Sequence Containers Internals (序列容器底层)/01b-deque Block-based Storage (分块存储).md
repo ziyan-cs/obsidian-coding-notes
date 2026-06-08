@@ -10,46 +10,27 @@ status: 🌱
 
 `deque` 由**多个固定大小的块（buffer）** 和一个**中控器（map）** 组成：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Map["中控器 (map)<br/>指针数组"]
-        B0["块指针 0"]
-        B1["块指针 1"]
-        B2["块指针 2"]
-        B3["块指针 3"]
-    end
-    
-    subgraph Block0["数据块 0"]
-        E00["elem"]
-        E01["elem"]
-        E02["elem"]
-        E03["elem"]
-    end
-    
-    subgraph Block1["数据块 1"]
-        E10["elem"]
-        E11["elem"]
-        E12["elem"]
-        E13["elem"]
-    end
-    
-    subgraph Block2["数据块 2"]
-        E20["elem"]
-        E21["elem"]
-        E22["elem"]
-        E23["elem"]
-    end
-    
-    B0 --> Block0
-    B1 --> Block1
-    B2 --> Block2
-    
-    note right of Block2
-        每块固定大小 (通常 512 字节)
-        两端插入 O(1)
-        随机访问 O(1) 但需两次间接
-    end note
+```text
+deque Memory Layout:
+
+  Map (Middle Controller / Pointer Array)
+  ┌─────────────────────────────────────┐
+  │  blk ptr 0  │  blk ptr 1  │  blk ptr 2  │  blk ptr 3  │
+  └──────┬──────────────────┬──────────────┴──────────────┘
+         │                  │              │
+         ↓                  ↓              ↓
+  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+  │  Data Block 0 │  │  Data Block 1 │  │  Data Block 2 │
+  ├──────────────┤  ├──────────────┤  ├──────────────┤
+  │ elem │ elem │  │ elem │ elem │  │ elem │ elem │
+  │ elem │ elem │  │ elem │ elem │  │ elem │ elem │
+  └──────────────┘  └──────────────┘  └──────────────┘
+
+Properties:
+  - Each block is fixed size (typically 512 bytes)
+  - push_front / push_back: O(1) amortized
+  - Random access operator[]: O(1) but requires double indirection
+    (map → buffer → element)
 ```
 
 - 每个 buffer 固定大小（通常是 512 字节，或 `max(1, 512/sizeof(T))` 个元素）

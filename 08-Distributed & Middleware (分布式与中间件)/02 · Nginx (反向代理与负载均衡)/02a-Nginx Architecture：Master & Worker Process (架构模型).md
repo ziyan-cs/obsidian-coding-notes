@@ -9,30 +9,33 @@ status: 🌱
 
 ## Nginx 进程模型
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    MASTER["Master 进程<br/>(root)<br/>读取配置 → fork Worker"]
-    W1["Worker 1<br/>(普通用户)<br/>epoll 事件循环"]
-    W2["Worker 2<br/>(普通用户)<br/>epoll 事件循环"]
-    W3["Worker 3<br/>(普通用户)<br/>epoll 事件循环"]
-    CACHE["共享内存 / 缓存<br/>(所有 Worker 共享)"]
-    
-    MASTER -->|fork| W1
-    MASTER -->|fork| W2
-    MASTER -->|fork| W3
-    W1 --- CACHE
-    W2 --- CACHE
-    W3 --- CACHE
-    
-    CLIENT["客户端请求"] -->|竞争 accept| W1 & W2 & W3
-    
-    note right of MASTER
-        一个 Master 管理多个 Worker
-        - 热加载配置 (reload)
-        - 平滑升级 (upgrade)
-        - Worker 崩溃时拉起
-    end note
+```text
+                          ┌──────────────────────────────────────┐
+                          │  Master Process                      │
+                          │  (root)                              │
+                          │  Read config → fork Workers          │
+                          │                                      │
+                          │  Responsibilities:                   │
+                          │  - Hot reload configuration (reload) │
+                          │  - Smooth binary upgrade (upgrade)   │
+                          │  - Restart crashed workers           │
+                          └──────┬───────────────────────────────┘
+                                 │ fork
+                ┌────────────────┼────────────────┐
+                ▼                ▼                ▼
+    ┌─────────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+    │  Worker 1           │  │  Worker 2        │  │  Worker 3       │
+    │  (nobody user)      │  │  (nobody user)   │  │  (nobody user)  │
+    │  epoll event loop   │  │  epoll event loop│  │  epoll event loop│
+    └──────┬──────────────┘  └──────┬──────────┘  └──────┬──────────┘
+           │                        │                     │
+           ├────────────────────────┼─────────────────────┤
+           │   Shared Memory / Cache (shared across all workers)
+           │                        │                     │
+           │                        │                     │
+    ┌──────┴────────────────────────┴─────────────────────┴──────────┐
+    │  Client requests ──→ accept competition across all workers     │
+    └─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 各进程职责

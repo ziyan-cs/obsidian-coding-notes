@@ -24,23 +24,29 @@ Cache = 若干组（Set），每组 = 若干路（Way，即缓存行）
 | **全相联** | 任意块可映射到任意行 | 1 组，全路 | 灵活但比较慢 |
 | **组相联** | 每个块映射到固定组内的任意行 | N 路/组 | **最常用** |
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    ADDR["内存地址<br/>Tag | Index | Offset"]
-
-    subgraph CacheSet["4路组相联 - Set i（由 Index 确定）"]
-        W0["Way 0: Tag | Data"]
-        W1["Way 1: Tag | Data"]
-        W2["Way 2: Tag | Data"]
-        W3["Way 3: Tag | Data"]
-    end
-
-    ADDR -->|Index → 找到 Set i| CacheSet
-    W0 -->|匹配 Tag → 命中| HIT["Cache Hit"]
-    W1 -->|匹配 Tag → 命中| HIT
-    W2 -->|匹配 Tag → 命中| HIT
-    W3 -->|匹配 Tag → 命中| HIT
+```text
+┌────────────────────────────────────────────────────┐
+│  MEMORY ADDRESS                                    │
+│  Tag │ Index │ Offset                              │
+└──────────────────────┬─────────────────────────────┘
+                       │  Index → locate Set i
+                       ▼
+┌──────────────────────┴─────────────────────────────┐
+│  4-WAY SET-ASSOCIATIVE CACHE - Set i               │
+├────────────────────────────────────────────────────┤
+│  Way 0: Tag │ Data                                 │
+│  Way 1: Tag │ Data                                 │
+│  Way 2: Tag │ Data                                 │
+│  Way 3: Tag │ Data                                 │
+└──┬───┬───┬───┴─────────────────────────────────────┘
+   │   │   │   │  Tag match on any way
+   │   │   │   │
+   └───┴───┴───┘
+               │
+               ▼
+     ┌─────────┴─────────┐
+     │   CACHE HIT       │
+     └───────────────────┘
 ```
 
 ## 替换策略

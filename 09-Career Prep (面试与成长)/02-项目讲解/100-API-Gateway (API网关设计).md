@@ -93,85 +93,118 @@ CREATE TABLE circuit_breaker_rule (
 
 ## 架构设计图
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-flowchart TD
-    subgraph "客户端层"
-        Client["客户端 App / Browser"]
-        DNS["DNS / CDN"]
-    end
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Client Layer                                                                              │
+│  ┌──────────────────────────────┐    ┌────────────────────────────────────────────────┐    │
+│  │  Client App / Browser        │    │  DNS / CDN                                    │    │
+│  └──────────────────────────────┘    └────────────────────────────────────────────────┘    │
+└───────────────────────────────────────┬────────────────────────────────────────────────────┘
+                                        │
+                                        ▼
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Entry Point                                                                                │
+│  ┌────────────────────────────────────────────┐                                            │
+│  │  Global Load Balancer (F5 / DNS Round-     │                                            │
+│  │  Robin)                                    │                                            │
+│  └──────────────────┬─────────────────────────┘                                            │
+│                     ▼                                                                       │
+│  ┌────────────────────────────────────────────┐                                            │
+│  │  API Gateway Cluster (Stateless,           │                                            │
+│  │  Horizontal Scaling)                       │                                            │
+│  └──────────────────┬─────────────────────────┘                                            │
+└─────────────────────┼──────────────────────────────────────────────────────────────────────┘
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Gateway Core Architecture (Filter Chain)                                                   │
+│                                                                                             │
+│  ┌──────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │                      Core (High-Performance Proxy Engine)                             │  │
+│  │                                                                                       │  │
+│  │  ┌─────────────┐    ┌────────────┐    ┌────────────────┐    ┌──────────────────────┐  │  │
+│  │  │ TLS         │───→│ Router     │───→│ Filter Chain   │───→│ Proxy (Reverse       │  │  │
+│  │  │ Termination │    │ (Radix     │    │ (Chain-of-     │    │ Proxy & Load         │  │  │
+│  │  │             │    │  Tree      │    │  Responsibi-   │    │ Balancer)            │  │  │
+│  │  └─────────────┘    │  Match)    │    │  lity Pattern) │    └──────────────────────┘  │  │
+│  │                     └────────────┘    └────────────────┘                             │  │
+│  │                                                                                       │  │
+│  │  ┌───────────────────────────────────────────────────────────────────────────────┐   │  │
+│  │  │                        Filter Chain (ordered execution)                       │   │  │
+│  │  │                                                                               │   │  │
+│  │  │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────────┐    │   │  │
+│  │  │  │ Auth Filter      │  │ Rate Limit       │  │ Circuit Breaker Filter  │    │   │  │
+│  │  │  │ JWT / OAuth /    │  │ Filter           │  │ State Machine           │    │   │  │
+│  │  │  │ API Key          │  │ Token Bucket /   │  │ (Closed / Open /         │    │   │  │
+│  │  │  │                  │  │ Sliding Window / │  │  Half-Open)              │    │   │  │
+│  │  │  │                  │  │ Redis            │  │                          │    │   │  │
+│  │  │  └──────────────────┘  └──────────────────┘  └──────────────────────────┘    │   │  │
+│  │  │                                                                               │   │  │
+│  │  │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────────┐    │   │  │
+│  │  │  │ Log Filter       │  │ Transform Filter │  │ Gray Release Filter     │    │   │  │
+│  │  │  │ Full Request/    │  │ Header / Body    │  │ Traffic Coloring /      │    │   │  │
+│  │  │  │ Response Logging │  │ Rewriting        │  │ Version Routing         │    │   │  │
+│  │  │  └──────────────────┘  └──────────────────┘  └──────────────────────────┘    │   │  │
+│  │  └───────────────────────────────────────────────────────────────────────────────┘   │  │
+│  └──────────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────┬──────────────────────────────────────────────────────────────────────┘
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Backend Services                                                                          │
+│                                                                                             │
+│  ┌──────────────────────────┐  ┌──────────────────────────┐  ┌──────────────────────────┐  │
+│  │ Service A (User Service) │  │ Service B (Order Service)│  │ Service C (Product       │  │
+│  └──────────────────────────┘  └──────────────────────────┘  │  Service)                 │  │
+│                                                              └──────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────────────────────────┘
 
-    subgraph "入口"
-        DNS --> LB["全局负载均衡<br/>F5 / DNS 轮询"]
-        LB --> Gateway_Cluster["API Gateway Cluster<br/>(无状态，水平扩展)"]
-    end
-
-    subgraph "网关核心架构（过滤器链）"
-        Gateway_Cluster --> Core
-
-        subgraph Core["内核（高性能代理引擎）"]
-            direction LR
-
-            TLS["TLS Termination<br/>(TLS 卸载)"]
-            TLS --> Router["Router<br/>(路由匹配：前缀树)"]
-            Router --> Chain["Filter Chain<br/>(责任链模式)"]
-
-            subgraph Chain["过滤器链"]
-                direction TB
-                Auth["🔑 鉴权过滤器<br/>JWT / OAuth / API Key"]
-                RateLimit["🚦 限流过滤器<br/>令牌桶 / 滑动窗口 / Redis"]
-                CB["🛡️ 熔断过滤器<br/>Circuit Breaker 状态机"]
-                Log["📝 日志过滤器<br/>全量请求日志"]
-                Transform["🔀 转换过滤器<br/>Header / Body 改写"]
-                Gray["🧪 灰度过滤器<br/>流量染色 / 版本路由"]
-            end
-
-            Chain --> Proxy["Proxy<br/>(反向代理 & 负载均衡)"]
-        end
-    end
-
-    subgraph "后端服务"
-        Proxy --> ServiceA["Service A<br/>(用户服务)"]
-        Proxy --> ServiceB["Service B<br/>(订单服务)"]
-        Proxy --> ServiceC["Service C<br/>(商品服务)"]
-    end
-
-    subgraph "控制面"
-        Admin["Admin API"] --> Config["配置服务"]
-        Config --> Dynamic["动态规则下发<br/>(etcd / Apollo)"]
-        Dynamic -.-> Gateway_Cluster
-    end
-
-    subgraph "可观测性"
-        Gateway_Cluster --> Metrics["Prometheus<br/>(QPS / Latency / Status)"]
-        Gateway_Cluster --> Tracing["Jaeger / Zipkin<br/>(全链路追踪)"]
-        Gateway_Cluster --> Log_Center["ELK / Loki<br/>(日志中心)"]
-    end
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Control Plane                          │  Observability                                   │
+│                                         │                                                   │
+│  ┌────────────┐  ┌──────────────────┐   │  ┌──────────────────────────────────────────┐   │
+│  │ Admin API  │→│ Config Service   │   │  │ Prometheus (QPS / Latency / Status)       │   │
+│  └────────────┘  └───────┬──────────┘   │  ├──────────────────────────────────────────┤   │
+│                          │              │  │ Jaeger / Zipkin (Distributed Tracing)    │   │
+│                          ▼              │  ├──────────────────────────────────────────┤   │
+│  ┌─────────────────────────────────┐    │  │ ELK / Loki (Log Center)                  │   │
+│  │ Dynamic Rule Distribution       │    │  └──────────────────────────────────────────┘   │
+│  │ (etcd / Apollo)                 │    │                                                   │
+│  └────────────────┬────────────────┘    │                                                   │
+│                   │ (async update)     │                                                   │
+│                   └──→ Gateway Cluster  │                                                   │
+└────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 过滤器链执行流程
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant GW as API Gateway
-    participant R as Rate Limiter
-    participant A as Auth Service
-    participant CB as Circuit Breaker
-    participant S as Backend Service
-
-    C->>GW: 1. HTTP Request
-    GW->>GW: 2. Route Match (/api/v1/orders → order-service)
-    GW->>R: 3. Rate Limit Check (IP+User)
-    R-->>GW: 4. ✅ Pass / ❌ 429
-    GW->>A: 5. JWT Validation
-    A-->>GW: 6. ✅ user_id, roles
-    GW->>CB: 7. Circuit Breaker State?
-    CB-->>GW: 8. ✅ Closed / ❌ Open → 503
-    GW->>S: 9. Proxy to order-service
-    S-->>GW: 10. Response
-    GW->>GW: 11. Post-filters (logging, metrics)
-    GW-->>C: 12. Response to Client
+```text
+Client              API Gateway          Rate Limiter        Auth Service        Circuit Breaker      Backend Service
+  │                     │                     │                   │                    │                    │
+  ├── 1. HTTP Request ─→│                     │                   │                    │                    │
+  │                     ├── 2. Route Match   │                   │                    │                    │
+  │                     │   (/api/v1/orders  │                   │                    │                    │
+  │                     │    → order-service)│                   │                    │                    │
+  │                     ├── 3. Rate Limit    │                   │                    │                    │
+  │                     │   Check (IP+User) ─→│                   │                    │                    │
+  │                     │◄── 4. Pass ────────┤                   │                    │                    │
+  │                     │    / 429 Reject     │                   │                    │                    │
+  │                     ├── 5. JWT           │                   │                    │                    │
+  │                     │   Validation ────────────────────────→│                    │                    │
+  │                     │◄── 6. user_id, ───────────────────────┤                    │                    │
+  │                     │   roles            │                   │                    │                    │
+  │                     ├── 7. Circuit       │                   │                    │                    │
+  │                     │   Breaker State? ──────────────────────────────────────────→│                    │
+  │                     │◄── 8. Closed ──────────────────────────────────────────────┤                    │
+  │                     │    / Open → 503    │                   │                    │                    │
+  │                     ├── 9. Proxy to      │                   │                    │                    │
+  │                     │   order-service ──────────────────────────────────────────────────────────────→│
+  │                     │◄── 10. Response ──────────────────────────────────────────────────────────────┤
+  │                     ├── 11. Post-filters │                   │                    │                    │
+  │                     │   (logging,        │                   │                    │                    │
+  │                     │    metrics)        │                   │                    │                    │
+  │◄── 12. Response ────┤                    │                   │                    │                    │
+  │      to Client       │                     │                   │                    │                    │
 ```
 
 ## 过滤器类型对比

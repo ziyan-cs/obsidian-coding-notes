@@ -10,27 +10,29 @@ status: 🌱
 
 InnoDB 的聚簇索引将索引与数据存储在一起——叶节点直接包含整行数据。
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Clustered["聚簇索引 (主键)"]
-        CL_ROOT["根节点<br/>(常驻 Buffer Pool)"]
-        CL_LEAF["叶节点<br/>(完整行数据)"]
-        CL_ROOT --> CL_LEAF
-    end
-    subgraph Secondary["二级索引 (非主键)"]
-        SEC_ROOT["根节点"]
-        SEC_LEAF["叶节点<br/>(键 + 主键值)"]
-        SEC_ROOT --> SEC_LEAF
-    end
-    SEC_LEAF -->|回表查询| CL_LEAF
-    CL_LEAF -->|"覆盖索引<br/>无需回表"| RESULT["查询结果"]
-    
-    note right of Secondary
-        二级索引叶节点存的是
-        索引列 + 主键值
-        不是数据行!
-    end note
+```text
+Clustered Index (Primary Key)        Secondary Index (Non-Primary Key)
+┌────────────────────────────┐      ┌─────────────────────────────────┐
+│ Root Node (Buffer Pool)    │      │ Root Node                       │
+└──────────┬─────────────────┘      └──────────┬──────────────────────┘
+           │                                   │
+           ▼                                   ▼
+┌────────────────────────────┐      ┌─────────────────────────────────┐
+│ Leaf Node                  │      │ Leaf Node                       │
+│ (full row data)            │      │ (key + primary key value)       │
+└──────┬─────────────────────┘      └──────────┬──────────────────────┘
+       │                                       │
+       │◄───── Table Lookup (回表) ─────────────┘
+       │
+       ▼
+┌────────────────────────────┐
+│ Query Result               │
+│ (Covering Index:           │
+│  skips table lookup)       │
+└────────────────────────────┘
+
+Note: Secondary index leaf nodes store index columns + primary key value,
+      NOT the full row data!
 ```
 
 ## 二级索引（Secondary Index）

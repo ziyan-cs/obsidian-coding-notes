@@ -27,22 +27,29 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 
 ### BGSAVE 写时复制（COW）
 
-```mermaid
-sequenceDiagram
-    participant Client as 客户端
-    participant Redis as Redis 主进程
-    participant Child as Fork 子进程
-    participant Disk as 磁盘
-    
-    Client->>Redis: BGSAVE 命令
-    Redis->>Redis: fork()
-    Redis->>Child: 子进程创建
-    Note over Redis: 父进程继续处理请求
-    Child->>Disk: 将内存数据写入临时 RDB 文件
-    Note over Child: 利用 Copy-on-Write<br/>fork 时共享内存页<br/>父进程修改时复制
-    Child->>Disk: 写入完成 → 重命名为 dump.rdb
-    Child->>Redis: 通知父进程完成
-    Redis->>Client: BGSAVE OK
+```text
+Client              Redis Main Process        Forked Child           Disk
+  │                        │                      │                  │
+  ├── BGSAVE command ─────→│                      │                  │
+  │                        ├── fork()             │                  │
+  │                        │─────────────────────→│                  │
+  │                        │  Child process created│                  │
+  │                        │                      │                  │
+  │◄──── Parent continues   │                      │                  │
+  │     handling requests   │                      │                  │
+  │                        │                      ├── Write in-memory│
+  │                        │                      │   data to temp   │
+  │                        │                      │   RDB file       │
+  │                        │                      │                  │
+  │                        │    Uses Copy-on-Write:                  │
+  │                        │    fork shares memory pages             │
+  │                        │    parent process copies on write       │
+  │                        │                      │                  │
+  │                        │                      ├── Write complete │
+  │                        │                      │   rename to      │
+  │                        │                      │   dump.rdb ─────→│
+  │                        │◄──── Notify parent ──┤                  │
+  │◄──── BGSAVE OK ────────┤                      │                  │
 ```
 
 **COW 代价：** fork 后如果有大量写入，每个写操作的页（默认 4KB）都会触发复制，增加内存和延迟。`info persistence` 可监控 `rdb_changes_since_last_save`。

@@ -11,30 +11,34 @@ status: 🌱
 
 # 模型结构
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Main["主线程（Main Reactor）"]
-        MR["Main Reactor<br/>epoll on listening fd<br/>只负责 accept 新连接"]
-    end
-
-    MR -->|将新连接分发| SR1
-    MR -->|将新连接分发| SR2
-    MR -->|将新连接分发| SRN
-
-    subgraph SubReactors["Sub Reactors（每个运行在独立线程，负责所分配连接的全部 I/O 事件）"]
-        SR1["Sub Reactor 1<br/>epoll<br/>Handler<br/>read/process/write<br/>线程1"]
-        SR2["Sub Reactor 2<br/>epoll<br/>Handler<br/>read/process/write<br/>线程2"]
-        SRN["Sub Reactor N<br/>epoll<br/>Handler<br/>read/process/write<br/>线程N"]
-    end
-
-    subgraph TP["Thread Pool（可选，业务复杂时）"]
-        POOL["线程池<br/>CPU密集型"]
-    end
-
-    SR1 -.-> POOL
-    SR2 -.-> POOL
-    SRN -.-> POOL
+```text
+┌─────────────────────────────────────────────────┐
+│  Main Thread (Main Reactor)                     │
+├─────────────────────────────────────────────────┤
+│  Main Reactor                                   │
+│  epoll on listening fd                          │
+│  Handles accept() only                          │
+└──────────┬────────────┬──────────────┬──────────┘
+           │ new conn   │ new conn     │ new conn
+           ▼            ▼              ▼
+┌─────────────────────────────────────────────────┐
+│  Sub Reactors (one event loop per thread)       │
+├────────────┬────────────────┬───────────────────┤
+│ Sub Rctr 1 │  Sub Reactor 2│  Sub Reactor N    │
+│ ┌────────┐ │  ┌──────────┐ │  ┌──────────┐     │
+│ │ epoll  │ │  │  epoll   │ │  │  epoll   │     │
+│ │Handler │ │  │  Handler │ │  │  Handler │     │
+│ │rd/pr/wr│ │  │ rd/pr/wr │ │  │ rd/pr/wr │     │
+│ │Thread 1│ │  │ Thread 2 │ │  │ Thread N │     │
+│ └────────┘ │  └──────────┘ │  └──────────┘     │
+└──────┬─────┴───────┬───────┴────────┬──────────┘
+       │             │               │
+       └──────┬──────┴───────┬───────┘
+              │ (optional)   │
+              ▼              ▼
+   ┌─────────────────────────────┐
+   │  Thread Pool (CPU-intensive)│
+   └─────────────────────────────┘
 ```
 
 # "One Loop Per Thread" 的含义

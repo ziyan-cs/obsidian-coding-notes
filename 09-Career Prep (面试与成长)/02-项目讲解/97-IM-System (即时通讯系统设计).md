@@ -93,68 +93,113 @@ CREATE TABLE group_member (
 
 ## 架构设计图
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-flowchart TD
-    subgraph "客户端层"
-        Mobile["iOS/Android App"]
-        PC["PC Client"]
-        Web["Web Browser"]
-    end
-
-    subgraph "接入层（长连接网关）"
-        LVS["LVS / DNS 负载均衡"]
-        LVS --> ConnGW["Connection Gateway Cluster<br/>(无状态，水平扩展)"]
-        ConnGW -- "WebSocket / TCP" --> Mobile
-        ConnGW --> PC
-        ConnGW --> Web
-    end
-
-    subgraph "逻辑服务层"
-        ConnGW -- "gRPC 内部 RPC" --> Router["Router Service<br/>（消息路由）"]
-        Router --> State["Presence Service<br/>（在线状态）"]
-        Router --> Group["Group Service<br/>（群成员管理）"]
-        Router --> MsgLogic["Message Logic<br/>（消息去重/校验/写扩散）"]
-    end
-
-    subgraph "存储层"
-        MsgLogic --> MQ["Kafka<br/>（削峰填谷）"]
-        MQ --> MsgStore["Message Store<br/>（消息持久化）"]
-        MsgLogic --> Redis["Redis Cluster<br/>（在线状态/seq）"]
-        Group --> DB_Group["MySQL<br/>（群成员/关系链）"]
-        MsgStore --> DB_MSG["TDSQL / Vitess<br/>（分片消息库）"]
-    end
-
-    subgraph "离线与推送"
-        Router --> Push["Push Service<br/>（APNs / FCM）"]
-        MsgLogic --> Offline["Offline Service<br/>（离线消息索引）"]
-        Offline --> Redis_Off["Redis<br/>（离线消息队列）"]
-    end
-
-    subgraph "漫游与检索"
-        DB_MSG --> Sync["Sync Service<br/>（多端同步）"]
-        Sync --> ES["Elasticsearch<br/>（消息检索）"]
-    end
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Client Layer                                                                        │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐                          │
+│  │ iOS/Android App│  │   PC Client    │  │  Web Browser   │                          │
+│  └────────────────┘  └────────────────┘  └────────────────┘                          │
+└─────────────────────────────────┬────────────────────────────────────────────────────┘
+                                  │ WebSocket / TCP
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Access Layer (Long-connection Gateway)                                              │
+│  ┌───────────────────────────────────────────────────────┐                           │
+│  │  LVS / DNS Load Balancer                              │                           │
+│  └──────────────────────┬────────────────────────────────┘                           │
+│                         ▼                                                             │
+│  ┌───────────────────────────────────────────────────────┐                           │
+│  │  Connection Gateway Cluster (Stateless, Horizontal    │                           │
+│  │  Scaling)                                             │                           │
+│  └───────────────────────────────────────────────────────┘                           │
+└─────────────────────────────────┬────────────────────────────────────────────────────┘
+                                  │ gRPC Internal RPC
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Logic Service Layer                                                                 │
+│  ┌──────────────────┐    ┌──────────────────┐    ┌───────────────────────────────┐   │
+│  │  Router Service  │───→│ Presence Service │    │ Group Service                 │   │
+│  │  (Message Route) │    │ (Online Status)  │    │ (Group Membership Management) │   │
+│  └────────┬─────────┘    └──────────────────┘    └──────────────┬────────────────┘   │
+│           │                                                     │                    │
+│           ▼                                                     │                    │
+│  ┌──────────────────────────────────────────────────┐           │                    │
+│  │  Message Logic (Dedup / Validation / Fanout)     │           │                    │
+│  └────────┬─────────────────────────────────────────┘           │                    │
+└───────────┼──────────────────────────────────────────────────────┼────────────────────┘
+            │                                                      │
+            ▼                                                      ▼
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Storage Layer                                                                       │
+│                                                                                       │
+│  ┌──────────────┐    ┌──────────────────┐    ┌──────────────────────────┐            │
+│  │  Kafka       │───→│ Message Store    │───→│ TDSQL / Vitess (Sharded  │            │
+│  │  (Buffer &   │    │ (Persistence)    │    │ Message Database)        │            │
+│  │  Peak Shave) │    └──────────────────┘    └──────────────────────────┘            │
+│  └──────────────┘                                                                   │
+│                                                                                       │
+│  ┌────────────────────────────────────────────┐    ┌──────────────────────────┐      │
+│  │  Redis Cluster (Online Status / Sequence)  │    │ MySQL (Group Members /   │      │
+│  └────────────────────────────────────────────┘    │ Relationship Graph)      │      │
+│                                                    └──────────────────────────┘      │
+└──────────────────────────────────┬───────────────────────────────────────────────────┘
+                                   │
+            ┌──────────────────────┼──────────────────────┐
+            ▼                      ▼                      ▼
+┌───────────────────────┐ ┌──────────────────┐ ┌──────────────────────┐
+│  Offline & Push       │ │  Roaming & Search│ │  Sync Service        │
+│                       │ │                  │ │  (Multi-device Sync) │
+│  ┌─────────────────┐  │ │  ┌────────────┐  │ │        │             │
+│  │ Push Service     │  │ │  │ Elastic-   │  │ │        ▼             │
+│  │ (APNs / FCM)     │  │ │  │ search     │◄─┤ │  ┌────────────────┐ │
+│  └─────────────────┘  │ │  │(Msg Search) │  │  │  │ Sync Cursor    │ │
+│                       │ │  └────────────┘  │  │  │ Management     │ │
+│  ┌─────────────────┐  │ └──────────────────┘  │  └────────────────┘ │
+│  │ Offline Service  │  │                       │                    │
+│  │ (Offline Msg     │  │                       │                    │
+│  │  Index)          │  │                       │                    │
+│  └────────┬─────────┘  │                       │                    │
+│           ▼            │                       │                    │
+│  ┌─────────────────┐   │                       │                    │
+│  │ Redis (Offline   │   │                       │                    │
+│  │ Msg Queue)       │   │                       │                    │
+│  └─────────────────┘   │                       │                    │
+└─────────────────────────┴───────────────────────┴────────────────────┘
 ```
 
 ### 消息投递流程
 
-```mermaid
-sequenceDiagram
-    participant A as Sender
-    participant GW as Connection Gateway
-    participant Router as Router Service
-    participant B as Receiver GW
-    participant Store as Message Store
-
-    A->>GW: 1. 发送消息 (conversation_id, content, client_seq)
-    GW->>Router: 2. 路由请求
-    Router->>Store: 3. 持久化消息 (获取 server_seq)
-    Store-->>Router: 4. 返回 msg_id, server_seq
-    Router->>B: 5. 在线推送 (Write-and-Check)
-    Router->>A: 6. 返回 ACK (msg_id, server_seq)
-    B->>B: 7. 消息确认 (ACK or NAK)
-    Router->>A: 8. 送达回执 (可选)
+```text
+Sender           Connection Gateway    Router Service     Receiver GW      Message Store
+  │                      │                   │                │                │
+  ├── 1. Send message   │                   │                │                │
+  │   (conversation_id, │                   │                │                │
+  │   content, client_seq)                   │                │                │
+  │────────────────────→│                   │                │                │
+  │                      ├── 2. Route       │                │                │
+  │                      │   request        │                │                │
+  │                      │─────────────────→│                │                │
+  │                      │                   ├── 3. Persist  │                │
+  │                      │                   │   message     │                │
+  │                      │                   │   (get        │                │
+  │                      │                   │   server_seq) │                │
+  │                      │                   │───────────────→│                │
+  │                      │                   │◄── 4. Return  ─┤                │
+  │                      │                   │   msg_id,      │                │
+  │                      │                   │   server_seq   │                │
+  │                      │                   │                │                │
+  │                      │                   ├── 5. Online    │                │
+  │                      │                   │   push (Write  │                │
+  │                      │                   │   & Check)     │                │
+  │                      │                   │────────────────→│                │
+  │                      │                   │                │                │
+  │◄──── 6. Return ACK ──┤◄──────────────────┤                │                │
+  │   (msg_id,           │                   │                │                │
+  │   server_seq)        │                   │                │                │
+  │                      │                   │                7. Message ACK   │
+  │                      │                   │                │  (ACK or NAK)  │
+  │                      │                   ├── 8. Delivery  │                │
+  │◄──── (optional) ─────┤◄──────────────────┤   receipt      │                │
 ```
 
 ## 消息分发模型对比

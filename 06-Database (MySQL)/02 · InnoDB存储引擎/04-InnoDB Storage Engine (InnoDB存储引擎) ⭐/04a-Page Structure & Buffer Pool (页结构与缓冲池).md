@@ -10,24 +10,18 @@ status: 🌱
 
 InnoDB 以**页（Page）** 为最小存储单位，默认 16KB。
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Page["InnoDB 数据页 (16KB)"]
-        HEADER["File Header (38字节)<br/>页号、前驱/后继页指针、LSN"]
-        SYS["Page Header (56字节)<br/>记录数、偏移数组"]
-        INFIMUM["Infimum (边界最小值)"]
-        RECORDS["用户记录 (User Records)<br/>← 行数据 →"]
-        SUPREMUM["Supremum (边界最大值)"]
-        DIR["Page Directory<br/>(槽数组，二分查找)"]
-        TRAILER["File Trailer (8字节)<br/>校验和"]
-    end
-    subgraph LR2["叶节点双向链表"]
-        PREV["← 前驱页"]
-        NEXT["后继页 →"]
-    end
-    HEADER --> PREV
-    HEADER --> NEXT
+```text
+InnoDB Data Page (16KB)
+├── File Header (38B, page number, prev/next page pointers, LSN)
+├── Page Header (56B, record count, offset array)
+├── Infimum (boundary min)
+├── User Records (row data)
+├── Supremum (boundary max)
+├── Page Directory (slot array, binary search)
+└── File Trailer (8B, checksum)
+
+Leaf Node Doubly Linked List (via File Header pointers):
+  Prev Page ◄──────────────────────► Next Page
 ```
 
 **页类型：**

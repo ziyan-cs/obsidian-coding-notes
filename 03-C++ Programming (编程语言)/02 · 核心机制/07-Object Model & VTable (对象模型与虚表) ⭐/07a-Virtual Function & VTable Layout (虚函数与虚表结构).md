@@ -10,26 +10,18 @@ status: 🌱
 
 每个含虚函数的**类**有一个 VTable（虚函数表），表中存放虚函数指针。每个**对象**有一个隐藏的 `vptr`（虚指针），指向其类的 VTable。
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Obj["对象内存布局"]
-        VPTR["vptr (8字节)<br/>→ vtable"]
-        DATA1["成员变量 int a"]
-        DATA2["成员变量 double b"]
-    end
-    subgraph VTab["虚函数表 (vtable)<br/>(类只此一份)"]
-        F1["[0] virtual ~Base()"]
-        F2["[1] virtual foo()<br/>→ 实际函数地址"]
-        F3["[2] virtual bar()"]
-    end
-    subgraph Code["代码段"]
-        FOO["Base::foo() 实现"]
-        BAR["Base::bar() 实现"]
-    end
-    VPTR --> VTab
-    F2 -.->|指向| FOO
-    F3 -.->|指向| BAR
+```text
+┌───────────────────────┐    ┌─────────────────────────┐    ┌─────────────────────┐
+│  Object Layout        │    │  VTable (one per class) │    │  Code Segment       │
+├───────────────────────┤    ├─────────────────────────┤    ├─────────────────────┤
+│  vptr (8 bytes) ──────│───→│  [0] virtual ~Base()   │    │  Base::foo()        │
+├───────────────────────┤    ├─────────────────────────┤    │    implementation   │
+│  int a                │    │  [1] virtual foo() ─────│───→│                     │
+│    (member variable)  │    ├─────────────────────────┤    ├─────────────────────┤
+├───────────────────────┤    │  [2] virtual bar() ─────│───→│  Base::bar()        │
+│  double b             │    └─────────────────────────┘    │    implementation   │
+│    (member variable)  │                                   └─────────────────────┘
+└───────────────────────┘
 ```
 
 ```cpp

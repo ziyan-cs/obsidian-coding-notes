@@ -10,18 +10,36 @@ status: 🌱
 
 虚拟内存为每个进程提供独立的、连续的、大小为 2^n 的地址空间（如 64 位 Linux 下 48 位地址空间 = 256TB）。
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph VA["虚拟地址"]
-        VPN["虚拟页号 (VPN)"]
-        OFFSET["页内偏移"]
-    end
-    MMU["MMU<br/>(硬件查页表)"] --> TLB["TLB<br/>(快表)"]
-    TLB -->|命中| PFN["物理页号 (PFN)"]
-    TLB -->|未命中| PageT["页表<br/>(内存)"]
-    PageT --> PFN
-    PFN --> PA["物理地址<br/>= PFN + 偏移"]
+```text
+┌────────────────────────────────────┐
+│  VIRTUAL ADDRESS                   │
+├────────────────────────────────────┤
+│  Virtual Page Number (VPN)         │
+│  Page Offset                       │
+└──────────────┬─────────────────────┘
+               │
+               ▼
+┌──────────────┴─────────────────────┐
+│  MMU (Page Table Walk in Hardware) │
+└──────────────┬─────────────────────┘
+               │
+               ▼
+┌──────────────┴─────────────────────┐
+│  TLB (Translation Lookaside Buffer)│
+├────────────────────────────────────┤
+│  ├── TLB hit → Physical Frame      │
+│  │              Number (PFN)       │
+│  │                                 │
+│  └── TLB miss → Page Table (memory)│
+│                  ↓                  │
+│               Physical Frame Number│
+└────────────────────────────────────┘
+               │
+               ▼
+┌──────────────┴─────────────────────┐
+│  PHYSICAL ADDRESS                  │
+│  = PFN + Page Offset               │
+└────────────────────────────────────┘
 ```
 
 **核心作用：**

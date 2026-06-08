@@ -88,70 +88,113 @@ CREATE TABLE config_history (
 
 ## 架构设计图
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-flowchart TD
-    subgraph "运营管理"
-        Admin["Admin Web UI"]
-        Admin --> API["Admin API Service"]
-        API --> Auth["权限校验 & 操作审计"]
-    end
-
-    subgraph "配置存储"
-        API --> DB["MySQL<br/>(配置主库，持久化)"]
-        API --> ConfigCore["Config Core Service<br/>(推送逻辑)"]
-        ConfigCore --> etcd["etcd / ZooKeeper<br/>(强一致性存储 + Watch 机制)"]
-        ConfigCore --> Redis_Cache["Redis<br/>(热点配置缓存，加速读取)"]
-    end
-
-    subgraph "客户端 SDK"
-        App1["Application Instance 1"]
-        App2["Application Instance 2"]
-        App3["Application Instance 3"]
-    end
-
-    subgraph "推送通道"
-        ConfigCore --> LongPolling["长轮询服务器<br/>(HTTP Long Polling)"]
-        ConfigCore --> WebSocket_Srv["WebSocket 服务器<br/>(实时推)"]
-        LongPolling --> App1
-        LongPolling --> App2
-        WebSocket_Srv --> App3
-    end
-
-    subgraph "灰度发布"
-        ConfigCore --> Gray["灰度引擎"]
-        Gray --> Rules["IP列表 / 机器标签 / 百分比"]
-        Gray --> LB["分批推送 + 自动回滚"]
-    end
-
-    subgraph "监控"
-        ConfigCore --> Monitor["变更事件监控"]
-        Monitor --> Alert["配置变更告警<br/>(敏感配置变更通知)"]
-        Monitor --> Audit["审计日志 / 操作记录"]
-    end
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Operations Management                                                               │
+│  ┌──────────────┐    ┌─────────────────┐    ┌──────────────────────────────────┐     │
+│  │ Admin Web UI │───→│ Admin API       │───→│ Permission Check & Audit Logging│     │
+│  └──────────────┘    │ Service         │    └──────────────────────────────────┘     │
+│                      └─────────────────┘                                            │
+└──────────────────────────────────┬───────────────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Configuration Storage                                                               │
+│                                   ┌──────────────────────────────────────┐           │
+│  ┌────────────────┐               │  Config Core Service (Push Logic)    │           │
+│  │ MySQL          │◄──────────────┤                                      │           │
+│  │ (Primary Store │               └──────┬───────────────────────┬───────┘           │
+│  │  Persistence)  │                      │                       │                   │
+│  └────────────────┘                      ▼                       ▼                   │
+│                                  ┌──────────────────┐  ┌────────────────────┐         │
+│                                  │ etcd / ZooKeeper │  │ Redis (Hot Config │         │
+│                                  │ (Strong           │  │ Cache, Accelerate │         │
+│                                  │  Consistency +    │  │ Reads)            │         │
+│                                  │  Watch Mechanism) │  └────────────────────┘         │
+│                                  └──────────────────┘                                 │
+└──────────────────────────────────┬───────────────────────────────────────────────────┘
+                                   │
+              ┌────────────────────┼────────────────────┐
+              ▼                    ▼                    ▼
+┌─────────────────────┐  ┌─────────────────┐  ┌─────────────────────┐
+│  Push Channel       │  │ Canary Release  │  │ Monitoring          │
+│                     │  │                 │  │                     │
+│  ┌───────────────┐  │  │ ┌─────────────┐ │  │ ┌───────────────┐  │
+│  │ Long Polling  │  │  │ │ Gray Engine │ │  │ │ Change Event  │  │
+│  │ Server (HTTP  │  │  │ └──────┬──────┘ │  │ │ Monitor       │  │
+│  │ Long Polling) │  │  │        │        │  │ └───────┬───────┘  │
+│  └───────┬───────┘  │  │  ┌─────┴─────┐  │  │         │          │
+│          │          │  │  │ IP List /  │  │  │  ┌──────┴──────┐  │
+│  ┌───────────────┐  │  │  │ Machine    │  │  │  │ Config      │  │
+│  │ WebSocket     │  │  │  │ Tag /      │  │  │  │ Change      │  │
+│  │ Server (Real- │  │  │  │ Percentage │  │  │  │ Alert       │  │
+│  │ time Push)    │  │  │  └────────────┘  │  │  │ (Sensitive   │  │
+│  └───────┬───────┘  │  │                 │  │  │  Configs)    │  │
+│          │          │  │  ┌─────────────┐ │  │  └──────────────┘  │
+│          │          │  │  │ Batch Push +│ │  │                     │
+│          │          │  │  │ Auto Rollback│ │  │  ┌──────────────┐  │
+│          │          │  │  └─────────────┘ │  │  │ Audit Log /  │  │
+│          │          │  └─────────────────┘  │  │  │ Operation   │  │
+│          │          │                       │  │  │ Records     │  │
+│          │          │                       │  │  └──────────────┘  │
+│          ▼          │                       │                     │
+│  ┌──────────────────────────────────────────┐                     │
+│  │ Client SDK                              │                     │
+│  │  ┌──────────────────┐  ┌──────────────┐ │                     │
+│  │  │ Application      │  │ Application  │ │                     │
+│  │  │ Instance 1       │  │ Instance 2   │ │                     │
+│  │  └──────────────────┘  └──────────────┘ │                     │
+│  │  ┌──────────────────┐                    │                     │
+│  │  │ Application      │                    │                     │
+│  │  │ Instance 3       │                    │                     │
+│  │  └──────────────────┘                    │                     │
+│  └──────────────────────────────────────────┘                     │
+└───────────────────────────────────────────────────────────────────┘
 ```
 
 ### 配置变更推送流程
 
-```mermaid
-sequenceDiagram
-    participant Admin as 运维/开发
-    participant API as Admin API
-    participant DB as MySQL
-    participant etcd
-    participant Push as Push Server
-    participant Client as 应用实例
-
-    Admin->>API: 1. 修改配置 (key, value)
-    API->>Auth: 2. 权限校验
-    API->>DB: 3. 写入配置 (version+1)
-    API->>etcd: 4. 更新 etcd key (/config/{env}/{namespace}/{key})
-    etcd-->>Push: 5. Watch 事件触发
-    Push-->>Client: 6. 推送变更通知 (key, new_version)
-    Client->>Client: 7. 本地加载新配置 (热更新)
-    Client->>Push: 8. ACK 确认 (new_version)
-    Push->>DB: 9. 记录 ACK 状态 (可选，灰度时必要)
-    Push->>Admin: 10. 推送完成通知
+```text
+Admin/Dev             Admin API              MySQL               etcd              Push Server          App Instance
+  │                       │                    │                 │                    │                    │
+  ├── 1. Modify config   │                    │                 │                    │                    │
+  │   (key, value)       │                    │                 │                    │                    │
+  │─────────────────────→│                    │                 │                    │                    │
+  │                       ├── 2. Permission   │                 │                    │                    │
+  │                       │   check           │                 │                    │                    │
+  │                       │  (internal)       │                 │                    │                    │
+  │                       ├── 3. Write config │                 │                    │                    │
+  │                       │   (version+1)     │                 │                    │                    │
+  │                       │──────────────────→│                 │                    │                    │
+  │                       ├── 4. Update etcd  │                 │                    │                    │
+  │                       │   key             │                 │                    │                    │
+  │                       │   (/config/env/ns │                 │                    │                    │
+  │                       │    /key)          │                 │                    │                    │
+  │                       │───────────────────────────────────→│                    │                    │
+  │                       │                    │                 ├── 5. Watch event  │                    │
+  │                       │                    │                 │   triggers        │                    │
+  │                       │                    │                 │───────────────────→│                    │
+  │                       │                    │                 │                    ├── 6. Push change  │
+  │                       │                    │                 │                    │   notification    │
+  │                       │                    │                 │                    │   (key,            │
+  │                       │                    │                 │                    │    new_version)    │
+  │                       │                    │                 │                    │──────────────────→│
+  │                       │                    │                 │                    │                    │
+  │                       │                    │                 │                    │ 7. Load new config│
+  │                       │                    │                 │                    │    locally (hot    │
+  │                       │                    │                 │                    │    reload)         │
+  │                       │                    │                 │                    │◄───────────────────┤
+  │                       │                    │                 │                    │ 8. ACK (new_      │
+  │                       │                    │                 │                    │    version)        │
+  │                       │                    │                 │                    │◄───────────────────┤
+  │                       │                    ├── 9. Record ACK │                    │                    │
+  │                       │                    │   status        │                    │                    │
+  │                       │                    │   (optional;    │                    │                    │
+  │                       │                    │   required for  │                    │                    │
+  │                       │                    │   canary)       │                    │                    │
+  │◄──── 10. Push ────────┤◄───────────────────┤                 │                    │                    │
+  │         complete      │                    │                 │                    │                    │
+  │         notification   │                    │                 │                    │                    │
 ```
 
 ## 配置推送机制对比

@@ -11,24 +11,17 @@ status: 🌱
 
 Redis Sorted Set 的有序结构核心，基于多级索引的链表：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    HEAD["Head<br/>(最高层)"]
-    L3_1["-∞"] --> L3_2["17"] --> L3_3["25"] --> L3_4["55"] --> L3_END["∞"]
-    L2_1["-∞"] --> L2_2["12"] --> L2_3["17"] --> L2_4["25"] --> L2_5["55"] --> L2_6["67"] --> L2_END["∞"]
-    L1_1["-∞"] --> L1_2["12"] --> L1_3["17"] --> L1_4["19"] --> L1_5["25"] --> L1_6["31"] --> L1_7["55"] --> L1_8["67"] --> L1_END["∞"]
-    
-    HEAD --> L3_1 & L2_1 & L1_1
-    
-    note right of L3_4
-        查找 31:
-        从最高层开始跳过
-        25 → 55（太大）
-        降一层 → 25 → 31
-        O(log n)
-    end note
-    
+```text
+Search for 31 in the skip list:
+Start from the highest level, skip forward in each level.
+25 → 55 (too large), descend one level → 25 → 31
+Time complexity: O(log n)
+
+Level 3: HEAD ─────────────────────────────────────→ 17 ──────────→ 25 ──────────→ 55 ─────→ ∞
+
+Level 2: HEAD ───────────────────→ 12 ──────→ 17 ──────────→ 25 ────────────→ 55 ──────→ 67 ───→ ∞
+
+Level 1: HEAD ──→ 12 ────→ 17 ────→ 19 ────→ 25 ────→ 31 ────→ 55 ────→ 67 ────→ ∞
 ```
 
 ### 节点结构

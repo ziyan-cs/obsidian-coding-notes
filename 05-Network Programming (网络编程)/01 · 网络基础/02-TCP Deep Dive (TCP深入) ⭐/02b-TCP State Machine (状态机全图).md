@@ -24,29 +24,27 @@ status: 🌱
 
 ## 状态转换图
 
-```mermaid
-stateDiagram-v2
-    [*] --> CLOSED
-    CLOSED --> LISTEN: passive open
-    CLOSED --> SYN_SENT: active open / connect
-    LISTEN --> SYN_RCVD: 收到 SYN
-    SYN_SENT --> ESTABLISHED: 收到 SYN+ACK
-    SYN_RCVD --> ESTABLISHED: 收到 ACK
-    SYN_RCVD --> CLOSED: timeout / RST
-    ESTABLISHED --> FIN_WAIT_1: active close
-    ESTABLISHED --> CLOSE_WAIT: passive close
-    FIN_WAIT_1 --> FIN_WAIT_2: 收到 ACK
-    FIN_WAIT_1 --> CLOSING: 收到 FIN
-    FIN_WAIT_1 --> TIME_WAIT: 收到 FIN+ACK
-    FIN_WAIT_2 --> TIME_WAIT: 收到 FIN
-    CLOSING --> TIME_WAIT: 收到 ACK
-    CLOSE_WAIT --> LAST_ACK: close
-    LAST_ACK --> CLOSED: 收到 ACK
-    TIME_WAIT --> CLOSED: 2MSL 超时
-    note right of TIME_WAIT
-        等待 2MSL 确保 ACK 到达
-        防止旧连接包干扰新连接
-    end note
+```text
+CLOSED ──passive open──────────────→ LISTEN
+CLOSED ──active open / connect─────→ SYN_SENT
+LISTEN ──receive SYN───────────────→ SYN_RCVD
+SYN_SENT ──receive SYN+ACK─────────→ ESTABLISHED
+SYN_RCVD ──receive ACK─────────────→ ESTABLISHED
+SYN_RCVD ──timeout / RST───────────→ CLOSED
+ESTABLISHED ──active close─────────→ FIN_WAIT_1
+ESTABLISHED ──passive close────────→ CLOSE_WAIT
+FIN_WAIT_1 ──receive ACK───────────→ FIN_WAIT_2
+FIN_WAIT_1 ──receive FIN───────────→ CLOSING
+FIN_WAIT_1 ──receive FIN+ACK───────→ TIME_WAIT
+FIN_WAIT_2 ──receive FIN───────────→ TIME_WAIT
+CLOSING ──receive ACK──────────────→ TIME_WAIT
+CLOSE_WAIT ──close()───────────────→ LAST_ACK
+LAST_ACK ──receive ACK─────────────→ CLOSED
+TIME_WAIT ──2MSL timeout───────────→ CLOSED
+
+Notes on TIME_WAIT:
+  - Wait 2MSL to ensure the last ACK arrives
+  - Prevent old connection packets from interfering with new connections
 ```
 
 ## 重点状态深析

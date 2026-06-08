@@ -10,27 +10,36 @@ status: 🌱
 
 ## 模型结构
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph MainThread["主线程 (Reactor)"]
-        RE["Reactor<br/>(epoll_wait)"]
-        DISPATCH["事件分发"]
-        ACC["Acceptor"]
-    end
-    subgraph ThreadPool["工作线程池"]
-        W1["Worker 1<br/>业务处理"]
-        W2["Worker 2<br/>业务处理"]
-        W3["Worker 3<br/>业务处理"]
-    end
-    
-    RE --> DISPATCH
-    DISPATCH -->|新连接| ACC
-    DISPATCH -->|IO可读| W1
-    DISPATCH -->|IO可读| W2
-    DISPATCH -->|IO可读| W3
-    ACC -->|注册fd| RE
-    
+```text
+┌───────────────────────────────────────────┐
+│  Main Thread (Reactor)                    │
+├───────────────────────────────────────────┤
+│  ┌─────────────────────────────────────┐  │
+│  │  Reactor (epoll_wait)               │  │
+│  └──────────────────┬──────────────────┘  │
+│                     │                      │
+│                     ▼                      │
+│  ┌─────────────────────────────────────┐  │
+│  │  Event Dispatcher                   │  │
+│  └──────┬──────────────────┬───────────┘  │
+│         │ new conn         │ I/O readable  │
+│         ▼                  ▼               │
+│  ┌──────────┐     ┌───────────────────┐    │
+│  │ Acceptor │     │  submit to pool   │    │
+│  └──────────┘     └───────────────────┘    │
+│       │ register fd                        │
+│       └──────────→ Reactor                 │
+└───────────────────────────────────────────┘
+                      │
+                      │ tasks
+                      ▼
+┌───────────────────────────────────────────┐
+│  Worker Thread Pool                       │
+├──────────┬──────────┬────────────────────┤
+│ Worker 1 │ Worker 2 │  Worker 3          │
+│ business │ business │  business          │
+│ logic    │ logic    │  logic             │
+└──────────┴──────────┴────────────────────┘
 ```
 
 ## 核心代码结构

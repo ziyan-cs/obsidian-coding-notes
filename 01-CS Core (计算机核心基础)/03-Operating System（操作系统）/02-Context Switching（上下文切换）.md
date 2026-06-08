@@ -86,20 +86,30 @@ int main() {
 
 ## 上下文切换流程（Linux）
 
-```mermaid
-sequenceDiagram
-    participant P1 as 进程 A
-    participant OS as 内核 (调度器)
-    participant P2 as 进程 B
-    
-    P1->>P1: 用户态执行
-    P1->>OS: 中断 / 系统调用
-    OS->>OS: 保存 A 的寄存器<br/>到 PCB_A
-    OS->>OS: 切换页表 / 地址空间<br/>(TLB 刷新)
-    OS->>OS: 加载 B 的寄存器<br/>从 PCB_B
-    OS->>P2: 返回用户态
-    P2->>P2: 继续执行 B
-    Note over OS: 上下文切换 ≈ 1-10μs<br/>(无锁时 ≈ 缓存污染代价最大)
+```text
+Process A                 Kernel (Scheduler)          Process B
+    │                         │                          │
+    ├── User-mode execution   │                          │
+    │                         │                          │
+    ├── Interrupt / Syscall ──→│                         │
+    │                         │                          │
+    │                         ├── Save A's registers     │
+    │                         │   to PCB_A               │
+    │                         │                          │
+    │                         ├── Switch page table /    │
+    │                         │   address space          │
+    │                         │   (TLB flush)            │
+    │                         │                          │
+    │                         ├── Load B's registers     │
+    │                         │   from PCB_B             │
+    │                         │                          │
+    │                         ├── Return to user mode ──→│
+    │                         │                          │
+    │                         │                          ├── Resume B execution
+    │                         │                          │
+    │                         │                          │
+    │                       Context switch ≈ 1-10μs      │
+    │                  (cache pollution dominates cost)  │
 ```
 
 **`switch_to` 汇编核心：**

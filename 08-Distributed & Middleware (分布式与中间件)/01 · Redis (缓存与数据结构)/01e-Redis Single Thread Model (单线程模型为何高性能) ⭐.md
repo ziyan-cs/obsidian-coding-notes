@@ -11,22 +11,43 @@ status: 🌱
 
 Redis 的核心流程（命令处理）是单线程的：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    CLIENTS["客户端连接（N个）"]
-    EPOLL["epoll/kqueue 事件通知"]
-    MAIN["主线程：事件循环（aeMain）"]
-    READ["读事件 → 解析命令"]
-    EXEC["→ 执行命令"]
-    WRITE["→ 写回结果"]
-    
-    CLIENTS --> EPOLL
-    EPOLL --> MAIN
-    MAIN --> READ
-    READ --> EXEC
-    EXEC --> WRITE
-    WRITE -->|下一轮| EPOLL
+```text
+┌──────────────┐
+│  Client      │
+│  Connections │
+│  (N clients) │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────────┐
+│  epoll/kqueue        │
+│  Event Notification  │
+└──────┬───────────────┘
+       │
+       ▼
+┌──────────────────────────┐
+│  Main Thread             │
+│  Event Loop (aeMain)     │
+└──────┬───────────────────┘
+       │
+       ▼
+┌──────────────────┐
+│  Read Event →    │
+│  Parse Command   │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│  Execute Command │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│  Write Result    │
+│  Back to Client  │
+└──────┬───────────┘
+       │
+       └──────→ (next round → epoll/kqueue)
 ```
 
 **注意：** Redis 6.0+ 的 I/O 线程池只在**读写 socket** 阶段多线程化，**命令执行**仍是单线程。
@@ -129,20 +150,26 @@ io-threads-do-reads yes  # 启用多线程读取
 
 **多线程 I/O 模型：**
 
-```mermaid
-sequenceDiagram
-    participant Main as 主线程
-    participant IO as I/O线程
-
-    Main->>Main: epoll_wait 获取就绪事件
-    Main->>IO: 将读任务分发给 I/O 线程
-    IO->>IO: 并行读取数据
-    IO-->>Main: 结果
-    Main->>Main: 单线程执行命令（仍是串行）
-    Main->>IO: 将写任务分发给 I/O 线程
-    IO->>IO: 并行写回
-    IO-->>Main: 完成
-    Main->>Main: 下一轮事件循环
+```text
+Main Thread                       I/O Threads
+    │                                  │
+    ├── epoll_wait to get ready events │
+    │  (running)                       │
+    │                                  │
+    ├── Distribute read tasks ────────→│
+    │                                  ├── Parallel read from
+    │                                  │   socket connections
+    │◄──── Return results ─────────────┤
+    │                                  │
+    ├── Execute commands sequentially  │
+    │  (still single-threaded)         │
+    │                                  │
+    ├── Distribute write tasks ───────→│
+    │                                  ├── Parallel write back
+    │                                  │   to socket connections
+    │◄──── Completion ─────────────────┤
+    │                                  │
+    ├── Next round of event loop       │
 ```
 
 **命令执行仍是单线程**，所以无需修改数据结构，无需考虑并发安全问题。

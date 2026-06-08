@@ -9,26 +9,26 @@ status: 🌱
 
 ## 三区模型
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph WD["工作区 (Working Tree)"]
-        FILES["实际文件<br/>src/main.cpp"]
-    end
-    subgraph INDEX["暂存区 (Index/Staging)"]
-        BLOB["索引中的 blob<br/>管理待提交快照"]
-    end
-    subgraph REPO["本地仓库 (.git)"]
-        COMMIT["提交历史<br/>commit 对象 DAG"]
-        HEAD["HEAD → 当前分支<br/>指向最新 commit"]
-    end
-    
-    FILES -->|git add| BLOB
-    BLOB -->|git commit| COMMIT
-    COMMIT --> HEAD
-    HEAD -->|git checkout| FILES
-    HEAD -->|git reset| BLOB
-    
+```text
+Three Areas of Git:
+
+┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────────┐
+│  Working Tree        │     │  Index (Staging)     │     │  Local Repository (.git) │
+│                      │     │                      │     │                          │
+│  actual files        │     │  blob entries        │     │  commit history          │
+│  src/main.cpp        │     │  managing snapshot   │     │  (commit object DAG)     │
+│                      │     │  to be committed     │     │                          │
+│                      │     │                      │     │  HEAD → current branch   │
+│                      │     │                      │     │         points to latest │
+└──────────────────────┘     └──────────────────────┘     │         commit           │
+          │                           ▲                   └──────────┬───────────────┘
+          │        git add            │                              │
+          └───────────────────────────┘                              │
+                                      │            git commit        │
+                                      └──────────────────────────────┘
+                                                              │
+          git checkout (checkout) ────────────────────────────┘
+          git reset (reset HEAD) ─────────────────────────────┘
 ```
 
 |区域|别名|存储位置|含义|

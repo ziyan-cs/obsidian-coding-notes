@@ -39,20 +39,30 @@ struct task_struct {
 
 ## 进程状态
 
-```mermaid
-stateDiagram-v2
-    [*] --> New: 创建
-    New --> Ready: 就绪
-    Ready --> Running: 调度选中
-    Running --> Ready: 时间片耗尽/抢占
-    Running --> Blocked: 等待IO/锁
-    Blocked --> Ready: IO完成/锁释放
-    Running --> Terminated: 退出
-    Terminated --> [*]
-    note right of Running
-        进程控制块 PCB 保存上下文
-        每次切换需切换地址空间（开销大）
-    end note
+```text
+[*]
+  └── create → NEW
+
+NEW
+  └── admit/ready → READY
+
+READY
+  └── scheduler dispatch → RUNNING
+
+RUNNING
+  ├── timeslice expired / preempted → READY
+  ├── wait I/O / lock → BLOCKED
+  └── exit → TERMINATED
+
+BLOCKED
+  └── I/O complete / lock released → READY
+
+TERMINATED
+  └── → [*]
+
+Note for RUNNING:
+  PCB saves execution context
+  Each switch requires address space switch (high overhead)
 ```
 
 **Linux 特有状态：**

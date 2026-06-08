@@ -11,18 +11,16 @@ status: 🌱
 
 TCP 连接建立需要三次报文交换，目的是**双方互相确认对方的发送和接收能力都正常**。
 
-```mermaid
-sequenceDiagram
-    participant C as 客户端
-    participant S as 服务端
-
-    Note over C: CLOSED → SYN_SENT
-    C->>S: SYN (SEQ=x)
-    Note over S: LISTEN → SYN_RCVD
-    S->>C: SYN+ACK (SEQ=y, ACK=x+1)
-    Note over C: SYN_SENT → ESTABLISHED
-    C->>S: ACK (SEQ=x+1, ACK=y+1)
-    Note over S: SYN_RCVD → ESTABLISHED
+```text
+Client                    Server
+  │                         │
+  │   (CLOSED → SYN_SENT)   │
+  ├── SYN (SEQ=x) ─────────→│
+  │                         │ (LISTEN → SYN_RCVD)
+  │←─ SYN+ACK (SEQ=y, ACK=x+1) ─┤
+  │   (SYN_SENT → ESTABLISHED)   │
+  ├── ACK (SEQ=x+1, ACK=y+1) ──→│
+  │                         │ (SYN_RCVD → ESTABLISHED)
 ```
 
 ## 为什么必须三次，不能两次？
@@ -45,24 +43,22 @@ sequenceDiagram
 
 TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以需要四次。
 
-```mermaid
-sequenceDiagram
-    participant A as 主动关闭方
-    participant B as 被动关闭方
-
-    Note over A: ESTABLISHED → FIN_WAIT_1
-    A->>B: FIN (SEQ=u)
-    Note over B: ESTABLISHED → CLOSE_WAIT
-    B->>A: ACK (ACK=u+1)
-    Note over A: FIN_WAIT_1 → FIN_WAIT_2
-    Note over B: 发完缓冲区剩余数据
-
-    Note over B: CLOSE_WAIT → LAST_ACK
-    B->>A: FIN (SEQ=v)
-    Note over A: FIN_WAIT_2 → TIME_WAIT
-    A->>B: ACK (ACK=v+1)
-    Note over B: LAST_ACK → CLOSED
-    Note over A: 等待 2MSL<br/>TIME_WAIT → CLOSED
+```text
+Active Closer             Passive Closer
+  │                         │
+  │   (ESTABLISHED → FIN_WAIT_1)  │
+  ├── FIN (SEQ=u) ─────────→│
+  │                         │ (ESTABLISHED → CLOSE_WAIT)
+  │←──── ACK (ACK=u+1) ─────┤
+  │   (FIN_WAIT_1 → FIN_WAIT_2)  │
+  │                         │ (flush remaining buffered data)
+  │                         │ (CLOSE_WAIT → LAST_ACK)
+  │←──── FIN (SEQ=v) ───────┤
+  │   (FIN_WAIT_2 → TIME_WAIT)   │
+  ├── ACK (ACK=v+1) ───────→│
+  │                         │ (LAST_ACK → CLOSED)
+  │   (wait 2MSL            │
+  │    TIME_WAIT → CLOSED)  │
 ```
 
 ## 为什么需要四次，不能三次？

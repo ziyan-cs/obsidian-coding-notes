@@ -10,26 +10,30 @@ status: 🌱
 
 SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Levels["SQL 标准四种隔离级别"]
-        RU["READ UNCOMMITTED<br/>读未提交<br/>❌ 脏读 ❌ 不可重复读 ❌ 幻读"]
-        RC["READ COMMITTED<br/>读已提交<br/>✅ 无脏读 ❌ 不可重复读 ❌ 幻读"]
-        RR["REPEATABLE READ<br/>可重复读 (MySQL 默认)<br/>✅ 无脏读 ✅ 不可重复读 ❌ 幻读"]
-        SER["SERIALIZABLE<br/>串行化<br/>✅ 全部解决"]
-    end
-    RU -->|隔离性增强| RC -->|隔离性增强| RR -->|隔离性增强| SER
-    SER -->|并发性能降低| RR
-    RR -->|并发性能降低| RC
-    RC -->|并发性能降低| RU
-    
-    
-    note right of RR
-        InnoDB 的 RR 级别通过
-        MVCC + Next-Key Lock
-        解决了幻读问题
-    end note
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  SQL Standard Four Isolation Levels                                  │
+├──────────────────────────────────────────────────────────────────────┤
+│  READ UNCOMMITTED                                                    │
+│    Dirty Read: Yes      Non-repeatable Read: Yes      Phantom: Yes  │
+├──────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)                │
+│       ▼                                                              │
+│  READ COMMITTED                                                      │
+│    Dirty Read: No       Non-repeatable Read: Yes      Phantom: Yes  │
+├──────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)                │
+│       ▼                                                              │
+│  REPEATABLE READ (MySQL Default)                                    │
+│    Dirty Read: No       Non-repeatable Read: No       Phantom: Yes  │
+├──────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)                │
+│       ▼                                                              │
+│  SERIALIZABLE                                                        │
+│    Dirty Read: No       Non-repeatable Read: No       Phantom: No   │
+└──────────────────────────────────────────────────────────────────────┘
+
+Note: InnoDB's RR level prevents phantom reads via MVCC + Next-Key Lock.
 ```
 
 ## RU（Read Uncommitted，读未提交）

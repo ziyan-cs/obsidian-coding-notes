@@ -56,25 +56,42 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 
 ### 重写过程
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph Normal["正常写入"]
-        CMD["SET foo bar"] --> APPEND["追加到 AOF 缓冲区"]
-        APPEND --> SYNC["fsync 到磁盘<br/>(每秒/每次/从不)"]
-    end
-    subgraph Rewrite["AOF 重写"]
-        MEM["当前内存状态"] --> NEW_AOF["扫描内存生成最小命令集"]
-        OLD_AOF["旧 AOF 可能非常大"] --> BG_REWRITE["fork 子进程重写"]
-        BG_REWRITE --> MERGE["父进程增量缓冲 → 合并"]
-        MERGE --> DONE["新 AOF 替换旧文件"]
-    end
-    
-    note right of NEW_AOF
-        例: 对 key 做了 1000 次 incr
-        → 重写为 SET key 1000
-        只保留最终状态
-    end note
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  Normal Write Path                                                   │
+│                                                                      │
+│  ┌──────────┐     ┌──────────────────┐     ┌──────────────────────┐  │
+│  │SET foo   │────→│ Append to AOF    │────→│ fsync to disk        │  │
+│  │bar       │     │ buffer           │     │ (every sec / every   │  │
+│  └──────────┘     └──────────────────┘     │  op / OS-dependent)  │  │
+│                                            └──────────────────────┘  │
+├──────────────────────────────────────────────────────────────────────┤
+│  AOF Rewrite Path                                                    │
+│                                                                      │
+│  ┌────────────────┐     ┌────────────────────────────┐               │
+│  │ Current in-    │────→│ Scan memory and generate   │               │
+│  │ memory state   │    │ minimal command set         │               │
+│  └────────────────┘     └────────────────────────────┘               │
+│                                                                      │
+│  ┌────────────────────┐     ┌──────────────────────────────┐         │
+│  │ Old AOF file may   │────→│ Fork child process to        │         │
+│  │ be very large      │     │ perform rewrite              │         │
+│  └────────────────────┘     └──────────────┬───────────────┘         │
+│                                            │                         │
+│                                            ▼                         │
+│                          ┌──────────────────────────────┐             │
+│                          │ Parent increment buffer →    │             │
+│                          │ merge with rewritten content  │             │
+│                          └──────────────┬───────────────┘             │
+│                                         │                             │
+│                                         ▼                             │
+│                          ┌──────────────────────────────┐             │
+│                          │ New AOF file replaces old     │             │
+│                          └──────────────────────────────┘             │
+│                                                                      │
+│  Example: A key incremented 1000 times                               │
+│  → rewrite as SET key 1000 (only the final state preserved)          │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 **重写优化：** 将多次命令合并为最少命令。例如 `RPUSH list A` `RPUSH list B` 合并为 `RPUSH list A B`。

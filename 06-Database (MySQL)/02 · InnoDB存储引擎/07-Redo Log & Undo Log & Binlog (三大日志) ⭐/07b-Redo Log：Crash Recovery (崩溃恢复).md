@@ -82,27 +82,46 @@ Checkpoint 解决了两个问题：
 
 ## 崩溃恢复流程
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    CRASH["数据库崩溃"]
-    START["实例启动<br/>读取 checkpoint LSN"]
-    SCAN["扫描 redo log<br/>从 checkpoint 到末尾"]
-    subgraph REDO["REDO 阶段 (前滚)"]
-        REDO1["找出 page_lsn < redo_lsn 的页"]
-        REDO2["重新应用 redo log 中的变更"]
-    end
-    subgraph UNDO["UNDO 阶段 (回滚)"]
-        UNDO1["扫描 undo log 中未提交的事务"]
-        UNDO2["回滚未提交事务的修改"]
-    end
-    DONE["恢复完成<br/>数据一致性保证"]
-    
-    CRASH --> START --> SCAN --> REDO
-    REDO --> REDO1 --> REDO2
-    REDO2 --> UNDO
-    UNDO --> UNDO1 --> UNDO2 --> DONE
-    
+```text
+┌──────────────────────────────┐
+│  Database Crash Occurs       │
+└──────────┬───────────────────┘
+           │
+           ▼
+┌──────────────────────────────┐
+│  Instance Startup            │
+│  Read checkpoint LSN         │
+└──────────┬───────────────────┘
+           │
+           ▼
+┌──────────────────────────────┐
+│  Scan Redo Log               │
+│  (checkpoint to end)         │
+└──────────┬───────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────┐
+│  REDO Phase (Roll-Forward)                   │
+├──────────────────────────────────────────────┤
+│  1. Find pages where page_lsn < redo_lsn    │
+│  2. Re-apply changes from redo log          │
+└──────────┬───────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────────────────────┐
+│  UNDO Phase (Rollback)                       │
+├──────────────────────────────────────────────┤
+│  1. Scan undo log for uncommitted            │
+│     transactions                             │
+│  2. Roll back modifications from             │
+│     uncommitted transactions                 │
+└──────────┬───────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────────────┐
+│  Recovery Complete           │
+│  Data Consistency Guaranteed │
+└──────────────────────────────┘
 ```
 
 ## LSN（Log Sequence Number）

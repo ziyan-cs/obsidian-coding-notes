@@ -7,24 +7,31 @@ status: 🌱
 > [!important] **核心考点**
 > 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph MemLayout["进程内存布局（从高地址到低地址）"]
-        direction TB
-        STACK["栈（Stack）<br/>局部变量、函数参数、返回地址<br/>向下增长<br/>高地址"]
-        GAP["增长方向相对"]
-        HEAP["堆（Heap）<br/>new/malloc 动态分配<br/>向上增长"]
-        BSS["BSS 段<br/>未初始化全局/静态变量<br/>程序启动时清零"]
-        DATA["Data 段<br/>已初始化全局/静态变量"]
-        TEXT["Text 段（代码段）<br/>只读，存储指令<br/>低地址"]
-    end
-
-    STACK --> GAP
-    GAP --> HEAP
-    HEAP --> BSS
-    BSS --> DATA
-    DATA --> TEXT
+```text
+┌──────────────────────────────────────────────┐
+│  HIGH ADDRESS                                │
+├──────────────────────────────────────────────┤
+│  Stack                                       │
+│    (local variables, function parameters,     │
+│     return addresses)                        │
+│    ↓ grows downward                          │
+├──────────────────────────────────────────────┤
+│  Heap                                        │
+│    (dynamic allocation via new/malloc)       │
+│    ↑ grows upward                            │
+├──────────────────────────────────────────────┤
+│  BSS Segment                                 │
+│    (uninitialized global/static variables,    │
+│     zero-filled at program startup)          │
+├──────────────────────────────────────────────┤
+│  Data Segment                                │
+│    (initialized global/static variables)      │
+├──────────────────────────────────────────────┤
+│  Text Segment (Code Segment)                 │
+│    (read-only, stores machine instructions)  │
+├──────────────────────────────────────────────┤
+│  LOW ADDRESS                                 │
+└──────────────────────────────────────────────┘
 ```
 
 ```cpp

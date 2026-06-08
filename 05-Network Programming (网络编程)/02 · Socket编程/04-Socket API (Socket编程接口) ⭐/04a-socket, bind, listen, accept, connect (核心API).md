@@ -16,33 +16,30 @@ socket( ) → bind( ) → listen( ) → accept( ) → recv( ) / send( ) → clos
 
 socket( ) → connect( ) → recv( ) / send( ) → close( )
 
-```mermaid
-sequenceDiagram
-    participant Server as 服务端
-    participant OS as 内核
-    participant Client as 客户端
-    
-    Server->>OS: socket() → fd
-    Server->>OS: bind(port)
-    Server->>OS: listen() → backlog
-    Note over Server: 阻塞等待连接
-    
-    Client->>OS: socket() → fd
-    Client->>OS: connect(server_ip:port)
-    OS->>Server: 三次握手
-    OS->>Client: connect 返回
-    
-    Server->>OS: accept() → new_fd
-    Note over Server,Client: 连接建立, 开始数据传输
-    
-    Client->>OS: write(req)
-    OS->>Server: 数据到达 → epoll 通知
-    Server->>OS: read() → 处理 → write(resp)
-    OS->>Client: 数据到达
-    Client->>OS: read(resp)
-    
-    Client->>OS: close()
-    Server->>OS: close()
+```text
+Server                    OS Kernel                Client
+  │                         │                        │
+  ├── socket() → fd ───────→│                        │
+  ├── bind(port) ──────────→│                        │
+  ├── listen() → backlog ──→│                        │
+  │   (blocking)            │                        │
+  │                         │←── socket() → fd ──────┤
+  │                         │←── connect(ip:port) ───┤
+  │←── three-way handshake ─┤                        │
+  │                         ├── connect returns ────→│
+  │                         │                        │
+  ├── accept() → new_fd ───→│                        │
+  │  Data transfer begins   │                        │
+  │                         │←───── write(req) ──────┤
+  │←─── data arrives ───────┤                        │
+  │      → epoll notify                              │
+  ├── read() → process() ──→│                        │
+  ├── write(resp) ─────────→│                        │
+  │                         ├── data arrives ───────→│
+  │                         │←───── read(resp) ──────┤
+  │                         │                        │
+  │                         │←────── close() ────────┤
+  ├──────── close() ───────→│                        │
 ```
 
 

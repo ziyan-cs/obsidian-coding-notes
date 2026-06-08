@@ -10,20 +10,23 @@ status: 🌱
 
 网络编程中，数据以流的形式到达，无法预知每次 `read()` 会收到多少数据：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph ReadBuf["读缓冲区"]
-        RBUF["环形缓冲区 / kbuf<br/>read_pos → write_pos"]
-    end
-    subgraph WriteBuf["写缓冲区"]
-        WBUF["环形缓冲区 / kbuf<br/>write_pos → send_pos"]
-    end
-    NET["网卡 / socket"] -->|epoll 可读| RBUF
-    RBUF -->|read / 解析| APP["应用层处理"]
-    APP -->|编码 / 序列化| WBUF
-    WBUF -->|epoll 可写| NET
-    
+```text
+┌──────────────────────────┐    ┌──────────────────────────┐
+│  Network Interface /     │    │  Network Interface /     │
+│  Socket                  │    │  Socket                  │
+└──────────┬───────────────┘    └────────▲─────────────────┘
+           │ epoll readable             │ epoll writable
+           ▼                            │
+┌──────────────────────────┐    ┌───────┴──────────────────┐
+│  Read Buffer             │    │  Write Buffer            │
+│  (ring buffer / kbuf)    │    │  (ring buffer / kbuf)    │
+│  read_pos → write_pos    │    │  write_pos → send_pos    │
+└──────────┬───────────────┘    └────────▲─────────────────┘
+           │ read / parse               │ encode / serialize
+           ▼                            │
+┌────────────────────────────────────────┴──────────────────┐
+│  Application Layer Processing                              │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ## Buffer 核心结构

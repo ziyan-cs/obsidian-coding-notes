@@ -17,37 +17,33 @@ status: 🌱
 
 ## 连接池的核心职责
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph App["应用程序"]
-        T1["线程 1"]
-        T2["线程 2"]
-        T3["线程 3"]
-    end
-    subgraph Pool["连接池"]
-        IDLE["空闲连接队列<br/>( idle_connections )"]
-        BUSY["活跃连接集合<br/>( in_use )"]
-        MIN["最小连接数<br/>min_idle"]
-        MAX["最大连接数<br/>max_size"]
-    end
-    subgraph DB["数据库"]
-        DB1["MySQL 连接 1"]
-        DB2["MySQL 连接 2"]
-        DB3["MySQL 连接 3"]
-    end
-    
-    T1 -->|get()| IDLE
-    T2 -->|get()| IDLE
-    T3 -->|get()| IDLE
-    IDLE -->|取出| BUSY
-    BUSY -->|release()| IDLE
-    IDLE --- MIN
-    BUSY --- MAX
-    IDLE --> DB1
-    IDLE --> DB2
-    IDLE --> DB3
-    
+```text
+┌───────────────────────────────────────────┐
+│  Application                              │
+├──────────┬──────────┬────────────────────┤
+│ Thread 1 │ Thread 2 │  Thread 3          │
+└─────┬────┴─────┬────┴────────┬───────────┘
+      │ get()    │ get()       │ get()
+      ▼          ▼              ▼
+┌───────────────────────────────────────────┐
+│  Connection Pool                          │
+├───────────────────────────────────────────┤
+│  ┌─────────────────────┐  ┌────────────┐  │
+│  │ Idle Connection Q   │  │ In-Use Set │  │
+│  │ (idle_connections)  │  │ (in_use)   │  │
+│  └──────────┬──────────┘  └──────┬─────┘  │
+│             │                     │        │
+│     ┌───────┴───────┐    ┌───────┴───┐    │
+│     │ min_idle      │    │ max_size  │    │
+│     └───────────────┘    └───────────┘    │
+└──────────┬────────────────────────────────┘
+           │ acquire/release
+           ▼
+┌───────────────────────────────────────────┐
+│  Database                                 │
+├──────────┬──────────┬────────────────────┤
+│ MySQL 1  │ MySQL 2  │  MySQL 3           │
+└──────────┴──────────┴────────────────────┘
 ```
 
 **核心参数：**

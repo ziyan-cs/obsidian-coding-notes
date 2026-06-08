@@ -63,37 +63,34 @@ int main() {
 // 微内核（Minix, QNX）：驱动在用户空间，稳定但 IPC 开销大
 ```
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    subgraph User["用户空间"]
-        APP["应用程序<br/>(shell, 浏览器, 服务器)"]
-        SL["系统库 / 运行时<br/>(libc, syscall 封装)"]
-    end
-    subgraph Kernel["内核空间"]
-        SC["系统调用接口<br/>(syscall 入口)"]
-        PM["进程管理<br/>调度器 · IPC"]
-        MM["内存管理<br/>虚拟内存 · 页表"]
-        FS["文件系统<br/>VFS · 具体 FS"]
-        NET["网络栈<br/>TCP/IP · Socket"]
-        DEV["设备驱动<br/>字符/块/网络设备"]
-    end
-    subgraph HW["硬件层"]
-        CPU["CPU · 寄存器 · MMU"]
-        RAM["主存"]
-        DISK["磁盘 / SSD"]
-        NIC["网卡"]
-    end
-    SL --> SC
-    SC --> PM
-    SC --> MM
-    SC --> FS
-    SC --> NET
-    SC --> DEV
-    PM --> CPU
-    MM --> RAM
-    FS --> DISK
-    NET --> NIC
+```text
+┌──────────────────────────────────────────────┐
+│                USER SPACE                     │
+├──────────────────────────────────────────────┤
+│  Applications (shell, browser, server)       │
+│  System Libraries / Runtime (libc, syscall)  │
+└──────────────────────┬───────────────────────┘
+                       │ syscall
+                       ▼
+┌──────────────────────────────────────────────┐
+│               KERNEL SPACE                    │
+├──────────────────────────────────────────────┤
+│  System Call Interface (syscall entry)       │
+├──────────┬──────────┬──────────┬─────────────┤
+│ Process  │ Memory   │ File Sys │ Network     │
+│ Mgmt     │ Mgmt     │ VFS, FS  │ TCP/IP,Sock │
+├──────────┴──────────┴──────────┴─────────────┤
+│  Device Drivers (char, block, network)       │
+└──────────────────┬───────────────────────────┘
+                   │
+         ┌─────────┼──────────┬──────────┐
+         ▼         ▼          ▼          ▼
+┌──────────────────────────────────────────────┐
+│              HARDWARE LAYER                   │
+├──────────────────────────────────────────────┤
+│  CPU     Main Memory    Disk/SSD      NIC     │
+│ (MMU)                                        │
+└──────────────────────────────────────────────┘
 ```
 
 ---

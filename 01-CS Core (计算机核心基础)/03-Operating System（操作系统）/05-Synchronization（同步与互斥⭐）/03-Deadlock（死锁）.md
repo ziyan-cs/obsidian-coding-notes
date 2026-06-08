@@ -158,13 +158,22 @@ int main() {
 
 ## 资源分配图
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    P1["线程 A"] -->|"持有"| R1["资源 1 (锁)"]
-    R1 -->|"被等待"| P2["线程 B"]
-    P2 -->|"持有"| R2["资源 2 (锁)"]
-    R2 -->|"被等待"| P1
+```text
+┌──────────────────────────────────────────────────────┐
+│  RESOURCE ALLOCATION GRAPH (DEADLOCK CYCLE)          │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│   Thread A ────(holds)────→ Resource 1 (Lock)        │
+│       ↑                               │              │
+│       │                               │              │
+│  (waited by)                    (waited by)           │
+│       │                               │              │
+│       │                               ▼              │
+│   Resource 2 (Lock) ←──(holds)──── Thread B          │
+│                                                       │
+│  Cycle detected: A waits for R2, B waits for R1      │
+│  → Deadlock                                           │
+└──────────────────────────────────────────────────────┘
 ```
 
 **检测死锁：** 资源分配图中有环 ⇔ 可能存在死锁（每种资源只有一个实例时，有环 = 死锁；多种实例时需进一步判断）。

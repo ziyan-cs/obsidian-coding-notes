@@ -8,29 +8,28 @@ status: 🌱
 
 ## CPU 的核心组成
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    subgraph Pipeline["CPU 指令流水线"]
-        IF["取指 (IF)<br/>从 I-Cache 取指令"]
-        ID["译码 (ID)<br/>解析指令与操作数"]
-        EX["执行 (EX)<br/>ALU 运算/地址计算"]
-        MEM["访存 (MEM)<br/>读/写 D-Cache"]
-        WB["写回 (WB)<br/>结果写入寄存器"]
-    end
-    
-    subgraph Core["CPU 核心"]
-        PC["程序计数器 PC"]
-        REG["寄存器堆"]
-        ALU["ALU 算术逻辑单元"]
-    end
-    
-    IF --> ID --> EX --> MEM --> WB
-    PC --> IF
-    REG --> ID
-    REG --> WB
-    ALU --> EX
-    
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│  CPU INSTRUCTION PIPELINE                                        │
+├──────────────────────────────────────────────────────────────────┤
+│  IF (Fetch) ──→ ID (Decode) ──→ EX (Execute) ──→ MEM (Access)  │
+│  ──→ WB (Writeback)                                             │
+│                                                                  │
+│  ├── IF:  Retrieve instruction from I-Cache                     │
+│  ├── ID:  Decode instruction and operands                       │
+│  ├── EX:  ALU computation / address calculation                 │
+│  ├── MEM: Read/write D-Cache                                    │
+│  └── WB:  Write result to register file                         │
+└──────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│  CPU CORE                                                       │
+├──────────────────────────────────────────────────────────────────┤
+│  PC (Program Counter)       ──→ supplies next addr to IF        │
+│  REG (Register File)        ──→ supplies operands to ID         │
+│                             ←── receives results from WB         │
+│  ALU (Arithmetic Logic Unit)──→ performs computation in EX      │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ## 关键寄存器

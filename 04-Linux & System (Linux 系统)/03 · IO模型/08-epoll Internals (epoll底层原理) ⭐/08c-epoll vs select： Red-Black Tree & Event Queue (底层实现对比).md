@@ -43,35 +43,30 @@ for (int i = 0; i <= max_fd; i++) {
 
 epoll 通过内核内建数据结构消除了 select 的 O(n) 瓶颈：
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph TD
-    EP["epoll 实例（struct eventpoll）"]
+```text
+epoll Instance (struct eventpoll):
 
-    subgraph RBR["红黑树 (rbr): 存储所有注册的 fd → epitem"]
-        N1["节点: fd + 关注事件类型"]
-        ADD["插入 O(log n) — epoll_ctl ADD"]
-        DEL["删除 O(log n) — epoll_ctl DEL"]
-        MOD["修改 O(log n) — epoll_ctl MOD"]
-    end
+┌─────────────────────────────────────────────────────────────┐
+│  ┌──────────────────────────┐  ┌──────────────────────────┐ │
+│  │  Red-Black Tree (rbr)    │  │  Ready List (rdllist)    │ │
+│  │  stores all registered   │  │  stores fds with pending │ │
+│  │  fd → epitem             │  │  events                  │ │
+│  │                          │  │                          │ │
+│  │  Node: fd + event type   │  │  Kernel driver (NIC      │ │
+│  │                          │  │  interrupt) callback     │ │
+│  │  Insert   O(log n)       │  │  → ep_poll_callback      │ │
+│  │  Delete   O(log n)       │  │       ↓                  │ │
+│  │  Modify   O(log n)       │  │  Enqueue ready epitem    │ │
+│  │                          │  │  into rdllist            │ │
+│  │                          │  │  epoll_wait directly     │ │
+│  │                          │  │  retrieves from list     │ │
+│  │                          │  │  → O(k) where k = ready  │ │
+│  └──────────────────────────┘  └──────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
 
-    subgraph RDL["就绪链表 (rdllist): 存储有事件发生的 fd"]
-        CB["内核驱动（网卡中断）回调<br/>→ ep_poll_callback"]
-        ENQUEUE["将就绪 epitem 加入 rdllist"]
-        WAIT["epoll_wait 直接从链表取数据<br/>— O(k)"]
-    end
-
-    EP --> RBR
-    EP --> RDL
-
-    N1 --> ADD
-    ADD --> DEL
-    DEL --> MOD
-
-    CB --> ENQUEUE
-    ENQUEUE --> WAIT
-
-    NOTE0["关键：fd_set 只需注册一次（epoll_ctl ADD）<br/>后续 epoll_wait 不再有拷贝开销。"]
+Key Advantage:
+  fd_set is registered only once (epoll_ctl ADD).
+  Subsequent epoll_wait calls incur no fd_set copy overhead.
 ```
 
 ## 事件驱动 vs 轮询

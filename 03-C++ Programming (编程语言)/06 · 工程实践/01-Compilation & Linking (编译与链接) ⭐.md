@@ -8,14 +8,18 @@ status: 🌱
 
 ## 编译的四个阶段
 
-```mermaid
-%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
-graph LR
-    SRC["source.cpp<br/>源码"] -->|预处理 (g++ -E)| PP["source.ii<br/>展开宏、头文件"]
-    PP -->|编译 (g++ -S)| ASM["source.s<br/>汇编代码"]
-    ASM -->|汇编 (g++ -c)| OBJ["source.o<br/>目标文件<br/>(二进制机器码)"]
-    OBJ -->|链接 (ld)| EXE["a.out<br/>可执行文件"]
-    LIB["静态库 .a<br/>动态库 .so"] -->|链接| EXE
+```text
+Compilation Pipeline:
+
+source.cpp  ──→  source.ii  ──→  source.s  ──→  source.o  ──→  a.out
+(preprocessing)  (compilation)  (assembly)    (linking)    (executable)
+    │                                                                  ▲
+    │ g++ -E                        g++ -S      g++ -c       ld       │
+    ↓                                                                  │
+(expand macros,                                                  ┌─────┴──────┐
+ include headers)                                                │  libfoo.a  │
+                                                                 │  libbar.so │
+                                                                 └────────────┘
 ```
 
 ```bash
