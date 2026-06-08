@@ -12,15 +12,15 @@ status: 🌱
 TCP 连接建立需要三次报文交换，目的是**双方互相确认对方的发送和接收能力都正常**。
 
 ```text
-Client                    Server
-  │                         │
-  │   (CLOSED → SYN_SENT)   │
-  ├── SYN (SEQ=x) ─────────→│
-  │                         │ (LISTEN → SYN_RCVD)
-  │←─ SYN+ACK (SEQ=y, ACK=x+1) ─┤
-  │   (SYN_SENT → ESTABLISHED)   │
-  ├── ACK (SEQ=x+1, ACK=y+1) ──→│
-  │                         │ (SYN_RCVD → ESTABLISHED)
+  Client                     Server
+    │                          │
+    │  (CLOSED→SYN_SENT)       │
+    ├── SYN(SEQ=x) ───────────→│
+    │                          │  (LISTEN→SYN_RCVD)
+    │←─ SYN+ACK(SEQ=y,ACK=x+1) ─┤
+    │  (SYN_SENT→ESTABLISHED)   │
+    ├── ACK(SEQ=x+1,ACK=y+1) ──→│
+    │                          │  (SYN_RCVD→ESTABLISHED)
 ```
 
 ## 为什么必须三次，不能两次？
@@ -45,22 +45,21 @@ TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以
 
 ```text
 Active Closer             Passive Closer
-  │                         │
-  │   (ESTABLISHED → FIN_WAIT_1)  │
-  ├── FIN (SEQ=u) ─────────→│
-  │                         │ (ESTABLISHED → CLOSE_WAIT)
-  │←──── ACK (ACK=u+1) ─────┤
-  │   (FIN_WAIT_1 → FIN_WAIT_2)  │
-  │                         │ (flush remaining buffered data)
-  │                         │ (CLOSE_WAIT → LAST_ACK)
-  │←──── FIN (SEQ=v) ───────┤
-  │   (FIN_WAIT_2 → TIME_WAIT)   │
-  ├── ACK (ACK=v+1) ───────→│
-  │                         │ (LAST_ACK → CLOSED)
-  │   (wait 2MSL            │
-  │    TIME_WAIT → CLOSED)  │
+    │                          │
+    │  (ESTABLISHED→FIN_WAIT_1)│
+    ├── FIN(SEQ=u) ───────────→│
+    │                          │  (ESTABLISHED→CLOSE_WAIT)
+    │←──── ACK(ACK=u+1) ───────┤
+    │  (FIN_WAIT_1→FIN_WAIT_2) │
+    │                          │  (flush buffered data)
+    │                          │  (CLOSE_WAIT→LAST_ACK)
+    │←──── FIN(SEQ=v) ─────────┤
+    │  (FIN_WAIT_2→TIME_WAIT)  │
+    ├── ACK(ACK=v+1) ─────────→│
+    │                          │  (LAST_ACK→CLOSED)
+    │  (TIME_WAIT→CLOSED)      │
+    │  (wait 2MSL)             │
 ```
-
 ## 为什么需要四次，不能三次？
 
 - 收到 FIN 只表示对方**不再发数据**，但对方还可以继续接收
