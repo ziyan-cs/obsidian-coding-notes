@@ -2,42 +2,39 @@
 tags:
   - network
   - socket
+status: 🌱
 ---
 
-> **核心考点**：主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
+> [!important] **核心考点**
+> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构
 
 # 模型结构
 
-```txt
-┌───────────────────────────────────────────────────────────────┐
-│  主线程（Main Reactor）                                       │
-│  ┌──────────────────┐                                         │
-│  │  Main Reactor    │  只负责 accept 新连接                   │
-│  │  (epoll on       │                                         │
-│  │  listening fd)   │                                         │
-│  └────────┬─────────┘                                         │
-└───────────┼─────────────────────────────────────────────────┘
-            │ 将新连接分发给某个 Sub Reactor
-     ┌──────┼───────┬──────────────┐
-     ↓      ↓       ↓              ↓
-┌─────────────────────────────────────┐ ┌─────────┐     ┌─────────┐
-│Sub      │ │Sub      │ ... │Sub      │   每个 Sub Reactor
-│Reactor 1│ │Reactor 2│     │Reactor N│   运行在独立线程
-│(epoll)  │ │(epoll)  │     │(epoll)  │   负责所分配连接的
-│         │ │         │     │         │   全部 I/O 事件
-│Handler  │ │Handler  │     │Handler  │
-│(read/   │ │(read/   │     │(read/   │
-│process/ │ │process/ │     │process/ │
-│write)   │ │write)   │     │write)   │
-└─────────────────────────────────────┘ └─────────┘     └─────────┘
-   线程1       线程2              线程N
-                    ↕（可选：业务复杂时再加线程池）
-              ┌─────────────┐
-              │  线程池     │
-              │（CPU密集型）│
-              └─────────────┘
+```mermaid
+graph TD
+    subgraph Main["主线程（Main Reactor）"]
+        MR["Main Reactor<br/>epoll on listening fd<br/>只负责 accept 新连接"]
+    end
+
+    MR -->|将新连接分发| SR1
+    MR -->|将新连接分发| SR2
+    MR -->|将新连接分发| SRN
+
+    subgraph SubReactors["Sub Reactors（每个运行在独立线程，负责所分配连接的全部 I/O 事件）"]
+        SR1["Sub Reactor 1<br/>epoll<br/>Handler<br/>read/process/write<br/>线程1"]
+        SR2["Sub Reactor 2<br/>epoll<br/>Handler<br/>read/process/write<br/>线程2"]
+        SRN["Sub Reactor N<br/>epoll<br/>Handler<br/>read/process/write<br/>线程N"]
+    end
+
+    subgraph TP["Thread Pool（可选，业务复杂时）"]
+        POOL["线程池<br/>CPU密集型"]
+    end
+
+    SR1 -.-> POOL
+    SR2 -.-> POOL
+    SRN -.-> POOL
 ```
 
 # "One Loop Per Thread" 的含义
@@ -98,6 +95,9 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 ---
 
+> [!tip]- **工程要点**
+> 主从 Reactor 是目前高并发服务器最成熟的架构模式，其核心优势在于"无锁"——同一连接的所有操作在同一线程中，天然避免了锁竞争。但需注意 Sub Reactor 之间的负载均衡（轮询可能导致热点），实际生产中常结合连接预估或最少连接策略来分配。
+>
 ## 关联笔记
 
 - [Single Reactor Single Thread (单reactor单线程)](/05-Network%20Programming%20(网络编程)/02%20·%20Socket编程/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐/05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md)

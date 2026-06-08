@@ -2,24 +2,28 @@
 tags:
   - network
   - networking
+status: 🌱
 ---
 
-> **核心考点**：为什么是三次/四次、每步状态变化、异常场景
+> [!important] **核心考点**
+> 为什么是三次/四次、每步状态变化、异常场景
 
 # 三次握手（建立连接）
 
 TCP 连接建立需要三次报文交换，目的是**双方互相确认对方的发送和接收能力都正常**。
 
-```
-【客户端】                        【服务端】
-   |                               |
-   |---- SYN (SEQ=x) ------------->|   客户端：CLOSED → SYN_SENT
-   |                               |   服务端：LISTEN → SYN_RCVD
-   |<--- SYN+ACK (SEQ=y,ACK=x+1)---|
-   |                               |
-   |---- ACK (SEQ=x+1,ACK=y+1) --->|   客户端：SYN_SENT → ESTABLISHED
-   |                               |   服务端：SYN_RCVD → ESTABLISHED
-   |                               |
+```mermaid
+sequenceDiagram
+    participant C as 客户端
+    participant S as 服务端
+
+    Note over C: CLOSED → SYN_SENT
+    C->>S: SYN (SEQ=x)
+    Note over S: LISTEN → SYN_RCVD
+    S->>C: SYN+ACK (SEQ=y, ACK=x+1)
+    Note over C: SYN_SENT → ESTABLISHED
+    C->>S: ACK (SEQ=x+1, ACK=y+1)
+    Note over S: SYN_RCVD → ESTABLISHED
 ```
 
 ## 为什么必须三次，不能两次？
@@ -42,21 +46,24 @@ TCP 连接建立需要三次报文交换，目的是**双方互相确认对方�
 
 TCP 是**全双工**的，双方各自独立关闭自己的发送方向，所以需要四次。
 
-```
-【主动关闭方】                    【被动关闭方】
-  |                               |
-  |---- FIN (SEQ=u) ------------->|   主动方：ESTABLISHED → FIN_WAIT_1
-  |                               |   被动方：ESTABLISHED → CLOSE_WAIT
-  |<--- ACK (ACK=u+1) ------------|
-  |                               |   主动方：FIN_WAIT_1 → FIN_WAIT_2
-  |                               |   被动方:发完缓冲区剩余数据
-  |                               |
-  |<--- FIN (SEQ=v) --------------|   被动方：CLOSE_WAIT → LAST_ACK
-  |                               |
-  |---- ACK (ACK=v+1) ----------->|   主动方：FIN_WAIT_2 → TIME_WAIT
-  |                               |   被动方：LAST_ACK → CLOSED
-  |      等待 2MSL                |
-  |   主动方：TIME_WAIT → CLOSED  |
+```mermaid
+sequenceDiagram
+    participant A as 主动关闭方
+    participant B as 被动关闭方
+
+    Note over A: ESTABLISHED → FIN_WAIT_1
+    A->>B: FIN (SEQ=u)
+    Note over B: ESTABLISHED → CLOSE_WAIT
+    B->>A: ACK (ACK=u+1)
+    Note over A: FIN_WAIT_1 → FIN_WAIT_2
+    Note over B: 发完缓冲区剩余数据
+
+    Note over B: CLOSE_WAIT → LAST_ACK
+    B->>A: FIN (SEQ=v)
+    Note over A: FIN_WAIT_2 → TIME_WAIT
+    A->>B: ACK (ACK=v+1)
+    Note over B: LAST_ACK → CLOSED
+    Note over A: 等待 2MSL<br/>TIME_WAIT → CLOSED
 ```
 
 ## 为什么需要四次，不能三次？

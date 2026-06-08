@@ -2,9 +2,11 @@
 tags:
   - distributed
   - distributed-protocol
+status: 🌱
 ---
 
-> **核心考点**：CAP 定理（一致性/可用性/分区容错）、BASE 理论、CP vs AP 权衡、PACELC
+> [!important] **核心考点**
+> CAP 定理（一致性/可用性/分区容错）、BASE 理论、CP vs AP 权衡、PACELC
 
 ## CAP 定理
 
@@ -107,7 +109,8 @@ MongoDB（强一致）：   PC/EC（写关注 majority）
 | CP 系统举例 | ZooKeeper、etcd、HBase |
 | AP 系统举例 | Cassandra、DynamoDB、Eureka |
 
-> **工程要点**：CAP 不是"三选二"的静态决策，而是**可以在不同操作级别做选择**（如关键数据强一致，非关键数据最终一致）。微服务中通常 BASE 为主，仅对支付等关键操作用强一致。
+> [!tip]- **工程要点**
+> CAP 不是"三选二"的静态决策，而是**可以在不同操作级别做选择**（如关键数据强一致，非关键数据最终一致）。微服务中通常 BASE 为主，仅对支付等关键操作用强一致。
 
 ---
 

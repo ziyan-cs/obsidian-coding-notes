@@ -2,9 +2,11 @@
 tags:
   - linux
   - io-model
+status: 🌱
 ---
 
-> **核心考点**：epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
+> [!important] **核心考点**
+> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
 
 ## epoll_create
 

@@ -2,9 +2,11 @@
 tags:
   - cs
   - computer-org
+status: 🌱
 ---
 
-> **核心考点**：Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
+> [!important] **核心考点**
+> Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
 
 ## Cache 基本结构
 
@@ -23,18 +25,22 @@ Cache = 若干组（Set），每组 = 若干路（Way，即缓存行）
 | **全相联** | 任意块可映射到任意行 | 1 组，全路 | 灵活但比较慢 |
 | **组相联** | 每个块映射到固定组内的任意行 | N 路/组 | **最常用** |
 
-```
-以 4 路组相联为例：
-内存地址 = [Tag | Index | Offset]
-  - Index：确定该地址属于哪个组
-  - Tag：用于匹配组内哪一路
-  - Offset：在缓存行内的字节偏移
+```mermaid
+graph TD
+    ADDR["内存地址<br/>Tag | Index | Offset"]
 
-Index → 找到 Set i
-         ├── Way 0: [Tag | Data]  ← 匹配 Tag
-         ├── Way 1: [Tag | Data]
-         ├── Way 2: [Tag | Data]
-         └── Way 3: [Tag | Data]
+    subgraph CacheSet["4路组相联 - Set i（由 Index 确定）"]
+        W0["Way 0: Tag | Data"]
+        W1["Way 1: Tag | Data"]
+        W2["Way 2: Tag | Data"]
+        W3["Way 3: Tag | Data"]
+    end
+
+    ADDR -->|Index → 找到 Set i| CacheSet
+    W0 -->|匹配 Tag → 命中| HIT["Cache Hit"]
+    W1 -->|匹配 Tag → 命中| HIT
+    W2 -->|匹配 Tag → 命中| HIT
+    W3 -->|匹配 Tag → 命中| HIT
 ```
 
 ## 替换策略
@@ -75,6 +81,9 @@ struct alignas(64) Data { int a; int b; };  // 分属不同 cache line
 
 ---
 
+> [!tip]- **工程要点**
+> 现代 CPU 的写回策略配合写缓冲兼顾了性能和一致性；伪共享是多线程编程中最隐蔽的性能陷阱之一，通过缓存行对齐即可解决。
+>
 ## 关联笔记
 
 - [CPU Execution Model（CPU执行模型）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization（计算机组成原理）/01-CPU%20Execution%20Model（CPU执行模型）.md)

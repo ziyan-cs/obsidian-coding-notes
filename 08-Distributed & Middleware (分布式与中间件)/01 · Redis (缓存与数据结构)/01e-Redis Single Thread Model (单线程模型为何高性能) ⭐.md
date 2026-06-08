@@ -2,29 +2,31 @@
 tags:
   - distributed
   - redis
+status: 🌱
 ---
 
-> **核心考点**：Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
+> [!important] **核心考点**
+> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
 ## Redis 单线程模型
 
 Redis 的核心流程（命令处理）是单线程的：
 
-```
-               ┌─────────────────────────┐
-               │     主线程              │
-               │  事件循环（aeMain）     │
-               │                         │
-               │  读事件 → 解析命令      │
-               │         → 执行命令      │
-               │         → 写回结果      │
-               └─────────────────────────┘
-                        ↑
-               epoll/kqueue 事件通知
-                        ↑
-               ┌─────────────────────┐
-               │   客户端连接（N 个）    │
-               └─────────────────────┘
+```mermaid
+graph TD
+    CLIENTS["客户端连接（N个）"]
+    EPOLL["epoll/kqueue 事件通知"]
+    MAIN["主线程：事件循环（aeMain）"]
+    READ["读事件 → 解析命令"]
+    EXEC["→ 执行命令"]
+    WRITE["→ 写回结果"]
+    
+    CLIENTS --> EPOLL
+    EPOLL --> MAIN
+    MAIN --> READ
+    READ --> EXEC
+    EXEC --> WRITE
+    WRITE -->|下一轮| EPOLL
 ```
 
 **注意：** Redis 6.0+ 的 I/O 线程池只在**读写 socket** 阶段多线程化，**命令执行**仍是单线程。
@@ -127,16 +129,20 @@ io-threads-do-reads yes  # 启用多线程读取
 
 **多线程 I/O 模型：**
 
-```
-主线程                          I/O 线程
-  │                              │
-  ├─epoll_wait 获取就绪事件       │
-  ├─将读任务分发给 I/O 线程 ────→ │ 并行读取数据
-  │←────────────── 结果 ──────── │
-  ├─单线程执行命令（仍是串行）      │
-  ├─将写任务分发给 I/O 线程 ────→ │ 并行写回
-  │←────────────── 完成 ──────── │
-  └─ 下一轮事件循环               │
+```mermaid
+sequenceDiagram
+    participant Main as 主线程
+    participant IO as I/O线程
+
+    Main->>Main: epoll_wait 获取就绪事件
+    Main->>IO: 将读任务分发给 I/O 线程
+    IO->>IO: 并行读取数据
+    IO-->>Main: 结果
+    Main->>Main: 单线程执行命令（仍是串行）
+    Main->>IO: 将写任务分发给 I/O 线程
+    IO->>IO: 并行写回
+    IO-->>Main: 完成
+    Main->>Main: 下一轮事件循环
 ```
 
 **命令执行仍是单线程**，所以无需修改数据结构，无需考虑并发安全问题。
@@ -153,7 +159,8 @@ io-threads-do-reads yes  # 启用多线程读取
 | KEYS 代替方案 | `SCAN 0 MATCH * COUNT 1000` 游标迭代 |
 | 多线程 I/O 做了什么 | 读请求/写响应多线程，命令执行仍然是单线程 |
 
-> **工程要点**：生产环境禁止使用 `KEYS *`，用 `SCAN` 替代。大 key 应拆分（如大 hash 拆为小 hash）。通过 `redis-cli --bigkeys` 扫描大 key。平均延迟应 < 1ms（同机房），超过 5ms 需要排查。
+> [!tip]- **工程要点**
+> 生产环境禁止使用 `KEYS *`，用 `SCAN` 替代。大 key 应拆分（如大 hash 拆为小 hash）。通过 `redis-cli --bigkeys` 扫描大 key。平均延迟应 < 1ms（同机房），超过 5ms 需要排查。
 
 ---
 

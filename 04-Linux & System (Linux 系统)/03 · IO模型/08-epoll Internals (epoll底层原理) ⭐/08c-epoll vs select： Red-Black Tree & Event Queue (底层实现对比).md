@@ -2,9 +2,11 @@
 tags:
   - linux
   - io-model
+status: 🌱
 ---
 
-> **核心考点**：epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
+> [!important] **核心考点**
+> epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
 
 ## select 的局限性
 
@@ -42,21 +44,34 @@ for (int i = 0; i <= max_fd; i++) {
 
 epoll 通过内核内建数据结构消除了 select 的 O(n) 瓶颈：
 
-```
-epoll 实例（struct eventpoll）:
-  ├── 红黑树 (rbr): 存储所有注册的 fd → epitem
-  │   ├─ 节点: fd + 关注事件类型
-  │   ├─ 插入 O(log n) — epoll_ctl ADD
-  │   ├─ 删除 O(log n) — epoll_ctl DEL
-  │   └─ 修改 O(log n) — epoll_ctl MOD
-  │
-  └── 就绪链表 (rdllist): 存储有事件发生的 fd
-      ├─ 内核驱动（网卡中断）回调 → ep_poll_callback
-      ├─ 将就绪 epitem 加入 rdllist
-      └─ epoll_wait 直接从链表取数据 — O(k)
+```mermaid
+graph TD
+    EP["epoll 实例（struct eventpoll）"]
 
-关键：fd_set 只需注册一次（epoll_ctl ADD），
-      后续 epoll_wait 不再有拷贝开销。
+    subgraph RBR["红黑树 (rbr): 存储所有注册的 fd → epitem"]
+        N1["节点: fd + 关注事件类型"]
+        ADD["插入 O(log n) — epoll_ctl ADD"]
+        DEL["删除 O(log n) — epoll_ctl DEL"]
+        MOD["修改 O(log n) — epoll_ctl MOD"]
+    end
+
+    subgraph RDL["就绪链表 (rdllist): 存储有事件发生的 fd"]
+        CB["内核驱动（网卡中断）回调<br/>→ ep_poll_callback"]
+        ENQUEUE["将就绪 epitem 加入 rdllist"]
+        WAIT["epoll_wait 直接从链表取数据<br/>— O(k)"]
+    end
+
+    EP --> RBR
+    EP --> RDL
+
+    N1 --> ADD
+    ADD --> DEL
+    DEL --> MOD
+
+    CB --> ENQUEUE
+    ENQUEUE --> WAIT
+
+    NOTE0["关键：fd_set 只需注册一次（epoll_ctl ADD）<br/>后续 epoll_wait 不再有拷贝开销。"]
 ```
 
 ## 事件驱动 vs 轮询
@@ -116,7 +131,8 @@ select/poll: 仍遍历 100 → O(n)
 epoll:       返回 50 → O(k)，k=50
 ```
 
-> **工程要点**：epoll 的优势在连接数大（>1000）时尤其明显。对于少量长连接，select 或 poll 的简单性足够。epoll 的红黑树维护本身也有开销——适合"大并发、稀疏活跃"的场景。Redis 单线程用 epoll 处理数万连接正是利用了 O(1) 就绪通知的优势。
+> [!tip]- **工程要点**
+> epoll 的优势在连接数大（>1000）时尤其明显。对于少量长连接，select 或 poll 的简单性足够。epoll 的红黑树维护本身也有开销——适合"大并发、稀疏活跃"的场景。Redis 单线程用 epoll 处理数万连接正是利用了 O(1) 就绪通知的优势。
 
 ---
 

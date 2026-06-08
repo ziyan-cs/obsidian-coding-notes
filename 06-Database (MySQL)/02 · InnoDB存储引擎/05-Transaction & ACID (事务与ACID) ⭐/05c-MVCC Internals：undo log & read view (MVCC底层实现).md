@@ -2,9 +2,11 @@
 tags:
   - database
   - innodb
+status: 🌱
 ---
 
-> **核心考点**：MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
+> [!important] **核心考点**
+> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
 ## MVCC 核心思想
 
@@ -44,59 +46,59 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 
 每次 UPDATE 产生一条 undo log，通过 DB_ROLL_PTR 串联成版本链：
 
-```
-行记录的多版本链：
-
-  ┌────────────────────────────┐
-  │ 最新版本（当前行数据）     │ ← DB_TRX_ID=100, 数据: balance=0
-  └──────────┬───────────────┘
-             │ DB_ROLL_PTR
-  ┌──────────▼───────────────┐
-  │ undo log: TRX_ID=80        │ ← 旧版本，数据: balance=100
-  │ 记录修改前的 balance=100   │
-  └──────────┬───────────────┘
-             │ DB_ROLL_PTR
-  ┌──────────▼───────────────┐
-  │ undo log: TRX_ID=50        │ ← 更旧的版本，数据: balance=200
-  │ 记录修改前的 balance=200   │
-  └────────────────────────────┘
+```mermaid
+graph LR
+    V1["最新版本（当前行数据）<br/>DB_TRX_ID=100<br/>balance=0"]
+    V2["undo log: TRX_ID=80<br/>旧版本<br/>balance=100"]
+    V3["undo log: TRX_ID=50<br/>更旧版本<br/>balance=200"]
+    
+    V1 -->|DB_ROLL_PTR| V2
+    V2 -->|DB_ROLL_PTR| V3
 ```
 
 ## Read View 可见性判断
 
 Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当前事务可见"。
 
-```
-Read View 结构：
-  ├── creator_trx_id：创建此 Read View 的事务 ID
-  ├── m_ids：活跃事务 ID 列表（未提交的事务）
-  ├── min_trx_id：m_ids 中的最小值
-  └── max_trx_id：下一个要分配的事务 ID（大于所有活跃事务）
+```mermaid
+graph TD
+    subgraph ReadView["Read View 结构"]
+        creator["creator_trx_id: 创建此 Read View 的事务 ID"]
+        mids["m_ids: 活跃事务 ID 列表（未提交的事务）"]
+        minid["min_trx_id: m_ids 中的最小值"]
+        maxid["max_trx_id: 下一个要分配的事务 ID（大于所有活跃事务）"]
+    end
 ```
 
 **可见性判断规则（判断 DB_TRX_ID）：**
-```
-1. DB_TRX_ID = creator_trx_id     → 当前事务自己的修改 → 可见
-2. DB_TRX_ID < min_trx_id         → 在 Read View 创建前已提交 → 可见
-3. DB_TRX_ID IN m_ids             → 其他活跃事务的修改 → 不可见
-4. DB_TRX_ID >= max_trx_id        → 在 Read View 创建后启动的 → 不可见
-5. 其他情况                       → 在 Read View 创建前已提交 → 可见
+
+```mermaid
+graph LR
+    R1["DB_TRX_ID = creator_trx_id<br/>→ 当前事务自己的修改 → 可见"]
+    R2["DB_TRX_ID < min_trx_id<br/>→ 在 Read View 创建前已提交 → 可见"]
+    R3["DB_TRX_ID IN m_ids<br/>→ 其他活跃事务的修改 → 不可见"]
+    R4["DB_TRX_ID >= max_trx_id<br/>→ 在 Read View 创建后启动的 → 不可见"]
+    R5["其他情况<br/>→ 在 Read View 创建前已提交 → 可见"]
 ```
 
-**图示：**
-```
-事务 ID：  1     2     3     4     5（当前）
-          │     │     │     │     │
-          └─────┴──┬──┴─────┴──┬──┘
-                   │           │
-             min_trx_id    max_trx_id
-             活跃事务 = {2, 4}
+**图示（事务时间线与可见性）：**
 
-事务 1：已提交，小于 min_trx_id → 可见
-事务 2：在 m_ids 中，未提交 → 不可见
-事务 3：不在 m_ids 且 < max_trx_id → 已提交 → 可见
-事务 4：在 m_ids 中，未提交 → 不可见
-事务 5/6：>= max_trx_id → 不可见
+```mermaid
+graph LR
+    subgraph Timeline["事务时间线"]
+        T1["事务 1<br/>已提交<br/>小于 min_trx_id<br/>→ 可见"]
+        T2["事务 2<br/>活跃（在 m_ids）<br/>→ 不可见"]
+        T3["事务 3<br/>不在 m_ids 且 < max_trx_id<br/>→ 可见"]
+        T4["事务 4<br/>活跃（在 m_ids）<br/>→ 不可见"]
+        T5["事务 5（当前）"]
+        T6["事务 6<br/>>= max_trx_id<br/>→ 不可见"]
+    end
+
+    T1 -->|"min_trx_id"| T2
+    T2 --> T3
+    T3 --> T4
+    T4 -->|"max_trx_id"| T5
+    T5 --> T6
 ```
 
 ## 快照读 vs 当前读
@@ -136,7 +138,8 @@ RR 级别下：
   事务 A: COMMIT;                      -- Read View 释放
 ```
 
-> **工程要点**：MVCC 的核心优势是"读不阻塞写"——这在 OLTP 系统中极其重要。快照读是 MVCC 的主角，不加任何锁。而当前读（SELECT ... FOR UPDATE）不走 MVCC，直接读最新数据并加锁——这在高并发下容易成为瓶颈。在线业务中，尽量用快照读，只在"检测并更新"（如扣库存）的原子操作中使用当前读。
+> [!tip]- **工程要点**
+> MVCC 的核心优势是"读不阻塞写"——这在 OLTP 系统中极其重要。快照读是 MVCC 的主角，不加任何锁。而当前读（SELECT ... FOR UPDATE）不走 MVCC，直接读最新数据并加锁——这在高并发下容易成为瓶颈。在线业务中，尽量用快照读，只在"检测并更新"（如扣库存）的原子操作中使用当前读。
 
 ---
 
