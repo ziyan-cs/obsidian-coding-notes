@@ -1,13 +1,5 @@
 {
   "editor:insert-link": [],
-  "insert-current-date": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "D"
-    }
-  ],
   "insert-template": [
     {
       "modifiers": [
@@ -24,14 +16,6 @@
         "Alt"
       ],
       "key": "M"
-    }
-  ],
-  "editor:insert-codeblock": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "C"
     }
   ],
   "editor:toggle-code": [
@@ -78,30 +62,6 @@
   "graph:open": [],
   "workspace:close-window": [],
   "markdown:toggle-preview": [],
-  "insert-current-time": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "T"
-    }
-  ],
-  "editor:insert-table": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "B"
-    }
-  ],
-  "editor:toggle-bullet-list": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "`"
-    }
-  ],
   "editor:toggle-numbered-list": [
     {
       "modifiers": [
@@ -134,5 +94,66 @@
   "workspace:previous-tab": [],
   "workspace:next-tab": [],
   "workspace:goto-last-tab": [],
-  "editor:toggle-checklist-status": []
+  "editor:toggle-checklist-status": [],
+  "workspace:edit-file-title": [],
+  "editor:insert-table": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "T"
+    }
+  ],
+  "insert-current-time": [
+    {
+      "modifiers": [
+        "Alt",
+        "Shift"
+      ],
+      "key": "T"
+    }
+  ],
+  "command-palette:open": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "P"
+    }
+  ],
+  "switcher:open": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "P"
+    }
+  ],
+  "insert-current-date": [
+    {
+      "modifiers": [
+        "Alt",
+        "Shift"
+      ],
+      "key": "D"
+    }
+  ],
+  "editor:toggle-bullet-list": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "`"
+    }
+  ],
+  "file-explorer:new-file-in-new-pane": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "N"
+    }
+  ],
+  "workspace:undo-close-pane": []
 }
