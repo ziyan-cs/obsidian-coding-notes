@@ -12,6 +12,7 @@ status: 🌱
 # 模型结构
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Main["主线程（Main Reactor）"]
         MR["Main Reactor<br/>epoll on listening fd<br/>只负责 accept 新连接"]

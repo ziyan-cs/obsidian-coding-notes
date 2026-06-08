@@ -11,6 +11,7 @@ status: 🌱
 ## 模型结构
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph MainThread["主线程 (Reactor)"]
         RE["Reactor<br/>(epoll_wait)"]
@@ -30,8 +31,6 @@ graph TD
     DISPATCH -->|IO可读| W3
     ACC -->|注册fd| RE
     
-    style RE fill:#4a90d9,color:#fff
-    style ThreadPool fill:#27ae60,color:#fff
 ```
 
 ## 核心代码结构

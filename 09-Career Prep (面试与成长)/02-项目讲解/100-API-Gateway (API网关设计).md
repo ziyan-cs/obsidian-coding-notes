@@ -94,6 +94,7 @@ CREATE TABLE circuit_breaker_rule (
 ## 架构设计图
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 flowchart TD
     subgraph "客户端层"
         Client["客户端 App / Browser"]

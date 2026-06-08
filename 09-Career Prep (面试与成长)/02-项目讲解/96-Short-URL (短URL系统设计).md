@@ -70,6 +70,7 @@ CREATE TABLE access_log (
 ## 架构设计图
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 flowchart TD
     Client["用户浏览器"] --> DNS["DNS / CDN"]
     DNS --> Nginx["Nginx 反向代理 (LVS + Keepalived)"]

@@ -20,6 +20,7 @@ sp2.reset();                            // 计数 = 2
 ### 控制块（Control Block）
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph SP1["shared_ptr A"]
         PTR1["raw ptr → T"]

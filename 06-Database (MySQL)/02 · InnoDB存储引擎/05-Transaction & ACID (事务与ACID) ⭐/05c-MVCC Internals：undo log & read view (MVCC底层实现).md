@@ -46,6 +46,7 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 每次 UPDATE 产生一条 undo log，通过 DB_ROLL_PTR 串联成版本链：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     V1["最新版本（当前行数据）<br/>DB_TRX_ID=100<br/>balance=0"]
     V2["undo log: TRX_ID=80<br/>旧版本<br/>balance=100"]
@@ -60,6 +61,7 @@ graph LR
 Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当前事务可见"。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph ReadView["Read View 结构"]
         creator["creator_trx_id: 创建此 Read View 的事务 ID"]
@@ -72,6 +74,7 @@ graph TD
 **可见性判断规则（判断 DB_TRX_ID）：**
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     R1["DB_TRX_ID = creator_trx_id<br/>→ 当前事务自己的修改 → 可见"]
     R2["DB_TRX_ID < min_trx_id<br/>→ 在 Read View 创建前已提交 → 可见"]
@@ -83,6 +86,7 @@ graph LR
 **图示（事务时间线与可见性）：**
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph Timeline["事务时间线"]
         T1["事务 1<br/>已提交<br/>小于 min_trx_id<br/>→ 可见"]

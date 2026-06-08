@@ -10,6 +10,7 @@ status: 🌱
 ## Nginx 进程模型
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     MASTER["Master 进程<br/>(root)<br/>读取配置 → fork Worker"]
     W1["Worker 1<br/>(普通用户)<br/>epoll 事件循环"]
@@ -26,10 +27,6 @@ graph TD
     
     CLIENT["客户端请求"] -->|竞争 accept| W1 & W2 & W3
     
-    style MASTER fill:#e74c3c,color:#fff
-    style W1 fill:#3498db,color:#fff
-    style W2 fill:#3498db,color:#fff
-    style W3 fill:#3498db,color:#fff
     note right of MASTER
         一个 Master 管理多个 Worker
         - 热加载配置 (reload)

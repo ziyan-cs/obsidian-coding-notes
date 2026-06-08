@@ -44,6 +44,7 @@ for (int i = 0; i <= max_fd; i++) {
 epoll 通过内核内建数据结构消除了 select 的 O(n) 瓶颈：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     EP["epoll 实例（struct eventpoll）"]
 

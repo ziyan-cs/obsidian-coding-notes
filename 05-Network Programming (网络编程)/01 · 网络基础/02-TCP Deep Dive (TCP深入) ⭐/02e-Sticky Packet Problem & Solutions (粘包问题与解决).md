@@ -11,6 +11,7 @@ status: 🌱
 **粘包（Sticky Packet）**：接收方在读取数据时，无法正确区分出原始的消息边界，多个消息被"粘"在一起，或一个消息被拆成多段读取。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Send["发送方 (数据流)"]
         M1["消息 A"]
@@ -24,9 +25,13 @@ graph TD
         CASE3["情况3: 拆包<br/>[A] [BC]"]
         CASE4["情况4: 乱序<br/>[A] [B的一半] [另一半]"]
     end
-    M1 & M2 & M3 --> TCP --> CASE1 & CASE2 & CASE3 & CASE4
-    style CASE2 fill:#e74c3c,color:#fff
-    style CASE4 fill:#f39c12,color:#fff
+    M1 --> TCP
+    M2 --> TCP
+    M3 --> TCP
+    TCP --> CASE1
+    TCP --> CASE2
+    TCP --> CASE3
+    TCP --> CASE4
 ```
 
 ---

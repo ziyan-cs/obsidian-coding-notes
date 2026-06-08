@@ -11,6 +11,7 @@ status: 🌱
 网络编程中，数据以流的形式到达，无法预知每次 `read()` 会收到多少数据：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph ReadBuf["读缓冲区"]
         RBUF["环形缓冲区 / kbuf<br/>read_pos → write_pos"]
@@ -23,8 +24,6 @@ graph LR
     APP -->|编码 / 序列化| WBUF
     WBUF -->|epoll 可写| NET
     
-    style ReadBuf fill:#e3f2fd
-    style WriteBuf fill:#fce4ec
 ```
 
 ## Buffer 核心结构

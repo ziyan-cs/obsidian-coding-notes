@@ -11,6 +11,7 @@ status: 🌱
 每个含虚函数的**类**有一个 VTable（虚函数表），表中存放虚函数指针。每个**对象**有一个隐藏的 `vptr`（虚指针），指向其类的 VTable。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Obj["对象内存布局"]
         VPTR["vptr (8字节)<br/>→ vtable"]
@@ -29,8 +30,6 @@ graph TD
     VPTR --> VTab
     F2 -.->|指向| FOO
     F3 -.->|指向| BAR
-    style VTab fill:#e3f2fd
-    style VPTR fill:#ff9800,color:#fff
 ```
 
 ```cpp

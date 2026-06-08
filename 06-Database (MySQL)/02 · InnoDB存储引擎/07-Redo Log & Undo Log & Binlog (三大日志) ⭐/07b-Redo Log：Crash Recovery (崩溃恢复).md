@@ -83,6 +83,7 @@ Checkpoint 解决了两个问题：
 ## 崩溃恢复流程
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     CRASH["数据库崩溃"]
     START["实例启动<br/>读取 checkpoint LSN"]
@@ -102,10 +103,6 @@ graph TD
     REDO2 --> UNDO
     UNDO --> UNDO1 --> UNDO2 --> DONE
     
-    style CRASH fill:#e74c3c,color:#fff
-    style DONE fill:#27ae60,color:#fff
-    style REDO fill:#e3f2fd
-    style UNDO fill:#fff3cd
 ```
 
 ## LSN（Log Sequence Number）

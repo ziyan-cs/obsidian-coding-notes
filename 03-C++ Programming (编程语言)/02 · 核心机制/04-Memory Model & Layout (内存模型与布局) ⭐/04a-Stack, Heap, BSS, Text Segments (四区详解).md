@@ -8,6 +8,7 @@ status: 🌱
 > 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph MemLayout["进程内存布局（从高地址到低地址）"]
         direction TB

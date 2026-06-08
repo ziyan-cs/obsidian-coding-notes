@@ -58,6 +58,7 @@ d.x = 42;    // 不再歧义，只有一个 A::x
 ### 布局示意
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     B["Base<br/>int data"]
     D1["Derived1<br/>+ int d1_data"]
@@ -72,8 +73,6 @@ graph TD
         Base 子对象只有一份
         通过偏移指针访问
     end note
-    style DD fill:#d4edda
-    style B fill:#f8d7da
 ```
 
 ---

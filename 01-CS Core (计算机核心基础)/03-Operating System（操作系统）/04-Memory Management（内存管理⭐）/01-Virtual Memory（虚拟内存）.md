@@ -11,6 +11,7 @@ status: 🌱
 虚拟内存为每个进程提供独立的、连续的、大小为 2^n 的地址空间（如 64 位 Linux 下 48 位地址空间 = 256TB）。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph VA["虚拟地址"]
         VPN["虚拟页号 (VPN)"]
@@ -21,8 +22,6 @@ graph LR
     TLB -->|未命中| PageT["页表<br/>(内存)"]
     PageT --> PFN
     PFN --> PA["物理地址<br/>= PFN + 偏移"]
-    style MMU fill:#4a90d9,color:#fff
-    style TLB fill:#e67e22,color:#fff
 ```
 
 **核心作用：**

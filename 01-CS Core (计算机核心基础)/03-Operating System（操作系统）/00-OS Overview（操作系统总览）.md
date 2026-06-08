@@ -64,6 +64,7 @@ int main() {
 ```
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph User["用户空间"]
         APP["应用程序<br/>(shell, 浏览器, 服务器)"]
@@ -83,8 +84,16 @@ graph TD
         DISK["磁盘 / SSD"]
         NIC["网卡"]
     end
-    SL --> SC --> PM & MM & FS & NET & DEV
-    PM & MM & FS & NET & DEV --> CPU & RAM & DISK & NIC
+    SL --> SC
+    SC --> PM
+    SC --> MM
+    SC --> FS
+    SC --> NET
+    SC --> DEV
+    PM --> CPU
+    MM --> RAM
+    FS --> DISK
+    NET --> NIC
 ```
 
 ---

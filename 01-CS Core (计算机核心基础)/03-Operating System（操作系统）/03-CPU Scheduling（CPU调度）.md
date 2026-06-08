@@ -83,6 +83,7 @@ void rr(vector<Process>& procs, int quantum) {
 ### MLFQ（多级反馈队列）
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph Ready["就绪队列"]
         P1["进程 P1<br/>(优先级 5)"]
@@ -94,7 +95,6 @@ graph LR
     CPU -->|等待 IO| Block["阻塞队列"]
     Block -->|IO 完成| Ready
     Preempt --> Ready
-    style Sched fill:#ff9900,color:#fff
 ```
 
 ---

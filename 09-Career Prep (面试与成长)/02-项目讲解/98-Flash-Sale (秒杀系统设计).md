@@ -80,6 +80,7 @@ CREATE TABLE seckill_order_{shard} (
 ## 架构设计图
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 flowchart TD
     subgraph "客户端层"
         Browser["浏览器/App"]

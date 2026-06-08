@@ -25,6 +25,7 @@ Cache = 若干组（Set），每组 = 若干路（Way，即缓存行）
 | **组相联** | 每个块映射到固定组内的任意行 | N 路/组 | **最常用** |
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     ADDR["内存地址<br/>Tag | Index | Offset"]
 

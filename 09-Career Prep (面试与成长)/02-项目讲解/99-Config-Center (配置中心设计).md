@@ -89,6 +89,7 @@ CREATE TABLE config_history (
 ## 架构设计图
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 flowchart TD
     subgraph "运营管理"
         Admin["Admin Web UI"]

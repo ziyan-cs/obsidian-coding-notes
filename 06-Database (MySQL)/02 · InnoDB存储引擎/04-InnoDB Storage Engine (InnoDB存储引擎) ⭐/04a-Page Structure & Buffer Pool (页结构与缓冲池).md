@@ -11,6 +11,7 @@ status: 🌱
 InnoDB 以**页（Page）** 为最小存储单位，默认 16KB。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Page["InnoDB 数据页 (16KB)"]
         HEADER["File Header (38字节)<br/>页号、前驱/后继页指针、LSN"]
@@ -25,9 +26,8 @@ graph TD
         PREV["← 前驱页"]
         NEXT["后继页 →"]
     end
-    HEADER --> PREV & NEXT
-    style Page fill:#e3f2fd
-    style RECORDS fill:#fff3cd
+    HEADER --> PREV
+    HEADER --> NEXT
 ```
 
 **页类型：**

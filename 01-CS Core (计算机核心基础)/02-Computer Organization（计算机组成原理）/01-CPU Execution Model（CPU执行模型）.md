@@ -9,6 +9,7 @@ status: 🌱
 ## CPU 的核心组成
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph Pipeline["CPU 指令流水线"]
         IF["取指 (IF)<br/>从 I-Cache 取指令"]
@@ -26,10 +27,10 @@ graph LR
     
     IF --> ID --> EX --> MEM --> WB
     PC --> IF
-    REG --> ID & WB
+    REG --> ID
+    REG --> WB
     ALU --> EX
     
-    style Pipeline fill:#e3f2fd
 ```
 
 ## 关键寄存器

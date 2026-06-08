@@ -90,6 +90,7 @@ struct SegmentDescriptor {
 ## 段页式结合
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Seg["分段"]
         SEG_DIR["段表<br/>段号 → 基址+限长"]
@@ -102,8 +103,6 @@ graph TD
         LINEAR --> DIR --> TAB --> FRAME["物理页框"]
     end
     FRAME --> PHYS["物理地址"]
-    style Seg fill:#e8f5e9
-    style Page fill:#e3f2fd
 ```
 
 **Linux 的实际做法：**

@@ -12,6 +12,7 @@ status: 🌱
 Redis Sorted Set 的有序结构核心，基于多级索引的链表：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     HEAD["Head<br/>(最高层)"]
     L3_1["-∞"] --> L3_2["17"] --> L3_3["25"] --> L3_4["55"] --> L3_END["∞"]
@@ -28,7 +29,6 @@ graph TD
         O(log n)
     end note
     
-    style HEAD fill:#e74c3c,color:#fff
 ```
 
 ### 节点结构

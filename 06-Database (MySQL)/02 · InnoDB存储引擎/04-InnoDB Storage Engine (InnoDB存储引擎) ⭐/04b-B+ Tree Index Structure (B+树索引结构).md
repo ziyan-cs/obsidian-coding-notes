@@ -22,6 +22,7 @@ status: 🌱
 ## B+ 树结构详解
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     Root["根节点（非叶，常驻内存 / Buffer Pool）<br/>键: 50, 120, 200"]
     

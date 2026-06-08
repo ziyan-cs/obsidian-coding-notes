@@ -11,6 +11,7 @@ status: 🌱
 InnoDB 的聚簇索引将索引与数据存储在一起——叶节点直接包含整行数据。
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Clustered["聚簇索引 (主键)"]
         CL_ROOT["根节点<br/>(常驻 Buffer Pool)"]
@@ -25,8 +26,6 @@ graph TD
     SEC_LEAF -->|回表查询| CL_LEAF
     CL_LEAF -->|"覆盖索引<br/>无需回表"| RESULT["查询结果"]
     
-    style Clustered fill:#e3f2fd
-    style Secondary fill:#fff3cd
     note right of Secondary
         二级索引叶节点存的是
         索引列 + 主键值

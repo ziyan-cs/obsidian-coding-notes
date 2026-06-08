@@ -10,6 +10,7 @@ status: 🌱
 ## 三区模型
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph LR
     subgraph WD["工作区 (Working Tree)"]
         FILES["实际文件<br/>src/main.cpp"]
@@ -28,9 +29,6 @@ graph LR
     HEAD -->|git checkout| FILES
     HEAD -->|git reset| BLOB
     
-    style WD fill:#e3f2fd
-    style INDEX fill:#fff3cd
-    style REPO fill:#d4edda
 ```
 
 |区域|别名|存储位置|含义|

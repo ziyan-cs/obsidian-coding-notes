@@ -94,6 +94,7 @@ CREATE TABLE group_member (
 ## 架构设计图
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 flowchart TD
     subgraph "客户端层"
         Mobile["iOS/Android App"]

@@ -12,6 +12,7 @@ status: 🌱
 Redis 的核心流程（命令处理）是单线程的：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     CLIENTS["客户端连接（N个）"]
     EPOLL["epoll/kqueue 事件通知"]

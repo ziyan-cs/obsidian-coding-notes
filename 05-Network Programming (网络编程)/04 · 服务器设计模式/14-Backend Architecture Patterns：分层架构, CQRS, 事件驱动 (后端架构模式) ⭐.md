@@ -11,6 +11,7 @@ status: 🌱
 C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Layered["分层架构"]
         L1["接入层<br/>(API Gateway / Nginx)"]
@@ -30,8 +31,6 @@ graph TD
     L1 --> L2
     L2 --> L3
     
-    style CQRS fill:#fff3cd
-    style Event fill:#d4edda
 ```
 
 ### C++ 项目目录结构

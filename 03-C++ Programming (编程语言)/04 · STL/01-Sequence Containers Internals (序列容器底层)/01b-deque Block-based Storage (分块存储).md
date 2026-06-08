@@ -11,6 +11,7 @@ status: 🌱
 `deque` 由**多个固定大小的块（buffer）** 和一个**中控器（map）** 组成：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Map["中控器 (map)<br/>指针数组"]
         B0["块指针 0"]

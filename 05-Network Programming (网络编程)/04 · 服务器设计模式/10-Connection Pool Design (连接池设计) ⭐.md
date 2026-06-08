@@ -18,6 +18,7 @@ status: 🌱
 ## 连接池的核心职责
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph App["应用程序"]
         T1["线程 1"]
@@ -36,14 +37,17 @@ graph TD
         DB3["MySQL 连接 3"]
     end
     
-    T1 & T2 & T3 -->|get()| IDLE
+    T1 -->|get()| IDLE
+    T2 -->|get()| IDLE
+    T3 -->|get()| IDLE
     IDLE -->|取出| BUSY
     BUSY -->|release()| IDLE
     IDLE --- MIN
     BUSY --- MAX
-    IDLE --> DB1 & DB2 & DB3
+    IDLE --> DB1
+    IDLE --> DB2
+    IDLE --> DB3
     
-    style Pool fill:#3498db,color:#fff
 ```
 
 **核心参数：**

@@ -11,6 +11,7 @@ status: 🌱
 每一层**隐藏下层实现细节**，仅暴露接口给上层：
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph App["应用程序层"]
         APP1["用户程序<br/>(浏览器 / 数据库 / 游戏)"]
@@ -35,8 +36,6 @@ graph TD
     KERN --> DRV
     DRV --> HW
     
-    style Library fill:#f0f0f0
-    style OS fill:#e3f2fd
 ```
 
 ## 抽象的好处与代价

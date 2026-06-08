@@ -57,6 +57,7 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 ### 重写过程
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk", "curve": "monotoneX"}} }%%
 graph TD
     subgraph Normal["正常写入"]
         CMD["SET foo bar"] --> APPEND["追加到 AOF 缓冲区"]
@@ -69,7 +70,6 @@ graph TD
         MERGE --> DONE["新 AOF 替换旧文件"]
     end
     
-    style Rewrite fill:#e3f2fd
     note right of NEW_AOF
         例: 对 key 做了 1000 次 incr
         → 重写为 SET key 1000
