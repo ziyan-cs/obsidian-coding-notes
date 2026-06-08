@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
+> [!important] **核心考点**：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 
 ## 可观测性三大支柱
 
@@ -235,7 +235,7 @@ auto stub = UserService::NewStub(tracing_channel);
 | Trace 传播方式 | HTTP: `traceparent` header, gRPC: metadata, 跨线程: Context 传递 |
 | 三大支柱缺一不可 | 日志查单次异常、Metrics 看趋势告警、Tracing 串起全链路 |
 
-> **工程要点**：C++ 后端服务可观测性三板斧——spdlog（日志）、prometheus-cpp（指标）、opentelemetry-cpp（追踪）。优先级：日志 > 指标 > 追踪。至少先上日志和基础指标（QPS、延迟、错误率），再逐步补充链路追踪。不要试图一开始就全量追踪，先追踪关键接口（用户登录、下单等核心链路）。
+> [!tip]- **工程要点**：C++ 后端服务可观测性三板斧——spdlog（日志）、prometheus-cpp（指标）、opentelemetry-cpp（追踪）。优先级：日志 > 指标 > 追踪。至少先上日志和基础指标（QPS、延迟、错误率），再逐步补充链路追踪。不要试图一开始就全量追踪，先追踪关键接口（用户登录、下单等核心链路）。
 
 ---
 

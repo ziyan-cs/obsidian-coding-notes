@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
+> [!important] **核心考点**：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
 ## HTTP 请求方法
 
@@ -82,7 +82,7 @@ PATCH  /users/42       → 部分更新用户    200 OK
 DELETE /users/42       → 删除用户        204 No Content / 404
 ```
 
-> **工程要点**：状态码的中性选择是 200+JSON body 中包含业务码，但这会违背 HTTP 语义。RESTful 设计中推荐利用 HTTP 状态码本身表达语义，配合标准错误 body 格式：`{"error": {"code": "VALIDATION_ERROR", "message": "email is required"}}`。
+> [!tip]- **工程要点**：状态码的中性选择是 200+JSON body 中包含业务码，但这会违背 HTTP 语义。RESTful 设计中推荐利用 HTTP 状态码本身表达语义，配合标准错误 body 格式：`{"error": {"code": "VALIDATION_ERROR", "message": "email is required"}}`。
 
 ---
 

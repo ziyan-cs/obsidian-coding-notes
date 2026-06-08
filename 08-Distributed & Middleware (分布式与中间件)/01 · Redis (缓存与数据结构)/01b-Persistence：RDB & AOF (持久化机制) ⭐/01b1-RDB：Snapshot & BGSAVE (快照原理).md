@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
+> [!important] **核心考点**
+> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
 ## RDB 快照
 
@@ -85,7 +86,8 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 | RDB 适合什么场景 | 定时备份、灾备恢复、数据迁移 |
 | RDB 丢多少数据 | 最多丢最后一次 BGSAVE 到宕机间的所有写操作 |
 
-> **工程要点**：RDB + AOF 混合使用是最佳实践（Redis 4.0+ 支持混合持久化 = AOF rewrite 时生成 RDB 段 + AOF 增量段）。`latency-monitor-threshold` 可用于监控 fork 阻塞。
+> [!tip]- **工程要点**
+> RDB + AOF 混合使用是最佳实践（Redis 4.0+ 支持混合持久化 = AOF rewrite 时生成 RDB 段 + AOF 增量段）。`latency-monitor-threshold` 可用于监控 fork 阻塞。
 
 ---
 

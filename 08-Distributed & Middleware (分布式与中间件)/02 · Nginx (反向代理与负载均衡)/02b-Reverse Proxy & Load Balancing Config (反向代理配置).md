@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
+> [!important] **核心考点**
+> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
 ## 反向代理配置
 
@@ -140,7 +141,8 @@ server {
 | 反向代理 vs 正向代理 | 正向代理代理客户端，反向代理代理服务端 |
 | X-Forwarded-For | 传递客户端真实 IP |
 
-> **工程要点**：动静分离可显著提升性能。HTTPS 建议 Let's Encrypt 自动续期。调试用 `nginx -T` 查看合并配置。
+> [!tip]- **工程要点**
+> 动静分离可显著提升性能。HTTPS 建议 Let's Encrypt 自动续期。调试用 `nginx -T` 查看合并配置。
 
 ---
 

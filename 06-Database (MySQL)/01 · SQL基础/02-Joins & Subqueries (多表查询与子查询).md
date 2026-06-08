@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
+> [!important] **核心考点**：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
 ## 联合查询
 
@@ -90,7 +90,7 @@ SELECT * FROM orders WHERE user_id IN (
 | EXISTS 优化原理 | Semi Join 半连接，找到匹配即停止扫描 |
 | 多表 JOIN 顺序 | MySQL 优化器决定，不按书写顺序 |
 
-> **工程要点**：多表查询关联字段必须有索引（EXPLAIN 看 type 列：`ref` 好于 `ALL`）。超过 3 张表 JOIN 考虑拆分 SQL 或冗余字段。
+> [!tip]- **工程要点**：多表查询关联字段必须有索引（EXPLAIN 看 type 列：`ref` 好于 `ALL`）。超过 3 张表 JOIN 考虑拆分 SQL 或冗余字段。
 
 ---
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
+> [!important] **核心考点**：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
 
 ## SQL 标准隔离级别
 
@@ -125,7 +125,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 ```
 
-> **工程要点**：绝大多数业务系统选 RC 就足够了。InnoDB 默认 RR 是历史原因（MySQL 主从复制基于 binlog，RC 在 statement 格式下主从不一致），但 MySQL 5.7+ 的 ROW 格式 binlog 下 RC 也安全。**RR 的 Gap Lock 是双刃剑——避免幻读的同时也增加了锁竞争和死锁概率。**
+> [!tip]- **工程要点**：绝大多数业务系统选 RC 就足够了。InnoDB 默认 RR 是历史原因（MySQL 主从复制基于 binlog，RC 在 statement 格式下主从不一致），但 MySQL 5.7+ 的 ROW 格式 binlog 下 RC 也安全。**RR 的 Gap Lock 是双刃剑——避免幻读的同时也增加了锁竞争和死锁概率。**
 
 ---
 

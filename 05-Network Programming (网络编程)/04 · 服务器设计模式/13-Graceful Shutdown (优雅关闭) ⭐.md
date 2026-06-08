@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
+> [!important] **核心考点**：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 ## 为什么需要优雅关闭
 
@@ -215,7 +215,7 @@ Kubernetes 删除 Pod 时：
 | 关闭顺序错误 | 先释放资源再等待请求完成 | 先 stop accept → drain → cleanup |
 | 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
 
-> **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）给存量请求一个 deadline（通常 10-30s）；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
+> [!tip]- **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）给存量请求一个 deadline（通常 10-30s）；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
 
 ---
 

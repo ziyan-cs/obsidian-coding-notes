@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
+> [!important] **核心考点**：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
 
 ## 阻塞 IO
 
@@ -51,6 +51,6 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 两者都是**同步 IO**——数据从内核到用户缓冲区的拷贝由用户线程自己完成，需要等待拷贝结束。
 
-> **工程要点**：非阻塞 IO 本身不提升性能，它的价值是和 IO 多路复用配合时让单个线程管理大量 fd。纯轮询非阻塞 IO（一直 read 检查 EAGAIN）反而更浪费 CPU。
+> [!tip]- **工程要点**：非阻塞 IO 本身不提升性能，它的价值是和 IO 多路复用配合时让单个线程管理大量 fd。纯轮询非阻塞 IO（一直 read 检查 EAGAIN）反而更浪费 CPU。
 
 阻塞与非阻塞 IO 详解见 → [Synchronous vs Asynchronous IO (同步与异步)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07b-Synchronous%20vs%20Asynchronous%20IO%20(同步与异步).md) · [IO Multiplexing (多路复用对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)

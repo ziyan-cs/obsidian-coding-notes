@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
+> [!important] **核心考点**：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
 ## Binlog vs Redo Log 概览
 
@@ -136,7 +136,7 @@ SHOW MASTER STATUS;                             -- 当前正在写的 binlog
 SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 ```
 
-> **工程要点**：生产环境推荐 `binlog_format=ROW`（保证主从一致性）+ `sync_binlog=1`（每次事务提交刷盘）。两阶段提交是 MySQL 数据一致性的基石——理解了它，才能真正理解为什么主从复制不会丢数据。**面试核心问题：** "MySQL 如何保证 binlog 和 redo log 的一致性？" → 答案就是两阶段提交。
+> [!tip]- **工程要点**：生产环境推荐 `binlog_format=ROW`（保证主从一致性）+ `sync_binlog=1`（每次事务提交刷盘）。两阶段提交是 MySQL 数据一致性的基石——理解了它，才能真正理解为什么主从复制不会丢数据。**面试核心问题：** "MySQL 如何保证 binlog 和 redo log 的一致性？" → 答案就是两阶段提交。
 
 ---
 

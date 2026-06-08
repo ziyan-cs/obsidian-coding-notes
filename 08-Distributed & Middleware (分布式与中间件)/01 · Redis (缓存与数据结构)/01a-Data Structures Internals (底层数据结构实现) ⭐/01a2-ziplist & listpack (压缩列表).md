@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
+> [!important] **核心考点**
+> ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 
 ## ziplist（压缩列表）
 
@@ -89,7 +90,8 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 | ziplist 优点 | 内存连续，CPU 缓存友好，小数据时比 hashtable 省内存 |
 | 什么时候升级 | 元素超限或某元素超 64B → 升级为 hashtable/quicklist |
 
-> **工程要点**：ziplist/listpack 的关键价值是内存紧凑性——一个小 hash 用 ziplist 比 hashtable 省数十倍内存。`DEBUG OBJECT key` 可查看内部编码（`encoding:ziplist`）。
+> [!tip]- **工程要点**
+> ziplist/listpack 的关键价值是内存紧凑性——一个小 hash 用 ziplist 比 hashtable 省数十倍内存。`DEBUG OBJECT key` 可查看内部编码（`encoding:ziplist`）。
 
 ---
 

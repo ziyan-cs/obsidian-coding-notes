@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
+> [!important] **核心考点**：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp
 // 动态分派：运行时根据对象实际类型查 VTable

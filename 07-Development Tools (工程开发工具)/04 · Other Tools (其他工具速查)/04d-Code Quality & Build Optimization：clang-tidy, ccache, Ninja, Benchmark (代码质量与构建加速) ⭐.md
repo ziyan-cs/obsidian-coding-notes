@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
+> [!important] **核心考点**：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
 
 ## 代码质量工具
 
@@ -243,7 +243,7 @@ COPY .devcontainer/CMakePresets.json /workspace/
 | DevContainer | 团队环境一致 | ★☆☆ 有余力再加 |
 | IWYU | 头文件管理 | ★☆☆ 有余力再加 |
 
-> **工程要点**：这些工具的价值排序是**频率 × 节省时间**。clang-format 每天触发几十次，ccache 每次编译都在省钱，值得第一时间配好。Google Benchmark 在 CI 中跑，对比每次 PR 的性能变化，发现退化立即告警。
+> [!tip]- **工程要点**：这些工具的价值排序是**频率 × 节省时间**。clang-format 每天触发几十次，ccache 每次编译都在省钱，值得第一时间配好。Google Benchmark 在 CI 中跑，对比每次 PR 的性能变化，发现退化立即告警。
 
 ---
 

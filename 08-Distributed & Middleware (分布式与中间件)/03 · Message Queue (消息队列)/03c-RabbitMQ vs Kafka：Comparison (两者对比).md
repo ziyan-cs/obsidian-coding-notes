@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
+> [!important] **核心考点**
+> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 
 ## 设计哲学对比
 
@@ -71,7 +72,8 @@ Kafka:    毫秒级（2-5ms，批量设计）
 | RabbitMQ 死信队列 | 消息过期/拒绝 -> DLX |
 | 如何选型 | 低延迟灵活路由选 RabbitMQ；高吞吐流处理选 Kafka |
 
-> **工程要点**：Kafka 不适合传统任务队列（延迟/定时任务），RabbitMQ 不适合海量日志。微服务内部通信选 RabbitMQ，大数据管道选 Kafka。很多公司两者都用。
+> [!tip]- **工程要点**
+> Kafka 不适合传统任务队列（延迟/定时任务），RabbitMQ 不适合海量日志。微服务内部通信选 RabbitMQ，大数据管道选 Kafka。很多公司两者都用。
 
 ---
 

@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 
-> **核心考点**：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
+> [!important] **核心考点**：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
 
 ## 什么是 Core Dump
 

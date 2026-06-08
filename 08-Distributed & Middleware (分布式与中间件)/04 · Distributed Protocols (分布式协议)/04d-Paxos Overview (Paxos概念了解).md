@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
+> [!important] **核心考点**
+> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 ## Paxos 简介
 
@@ -103,7 +104,8 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 | Raft vs Paxos | Raft 是可理解的 Paxos 实现 |
 | Paxos 的应用 | Google Chubby（分布式锁），ZooKeeper 的 ZAB 受 Paxos 启发 |
 
-> **工程要点**：Paxos 理论价值极高但实现困难。实际操作中，新系统应优先选择 Raft（etcd/Consul/TiKV 已验证），而非从头实现 Paxos。了解 Paxos 有助于理解分布式一致性的本质。
+> [!tip]- **工程要点**
+> Paxos 理论价值极高但实现困难。实际操作中，新系统应优先选择 Raft（etcd/Consul/TiKV 已验证），而非从头实现 Paxos。了解 Paxos 有助于理解分布式一致性的本质。
 
 ---
 

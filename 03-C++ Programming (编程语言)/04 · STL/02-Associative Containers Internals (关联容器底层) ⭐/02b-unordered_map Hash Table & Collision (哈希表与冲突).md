@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
+> [!important] **核心考点**：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
 
 ## 底层结构：Separate Chaining（链地址法）
 

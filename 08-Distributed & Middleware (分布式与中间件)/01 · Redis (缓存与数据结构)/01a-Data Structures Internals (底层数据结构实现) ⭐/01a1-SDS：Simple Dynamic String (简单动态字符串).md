@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
+> [!important] **核心考点**
+> SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
 ## SDS 结构
 
@@ -81,7 +82,8 @@ sdsfree(s);                     // 释放
 | 预分配阈值 1MB | 小字符串加倍，大字符串线性增长 |
 | SDS 相比 std::string | Redis C 实现，内存紧凑；std::string SSO 且有 RAII |
 
-> **工程要点**：SDS 的预分配策略是"空间换时间"的典型——大多数 append 操作无需重新分配。`SDS_MAX_PREALLOC` 设为 1MB 避免大字符串翻倍浪费。
+> [!tip]- **工程要点**
+> SDS 的预分配策略是"空间换时间"的典型——大多数 append 操作无需重新分配。`SDS_MAX_PREALLOC` 设为 1MB 避免大字符串翻倍浪费。
 
 ---
 

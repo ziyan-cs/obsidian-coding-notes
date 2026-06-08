@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：主从复制 binlog 异步复制流程、半同步复制保证、主从延迟原因与解决方案
+> [!important] **核心考点**：主从复制 binlog 异步复制流程、半同步复制保证、主从延迟原因与解决方案
 
 ## 主从复制概述
 
@@ -171,7 +171,7 @@ auto writeTs = std::chrono::steady_clock::now();
 // ... 从库读取检查 repl lag，未追上则回退主库
 ```
 
-> **工程要点**：主从复制的核心矛盾——异步复制可能丢数据，半同步复制增加延迟。大多数业务选择异步复制 + 监控告警（接受秒级延迟的可能性）。对于不能接受任何数据丢失的业务，使用半同步复制或 MySQL InnoDB Cluster。**排查主从延迟的首选命令：** `SHOW SLAVE STATUS\G` 看 `Seconds_Behind_Master` 和 `Slave_SQL_Running_State`。
+> [!tip]- **工程要点**：主从复制的核心矛盾——异步复制可能丢数据，半同步复制增加延迟。大多数业务选择异步复制 + 监控告警（接受秒级延迟的可能性）。对于不能接受任何数据丢失的业务，使用半同步复制或 MySQL InnoDB Cluster。**排查主从延迟的首选命令：** `SHOW SLAVE STATUS\G` 看 `Seconds_Behind_Master` 和 `Slave_SQL_Running_State`。
 
 ---
 

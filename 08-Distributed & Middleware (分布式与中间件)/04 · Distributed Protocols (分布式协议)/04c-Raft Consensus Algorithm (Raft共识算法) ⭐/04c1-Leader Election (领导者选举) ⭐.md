@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
+> [!important] **核心考点**
+> Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 
 ## Raft 角色与任期
 
@@ -134,7 +135,8 @@ Follower 投票前比较：
 | 日志完整性限制 | 只有日志最新的节点才能当选 Leader |
 | 新 Leader 第一件事 | 发送心跳（空 AppendEntries）确立权威 |
 
-> **工程要点**：Raft 选举超时的设置需权衡——太短容易频繁选举，太长导致 Leader 故障后恢复慢。etcd 默认 election timeout 为 1000ms。网络不稳定时可通过调整心跳间隔（heartbeat interval = 1/10 election timeout）减少不必要选举。
+> [!tip]- **工程要点**
+> Raft 选举超时的设置需权衡——太短容易频繁选举，太长导致 Leader 故障后恢复慢。etcd 默认 election timeout 为 1000ms。网络不稳定时可通过调整心跳间隔（heartbeat interval = 1/10 election timeout）减少不必要选举。
 
 ---
 

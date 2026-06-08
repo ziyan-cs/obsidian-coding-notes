@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
+> [!important] **核心考点**：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
 ## Redo Log 的物理结构
 
@@ -139,7 +139,7 @@ LSN 的作用：
   Last checkpoint at           123400000    ← checkpoint 位置
 ```
 
-> **工程要点**：redo log 太小会导致频繁 checkpoint（强制刷脏页），表现为 IO 尖刺和性能抖动。经验公式：redo log 总大小应能容纳 1-2 小时的写入量。监控指标：`SHOW ENGINE INNODB STATUS` 中的 `Log sequence number` 与 `Last checkpoint at` 的差距不应持续超过 redo log 总大小的 70%。恢复时间与 redo log 总大小成正比——512×3=1.5GB 的 redo log 恢复时间通常在 5 分钟内。
+> [!tip]- **工程要点**：redo log 太小会导致频繁 checkpoint（强制刷脏页），表现为 IO 尖刺和性能抖动。经验公式：redo log 总大小应能容纳 1-2 小时的写入量。监控指标：`SHOW ENGINE INNODB STATUS` 中的 `Log sequence number` 与 `Last checkpoint at` 的差距不应持续超过 redo log 总大小的 70%。恢复时间与 redo log 总大小成正比——512×3=1.5GB 的 redo log 恢复时间通常在 5 分钟内。
 
 ---
 

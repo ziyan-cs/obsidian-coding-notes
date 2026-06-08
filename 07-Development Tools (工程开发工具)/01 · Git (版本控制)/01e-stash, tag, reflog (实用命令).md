@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
+> [!important] **核心考点**：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
 
 ## git stash（临时搁置）
 

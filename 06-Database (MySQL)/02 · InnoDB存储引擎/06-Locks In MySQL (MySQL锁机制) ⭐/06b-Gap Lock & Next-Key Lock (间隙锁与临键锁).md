@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
+> [!important] **核心考点**：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
 
 ## 为什么需要 Gap Lock
 
@@ -120,7 +120,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 无索引       | 任何查询    | 全表锁（逐行加 Next-Key Lock）
 ```
 
-> **工程要点**：Gap Lock 的锁定范围比想象的大——一个 WHERE 条件可能会锁住大半个索引树。典型故障：RR 级别下一个大范围 UPDATE 导致整个表无法插入新数据。排查手段：`SELECT * FROM performance_schema.data_locks` 查看具体锁范围。如果业务不要求 RR 的可重复读，使用 RC 级别可以完全避免 Gap Lock。
+> [!tip]- **工程要点**：Gap Lock 的锁定范围比想象的大——一个 WHERE 条件可能会锁住大半个索引树。典型故障：RR 级别下一个大范围 UPDATE 导致整个表无法插入新数据。排查手段：`SELECT * FROM performance_schema.data_locks` 查看具体锁范围。如果业务不要求 RR 的可重复读，使用 RC 级别可以完全避免 Gap Lock。
 
 ---
 

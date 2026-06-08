@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
+> [!important] **核心考点**：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 
 ## 最小 CMake 项目
 
@@ -157,7 +157,7 @@ ${CMAKE_CXX_COMPILER_ID} # GNU / Clang / AppleClang / MSVC
 ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 ```
 
-> **工程要点**：现代 CMake 是"**声明式**"而非"脚本式"。核心思想：**描述你的目标及其依赖关系**，CMake 自行推导构建顺序和编译选项。避免全局函数（`include_directories`、`add_definitions` 等），改用目标属性（`target_*` 系列）。
+> [!tip]- **工程要点**：现代 CMake 是"**声明式**"而非"脚本式"。核心思想：**描述你的目标及其依赖关系**，CMake 自行推导构建顺序和编译选项。避免全局函数（`include_directories`、`add_definitions` 等），改用目标属性（`target_*` 系列）。
 
 ---
 

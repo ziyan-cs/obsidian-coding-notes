@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
+> [!important] **核心考点**：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
 >见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01%20·%20基础数据结构/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
 
 层序遍历的变体：

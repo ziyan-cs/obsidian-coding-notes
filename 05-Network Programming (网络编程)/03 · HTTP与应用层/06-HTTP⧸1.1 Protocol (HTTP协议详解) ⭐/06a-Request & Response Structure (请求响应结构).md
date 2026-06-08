@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
+> [!important] **核心考点**：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
 ## HTTP 请求结构
 
@@ -95,7 +95,7 @@ Host: www.example.com
 
 ```
 
-> **工程要点**：HTTP 协议的头部以 `\r\n\r\n` 结束（空行），这是解析的终止边界。对于固定长度的请求体，Content-Length 指定精确字节数；对于变长内容（如 Server-Sent Events），使用 Transfer-Encoding: chunked。理解这一行终结的解析模型，是实现高性能 HTTP 状态机解析器的基础。
+> [!tip]- **工程要点**：HTTP 协议的头部以 `\r\n\r\n` 结束（空行），这是解析的终止边界。对于固定长度的请求体，Content-Length 指定精确字节数；对于变长内容（如 Server-Sent Events），使用 Transfer-Encoding: chunked。理解这一行终结的解析模型，是实现高性能 HTTP 状态机解析器的基础。
 
 ---
 

@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
+> [!important] **核心考点**
+> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
 ## Kafka 消息可靠性语义
 
@@ -104,7 +105,8 @@ Producer -> Broker -> Consumer
 | 重复消费原因 | Rebalance、消费超时、手动提交失败 |
 | 消费者幂等实现 | UPSERT、去重表、状态机 |
 
-> **工程要点**：生产推荐 acks=all + enable.idempotence=true + 手动 commit。追求极致吞吐可降为 acks=1，但需接受极端情况可能丢消息。
+> [!tip]- **工程要点**
+> 生产推荐 acks=all + enable.idempotence=true + 手动 commit。追求极致吞吐可降为 acks=1，但需接受极端情况可能丢消息。
 
 ---
 

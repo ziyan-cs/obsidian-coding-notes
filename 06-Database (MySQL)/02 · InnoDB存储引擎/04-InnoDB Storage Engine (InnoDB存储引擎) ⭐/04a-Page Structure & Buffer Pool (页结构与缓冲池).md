@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
+> [!important] **核心考点**：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
 
 ## InnoDB 页结构
 
@@ -121,7 +121,7 @@ innodb_page_cleaners = 8
 # 由 innodb_adaptive_flushing = ON 控制
 ```
 
-> **工程要点**：Buffer Pool 命中率是数据库性能的核心指标——命中率 > 99% 意味着内存够大，磁盘 IO 压力小。如果命中率持续低于 95%，考虑增大 innodb_buffer_pool_size。改进型 LRU 的 old_blocks_time 机制对大表扫描场景非常关键，设置为 1000ms 可以有效减少扫描对缓存的冲击。
+> [!tip]- **工程要点**：Buffer Pool 命中率是数据库性能的核心指标——命中率 > 99% 意味着内存够大，磁盘 IO 压力小。如果命中率持续低于 95%，考虑增大 innodb_buffer_pool_size。改进型 LRU 的 old_blocks_time 机制对大表扫描场景非常关键，设置为 1000ms 可以有效减少扫描对缓存的冲击。
 
 ---
 

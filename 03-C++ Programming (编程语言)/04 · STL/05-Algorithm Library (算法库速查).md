@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：STL 算法的分类、迭代器要求、Lambda 配合使用
+> [!important] **核心考点**：STL 算法的分类、迭代器要求、Lambda 配合使用
 
 ## 分类速查
 
@@ -135,7 +135,7 @@ std::sort(people.begin(), people.end(),
 | `lower_bound` | O(log N) | 必须有序区间 |
 | `find` | O(N) | 无序区间只能用这个 |
 
-> **工程要点**：
+> [!tip]- **工程要点**：
 > - `std::sort` 在元素数量少时（<16）切换到插入排序（introsort 的优化）
 > - `std::find` 不要用在已排序区间上——`lower_bound` 快得多
 > - C++17 引入并行策略：`std::sort(std::execution::par, v.begin(), v.end())`

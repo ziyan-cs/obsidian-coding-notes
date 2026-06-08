@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：虚拟地址 vs 物理地址、MMU/TLB、缺页中断、页面置换、页表结构
+> [!important] **核心考点**：虚拟地址 vs 物理地址、MMU/TLB、缺页中断、页面置换、页表结构
 
 ## 虚拟内存基本概念
 
@@ -148,7 +148,7 @@ int main() {
 | 匿名页 vs 文件页 | 匿名页（堆/栈）换出到 swap；文件页回写磁盘即可 |
 | 大页（HugePages） | 2MB/1GB 页，减少页表级数和 TLB miss |
 
-> **工程要点**：数据库、搜索引擎等内存敏感型应用通常启用 HugePages（2MB 页）以减少 TLB miss。`madvise(MADV_HUGEPAGE)` 可提示内核使用透明大页。监控 `/proc/meminfo` 的 `pgfault` / `pgmajfault` 判断是否过度缺页。
+> [!tip]- **工程要点**：数据库、搜索引擎等内存敏感型应用通常启用 HugePages（2MB 页）以减少 TLB miss。`madvise(MADV_HUGEPAGE)` 可提示内核使用透明大页。监控 `/proc/meminfo` 的 `pgfault` / `pgmajfault` 判断是否过度缺页。
 
 ---
 

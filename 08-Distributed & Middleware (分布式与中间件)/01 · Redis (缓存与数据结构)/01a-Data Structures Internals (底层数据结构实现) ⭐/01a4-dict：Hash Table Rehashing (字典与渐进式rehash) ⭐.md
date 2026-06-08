@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
+> [!important] **核心考点**
+> dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
 ## Redis dict 结构
 
@@ -119,7 +120,8 @@ void dictRehash(dict *d, int n) {
 | 缩容条件 | 负载因子 < 0.1 |
 | 为什么用链地址 | 不支持 O(1) 内存分配（节点独立分配），比开放地址更灵活 |
 
-> **工程要点**：dict 是 Redis 全局键空间的基础——`redisDb->dict` 存所有 key-value。渐进式 rehash 的设计思想（分批迁移、读写查两张表、新增只进新表）被许多需要在线扩容的系统借鉴。
+> [!tip]- **工程要点**
+> dict 是 Redis 全局键空间的基础——`redisDb->dict` 存所有 key-value。渐进式 rehash 的设计思想（分批迁移、读写查两张表、新增只进新表）被许多需要在线扩容的系统借鉴。
 
 ---
 

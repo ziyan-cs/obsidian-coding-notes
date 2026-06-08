@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
+> [!important] **核心考点**：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
 
 ## 进制转换
 

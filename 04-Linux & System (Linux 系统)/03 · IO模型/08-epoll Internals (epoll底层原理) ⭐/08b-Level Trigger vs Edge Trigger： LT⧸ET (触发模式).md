@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
+> [!important] **核心考点**：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
 
 ## 水平触发 LT（Level-Triggered）
 
@@ -81,6 +81,6 @@ while (1) {
 - **Redis**：使用 LT 模式（追求简单、事件驱动明确）
 - **一般项目**：推荐 LT 模式，编程简单不易出错，性能差异通常可接受
 
-> **工程要点**：ET 模式的核心问题是"怎么知道数据读完了"——只能通过 read 返回 EAGAIN 判断。这就要求 fd 必须是非阻塞的，否则最后一次无数据可读时 read 会阻塞线程。如果你发现 ET 模式下某些事件没触发，大概率是循环读逻辑不对或忘记设置非阻塞。
+> [!tip]- **工程要点**：ET 模式的核心问题是"怎么知道数据读完了"——只能通过 read 返回 EAGAIN 判断。这就要求 fd 必须是非阻塞的，否则最后一次无数据可读时 read 会阻塞线程。如果你发现 ET 模式下某些事件没触发，大概率是循环读逻辑不对或忘记设置非阻塞。
 
 epoll 触发模式见 → [epoll_create, epoll_ctl, epoll_wait (API详解)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08a-epoll_create,%20epoll_ctl,%20epoll_wait%20(API详解).md) · [epoll vs select (底层实现对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)

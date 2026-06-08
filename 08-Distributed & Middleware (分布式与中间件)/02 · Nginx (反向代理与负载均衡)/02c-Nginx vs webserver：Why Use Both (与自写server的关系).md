@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
+> [!important] **核心考点**
+> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
 ## 为什么用 Nginx + 自写 Server
 
@@ -100,7 +101,8 @@ Nginx（路由）
 | sendfile 零拷贝 | 避免用户态参与，直接 DMA 到网卡 |
 | Nginx + 自写 Server 是职责分离 | 各司其职，不互相替代 |
 
-> **工程要点**：Nginx 在前面做限流、SSL、静态文件，自写 Server 专注业务——这是后端最佳实践。即使 Go 自带 net/http，生产环境也建议前面挂 Nginx。
+> [!tip]- **工程要点**
+> Nginx 在前面做限流、SSL、静态文件，自写 Server 专注业务——这是后端最佳实践。即使 Go 自带 net/http，生产环境也建议前面挂 Nginx。
 
 ---
 

@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
+> [!important] **核心考点**
+> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 
 ## 过期策略
 
@@ -133,7 +134,8 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 | allkeys-lru 最常用 | 因为它对所有 key 公平，不会因未设 TTL 就留在内存 |
 | 淘汰时是否立即释放内存 | 同步淘汰，一次可能淘汰多个 key 直到足够 |
 
-> **工程要点**：生产环境通常 `maxmemory-policy allkeys-lru` + 合理设置 `maxmemory`（通常为机器内存的 50-70%，留余量给 COW 和 OS）。监控 `evicted_keys` 指标，如果持续增长说明内存不足需要扩容。
+> [!tip]- **工程要点**
+> 生产环境通常 `maxmemory-policy allkeys-lru` + 合理设置 `maxmemory`（通常为机器内存的 50-70%，留余量给 COW 和 OS）。监控 `evicted_keys` 指标，如果持续增长说明内存不足需要扩容。
 
 ---
 

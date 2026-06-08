@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
+> [!important] **核心考点**
+> Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 
 ## Raft 安全性保证
 
@@ -119,7 +120,8 @@ Raft 节点需要持久化的状态：
 | 单节点变更 | 一次只增减一个，更简单 |
 | InstallSnapshot | 落后节点通过快照追赶 |
 
-> **工程要点**：etcd 使用单节点变更简化了成员变更。生产环境 Raft 集群通常为 3 或 5 节点。3 节点允许 1 故障，5 节点允许 2 故障。偶数节点（4/6）没有优势（多数派为 3/4 或 4/6，故障容限相同但多了节点）。
+> [!tip]- **工程要点**
+> etcd 使用单节点变更简化了成员变更。生产环境 Raft 集群通常为 3 或 5 节点。3 节点允许 1 故障，5 节点允许 2 故障。偶数节点（4/6）没有优势（多数派为 3/4 或 4/6，故障容限相同但多了节点）。
 
 ---
 

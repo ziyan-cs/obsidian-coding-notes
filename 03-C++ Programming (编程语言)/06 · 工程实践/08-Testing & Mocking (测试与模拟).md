@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
+> [!important] **核心考点**：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
 ## 测试金字塔
 
@@ -189,7 +189,7 @@ genhtml -o report coverage.info
 // src/module.cpp → tests/module_test.cpp
 ```
 
-> **工程要点**：好的单元测试是"**活的文档**"——阅读测试代码就能理解模块的预期行为。在 CI 中集成测试（`cmake --build . --target test`），确保每次提交都自动运行。**测试不是可选品**，是工程质量的基线。
+> [!tip]- **工程要点**：好的单元测试是"**活的文档**"——阅读测试代码就能理解模块的预期行为。在 CI 中集成测试（`cmake --build . --target test`），确保每次提交都自动运行。**测试不是可选品**，是工程质量的基线。
 
 ---
 

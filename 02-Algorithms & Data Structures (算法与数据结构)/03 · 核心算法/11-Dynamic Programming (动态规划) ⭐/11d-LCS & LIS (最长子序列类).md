@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
+> [!important] **核心考点**：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
 ## 最长递增子序列（LIS）
 
@@ -144,7 +144,7 @@ int longestPalindromeSubseq(string s) {
 | 最长重复子数组 | 同上，用一维滚动数组优化空间 | O(mn) |
 | 最大子数组和（Kadane） | cur = max(x, cur+x) | O(n) |
 
-> **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。
+> [!tip]- **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。
 
 ---
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
+> [!important] **核心考点**：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
 ## Placement New
 
@@ -178,7 +178,7 @@ using ScopedVec = std::vector<String,
 | 特殊硬件/NUMA | 绑定分配器 |
 | 99% 的日常场景 | **默认分配器就够了** |
 
-> **工程要点**：不要过早自定义分配器。默认的 `::operator new` 使用 `malloc`，性能已经很好。只有当 profiling 证明分配器是瓶颈时（大量小对象、高并发分配），才考虑自定义。PMR（Polymorphic Memory Resource, C++17）提供了更现代的内存资源管理方式，是新项目的首选。
+> [!tip]- **工程要点**：不要过早自定义分配器。默认的 `::operator new` 使用 `malloc`，性能已经很好。只有当 profiling 证明分配器是瓶颈时（大量小对象、高并发分配），才考虑自定义。PMR（Polymorphic Memory Resource, C++17）提供了更现代的内存资源管理方式，是新项目的首选。
 
 ---
 

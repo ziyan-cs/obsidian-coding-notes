@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
+> [!important] **核心考点**：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
 
 ## const
 

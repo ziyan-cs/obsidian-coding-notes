@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
+> [!important] **核心考点**：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
 ## EXPLAIN 输出详解
 
@@ -140,7 +140,7 @@ SELECT * FROM user WHERE age = 20;
 -- 5. 联表时被驱动表的 type 是否为 eq_ref / ref？
 ```
 
-> **工程要点**：EXPLAIN 是 SQL 优化的第一工具，但 rows 是估计值不一定精确，可用 `ANALYZE TABLE` 更新统计信息。MySQL 8.0 的 `EXPLAIN ANALYZE` 可以给出实际执行时间：`EXPLAIN ANALYZE SELECT * FROM user WHERE age > 20`——比传统 EXPLAIN 更准确。
+> [!tip]- **工程要点**：EXPLAIN 是 SQL 优化的第一工具，但 rows 是估计值不一定精确，可用 `ANALYZE TABLE` 更新统计信息。MySQL 8.0 的 `EXPLAIN ANALYZE` 可以给出实际执行时间：`EXPLAIN ANALYZE SELECT * FROM user WHERE age > 20`——比传统 EXPLAIN 更准确。
 
 ---
 

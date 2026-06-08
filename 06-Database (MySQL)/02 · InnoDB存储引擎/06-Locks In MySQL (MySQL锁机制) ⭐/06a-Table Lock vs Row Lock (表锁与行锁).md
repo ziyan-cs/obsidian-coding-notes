@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
+> [!important] **核心考点**：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
 
 ## 表锁 vs 行锁
 
@@ -114,7 +114,7 @@ SELECT * FROM performance_schema.data_locks\G
 SELECT * FROM performance_schema.data_lock_waits\G
 ```
 
-> **工程要点**：InnoDB 的行锁只有通过索引才能生效——没有索引的 WHERE 条件会退化为表锁，这是性能灾难的常见原因。大表 DELETE/UPDATE 操作尤其需要注意：一次操作影响 1 万行的范围更新会在短时间内加大量行锁，可能耗尽锁内存或引发大量锁等待。建议分批处理（如 LIMIT 1000 循环）。
+> [!tip]- **工程要点**：InnoDB 的行锁只有通过索引才能生效——没有索引的 WHERE 条件会退化为表锁，这是性能灾难的常见原因。大表 DELETE/UPDATE 操作尤其需要注意：一次操作影响 1 万行的范围更新会在短时间内加大量行锁，可能耗尽锁内存或引发大量锁等待。建议分批处理（如 LIMIT 1000 循环）。
 
 ---
 

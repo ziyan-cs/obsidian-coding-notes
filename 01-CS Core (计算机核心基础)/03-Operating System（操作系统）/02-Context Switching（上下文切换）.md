@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：上下文切换的流程、切换代价、TLB 失效、切换 vs 模式切换的区别
+> [!important] **核心考点**：上下文切换的流程、切换代价、TLB 失效、切换 vs 模式切换的区别
 
 ## 上下文切换
 
@@ -135,7 +135,7 @@ switch_to:
 | 大页（Huge Pages） | 减少 TLB miss | 内存密集型 |
 | CPU 亲和性 | 绑定进程到固定核，cache 更热 | 性能敏感路径 |
 
-> **工程要点**：Redis 单线程模型高吞吐的核心原因之一就是避免了上下文切换。Nginx 事件驱动 + 少量 worker 进程大幅降低了切换开销。检测 `vmstat 1` 的 `cs`（context switch）列可知是否切换过度。
+> [!tip]- **工程要点**：Redis 单线程模型高吞吐的核心原因之一就是避免了上下文切换。Nginx 事件驱动 + 少量 worker 进程大幅降低了切换开销。检测 `vmstat 1` 的 `cs`（context switch）列可知是否切换过度。
 
 ---
 

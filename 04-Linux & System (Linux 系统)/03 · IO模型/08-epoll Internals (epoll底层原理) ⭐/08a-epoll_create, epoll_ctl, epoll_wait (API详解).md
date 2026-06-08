@@ -85,6 +85,6 @@ while (1) {
 close(epfd);
 ```
 
-> **工程要点**：`epoll_event.data` 是联合体，推荐用 `data.ptr` 指向连接对象（struct），避免再通过 fd 做映射查找。
+> [!tip]- **工程要点**：`epoll_event.data` 是联合体，推荐用 `data.ptr` 指向连接对象（struct），避免再通过 fd 做映射查找。
 
 epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md) · [epoll vs select (底层实现对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)

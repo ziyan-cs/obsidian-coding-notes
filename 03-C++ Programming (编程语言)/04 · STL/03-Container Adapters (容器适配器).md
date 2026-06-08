@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
+> [!important] **核心考点**：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
 ## 适配器模式
 
@@ -89,7 +89,7 @@ std::vector<int> data{3, 1, 4, 1, 5, 9};
 std::priority_queue<int> pq(data.begin(), data.end());  // O(N) 构造
 ```
 
-> **工程要点**：`priority_queue` **不是 stable 的**（相同优先级元素顺序不确定）。需要稳定优先队列时，可以用 `(priority, counter)` 做 pair 来解决。
+> [!tip]- **工程要点**：`priority_queue` **不是 stable 的**（相同优先级元素顺序不确定）。需要稳定优先队列时，可以用 `(priority, counter)` 做 pair 来解决。
 
 ---
 

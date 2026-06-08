@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
+> [!important] **核心考点**：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
 
 ## strace：系统调用追踪
 
@@ -147,6 +147,6 @@ Performance counter stats for './prog':
    如果断言失败 → 检查前置条件
 ```
 
-> **工程要点**：三把刀各有所长——strace 看"程序在做什么系统调用"，gdb 看"程序内部状态是什么"，perf 看"程序时间花在哪"。排查问题时先从 strace/perf 宏观定位，再到 gdb 微观确认。**不要上来就用 gdb 单步调试几万行的服务器程序。**
+> [!tip]- **工程要点**：三把刀各有所长——strace 看"程序在做什么系统调用"，gdb 看"程序内部状态是什么"，perf 看"程序时间花在哪"。排查问题时先从 strace/perf 宏观定位，再到 gdb 微观确认。**不要上来就用 gdb 单步调试几万行的服务器程序。**
 
 调试与追踪工具见 → [System Calls Overview (常用系统调用速查)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md)

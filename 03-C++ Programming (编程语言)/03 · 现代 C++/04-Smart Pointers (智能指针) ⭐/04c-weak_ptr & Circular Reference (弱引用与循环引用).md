@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
+> [!important] **核心考点**：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
 
 `weak_ptr` 是对 `shared_ptr` 管理对象的**非拥有观察者**，不增加强引用计数，只增加弱引用计数。
 

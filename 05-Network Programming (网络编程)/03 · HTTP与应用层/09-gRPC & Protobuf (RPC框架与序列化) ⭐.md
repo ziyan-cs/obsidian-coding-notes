@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
+> [!important] **核心考点**：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
 ## 为什么需要 RPC
 
@@ -253,7 +253,7 @@ class LogInterceptor : public grpc::Interceptor {
 | gRPC 为什么快 | Protobuf 编解码快 + HTTP/2 多路复用减少连接数 |
 | Channel 的安全性 | 多个 Stub 共享 Channel 是线程安全的，不需要额外锁 |
 
-> **工程要点**：gRPC 是 C++ 后端微服务间通信的首选方案。关键配置：超时必须设置（默认无限等待）、Keepalive 必须启用（防止中间设备断开空闲连接）、Channel 复用而非每次新建。注意 gRPC 1.x 版本之间可能有 ABI 不兼容，CMake 中锁定版本。
+> [!tip]- **工程要点**：gRPC 是 C++ 后端微服务间通信的首选方案。关键配置：超时必须设置（默认无限等待）、Keepalive 必须启用（防止中间设备断开空闲连接）、Channel 复用而非每次新建。注意 gRPC 1.x 版本之间可能有 ABI 不兼容，CMake 中锁定版本。
 
 ---
 

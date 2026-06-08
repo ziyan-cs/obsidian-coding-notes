@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
+> [!important] **核心考点**
+> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
 ## Nginx 进程模型
 
@@ -113,7 +114,8 @@ nginx -s reload
 | sendfile 优化 | 零拷贝：文件 → 网卡，不经用户态 |
 | 一个 worker 能处理多少连接 | 理论无上限，取决于内存 |
 
-> **工程要点**：`worker_connections 10240` + `worker_processes auto` 是常见配置。大并发时注意修改 `ulimit -n`。Nginx 架构是"少量进程 + 异步非阻塞"的典范。
+> [!tip]- **工程要点**
+> `worker_connections 10240` + `worker_processes auto` 是常见配置。大并发时注意修改 `ulimit -n`。Nginx 架构是"少量进程 + 异步非阻塞"的典范。
 
 ---
 

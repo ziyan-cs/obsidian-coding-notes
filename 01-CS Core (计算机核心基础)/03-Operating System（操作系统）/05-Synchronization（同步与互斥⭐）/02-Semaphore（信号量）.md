@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：信号量概念、P/V 操作、计数信号量 vs 二进制信号量、生产者消费者、读写者问题
+> [!important] **核心考点**：信号量概念、P/V 操作、计数信号量 vs 二进制信号量、生产者消费者、读写者问题
 
 ## 信号量定义
 
@@ -204,7 +204,7 @@ void philosopher(int i) {
 | 虚假唤醒 | 需要 while 循环检查条件 | 无此问题 |
 | 语义 | 无资源计数 | 显式资源计数 |
 
-> **工程要点**：C++ 标准库没有信号量（C++20 才引入 `std::counting_semaphore`），多线程同步首选 `mutex + condition_variable`。信号量在生产者消费问题中自然表达资源计数，但信号量的 P/V 错序容易导致死锁——使用 `condition_variable` 时这类错误更少。
+> [!tip]- **工程要点**：C++ 标准库没有信号量（C++20 才引入 `std::counting_semaphore`），多线程同步首选 `mutex + condition_variable`。信号量在生产者消费问题中自然表达资源计数，但信号量的 P/V 错序容易导致死锁——使用 `condition_variable` 时这类错误更少。
 
 ---
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
+> [!important] **核心考点**：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
 
 ## C++ CI/CD 流水线
 
@@ -143,7 +143,7 @@ CMakeLists.txt   @tech-lead
 | 代码覆盖率 | `gcovr` + `codecov` 自动上传报告 |
 | Sanitizer CI | 单独跑一个 `-DCMAKE_BUILD_TYPE=Debug -DSANITIZER=ON` 的 job |
 
-> **工程要点**：C++ CI 核心是**快**——用 ccache + ninja + 并行把 15 分钟的编译压到 2-3 分钟。CI 跑的检查越多越好，但不要让它成为开发的阻力。建议：PR CI < 10 分钟，超过这个时间团队就开始绕 CI 了。
+> [!tip]- **工程要点**：C++ CI 核心是**快**——用 ccache + ninja + 并行把 15 分钟的编译压到 2-3 分钟。CI 跑的检查越多越好，但不要让它成为开发的阻力。建议：PR CI < 10 分钟，超过这个时间团队就开始绕 CI 了。
 
 ---
 

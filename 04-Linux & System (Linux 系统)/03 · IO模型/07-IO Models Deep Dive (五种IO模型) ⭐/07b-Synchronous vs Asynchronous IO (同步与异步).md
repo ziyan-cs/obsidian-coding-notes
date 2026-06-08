@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
+> [!important] **核心考点**：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
 
 ## 同步 vs 异步的本质
 
@@ -52,6 +52,6 @@ ssize_t ret = aio_return(&cb);
 2. 事件循环 + 回调模型已足够高效
 3. 同步模型更易理解和调试
 
-> **工程要点**：面试中"阻塞/非阻塞"描述**调用行为**，"同步/异步"描述**拷贝主体**。大部分高性能网络框架是"非阻塞同步 IO + 多路复用"组合。
+> [!tip]- **工程要点**：面试中"阻塞/非阻塞"描述**调用行为**，"同步/异步"描述**拷贝主体**。大部分高性能网络框架是"非阻塞同步 IO + 多路复用"组合。
 
 同步与异步 IO 详解见 → [Blocking vs Non-blocking IO (阻塞与非阻塞)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07a-Blocking%20vs%20Non-blocking%20IO%20(阻塞与非阻塞).md) · [IO Multiplexing (多路复用对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)

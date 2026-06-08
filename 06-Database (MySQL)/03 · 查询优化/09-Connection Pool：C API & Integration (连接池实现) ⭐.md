@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
+> [!important] **核心考点**：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
 ## MySQL C API 基础
 
@@ -194,7 +194,7 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 }
 ```
 
-> **工程要点**：数据库连接池的坑：1) MySQL `wait_timeout` 默认 8 小时，连接池中的空闲连接可能被 MySQL 服务端断开——所以获取连接时必须先做 `mysql_ping` 或 `SELECT 1` 验证；2) 连接泄露——应用获取连接后必须保证在 finally 中 release；3) 事务未提交——获取连接时注意是否需要回滚残留事务。推荐 C++ 项目使用成熟的连接池库如 AliSQL 的 ConnectionPool 或自研基于 `MYSQL` 句柄池的封装。
+> [!tip]- **工程要点**：数据库连接池的坑：1) MySQL `wait_timeout` 默认 8 小时，连接池中的空闲连接可能被 MySQL 服务端断开——所以获取连接时必须先做 `mysql_ping` 或 `SELECT 1` 验证；2) 连接泄露——应用获取连接后必须保证在 finally 中 release；3) 事务未提交——获取连接时注意是否需要回滚残留事务。推荐 C++ 项目使用成熟的连接池库如 AliSQL 的 ConnectionPool 或自研基于 `MYSQL` 句柄池的封装。
 
 ---
 

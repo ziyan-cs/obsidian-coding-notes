@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
+> [!important] **核心考点**：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
 ## GDB 核心命令
 
@@ -139,7 +139,7 @@ valgrind --tool=callgrind ./main
 | **ThreadSanitizer** | 数据竞争检测 | ~5x 慢 |
 | **UBSan** | 未定义行为检测 | ~1.5x 慢 |
 
-> **工程要点**：现代 C++ 调试首选 **AddressSanitizer**（快、准）。在 CI 中应开启 ASan + UBSan。与 GDB 配合使用：ASan 告诉你问题类型和位置，GDB 帮你分析上下文。
+> [!tip]- **工程要点**：现代 C++ 调试首选 **AddressSanitizer**（快、准）。在 CI 中应开启 ASan + UBSan。与 GDB 配合使用：ASan 告诉你问题类型和位置，GDB 帮你分析上下文。
 
 ---
 

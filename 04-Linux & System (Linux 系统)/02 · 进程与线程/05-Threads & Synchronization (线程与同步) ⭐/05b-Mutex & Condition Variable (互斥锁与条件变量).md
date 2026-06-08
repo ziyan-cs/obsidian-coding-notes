@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
+> [!important] **核心考点**：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
 ## 互斥锁（Mutex）
 

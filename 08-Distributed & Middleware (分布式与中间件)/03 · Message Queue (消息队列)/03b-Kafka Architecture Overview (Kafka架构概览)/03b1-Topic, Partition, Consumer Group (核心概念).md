@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
+> [!important] **核心考点**
+> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
 ## Kafka 核心概念
 
@@ -109,7 +110,8 @@ max.poll.records=500        # 每次拉取条数
 | Rebalance 影响 | 期间消费暂停，应避免频繁触发 |
 | 分区数建议 | 通常 = 消费者数 = CPU 核数 |
 
-> **工程要点**：性能与分区数相关——分区太多增加选举和句柄开销。建议分区数不超过 1000/集群。手动提交 offset，处理成功后再提交。
+> [!tip]- **工程要点**
+> 性能与分区数相关——分区太多增加选举和句柄开销。建议分区数不超过 1000/集群。手动提交 offset，处理成功后再提交。
 
 ---
 

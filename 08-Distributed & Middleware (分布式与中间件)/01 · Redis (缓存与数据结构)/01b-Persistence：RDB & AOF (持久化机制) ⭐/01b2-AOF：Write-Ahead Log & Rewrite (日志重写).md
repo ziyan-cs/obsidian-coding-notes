@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
+> [!important] **核心考点**
+> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
 ## AOF 日志
 
@@ -120,7 +121,8 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 | 混合持久化加载流程 | 读文件头判断是否为 RDB → 加载 RDB → 重放剩余 AOF |
 | AOF rewrite 中的增量处理 | 重写缓冲区记录重写期间的命令，完成后追加 |
 
-> **工程要点**：生产环境推荐 `appendfsync everysec` + `aof-use-rdb-preamble yes`。RDB 仍建议开启作为备份补充（灾难恢复场景）。`info persistence` 监控 `aof_pending_bio_fsync` 判断 AOF 是否堆积。
+> [!tip]- **工程要点**
+> 生产环境推荐 `appendfsync everysec` + `aof-use-rdb-preamble yes`。RDB 仍建议开启作为备份补充（灾难恢复场景）。`info persistence` 监控 `aof_pending_bio_fsync` 判断 AOF 是否堆积。
 
 ---
 

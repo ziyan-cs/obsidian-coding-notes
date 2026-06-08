@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 
-> **核心考点**：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
+> [!important] **核心考点**：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 
 ## AddressSanitizer（ASan）
 

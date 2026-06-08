@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 
-> **核心考点**：auto 的推导规则、decltype 与 auto 的区别、trailing return type
+> [!important] **核心考点**：auto 的推导规则、decltype 与 auto 的区别、trailing return type
 
 ## auto
 

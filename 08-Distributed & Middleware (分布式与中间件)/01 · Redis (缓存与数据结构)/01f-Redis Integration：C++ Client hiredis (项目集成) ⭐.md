@@ -4,7 +4,8 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
+> [!important] **核心考点**
+> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
 
 ## hiredis 库
 
@@ -184,7 +185,8 @@ public:
 | 异步 hiredis 依赖 | 需要事件库（libevent/libev） |
 | 序列化方式 | JSON / protobuf / MessagePack |
 
-> **工程要点**：生产环境推荐使用 Pipeline 批量操作（可提升 5-10 倍吞吐）。注意 Pipeline 无事务性，中间失败不影响后续命令。超时时间设为 200-500ms 较为合理，避免长时间等待。
+> [!tip]- **工程要点**
+> 生产环境推荐使用 Pipeline 批量操作（可提升 5-10 倍吞吐）。注意 Pipeline 无事务性，中间失败不影响后续命令。超时时间设为 200-500ms 较为合理，避免长时间等待。
 
 ---
 

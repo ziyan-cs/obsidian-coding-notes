@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-> **核心考点**：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
+> [!important] **核心考点**：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
 
 
 # OSI vs TCP/IP  
