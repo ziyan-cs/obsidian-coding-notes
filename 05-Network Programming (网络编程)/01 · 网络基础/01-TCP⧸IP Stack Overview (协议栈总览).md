@@ -136,10 +136,4 @@ DNS（域名系统）将易读记的域名解析为机器可识别的 IP 地址
 
 ---
 
-## 关联笔记
-
-- [UDP Characteristics & Use Cases (UDP特性与使用场景)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/03-UDP%20Characteristics%20&%20Use%20Cases%20(UDP特性与使用场景).md)
-- [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md)
-- [TCP State Machine (状态机全图)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md)
-- [TIME_WAIT：Why & How to Handle (TIME_WAIT原因与处理)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02c-TIME_WAIT：Why%20&%20How%20to%20Handle%20(TIME_WAIT原因与处理).md)
-- [Flow Control & Congestion Control (流量控制与拥塞控制)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md)
+传输层核心协议详解见 → [UDP Characteristics & Use Cases (UDP特性与使用场景)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/03-UDP%20Characteristics%20&%20Use%20Cases%20(UDP特性与使用场景).md>) · [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md>)

@@ -169,10 +169,4 @@ void mutex_lock(int *futex) {
 
 ---
 
-## 关联笔记
-
-- [Semaphore（信号量）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/02-Semaphore（信号量）.md)
-- [Deadlock（死锁）](/01-CS%20Core%20(计算机核心基础)/03-Operating%20System（操作系统）/05-Synchronization（同步与互斥⭐）/03-Deadlock（死锁）.md)
-- [What is a Computer（计算机本质）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/01-What%20is%20a%20Computer（计算机本质）.md)
-- [Hardware vs Software（软硬件关系）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/02-Hardware%20vs%20Software（软硬件关系）.md)
-- [System Abstraction（系统抽象层次）](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals（计算机基础）/01-Computer%20Overview（计算机系统总览）/03-System%20Abstraction（系统抽象层次）.md)
+进阶话题见 → [信号量](02-Semaphore（信号量）.md) · [死锁](03-Deadlock（死锁）.md)

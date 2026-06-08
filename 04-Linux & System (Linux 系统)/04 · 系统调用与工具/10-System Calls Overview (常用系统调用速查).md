@@ -85,12 +85,4 @@ tags:
 
 > **工程要点**：频繁系统调用是性能瓶颈之一。减少系统调用的技术包括：用户态缓冲区（stdio 的 fread/fwrite）、批量处理（readv/writev 聚集 IO）、mmap 减少 read/write、epoll 替代 select/poll。
 
----
-
-## 关联笔记
-
-- [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md)
-- [Debugging & Tracing： strace, gdb, perf (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
-- [Shell & Basic Commands (命令行与Shell编程)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md)
-- [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
-- [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)
+系统调用速查见 → [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md) · [Debugging & Tracing (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
