@@ -164,10 +164,6 @@ pt-query-digest /var/log/mysql/slow.log
 
 ---
 
-## 关联笔记
 
-- [Table Design (表设计)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/03-Table%20Design%20(表设计).md)
-- [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)
-- [Index Design Principles (索引设计原则)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)
-- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
-- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+
+执行计划分析见 → [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md) · [Index Design Principles (索引设计原则)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)

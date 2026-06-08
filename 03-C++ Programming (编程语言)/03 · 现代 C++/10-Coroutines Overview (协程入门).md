@@ -176,10 +176,4 @@ task<void> fetch_coro() {
 
 ---
 
-## 关联笔记
-
-- [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
-- [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/01-Type%20Deduction%20(类型推导).md)
-- [Lambda & Function Object (Lambda与函数对象)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/02-Lambda%20&%20Function%20Object%20(Lambda与函数对象)%20⭐.md)
-- [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
-- [constexpr & Compile-time Computation (编译期计算)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/06-constexpr%20&%20Compile-time%20Computation%20(编译期计算).md)
+协程是 C++20 的核心新特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)

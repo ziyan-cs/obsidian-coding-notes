@@ -157,10 +157,6 @@ CREATE TABLE order (
 
 ---
 
-## 关联笔记
 
-- [Master-Slave Replication (主从复制原理)](/06-Database%20(MySQL)/04%20·%20高可用与架构/10-Master-Slave%20Replication%20(主从复制原理).md)
-- [MySQL vs Redis：Caching Strategy (缓存策略对比)](/06-Database%20(MySQL)/04%20·%20高可用与架构/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
-- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
-- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
-- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)
+
+主从复制原理见 → [Master-Slave Replication (主从复制原理)](/06-Database%20(MySQL)/04%20·%20高可用与架构/10-Master-Slave%20Replication%20(主从复制原理).md) · [MySQL vs Redis：Caching Strategy (缓存策略对比)](/06-Database%20(MySQL)/04%20·%20高可用与架构/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)

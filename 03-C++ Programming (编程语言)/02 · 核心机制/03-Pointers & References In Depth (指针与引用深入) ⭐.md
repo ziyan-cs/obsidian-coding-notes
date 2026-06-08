@@ -83,10 +83,4 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 
 ---
 
-## 关联笔记
-
-- [Const%2C Typedef %26 Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const%2C%20Typedef%20%26%20Enum%20(类型系统基础).md)
-- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
-- [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
-- [OOP Principles (面向对象三大特性)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/05-OOP%20Principles%20(面向对象三大特性).md)
-- [Templates Basics (模板基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/08-Templates%20Basics%20(模板基础).md)
+指针类型转换详见 → [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)

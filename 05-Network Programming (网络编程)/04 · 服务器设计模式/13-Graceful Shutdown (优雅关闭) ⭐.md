@@ -219,10 +219,4 @@ Kubernetes 删除 Pod 时：
 
 ---
 
-## 关联笔记
-
-- [Connection Pool Design (连接池设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md)
-- [Buffer Design：Read & Write Buffer (缓冲区设计)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md)
-- [Server Performance：Benchmarking with wrk (压测)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md)
-- [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](/05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md)
-- [TCP⧸IP Stack Overview (协议栈总览)](/05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md)
+服务器设计实践见 → [Connection Pool Design (连接池设计)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md>)

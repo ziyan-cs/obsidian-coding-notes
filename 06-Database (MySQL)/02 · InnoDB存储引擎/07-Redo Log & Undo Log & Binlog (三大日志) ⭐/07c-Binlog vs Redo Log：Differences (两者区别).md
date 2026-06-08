@@ -140,10 +140,6 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 ---
 
-## 关联笔记
 
-- [WAL：Write-Ahead Logging (WAL机制)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07a-WAL：Write-Ahead%20Logging%20(WAL机制).md)
-- [Redo Log：Crash Recovery (崩溃恢复)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md)
-- [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
-- [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
-- [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)
+
+WAL机制详解见 → [WAL：Write-Ahead Logging (WAL机制)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07a-WAL：Write-Ahead%20Logging%20(WAL机制).md) · [Redo Log：Crash Recovery (崩溃恢复)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md)

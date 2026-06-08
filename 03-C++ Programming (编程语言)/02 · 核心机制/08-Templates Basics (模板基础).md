@@ -125,10 +125,4 @@ std::conditional_t<true, int, double>  // int
 
 ---
 
-## 关联笔记
-
-- [Const%2C Typedef %26 Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const%2C%20Typedef%20%26%20Enum%20(类型系统基础).md)
-- [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
-- [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
-- [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
-- [OOP Principles (面向对象三大特性)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/05-OOP%20Principles%20(面向对象三大特性).md)
+类型别名与模板紧密相关，详见 → [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)

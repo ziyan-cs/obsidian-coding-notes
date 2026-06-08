@@ -44,10 +44,4 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 ---
 
-## 关联笔记
-
-- [Constructor & Destructor Order (构造析构顺序)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)
-- [Copy Control & Rule of 5 (拷贝控制与五法则)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)
-- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
-- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
-- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+拷贝控制与运算符重载常配合使用，详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)

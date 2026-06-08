@@ -123,10 +123,4 @@ v.shrink_to_fit();
 
 ---
 
-## 关联笔记
-
-- [deque Block-based Storage (分块存储)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md)
-- [list Doubly Linked List (双向链表)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)
-- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
-- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
-- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+其他序列容器对比详见 → [deque Block-based Storage (分块存储)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md) · [list Doubly Linked List (双向链表)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)

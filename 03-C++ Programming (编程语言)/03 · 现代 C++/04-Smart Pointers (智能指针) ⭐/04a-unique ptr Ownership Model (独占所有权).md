@@ -43,10 +43,4 @@ std::unique_ptr<void, decltype(&free)> buf(malloc(1024), free);
 
 ---
 
-## 关联笔记
-
-- [shared ptr Reference Counting Internals (引用计数底层)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
-- [weak_ptr & Circular Reference (弱引用与循环引用)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04c-weak_ptr%20&%20Circular%20Reference%20(弱引用与循环引用).md)
-- [Variables, Types & Operators (变量、类型与运算符)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
-- [Control Flow(流程控制)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/02-Control%20Flow(流程控制).md)
-- [Functions(函数)](/03-C++%20Programming%20(编程语言)/01%20·%20基础语法/03-Functions(函数).md)
+shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
