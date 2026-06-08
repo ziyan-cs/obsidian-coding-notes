@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - stl
+  - cpp/stl
+status: 🌱
 ---
 
 > **核心考点**：STL 算法的分类、迭代器要求、Lambda 配合使用

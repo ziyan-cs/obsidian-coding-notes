@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
   - git
+status: 🌱
 ---
 
 > **核心考点**：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署

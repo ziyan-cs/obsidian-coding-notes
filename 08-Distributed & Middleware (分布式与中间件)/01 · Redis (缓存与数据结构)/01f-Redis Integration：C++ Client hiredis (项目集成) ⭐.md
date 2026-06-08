@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式

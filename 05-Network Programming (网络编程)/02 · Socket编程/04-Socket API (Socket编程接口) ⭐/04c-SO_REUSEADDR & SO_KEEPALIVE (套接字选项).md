@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - socket
+  - network/socket
+status: 🌱
 ---
 
 > **核心考点**：SO_REUSEADDR 解决 TIME_WAIT 复用、SO_KEEPALIVE 心跳保活、TCP_NODELAY 与 Nagle 算法

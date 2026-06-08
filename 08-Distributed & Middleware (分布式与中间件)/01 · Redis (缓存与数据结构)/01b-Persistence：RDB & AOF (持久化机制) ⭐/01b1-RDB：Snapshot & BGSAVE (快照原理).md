@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点

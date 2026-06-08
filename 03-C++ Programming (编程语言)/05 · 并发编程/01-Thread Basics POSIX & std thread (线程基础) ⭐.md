@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - concurrency
+  - cpp/concurrency
+status: 🌱
 ---
 
 > **核心考点**：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理

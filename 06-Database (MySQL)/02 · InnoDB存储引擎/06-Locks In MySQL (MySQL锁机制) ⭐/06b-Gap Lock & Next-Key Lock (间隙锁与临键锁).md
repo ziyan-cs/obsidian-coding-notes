@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
+status: 🌱
 ---
 
 > **核心考点**：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障

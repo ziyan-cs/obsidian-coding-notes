@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - optimization
+  - database/optimization
+status: 🌱
 ---
 
 > **核心考点**：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化

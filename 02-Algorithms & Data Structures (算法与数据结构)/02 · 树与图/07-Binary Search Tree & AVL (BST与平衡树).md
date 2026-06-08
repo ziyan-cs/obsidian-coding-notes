@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：BST 中序遍历递增性质、查找/插入/删除的迭代与递归、AVL 旋转平衡机制

@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - class-internals
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝

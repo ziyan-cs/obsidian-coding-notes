@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - nginx
+  - distributed/nginx
+status: 🌱
 ---
 
 > **核心考点**：Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型

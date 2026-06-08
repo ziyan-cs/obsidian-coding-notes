@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：封装、继承、多态三大面向对象特性在 C++ 中的实现

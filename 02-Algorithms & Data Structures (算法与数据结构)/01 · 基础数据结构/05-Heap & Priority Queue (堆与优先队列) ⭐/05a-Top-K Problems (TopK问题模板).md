@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - basics
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：堆的 push/pop 操作、TopK 的堆解法 vs 快速选择、海量数据处理的堆思路

@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - sql
+  - database/sql
+status: 🌱
 ---
 
 > **核心考点**：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页

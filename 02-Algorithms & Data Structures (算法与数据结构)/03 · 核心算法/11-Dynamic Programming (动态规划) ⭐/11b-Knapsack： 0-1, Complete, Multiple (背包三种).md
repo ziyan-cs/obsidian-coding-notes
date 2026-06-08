@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化

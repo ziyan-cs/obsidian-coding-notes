@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果

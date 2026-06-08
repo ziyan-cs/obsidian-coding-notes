@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - optimization
+  - database/optimization
+status: 🌱
 ---
 
 > **核心考点**：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧

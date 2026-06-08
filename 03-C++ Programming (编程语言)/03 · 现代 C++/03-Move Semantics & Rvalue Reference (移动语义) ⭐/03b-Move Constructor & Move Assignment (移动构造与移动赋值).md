@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - modern-cpp
+  - cpp/modern
+status: 🌱
 ---
 
 > **核心考点**：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义

@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - modern-cpp
+  - cpp/modern
+status: 🌱
 ---
 
 > **核心考点**：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系

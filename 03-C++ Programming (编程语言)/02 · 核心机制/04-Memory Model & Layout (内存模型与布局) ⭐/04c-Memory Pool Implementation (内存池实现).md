@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - memory-layout
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：内存池解决 malloc 开销与碎片问题、固定大小分配器实现

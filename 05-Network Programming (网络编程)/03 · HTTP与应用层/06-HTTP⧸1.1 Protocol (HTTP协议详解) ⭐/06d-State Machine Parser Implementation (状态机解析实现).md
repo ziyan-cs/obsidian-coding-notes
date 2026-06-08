@@ -1,7 +1,6 @@
 ---
 tags:
-  - network
-  - http
+  - network/http
 status: 🌱
 ---
 

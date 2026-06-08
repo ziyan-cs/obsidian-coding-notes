@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - computer-org
+  - cs/computer-org
+status: 🌱
 ---
 
 > **核心考点**：I/O 三种方式（程序控制/中断/DMA）、中断处理流程、DMA 传输机制

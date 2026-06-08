@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - io-model
+  - linux/io
+status: 🌱
 ---
 
 > **核心考点**：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异

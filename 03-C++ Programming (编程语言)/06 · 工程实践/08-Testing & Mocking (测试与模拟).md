@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - engineering
+  - cpp/engineering
+status: 🌱
 ---
 
 > **核心考点**：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成

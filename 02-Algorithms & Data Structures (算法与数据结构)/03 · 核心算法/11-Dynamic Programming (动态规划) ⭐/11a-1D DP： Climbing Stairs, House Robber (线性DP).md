@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化

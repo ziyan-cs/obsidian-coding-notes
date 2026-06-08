@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - modern-cpp
+  - cpp/modern
+status: 🌱
 ---
 
 > **核心考点**：左值/右值/将亡值的定义，右值引用的绑定规则

@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - vtable
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：多继承的二义性、虚继承解决菱形继承问题、对象布局变化

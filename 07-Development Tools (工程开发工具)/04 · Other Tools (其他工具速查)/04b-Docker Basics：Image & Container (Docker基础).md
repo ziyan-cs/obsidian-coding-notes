@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
-  - tools
+  - devtools/tools
+status: 🌱
 ---
 
 

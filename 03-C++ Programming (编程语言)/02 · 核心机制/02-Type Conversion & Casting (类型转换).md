@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则

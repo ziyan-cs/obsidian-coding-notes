@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：延迟 vs 吞吐量、Amdahl 定律、CPU 性能公式、性能度量指标

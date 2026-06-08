@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - class-internals
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性

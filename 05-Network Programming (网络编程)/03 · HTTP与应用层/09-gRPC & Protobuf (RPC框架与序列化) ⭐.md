@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - http
+  - network/http
+status: 🌱
 ---
 
 > **核心考点**：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比

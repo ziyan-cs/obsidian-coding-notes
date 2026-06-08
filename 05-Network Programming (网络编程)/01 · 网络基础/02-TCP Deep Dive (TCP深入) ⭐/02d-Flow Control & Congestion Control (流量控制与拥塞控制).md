@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - networking
+  - network/core
+status: 🌱
 ---
 
 > **核心考点**：两者的区别、滑动窗口、拥塞控制四个阶段

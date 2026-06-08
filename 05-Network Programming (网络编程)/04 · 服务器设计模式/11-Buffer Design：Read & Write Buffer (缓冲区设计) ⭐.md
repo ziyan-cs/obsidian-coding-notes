@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理

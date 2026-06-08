@@ -1,8 +1,7 @@
 ---
 tags:
-  - cs
-  - os
-  - memory-mgmt
+  - cs/os
+status: 🌱
 ---
 
 > **核心考点**：虚拟地址 vs 物理地址、MMU/TLB、缺页中断、页面置换、页表结构

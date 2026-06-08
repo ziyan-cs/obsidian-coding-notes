@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - basics
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：双指针的四种模式、滑动窗口、前缀和

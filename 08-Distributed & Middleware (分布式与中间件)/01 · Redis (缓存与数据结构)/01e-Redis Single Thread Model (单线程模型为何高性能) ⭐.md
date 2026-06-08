@@ -1,7 +1,6 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
 status: 🌱
 ---
 

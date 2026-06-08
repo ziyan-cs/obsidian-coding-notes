@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原

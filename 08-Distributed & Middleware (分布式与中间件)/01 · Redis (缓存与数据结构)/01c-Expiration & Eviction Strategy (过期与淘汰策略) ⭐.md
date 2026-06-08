@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU

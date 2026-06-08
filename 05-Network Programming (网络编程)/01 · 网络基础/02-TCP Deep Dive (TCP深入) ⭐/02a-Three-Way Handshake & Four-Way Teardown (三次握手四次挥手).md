@@ -1,7 +1,6 @@
 ---
 tags:
-  - network
-  - networking
+  - network/core
 status: 🌱
 ---
 

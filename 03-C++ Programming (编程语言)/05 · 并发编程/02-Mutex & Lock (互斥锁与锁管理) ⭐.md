@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - concurrency
+  - cpp/concurrency
+status: 🌱
 ---
 
 > **核心考点**：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度

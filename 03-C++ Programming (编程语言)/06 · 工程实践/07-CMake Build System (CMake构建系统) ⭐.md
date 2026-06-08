@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - engineering
+  - cpp/engineering
+status: 🌱
 ---
 
 > **核心考点**：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理

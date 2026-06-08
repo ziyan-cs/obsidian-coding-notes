@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - syntax
+  - cpp/syntax
+status: 🌱
 ---
 
 > **核心考点**：iostream 格式化、文件读写、输入缓冲机制、性能注意事项

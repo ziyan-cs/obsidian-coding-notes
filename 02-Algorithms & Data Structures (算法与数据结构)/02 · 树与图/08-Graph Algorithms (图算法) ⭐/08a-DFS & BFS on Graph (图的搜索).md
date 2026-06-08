@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环

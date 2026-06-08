@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - networking
+  - network/core
+status: 🌱
 ---
 
 > **核心考点**：UDP 与 TCP 的本质差异、UDP 的特性细节、适用场景、以及基于 UDP 的可靠传输如何实现

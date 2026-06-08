@@ -1,8 +1,7 @@
 ---
 tags:
-  - career
-  - system-design
-  - interview
+  - distributed/system
+status: 🌱
 ---
 
 > **核心考点**：etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布

@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：函数模板、类模板、模板特化、SFINAE 初步

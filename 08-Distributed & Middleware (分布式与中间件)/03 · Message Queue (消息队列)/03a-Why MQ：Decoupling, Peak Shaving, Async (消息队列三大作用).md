@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - mq
+  - distributed/mq
+status: 🌱
 ---
 
 > **核心考点**：消息队列三大作用、同步 vs 异步对比、MQ 引入的问题

@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
   - cmake
+status: 🌱
 ---
 
 > **核心考点**：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比

@@ -1,8 +1,7 @@
 ---
 tags:
-  - cs
-  - os
-  - synchronization
+  - cs/os
+status: 🌱
 ---
 
 > **核心考点**：信号量概念、P/V 操作、计数信号量 vs 二进制信号量、生产者消费者、读写者问题

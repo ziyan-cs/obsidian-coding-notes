@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：编译四阶段（预处理/编译/汇编/链接）、静态链接 vs 动态链接、链接器符号解析与重定位

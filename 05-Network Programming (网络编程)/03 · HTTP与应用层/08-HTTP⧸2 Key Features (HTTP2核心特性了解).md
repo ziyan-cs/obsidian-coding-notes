@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - http
+  - network/http
+status: 🌱
 ---
 
 > **核心考点**：HTTP/2 多路复用、头部压缩 HPACK、二进制分帧、服务器推送等核心特性

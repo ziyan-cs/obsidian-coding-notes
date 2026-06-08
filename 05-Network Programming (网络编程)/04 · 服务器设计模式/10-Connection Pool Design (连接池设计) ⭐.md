@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离

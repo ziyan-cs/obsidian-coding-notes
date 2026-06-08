@@ -1,7 +1,6 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
 status: 🌱
 ---
 

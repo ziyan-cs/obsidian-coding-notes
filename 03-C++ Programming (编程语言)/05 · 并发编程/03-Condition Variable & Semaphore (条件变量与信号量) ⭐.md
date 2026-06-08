@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - concurrency
+  - cpp/concurrency
+status: 🌱
 ---
 
 > **核心考点**：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择

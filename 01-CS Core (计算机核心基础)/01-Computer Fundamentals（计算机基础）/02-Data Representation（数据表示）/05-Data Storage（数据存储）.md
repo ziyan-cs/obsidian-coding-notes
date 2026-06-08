@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：字节序（大小端）、数据对齐、存储层次、数据持久化

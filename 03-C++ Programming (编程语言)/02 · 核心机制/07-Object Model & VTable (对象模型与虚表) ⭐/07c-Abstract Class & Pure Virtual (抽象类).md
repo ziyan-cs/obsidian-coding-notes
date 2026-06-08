@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - vtable
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）

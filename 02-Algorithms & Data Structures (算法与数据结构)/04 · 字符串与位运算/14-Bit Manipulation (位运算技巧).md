@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - string-bit
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：位运算基本操作、常用位技巧、Brian Kernighan 算法、^ 异或的妙用、掩码与状态压缩

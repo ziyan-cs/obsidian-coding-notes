@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - basics
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题

@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础

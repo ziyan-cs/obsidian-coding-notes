@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - sql
+  - database/sql
+status: 🌱
 ---
 
 > **核心考点**：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序

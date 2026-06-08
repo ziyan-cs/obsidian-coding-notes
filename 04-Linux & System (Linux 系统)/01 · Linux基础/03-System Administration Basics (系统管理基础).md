@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - basics
+  - linux/basics
+status: 🌱
 ---
 
 > **核心考点**：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看

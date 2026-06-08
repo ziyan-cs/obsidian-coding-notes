@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - concurrency
+  - cpp/concurrency
+status: 🌱
 ---
 
 > **核心考点**：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础

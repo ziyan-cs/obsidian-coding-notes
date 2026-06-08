@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - stl
+  - cpp/stl
+status: 🌱
 ---
 
 > **核心考点**：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决

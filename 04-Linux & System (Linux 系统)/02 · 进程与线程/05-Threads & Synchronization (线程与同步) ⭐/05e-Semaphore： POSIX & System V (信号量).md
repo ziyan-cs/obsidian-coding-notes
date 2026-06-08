@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - process
+  - linux/process
+status: 🌱
 ---
 
 > **核心考点**：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步

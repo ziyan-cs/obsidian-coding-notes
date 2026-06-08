@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：分层架构、CQRS、事件驱动架构、微服务划分原则、C++ 后端项目结构

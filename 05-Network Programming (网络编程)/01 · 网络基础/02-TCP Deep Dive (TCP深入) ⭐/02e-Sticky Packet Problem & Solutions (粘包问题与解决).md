@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - networking
+  - network/core
+status: 🌱
 ---
 
 > **核心考点**：什么是粘包、根本原因、四种解决方案

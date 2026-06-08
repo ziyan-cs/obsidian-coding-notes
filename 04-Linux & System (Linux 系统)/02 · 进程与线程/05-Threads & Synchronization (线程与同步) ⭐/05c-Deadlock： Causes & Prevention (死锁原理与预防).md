@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - process
+  - linux/process
+status: 🌱
 ---
 
 > **核心考点**：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复

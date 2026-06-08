@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
   - git
+status: 🌱
 ---
 
 

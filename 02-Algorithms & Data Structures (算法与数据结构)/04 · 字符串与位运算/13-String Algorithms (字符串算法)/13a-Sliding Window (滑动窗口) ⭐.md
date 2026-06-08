@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - string-bit
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：滑动窗口模板（可变长度/固定长度）、窗口收缩条件判断、哈希表维护字符频次

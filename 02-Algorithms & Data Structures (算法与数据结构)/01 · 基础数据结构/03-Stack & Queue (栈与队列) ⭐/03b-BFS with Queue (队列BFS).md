@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - basics
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复

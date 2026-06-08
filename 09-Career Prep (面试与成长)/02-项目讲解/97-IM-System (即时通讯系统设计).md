@@ -1,8 +1,7 @@
 ---
 tags:
-  - career
-  - system-design
-  - interview
+  - distributed/system
+status: 🌱
 ---
 
 > **核心考点**：WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性

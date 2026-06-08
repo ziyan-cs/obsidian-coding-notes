@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - syntax
+  - cpp/syntax
+status: 🌱
 ---
 
 > **核心考点**：C++ 基本类型的大小与范围、类型转换规则、const 与引用

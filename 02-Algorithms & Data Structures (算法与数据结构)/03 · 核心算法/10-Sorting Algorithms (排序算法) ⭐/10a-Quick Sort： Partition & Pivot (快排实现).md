@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现

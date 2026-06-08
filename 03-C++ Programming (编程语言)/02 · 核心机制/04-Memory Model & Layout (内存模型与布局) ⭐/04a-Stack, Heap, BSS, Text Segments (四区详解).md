@@ -1,8 +1,6 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - memory-layout
+  - cpp/core
 status: 🌱
 ---
 

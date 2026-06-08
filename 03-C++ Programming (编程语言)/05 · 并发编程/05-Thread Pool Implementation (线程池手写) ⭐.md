@@ -1,7 +1,6 @@
 ---
 tags:
-  - cpp
-  - concurrency
+  - cpp/concurrency
 status: 🌱
 ---
 

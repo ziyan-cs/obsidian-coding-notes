@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - optimization
+  - database/optimization
+status: 🌱
 ---
 
 > **核心考点**：字段类型选择原则、主键设计规范、范式与反范式、表结构优化策略

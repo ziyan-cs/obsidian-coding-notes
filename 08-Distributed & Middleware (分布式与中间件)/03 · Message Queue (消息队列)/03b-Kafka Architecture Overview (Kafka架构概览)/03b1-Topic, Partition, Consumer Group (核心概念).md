@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - mq
+  - distributed/mq
+status: 🌱
 ---
 
 > **核心考点**：Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance

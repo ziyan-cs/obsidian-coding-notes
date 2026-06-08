@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
-  - tools
+  - devtools/tools
+status: 🌱
 ---
 
 > **核心考点**：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark

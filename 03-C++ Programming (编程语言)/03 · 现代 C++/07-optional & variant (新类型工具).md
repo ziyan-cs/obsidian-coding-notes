@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - modern-cpp
+  - cpp/modern
+status: 🌱
 ---
 
 > **核心考点**：optional、variant、any 三种新型类型工具的适用场景

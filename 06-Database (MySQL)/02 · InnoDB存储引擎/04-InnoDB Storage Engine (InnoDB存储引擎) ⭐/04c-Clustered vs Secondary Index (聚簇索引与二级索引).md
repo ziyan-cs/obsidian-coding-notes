@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
+status: 🌱
 ---
 
 > **核心考点**：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引

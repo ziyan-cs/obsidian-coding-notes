@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - http
+  - network/http
+status: 🌱
 ---
 
 > **核心考点**：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义

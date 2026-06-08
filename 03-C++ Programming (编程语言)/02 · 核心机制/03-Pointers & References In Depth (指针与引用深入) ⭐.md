@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：指针与引用的本质区别、函数指针、智能指针底层原理的关系

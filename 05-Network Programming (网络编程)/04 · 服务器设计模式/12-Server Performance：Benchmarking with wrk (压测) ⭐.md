@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：wrk/ab 压测工具使用、QPS/TPS/延迟指标分析、性能瓶颈定位方法

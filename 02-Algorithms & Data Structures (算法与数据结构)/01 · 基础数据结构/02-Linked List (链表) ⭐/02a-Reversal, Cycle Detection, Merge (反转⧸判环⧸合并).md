@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - basics
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：链表反转的迭代与递归实现、环检测 Floyd 算法、有序链表合并、链表归并排序

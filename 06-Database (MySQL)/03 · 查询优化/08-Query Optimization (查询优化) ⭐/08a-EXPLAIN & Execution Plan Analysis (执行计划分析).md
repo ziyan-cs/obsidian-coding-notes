@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - optimization
+  - database/optimization
+status: 🌱
 ---
 
 > **核心考点**：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位

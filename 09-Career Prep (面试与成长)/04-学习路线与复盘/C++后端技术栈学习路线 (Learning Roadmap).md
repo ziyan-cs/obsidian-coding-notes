@@ -1,8 +1,6 @@
 ---
 tags:
-  - career
-  - roadmap
-  - interview
+  - career/interview
 status: 🌱
 ---
 

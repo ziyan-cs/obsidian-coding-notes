@@ -1,8 +1,6 @@
 ---
 tags:
-  - cs
-  - os
-  - synchronization
+  - cs/os
 status: 🌱
 ---
 

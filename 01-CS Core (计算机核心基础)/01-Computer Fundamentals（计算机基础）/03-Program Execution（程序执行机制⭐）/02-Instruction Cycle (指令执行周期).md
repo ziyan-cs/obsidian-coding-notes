@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：取指-译码-执行周期、CPU 流水线各阶段、流水线冒险与解决

@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - process
+  - linux/process
+status: 🌱
 ---
 
 > **核心考点**：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期

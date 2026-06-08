@@ -1,7 +1,6 @@
 ---
 tags:
-  - cs
-  - computer-org
+  - cs/computer-org
 status: 🌱
 ---
 

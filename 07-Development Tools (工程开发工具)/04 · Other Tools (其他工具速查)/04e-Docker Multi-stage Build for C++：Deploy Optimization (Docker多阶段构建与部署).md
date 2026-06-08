@@ -1,7 +1,7 @@
 ---
 tags:
-  - devtools
-  - tools
+  - devtools/tools
+status: 🌱
 ---
 
 > **核心考点**：多阶段构建原理、C++ 二进制最小化、Alpine vs Ubuntu 抉择、CI 集成

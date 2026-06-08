@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：缓存穿透原因、布隆过滤器原理、误判率与哈希函数数、解决方案对比

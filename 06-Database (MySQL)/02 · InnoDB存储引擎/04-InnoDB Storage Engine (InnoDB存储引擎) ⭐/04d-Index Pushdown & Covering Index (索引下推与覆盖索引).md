@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
+status: 🌱
 ---
 
 > **核心考点**：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化

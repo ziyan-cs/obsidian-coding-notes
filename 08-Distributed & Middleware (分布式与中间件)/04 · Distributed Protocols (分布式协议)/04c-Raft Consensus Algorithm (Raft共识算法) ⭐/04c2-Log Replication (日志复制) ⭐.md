@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - distributed-protocol
+  - distributed/protocol
+status: 🌱
 ---
 
 > **核心考点**：日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理

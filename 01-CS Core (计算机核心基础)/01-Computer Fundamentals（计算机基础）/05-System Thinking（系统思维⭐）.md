@@ -1,7 +1,6 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
 status: 🌱
 ---
 

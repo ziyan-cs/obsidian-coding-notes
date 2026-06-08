@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - sql
+  - database/sql
+status: 🌱
 ---
 
 > **核心考点**：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询

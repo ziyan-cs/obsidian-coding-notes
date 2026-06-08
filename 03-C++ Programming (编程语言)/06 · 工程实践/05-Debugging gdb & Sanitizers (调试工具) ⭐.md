@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - engineering
+  - cpp/engineering
+status: 🌱
 ---
 
 > **核心考点**：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析

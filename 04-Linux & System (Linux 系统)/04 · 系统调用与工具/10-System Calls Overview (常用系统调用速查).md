@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - syscall
+  - linux/syscall
+status: 🌱
 ---
 
 > **核心考点**：文件/进程/网络/内存管理相关系统调用速查、用户态与内核态切换、系统调用开销

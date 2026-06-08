@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化

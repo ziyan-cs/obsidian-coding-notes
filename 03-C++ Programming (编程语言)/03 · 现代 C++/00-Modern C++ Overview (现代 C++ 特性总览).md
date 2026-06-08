@@ -1,7 +1,6 @@
 ---
 tags:
-  - cpp
-  - modern-cpp
+  - cpp/modern
 status: 🌱
 ---
 

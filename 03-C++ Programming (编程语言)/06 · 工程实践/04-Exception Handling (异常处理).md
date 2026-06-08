@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - engineering
+  - cpp/engineering
+status: 🌱
 ---
 
 > **核心考点**：异常安全保证、栈展开、noexcept 优化、RAII 与异常

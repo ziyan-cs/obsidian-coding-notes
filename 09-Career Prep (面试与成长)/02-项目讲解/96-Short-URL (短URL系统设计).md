@@ -1,8 +1,7 @@
 ---
 tags:
-  - career
-  - system-design
-  - interview
+  - distributed/system
+status: 🌱
 ---
 
 > **核心考点**：发号器 + 哈希映射 + HTTP 重定向，重点在唯一 ID 生成策略和缓存加速

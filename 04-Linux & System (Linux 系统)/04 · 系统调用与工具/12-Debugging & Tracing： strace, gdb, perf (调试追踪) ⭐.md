@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - syscall
+  - linux/syscall
+status: 🌱
 ---
 
 > **核心考点**：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析

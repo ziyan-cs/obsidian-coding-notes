@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - socket
+  - network/socket
+status: 🌱
 ---
 
 > **核心考点**：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程

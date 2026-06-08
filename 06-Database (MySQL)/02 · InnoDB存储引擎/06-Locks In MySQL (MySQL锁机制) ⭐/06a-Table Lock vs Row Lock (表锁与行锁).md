@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
+status: 🌱
 ---
 
 > **核心考点**：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用

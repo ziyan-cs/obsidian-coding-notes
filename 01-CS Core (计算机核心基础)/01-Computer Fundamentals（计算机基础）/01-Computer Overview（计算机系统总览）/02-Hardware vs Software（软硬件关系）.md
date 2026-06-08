@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - fundamentals
+  - cs/fundamentals
+status: 🌱
 ---
 
 > **核心考点**：软硬件的逻辑等价性、分层抽象、固件的角色、ISA 作为软硬件分界

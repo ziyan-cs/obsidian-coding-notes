@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和

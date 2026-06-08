@@ -1,8 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
-  - vtable
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理

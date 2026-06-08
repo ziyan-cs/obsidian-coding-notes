@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：边界条件、三种模板的使用场景、二分答案

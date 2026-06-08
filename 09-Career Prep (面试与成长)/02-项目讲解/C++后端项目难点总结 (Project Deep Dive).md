@@ -1,8 +1,6 @@
 ---
 tags:
-  - career
-  - project
-  - interview
+  - distributed/system
 status: 🌱
 ---
 

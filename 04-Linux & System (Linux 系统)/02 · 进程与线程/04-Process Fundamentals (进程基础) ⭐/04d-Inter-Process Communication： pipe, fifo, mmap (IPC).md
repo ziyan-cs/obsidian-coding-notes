@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - process
+  - linux/process
+status: 🌱
 ---
 
 > **核心考点**：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比

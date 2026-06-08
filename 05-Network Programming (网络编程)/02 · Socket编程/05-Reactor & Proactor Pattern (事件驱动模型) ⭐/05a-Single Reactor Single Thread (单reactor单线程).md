@@ -1,7 +1,6 @@
 ---
 tags:
-  - network
-  - socket
+  - network/socket
 status: 🌱
 ---
 

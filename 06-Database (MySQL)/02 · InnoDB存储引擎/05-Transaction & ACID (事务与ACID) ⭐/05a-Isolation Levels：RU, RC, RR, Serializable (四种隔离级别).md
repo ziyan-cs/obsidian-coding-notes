@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - innodb
+  - database/innodb
+status: 🌱
 ---
 
 > **核心考点**：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别

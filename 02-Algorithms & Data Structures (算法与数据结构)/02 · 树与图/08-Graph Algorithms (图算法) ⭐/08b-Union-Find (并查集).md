@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：并查集 find/union、路径压缩与按秩合并、连通性检测

@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - computer-org
+  - cs/computer-org
+status: 🌱
 ---
 
 > **核心考点**：CPU 核心组成（数据通路 + 控制单元）、寄存器、ALU、控制器实现方式

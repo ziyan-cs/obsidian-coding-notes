@@ -1,7 +1,7 @@
 ---
 tags:
-  - cs
-  - computer-org
+  - cs/computer-org
+status: 🌱
 ---
 
 > **核心考点**：总线结构（数据/地址/控制）、总线仲裁、总线事务、常见总线标准

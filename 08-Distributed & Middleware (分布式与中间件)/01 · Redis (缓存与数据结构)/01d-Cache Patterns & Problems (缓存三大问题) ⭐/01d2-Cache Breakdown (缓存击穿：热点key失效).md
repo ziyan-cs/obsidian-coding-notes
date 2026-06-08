@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：缓存击穿原因、互斥锁方案、逻辑过期方案、热点 key 处理

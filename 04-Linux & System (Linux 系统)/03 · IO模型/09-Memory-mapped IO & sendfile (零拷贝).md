@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - io-model
+  - linux/io
+status: 🌱
 ---
 
 > **核心考点**：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升

@@ -1,8 +1,7 @@
 ---
 tags:
-  - career
-  - system-design
-  - interview
+  - distributed/system
+status: 🌱
 ---
 
 > **核心考点**：流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"

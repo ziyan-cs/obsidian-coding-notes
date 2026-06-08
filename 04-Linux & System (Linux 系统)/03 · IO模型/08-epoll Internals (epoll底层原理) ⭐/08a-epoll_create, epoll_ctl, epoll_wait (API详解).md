@@ -1,7 +1,6 @@
 ---
 tags:
-  - linux
-  - io-model
+  - linux/io
 status: 🌱
 ---
 

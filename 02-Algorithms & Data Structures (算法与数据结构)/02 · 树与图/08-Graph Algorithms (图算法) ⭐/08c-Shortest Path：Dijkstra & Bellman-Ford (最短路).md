@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：Dijkstra（堆优化）、Bellman-Ford（负权检测）、Floyd 多源最短路

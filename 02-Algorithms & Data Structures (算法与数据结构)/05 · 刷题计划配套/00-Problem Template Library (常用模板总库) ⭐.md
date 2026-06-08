@@ -1,7 +1,6 @@
 ---
 tags:
-  - algorithm
-  - practice
+  - cs/algorithm
 status: 🌱
 ---
 

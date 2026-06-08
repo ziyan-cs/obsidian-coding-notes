@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启

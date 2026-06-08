@@ -1,7 +1,7 @@
 ---
 tags:
-  - linux
-  - process
+  - linux/process
+status: 🌱
 ---
 
 > **核心考点**：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级

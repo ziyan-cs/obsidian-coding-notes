@@ -1,7 +1,7 @@
 ---
 tags:
-  - cpp
-  - core-mechanism
+  - cpp/core
+status: 🌱
 ---
 
 > **核心考点**：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载

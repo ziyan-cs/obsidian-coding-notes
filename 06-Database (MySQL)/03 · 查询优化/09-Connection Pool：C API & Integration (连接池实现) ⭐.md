@@ -1,7 +1,7 @@
 ---
 tags:
-  - database
-  - optimization
+  - database/optimization
+status: 🌱
 ---
 
 > **核心考点**：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优

@@ -1,8 +1,7 @@
 ---
 tags:
-  - cs
-  - os
-  - synchronization
+  - cs/os
+status: 🌱
 ---
 
 > **核心考点**：死锁四条件、死锁预防/避免/检测/恢复、银行家算法、资源分配图

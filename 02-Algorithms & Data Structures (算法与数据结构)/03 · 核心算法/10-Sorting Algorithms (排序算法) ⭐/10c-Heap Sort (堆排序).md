@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - core-algorithm
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性

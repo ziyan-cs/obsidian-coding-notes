@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - networking
+  - network/core
+status: 🌱
 ---
 
 > **核心考点**：每个状态的含义、转换条件、服务端/客户端各自的状态路径

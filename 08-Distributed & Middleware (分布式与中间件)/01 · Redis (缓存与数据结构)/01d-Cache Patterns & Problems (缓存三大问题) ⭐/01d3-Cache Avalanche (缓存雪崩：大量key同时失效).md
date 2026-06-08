@@ -1,7 +1,7 @@
 ---
 tags:
-  - distributed
-  - redis
+  - redis/core
+status: 🌱
 ---
 
 > **核心考点**：缓存雪崩的原因、过期时间加随机化、多级缓存、降级与限流

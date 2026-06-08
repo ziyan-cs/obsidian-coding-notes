@@ -1,7 +1,7 @@
 ---
 tags:
-  - algorithm
-  - tree-graph
+  - cs/algorithm
+status: 🌱
 ---
 
 > **核心考点**：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历

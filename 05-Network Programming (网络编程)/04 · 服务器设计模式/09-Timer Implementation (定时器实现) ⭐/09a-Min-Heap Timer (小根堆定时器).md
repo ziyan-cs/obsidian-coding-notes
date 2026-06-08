@@ -1,7 +1,7 @@
 ---
 tags:
-  - network
-  - server-design
+  - network/server
+status: 🌱
 ---
 
 > **核心考点**：小根堆定时器实现原理、定时器节点管理、超时检测与回调处理
