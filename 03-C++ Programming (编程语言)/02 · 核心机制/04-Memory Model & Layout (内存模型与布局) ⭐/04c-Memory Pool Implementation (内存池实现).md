@@ -20,7 +20,7 @@ status: 🌱
 template<typename T, size_t BlockSize = 4096>
 class MemoryPool {
     union Chunk {
-        char  data[sizeof(T)];
+        char data[sizeof(T)];
         Chunk* next;
     };
     Chunk* freeList_ = nullptr;
