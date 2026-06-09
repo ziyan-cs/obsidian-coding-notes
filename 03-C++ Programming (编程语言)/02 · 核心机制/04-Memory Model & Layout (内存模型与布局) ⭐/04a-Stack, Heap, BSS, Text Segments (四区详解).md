@@ -12,7 +12,7 @@ status: 🌱
 │  HIGH ADDRESS                                │
 ├──────────────────────────────────────────────┤
 │  Stack                                       │
-│    (local variables, function parameters,     │
+│    (local variables, function parameters,    │
 │     return addresses)                        │
 │    ↓ grows downward                          │
 ├──────────────────────────────────────────────┤
@@ -21,11 +21,11 @@ status: 🌱
 │    ↑ grows upward                            │
 ├──────────────────────────────────────────────┤
 │  BSS Segment                                 │
-│    (uninitialized global/static variables,    │
+│    (uninitialized global/static variables,   │
 │     zero-filled at program startup)          │
 ├──────────────────────────────────────────────┤
 │  Data Segment                                │
-│    (initialized global/static variables)      │
+│    (initialized global/static variables)     │
 ├──────────────────────────────────────────────┤
 │  Text Segment (Code Segment)                 │
 │    (read-only, stores machine instructions)  │
