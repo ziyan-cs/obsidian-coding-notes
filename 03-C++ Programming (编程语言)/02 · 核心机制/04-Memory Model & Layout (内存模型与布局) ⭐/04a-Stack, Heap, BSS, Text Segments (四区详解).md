@@ -1,7 +1,7 @@
 ---
 tags:
   - cpp/core
-status: 🌱
+status: 🌿
 ---
 
 > [!important] **核心考点**
