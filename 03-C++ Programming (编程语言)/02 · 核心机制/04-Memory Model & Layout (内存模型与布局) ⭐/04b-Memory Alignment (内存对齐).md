@@ -1,7 +1,7 @@
 ---
 tags:
   - cpp/core
-status: 🌱
+status: 🌿
 ---
 
 > [!important] **核心考点**：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
