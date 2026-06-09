@@ -50,17 +50,17 @@ status: 🌱
 ## 指令执行基本流程
 
 ```
-PC → 寻址 → 从内存取指令 → IR
-                          ↓
-                   控制器译码
-                          ↓
-                   发出控制信号
-                          ↓
-                   ALU / 访存 / 写回
-                          ↓
-                   PC = PC + 指令长度
-                          ↓
-                      重复...
+PC → Address → Fetch instruction → IR
+                                    ↓
+                              Decode
+                                    ↓
+                           Control signals
+                                    ↓
+                     ALU / Mem access / Write back
+                                    ↓
+                          PC = PC + instr len
+                                    ↓
+                                Repeat...
 ```
 
 ## 现代 CPU 的改进
