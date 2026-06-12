@@ -1,27 +1,28 @@
-# Obsidian Git Sync: 同步核心配置，隔离设备私有文件
-# 设备布局、运行状态
+# Obsidian Git Sync: 仅同步笔记 & 核心配置
+# 设备界面与状态
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
-.obsidian/app.json
 .obsidian/workspace*.lock
+.obsidian/app.json
 .obsidian/hotkeys.json
+.obsidian/graph.json
+.obsidian/cache/
+journal.db
 
-# 插件：仅同步配置，忽略本体
+# 插件：仅同步启用列表
 .obsidian/plugins/*
 !.obsidian/community-plugins.json
 !.obsidian/core-plugins.json
 
-# 主题：仅同步选择配置，忽略主题文件
+# 主题：仅同步选择配置
 .obsidian/themes/*
 !.obsidian/appearance.json
 
-# 缓存、临时文件
-.obsidian/cache/
-.obsidian/graph.json
-journal.db
+# 回收站与备份
 .trash/
+.obsidian/backups/
 
-# 系统、IDE 临时文件
+# 系统/IDE临时文件
 .DS_Store
 Thumbs.db
 .vscode/
