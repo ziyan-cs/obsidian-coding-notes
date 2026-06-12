@@ -1,23 +1,27 @@
-# ==============================================
-# Obsidian 忽略规则
-# ==============================================
-
-# 1. 个人工作区布局
+# Obsidian Git Sync: 同步核心配置，隔离设备私有文件
+# 设备布局、运行状态
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/app.json
+.obsidian/workspace*.lock
+.obsidian/hotkeys.json
 
-# 2. 插件安装包、本地缓存
+# 插件：仅同步配置，忽略本体
 .obsidian/plugins/*
+!.obsidian/community-plugins.json
+!.obsidian/core-plugins.json
 
-# 3. 主题安装包
+# 主题：仅同步选择配置，忽略主题文件
 .obsidian/themes/*
+!.obsidian/appearance.json
 
-# 4. 本地缓存、回收站、临时文件
+# 缓存、临时文件
+.obsidian/cache/
+.obsidian/graph.json
 journal.db
 .trash/
-.obsidian/cache/
 
-# 5. 系统/IDE 临时文件
+# 系统、IDE 临时文件
 .DS_Store
 Thumbs.db
 .vscode/
@@ -26,16 +30,6 @@ Thumbs.db
 *~
 *.tmp
 
-# 6. Claude 本地文件
+# 第三方文件
 .claude/
 CLAUDE.md
-
-# ==============================================
-# 以下文件被保留上传
-# ==============================================
-# .obsidian/app.json
-# .obsidian/appearance.json
-# .obsidian/community-plugins.json
-# .obsidian/core-plugins.json
-# .obsidian/graph.json
-# .obsidian/snippets/

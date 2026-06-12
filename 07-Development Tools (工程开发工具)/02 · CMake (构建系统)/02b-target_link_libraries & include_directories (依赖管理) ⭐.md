@@ -1,6 +1,6 @@
 ---
 tags:
-  - cmake
+  - devtools/cmake
 status: 🌱
 ---
 
