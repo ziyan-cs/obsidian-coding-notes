@@ -289,23 +289,23 @@ end
 
 **三种状态 + 计数滑动窗口**：
 
-```
-        ┌──────────────────────────────┐
-        │                              │
-        ▼   失败 ≥ threshold           │
-  ┌──────────┐      ┌──────────┐       │
-  │  Closed   │─────►│   Open   │       │
-  │ (正常)    │      │ (断开)   │       │
-  └──────────┘      └──────────┘       │
-        ▲               │              │
-        │   超时        │              │
-        │   ┌──────────┐│              │
-        │   │ Half-Open│◄──────────────┘
-        │   │ (半开)   │
-        │   └──────────┘
-        │       │
-        └───────┘
-         成功 ≥ threshold
+```         
+		        ┌──────────────────────────────────┐ 
+		        │          Closed (Normal)         |◄──────────┐
+		        |    All requests pass through     |           |
+		        └────────────────┬─────────────────┘           |
+						         │  Failures ≥ threshold       |
+						         ▼                             |
+		        ┌──────────────────────────────────┐           |
+		        │          Open (Tripped)          │           | Successes ≥ success_threshold
+    ┌──────────→|  Fast-fail & block all requests  |           |
+	|           └────────────────┬─────────────────┘           |
+	| Any probe failed           │ Timeout Elapsed             |
+	|  			     		     ▼                             |
+    |	        ┌──────────────────────────────────┐           |
+	└───────────│          Half-Open (Test)        |───────────┘
+		        │    Allow limited probe calls     │
+		        └──────────────────────────────────┘
 ```
 
 - **Closed**：正常代理，统计滑动窗口内的失败率
@@ -350,17 +350,17 @@ func handleRequest(ctx *Context) {
 | 鉴权服务挂了 | 允许本地缓存的 Token 继续有效（忽略下线校验） |
 | 配置中心挂了 | 网关内存中的路由规则不变，正常运行 |
 
-## 面试追问
+## **面试追问**
 
-| 追问方向 | 参考回答 |
-|---------|---------|
-| **网关 vs 普通反向代理（Nginx）的区别？** | Nginx 是 L7 反向代理，侧重性能；API 网关附加了鉴权、限流、熔断、转换、灰度等业务功能。实践中常在 Nginx 之后部署网关（Nginx 负责 TLS 卸载 + 静态资源，网关负责业务路由和策略） |
-| **网关怎么处理大文件上传（1GB+）？** | 流式转发，不在网关内存中缓存完整 Body。使用 chunked transfer encoding，边接收边转发。避免内存 OOM |
-| **网关的鉴权怎么做才能不成为性能瓶颈？** | ① JWT 无状态鉴权（本地解析 + 缓存公钥）；② Token 黑名单用 Redis Bloom Filter；③ 敏感操作才回源鉴权服务校验；④ 分层的 token：短期 access token（1h 本地校验），长期 refresh token（需要回源） |
-| **怎么保证网关不会因为后端慢而耗尽连接？** | ① 每个路由设置独立的连接池上限；② 后端服务级别的超时控制（connect / read / write 分别设超时）；③ 熔断器防止故障传导；④ 管理后台的过载保护（adaptive concurrency limit） |
-| **网关重启时如何处理正在处理中的请求？** | 优雅关闭（graceful shutdown）：① 关闭监听端口（不再接受新请求）；② 等待所有 inflight 请求完成（最多等待 max_wait_seconds）；③ 超过等待时间的请求返回 502；④ 进程退出 |
-| **Kong / Spring Cloud Gateway / Nginx + Lua 各有什么优劣？** | Kong：功能丰富、生态好，但性能受 Lua 限制；Spring Cloud Gateway：Java 生态集成好，适合 Spring 技术栈，但 Java 内存占用高；Nginx + Lua（OpenResty）：性能最强，适合流量入口，但 Lua 开发效率低。选型取决于团队技术栈和性能要求 |
-| **网关的限流信息和鉴权 Token 怎么在微服务间传递？** | 通过请求 Header 透传：`X-User-Id`、`X-User-Roles`、`X-Request-Id`、`X-Gray-Tag`。微服务信任网关（网关在 Header 中加入签名，防止客户端伪造） |
-| **全链路追踪在网关层如何实现？** | 网关生成 Trace ID（`X-Request-Id` / `X-Trace-Id`），透传给所有下游。使用 OpenTelemetry SDK 集成 Jaeger / Zipkin。网关层记录 span：网关收到请求 → 过滤器执行 → 后端请求 → 响应返回 |
+| 追问方向                                                  | 参考回答                                                                                                                                                            |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **网关 vs 普通反向代理（Nginx）的区别？**                           | Nginx 是 L7 反向代理，侧重性能；<br>API 网关附加了鉴权、限流、熔断、转换、灰度等业务功能。<br>实践中常在 Nginx 之后部署网关（Nginx 负责 TLS 卸载 + 静态资源，网关负责业务路由和策略）                                                |
+| **网关怎么处理大文件上传（1GB+）？**                                | 流式转发，不在网关内存中缓存完整 Body。<br>使用 chunked transfer encoding，边接收边转发。避免内存 OOM                                                                                          |
+| **网关的鉴权怎么做才能不成为性能瓶颈？**                                | ① JWT 无状态鉴权（本地解析 + 缓存公钥）；<br>② Token 黑名单用 Redis Bloom Filter；<br>③ 敏感操作才回源鉴权服务校验；<br>④ 分层的 token：短期 access token（1h 本地校验），长期 refresh token（需要回源）                |
+| **怎么保证网关不会因为后端慢而耗尽连接？**                               | ① 每个路由设置独立的连接池上限；<br>② 后端服务级别的超时控制（connect / read / write 分别设超时）；<br>③ 熔断器防止故障传导；<br>④ 管理后台的过载保护（adaptive concurrency limit）                                    |
+| **网关重启时如何处理正在处理中的请求？**                                | 优雅关闭（graceful shutdown）：<br>① 关闭监听端口（不再接受新请求）；<br>② 等待所有 inflight 请求完成（最多等待 max_wait_seconds）；<br>③ 超过等待时间的请求返回 502；<br>④ 进程退出                                  |
+| **Kong / Spring Cloud Gateway / Nginx + Lua 各有什么优劣？** | Kong：功能丰富、生态好，但性能受 Lua 限制；<br>Spring Cloud Gateway：Java 生态集成好，适合 Spring 技术栈，但 Java 内存占用高；<br>Nginx + Lua（OpenResty）：性能最强，适合流量入口，但 Lua 开发效率低。<br>选型取决于团队技术栈和性能要求 |
+| **网关的限流信息和鉴权 Token 怎么在微服务间传递？**                       | 通过请求 Header 透传：`X-User-Id`、`X-User-Roles`、`X-Request-Id`、`X-Gray-Tag`。<br>微服务信任网关（网关在 Header 中加入签名，防止客户端伪造）                                                     |
+| **全链路追踪在网关层如何实现？**                                    | 网关生成 Trace ID（`X-Request-Id` / `X-Trace-Id`），透传给所有下游。<br>使用 OpenTelemetry SDK 集成 Jaeger / Zipkin。<br>网关层记录 span：网关收到请求 → 过滤器执行 → 后端请求 → 响应返回                    |
 
 API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
