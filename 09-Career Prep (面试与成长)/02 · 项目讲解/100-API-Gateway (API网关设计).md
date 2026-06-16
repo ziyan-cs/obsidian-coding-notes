@@ -117,8 +117,8 @@ CREATE TABLE circuit_breaker_rule (
                       │
                       ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────────┐
-│  Gateway Core Architecture (Filter Chain)                                                   │
-│                                                                                             │
+│  Gateway Core Architecture (Filter Chain)                                                  │
+│                                                                                            │
 │  ┌──────────────────────────────────────────────────────────────────────────────────────┐  │
 │  │                      Core (High-Performance Proxy Engine)                             │  │
 │  │                                                                                       │  │
