@@ -163,7 +163,7 @@ CREATE TABLE circuit_breaker_rule (
 │  Control Plane                          │  Observability                                   │
 │                                         │                                                   │
 │  ┌────────────┐  ┌──────────────────┐   │  ┌──────────────────────────────────────────┐   │
-│  │ Admin API  │→│ Config Service   │   │  │ Prometheus (QPS / Latency / Status)       │   │
+│  │ Admin API  │→ │ Config Service   │   │  │ Prometheus (QPS / Latency / Status)       │   │
 │  └────────────┘  └───────┬──────────┘   │  ├──────────────────────────────────────────┤   │
 │                          │              │  │ Jaeger / Zipkin (Distributed Tracing)    │   │
 │                          ▼              │  ├──────────────────────────────────────────┤   │
