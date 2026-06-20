@@ -4,7 +4,9 @@
   "accentColor": "",
   "theme": "obsidian",
   "nativeMenus": true,
-  "monospaceFontFamily": "Fira Code",
+  "monospaceFontFamily": "JetBrains Mono",
   "baseFontSizeAction": true,
-  "baseFontSize": 18
+  "baseFontSize": 18,
+  "interfaceFontFamily": "Inter",
+  "textFontFamily": "Inter"
 }
