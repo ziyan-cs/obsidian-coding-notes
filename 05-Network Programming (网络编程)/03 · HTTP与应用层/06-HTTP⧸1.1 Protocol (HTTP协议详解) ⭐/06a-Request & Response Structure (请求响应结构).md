@@ -23,16 +23,17 @@ body content                                     ← 请求体（可选）
 - **HTTP 版本**：HTTP/1.0、HTTP/1.1、HTTP/2
 
 **请求头关键字段：**
-| 头部 | 作用 | 示例 |
-|------|------|------|
-| Host | 目标主机（HTTP/1.1 必选） | Host: www.example.com |
-| Content-Length | 请求体长度（字节） | Content-Length: 42 |
-| Content-Type | 请求体 MIME 类型 | Content-Type: application/json |
-| Connection | 连接管理 | Connection: keep-alive |
-| User-Agent | 客户端标识 | User-Agent: Mozilla/5.0 |
-| Cookie | 客户端 Cookie | Cookie: session_id=abc |
-| Authorization | 认证信息 | Authorization: Bearer token |
-| Accept | 接受的响应类型 | Accept: application/json |
+
+| 头部             | 作用                | 示例                             |
+| -------------- | ----------------- | ------------------------------ |
+| Host           | 目标主机（HTTP/1.1 必选） | Host: www.example.com          |
+| Content-Length | 请求体长度（字节）         | Content-Length: 42             |
+| Content-Type   | 请求体 MIME 类型       | Content-Type: application/json |
+| Connection     | 连接管理              | Connection: keep-alive         |
+| User-Agent     | 客户端标识             | User-Agent: Mozilla/5.0        |
+| Cookie         | 客户端 Cookie        | Cookie: session_id=abc         |
+| Authorization  | 认证信息              | Authorization: Bearer token    |
+| Accept         | 接受的响应类型           | Accept: application/json       |
 
 ## HTTP 响应结构
 
@@ -51,6 +52,7 @@ Date: Mon, 01 Jan 2024 00:00:00 GMT\r\n          ← 响应头
 - **原因短语**：OK、Not Found、Internal Server Error 等
 
 **响应头关键字段：**
+
 | 头部 | 作用 | 示例 |
 |------|------|------|
 | Content-Type | 响应体类型 | Content-Type: text/html; charset=utf-8 |
