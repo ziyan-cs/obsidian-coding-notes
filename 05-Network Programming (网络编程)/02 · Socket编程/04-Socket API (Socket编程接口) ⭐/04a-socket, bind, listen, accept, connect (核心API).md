@@ -32,7 +32,7 @@ Server                    OS Kernel                Client
   │  Data transfer begins   │                        │
   │                         │←───── write(req) ──────┤
   │←─── data arrives ───────┤                        │
-  │      → epoll notify                              │
+  │      → epoll notify     |                        │
   ├── read() → process() ──→│                        │
   ├── write(resp) ─────────→│                        │
   │                         ├── data arrives ───────→│
