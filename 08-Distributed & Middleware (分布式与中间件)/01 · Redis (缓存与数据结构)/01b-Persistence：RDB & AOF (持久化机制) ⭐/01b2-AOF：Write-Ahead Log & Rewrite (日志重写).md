@@ -36,8 +36,8 @@ appendfsync no         # 交给 OS 决定刷盘（最快，丢最多）
 *3          → 3 个参数
 $3          → 参数长度 3
 SET         → 命令
-$3 → key   → 键
-$5 → value → 值
+$3 → key    → 键
+$5 → value  → 值
 ```
 
 ---
@@ -79,15 +79,15 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 │  └────────────────────┘     └──────────────┬───────────────┘         │
 │                                            │                         │
 │                                            ▼                         │
-│                          ┌──────────────────────────────┐             │
-│                          │ Parent increment buffer →    │             │
-│                          │ merge with rewritten content  │             │
-│                          └──────────────┬───────────────┘             │
-│                                         │                             │
-│                                         ▼                             │
-│                          ┌──────────────────────────────┐             │
-│                          │ New AOF file replaces old     │             │
-│                          └──────────────────────────────┘             │
+│                          ┌──────────────────────────────┐            │
+│                          │ Parent increment buffer →    │            │
+│                          │ merge with rewritten content │            │
+│                          └──────────────┬───────────────┘            │
+│                                         │                            │
+│                                         ▼                            │
+│                          ┌──────────────────────────────┐            │
+│                          │ New AOF file replaces old    │            │
+│                          └──────────────────────────────┘            │
 │                                                                      │
 │  Example: A key incremented 1000 times                               │
 │  → rewrite as SET key 1000 (only the final state preserved)          │

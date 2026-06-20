@@ -110,18 +110,21 @@ Saga 将一个大事务拆分为 N 个子事务，每个子事务有对应的补
 ## 方案四：本地消息表（最终一致）
 
 ```
-服务 A（发起方）                   服务 B（执行方）
-  │                                   │
-  ├─ 1. 执行业务 + 写消息表 ──→      │
-  │    （同一本地事务）               │
-  │                                   │
-  ├─ 2. 定时轮询消息表                │
-  │    发送未完成的消息 ────────────→ │
-  │                                  ├─ 3. 执行消息
-  │◄─────────────────────────────────┤    回复 ACK
-  │                                   │
-  ├─ 4. 标记消息为已完成              │
-  │                                   │
+服务 A (Producer)                   服务 B (Consumer)
+  │                                  │
+  ├─ 1. Execute business logic +     |
+  |     Insert message into          |
+  |      local table ───────────────→|
+  │    (Single local DB transaction) |
+  │                                  │
+  ├─ 2. Timed task polls             |
+  |      message table +             │
+  │     Send unfinished messages ───→│
+  │                                  ├─ 3. Process message +
+  │◄─────────────────────────────────┤     Return ACK response
+  │                                  │
+  ├─ 4. Mark message as completed    │
+  │                                  │
 ```
 
 **优点：** 无 2PC 的阻塞问题，实现简单

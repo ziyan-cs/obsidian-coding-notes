@@ -32,14 +32,14 @@ Client              Redis Main Process        Forked Child           Disk
   │                        │                      │                  │
   ├── BGSAVE command ─────→│                      │                  │
   │                        ├── fork()             │                  │
-  │                        │─────────────────────→│                  │
-  │                        │  Child process created│                  │
+  │                        ├─────────────────────→│                  │
+  │                        │ Child process created│                  │
   │                        │                      │                  │
-  │◄──── Parent continues   │                      │                  │
-  │     handling requests   │                      │                  │
+  │◄──── Parent continues  │                      │                  │
+  │     handling requests  │                      │                  │
   │                        │                      ├── Write in-memory│
   │                        │                      │   data to temp   │
-  │                        │                      │   RDB file       │
+  │                        │                      │   RDB file ─────→│
   │                        │                      │                  │
   │                        │    Uses Copy-on-Write:                  │
   │                        │    fork shares memory pages             │

@@ -48,6 +48,7 @@ clang-tidy src/server.cpp -checks='modernize-*' --fix
 ```
 
 **值得开启的 check：**
+
 | Check | 发现什么问题 |
 |-------|-------------|
 | `modernize-use-override` | 漏写 `override` 关键字 |
@@ -103,6 +104,7 @@ cmake --build build --parallel $(nproc)
 ```
 
 **实测对比（大型 C++ 项目，增量编译）：**
+
 | 构建系统 | 首次 | 改 1 个 .cpp | 改 1 个 .h |
 |---------|------|-------------|------------|
 | Make | 5:20 | 1:45 | 3:10 |

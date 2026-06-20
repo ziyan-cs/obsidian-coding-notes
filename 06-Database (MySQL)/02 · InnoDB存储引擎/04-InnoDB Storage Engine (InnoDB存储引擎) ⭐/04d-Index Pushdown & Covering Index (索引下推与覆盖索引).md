@@ -75,6 +75,7 @@ SELECT * FROM user WHERE name = 'Bob' OR name = 'Alice';
 ```
 
 **索引合并的三种方式：**
+
 | 方式 | EXPLAIN Extra 信息 | 适用条件 |
 |------|-------------------|---------|
 | 交集（Intersection） | Using intersect(idx1,idx2) | AND 条件，主键交集 |

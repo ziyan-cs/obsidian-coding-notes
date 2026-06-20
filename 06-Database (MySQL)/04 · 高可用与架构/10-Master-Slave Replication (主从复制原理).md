@@ -16,10 +16,10 @@ Master                         Binlog         Slave                    Relay Log
   ├── Transaction commit ───────►│              │                         │             │
   │   (write to Binlog)          │              │                         │             │
   │                              │              │                         │             │
-  │◄──── IO Thread: request ───────────────────│                         │             │
-  │       Binlog                                │                         │             │
+  │◄──── IO Thread: request ────────────────────│                         │             │
+  │       Binlog                 |              │                         │             │
   │                              │              │                         │             │
-  ├── Send Binlog events ─────────────────────►│                         │             │
+  ├── Send Binlog events ──────────────────────►│                         │             │
   │                              │              │                         │             │
   │                              │              ├── Write to Relay Log ──►│             │
   │                              │              │                         │             │
@@ -41,12 +41,12 @@ Notes:
 复制过程涉及三个线程：
 
 ```
-主库：
+Master:
   Binlog Dump Thread
     └─ 在事务提交时读取 binlog，发送给从库
     └─ 每个从库对应一个 dump 线程
 
-从库：
+Slave:
   I/O Thread
     └─ 连接到主库，请求 binlog
     └─ 将接收到的 binlog 写入 relay log（中继日志）
@@ -60,19 +60,19 @@ Notes:
 ## 复制流程详解
 
 ```
-主库（Master）                    从库（Slave）
+Master                             Slave
   │                                  │
-  │ 1. 事务提交                      │
-  │    (写入 binlog)                 │
+  │ 1. Transaction commit            │
+  │    (Write changes to binlog)     │
   │                                  │
   │ 2. Binlog Dump Thread            │
-  │    发送 binlog 事件 ───────────→ │ 3. I/O Thread
-  │                                  │    接收并写入 relay log
+  │    Send binlog events ──────────→│ 3. I/O Thread
+  │                                  │    Receive & write to relay log
   │                                  │
   │                                  │ 4. SQL Thread
-  │                                  │    读取 relay log 并执行
+  │                                  │    Read & execute relay log events
   │                                  │
-  │                                  │ 5. 数据应用到从库
+  │                                  │ 5. Apply data to slave tables
 ```
 
 ## 复制模式

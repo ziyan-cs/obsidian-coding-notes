@@ -23,8 +23,6 @@ Valgrind 是一个动态分析框架，其最常用工具 **Memcheck** 能在程
 
 ## 基本用法
 
-bash
-
 ```bash
 # 编译（保留调试信息）
 g++ -g -O0 -o myapp main.cpp

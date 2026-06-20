@@ -30,8 +30,6 @@ git merge feature
 
 **Fast-forward merge**：若 main 没有新 commit，直接移动指针，不产生 merge commit：
 
-bash
-
 ```bash
 git merge --no-ff feature   # 强制产生 merge commit，保留分支痕迹
 ```

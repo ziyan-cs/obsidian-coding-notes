@@ -22,8 +22,8 @@ Clustered Index (Primary Key)        Secondary Index (Non-Primary Key)
 │ (full row data)            │      │ (key + primary key value)       │
 └──────┬─────────────────────┘      └──────────┬──────────────────────┘
        │                                       │
-       │◄───── Table Lookup (回表) ─────────────┘
-       │
+       │◄───── Table Lookup  ──────────────────┘
+       │          (回表)
        ▼
 ┌────────────────────────────┐
 │ Query Result               │

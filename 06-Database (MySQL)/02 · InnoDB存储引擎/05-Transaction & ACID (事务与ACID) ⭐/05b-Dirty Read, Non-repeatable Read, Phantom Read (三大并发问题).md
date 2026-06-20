@@ -18,13 +18,14 @@ status: 🌱
   │   SET balance=0         │
   │   WHERE id=1            │
   │                         │
-  │── (未提交) ────────────→│── SELECT balance FROM account WHERE id=1
-  │                         │    → 读到 0（脏数据！）
+  │── (Uncommitted) ───────→│── SELECT balance FROM account WHERE id=1
+  │                         │    → Reads 0 (Dirty Read!)
   │                         │
-  ├── ROLLBACK（回滚）       │
-  │   balance 恢复到 100    │
+  ├── ROLLBACK              │
+  │   balance roll back 100 │
   │                         │
-  │                         │── 业务逻辑基于 balance=0 做了错误的决策
+  │                         │── Business logic makes wrong decisions 
+  |                         |   based on balance=0
 ```
 
 **发生条件：** 隔离级别为 RU（Read Uncommitted）。
@@ -40,15 +41,16 @@ status: 🌱
   事务 A                   事务 B
   ├── BEGIN                 │
   ├── SELECT balance        │
-  │   WHERE id=1              │
-  │   → 100                   │
-  │                           │
+  │   WHERE id=1            │
+  │   → 100                 │
+  │                         │
   │                         ├── UPDATE account SET balance=0 WHERE id=1
   │                         ├── COMMIT
-  │                           │
+  │                         │
   ├── SELECT balance        │
-  │   WHERE id=1              │
-  │   → 0（和上次不一样！）   │
+  │   WHERE id=1            │
+  │   → 0                   |  ← (Different from previous read!)
+  |                         |
   ├── COMMIT                │
 ```
 
@@ -67,15 +69,16 @@ status: 🌱
   事务 A                   事务 B
   ├── BEGIN                 │
   ├── SELECT * FROM user    │
-  │   WHERE age > 20          │
-  │   → 10 行                 │
-  │                           │
+  │   WHERE age > 20        │
+  │   → 10 rows             │
+  │                         │
   │                         ├── INSERT INTO user(name, age) VALUES('Bob', 25)
   │                         ├── COMMIT
-  │                           │
+  │                         │
   ├── SELECT * FROM user    │
-  │   WHERE age > 20          │
-  │   → 11 行（多了一行！）   │  ← 幻读
+  │   WHERE age > 20        │
+  │   → 11 rows             |  ← One more new row (Phantom Read!)
+  |                         |
   ├── COMMIT                │
 ```
 

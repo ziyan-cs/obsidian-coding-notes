@@ -57,6 +57,7 @@ EXPLAIN SELECT * FROM user WHERE address = 'CN';
 ## Extra 信息解读
 
 **好兆头：**
+
 | Extra | 含义 |
 |-------|------|
 | Using index | 覆盖索引，无需回表 |
@@ -64,6 +65,7 @@ EXPLAIN SELECT * FROM user WHERE address = 'CN';
 | Using where | 在存储引擎层过滤 |
 
 **坏兆头：**
+
 | Extra | 含义 | 优化方向 |
 |-------|------|---------|
 | Using filesort | 文件排序（非索引排序） | 添加排序字段到索引 |

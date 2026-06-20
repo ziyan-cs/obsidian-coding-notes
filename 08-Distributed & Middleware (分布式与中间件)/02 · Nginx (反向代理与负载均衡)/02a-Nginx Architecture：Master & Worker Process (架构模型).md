@@ -10,31 +10,31 @@ status: 🌱
 ## Nginx 进程模型
 
 ```text
-                          ┌──────────────────────────────────────┐
-                          │  Master Process                      │
-                          │  (root)                              │
-                          │  Read config → fork Workers          │
-                          │                                      │
-                          │  Responsibilities:                   │
-                          │  - Hot reload configuration (reload) │
-                          │  - Smooth binary upgrade (upgrade)   │
-                          │  - Restart crashed workers           │
-                          └──────┬───────────────────────────────┘
-                                 │ fork
-                ┌────────────────┼────────────────┐
-                ▼                ▼                ▼
-    ┌─────────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-    │  Worker 1           │  │  Worker 2        │  │  Worker 3       │
-    │  (nobody user)      │  │  (nobody user)   │  │  (nobody user)  │
-    │  epoll event loop   │  │  epoll event loop│  │  epoll event loop│
-    └──────┬──────────────┘  └──────┬──────────┘  └──────┬──────────┘
-           │                        │                     │
-           ├────────────────────────┼─────────────────────┤
-           │   Shared Memory / Cache (shared across all workers)
-           │                        │                     │
-           │                        │                     │
-    ┌──────┴────────────────────────┴─────────────────────┴──────────┐
-    │  Client requests ──→ accept competition across all workers     │
+	              ┌───────────────────────────────────────┐
+	              │  Master Process                       │
+	              │  (root)                               │
+	              │  Read config → fork Workers           │
+	              │                                       │
+	              │  Responsibilities:                    │
+	              │  - Hot reload configuration (reload)  │
+	              │  - Smooth binary upgrade (upgrade)    │
+	              |  - Restart crashed workers            │
+	              └──────────────────┬────────────────────┘
+                                     │ fork
+                 ┌───────────────────┼─────────────────────┐
+                 ▼                   ▼                     ▼
+    ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐
+    │  Worker 1         │  │  Worker 2         │  │  Worker 3         │
+    │  (nobody user)    │  │  (nobody user)    │  │  (nobody user)    │
+    │  epoll event loop │  │  epoll event loop │  │  epoll event loop │
+    └──────┬────────────┘  └─────────┬─────────┘  └────────┬──────────┘
+           │                         │                     │
+           ├─────────────────────────┼─────────────────────┤
+         [ Shared Memory / Cache (shared across all workers) ]
+           │                         │                     │
+           │                         │                     │
+    ┌──────┴─────────────────────────┴─────────────────────┴──────────┐
+    │  Client requests ──→ accept competition across all workers      │
     └─────────────────────────────────────────────────────────────────┘
 ```
 

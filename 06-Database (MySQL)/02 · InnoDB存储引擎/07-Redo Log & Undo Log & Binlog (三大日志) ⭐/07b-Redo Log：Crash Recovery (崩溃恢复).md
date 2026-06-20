@@ -46,18 +46,17 @@ Redo log 文件不是无限增长的——它使用**固定大小的循环缓冲
 ```
 redo log 文件组（3 个文件，循环使用）：
 
-  File 0    File 1    File 2
-  ┌──────────────────────────┐  ┌──────┐  ┌──────┐
-  │      │  │      │  │      │
-  │      │  │      │  │      │
-  │      │  │      │  │      │
-  └──────────────────────────┘  └──────┘  └──────┘
-   ↑                        ↑
-  write_pos (当前写入位置)    checkpoint（已刷盘的安全点位）
+  File 0     File 1     File 2
+  ┌──────┐   ┌──────┐   ┌──────┐
+  │      │   │      │   │      │
+  └──────┘   └──────┘   └──────┘
+      ↑                     ↑
+  write_pos              checkpoint 
+  (当前写入位置)           (已刷盘的安全点位)
 
   当 write_pos 追到 checkpoint 时 → 强制刷脏页 → 推进 checkpoint
 ```
-
+ 
 ## Checkpoint 机制
 
 Checkpoint 解决了两个问题：
@@ -66,12 +65,13 @@ Checkpoint 解决了两个问题：
 
 ```
 崩溃恢复范围：
-  ┌─────────────────────────────────────────────┐
-  │  checkpoint →→→→→ crash →→→→→→→→→→→→→       │
-  │  │                    │                     │
-  │  脏页已全部刷盘        需要重放的 redo log  │
-  │  （无需恢复）           （前滚恢复）        │
-  └─────────────────────────────────────────────┘
+  ┌─────────────────────────────────────────────────┐
+  │  checkpoint ────→ crash ──────────────────────→ │
+  │      │                          │               │
+  │  All dirty pages             Redo logs          │
+  |  flushed to disk             to replay          |
+  │  (No recovery required)      (Forward recovery) │
+  └─────────────────────────────────────────────────┘
 ```
 
 **InnoDB 的 Fuzzy Checkpoint：**
@@ -100,28 +100,28 @@ Checkpoint 解决了两个问题：
 └──────────┬───────────────────┘
            │
            ▼
-┌──────────────────────────────────────────────┐
-│  REDO Phase (Roll-Forward)                   │
-├──────────────────────────────────────────────┤
-│  1. Find pages where page_lsn < redo_lsn    │
-│  2. Re-apply changes from redo log          │
-└──────────┬───────────────────────────────────┘
+┌────────────────────────────────────────────┐
+│  REDO Phase (Roll-Forward)                 │
+├────────────────────────────────────────────┤
+│  1. Find pages where page_lsn < redo_lsn   │
+│  2. Re-apply changes from redo log         │
+└──────────┬─────────────────────────────────┘
            │
            ▼
-┌──────────────────────────────────────────────┐
-│  UNDO Phase (Rollback)                       │
-├──────────────────────────────────────────────┤
-│  1. Scan undo log for uncommitted            │
-│     transactions                             │
-│  2. Roll back modifications from             │
-│     uncommitted transactions                 │
-└──────────┬───────────────────────────────────┘
+┌────────────────────────────────────────────┐
+│  UNDO Phase (Rollback)                     │
+├────────────────────────────────────────────┤
+│  1. Scan undo log for uncommitted          │
+│     transactions                           │
+│  2. Roll back modifications from           │
+│     uncommitted transactions               │
+└──────────┬─────────────────────────────────┘
            │
            ▼
-┌──────────────────────────────┐
-│  Recovery Complete           │
-│  Data Consistency Guaranteed │
-└──────────────────────────────┘
+┌───────────────────────────────┐
+│  Recovery Complete            │
+│  Data Consistency Guaranteed  │
+└───────────────────────────────┘
 ```
 
 ## LSN（Log Sequence Number）

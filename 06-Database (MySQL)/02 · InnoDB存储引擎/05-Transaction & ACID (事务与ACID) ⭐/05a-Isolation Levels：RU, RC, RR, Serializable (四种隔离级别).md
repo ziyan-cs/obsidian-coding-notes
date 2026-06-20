@@ -11,27 +11,27 @@ status: 🌱
 SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 
 ```text
-┌──────────────────────────────────────────────────────────────────────┐
-│  SQL Standard Four Isolation Levels                                  │
-├──────────────────────────────────────────────────────────────────────┤
-│  READ UNCOMMITTED                                                    │
+┌─────────────────────────────────────────────────────────────────────┐
+│  SQL Standard Four Isolation Levels                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│  READ UNCOMMITTED                                                   │
 │    Dirty Read: Yes      Non-repeatable Read: Yes      Phantom: Yes  │
-├──────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)                │
-│       ▼                                                              │
-│  READ COMMITTED                                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)               │
+│       ▼                                                             │
+│  READ COMMITTED                                                     │
 │    Dirty Read: No       Non-repeatable Read: Yes      Phantom: Yes  │
-├──────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)                │
-│       ▼                                                              │
+├─────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)               │
+│       ▼                                                             │
 │  REPEATABLE READ (MySQL Default)                                    │
 │    Dirty Read: No       Non-repeatable Read: No       Phantom: Yes  │
-├──────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)                │
-│       ▼                                                              │
-│  SERIALIZABLE                                                        │
+├─────────────────────────────────────────────────────────────────────┤
+│       │  (isolation increases, concurrency decreases)               │
+│       ▼                                                             │
+│  SERIALIZABLE                                                       │
 │    Dirty Read: No       Non-repeatable Read: No       Phantom: No   │
-└──────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────┘
 
 Note: InnoDB's RR level prevents phantom reads via MVCC + Next-Key Lock.
 ```

@@ -26,15 +26,15 @@ InnoDB 的每行记录有三个隐藏列：
 
 ```
 行记录结构（隐藏列）：
-  ┌────────────┬──────────┬──────────┐
-  │ DB_TRX_ID  │ DB_ROLL_PTR │ DB_ROW_ID │
-  ├────────────┼──────────┼──────────┤
-  │ 最后修改的  │ 指向 undo │ 自增行 ID  │
-  │ 事务 ID    │ log 纪录  │（无主键时） │
-  └────────────┴──────────┴──────────┘
-  └──────────────────────────────────────┘
+  ┌─────────────┬─────────────┬──────────────────┐
+  │ DB_TRX_ID   │ DB_ROLL_PTR │ DB_ROW_ID        │
+  ├─────────────┼─────────────┼──────────────────┤
+  │ Last Modify │ Pointer to  │ Auto-inc Row ID  │
+  │ Transaction │ Undo Log    │ (No Primary Key) │
+  └─────────────┴─────────────┴──────────────────┘
+
   ┌──────────────────────────────────────┐
-  │  实际业务列（col1, col2, ...）       │
+  │  Business Columns (col1, col2, ...)  |
   └──────────────────────────────────────┘
 
 DB_TRX_ID：最近修改此行的事务 ID（递增）
@@ -46,20 +46,20 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 每次 UPDATE 产生一条 undo log，通过 DB_ROLL_PTR 串联成版本链：
 
 ```text
-┌───────────────────────────┐     DB_ROLL_PTR     ┌───────────────────────────┐
-│  Latest Version           │────────────────────►│  Undo Log                 │
-│  (current row data)       │                      │  TRX_ID = 80              │
-│  DB_TRX_ID = 100          │                      │  balance = 100            │
-│  balance = 0              │                      │  (previous version)       │
-└───────────────────────────┘                      └───────────┬───────────────┘
-                                                              │ DB_ROLL_PTR
-                                                              ▼
-                                                       ┌───────────────────────────┐
-                                                       │  Undo Log                 │
-                                                       │  TRX_ID = 50              │
-                                                       │  balance = 200            │
-                                                       │  (older version)          │
-                                                       └───────────────────────────┘
+┌───────────────────────┐   DB_ROLL_PTR    ┌───────────────────────┐
+│  Latest Version       │─────────────────►│  Undo Log             │
+│  (current row data)   │                  │  TRX_ID = 80          │
+│  DB_TRX_ID = 100      │                  │  balance = 100        |
+│  balance = 0          │                  │  (previous version)   │
+└───────────────────────┘                  └───────────┬───────────┘
+                                                       │ DB_ROLL_PTR
+                                                       ▼
+                                           ┌───────────────────────────┐
+                                           │  Undo Log                 │
+                                           │  TRX_ID = 50              │
+                                           │  balance = 200            │
+                                           │  (older version)          │
+                                           └───────────────────────────┘
 ```
 
 ## Read View 可见性判断
@@ -67,38 +67,38 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当前事务可见"。
 
 ```text
-┌──────────────────────────────────────────────────────────────────────┐
-│  Read View Structure                                                 │
-├──────────────────────────────────────────────────────────────────────┤
-│  creator_trx_id: Transaction ID that created this Read View         │
-│  m_ids: List of active (uncommitted) transaction IDs                │
-│  min_trx_id: Minimum value in m_ids                                 │
-│  max_trx_id: Next transaction ID to be assigned                     │
-│              (greater than all active transactions)                  │
-└──────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  Read View Structure                                            │
+├─────────────────────────────────────────────────────────────────┤
+│  creator_trx_id: Transaction ID that created this Read View     │
+│  m_ids: List of active (uncommitted) transaction IDs            │
+│  min_trx_id: Minimum value in m_ids                             │
+│  max_trx_id: Next transaction ID to be assigned                 │
+│              (greater than all active transactions)             │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 **可见性判断规则（判断 DB_TRX_ID）：**
 
 ```text
-┌──────────────────────────────────────────────────────────────────────┐
-│  Visibility Rules (evaluated against DB_TRX_ID)                      │
-├──────────────────────────────────────────────────────────────────────┤
-│  Rule 1: DB_TRX_ID == creator_trx_id                                 │
-│    → Modification by current transaction → VISIBLE                  │
-│                                                                      │
-│  Rule 2: DB_TRX_ID < min_trx_id                                      │
-│    → Committed before Read View creation → VISIBLE                  │
-│                                                                      │
-│  Rule 3: DB_TRX_ID IN m_ids                                          │
-│    → Modified by another active transaction → INVISIBLE             │
-│                                                                      │
-│  Rule 4: DB_TRX_ID >= max_trx_id                                     │
-│    → Transaction started after Read View creation → INVISIBLE       │
-│                                                                      │
-│  Rule 5: Otherwise (not in m_ids, < max_trx_id)                      │
-│    → Committed before Read View creation → VISIBLE                  │
-└──────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  Visibility Rules (evaluated against DB_TRX_ID)                 │
+├─────────────────────────────────────────────────────────────────┤
+│  Rule 1: DB_TRX_ID == creator_trx_id                            │
+│    → Modification by current transaction → VISIBLE              │
+│                                                                 │
+│  Rule 2: DB_TRX_ID < min_trx_id                                 │
+│    → Committed before Read View creation → VISIBLE              │
+│                                                                 │
+│  Rule 3: DB_TRX_ID IN m_ids                                     │
+│    → Modified by another active transaction → INVISIBLE         │
+│                                                                 │
+│  Rule 4: DB_TRX_ID >= max_trx_id                                │
+│    → Transaction started after Read View creation → INVISIBLE   │
+│                                                                 │
+│  Rule 5: Otherwise (not in m_ids, < max_trx_id)                 │
+│    → Committed before Read View creation → VISIBLE              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 **图示（事务时间线与可见性）：**
