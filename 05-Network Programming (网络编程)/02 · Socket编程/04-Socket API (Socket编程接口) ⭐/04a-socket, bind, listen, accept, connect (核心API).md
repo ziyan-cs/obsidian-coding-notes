@@ -125,18 +125,18 @@ int listen(int sockfd, int backlog);
 - `backlog`：**全连接队列**（Accept Queue）的最大长度
 
 ```txt
-客户端 SYN 到达
+  客户端 SYN 到达
        ↓
 ┌──────────────────────┐
-│  半连接队列          │  SYN_RCVD 状态，等待第三次握手 ACK
+│  Half-Open Queue     │  SYN_RCVD 状态，等待第三次握手 ACK
 │  (SYN Queue)         │  大小由 /proc/sys/net/ipv4/tcp_max_syn_backlog 控制
-└─────────┬───────────┘
+└─────────┬────────────┘
           │ 三次握手完成
           ↓
 ┌──────────────────────┐
-│  全连接队列          │  ESTABLISHED 状态，等待 accept() 取走
+│  Full Connection Q   │  ESTABLISHED 状态，等待 accept() 取走
 │  (Accept Queue)      │  大小 = min(backlog, somaxconn)
-└─────────┬───────────┘
+└─────────┬────────────┘
           │ accept() 调用
           ↓
         应用程序
