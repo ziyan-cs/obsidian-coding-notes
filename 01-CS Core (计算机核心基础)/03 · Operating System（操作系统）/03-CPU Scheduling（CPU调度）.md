@@ -100,13 +100,13 @@ void rr(vector<Process>& procs, int quantum) {
 ┌──────────────┴─────────────────────────────┐
 │  CPU EXECUTION                             │
 └──┬──────────────────────────────────────┬──┘
-   │ timeslice expired                     │ wait I/O
+   │ timeslice expired                    │ wait I/O
    ▼                                      ▼
 ┌──────────────┐                ┌──────────────────┐
 │ RE-ENQUEUE   │                │ BLOCKED QUEUE    │
 └──────┬───────┘                └────────┬─────────┘
-       │ re-enqueue                     │ I/O complete
-       └───────────────┬────────────────┘
+       │ re-enqueue                      │ I/O complete
+       └───────────────┬─────────────────┘
                        ▼
               ┌────────┴────────┐
               │  READY QUEUE    │

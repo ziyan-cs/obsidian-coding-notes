@@ -62,7 +62,7 @@ fork 之后，父子进程**共享同一份物理内存页**，并不立即复�
 ```
 fork 后：
 父进程页表 ──┐
-              ├──→ 共享物理页（只读标记）
+            ├──→ 共享物理页（只读标记）
 子进程页表 ──┘
 
 某方写入时：
@@ -158,19 +158,19 @@ while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
 
 ```
               fork()
-CREATED ──────────────────> READY
-                              │
-              调度器选中        │  等待 I/O / 信号
-              ↓               ↓
+CREATED ───────────────────> READY
+                               │
+  Scheduler selects process    │ Wait for I/O / Signal
+              ↓                ↓
            RUNNING ─────────> BLOCKED
               │                    │
-              │ 时间片耗尽           │ 条件满足
+              │ Time slice expires | Condition satisfied
               ↓                    ↓
-            READY <───────────────
+            READY <────────────────┘
               │
               │ exit()
               ↓
-           ZOMBIE ── wait() ──> 消亡
+           ZOMBIE ── wait() ──> Terminated
 ```
 
 | 状态 | ps 显示 | 含义 |

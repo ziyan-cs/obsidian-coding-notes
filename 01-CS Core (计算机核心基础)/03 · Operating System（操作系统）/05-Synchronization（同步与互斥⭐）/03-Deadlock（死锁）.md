@@ -159,21 +159,21 @@ int main() {
 ## 资源分配图
 
 ```text
-┌──────────────────────────────────────────────────────┐
-│  RESOURCE ALLOCATION GRAPH (DEADLOCK CYCLE)          │
-├──────────────────────────────────────────────────────┤
-│                                                       │
-│   Thread A ────(holds)────→ Resource 1 (Lock)        │
-│       ↑                               │              │
-│       │                               │              │
-│  (waited by)                    (waited by)           │
-│       │                               │              │
-│       │                               ▼              │
-│   Resource 2 (Lock) ←──(holds)──── Thread B          │
-│                                                       │
-│  Cycle detected: A waits for R2, B waits for R1      │
-│  → Deadlock                                           │
-└──────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────┐
+│  RESOURCE ALLOCATION GRAPH (DEADLOCK CYCLE)        │
+├────────────────────────────────────────────────────┤
+│                                                    │
+│   Thread A ────(holds)────→ Resource 1 (Lock)      │
+│       ↑                               │            │
+│       │                               │            │
+│  (waited by)                    (waited by)        │
+│       │                               │            │
+│       │                               ▼            │
+│   Resource 2 (Lock) ←──(holds)──── Thread B        │
+│                                                    │
+│  Cycle detected: A waits for R2, B waits for R1    │
+│  → Deadlock                                        │
+└────────────────────────────────────────────────────┘
 ```
 
 **检测死锁：** 资源分配图中有环 ⇔ 可能存在死锁（每种资源只有一个实例时，有环 = 死锁；多种实例时需进一步判断）。

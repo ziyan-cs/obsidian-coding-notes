@@ -9,27 +9,27 @@ status: 🌱
 ## CPU 的核心组成
 
 ```text
-┌──────────────────────────────────────────────────────────────────┐
-│  CPU INSTRUCTION PIPELINE                                        │
-├──────────────────────────────────────────────────────────────────┤
-│  IF (Fetch) ──→ ID (Decode) ──→ EX (Execute) ──→ MEM (Access)  │
+┌─────────────────────────────────────────────────────────────────┐
+│  CPU INSTRUCTION PIPELINE                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  IF (Fetch) ──→ ID (Decode) ──→ EX (Execute) ──→ MEM (Access)   │
 │  ──→ WB (Writeback)                                             │
-│                                                                  │
+│                                                                 │
 │  ├── IF:  Retrieve instruction from I-Cache                     │
 │  ├── ID:  Decode instruction and operands                       │
 │  ├── EX:  ALU computation / address calculation                 │
 │  ├── MEM: Read/write D-Cache                                    │
 │  └── WB:  Write result to register file                         │
-└──────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────┘
 
-┌──────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────┐
 │  CPU CORE                                                       │
-├──────────────────────────────────────────────────────────────────┤
+├─────────────────────────────────────────────────────────────────┤
 │  PC (Program Counter)       ──→ supplies next addr to IF        │
 │  REG (Register File)        ──→ supplies operands to ID         │
-│                             ←── receives results from WB         │
+│                             ←── receives results from WB        │
 │  ALU (Arithmetic Logic Unit)──→ performs computation in EX      │
-└──────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## 关键寄存器

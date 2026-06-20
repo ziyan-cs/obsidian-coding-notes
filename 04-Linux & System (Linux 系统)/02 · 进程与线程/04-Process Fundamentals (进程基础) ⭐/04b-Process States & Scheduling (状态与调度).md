@@ -10,19 +10,19 @@ status: 🌱
 
 ```
               fork()
-CREATED ──────────────────> READY
-                              │
-              调度器选中        │  等待 I/O / 信号 / 锁
-              ↓               ↓
-           RUNNING ─────────> WAITING/BLOCKED
+CREATED ───────────────────> READY
+                               │
+  Scheduler selects process    │ Wait for I/O / Signal
+              ↓                ↓
+           RUNNING ─────────> BLOCKED
               │                    │
-              │ 时间片耗尽           │ 条件满足
+              │ Time slice expires | Condition satisfied
               ↓                    ↓
-            READY <─────────────── READY
+            READY <────────────────┘
               │
               │ exit()
               ↓
-           ZOMBIE ──（父进程 wait）──> 消亡
+           ZOMBIE ── wait() ──> Terminated
 ```
 
 |状态|ps 显示|含义|

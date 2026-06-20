@@ -65,7 +65,7 @@ int main() {
 
 ```text
 ┌──────────────────────────────────────────────┐
-│                USER SPACE                     │
+│                USER SPACE                    │
 ├──────────────────────────────────────────────┤
 │  Applications (shell, browser, server)       │
 │  System Libraries / Runtime (libc, syscall)  │
@@ -73,7 +73,7 @@ int main() {
                        │ syscall
                        ▼
 ┌──────────────────────────────────────────────┐
-│               KERNEL SPACE                    │
+│               KERNEL SPACE                   │
 ├──────────────────────────────────────────────┤
 │  System Call Interface (syscall entry)       │
 ├──────────┬──────────┬──────────┬─────────────┤
@@ -86,9 +86,9 @@ int main() {
          ┌─────────┼──────────┬──────────┐
          ▼         ▼          ▼          ▼
 ┌──────────────────────────────────────────────┐
-│              HARDWARE LAYER                   │
+│              HARDWARE LAYER                  │
 ├──────────────────────────────────────────────┤
-│  CPU     Main Memory    Disk/SSD      NIC     │
+│  CPU     Main Memory    Disk/SSD      NIC    │
 │ (MMU)                                        │
 └──────────────────────────────────────────────┘
 ```

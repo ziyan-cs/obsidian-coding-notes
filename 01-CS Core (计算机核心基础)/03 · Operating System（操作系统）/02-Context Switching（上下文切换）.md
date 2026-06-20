@@ -13,15 +13,15 @@ CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状�
 ### 切换内容
 
 ```
-┌─ 当前进程（Running）──┐      ┌─ 目标进程（Ready）───┐
-│  PC（程序计数器）       │      │  PC                   │
-│  通用寄存器（EAX,EBX..）│      │  通用寄存器           │
-│  栈指针（SP）           │      │  栈指针               │
-│  页表基址（CR3）        │      │  页表基址             │
-│  FPU/向量寄存器         │  →   │  FPU/向量寄存器       │
-│  内核栈                 │      │  内核栈               │
-└────────────────────────────────────────────────────────┘      └──────────────────────┘
-         保存到 PCB                         恢复
+┌───────────── Running Process ──────────┐     ┌────────────── Ready Process ──────────┐
+│ Program Counter (PC)                   │     │ Program Counter (PC)                  │
+│ General Purpose Registers (EAX, EBX…)  │     │ General Purpose Registers             │
+│ Stack Pointer (SP)                     │     │ Stack Pointer (SP)                    │
+│ Page Table Base Register (CR3)         │     │ Page Table Base Register (CR3)        │
+│ FPU / Vector Registers                 │  →  │ FPU / Vector Registers                │
+│ Kernel Stack                           │     │ Kernel Stack                          │
+└────────────────────────────────────────┘     └───────────────────────────────────────┘
+              Save to PCB                                     Restore from PCB
 ```
 
 **关键区别：**
@@ -45,9 +45,9 @@ CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状�
 ────────────────────────────────────────
 函数调用                   1-2 ns
 系统调用                   50-200 ns
-进程上下文切换            1-10 μs      ← ★
+进程上下文切换              1-10 μs      ← ★
 TLB miss/latency          50-200 ns
-一次内存访问 ≈ L3 访问     10-20 ns
+一次内存访问 ≈ L3 访问      10-20 ns
 
 进程切换 ≈ 10000-100000 条指令
 ```
@@ -91,7 +91,7 @@ Process A                 Kernel (Scheduler)          Process B
     │                         │                          │
     ├── User-mode execution   │                          │
     │                         │                          │
-    ├── Interrupt / Syscall ──→│                         │
+    ├── Interrupt / Syscall ─→│                          │
     │                         │                          │
     │                         ├── Save A's registers     │
     │                         │   to PCB_A               │

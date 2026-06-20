@@ -10,13 +10,13 @@ status: 🌱
 ## 存储金字塔
 
 ```
-               寄存器         ← 速度快（~0.3ns），容量小（~KB）
-               L1 Cache       ← ～1ns，～32KB
-              L2 Cache        ← ～5ns，～256KB
-             L3 Cache         ← ～15ns，～MB
-              主存 (RAM)       ← ～100ns，～GB
-             SSD / NVMe       ← ～100μs，～TB
-              HDD 磁盘         ← ～10ms，～TB+
+	Register         ← Fastest (~0.3ns), Small Capacity (~KB)
+	L1 Cache         ← ~1ns, ~32KB
+	L2 Cache         ← ~5ns, ~256KB
+	L3 Cache         ← ~15ns, ~MB
+	Main Memory(RAM) ← ~100ns, ~GB
+	SSD / NVMe       ← ~100μs, ~TB
+	HDD Hard Disk    ← ~10ms, ~TB+
 ```
 
 **核心规律：** 每向下一层，速度慢约 10 倍、容量大约 10 倍、单位成本约 1/10。
