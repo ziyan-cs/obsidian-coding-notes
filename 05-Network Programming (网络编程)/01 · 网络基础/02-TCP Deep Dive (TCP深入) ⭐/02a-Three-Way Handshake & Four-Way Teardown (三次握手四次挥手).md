@@ -18,6 +18,7 @@ TCP 连接建立需要三次报文交换，目的是**双方互相确认对方�
     ├── SYN(SEQ=x) ────────────→│
     │                           │  (LISTEN→SYN_RCVD)
     │←─ SYN+ACK(SEQ=y,ACK=x+1) ─┤
+    |                           |
     │  (SYN_SENT→ESTABLISHED)   │
     ├── ACK(SEQ=x+1,ACK=y+1) ──→│
     │                           │  (SYN_RCVD→ESTABLISHED)
