@@ -45,9 +45,9 @@ bash
 
 ```bash
 # 只把部分改动加入暂存区
-git add src/feature.cpp    # 只暂存这一个文件
+git add src/core/Epoll.cpp    # 只暂存这一个文件
 git add -p                 # 交互式选择文件中的具体行（hunk）
-git commit -m "feat: add feature"   # 只提交暂存的内容
+git commit -m "feat(core): add Epoll class"   # 只提交暂存的内容
 ```
 
 ---
