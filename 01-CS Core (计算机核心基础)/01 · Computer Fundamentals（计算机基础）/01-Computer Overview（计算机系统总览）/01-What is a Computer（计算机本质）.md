@@ -33,19 +33,19 @@ status: 🌱
 
 **Five Components:**
 
-| Component | Function |
-|-----------|----------|
-| **Control Unit** | Fetch, decode, coordinate other components |
-| **ALU** (Arithmetic Logic Unit) | Execute arithmetic & logic operations |
-| **Memory** | Store instructions & data (main memory) |
-| **Input Device** | Send external data into the computer |
-| **Output Device** | Output computation results |
+| Component                       | Function                                   |
+| ------------------------------- | ------------------------------------------ |
+| **Control Unit**                | Fetch, decode, coordinate other components |
+| **ALU** (Arithmetic Logic Unit) | Execute arithmetic & logic operations      |
+| **Memory**                      | Store instructions & data (main memory)    |
+| **Input Device**                | Send external data into the computer       |
+| **Output Device**               | Output computation results                 |
 
 ## 存储程序概念
 
 - 指令和数据**没有区别**——都是二进制数，存在同一内存中
 - 指令由 **操作码（opcode）+ 操作数（operand）** 组成
-- 程序执行 = 重复：取指 → 译码 → 执行
+- 程序执行 = 重复：取指令 → 译码 → 执行
 - 这意味着**程序可以修改自身**（自修改代码，现代架构通常禁止）
 
 ## 指令执行基本流程
@@ -53,7 +53,7 @@ status: 🌱
 ```
 PC → Address → Fetch instruction → IR
                                     ↓
-                              Decode
+	                              Decode
                                     ↓
                            Control signals
                                     ↓
