@@ -1,0 +1,146 @@
+---
+tags:
+  - cs/algorithm
+status: 🌱
+---
+
+> Related: [[00-Problem Template Library (常用模板总库) ⭐]] · [[00-Mistake Journal (错题与易错点记录) ⭐]]
+
+# Algorithm Contest Plan (2026-08 -> 2027-06)
+
+> Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
+> Main line: 深化 C++ -> 蓝桥杯冲省一 + GPLT 天梯赛 + online rating; ICPC/CCPC regionals from 大二下
+> 总节奏: 9月 C++ 深化 4 周 -> 10-12月 12 周专题 -> 寒假真题冲刺 -> 4月省赛
+
+---
+
+## 1. Key Dates
+
+| Date | Event | Action |
+|---|---|---|
+| 2026-09-19 | 百度之星初赛·第2场 (online) | 参加, 当模拟考, 不计较成绩 |
+| 2026-10 ~ 12 | 蓝桥杯第15届 报名 (dasai.lanqiao.cn) | 一开放就报 |
+| 2026-11-15 | 赛氪 ADPC 秋季赛 (optional, 69 CNY) | 预算紧可跳过 |
+| Every Sun | LeetCode weekly + biweekly | 必打 |
+| Every Wed-ish | 牛客小白月赛 / 牛客周赛 | 必打 |
+| ~2027-03 | GPLT 天梯赛 (school registers) | 关注校内通知 |
+| 2027-04 | 蓝桥杯省赛 (est.) | **目标: 省一** |
+| 2027-06 | 蓝桥杯国赛 (est.) | 国三+ if 省一 |
+| 2027-08+ | 暑期多校训练 + 组队 | Prep ICPC/CCPC |
+
+---
+
+## 2. Strategy
+
+- 主攻: C++ 深化 (9月) -> 蓝桥杯 (省二->省一) + GPLT 团队奖 + LC/CF/牛客 rating
+- 暂缓: ICPC 网络预选赛第2场 (9/1 cutoff); CCPC 区域赛
+- 原则: 每天 1-2h, 周末 3-4h; 以题带学, 不裸学语法; 坚持 > 强度
+
+---
+
+## 3. C++ 深化 4 周 (9 月, 以题带学)
+
+> 目的: 从"能写后端"到"竞赛顺手"。每主题配 8-10 道力扣题, 9 月总刷 ~40 题, 每周末模板入库。
+
+### W1 (9/1-9/7) 语言基础深化
+- 类型/运算/分支循环/数组/函数/作用域
+- 指针/引用/const/auto/范围 for
+- 输入输出: cin/cout 提速 + scanf/printf 对比
+- 配题: LC easy 数组/字符串 ~10 题
+
+### W2 (9/8-9/14) 面向对象 & 内存
+- struct/class、构造函数/析构、拷贝/移动语义、运算符重载
+- 栈/堆、new/delete、智能指针概念
+- 链表/二叉树结构体指针写法 (竞赛必用)
+- 配题: LC 链表/二叉树 ~10 题
+
+### W3 (9/15-9/21) STL 容器深挖
+- vector/string/stack/queue/deque/priority_queue
+- map/unordered_map/set/unordered_set: 底层与复杂度、迭代器失效
+- 9/19 百度之星初赛 (模拟考)
+- 配题: LC 哈希/栈/队列 ~10 题
+
+### W4 (9/22-9/28) 泛型 & 算法库
+- 函数模板/类模板、lambda (含捕获列表)
+- algorithm: sort 自定义比较、lower_bound/upper_bound、next_permutation、accumulate
+- 数学工具入库: 快速幂、gcd/lcm、埃氏筛、组合数
+- 配题: LC 排序/二分 ~10 题
+
+### 9 月底检查点
+- LC 累计 ~150 题 (中等 >= 40)
+- 模板库 >= 8 个可用模板 (IO/哈希/堆/二分/排序/快速幂/筛/gcd)
+
+---
+
+## 4. 12 周专题 (10 月 -> 12 月)
+
+| Week | Topic | C++ notes |
+|---|---|---|
+| 1 | 数组 / 哈希 | vector, unordered_map 计数 |
+| 2 | 双指针 / 滑动窗口 | 窗口收缩、边界 |
+| 3 | 栈 / 队列 | 单调栈、表达式、括号 |
+| 4 | 链表 | 反转、快慢指针 (LC hot) |
+| 5 | 二叉树 | 递归三序、层序、DFS 计数 |
+| 6 | 排序 / 贪心 | sort 自定义、优先队列贪心 |
+| 7 | 递归 / 回溯 | 子集、排列、组合 |
+| 8 | DP 入门 | 一维: 爬楼梯、打家劫舍、LIS |
+| 9 | DP 进阶 | 背包 (0-1/完全)、二维 DP、路径 |
+| 10 | 搜索 | BFS 最短路、DFS 连通块 |
+| 11 | 数论 / 数学 | 快速幂、质数、GCD、进制 |
+| 12 | 模拟 / 字符串 | 日期、大数、拼接 (蓝桥高频) |
+
+节奏: 周一-周五 6-8 题/周 (中等为主), 周末总结模板 + 周赛。
+
+---
+
+## 5. Weekly Template
+
+- 周一~周五: 45-90 min/day, 1-2 题 + 复盘昨日
+- 周六: 2-3h, 补题 + 模板库更新 + 蓝桥真题片段
+- 周日: LC weekly 90 min (必打) + 补 2-3 题
+- 周三/四: 牛客赛 2h (与专题冲突时优先周赛)
+
+---
+
+## 6. 蓝桥杯专项
+
+- 10 月初报名后每周: 2 晚真题分类刷 (暴力枚举->模拟->贪心->简单DP->DFS/BFS->字符串) + 周末 1 套完整真题 (限时 4h)
+- 省一考点优先级: 模拟+暴力 > 贪心 > 简单DP > 搜索 > 数论 > 图论入门
+- 12 月底: 专题过半 + 真题 1 遍初刷
+- 2027 寒假 (1-2月): 二刷真题错题 + DP/搜索补漏, 每天 2-3h
+- 2027-03: 近 2 年真题保持手感 + 天梯赛
+
+---
+
+## 7. 模板库工程化 (GitHub + Obsidian)
+
+- **GitHub repo** (snake_case, 如 `algorithm-templates`): 按专题分目录, 每个模板文件带注释说明适用场景/复杂度; 好题整理成题解 md
+- **Obsidian**: 每周 pattern 写进 `Vault/Notes/Obsidian_Coding`, 标签 + 双向链接
+- **本地工程**: CLion 2026.2 建竞赛工程, 统一 main.cpp + 样例测试, 提交 OJ 前本地跑通
+- **复盘三步**: 独立重写 -> 对照题解 -> 提炼模板入库; 每月末重做本月错题 10 道
+- 模板库本身写进简历: "开源算法模板库, N 专题 / M 模板"
+
+---
+
+## 8. Python 对齐 (副线, 9 月周末或 10 月)
+
+> 你 Python 是 working 级, 只对齐竞赛/数据向库, 每天 30-60 min 即可, 不占 C++ 主线:
+
+- collections (Counter, deque), itertools, bisect, heapq, functools.lru_cache, math
+- 定位: Kaggle/天池/课程作业; 蓝桥杯与 ICPC 主力仍是 C++
+
+---
+
+## 9. Resume Targets (按达成顺序)
+
+1. 蓝桥杯第15届 C/C++ 组 省赛一等奖 (2027.04)
+2. GPLT 天梯赛 团队一/二等奖 (2027.03)
+3. 百度之星 2026 初赛 排名前 X% (2026.09)
+4. Codeforces Rating >= 1400 / LC 全球排名前 X% (持续)
+5. 蓝桥杯国赛 国三+ (2027.06, 若省一)
+6. GitHub 算法模板库 (开源作品, 持续)
+7. ICPC/CCPC 区域赛奖牌 (2027-2028 赛季)
+
+---
+
+*Generated 2026-08-30. 比赛时间以官网/学校通知为准.*
