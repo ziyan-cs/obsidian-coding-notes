@@ -78,4 +78,4 @@ int main() {
 ---
 
 
-指令执行周期详见 → [Instruction Cycle (指令执行周期)](/01-CS%20Core%20(计算机核心基础)/01%20·%20Computer%20Fundamentals（计算机基础）/03-Program%20Execution（程序执行机制⭐）/02-Instruction%20Cycle%20(指令执行周期).md)
+指令执行周期详见 → [Instruction Cycle (指令执行周期)](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals%20(计算机基础)/03-Program%20Execution%20(程序执行机制)/02-Instruction%20Cycle%20(指令执行周期).md)

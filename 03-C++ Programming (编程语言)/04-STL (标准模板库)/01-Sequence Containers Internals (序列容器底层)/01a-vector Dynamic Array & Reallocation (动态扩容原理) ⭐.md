@@ -123,4 +123,4 @@ v.shrink_to_fit();
 
 ---
 
-其他序列容器对比详见 → [deque Block-based Storage (分块存储)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md) · [list Doubly Linked List (双向链表)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)
+其他序列容器对比详见 → [deque Block-based Storage (分块存储)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md) · [list Doubly Linked List (双向链表)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)

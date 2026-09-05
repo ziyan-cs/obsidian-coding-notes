@@ -108,4 +108,4 @@ show variables like 'datadir';
 
 
 
-SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/06-Database%20(MySQL)/01%20·%20SQL基础/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/06-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)

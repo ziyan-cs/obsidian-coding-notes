@@ -98,4 +98,4 @@ auto iter = pending.insert(pending.end(), {42});
 
 ---
 
-vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)

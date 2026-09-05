@@ -78,4 +78,4 @@ for (int x : random_data)
 ---
 
 
-编译链接加载详见 → [Compilation & Linking (编译链接加载)](/01-CS%20Core%20(计算机核心基础)/01%20·%20Computer%20Fundamentals（计算机基础）/03-Program%20Execution（程序执行机制⭐）/01-Compilation%20&%20Linking%20(编译链接加载).md)
+编译链接加载详见 → [Compilation & Linking (编译链接加载)](/01-CS%20Core%20(计算机核心基础)/01-Computer%20Fundamentals%20(计算机基础)/03-Program%20Execution%20(程序执行机制)/01-Compilation%20&%20Linking%20(编译链接加载).md)

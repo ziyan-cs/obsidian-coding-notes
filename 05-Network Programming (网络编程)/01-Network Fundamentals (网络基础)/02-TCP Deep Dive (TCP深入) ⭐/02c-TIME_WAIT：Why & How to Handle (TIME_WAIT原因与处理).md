@@ -100,4 +100,4 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 ---
 
-TIME_WAIT 在 TCP 状态机中的位置见 → [TCP State Machine (状态机全图)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md>) · 流量控制机制见 → [Flow Control & Congestion Control (流量控制与拥塞控制)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md>)
+TIME_WAIT 在 TCP 状态机中的位置见 → [TCP State Machine (状态机全图)](</05-Network%20Programming%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md>) · 流量控制机制见 → [Flow Control & Congestion Control (流量控制与拥塞控制)](</05-Network%20Programming%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md>)

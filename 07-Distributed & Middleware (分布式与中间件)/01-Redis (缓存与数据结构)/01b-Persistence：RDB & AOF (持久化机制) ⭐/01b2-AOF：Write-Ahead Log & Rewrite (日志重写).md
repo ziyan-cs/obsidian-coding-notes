@@ -147,4 +147,4 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ---
 
-RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (快照原理)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b1-RDB：Snapshot%20&%20BGSAVE%20(快照原理).md)
+RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (快照原理)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b1-RDB：Snapshot%20&%20BGSAVE%20(快照原理).md)

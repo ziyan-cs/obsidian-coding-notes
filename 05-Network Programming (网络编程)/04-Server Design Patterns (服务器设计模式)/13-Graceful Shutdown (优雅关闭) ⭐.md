@@ -228,4 +228,4 @@ Kubernetes 删除 Pod 时：
 
 ---
 
-服务器设计实践见 → [Connection Pool Design (连接池设计)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md>)
+服务器设计实践见 → [Connection Pool Design (连接池设计)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md>)

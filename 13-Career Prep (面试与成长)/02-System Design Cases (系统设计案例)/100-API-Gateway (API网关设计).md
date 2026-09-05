@@ -363,4 +363,4 @@ func handleRequest(ctx *Context) {
 | **网关的限流信息和鉴权 Token 怎么在微服务间传递？**                       | 通过请求 Header 透传：`X-User-Id`、`X-User-Roles`、`X-Request-Id`、`X-Gray-Tag`。<br>微服务信任网关（网关在 Header 中加入签名，防止客户端伪造）                                                     |
 | **全链路追踪在网关层如何实现？**                                    | 网关生成 Trace ID（`X-Request-Id` / `X-Trace-Id`），透传给所有下游。<br>使用 OpenTelemetry SDK 集成 Jaeger / Zipkin。<br>网关层记录 span：网关收到请求 → 过滤器执行 → 后端请求 → 响应返回                    |
 
-API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03%20·%20HTTP与应用层/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
+API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)

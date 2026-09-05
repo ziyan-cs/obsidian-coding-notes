@@ -43,4 +43,4 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 ---
 
-拷贝控制与运算符重载常配合使用，详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)
+拷贝控制与运算符重载常配合使用，详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)

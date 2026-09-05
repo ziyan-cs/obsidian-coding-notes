@@ -122,4 +122,4 @@ ab -n 100000 -c 100 http://localhost:8080/
 
 ---
 
-性能优化相关见 → [Connection Pool Design (连接池设计)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Buffer Design：Read & Write Buffer (缓冲区设计)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>)
+性能优化相关见 → [Connection Pool Design (连接池设计)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Buffer Design：Read & Write Buffer (缓冲区设计)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>)

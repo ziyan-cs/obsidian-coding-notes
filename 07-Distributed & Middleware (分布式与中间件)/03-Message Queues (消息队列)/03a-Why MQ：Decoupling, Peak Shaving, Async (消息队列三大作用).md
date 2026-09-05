@@ -82,4 +82,4 @@ status: 🌱
 
 ---
 
-消息队列选型对比详解见 → [RabbitMQ vs Kafka：Comparison (两者对比)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/03%20·%20Message%20Queue%20(消息队列)/03c-RabbitMQ%20vs%20Kafka：Comparison%20(两者对比).md)
+消息队列选型对比详解见 → [RabbitMQ vs Kafka：Comparison (两者对比)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03c-RabbitMQ%20vs%20Kafka：Comparison%20(两者对比).md)

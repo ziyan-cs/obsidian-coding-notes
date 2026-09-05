@@ -223,4 +223,4 @@ void *health_check_thread(void *arg) {
 
 ---
 
-服务器设计模式系列见 → [Buffer Design：Read & Write Buffer (缓冲区设计)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>) · [Graceful Shutdown (优雅关闭)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>)
+服务器设计模式系列见 → [Buffer Design：Read & Write Buffer (缓冲区设计)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>) · [Graceful Shutdown (优雅关闭)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>)

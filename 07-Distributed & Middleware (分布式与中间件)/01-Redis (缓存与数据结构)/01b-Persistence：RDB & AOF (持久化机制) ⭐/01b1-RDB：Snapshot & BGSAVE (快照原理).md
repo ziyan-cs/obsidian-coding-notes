@@ -107,4 +107,4 @@ Client              Redis Main Process        Forked Child           Disk
 
 ---
 
-AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrite (日志重写)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b2-AOF：Write-Ahead%20Log%20&%20Rewrite%20(日志重写).md)
+AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrite (日志重写)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b2-AOF：Write-Ahead%20Log%20&%20Rewrite%20(日志重写).md)

@@ -142,4 +142,4 @@ std::sort(people.begin(), people.end(),
 
 ---
 
-STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/06-STL%20Cheat%20Sheet%20(STL速查总览).md)

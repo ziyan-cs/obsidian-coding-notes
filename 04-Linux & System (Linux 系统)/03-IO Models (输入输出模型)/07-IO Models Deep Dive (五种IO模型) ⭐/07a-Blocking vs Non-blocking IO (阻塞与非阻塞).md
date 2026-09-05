@@ -53,4 +53,4 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 > [!tip]- **工程要点**：非阻塞 IO 本身不提升性能，它的价值是和 IO 多路复用配合时让单个线程管理大量 fd。纯轮询非阻塞 IO（一直 read 检查 EAGAIN）反而更浪费 CPU。
 
-阻塞与非阻塞 IO 详解见 → [Synchronous vs Asynchronous IO (同步与异步)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07b-Synchronous%20vs%20Asynchronous%20IO%20(同步与异步).md) · [IO Multiplexing (多路复用对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)
+阻塞与非阻塞 IO 详解见 → [Synchronous vs Asynchronous IO (同步与异步)](/04-Linux%20&%20System%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07b-Synchronous%20vs%20Asynchronous%20IO%20(同步与异步).md) · [IO Multiplexing (多路复用对比)](/04-Linux%20&%20System%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)

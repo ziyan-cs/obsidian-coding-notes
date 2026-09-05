@@ -84,4 +84,4 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 > [!tip]- **工程要点**：零拷贝的核心思路是避免数据在内核态和用户态之间来回拷贝。sendfile 对静态文件传输最有效，如果数据需要计算/修改（如压缩、加密），仍需要传统方式。Nginx 的静态文件服务正是利用 sendfile 实现高性能。
 
-零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02%20·%20进程与线程/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
+零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)

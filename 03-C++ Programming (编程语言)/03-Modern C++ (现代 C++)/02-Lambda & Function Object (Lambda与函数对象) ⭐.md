@@ -128,4 +128,4 @@ void process(std::vector<int>& v, F pred) {
 
 ---
 
-完美转发与 Lambda 表达式常配合使用，详见 → [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+完美转发与 Lambda 表达式常配合使用，详见 → [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)

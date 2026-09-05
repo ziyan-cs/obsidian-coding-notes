@@ -97,4 +97,4 @@ std::deque<std::function<void()>> tasks;
 
 ---
 
-vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)

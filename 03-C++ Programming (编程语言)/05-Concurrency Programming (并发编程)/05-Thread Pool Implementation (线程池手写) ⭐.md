@@ -170,4 +170,4 @@ class SimplePool {
 ---
 
 配套的并发原语见 → [Mutex & Lock](../02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md) · [Condition Variable](../03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md)
-- [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+- [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)

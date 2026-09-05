@@ -103,4 +103,4 @@ if (auto [lock, data] = acquireData(); data.valid()) {
 
 ---
 
-string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)

@@ -155,4 +155,4 @@ SELECT * FROM sys.innodb_lock_waits\G
 
 
 
-表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/06-Database%20(MySQL)/02%20·%20INNODB存储引擎/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)
+表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/06-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/06-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)

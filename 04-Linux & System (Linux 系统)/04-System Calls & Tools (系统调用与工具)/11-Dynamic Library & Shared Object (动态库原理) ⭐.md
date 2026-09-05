@@ -98,4 +98,4 @@ dlclose(handle);
 
 > [!tip]- **工程要点**：`-fPIC` 对性能有轻微影响（多一次间接寻址），但这是动态库和 ASLR 的必要代价。如果不需要共享，静态库性能更优。`LD_PRELOAD` 环境变量可以劫持系统库函数——这是很多调试/监控工具的底层原理。
 
-动态库原理见 → [System Calls Overview (常用系统调用速查)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Debugging & Tracing (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
+动态库原理见 → [System Calls Overview (常用系统调用速查)](/04-Linux%20&%20System%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Debugging & Tracing (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)

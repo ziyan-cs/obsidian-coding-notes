@@ -157,4 +157,4 @@ if (big.is_lock_free()) {
 
 ---
 
-无锁结构基于原子操作实现，详见 → [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+无锁结构基于原子操作实现，详见 → [Lock-free Structures Overview (无锁结构概念)](/03-C++%20Programming%20(编程语言)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)

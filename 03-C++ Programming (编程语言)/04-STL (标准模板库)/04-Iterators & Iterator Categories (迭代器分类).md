@@ -107,4 +107,4 @@ std::vector<int> data(in, end);
 
 ---
 
-算法库与迭代器分类紧密相关，详见 → [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/05-Algorithm%20Library%20(算法库速查).md)
+算法库与迭代器分类紧密相关，详见 → [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)

@@ -151,4 +151,4 @@ SELECT * FROM user WHERE age = 20;
 
 
 
-索引设计原则见 → [Index Design Principles (索引设计原则)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md) · [Slow Query Log & Optimization (慢查询分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08c-Slow%20Query%20Log%20&%20Optimization%20(慢查询分析).md)
+索引设计原则见 → [Index Design Principles (索引设计原则)](/06-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md) · [Slow Query Log & Optimization (慢查询分析)](/06-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08c-Slow%20Query%20Log%20&%20Optimization%20(慢查询分析).md)

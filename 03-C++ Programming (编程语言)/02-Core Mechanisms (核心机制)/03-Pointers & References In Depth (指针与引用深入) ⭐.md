@@ -86,4 +86,4 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 
 ---
 
-指针类型转换详见 → [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+指针类型转换详见 → [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/02-Type%20Conversion%20&%20Casting%20(类型转换).md)

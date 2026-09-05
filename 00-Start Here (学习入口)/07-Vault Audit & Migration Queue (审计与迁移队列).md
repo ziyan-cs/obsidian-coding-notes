@@ -21,7 +21,7 @@ verified: 2026-09-05
 
 ## 本轮实际进度（2026-09-05）
 
-- **入口导航**：新增 4 个章节 MOC——`01-CS Core MOC`、`02-Algorithms MOC`、`07-Tools MOC`、`09-Career Prep MOC`；新增 wikilink 全部校验通过（0 dangling）。C++ 已有 `00-C++ Backend Core Map`，无需新增。
+- **入口导航**：新增 4 个章节 MOC——`00-CS Core MOC (计算机核心导航)`、`00-Algorithms MOC (算法导航)`、`00-Tools MOC (工程工具导航)`、`00-Career Prep MOC (面试导航)`；新增 wikilink 全部校验通过（0 dangling）。C++ 已有 `00-C++ Backend Core Map (后端能力地图)`，无需新增。
 - **frontmatter 迁移**：60 篇主线笔记由 emoji 状态改为文本 `status` + `review_due` + `confidence` + `verified`；稳定基础标 `stable`，易变内容（编译链接、CMake、gRPC、hiredis、EXPLAIN）标 `NEEDS_VERIFY`。
 - **内容闭环**：7 篇高频笔记补「30 秒回答 / 自测」——B+ 树、MVCC、Next-Key Lock、RDB、epoll API、TCP 握手、虚表。
 - **未做（待后续）**：算法模板"错误模式 / 表达卡"改造；低频理论来源与待验证项补齐。

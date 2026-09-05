@@ -152,4 +152,4 @@ void wheel_tick_multi(time_wheel_multi *wheels) {
 
 ---
 
-另一种定时器实现见 → [Min-Heap Timer (小根堆定时器)](</05-Network%20Programming%20(网络编程)/04%20·%20服务器设计模式/09-Timer%20Implementation%20(定时器实现)%20⭐/09a-Min-Heap%20Timer%20(小根堆定时器).md>)
+另一种定时器实现见 → [Min-Heap Timer (小根堆定时器)](</05-Network%20Programming%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/09-Timer%20Implementation%20(定时器实现)%20⭐/09a-Min-Heap%20Timer%20(小根堆定时器).md>)

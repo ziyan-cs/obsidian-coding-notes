@@ -426,4 +426,4 @@ read -t 10 -p "Enter number: " num    # 10 秒超时
 > - `[[ ]]` 比 `[ ]` 功能更强，支持 `&&` `||` 和正则
 > - `$(( ))` 是最推荐的整数运算方式
 
-Shell 命令与脚本详解见 → [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01%20·%20Linux基础/03-System%20Administration%20Basics%20(系统管理基础).md)
+Shell 命令与脚本详解见 → [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [System Administration Basics (系统管理基础)](/04-Linux%20&%20System%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)

@@ -83,4 +83,4 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ---
 
-指针与引用的转换操作详见 → [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+指针与引用的转换操作详见 → [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)

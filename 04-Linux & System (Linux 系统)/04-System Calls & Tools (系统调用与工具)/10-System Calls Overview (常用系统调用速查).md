@@ -85,4 +85,4 @@ status: 🌱
 
 > [!tip]- **工程要点**：频繁系统调用是性能瓶颈之一。减少系统调用的技术包括：用户态缓冲区（stdio 的 fread/fwrite）、批量处理（readv/writev 聚集 IO）、mmap 减少 read/write、epoll 替代 select/poll。
 
-系统调用速查见 → [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md) · [Debugging & Tracing (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04%20·%20系统调用与工具/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
+系统调用速查见 → [Dynamic Library & Shared Object (动态库原理)](/04-Linux%20&%20System%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md) · [Debugging & Tracing (调试追踪)](/04-Linux%20&%20System%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)

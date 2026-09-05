@@ -200,4 +200,4 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 
 
 
-MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-MySQL%20Basics%20(MySQL%20基础).md)
+MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/06-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md)

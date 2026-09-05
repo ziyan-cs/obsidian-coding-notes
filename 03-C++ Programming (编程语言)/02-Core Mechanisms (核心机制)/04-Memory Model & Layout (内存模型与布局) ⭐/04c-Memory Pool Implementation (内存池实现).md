@@ -81,4 +81,4 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 
 ---
 
-内存对齐对内存池实现至关重要，详见 → [Memory Alignment (内存对齐)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)
+内存对齐对内存池实现至关重要，详见 → [Memory Alignment (内存对齐)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)

@@ -26,4 +26,4 @@ status: 🌱
 
 ---
 
-类型推导详见 → [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/01-Type%20Deduction%20(类型推导).md)
+类型推导详见 → [Type Deduction (类型推导)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/01-Type%20Deduction%20(类型推导).md)

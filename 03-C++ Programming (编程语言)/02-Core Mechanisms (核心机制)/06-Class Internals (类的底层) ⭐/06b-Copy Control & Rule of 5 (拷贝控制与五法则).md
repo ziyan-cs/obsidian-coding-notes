@@ -78,4 +78,4 @@ public:
 
 ---
 
-构造析构顺序详见 → [Constructor & Destructor Order (构造析构顺序)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)
+构造析构顺序详见 → [Constructor & Destructor Order (构造析构顺序)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)

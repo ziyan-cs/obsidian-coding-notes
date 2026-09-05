@@ -278,4 +278,4 @@ Token 用完即废，防止囤积
 | **怎么测试秒杀系统的正确性？** | ① 单元测试：Lua 脚本的各种边界（库存=0、超量扣减）；② 压力测试：jmeter 模拟 10 倍预估并发；③ 正确性验证：压测后检查 sum(已售) <= total_stock；④ Chaos Engineering：随机 Kill 服务验证库存不丢 |
 | **下单 Token 怎么保证不提前泄漏？** | Token 含时间戳和签名（HMAC-SHA256），服务端验证时间窗口（±5s）。Token 在秒杀开始时才生效，提前预发的 Token 在活动时间前被拒绝 |
 
-秒杀系统缓存与消息队列详解见 → [Cache Penetration / Breakdown / Avalanche](08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md) · [Kafka Message Delivery Guarantees](08-Distributed%20&%20Middleware%20(分布式与中间件)/03%20·%20Message%20Queue%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)
+秒杀系统缓存与消息队列详解见 → [Cache Penetration / Breakdown / Avalanche](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md) · [Kafka Message Delivery Guarantees](07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)

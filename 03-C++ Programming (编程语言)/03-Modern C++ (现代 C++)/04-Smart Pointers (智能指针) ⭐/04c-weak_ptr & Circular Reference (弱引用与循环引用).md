@@ -86,4 +86,4 @@ public:
 
 ---
 
-shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
+shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)

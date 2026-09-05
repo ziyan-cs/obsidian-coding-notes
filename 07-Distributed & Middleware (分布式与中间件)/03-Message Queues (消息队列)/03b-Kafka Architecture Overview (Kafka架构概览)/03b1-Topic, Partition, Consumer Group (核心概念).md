@@ -115,4 +115,4 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-消息可靠性保证详解见 → [03b2-Message Delivery Guarantees (消息可靠性)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/03%20·%20Message%20Queue%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)
+消息可靠性保证详解见 → [03b2-Message Delivery Guarantees (消息可靠性)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)

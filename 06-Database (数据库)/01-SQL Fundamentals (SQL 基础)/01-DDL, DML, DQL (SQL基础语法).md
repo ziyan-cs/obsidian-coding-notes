@@ -410,4 +410,4 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 
 
-多表查询见 → [Joins & Subqueries (多表查询与子查询)](/06-Database%20(MySQL)/01%20·%20SQL基础/02-Joins%20&%20Subqueries%20(多表查询与子查询).md) · [Aggregate Functions & Group By (聚合与分组)](/06-Database%20(MySQL)/01%20·%20SQL基础/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)
+多表查询见 → [Joins & Subqueries (多表查询与子查询)](/06-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md) · [Aggregate Functions & Group By (聚合与分组)](/06-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)

@@ -143,4 +143,4 @@ if (ec) { /* 处理不存在等预期情况 */ }
 
 ---
 
-调试与异常定位详见 → [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+调试与异常定位详见 → [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)

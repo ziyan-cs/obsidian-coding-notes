@@ -262,4 +262,4 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-原子操作与内存序选择详见 → [Atomic & Memory Order (原子操作与内存序)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
+原子操作与内存序选择详见 → [Atomic & Memory Order (原子操作与内存序)](/03-C++%20Programming%20(编程语言)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)

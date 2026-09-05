@@ -190,4 +190,4 @@ class Server {
 
 ---
 
-RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & References In Depth (指针与引用深入)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)

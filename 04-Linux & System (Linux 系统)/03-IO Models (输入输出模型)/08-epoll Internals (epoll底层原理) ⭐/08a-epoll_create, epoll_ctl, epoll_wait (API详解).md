@@ -96,4 +96,4 @@ close(epfd);
 - **常见误区**：用 `data.fd` 存 fd 后还要回查连接对象（应直接用 `data.ptr`）；多线程共享 epfd 时漏设 `EPOLLONESHOT`，导致同一事件被多线程重复处理。
 - **自测**：1) `epoll_event.data` 为什么是 union？ 2) `epoll_create` 的 size 参数为什么被忽略？
 
-epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md) · [epoll vs select (底层实现对比)](/04-Linux%20&%20System%20(Linux%20系统)/03%20·%20IO模型/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)
+epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/04-Linux%20&%20System%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md) · [epoll vs select (底层实现对比)](/04-Linux%20&%20System%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)

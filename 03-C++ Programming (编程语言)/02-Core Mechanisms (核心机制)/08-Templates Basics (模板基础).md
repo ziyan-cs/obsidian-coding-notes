@@ -125,4 +125,4 @@ std::conditional_t<true, int, double>  // int
 
 ---
 
-类型别名与模板紧密相关，详见 → [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+类型别名与模板紧密相关，详见 → [Const, Typedef & Enum (类型系统基础)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)

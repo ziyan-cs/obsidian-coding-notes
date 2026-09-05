@@ -70,4 +70,4 @@ auto sp = std::shared_ptr<MyClass>(new MyClass(args...));
 
 ---
 
-weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与循环引用)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/04-Smart%20Pointers%20(智能指针)%20⭐/04c-weak_ptr%20&%20Circular%20Reference%20(弱引用与循环引用).md)
+weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与循环引用)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04c-weak_ptr%20&%20Circular%20Reference%20(弱引用与循环引用).md)

@@ -314,4 +314,4 @@ int timeout = cfg->rpc_timeout_ms;
 | **配置中的 DB 密码怎么轮换？** | 通过配置中心定时任务自动轮换，新密码加密后写入配置中心。依赖密码的客户端通过 Watch 接收到新密码，在线切换连接池。AB 测试：保留旧连接直到旧连接耗尽 |
 | **推拉结合的实现细节？** | 先推（Push Server 通知客户端版本变化），后拉（客户端主动拉取新值）。推不可靠时靠拉兜底。客户端定时在后台拉取全量版本号对比（类似于 DNS 的 SOA 查询），发现不一致时拉取增量 |
 
-配置中心依赖的分布式共识协议详解见 → [Leader Election (Raft)](08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [Log Replication (Raft)](08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
+配置中心依赖的分布式共识协议详解见 → [Leader Election (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [Log Replication (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)

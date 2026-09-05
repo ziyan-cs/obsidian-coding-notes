@@ -110,4 +110,4 @@ Producer -> Broker -> Consumer
 
 ---
 
-Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/03%20·%20Message%20Queue%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)
+Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)

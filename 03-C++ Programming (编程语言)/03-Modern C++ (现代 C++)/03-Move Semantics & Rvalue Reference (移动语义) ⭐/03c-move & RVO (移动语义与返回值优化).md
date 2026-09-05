@@ -63,4 +63,4 @@ std::string bar() {
 
 ---
 
-移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
+移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)

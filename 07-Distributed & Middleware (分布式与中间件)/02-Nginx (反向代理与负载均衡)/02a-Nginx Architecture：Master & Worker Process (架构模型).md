@@ -134,4 +134,4 @@ nginx -s reload
 
 ---
 
-Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反向代理配置)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)
+Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反向代理配置)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)

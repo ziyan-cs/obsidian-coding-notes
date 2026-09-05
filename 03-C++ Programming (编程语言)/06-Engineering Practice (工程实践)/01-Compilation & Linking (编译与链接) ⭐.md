@@ -153,4 +153,4 @@ inline int square(int x) { return x * x; }
 
 ---
 
-头文件与源文件组织详见 → [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
+头文件与源文件组织详见 → [Header & Source Organization (头文件与源文件组织)](/03-C++%20Programming%20(编程语言)/06-Engineering%20Practice%20(工程实践)/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)

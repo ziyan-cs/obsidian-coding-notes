@@ -91,4 +91,4 @@ std::visit([](auto&& v) {
 
 ---
 
-optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详见 → [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03%20·%20现代%20C++/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详见 → [Modern C++ Overview (现代 C++ 特性总览)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)

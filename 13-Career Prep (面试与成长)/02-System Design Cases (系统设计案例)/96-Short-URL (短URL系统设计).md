@@ -212,4 +212,4 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 | **怎么估算短链系统的写 QPS？** | 假设 Twitter/X 日活 3 亿，每天新增短链 5 千万，日间 12 小时均匀分布 ≈ 50M / 43200s ≈ 1157/s。多数业务系统低于此数量级，10~100 QPS 写入即可 |
 | **一致性哈希在短链系统中的作用？** | 通常不需要，短链系统无状态，前端 Nginx 直接轮询即可。但如果要做用户级分片存储，可按 user_id 一致性哈希分库 |
 
-短 URL 系统分布式与缓存基础详解见 → [CAP Theorem & BASE Theory](08-Distributed%20&%20Middleware%20(分布式与中间件)/04%20·%20Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Redis Cache Patterns](08-Distributed%20&%20Middleware%20(分布式与中间件)/01%20·%20Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md)
+短 URL 系统分布式与缓存基础详解见 → [CAP Theorem & BASE Theory](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Redis Cache Patterns](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md)

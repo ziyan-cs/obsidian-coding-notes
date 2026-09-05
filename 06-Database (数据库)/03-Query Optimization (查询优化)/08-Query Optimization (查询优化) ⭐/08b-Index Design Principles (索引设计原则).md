@@ -165,4 +165,4 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 
 
-表设计规范见 → [Table Design (表设计)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/03-Table%20Design%20(表设计).md) · [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)
+表设计与 SQL 基础见 → [MySQL Basics (MySQL 基础)](/06-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md) · [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)

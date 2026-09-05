@@ -204,4 +204,4 @@ sendto(fd, buf, len, 0,
 
 ---
 
-UDP 与 TCP 的对比背景见 → [TCP/IP Stack Overview (协议栈总览)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md>) · 数据边界问题见 → [Sticky Packet Problem & Solutions (粘包问题与解决)](</05-Network%20Programming%20(网络编程)/01%20·%20网络基础/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md>)
+UDP 与 TCP 的对比背景见 → [TCP/IP Stack Overview (协议栈总览)](</05-Network%20Programming%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md>) · 数据边界问题见 → [Sticky Packet Problem & Solutions (粘包问题与解决)](</05-Network%20Programming%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md>)

@@ -1,0 +1,70 @@
+---
+tags:
+  - cs/computer-org
+status: 🌱
+---
+
+> [!important] **核心考点**：CPU 核心组成（数据通路 + 控制单元）、寄存器、ALU、控制器实现方式
+
+## CPU 的核心组成
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│  CPU INSTRUCTION PIPELINE                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  IF (Fetch) ──→ ID (Decode) ──→ EX (Execute) ──→ MEM (Access)   │
+│  ──→ WB (Writeback)                                             │
+│                                                                 │
+│  ├── IF:  Retrieve instruction from I-Cache                     │
+│  ├── ID:  Decode instruction and operands                       │
+│  ├── EX:  ALU computation / address calculation                 │
+│  ├── MEM: Read/write D-Cache                                    │
+│  └── WB:  Write result to register file                         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  CPU CORE                                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  PC (Program Counter)       ──→ supplies next addr to IF        │
+│  REG (Register File)        ──→ supplies operands to ID         │
+│                             ←── receives results from WB        │
+│  ALU (Arithmetic Logic Unit)──→ performs computation in EX      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## 关键寄存器
+
+| 寄存器 | 全称 | 功能 |
+|--------|------|------|
+| **PC** | Program Counter | 存放下一条指令的地址 |
+| **IR** | Instruction Register | 存放当前正在执行的指令 |
+| **SP** | Stack Pointer | 指向栈顶 |
+| **FP/BP** | Frame Pointer | 指向当前栈帧基址 |
+| **通用寄存器** | — | 暂存操作数和结果 |
+
+## ALU 的功能
+
+ALU 是 CPU 中执行实际计算的部件：
+
+- **算术运算**：加、减、乘、除、自增
+- **逻辑运算**：与、或、异或、取反、移位
+- **比较运算**：相等、大于、小于判断（产生条件码/标志位）
+
+ALU 输出标志位：
+- **ZF** (Zero Flag)：结果为 0
+- **SF** (Sign Flag)：结果为负
+- **CF** (Carry Flag)：无符号溢出
+- **OF** (Overflow Flag)：有符号溢出
+
+## 控制器实现
+
+| 方式 | 原理 | 特点 |
+|------|------|------|
+| **硬布线** | 组合逻辑电路直接产生控制信号 | 快但复杂，难扩展 |
+| **微程序** | 将控制信号存为 ROM 中的微指令 | 灵活易扩展，相对慢 |
+| 现代 CPU | 硬布线为主 + 少数复杂指令用微码 | 兼顾性能与复杂度 |
+
+---
+
+
+指令执行流程详见 → [Instruction Cycle（指令执行流程）](/01-CS%20Core%20(计算机核心基础)/02-Computer%20Organization%20(计算机组成原理)/02-Instruction%20Cycle%20(指令执行流程).md)

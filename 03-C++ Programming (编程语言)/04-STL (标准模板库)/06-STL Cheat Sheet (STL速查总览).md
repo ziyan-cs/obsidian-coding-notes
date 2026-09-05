@@ -71,4 +71,4 @@ unordered 哈希表  飞一般的查找
 
 ---
 
-容器适配器与算法详见 → [Container Adapters (容器适配器)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/03-Container%20Adapters%20(容器适配器).md) · [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04%20·%20STL/05-Algorithm%20Library%20(算法库速查).md)
+容器适配器与算法详见 → [Container Adapters (容器适配器)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/03-Container%20Adapters%20(容器适配器).md) · [Algorithm Library (算法库速查)](/03-C++%20Programming%20(编程语言)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)

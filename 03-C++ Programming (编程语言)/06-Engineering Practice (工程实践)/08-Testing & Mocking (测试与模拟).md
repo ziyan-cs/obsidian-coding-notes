@@ -193,4 +193,4 @@ genhtml -o report coverage.info
 
 ---
 
-测试与调试配合保障代码质量，详见 → [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06%20·%20工程实践/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+测试与调试配合保障代码质量，详见 → [Debugging gdb & Sanitizers (调试工具)](/03-C++%20Programming%20(编程语言)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)

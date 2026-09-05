@@ -64,4 +64,4 @@ switch (d) {
 
 ---
 
-类型转换规则详见 → [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02%20·%20核心机制/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+类型转换规则详见 → [Type Conversion & Casting (类型转换)](/03-C++%20Programming%20(编程语言)/02-Core%20Mechanisms%20(核心机制)/02-Type%20Conversion%20&%20Casting%20(类型转换).md)

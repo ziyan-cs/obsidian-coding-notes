@@ -120,4 +120,4 @@ try {
 
 ---
 
-互斥锁与锁管理详见 → [Mutex & Lock (互斥锁与锁管理)](/03-C++%20Programming%20(编程语言)/05%20·%20并发编程/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
+互斥锁与锁管理详见 → [Mutex & Lock (互斥锁与锁管理)](/03-C++%20Programming%20(编程语言)/05-Concurrency%20Programming%20(并发编程)/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)

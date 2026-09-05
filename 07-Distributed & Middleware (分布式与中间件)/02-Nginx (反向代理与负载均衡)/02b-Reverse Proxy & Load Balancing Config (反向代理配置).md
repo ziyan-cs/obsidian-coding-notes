@@ -146,4 +146,4 @@ server {
 
 ---
 
-Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/08-Distributed%20&%20Middleware%20(分布式与中间件)/02%20·%20Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)
+Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)

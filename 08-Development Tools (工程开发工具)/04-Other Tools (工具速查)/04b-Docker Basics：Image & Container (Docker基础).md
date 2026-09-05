@@ -144,8 +144,8 @@ docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据�
 
 ## 关联笔记
 
-- [Makefile Basics (Makefile基础)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
-- [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
-- [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
-- [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/07-Development%20Tools%20(工程开发工具)/04%20·%20Other%20Tools%20(其他工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/07-Development%20Tools%20(工程开发工具)/01%20·%20Git%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- [Makefile Basics (Makefile基础)](/08-Development%20Tools%20(工程开发工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
+- [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/08-Development%20Tools%20(工程开发工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
+- [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/08-Development%20Tools%20(工程开发工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
+- [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/08-Development%20Tools%20(工程开发工具)/04-Other%20Tools%20(工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
+- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/08-Development%20Tools%20(工程开发工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)

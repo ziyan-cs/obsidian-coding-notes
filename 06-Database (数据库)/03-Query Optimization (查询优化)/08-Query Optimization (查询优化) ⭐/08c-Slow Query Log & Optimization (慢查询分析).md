@@ -166,4 +166,4 @@ pt-query-digest /var/log/mysql/slow.log
 
 
 
-执行计划分析见 → [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md) · [Index Design Principles (索引设计原则)](/06-Database%20(MySQL)/03%20·%20查询优化/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)
+执行计划分析见 → [EXPLAIN & Execution Plan Analysis (执行计划分析)](/06-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md) · [Index Design Principles (索引设计原则)](/06-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)
