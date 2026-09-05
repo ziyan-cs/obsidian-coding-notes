@@ -36,4 +36,4 @@ verified: 2026-09-05
 
 ## 每周复盘
 
-写入 [[00-Start Here (学习入口)/05-Mistake Log|Mistake Log]]：本周最难概念、一次真实错误、下周唯一改进点。
+写入 [[00-Start Here (学习入口)/05-Mistake Log (错误记录)|Mistake Log]]：本周最难概念、一次真实错误、下周唯一改进点。

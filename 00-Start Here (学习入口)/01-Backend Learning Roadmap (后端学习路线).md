@@ -68,10 +68,10 @@ verified: 2026-09-05
 
 - 某主题能脱稿讲 3 分钟、改写最小例子、答对自测题，才从 `review` 升为 `solid`。
 - 连续两周没有可运行产物，则减少阅读量，改做一个 30 分钟小实验。
-- 新工具、框架或版本信息先查一手文档，记录验证日期；见 [[06-Sources & Freshness Policy]]。
+- 新工具、框架或版本信息先查一手文档，记录验证日期；见 [[06-Sources & Freshness Policy (来源与时效规则)]]。
 
 ## 关联
 
-- [[00-Vault Map]]
-- [[02-Spaced Review System]]
-- [[05-Mistake Log]]
+- [[00-Vault Map (知识库地图)]]
+- [[02-Spaced Review System (间隔复习系统)]]
+- [[05-Mistake Log (错误记录)]]

@@ -21,12 +21,12 @@ verified: 2026-09-05
 
 | 如果你想解决… | 从这里开始 | 完成信号 |
 | --- | --- | --- |
-| 不知道本周学什么 | [[01-Backend Learning Roadmap]] | 能说出当前阶段和本周交付物 |
-| 看过就忘 | [[02-Spaced Review System]] | 复习队列中有明确日期 |
-| 不知道怎样记笔记 | [[03-Note Standard]] | 新笔记有结论、代码、误区和自测 |
-| 英文术语卡住 | [[04-Engineering English Glossary]] | 能用中英术语解释同一概念 |
-| 又犯同样的错误 | [[05-Mistake Log]] | 错误有原因、修正和下次触发条件 |
-| 怀疑笔记过时 | [[06-Sources & Freshness Policy]] | 找得到一手来源和验证日期 |
+| 不知道本周学什么 | [[01-Backend Learning Roadmap (后端学习路线)]] | 能说出当前阶段和本周交付物 |
+| 看过就忘 | [[02-Spaced Review System (间隔复习系统)]] | 复习队列中有明确日期 |
+| 不知道怎样记笔记 | [[03-Note Standard (笔记规范)]] | 新笔记有结论、代码、误区和自测 |
+| 英文术语卡住 | [[04-Engineering English Glossary (工程英语术语)]] | 能用中英术语解释同一概念 |
+| 又犯同样的错误 | [[05-Mistake Log (错误记录)]] | 错误有原因、修正和下次触发条件 |
+| 怀疑笔记过时 | [[06-Sources & Freshness Policy (来源与时效规则)]] | 找得到一手来源和验证日期 |
 
 ## 知识主干与顺序
 
@@ -48,11 +48,11 @@ Database ─┘                 ├──> Go：服务端工程 ─────�
 1. 选一个原子主题，先写下“我猜它解决什么问题”。
 2. 阅读并运行一个最小例子；改一个参数，观察失败或边界行为。
 3. 用自己的话写 3 条结论、1 个反例、2 道自测题。
-4. 在 [[02-Spaced Review System]] 记录下一次复习日；出错则写入 [[05-Mistake Log]]。
+4. 在 [[02-Spaced Review System (间隔复习系统)]] 记录下一次复习日；出错则写入 [[05-Mistake Log (错误记录)]]。
 
 ## 每周复习入口
 
-- 固定一次复习：清空 `review_due` 到期的卡片（[[02-Spaced Review System]]）；到期积压 > 5 条就暂停新主题，先消化。
+- 固定一次复习：清空 `review_due` 到期的卡片（[[02-Spaced Review System (间隔复习系统)]]）；到期积压 > 5 条就暂停新主题，先消化。
 - 只优先复习核心主线（C++ 后端、Linux、网络、MySQL、Redis、项目），其余到期可降级延后。
 
 ## 项目推进入口
@@ -68,13 +68,13 @@ Database ─┘                 ├──> Go：服务端工程 ─────�
 
 ## 审计进度（实际完成状态）
 
-- **P0/P1（前置阶段）**：已完成——高价值主线笔记的结论/反例/自测补全与版本核对。主题清单见 [[07-Vault Audit & Migration Queue]]。
+- **P0/P1（前置阶段）**：已完成——高价值主线笔记的结论/反例/自测补全与版本核对。主题清单见 [[07-Vault Audit & Migration Queue (审计与迁移队列)]]。
 - **P2（入口与格式）**：新增 4 个章节入口 MOC（CS Core / 算法 / 工具 / 面试）；迁移 60 篇主线笔记 frontmatter（emoji 状态 → 文本 status + review_due + confidence + verified），易变内容标 NEEDS_VERIFY。
 - **P3（内容闭环）**：为 7 篇高频笔记补「30 秒回答 / 自测」，覆盖 MySQL 索引/事务/锁、Redis 持久化、Linux epoll、TCP 握手、C++ 虚表。
-- **待办**：算法模板"错误模式 / 表达卡"改造；低频理论保留待验证项（见 [[07-Vault Audit & Migration Queue]]）。
+- **待办**：算法模板"错误模式 / 表达卡"改造；低频理论保留待验证项（见 [[07-Vault Audit & Migration Queue (审计与迁移队列)]]）。
 
 ## 关联
 
-- [[01-Backend Learning Roadmap]]
-- [[02-Spaced Review System]]
-- [[03-Note Standard]]
+- [[01-Backend Learning Roadmap (后端学习路线)]]
+- [[02-Spaced Review System (间隔复习系统)]]
+- [[03-Note Standard (笔记规范)]]

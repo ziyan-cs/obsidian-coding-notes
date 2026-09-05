@@ -62,6 +62,6 @@ seed → learning → review → solid
 
 ## 关联
 
-- [[03-Note Standard]]
-- [[05-Mistake Log]]
-- [[01-Backend Learning Roadmap]]
+- [[03-Note Standard (笔记规范)]]
+- [[05-Mistake Log (错误记录)]]
+- [[01-Backend Learning Roadmap (后端学习路线)]]

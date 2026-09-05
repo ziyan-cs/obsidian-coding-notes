@@ -51,6 +51,6 @@ CMake / 测试 / Sanitizer / gdb / perf
 
 ## 关联
 
-- [[00-Start Here (学习入口)/01-Backend Learning Roadmap|两年学习路线]]
+- [[00-Start Here (学习入口)/01-Backend Learning Roadmap (后端学习路线)|两年学习路线]]
 - [[09-Go Programming (Go 编程)/08-C++ to Go Decision Notes (C++ 到 Go 迁移决策)|C++ to Go Decision Notes]]
 - [[12-Backend Projects (后端项目)/00-Project Map|Project Map]]

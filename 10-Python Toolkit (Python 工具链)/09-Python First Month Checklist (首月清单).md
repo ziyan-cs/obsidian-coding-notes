@@ -30,4 +30,4 @@ verified: 2026-09-05
 
 - [ ] 完成 [[06-Type Hints, Logging & Quality (类型标注、日志与质量)]]、[[07-Data Processing Boundaries (数据处理边界)]]、[[08-C++ Go Python Decision Notes (多语言分工决策)]]。
 - [ ] 做一份从 CSV 生成 Markdown 报告的脚本。
-- [ ] 在 [[00-Start Here (学习入口)/05-Mistake Log|Mistake Log]] 记录至少两次真实错误。
+- [ ] 在 [[00-Start Here (学习入口)/05-Mistake Log (错误记录)|Mistake Log]] 记录至少两次真实错误。

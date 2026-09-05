@@ -66,6 +66,6 @@ verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 
 ## 关联
 
-- [[00-Vault Map]]
-- [[02-Spaced Review System]]
-- [[06-Sources & Freshness Policy]]
+- [[00-Vault Map (知识库地图)]]
+- [[02-Spaced Review System (间隔复习系统)]]
+- [[06-Sources & Freshness Policy (来源与时效规则)]]
