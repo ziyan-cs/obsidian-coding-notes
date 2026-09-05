@@ -18,6 +18,6 @@ verified: 2026-09-05
 1. 基础命令与权限 → 2. 进程/线程/信号 → 3. 五种 I/O 模型 → 4. epoll 底层 → 5. 零拷贝 → 6. 调试追踪。
 
 ## 与 C++ / 项目入口
-- 并发：[[03-C++ Programming (编程语言)/05 · 并发编程/01-Thread Basics POSIX & std thread (线程基础) ⭐|C++ 线程]]
+- 并发：[[03-C++ Programming (编程语言)/05-Concurrency Programming (并发编程)/01-Thread Basics POSIX & std thread (线程基础) ⭐|C++ 线程]]
 - 网络：[[05-Network Programming (网络编程)/02 · Socket编程/05-Reactor & Proactor Pattern (事件驱动模型) ⭐/05c-Multi Reactor Multi Thread： one loop per thread (主从reactor)|Reactor 模型]]
 - 项目：[[12-Backend Projects (后端项目)/00-Project Map|项目地图]]

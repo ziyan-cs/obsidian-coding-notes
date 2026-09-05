@@ -19,5 +19,5 @@ verified: 2026-09-05
 
 ## 与 C++ / 项目入口
 - 底层 I/O：[[04-Linux & System (Linux 系统)/03 · IO模型/08-epoll Internals (epoll底层原理) ⭐/08a-epoll_create, epoll_ctl, epoll_wait (API详解)|epoll]]
-- C++ 并发：[[03-C++ Programming (编程语言)/05 · 并发编程/05-Thread Pool Implementation (线程池手写) ⭐|线程池]]
+- C++ 并发：[[03-C++ Programming (编程语言)/05-Concurrency Programming (并发编程)/05-Thread Pool Implementation (线程池手写) ⭐|线程池]]
 - 项目：[[12-Backend Projects (后端项目)/02-URL Shortener|URL Shortener]]
