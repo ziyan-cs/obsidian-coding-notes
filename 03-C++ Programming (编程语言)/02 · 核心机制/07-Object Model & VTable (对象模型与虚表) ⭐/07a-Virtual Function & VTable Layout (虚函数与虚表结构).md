@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/core
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：虚函数表结构、vptr 指针、单继承下的 VTable 布局
@@ -71,6 +74,12 @@ class Derived : public Base {
 
 class Leaf final : public Derived { };  // 禁止继承 Leaf
 ```
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：每个含虚函数的类有一张 VTable（存虚函数地址），每个对象开头藏一个 vptr 指向它；虚调用 = 读 vptr → 查表 → 间接跳转，代价是一次额外内存访问 + 不可内联；对象大小多 8 字节（64 位），类多一张静态表。
+- **常见误区**：以为 vptr 存在类里（实际每个对象各一个）；在构造函数/析构函数里调虚函数并期望动态分发（此时 vptr 已指向本类，不会派发到派生类）；多态基类忘记声明 `virtual` 析构。
+- **自测**：1) `sizeof(Base)`（只有一个虚函数）在 64 位下是多少？ 2) 为什么构造函数里调虚函数不会动态派发到派生类？
 
 ---
 

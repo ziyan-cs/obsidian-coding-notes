@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/concurrency
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
@@ -36,10 +39,10 @@ std::mutex mtx;
 int shared = 0;
 void inc_mutex() {
     std::lock_guard lock(mtx);
-    ++shared;  // 涉及系统调用（用户态→内核态→用户态）
+    ++shared;  // 无竞争时通常在用户态完成；竞争时才可能经 futex 等待/唤醒
 }
 
-// atomic：无锁，只在用户态完成
+// atomic：std::atomic 不保证 lock-free，可用 is_lock_free() 查询
 std::atomic<int> atomic_shared{0};
 void inc_atomic() {
     ++atomic_shared;  // 编译为 lock add 或 CAS 循环，纯用户态指令
@@ -47,9 +50,8 @@ void inc_atomic() {
 ```
 
 **性能量级**（粗略对比）：
-- `mutex lock/unlock`：~25-50ns（系统调用+上下文切换）
-- `atomic fetch_add`：~5-15ns（一条 CPU 指令）
-- 注意：实际差异取决于**竞争程度**
+- mutex：无竞争时，常见实现通常在用户态完成；发生竞争时才可能通过 futex 等机制等待或唤醒。实际成本受平台、实现、竞争和缓存状态影响，必须测量。
+- atomic：通常在用户态完成，具体开销需以本机测量为准。
 
 ## 内存序（Memory Order）— 核心难点
 
@@ -60,7 +62,7 @@ int x = 0, y = 0;
 
 // 六种内存序：
 std::memory_order_relaxed;   // 无顺序约束
-std::memory_order_consume;   // 数据依赖（实践中 ≈ relaxed，不推荐使用）
+std::memory_order_consume;   // 规范中的依赖序；主流编译器通常按 acquire 处理，一般不推荐使用
 std::memory_order_acquire;   // 保证之后的读取不会重排到此操作之前
 std::memory_order_release;   // 保证之前的写入不会重排到此操作之后
 std::memory_order_acq_rel;   // acquire + release（用于 read-modify-write）

@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/concurrency
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析

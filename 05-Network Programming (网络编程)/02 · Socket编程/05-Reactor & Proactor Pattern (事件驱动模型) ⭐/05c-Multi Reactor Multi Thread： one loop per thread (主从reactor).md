@@ -1,7 +1,10 @@
 ---
 tags:
   - network/socket
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**
@@ -91,11 +94,13 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 | 框架/项目       | 模型                                                              |
 | ----------- | --------------------------------------------------------------- |
 | Redis（6.0前） | 单 Reactor 单线程                                                   |
-| Nginx       | 主从 Reactor（master + worker，one loop per worker）                 |
+| Nginx       | master/worker 多进程，各 worker 独立事件循环                          |
 | Netty       | 主从 Reactor 多线程（Boss Group + Worker Group）                       |
 | Muduo（陈硕）   | 主从 Reactor，one loop per thread                                  |
 | Node.js     | 单 Reactor 单线程（libuv event loop）+ 线程池（libuv threadpool，处理文件 I/O） |
 | Tokio（Rust） | 主从 Reactor 多线程（work-stealing 调度）                                |
+
+> **Nginx 说明**：Nginx 采用 master/worker 多进程架构，worker 各自运行事件循环；它**不是**主 Reactor accept 后分发给子 Reactor 的 Muduo/Netty 式主从模型。历史上 worker 通过 accept_mutex（或新版 EPOLLEXCLUSIVE / SO_REUSEPORT）竞争共享监听 socket，具体机制随版本与配置不同，实现时按所用版本核对官方文档。
 
 ---
 

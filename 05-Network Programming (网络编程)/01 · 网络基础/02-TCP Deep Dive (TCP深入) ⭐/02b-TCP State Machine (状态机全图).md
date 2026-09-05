@@ -1,7 +1,10 @@
 ---
 tags:
   - network/core
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：每个状态的含义、转换条件、服务端/客户端各自的状态路径

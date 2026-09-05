@@ -1,7 +1,10 @@
 ---
 tags:
   - linux/io
-status: 🌱
+status: seed
+review_due: 2026-09-19
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升

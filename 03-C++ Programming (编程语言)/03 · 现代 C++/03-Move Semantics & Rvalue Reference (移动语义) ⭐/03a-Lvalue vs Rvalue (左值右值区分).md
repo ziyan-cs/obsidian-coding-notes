@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：左值/右值/将亡值的定义，右值引用的绑定规则

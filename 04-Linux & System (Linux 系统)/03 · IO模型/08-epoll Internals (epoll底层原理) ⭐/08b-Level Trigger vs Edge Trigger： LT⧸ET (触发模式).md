@@ -1,7 +1,10 @@
 ---
 tags:
   - linux/io
-status: 🌱
+status: seed
+review_due: 2026-09-19
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源

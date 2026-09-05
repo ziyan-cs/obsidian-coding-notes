@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/core
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：指针与引用的本质区别、函数指针、智能指针底层原理的关系

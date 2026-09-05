@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制

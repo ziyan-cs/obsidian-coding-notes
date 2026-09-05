@@ -1,7 +1,10 @@
 ---
 tags:
   - linux/io
-status: 🌱
+status: seed
+review_due: 2026-09-19
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**
@@ -71,7 +74,7 @@ for (int i = 0; i < n; i++) {
 
 **核心优势：**
 - **O(1) 事件通知**：只返回就绪的 fd，不遍历所有
-- **mmap 共享内存**：避免用户态/内核态数据拷贝
+- **关注集合 + 就绪集合**：内核维护关注集合与就绪集合；epoll_wait 将就绪事件返回到用户提供的 events 缓冲区（epoll 不以 mmap 共享事件区作为其机制）
 - **红黑树管理**：epoll_ctl 用红黑树维护 fd 集合，增删改 O(log n)
 - **就绪链表**：内核把就绪的 fd 链入就绪链表，epoll_wait 直接读取
 - **无上限**：受系统最大文件数限制（cat /proc/sys/fs/file-max）
@@ -83,7 +86,7 @@ for (int i = 0; i < n; i++) {
 | 底层结构 | 位数组 | pollfd 数组 | 红黑树 + 就绪链表 |
 | 最大 fd 数 | 1024 | 无上限 | 无上限 |
 | 遍历方式 | 全部遍历 O(n) | 全部遍历 O(n) | 直接返回就绪 O(k) |
-| 数据拷贝 | 每次拷贝全部 | 每次拷贝全部 | mmap 共享内存，零拷贝 |
+| 数据拷贝 | 每次拷贝全部 | 每次拷贝全部 | 仅就绪事件拷入用户 events 缓冲区 |
 | 触发模式 | LT | LT | LT + ET |
 | 平台 | 几乎所有平台 | 几乎所有平台 | Linux 2.6+ |
 | 修改 fd | 重设 fd_set | 重设 pollfd | epoll_ctl 增量更新 |

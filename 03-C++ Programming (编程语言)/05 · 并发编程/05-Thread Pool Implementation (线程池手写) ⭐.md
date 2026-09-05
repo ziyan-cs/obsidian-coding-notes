@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/concurrency
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**
@@ -157,6 +160,12 @@ class SimplePool {
 
 > [!tip]- **工程要点**
 > 生产级线程池还需要：**工作窃取**（每条线程有自己的任务队列）、**优先级队列**（紧急任务插队）、**定时任务**、**监控接口**（当前队列深度、活跃线程数）。但面试手撕以上基础版本就够了。
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：线程池 = 任务队列 + 固定线程集合 + 条件变量通知。`enqueue` 把任务包装成 `packaged_task` 入队，worker 循环取任务执行，析构时置 stop 标志 + `notify_all` + `join`。
+- **常见误区**：`enqueue` 里先检查 `stop_` 再 push 存在竞态（应持锁检查）；worker 里 `stop_` 为 true 且队列非空时过早退出（丢任务）。
+- **自测**：1) 为什么 `enqueue` 的 `stop_` 判断必须在锁内？ 2) 任务抛异常会怎样，如何拿回异常？
 
 ---
 

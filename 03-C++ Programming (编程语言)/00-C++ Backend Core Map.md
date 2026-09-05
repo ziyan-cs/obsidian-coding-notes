@@ -40,7 +40,7 @@ CMake / 测试 / Sanitizer / gdb / perf
 
 - 先用 C++ 理解资源和并发成本，再学 Go 的 `context`、goroutine 和 GC 边界。
 - Python 不替代 C++；它用于把压测日志、接口回归和数据生成自动化。
-- 任何跨语言结论放入 [[13-Comparisons & Decision Records/00-Decision Map|Decision Map]]，避免散落在语言笔记中。
+- 任何跨语言结论放入 [[11-Comparisons & Decision Records (技术选型与决策记录)/00-Decision Map|Decision Map]]，避免散落在语言笔记中。
 
 ## 本阶段验收
 
@@ -51,6 +51,6 @@ CMake / 测试 / Sanitizer / gdb / perf
 
 ## 关联
 
-- [[00-Start Here/01-Backend Learning Roadmap|两年学习路线]]
-- [[10-Go Programming/08-C++ to Go Decision Notes|C++ to Go Decision Notes]]
-- [[12-Backend Projects/00-Project Map|Project Map]]
+- [[00-Start Here (学习入口)/01-Backend Learning Roadmap|两年学习路线]]
+- [[09-Go Programming (Go 编程)/08-C++ to Go Decision Notes (C++ 到 Go 迁移决策)|C++ to Go Decision Notes]]
+- [[12-Backend Projects (后端项目)/00-Project Map|Project Map]]

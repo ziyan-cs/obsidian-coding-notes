@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/core
-status: 🌿
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**

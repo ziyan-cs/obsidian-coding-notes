@@ -4,7 +4,7 @@
 
 ## Start Here
 
-先从 [[00-Start Here/00-Vault Map|知识地图]] 进入；学习节奏见 [[00-Start Here/01-Backend Learning Roadmap|两年学习路线]]；每次学习后按 [[00-Start Here/02-Spaced Review System|间隔复习系统]] 回顾；新笔记使用 [[00-Start Here/03-Note Standard|笔记规范]]；全库的渐进深改顺序见 [[00-Start Here/07-Vault Audit & Migration Queue|迁移队列]]。
+先从 [[00-Start Here (学习入口)/00-Vault Map|知识地图]] 进入；学习节奏见 [[00-Start Here (学习入口)/01-Backend Learning Roadmap|两年学习路线]]；每次学习后按 [[00-Start Here (学习入口)/02-Spaced Review System|间隔复习系统]] 回顾；新笔记使用 [[00-Start Here (学习入口)/03-Note Standard|笔记规范]]；全库的渐进深改顺序见 [[00-Start Here (学习入口)/07-Vault Audit & Migration Queue|迁移队列]]。
 
 ## Note Frontmatter
 
@@ -27,19 +27,19 @@ verified: 2026-09-05 # optional; required for volatile tooling/API facts
 
 | Directory                         | Content                                                       |
 | --------------------------------- | ------------------------------------------------------------- |
-| `00-Start Here`                   | Navigation, review system, templates, learning roadmap        |
-| `01-CS Core`                      | Fundamentals, OS, computer organization                       |
-| `02-Algorithms & Data Structures` | Trees, graphs, DP, strings, bit ops                           |
-| `03-C++ Programming`              | Syntax, core mechanisms, modern C++, STL, concurrency, design |
-| `04-Linux & System`               | Basics, processes/threads, I/O models, syscalls               |
-| `05-Network Programming`          | Foundations, socket, HTTP, server design patterns             |
-| `06-Database`                     | MySQL: SQL, InnoDB, query optimization, high-availability     |
-| `07-Development Tools`            | Git, CMake, debug/profiling, misc                             |
-| `08-Distributed & Middleware`     | Redis, Nginx, MQ, distributed protocols                       |
-| `09-Career Prep`                  | Interview knowledge, project walkthroughs, resume             |
-| `10-Go Programming`               | Go language and backend engineering                            |
-| `11-Python Toolkit`               | Python for automation, testing, and data work                 |
-| `12-Backend Projects`             | Project evidence, designs, experiments                        |
-| `13-Comparisons & Decision Records` | Cross-language comparisons and technical decisions           |
+| `00-Start Here (学习入口)`         | Navigation, review system, templates, learning roadmap        |
+| `01-CS Core (计算机核心基础)`      | Fundamentals, OS, computer organization                       |
+| `02-Algorithms & Data Structures (算法与数据结构)` | Trees, graphs, DP, strings, bit ops          |
+| `03-C++ Programming (编程语言)`    | Syntax, core mechanisms, modern C++, STL, concurrency, design |
+| `04-Linux & System (Linux 系统)`   | Basics, processes/threads, I/O models, syscalls               |
+| `05-Network Programming (网络编程)` | Foundations, socket, HTTP, server design patterns            |
+| `06-Database (数据库)`             | MySQL: SQL, InnoDB, query optimization, high-availability     |
+| `07-Distributed & Middleware (分布式与中间件)` | Redis, Nginx, MQ, distributed protocols      |
+| `08-Development Tools (工程开发工具)` | Git, CMake, debug/profiling, misc                           |
+| `09-Go Programming (Go 编程)`      | Go language and backend engineering                           |
+| `10-Python Toolkit (Python 工具链)` | Python for automation, testing, and data work                |
+| `11-Comparisons & Decision Records (技术选型与决策记录)` | Cross-language comparisons and technical decisions |
+| `12-Backend Projects (后端项目)`   | Project evidence, designs, experiments                        |
+| `13-Career Prep (面试与成长)`       | Interview knowledge, project walkthroughs, resume             |
 
 > `assets/` (Obsidian attachments) and dot-dirs (`.obsidian/`, `.git/`, `.claude/`) are tool-managed, not content folders.

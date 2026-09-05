@@ -1,7 +1,10 @@
 ---
 tags:
   - network/core
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**
@@ -84,6 +87,12 @@ Active Closer             Passive Closer
 |服务端没有 LISTEN|服务端回 RST，连接被重置|
 |同时打开|双方同时发 SYN，各自进入 SYN_SENT → SYN_RCVD，最终 ESTABLISHED|
 |同时关闭|双方同时发 FIN，各自进入 CLOSING 状态，最终都进入 TIME_WAIT|
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：三次握手为了双方同步 ISN 并排除历史旧连接干扰（两次无法拒绝旧 SYN，四次没必要——SYN+ACK 可合并）；四次挥手因为 TCP 全双工、双方各自独立关闭发送方向，被动方 ACK 与 FIN 不能合并；TIME_WAIT 等 2MSL 保证最后的 ACK 送达 + 让旧报文消散。
+- **常见误区**：以为挥手必然是四次报文（被动方无数据可发时 FIN 紧跟 ACK 可合并；双方同时关闭出现 CLOSING）；忽略 TIME_WAIT 只出现在主动关闭方。
+- **自测**：1) 为什么是三次不是两次？ 2) TIME_WAIT 出现在哪一方，为什么等 2MSL？
 
 ---
 

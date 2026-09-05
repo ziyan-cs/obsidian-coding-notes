@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/concurrency
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景

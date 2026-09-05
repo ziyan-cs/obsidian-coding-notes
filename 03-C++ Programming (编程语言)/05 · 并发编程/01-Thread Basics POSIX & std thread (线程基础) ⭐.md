@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/concurrency
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理

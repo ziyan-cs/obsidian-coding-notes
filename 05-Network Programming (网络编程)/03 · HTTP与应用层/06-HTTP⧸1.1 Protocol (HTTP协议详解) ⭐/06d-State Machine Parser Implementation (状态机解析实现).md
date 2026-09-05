@@ -1,7 +1,10 @@
 ---
 tags:
   - network/http
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**

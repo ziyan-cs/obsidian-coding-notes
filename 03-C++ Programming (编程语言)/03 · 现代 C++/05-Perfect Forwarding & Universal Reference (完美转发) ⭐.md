@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：万能引用、引用折叠、std::forward 的作用

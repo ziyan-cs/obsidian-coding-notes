@@ -1,7 +1,10 @@
 ---
 tags:
   - network/server
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
@@ -216,6 +219,12 @@ Kubernetes 删除 Pod 时：
 | 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
 
 > [!tip]- **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）给存量请求一个 deadline（通常 10-30s）；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：信号 handler 只置 `atomic<bool>`，主循环退出后依次：停 listen → 关闭空闲连接 → 给存量请求 deadline drain → 超时强制关闭 → 清理资源退出。
+- **常见误区**：在信号 handler 里做重活（`printf`/`malloc` 等非可重入操作）；先关资源再等请求完成（顺序颠倒）。
+- **自测**：1) 为什么信号 handler 里只允许置一个 `volatile sig_atomic_t` 或 `atomic<bool>`？ 2) k8s 里 `SIGTERM` 后最多多久不退出会被强杀？
 
 ---
 

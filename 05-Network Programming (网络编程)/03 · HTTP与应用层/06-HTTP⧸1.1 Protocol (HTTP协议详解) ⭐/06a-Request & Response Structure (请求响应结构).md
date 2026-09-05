@@ -1,7 +1,10 @@
 ---
 tags:
   - network/http
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构

@@ -1,7 +1,10 @@
 ---
 tags:
   - network/server
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
@@ -211,6 +214,12 @@ ssize_t n = writev(fd, iov, iovcnt);
 - **Redis**：`sds`（简单动态字符串），用空间预分配消除 realloc 热点
 
 > [!tip]- **工程要点**：Buffer 设计的核心是**减少数据拷贝**和**避免缓冲区溢出**。Compact + 翻倍扩容是最常用的组合——每次读操作前先 compact（将未读数据移到头部），空间不够时翻倍扩容。对于高性能场景，使用 `readv`/`writev` 实现零拷贝发送，避免用户空间的数据拼接。
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：读写 Buffer 用 `read_pos`/`write_pos` 两个游标区分"已读/待处理/可写"三段；写不下先 compact 再翻倍扩容；非阻塞 `write` 写不完的暂存写 Buffer 并注册 `EPOLLOUT`。
+- **常见误区**：`write()` 返回正数但 < len 时直接丢弃剩余数据；扩容后旧指针失效未更新。
+- **自测**：1) 为什么每次读事件要先 `buffer_compact`？ 2) `EPOLLOUT` 何时注册、何时撤销？
 
 ---
 

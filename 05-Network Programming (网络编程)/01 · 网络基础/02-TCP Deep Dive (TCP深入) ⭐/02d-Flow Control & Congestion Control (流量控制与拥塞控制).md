@@ -1,7 +1,10 @@
 ---
 tags:
   - network/core
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：两者的区别、滑动窗口、拥塞控制四个阶段

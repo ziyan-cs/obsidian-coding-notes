@@ -1,7 +1,10 @@
 ---
 tags:
   - network/core
-status: 🌱
+status: seed
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：为什么存在、带来什么问题、如何正确处理

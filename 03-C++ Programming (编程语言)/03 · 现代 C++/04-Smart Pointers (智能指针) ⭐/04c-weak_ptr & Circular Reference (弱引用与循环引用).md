@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
@@ -74,6 +77,12 @@ public:
 |拷贝|❌|✅|✅|
 |开销|零开销|控制块 + 原子操作|同 shared_ptr|
 |使用场景|默认首选|共享所有权|打破循环引用、缓存、观察者|
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：`weak_ptr` 是 `shared_ptr` 的"非拥有观察者"，不增加强引用计数。用 `lock()` 临时提升为 `shared_ptr` 来安全访问，避免悬垂。
+- **常见误区**：直接用 `weak_ptr` 解引用（不可行，必须先 `lock()`）；把缓存/观察者设计成 `shared_ptr` 导致对象永远不释放。
+- **自测**：1) `expired()` 返回 true 与 `lock()` 返回空，两者何时结果不一致（竞态）？ 2) 为什么 `weak_ptr` 需要在控制块里额外记录 weak count？
 
 ---
 

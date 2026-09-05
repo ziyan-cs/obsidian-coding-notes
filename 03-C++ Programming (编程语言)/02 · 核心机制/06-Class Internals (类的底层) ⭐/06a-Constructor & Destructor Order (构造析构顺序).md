@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/core
-status: 🌳
+status: solid
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性

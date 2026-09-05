@@ -1,7 +1,10 @@
 ---
 tags:
   - linux/io
-status: 🌱
+status: seed
+review_due: 2026-09-19
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**
@@ -101,15 +104,9 @@ epoll 的核心设计是**回调驱动**而非**轮询扫描**：
    - 时间复杂度 O(k)，k = 就绪事件数
 ```
 
-## 内存管理：mmap 共享
+## 就绪事件如何返回用户态
 
-epoll 还利用 mmap 在内核和用户态之间共享 event 存储区域，避免了数据拷贝：
-
-```c
-// epoll 内部使用 mmap 共享内存传输就绪事件
-// 无需 read/write 系统调用拷贝数据
-// 这是 epoll 高效的原因之一（但非主要）
-```
+内核维护关注集合与就绪集合；epoll_wait 将就绪事件返回到用户提供的 events 缓冲区。epoll 不以 mmap 共享用户态/内核态事件区作为其机制——就绪事件经 copy_to_user 拷入用户空间，代价 O(k)（k 为就绪事件数）。
 
 ## 性能对比数字
 

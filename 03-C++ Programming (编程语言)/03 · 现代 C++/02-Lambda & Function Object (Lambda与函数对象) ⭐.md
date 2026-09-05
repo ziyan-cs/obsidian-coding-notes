@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：捕获方式、泛型 lambda、std::function 的开销

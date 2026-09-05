@@ -1,7 +1,10 @@
 ---
 tags:
   - network/core
-status: 🌿
+status: learning
+review_due: 2026-09-26
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程

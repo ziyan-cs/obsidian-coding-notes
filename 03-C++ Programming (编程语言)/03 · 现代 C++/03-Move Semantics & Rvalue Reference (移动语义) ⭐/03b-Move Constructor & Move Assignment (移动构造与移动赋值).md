@@ -1,7 +1,10 @@
 ---
 tags:
   - cpp/modern
-status: 🌱
+status: seed
+review_due: 2026-09-12
+confidence: 1
+verified: stable
 ---
 
 > [!important] **核心考点**：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义
@@ -75,6 +78,12 @@ std::vector<MyString> v;
 v.push_back(MyString("hello"));
 // 若移动构造未标 noexcept：push_back 扩容时用拷贝，性能损失！
 ```
+
+## 30 秒回答 / 自测
+
+- **30 秒回答**：移动构造/赋值"偷走"被移动对象的资源（指针/句柄）并把其置于可析构状态，把 O(n) 深拷贝降为 O(1)。
+- **常见误区**：移动后仍使用被移动对象（合法但状态未定义，通常只允许重新赋值或析构）；移动构造没标 `noexcept`，导致 `std::vector` 扩容退回拷贝。
+- **自测**：1) 移动构造后，被移动对象的指针成员应设为什么？ 2) 为什么 `std::vector` 要求移动构造 `noexcept` 才在扩容时用它？
 
 ---
 
