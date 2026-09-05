@@ -19,4 +19,4 @@ verified: 2026-09-05
 
 ## 与 C++ / 项目入口
 - 缓存：[[07-Distributed & Middleware (分布式与中间件)/01-Redis (缓存与数据结构)/01d-Cache Patterns & Problems (缓存三大问题) ⭐/01d1-Cache Penetration (缓存穿透：布隆过滤器)|Redis 缓存]]
-- 项目：[[12-Backend Projects (后端项目)/02-URL Shortener|URL Shortener]] · [[12-Backend Projects (后端项目)/04-Flash Sale|Flash Sale]]
+- 项目：[[12-Backend Projects (后端项目)/02-URL Shortener (短链接服务)|URL Shortener]] · [[12-Backend Projects (后端项目)/04-Flash Sale (秒杀系统)|Flash Sale]]

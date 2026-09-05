@@ -20,4 +20,4 @@ verified: 2026-09-05
 
 ## 与 C++ / 面试入口
 - STL 底层对应 → [[03-C++ Programming (编程语言)/04-STL (标准模板库)/02-Associative Containers Internals (关联容器底层) ⭐/02a-map & set Red-Black Tree (红黑树与有序容器)|红黑树与有序容器]] · [[03-C++ Programming (编程语言)/04-STL (标准模板库)/01-Sequence Containers Internals (序列容器底层)/01a-vector Dynamic Array & Reallocation (动态扩容原理) ⭐|vector 底层]]
-- 面试高频题 → [[13-Career Prep (面试与成长)/01 · 八股文 (面试知识)/01-C++专项面试⭐/C++后端面试高频100题 ⭐|C++ 高频 100 题]]
+- 面试高频题 → [[13-Career Prep (面试与成长)/01-Interview Knowledge (面试知识)/01-C++专项面试⭐/C++后端面试高频100题 ⭐|C++ 高频 100 题]]

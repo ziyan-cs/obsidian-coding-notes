@@ -7,7 +7,7 @@ status: 🌱
 > [!important] **核心考点**
 > 发号器 + 哈希映射 + HTTP 重定向，重点在唯一 ID 生成策略和缓存加速
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/02-URL Shortener|URL Shortener 项目]]。
+> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/02-URL Shortener (短链接服务)|URL Shortener 项目]]。
 
 ## 需求分析
 

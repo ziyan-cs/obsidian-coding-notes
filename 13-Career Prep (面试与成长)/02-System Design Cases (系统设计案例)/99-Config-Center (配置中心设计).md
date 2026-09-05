@@ -7,7 +7,7 @@ status: 🌱
 > [!important] **核心考点**
 > etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/05-Config Center|Config Center 项目]]。
+> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/05-Config Center (配置中心)|Config Center 项目]]。
 
 ## 需求分析
 

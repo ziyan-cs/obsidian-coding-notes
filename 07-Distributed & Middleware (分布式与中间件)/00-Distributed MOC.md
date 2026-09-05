@@ -19,4 +19,4 @@ verified: 2026-09-05
 
 ## 与 C++ / 项目入口
 - 缓存落点：[[06-Database (数据库)/04-High Availability & Architecture (高可用与架构)/12-MySQL vs Redis：Caching Strategy (缓存策略对比)|MySQL vs Redis]]
-- 项目：[[12-Backend Projects (后端项目)/04-Flash Sale|Flash Sale]] · [[12-Backend Projects (后端项目)/05-Config Center|Config Center]]
+- 项目：[[12-Backend Projects (后端项目)/04-Flash Sale (秒杀系统)|Flash Sale]] · [[12-Backend Projects (后端项目)/05-Config Center (配置中心)|Config Center]]

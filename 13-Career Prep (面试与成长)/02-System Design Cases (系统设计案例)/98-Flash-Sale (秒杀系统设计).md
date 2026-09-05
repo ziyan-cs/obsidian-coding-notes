@@ -7,7 +7,7 @@ status: 🌱
 > [!important] **核心考点**
 > 流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/04-Flash Sale|Flash Sale 项目]]。
+> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/04-Flash Sale (秒杀系统)|Flash Sale 项目]]。
 
 ## 需求分析
 

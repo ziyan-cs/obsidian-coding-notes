@@ -7,7 +7,7 @@ status: 🌱
 > [!important] **核心考点**
 > WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/03-IM and Notification|IM / Notification 项目]]。
+> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/03-IM & Notification (即时通讯与通知)|IM / Notification 项目]]。
 
 ## 需求分析
 

@@ -33,6 +33,6 @@ verified: 2026-09-05
 
 ## 关联
 
-- [[01-Project Design Template]]
-- [[06-Portfolio Evidence Checklist]]
-- [[11-Comparisons & Decision Records (技术选型与决策记录)/00-Decision Map|Decision Map]]
+- [[01-Project Design Template (项目设计模板)]]
+- [[06-Portfolio Evidence Checklist (项目证据清单)]]
+- [[11-Comparisons & Decision Records (技术选型与决策记录)/00-Decision Map (决策地图)|Decision Map]]

@@ -36,8 +36,8 @@ verified: 2026-09-05
 
 ## 关联
 
-- [[01-Resource Lifetime]]
-- [[02-Concurrency Models]]
-- [[03-Error Handling]]
-- [[04-HTTP Service Design]]
-- [[05-Observability & Performance]]
+- [[01-Resource Lifetime (资源生命周期)]]
+- [[02-Concurrency Models (并发模型)]]
+- [[03-Error Handling (错误处理)]]
+- [[04-HTTP Service Design (HTTP 服务设计)]]
+- [[05-Observability & Performance (可观测性与性能)]]
