@@ -4,8 +4,6 @@ tags:
 status: 🌱
 ---
 
-> Related: [[00-Problem Template Library (常用模板总库) ⭐]] · [[00-Mistake Journal (错题与易错点记录) ⭐]]
-
 # Algorithm Contest Plan (2026-08 -> 2027-06)
 
 > Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
@@ -16,17 +14,17 @@ status: 🌱
 
 ## 1. Key Dates
 
-| Date | Event | Action |
-|---|---|---|
-| 2026-09-19 | 百度之星初赛·第2场 (online) | 参加, 当模拟考, 不计较成绩 |
-| 2026-10 ~ 12 | 蓝桥杯第15届 报名 (dasai.lanqiao.cn) | 一开放就报 |
-| 2026-11-15 | 赛氪 ADPC 秋季赛 (optional, 69 CNY) | 预算紧可跳过 |
-| Every Sun | LeetCode weekly + biweekly | 必打 |
-| Every Wed-ish | 牛客小白月赛 / 牛客周赛 | 必打 |
-| ~2027-03 | GPLT 天梯赛 (school registers) | 关注校内通知 |
-| 2027-04 | 蓝桥杯省赛 (est.) | **目标: 省一** |
-| 2027-06 | 蓝桥杯国赛 (est.) | 国三+ if 省一 |
-| 2027-08+ | 暑期多校训练 + 组队 | Prep ICPC/CCPC |
+| Date          | Event                          | Action          |
+| ------------- | ------------------------------ | --------------- |
+| 2026-09-19    | 百度之星初赛·第2场 (online)            | 参加, 当模拟考, 不计较成绩 |
+| 2026-10 ~ 12  | 蓝桥杯第15届 报名 (dasai.lanqiao.cn)  | 一开放就报           |
+| 2026-11-15    | 赛氪 ADPC 秋季赛 (optional, 69 CNY) | 预算紧可跳过          |
+| Every Sun     | LeetCode weekly + biweekly     | 必打              |
+| Every Wed-ish | 牛客小白月赛 / 牛客周赛                  | 必打              |
+| ~2027-03      | GPLT 天梯赛 (school registers)    | 关注校内通知          |
+| 2027-04       | 蓝桥杯省赛 (est.)                   | **目标: 省一**      |
+| 2027-06       | 蓝桥杯国赛 (est.)                   | 国三+ if 省一       |
+| 2027-08+      | 暑期多校训练 + 组队                    | Prep ICPC/CCPC  |
 
 ---
 
