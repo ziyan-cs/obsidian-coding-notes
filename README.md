@@ -4,7 +4,7 @@
 
 ## Start Here
 
-先从 [[00-Start Here/00-Vault Map|知识地图]] 进入；学习节奏见 [[00-Start Here/01-Backend Learning Roadmap|两年学习路线]]；每次学习后按 [[00-Start Here/02-Spaced Review System|间隔复习系统]] 回顾；新笔记使用 [[00-Start Here/03-Note Standard|笔记规范]]。
+先从 [[00-Start Here/00-Vault Map|知识地图]] 进入；学习节奏见 [[00-Start Here/01-Backend Learning Roadmap|两年学习路线]]；每次学习后按 [[00-Start Here/02-Spaced Review System|间隔复习系统]] 回顾；新笔记使用 [[00-Start Here/03-Note Standard|笔记规范]]；全库的渐进深改顺序见 [[00-Start Here/07-Vault Audit & Migration Queue|迁移队列]]。
 
 ## Note Frontmatter
 
@@ -37,9 +37,9 @@ verified: 2026-09-05 # optional; required for volatile tooling/API facts
 | `07-Development Tools`            | Git, CMake, debug/profiling, misc                             |
 | `08-Distributed & Middleware`     | Redis, Nginx, MQ, distributed protocols                       |
 | `09-Career Prep`                  | Interview knowledge, project walkthroughs, resume             |
-| `10-Go Programming`               | Go language and backend engineering (planned)                 |
-| `11-Python Toolkit`               | Python for automation, testing, and data work (planned)       |
-| `12-Backend Projects`             | Project evidence, designs, experiments (planned)              |
-| `13-Comparisons & Decision Records` | Cross-language comparisons and technical decisions (planned) |
+| `10-Go Programming`               | Go language and backend engineering                            |
+| `11-Python Toolkit`               | Python for automation, testing, and data work                 |
+| `12-Backend Projects`             | Project evidence, designs, experiments                        |
+| `13-Comparisons & Decision Records` | Cross-language comparisons and technical decisions           |
 
 > `assets/` (Obsidian attachments) and dot-dirs (`.obsidian/`, `.git/`, `.claude/`) are tool-managed, not content folders.
