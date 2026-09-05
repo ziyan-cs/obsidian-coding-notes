@@ -19,4 +19,4 @@ verified: 2026-09-05
 
 ## 与 C++ / Linux 入口
 - 内存与缓存 → [[03-C++ Programming (编程语言)/02-Core Mechanisms (核心机制)/04-Memory Model & Layout (内存模型与布局) ⭐/04a-Stack, Heap, BSS, Text Segments (四区详解)|C++ 内存模型]]
-- 进程线程与同步 → [[04-Linux & System (Linux 系统)/02 · 进程与线程/04-Process Fundamentals (进程基础) ⭐/04a-Process Lifecycle： fork, exec, wait (生命周期)|Linux 进程]] · [[03-C++ Programming (编程语言)/05-Concurrency Programming (并发编程)/01-Thread Basics POSIX & std thread (线程基础) ⭐|C++ 线程]]
+- 进程线程与同步 → [[04-Linux & System (Linux 系统)/02-Processes & Threads (进程与线程)/04-Process Fundamentals (进程基础) ⭐/04a-Process Lifecycle： fork, exec, wait (生命周期)|Linux 进程]] · [[03-C++ Programming (编程语言)/05-Concurrency Programming (并发编程)/01-Thread Basics POSIX & std thread (线程基础) ⭐|C++ 线程]]
