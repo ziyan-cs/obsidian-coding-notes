@@ -18,9 +18,10 @@ C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。
 ## 生命周期模型
 
 ```text
-构造成功 → 对象可用 → 拷贝或移动 → 赋值替换旧状态 → 析构释放资源
-     │                       │
-     └── 构造失败：已完成构造的成员自动析构  └── moved-from 对象仍可析构与赋值
+construct -> usable object -> copy or move -> assignment -> destruction
+
+construction failure -> completed members are destroyed
+moved-from object -> valid for destruction and assignment
 ```
 
 ## Rule of Zero 与 Rule of Five

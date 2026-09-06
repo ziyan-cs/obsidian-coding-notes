@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## 30 秒回答
 
-**02-CMake and Dependencies (CMake 与依赖)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+**核心结论**：阅读定位  本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 工程结论
 
@@ -22,10 +22,10 @@ CMake 的核心不是生成命令，而是声明 target 及其源文件、编译
 ## 依赖模型
 
 ```text
-library target ── PUBLIC  ──> 使用者需要的接口依赖
-       │
-       └── PRIVATE ──> 仅本 target 编译或链接所需的实现依赖
-executable target ──> 链接 library target
+library target
+  - PUBLIC: dependency required by consumers of its interface
+  - PRIVATE: dependency required only by its implementation
+executable target -> links the library target
 ```
 
 ## 选型边界
@@ -184,35 +184,23 @@ ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
+- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 02-CMake and Dependencies (CMake 与依赖) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+02-CMake and Dependencies (CMake 与依赖)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

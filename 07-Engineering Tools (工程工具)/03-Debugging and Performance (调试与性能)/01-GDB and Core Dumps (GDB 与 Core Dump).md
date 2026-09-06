@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## 30 秒回答
 
-**01-GDB and Core Dumps (GDB 与 Core Dump)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
 
 ## GDB Essentials (GDB 核心用法)
@@ -248,8 +248,7 @@ void enable_core_dump() {
 
 ---
 
-## 关联笔记（补充 2）
-
+## 关联笔记 · 延伸要点 2
 - [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
 - [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
 - [AddressSanitizer & UBSan (编译期检测工具)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03d-AddressSanitizer%20&%20UBSan%20(编译期检测工具)%20⭐.md)
@@ -258,35 +257,23 @@ void enable_core_dump() {
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
+- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 01-GDB and Core Dumps (GDB 与 Core Dump) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+01-GDB and Core Dumps (GDB 与 Core Dump)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

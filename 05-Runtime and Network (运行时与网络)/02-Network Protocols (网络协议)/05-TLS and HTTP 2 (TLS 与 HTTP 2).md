@@ -45,29 +45,14 @@ TLS 方案：
 ## TLS 1.2 完整握手流程
 
 ```
-Client                        Server
-  │                             │
-  │───── ClientHello ──────────→│  客户端发送：支持的 TLS 版本、加密套件列表、
-  │                             │             随机数 random_C
-  │←─── ServerHello ────────────│  服务端选择：TLS 版本、加密套件、
-  │                             │             随机数 random_S
-  │←─── Certificate ────────────│  服务端发送数字证书（含公钥）
-  │←─── ServerHelloDone ────────│  通知客户端：服务器发送完毕
-  │                             │
-  │───── ClientKeyExchange ────→│  客户端用服务端公钥加密 premaster_secret
-  │                             │  （一个随机数，只有服务端能解密）
-  │                             │
-  │                             │  双方都计算：master_secret =
-  │                             │    PRF(premaster_secret, random_C, random_S)
-  │                             │  再衍生出：会话密钥（对称密钥）
-  │                             │
-  │───── ChangeCipherSpec ─────→│  通知：后续通信将加密
-  │───── Finished ─────────────→│  加密的握手消息完整性校验
-  │                             │
-  │←─── ChangeCipherSpec ───────│  通知：后续通信将加密
-  │←─── Finished ───────────────│  加密的握手消息完整性校验
-  │                             │
-  │══════ 加密通信开始 ═══════════│  使用 AES/GCM 等对称加密
+TLS 1.2 handshake, simplified
+  1. client -> server: ClientHello (versions, cipher suites, random)
+  2. server -> client: ServerHello and Certificate
+  3. client -> server: key exchange material
+  4. both sides derive symmetric traffic keys
+  5. both sides send Finished; protected application data begins
+
+TLS 1.3 has a different, shorter handshake; do not use this diagram as its wire format.
 ```
 
 ## 数字证书与 CA
@@ -75,17 +60,12 @@ Client                        Server
 证书的作用：**证明公钥确实属于声称的服务器**。
 
 ```
-证书链：
-  根 CA（自签名，预置在浏览器/操作系统中）
-    └── 中间 CA（由根 CA 签发）
-          └── 服务器证书（由中间 CA 签发）
+certificate chain
+  root CA -> intermediate CA -> server certificate
 
-证书内容：
-  - 域名（CN / SAN）
-  - 公钥
-  - 签发者（CA）
-  - 有效期
-  - 数字签名（由 CA 的私钥生成）
+certificate fields
+  - subject names (CN / SAN)
+  - public key, issuer, validity period, CA signature
 ```
 
 **证书验证过程：**
@@ -290,35 +270,23 @@ TCP 丢包时：
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
+- 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 05-TLS and HTTP 2 (TLS 与 HTTP 2) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+05-TLS and HTTP 2 (TLS 与 HTTP 2)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

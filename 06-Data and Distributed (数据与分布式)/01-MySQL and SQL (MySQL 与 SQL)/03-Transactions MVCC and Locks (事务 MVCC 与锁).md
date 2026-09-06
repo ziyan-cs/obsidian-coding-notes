@@ -43,29 +43,14 @@ verified: 2026-09-06
 SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 
 ```text
-┌─────────────────────────────────────────────────────────────────────┐
-│  SQL Standard Four Isolation Levels                                 │
-├─────────────────────────────────────────────────────────────────────┤
-│  READ UNCOMMITTED                                                   │
-│    Dirty Read: Yes      Non-repeatable Read: Yes      Phantom: Yes  │
-├─────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)               │
-│       ▼                                                             │
-│  READ COMMITTED                                                     │
-│    Dirty Read: No       Non-repeatable Read: Yes      Phantom: Yes  │
-├─────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)               │
-│       ▼                                                             │
-│  REPEATABLE READ (MySQL Default)                                    │
-│    Dirty Read: No       Non-repeatable Read: No       Phantom: Yes  │
-├─────────────────────────────────────────────────────────────────────┤
-│       │  (isolation increases, concurrency decreases)               │
-│       ▼                                                             │
-│  SERIALIZABLE                                                       │
-│    Dirty Read: No       Non-repeatable Read: No       Phantom: No   │
-└─────────────────────────────────────────────────────────────────────┘
+SQL isolation, from lower to higher isolation
+  - READ UNCOMMITTED: dirty / non-repeatable / phantom reads possible
+  - READ COMMITTED: non-repeatable and phantom reads possible
+  - REPEATABLE READ: snapshot reads stay consistent in an InnoDB transaction
+  - SERIALIZABLE: strongest isolation, generally least concurrent
 
-Note: InnoDB 的一致性快照读在 RR 下可保持事务内视图一致；锁定读/写入的范围保护与 Next-Key Lock 有关。具体“幻读”必须区分快照读与 locking read。
+InnoDB range protection for locking reads and writes involves Next-Key Lock.
+Always distinguish snapshot reads from locking reads when discussing phantoms.
 ```
 
 ## RU（Read Uncommitted，读未提交）
@@ -721,8 +706,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 > [!tip]- **工程要点**：范围条件可能锁住比业务直觉更大的索引区间。排查时用 `performance_schema.data_locks`、事务信息和执行计划确认实际锁范围；切换 RC 可能减少部分 gap locking，但并不保证所有场景都没有 gap lock，须结合当前版本与约束验证。
 
-## 30 秒回答 / 自测（补充 2）
-
+## 30 秒回答 / 自测 · 延伸要点 2
 - **30 秒回答**：Next-Key Lock = Record Lock + Gap Lock，左开右闭；普通索引/范围查询用它锁住行与行前间隙防止幻读；命中唯一索引等值查询退化为 Record Lock；Gap Lock 只在 RR/Serializable 生效，间隙锁之间可共存。
 - **常见误区**：以为唯一索引查询一定会退化（范围查询不退化）；以为 Gap Lock 锁的是记录本身（实际锁间隙，所以同间隙可共存）；忽略"无索引"导致全表逐行加锁。
 - **自测**：1) 为什么唯一索引等值查询能退化为 Record Lock？ 2) 索引 1,5,10 上 `WHERE id=5 FOR UPDATE` 的 Next-Key Lock 锁哪些范围？
@@ -886,30 +870,18 @@ SELECT * FROM sys.innodb_lock_waits\G
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 03-Transactions MVCC and Locks (事务 MVCC 与锁) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+03-Transactions MVCC and Locks (事务 MVCC 与锁)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

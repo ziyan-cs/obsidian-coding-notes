@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## 30 秒回答
 
-**04-Distributed Transactions (分布式事务)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
 
 ## Distributed Transactions and Saga (分布式事务与Saga)
@@ -123,21 +123,11 @@ Saga 将一个大事务拆分为 N 个子事务，每个子事务有对应的补
 ## 方案四：本地消息表（最终一致）
 
 ```
-服务 A (Producer)                   服务 B (Consumer)
-  │                                  │
-  ├─ 1. Execute business logic +     |
-  |     Insert message into          |
-  |      local table ───────────────→|
-  │    (Single local DB transaction) |
-  │                                  │
-  ├─ 2. Timed task polls             |
-  |      message table +             │
-  │     Send unfinished messages ───→│
-  │                                  ├─ 3. Process message +
-  │◄─────────────────────────────────┤     Return ACK response
-  │                                  │
-  ├─ 4. Mark message as completed    │
-  │                                  │
+transactional outbox flow
+  1. producer commits business state and an outbox row in one local transaction
+  2. relay reads unfinished outbox rows and publishes them
+  3. consumer processes idempotently and acknowledges
+  4. relay records completion; retries handle missing acknowledgement
 ```
 
 **优点：** 无 2PC 的阻塞问题，实现简单
@@ -177,35 +167,23 @@ Saga 将一个大事务拆分为 N 个子事务，每个子事务有对应的补
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
+- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 04-Distributed Transactions (分布式事务) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+04-Distributed Transactions (分布式事务)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

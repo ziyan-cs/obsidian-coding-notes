@@ -221,8 +221,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-## 关联笔记（补充 2）
-
+## 关联笔记 · 延伸要点 2
 - [01b2-Git Flow & Feature Branch Workflow (团队协作流)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b2-Git%20Flow%20&%20Feature%20Branch%20Workflow%20(团队协作流).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
@@ -305,8 +304,7 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ---
 
-## 关联笔记（补充 3）
-
+## 关联笔记 · 延伸要点 3
 - [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
@@ -315,35 +313,23 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
+- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 01-Git Model and Branches (Git 模型与分支) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+01-Git Model and Branches (Git 模型与分支)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？

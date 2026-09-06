@@ -50,20 +50,13 @@ Notes:
 复制过程涉及三个线程：
 
 ```
-Master:
-  Binlog Dump Thread
-    └─ 在事务提交时读取 binlog，发送给从库
-    └─ 每个从库对应一个 dump 线程
+source
+  - binlog dump thread sends binlog events to each replica
 
-Slave:
-  I/O Thread
-    └─ 连接到主库，请求 binlog
-    └─ 将接收到的 binlog 写入 relay log（中继日志）
-
-  SQL / applier thread
-    └─ 从 relay log 读取事件
-    └─ 在从库上重放 SQL
-    └─ 可配置并行应用；具体能力和参数随 MySQL 版本变化
+replica
+  - I/O thread receives events and writes relay log
+  - SQL / applier thread reads relay log and applies events
+  - parallel apply support and settings vary by MySQL version
 ```
 
 ## 复制流程详解
@@ -118,27 +111,14 @@ vim /usr/my.cnf:
 
 ```
 SHOW SLAVE STATUS\G
-关键字段：
-  Seconds_Behind_Source / Seconds_Behind_Master: 0   ← 仅是一个参考指标；可能为 NULL 或不代表端到端可见性
+`Seconds_Behind_Source` / `Seconds_Behind_Master` is only a reference.
+It can be NULL and does not prove end-to-end read visibility.
 
-延迟原因：
-  1. 从库 SQL Thread 单线程重放
-     └─ 主库写入并发高 → 从库重放跟不上
-     └─ 解决办法：开启并行复制
-
-  2. 从库硬件性能低于主库
-     └─ 解决办法：从库配置不低于主库
-
-  3. 大事务
-     └─ 一个 UPDATE 影响 1000 万行 → 从库执行 10 秒
-     └─ 解决办法：拆分大事务
-
-  4. 从库上的读负载
-     └─ 从库同时在服务读请求
-     └─ 解决办法：从库只做备份，不对外服务
-
-  5. 锁竞争
-     └─ 从库重放时与其他查询冲突
+common lag causes
+  - apply throughput is below source write throughput: consider parallel apply
+  - replica hardware is insufficient: size replicas for the workload
+  - huge transaction: split the write into bounded transactions
+  - read workload or lock contention on the replica: isolate workloads
 ```
 
 ## 并行复制（MySQL 5.7+）
@@ -204,35 +184,23 @@ auto writeTs = std::chrono::steady_clock::now();
 
 ## 常见误区
 
-- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
-- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
+- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
 ## 学习闭环
 
-### 复述
+### 从零复述
 
-- 不看正文，说明 07-Replication (复制) 的问题、核心机制与边界。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
+07-Replication (复制)
+**。
 
-### 验证
+### 最小验证
 
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-### 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-## 学习闭环
-
-### 复述
-
-- 不看正文，说清本主题的问题、核心机制和适用边界。
-
-### 验证
-
-- 通过代码、测试、压测或项目现象验证一个关键结论。
+- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
 ### 自测
 
-1. 这个主题解决什么问题？
-2. 它在什么条件下需要替代方案？
+1. 它解决的工程问题是什么？
+2. 核心机制在哪个环节生效？
+3. 什么时候应当换用另一种方案？
