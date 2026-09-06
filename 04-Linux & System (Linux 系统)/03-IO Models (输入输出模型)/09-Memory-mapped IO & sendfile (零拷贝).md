@@ -11,6 +11,9 @@ verified: stable
 
 > [!important] **核心考点**：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
 
+> [!warning] “零拷贝”是相对用户态 CPU copy 的工程术语
+> 实际数据路径受内核版本、文件系统、TLS、网卡卸载与硬件能力影响。不要把“0 次 CPU 拷贝”当作任何机器上的保证；应以目标环境的 profile、吞吐和尾延迟决定是否使用。
+
 ## 传统 IO 的数据拷贝
 
 传统 `read + write` 传输文件涉及 **4 次上下文切换 + 4 次数据拷贝（其中 2 次 DMA、2 次 CPU）**：
@@ -50,7 +53,7 @@ munmap(addr, length);
 ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 ```
 
-**拷贝次数：** 2 次（2 次 DMA，**0 次 CPU 拷贝**）→ 真正的零拷贝
+**概念模型：** 通常可避免用户态缓冲区相关的 CPU copy；是否还能以 scatter/gather 等方式减少内核缓冲区 copy，取决于内核与设备能力。
 - 磁盘 → 内核缓冲区（DMA）
 - 内核缓冲区 → 网卡（DMA）
 
@@ -84,6 +87,10 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 用于任意两个 fd 之间的零拷贝数据传输（不限于文件到 socket）。
 
-> [!tip]- **工程要点**：零拷贝的核心思路是避免数据在内核态和用户态之间来回拷贝。sendfile 对静态文件传输最有效，如果数据需要计算/修改（如压缩、加密），仍需要传统方式。Nginx 的静态文件服务正是利用 sendfile 实现高性能。
+> [!tip]- **工程要点**：零拷贝的核心思路是避免不必要的用户态数据搬运。`sendfile` 常适合静态文件到 socket 的直通路径；一旦需要在应用层查看或修改 body（例如内容转换），就需要不同的数据路径。TLS/协议栈配置也可能改变实际收益，先测量再选择。
+
+## 30 秒回答
+
+`mmap` 让文件页映射进进程虚拟地址空间，应用仍可读写该映射；`sendfile` 让内核在文件与 socket 之间组织传输，通常避免用户缓冲区 copy。它们解决的是数据搬运成本，不替代缓存策略、网络瓶颈或应用层处理；“是否更快”必须针对真实文件大小、TLS 和网卡环境验证。
 
 零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/04-Linux%20&%20System%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
