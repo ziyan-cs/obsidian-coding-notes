@@ -46,13 +46,13 @@ verified: stable
 
 ```cpp
 #include <csignal>
-#include <atomic>
+#include <csignal>
 
-std::atomic<bool> g_stop{false};
+volatile sig_atomic_t g_stop = 0;
 
 extern "C" void signalHandler(int sig) {
     if (sig == SIGTERM || sig == SIGINT) {
-        g_stop.store(true, std::memory_order_relaxed);
+        g_stop = 1;
     }
 }
 
@@ -69,7 +69,7 @@ int main() {
     signal(SIGPIPE, SIG_IGN);
 
     // 事件循环
-    while (!g_stop.load(std::memory_order_relaxed)) {
+    while (!g_stop) {
         int n = epoll_wait(epfd, events, MAX_EVENTS, 1000);  // 带超时
         // ... 处理事件
     }
@@ -121,7 +121,8 @@ public:
     void init(std::chrono::seconds timeout = 10s) {
         timeout_ = timeout;
         struct sigaction sa{};
-        sa.sa_handler = [](int) { instance().stop(); };
+        // handler 只通知主循环；不要在信号上下文启动线程或调用 std::function。
+        sa.sa_handler = [](int) { stopping_signal_ = 1; };
         sigemptyset(&sa.sa_mask);
         sigaction(SIGTERM, &sa, nullptr);
         sigaction(SIGINT, &sa, nullptr);
@@ -130,9 +131,10 @@ public:
 
     void onShutdown(Callback cb) { cb_ = std::move(cb); }
 
+    static bool signalRequested() { return stopping_signal_ != 0; }
     bool isStopping() const { return stopping_.load(std::memory_order_relaxed); }
 
-    void stop() {
+    void stop() {  // 仅由正常线程在观察到 stopping_signal_ 后调用
         bool expected = false;
         if (!stopping_.compare_exchange_strong(expected, true))
             return;  // 已在关闭中
@@ -146,6 +148,7 @@ public:
     }
 
 private:
+    inline static volatile sig_atomic_t stopping_signal_ = 0;
     std::atomic<bool> stopping_{false};
     std::chrono::seconds timeout_{10s};
     Callback cb_;
@@ -156,7 +159,8 @@ int main() {
     auto& gs = GracefulShutdown::instance();
     gs.init(15s);
     gs.onShutdown([] { /* 强制清理 */ });
-    // ... 事件循环中检查 gs.isStopping()
+    // 事件循环中：if (GracefulShutdown::signalRequested()) gs.stop();
+    // 再根据 gs.isStopping() 停止接入并 drain。
 }
 ```
 
@@ -216,7 +220,7 @@ Kubernetes 删除 Pod 时：
 | 陷阱 | 原因 | 解决 |
 |------|------|------|
 | `write()` 到已关闭连接 | 客户端在对端关闭后继续写 | 检查 `EPIPE`/`SIGPIPE`，忽略 SIGPIPE |
-| 信号处理中调用非可重入函数 | `printf`、`malloc` 在信号上下文中不安全 | 信号 handler 只设 `atomic<bool>`，其余在主循环处理 |
+| 信号处理中调用非可重入函数 | `printf`、`malloc` 在信号上下文中不安全 | handler 只设 `volatile sig_atomic_t`，其余在主循环处理 |
 | 关闭顺序错误 | 先释放资源再等待请求完成 | 先 stop accept → drain → cleanup |
 | 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
 
@@ -224,7 +228,7 @@ Kubernetes 删除 Pod 时：
 
 ## 30 秒回答 / 自测
 
-- **30 秒回答**：信号 handler 只置 `atomic<bool>`，主循环退出后依次：停 listen → 关闭空闲连接 → 给存量请求 deadline drain → 超时强制关闭 → 清理资源退出。
+- **30 秒回答**：信号 handler 只置 `volatile sig_atomic_t`，主循环观察到后依次：停 listen → 关闭空闲连接 → 给存量请求 deadline drain → 超时强制关闭 → 清理资源退出。
 - **常见误区**：在信号 handler 里做重活（`printf`/`malloc` 等非可重入操作）；先关资源再等请求完成（顺序颠倒）。
 - **自测**：1) 为什么信号 handler 里只允许置一个 `volatile sig_atomic_t` 或 `atomic<bool>`？ 2) k8s 里 `SIGTERM` 后最多多久不退出会被强杀？
 
