@@ -41,7 +41,7 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' |
                 [ref]$parsedDate
             )) {
             $invalid.Add([pscustomobject]@{
-                Path = $file.FullName.Substring($resolvedRoot.Length).TrimStart('\')
+                Name = $file.Name
                 Value = $rawDate
             })
             return
@@ -50,35 +50,38 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' |
         if ($All -or $parsedDate.Date -le $today) {
             $items.Add([pscustomobject]@{
                 Due  = $parsedDate.Date
-                Path = $file.FullName.Substring($resolvedRoot.Length).TrimStart('\')
+                Name = $file.Name
             })
         }
     }
+
+Write-Output ''
 
 if ($items.Count -eq 0) {
     Write-Output '没有到期或待复习的笔记。'
 }
 else {
-    Write-Output ("今天：{0:yyyy-MM-dd}" -f $today)
-    Write-Output ("待复习：{0} 篇" -f $items.Count)
+    Write-Output ("[ REVIEW_DUE | TODAY: {0:yyyy-MM-dd} | COUNT: {1} ]" -f $today, $items.Count)
 
-    foreach ($item in ($items | Sort-Object Due, Path)) {
+    foreach ($item in ($items | Sort-Object Due, Name)) {
         $label = if ($item.Due -lt $today) {
-            '逾期'
+            'OVERDUE'
         }
         elseif ($item.Due -eq $today) {
-            '今天'
+            'TODAY'
         }
         else {
-            '未来'
+            'FUTURE'
         }
-        Write-Output ("- [{0}] {1:yyyy-MM-dd}  {2}" -f $label, $item.Due, $item.Path)
+        Write-Output ("- [{0}] {1:yyyy-MM-dd} | {2}" -f $label, $item.Due, $item.Name)
     }
 }
 
 if ($invalid.Count -gt 0) {
     Write-Warning '以下 review_due 不是 yyyy-MM-dd，已跳过：'
-    foreach ($item in ($invalid | Sort-Object Path)) {
-        Write-Warning ("- {0}  (review_due: {1})" -f $item.Path, $item.Value)
+    foreach ($item in ($invalid | Sort-Object Name)) {
+        Write-Warning ("- {0}  (review_due: {1})" -f $item.Name, $item.Value)
     }
 }
+
+Write-Output ''

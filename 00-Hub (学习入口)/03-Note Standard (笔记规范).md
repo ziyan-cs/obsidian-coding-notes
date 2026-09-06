@@ -12,7 +12,6 @@ verified: 2026-09-05
 ---
 tags: [language/cpp, topic/ownership]
 status: seed
-review_due: YYYY-MM-DD
 confidence: 1
 verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 ---

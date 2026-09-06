@@ -1,7 +1,6 @@
 ---
 tags: [vault/moc, learning/foundation]
 status: learning
-review_due: 2026-09-13
 confidence: 1
 verified: 2026-09-06
 ---

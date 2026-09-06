@@ -1,7 +1,6 @@
 ---
 tags: [language/go, go/errors, go/context]
 status: seed
-review_due: 2026-09-12
 confidence: 1
 verified: 2026-09-05
 ---

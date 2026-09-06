@@ -1,7 +1,6 @@
 ---
 tags: [language/go, career/backend]
 status: stable
-review_due: 2026-09-13
 confidence: high
 verified: 2026-09-06
 ---

@@ -1,7 +1,6 @@
 ---
 tags: [vault/architecture, vault/style]
 status: solid
-review_due: 2026-10-06
 confidence: 1
 verified: 2026-09-06
 ---

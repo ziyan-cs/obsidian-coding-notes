@@ -1,6 +1,6 @@
 ---
+review_due: 2026-10-03
 status: stable
-review_due: 2026-09-13
 confidence: medium
 verified: 2026-09-06
 ---

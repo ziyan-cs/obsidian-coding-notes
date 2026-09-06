@@ -1,7 +1,6 @@
 ---
 tags: [language/go, go/http]
 status: seed
-review_due: 2026-09-12
 confidence: 1
 verified: 2026-09-05
 ---
