@@ -47,7 +47,7 @@ std::unique_ptr<void, decltype(&free)> buf(malloc(1024), free);
 
 ## 30 秒回答 / 自测
 
-- **30 秒回答**：`unique_ptr` 独占所有权、不可拷贝只可移动、零额外开销；`shared_ptr` 引用计数共享所有权；`weak_ptr` 不拥有、只观察。默认首选 `unique_ptr`，确需共享才用 `shared_ptr`。
+- **30 秒回答**：`unique_ptr` 独占所有权、不可拷贝只可移动，通常不需要独立控制块；`shared_ptr` 以引用计数表达共享所有权；`weak_ptr` 不拥有、只观察。默认首选 `unique_ptr`，确需共享才用 `shared_ptr`。自定义删除器的类型和大小仍会影响 `unique_ptr` 对象布局。
 - **常见误区**：把 `p.get()` 返回的裸指针交给另一个 `unique_ptr` 管理 → 双重释放；`p.release()` 后忘记手动 `delete`。
 - **自测**：1) 为什么 `unique_ptr` 能放进 `std::vector` 却不能被拷贝？ 2) 函数参数何时传 `unique_ptr`（按值）、`const unique_ptr&`、还是裸指针？
 

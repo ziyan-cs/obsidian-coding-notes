@@ -8,7 +8,7 @@ status: 🌱
 
 > [!important] **核心考点**：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 
-### 图的表示
+## 图的表示
 
 ```cpp
 // 邻接表（稀疏图，最常用）
@@ -23,7 +23,7 @@ vector<vector<int>> matrix(n, vector<int>(n, 0));
 matrix[u][v] = weight;
 ```
 
-### 图 DFS 模板
+## 图 DFS 模板
 
 ```cpp
 // 图用邻接表
@@ -37,6 +37,7 @@ void dfs(vector<vector<char>>& grid, int i, int j) {
     dfs(grid,i+1,j); dfs(grid,i-1,j); dfs(grid,i,j+1); dfs(grid,i,j-1);
 }
 int numIslands(vector<vector<char>>& grid) {
+    if (grid.empty() || grid[0].empty()) return 0;
     int cnt = 0;
     for (int i=0; i<(int)grid.size(); i++)
         for (int j=0; j<(int)grid[0].size(); j++)
@@ -45,7 +46,7 @@ int numIslands(vector<vector<char>>& grid) {
 }
 ```
 
-### 拓扑排序（有向无环图 DAG）
+## 拓扑排序（有向无环图 DAG）
 
 **Kahn 算法（BFS）：**
 
@@ -83,6 +84,12 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 ```
 
 ---
+
+## 30 秒回答
+
+**DFS 和 BFS 怎么选？** 只要遍历连通性，两者都是 `O(V+E)`；DFS 的递归结构适合回溯、连通块和后序处理，深图要防递归栈溢出；无权图求最少边数时用 BFS，并在节点首次入队时标记已访问，避免重复入队。
+
+**自测：** Kahn 拓扑排序最终输出不足 `n` 个节点说明什么？为什么图搜索必须维护 `visited`？
 
 ## 关联笔记
 

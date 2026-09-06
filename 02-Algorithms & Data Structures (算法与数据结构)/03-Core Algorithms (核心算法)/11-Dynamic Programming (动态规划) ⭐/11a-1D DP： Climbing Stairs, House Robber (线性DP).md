@@ -47,6 +47,7 @@ int climbStairs(int n) {
 ```cpp
 int minCostClimbingStairs(vector<int>& cost) {
     int n = cost.size();
+    if (n <= 1) return 0;
     int a = cost[0], b = cost[1];
     for (int i = 2; i < n; i++) {
         int c = min(a, b) + cost[i];
@@ -65,6 +66,7 @@ int minCostClimbingStairs(vector<int>& cost) {
 // 相邻房屋不能同时偷，求最大金额
 int rob(vector<int>& nums) {
     int n = nums.size();
+    if (n == 0) return 0;
     if (n == 1) return nums[0];
     int a = nums[0], b = max(nums[0], nums[1]);
     for (int i = 2; i < n; i++) {
@@ -83,6 +85,7 @@ int rob(vector<int>& nums) {
 // 首尾相连，不能同时偷第一家 and 最后一家
 int robII(vector<int>& nums) {
     int n = nums.size();
+    if (n == 0) return 0;
     if (n == 1) return nums[0];
     // 分别计算：去掉第一家 / 去掉最后一家，取最大值
     return max(robRange(nums, 0, n - 2), robRange(nums, 1, n - 1));
@@ -152,6 +155,7 @@ int maxProduct(vector<int>& nums) {
 ```cpp
 int numDecodings(string s) {
     int n = s.size();
+    if (n == 0) return 0;
     int a = 1, b = s[0] != '0' ? 1 : 0;
     for (int i = 2; i <= n; i++) {
         int c = 0;
@@ -175,6 +179,12 @@ int numDecodings(string s) {
 | 单词拆分 | 前 i 个字符是否可拆分 | `dp[i] = any(dp[j] && s[j:i] in dict)` | O(n²) |
 
 > [!tip]- **工程要点**：一维 DP 的核心是状态定义。大多数线性 DP 只需记录前几个状态，可以用滚动变量替代数组，将空间从 O(n) 优化到 O(1)。遇到新题先想：`dp[i]` 表示什么？怎么从 `dp[i-1]` 或 `dp[i-2]` 转移过来？
+
+## 30 秒回答
+
+**一维 DP 怎么写稳？** 先用一句话定义状态，再列出“选/不选”或“从哪些前态来”的转移，最后单独处理空输入、长度为 1 和第一个可转移位置。滚动变量只是在已经证明状态依赖范围很小时的空间优化，不应反过来替代状态定义。
+
+**自测：** 为什么 `rob` 的递推要比较“偷当前”与“不偷当前”？`numDecodings` 里字符 `'0'` 为什么不能单独贡献方案数？
 
 ---
 

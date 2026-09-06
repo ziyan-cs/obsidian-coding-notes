@@ -1,12 +1,14 @@
 ---
 tags:
   - cs/algorithm
-status: 🌱
+status: stable
 ---
 
-> [!important] **核心考点**：十大排序算法的时间/空间/稳定性对比、基于比较与基于计数的分类、排序选型决策
+# Sorting Algorithms — 排序
 
-# 核心
+> [!important] **核心考点**：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
+
+## 核心
 
 - 排序 4 要素：
     - 时间复杂度
@@ -17,8 +19,9 @@ status: 🌱
     - 归并排序
     - 快速排序
 - 目标：
-	- 充分利用 $O(N·log N)$ 和 $O(N^2)$ 排序的各自优势
-# 排序算法对比
+	- 先看数据规模、是否近乎有序、值域和稳定性要求，再决定是否值得手写排序。
+
+## 排序算法对比
 
 ---
 
@@ -26,16 +29,16 @@ status: 🌱
 - 选择：$O(N^2)$  $O(1)$                      不稳定，原地 交换次数少，适合操作昂贵的场景
 - 插入：$O(N^2)$  $O(1)$                          稳定，原地    近乎有序时很强，适合小数据
 - 归并：$O(N·log N)$  $O(N)$                稳定，非原地   时间稳定，适合逆序对拓展
-- 快排：$O(N·log N)$  $O(log N)$        不稳定，通常原地   工程最常用，平均性能最优
+- 快排：平均 $O(N·log N)$、最坏 $O(N^2)$；通常原地且不稳定。标准库一般以 introsort 等混合策略规避最坏情况
 - 堆排：$O(N·log N)$  $O(1)$              不稳定，原地   适合空间敏感的场景
 - 计数：$O(N+k)$  $O(k)$                     稳定，非原地   适合值域小的整数，线性时间
-- 希尔：$O(N·log N)$  $O(1)$              不稳定，原地   依赖 gap 序列
-- 桶排：$O(N)$  $O(N)$                       不稳定，非原地   依赖数据分布
-- 基数：$O(N)$  $O(N)$                          稳定，非原地   适合整数 / 定长串
+- 希尔：复杂度取决于 gap 序列；原地、不稳定
+- 桶排：期望复杂度依赖近似均匀的输入分布及桶内排序策略
+- 基数：$O(d·(N+k))$，其中 `d` 为位数、`k` 为每位取值范围；适合固定长度键
 
 ---
 
-# 十大经典排序
+## 经典排序实现
 
 ### 2.1 冒泡排序（Bubble Sort）
 
@@ -100,12 +103,14 @@ void insertSort(vector<int>& arr) {
 ```cpp
 // 对外接口
 void countingSort(vector<int>& arr) {
-    int minIdx = *max_element(arr.begin(), arr.end());
-    vector<int> cnt(minIdx + 1, 0);
-    for (int x : a) cnt[x]++;
-    int idx = 0;
-    for (int v = 0; v <= minIdx; ++v) {
-        while (cnt[v]--) a[idx++] = v;
+    if (arr.empty()) return;
+    int minVal = *min_element(arr.begin(), arr.end());
+    int maxVal = *max_element(arr.begin(), arr.end());
+    vector<int> cnt(maxVal - minVal + 1, 0);  // 仅适用于值域可承受
+    for (int x : arr) ++cnt[x - minVal];
+    int pos = 0;
+    for (int offset = 0; offset < (int)cnt.size(); ++offset) {
+        while (cnt[offset]-- > 0) arr[pos++] = offset + minVal;
     }
 }
 ```
@@ -120,8 +125,8 @@ void shellSort(vector<int>& arr) {
     for (int gap = n / 2; gap > 0; gap /= 2) {
         for (int i = gap; i < n; ++i) {
             int temp = arr[i], j = i;
-            while (j >= gap && a[j - gap] > temp) {
-                arr[j] = a[j - gap];
+            while (j >= gap && arr[j - gap] > temp) {
+                arr[j] = arr[j - gap];
                 j -= gap;
             }
             arr[j] = temp;
@@ -155,6 +160,7 @@ void bucketSort(vector<float>& a) {
 ```cpp
 // 对外接口
 void radixSort(vector<int>& a) {
+    if (a.empty()) return;
     int mx = *max_element(a.begin(), a.end());
     for (int exp = 1; mx / exp > 0; exp *= 10) {
         vector<int> output(a.size());
@@ -169,6 +175,14 @@ void radixSort(vector<int>& a) {
     }
 }
 ```
+
+> [!warning] 计数排序的空间随“值域”而不是元素个数增长；上例的基数排序只覆盖非负整数，`exp *= 10` 也要注意溢出。题目没有明确数据范围时，优先使用 `std::sort` / `std::stable_sort`，而不是把线性排序当作默认选项。
+
+## 30 秒回答
+
+**排序如何选？** 通用场景优先标准库排序：`std::sort` 适合通常的就地不稳定排序需求，需保持等值元素相对顺序时用 `std::stable_sort`。近乎有序、小区间常用插入排序思想；值域小的整数才考虑计数排序；固定长度键且每位范围有限才考虑基数排序。
+
+**自测：** 为什么计数排序不能只看 `N`？快速排序为什么不能只写“`O(N log N)`”？
 
 ---
 

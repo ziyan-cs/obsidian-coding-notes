@@ -6,10 +6,11 @@ status: 🌱
 
 # Shortest Path：Dijkstra & Bellman-Ford — 最短路
 
-> [!important] **核心考点**：Dijkstra（堆优化）、Bellman-Ford（负权检测）、Floyd 多源最短路
 > [!important] **核心考点**：Dijkstra 非负权最短路（堆优化）、Bellman-Ford 负权最短路与检测、Floyd 多源最短路
 
-### Dijkstra（单源最短路，非负权边）
+> [!warning] Dijkstra 一旦把节点从最小堆取出，就依赖“后续边不会让路径变短”的前提；**任意负权边都会破坏这个前提**。距离与边权可能很大时，使用 `long long`，并避免把 `INF + w` 当作普通整数相加。
+
+## Dijkstra（单源最短路，非负权边）
 
 ```cpp
 vector<int> dijkstra(vector<vector<pair<int,int>>>& graph, int start) {
@@ -32,12 +33,12 @@ vector<int> dijkstra(vector<vector<pair<int,int>>>& graph, int start) {
     }
     return dist;
 }
-# 时间复杂度：O((V + E) log V)
+// 时间复杂度：O((V + E) log V)
 ```
 
 **不适用场景：** 有负权边（改用 Bellman-Ford）。
 
-### Bellman-Ford（允许负权边，可检测负权环）
+## Bellman-Ford（允许负权边，可检测负权环）
 
 ```cpp
 vector<int> bellmanFord(int n, vector<tuple<int,int,int>>& edges, int src) {
@@ -53,10 +54,12 @@ vector<int> bellmanFord(int n, vector<tuple<int,int,int>>& edges, int src) {
             return {};  // 有负权环
     return dist;
 }
-# 时间复杂度：O(VE)
+// 时间复杂度：O(VE)
 ```
 
-### Floyd-Warshall（全源最短路）
+> [!tip] 此示例用空 `vector` 表示“从 `src` 可达的负权环”。工程接口最好把“最短距离”和“是否存在负环”分开表达，避免与“空图/异常输入”的含义混淆。
+
+## Floyd-Warshall（全源最短路）
 
 ```cpp
 void floydWarshall(vector<vector<int>>& dist) {
@@ -67,10 +70,10 @@ void floydWarshall(vector<vector<int>>& dist) {
                 if (dist[i][k] != INT_MAX && dist[k][j] != INT_MAX)
                     dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 }
-# 时间复杂度：O(V³)，适合节点数较少的稠密图
+// 时间复杂度：O(V³)，适合节点数较少的稠密图
 ```
 
-### 最短路算法对比
+## 最短路算法对比
 
 |算法|时间复杂度|负权边|负权环检测|适用场景|
 |---|---|---|---|---|
@@ -79,6 +82,12 @@ void floydWarshall(vector<vector<int>>& dist) {
 |Floyd-Warshall|O(V³)|✅|✅|全源，节点少|
 
 ---
+
+## 30 秒回答
+
+**如何选最短路算法？** 单源、边权非负时优先 Dijkstra + 最小堆；允许负权且需要检测从源点可达的负环时用 Bellman-Ford；节点数较少、要一次得到任意两点距离时用 Floyd-Warshall。任何实现都先明确“不可达”和“负环”在返回值里的表示，并防止距离相加溢出。
+
+**自测：** 为什么 Dijkstra 不能处理负权边？Bellman-Ford 只需做 `V-1` 轮松弛的原因是什么？
 
 ## 关联笔记
 

@@ -14,6 +14,7 @@ status: 🌱
 
 ```cpp
 int lengthOfLIS(vector<int>& nums) {
+    if (nums.empty()) return 0;
     int n = nums.size(), res = 1;
     vector<int> dp(n, 1);           // dp[i] = 以 i 结尾的最长递增子序列长度
     for (int i = 0; i < n; i++) {
@@ -44,6 +45,8 @@ int lengthOfLIS(vector<int>& nums) {
 ```
 
 **理解：** `tails` 不一定是正确的 LIS 序列，但**长度**一定正确。算法核心是让 tails 中的数尽可能小，以便后续能接更多数。
+
+> [!tip] 此处用 `lower_bound`，得到的是严格递增 LIS；若题目要求“非递减”子序列，通常改用 `upper_bound`。若要恢复具体序列，还需要额外记录前驱和每个长度对应的末尾下标。
 
 ---
 
@@ -117,6 +120,7 @@ int minDistance(string a, string b) {
 ```cpp
 int longestPalindromeSubseq(string s) {
     int n = s.size();
+    if (n == 0) return 0;
     vector<vector<int>> dp(n, vector<int>(n, 0));
     for (int i = n - 1; i >= 0; i--) {
         dp[i][i] = 1;
@@ -147,6 +151,12 @@ int longestPalindromeSubseq(string s) {
 | 最大子数组和（Kadane） | cur = max(x, cur+x) | O(n) |
 
 > [!tip]- **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。
+
+## 30 秒回答
+
+**LIS 的 `tails` 为什么正确？** `tails[len - 1]` 只保存长度为 `len` 的递增子序列所能取得的最小结尾；它不保证自身是一条真实 LIS，却为后续元素留下最多延长空间，因此其长度等于 LIS 长度。LCS、编辑距离则必须保留两个序列前缀的关系，基础解法是二维 DP。
+
+**自测：** 严格递增 LIS 为什么用 `lower_bound`？“最长公共子序列”和“最长公共子串”的不匹配转移为何不同？
 
 ---
 
