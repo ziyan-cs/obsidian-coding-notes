@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Debugging & Tracing： strace, gdb, perf — 调试追踪
+
 > [!important] **核心考点**：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
 
 ## strace：系统调用追踪

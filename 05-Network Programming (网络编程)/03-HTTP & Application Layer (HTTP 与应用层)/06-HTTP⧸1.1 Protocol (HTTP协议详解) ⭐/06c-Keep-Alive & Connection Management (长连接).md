@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Keep-Alive & Connection Management — 长连接
+
 > [!important] **核心考点**：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
 ## 短连接 vs 长连接

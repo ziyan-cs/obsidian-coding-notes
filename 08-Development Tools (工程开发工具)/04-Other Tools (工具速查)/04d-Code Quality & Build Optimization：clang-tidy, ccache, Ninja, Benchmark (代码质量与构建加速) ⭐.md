@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark — 代码质量与构建加速
+
 > [!important] **核心考点**：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
 
 ## 代码质量工具

@@ -4,6 +4,7 @@ tags:
 status: 🌱
 ---
 
+# target_link_libraries & include_directories — 依赖管理
 
 > [!important] **核心考点**：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
 

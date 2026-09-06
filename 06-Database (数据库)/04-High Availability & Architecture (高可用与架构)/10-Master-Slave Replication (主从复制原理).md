@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Master-Slave Replication — 主从复制原理
+
 > [!important] **核心考点**：主从复制 binlog 异步复制流程、半同步复制保证、主从延迟原因与解决方案
 
 ## 主从复制概述

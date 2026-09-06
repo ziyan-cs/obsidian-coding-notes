@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# 01b1-RDB：Snapshot & BGSAVE — 快照原理
+
 > [!important] **核心考点**
 > RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 

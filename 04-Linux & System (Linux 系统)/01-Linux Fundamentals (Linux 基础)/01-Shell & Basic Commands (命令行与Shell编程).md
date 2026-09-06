@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Shell & Basic Commands — 命令行与Shell编程
+
 > [!important] **核心考点**：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
 
 ## 帮助命令

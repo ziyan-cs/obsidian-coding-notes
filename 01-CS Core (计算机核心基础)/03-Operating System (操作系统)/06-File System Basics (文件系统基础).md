@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# File System Basics — 文件系统基础
+
 > [!important] **核心考点**：文件系统结构、inode、目录结构、文件分配方式、磁盘调度、硬链接 vs 软链接
 
 ## 文件系统层次

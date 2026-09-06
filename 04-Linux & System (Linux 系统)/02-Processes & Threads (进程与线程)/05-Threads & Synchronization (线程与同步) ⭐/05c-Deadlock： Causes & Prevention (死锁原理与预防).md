@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Deadlock： Causes & Prevention — 死锁原理与预防
+
 > [!important] **核心考点**：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
 ## 死锁的四个必要条件（Coffman 条件）

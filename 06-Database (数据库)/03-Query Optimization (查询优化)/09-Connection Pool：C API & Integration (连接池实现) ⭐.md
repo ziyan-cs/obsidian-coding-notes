@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Connection Pool：C API & Integration — 连接池实现
+
 > [!important] **核心考点**：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
 ## MySQL C API 基础

@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# CMake with vcpkg & Conan — 包管理器集成
+
 > [!important] **核心考点**：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
 
 ## 为什么需要包管理器

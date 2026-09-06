@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Union-Find — 并查集
+
 > [!important] **核心考点**：并查集 find/union、路径压缩与按秩合并、连通性检测
 > [!important] **核心考点**：并查集的 find/union 操作、路径压缩与按秩合并优化、连通性检测与环检测
 

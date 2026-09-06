@@ -7,6 +7,8 @@ confidence: 1
 verified: NEEDS_VERIFY
 ---
 
+# Compilation & Linking — 编译与链接
+
 > [!important] **核心考点**：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
 ## 编译的四个阶段

@@ -4,8 +4,13 @@ tags:
 status: 🌱
 ---
 
+# Message Delivery Guarantees — 消息可靠性
+
 > [!important] **核心考点**
 > 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
+
+> [!warning] “Exactly Once” 必须说明边界
+> Kafka 的幂等与事务能约束 Kafka 内部的写入/消费链路；把消息处理结果写进 MySQL 等外部系统时，不能仅凭一段本地 SQL 就宣称端到端 exactly-once。通常要使用幂等写入、去重键、outbox/inbox 或可恢复的状态机。
 
 ## Kafka 消息可靠性语义
 
@@ -70,15 +75,15 @@ class ConsumerCb : public RdKafka::ConsumeCb {
 };
 ```
 
-### 端到端 Exactly Once
+### 外部系统的处理一致性
 
 ```
-Kafka -> MySQL 的原子写入：
+Kafka -> MySQL 的常见目标是“至少一次投递 + 幂等落库”：
 BEGIN TRANSACTION;
-  INSERT INTO result VALUES (processed_data);
+  INSERT ... ON DUPLICATE KEY UPDATE ...;  -- 用业务唯一键去重
   UPDATE consumer_offsets SET offset=X;
 COMMIT;
-两者要么同时成功，要么同时失败
+仍需设计崩溃恢复：offset 与业务状态的存储边界、重试和补偿不能靠假设自动原子化。
 ```
 
 ---
@@ -107,6 +112,16 @@ Producer -> Broker -> Consumer
 
 > [!tip]- **工程要点**
 > 生产推荐 acks=all + enable.idempotence=true + 手动 commit。追求极致吞吐可降为 acks=1，但需接受极端情况可能丢消息。
+
+## 30 秒回答
+
+Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 和幂等生产者降低写入丢失/重复风险，消费者在业务成功后提交 offset 得到 at-least-once。若副作用进入数据库或第三方服务，必须额外设计幂等键与恢复流程；“exactly-once”永远要先问它覆盖到哪里。
+
+## 自测
+
+1. 为什么手动提交 offset 仍可能造成重复消费？
+2. Kafka transaction 能否让 Kafka 与 MySQL 自动成为同一个原子事务？
+3. 业务去重键应选择消息 ID、订单 ID 还是两者组合？为什么？
 
 ---
 

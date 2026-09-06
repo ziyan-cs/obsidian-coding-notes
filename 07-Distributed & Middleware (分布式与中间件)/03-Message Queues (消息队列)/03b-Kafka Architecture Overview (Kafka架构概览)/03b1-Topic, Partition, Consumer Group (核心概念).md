@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# 03b1-Topic, Partition, Consumer Group — 核心概念
+
 > [!important] **核心考点**
 > Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 

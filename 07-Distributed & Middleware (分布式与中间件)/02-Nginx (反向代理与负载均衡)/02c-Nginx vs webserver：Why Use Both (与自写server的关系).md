@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Nginx vs webserver：Why Use Both — 与自写server的关系
+
 > [!important] **核心考点**
 > Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 

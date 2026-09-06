@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# TIME_WAIT：Why & How to Handle — TIME_WAIT原因与处理
+
 > [!important] **核心考点**：为什么存在、带来什么问题、如何正确处理
 
 ## 为什么存在 TIME_WAIT？

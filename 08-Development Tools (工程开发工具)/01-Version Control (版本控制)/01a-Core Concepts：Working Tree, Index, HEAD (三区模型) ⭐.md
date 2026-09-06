@@ -4,6 +4,7 @@ tags:
 status: 🌱
 ---
 
+# Core Concepts：Working Tree, Index, HEAD — 三区模型
 
 > [!important] **核心考点**：三个区域的定义、文件在三区之间的流转、HEAD 的本质
 

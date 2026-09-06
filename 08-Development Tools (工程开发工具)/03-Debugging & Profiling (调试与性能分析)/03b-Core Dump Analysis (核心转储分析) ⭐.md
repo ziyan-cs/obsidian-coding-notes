@@ -4,6 +4,7 @@ tags:
 status: 🌱
 ---
 
+# Core Dump Analysis — 核心转储分析
 
 > [!important] **核心考点**：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
 

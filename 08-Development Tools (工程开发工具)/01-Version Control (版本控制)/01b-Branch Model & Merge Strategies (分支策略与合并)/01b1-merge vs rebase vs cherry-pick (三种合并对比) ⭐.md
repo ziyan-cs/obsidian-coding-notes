@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-
+# 01b1-merge vs rebase vs cherry-pick — 三种合并对比
 
 > [!important] **核心考点**：三者的本质区别、各自的使用场景、rebase 的黄金法则
 
