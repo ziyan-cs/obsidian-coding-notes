@@ -52,7 +52,7 @@ gdb> l                    # 看附近源码
 ## AddressSanitizer (ASan)
 
 ```bash
-# 编译时开启（GCC/Clang 4.8+）
+# 编译时开启（具体支持组合以当前 GCC/Clang 文档为准）
 g++ -fsanitize=address -g -O1 main.cpp -o main
 
 # 运行即可检测内存错误
@@ -130,18 +130,20 @@ valgrind --tool=memcheck ./main
 # Callgrind：性能分析
 valgrind --tool=callgrind ./main
 
-# 注意：valgrind 会使程序运行慢 10-20 倍
-# 调试时用 ASan（更快），上线前用 valgrind 兜底
+# 性能开销受程序、平台和工具版本影响；先在本机测量
+# ASan 与 Valgrind 覆盖面不同，按复现条件选择，不存在“上线前必跑”的通用顺序
 ```
 
 | 工具 | 用途 | 速度 |
 |------|------|------|
-| **AddressSanitizer** | 内存错误检测 | ~2x 慢 | 
-| **Valgrind Memcheck** | 更全面的内存检测 | ~20x 慢 |
-| **ThreadSanitizer** | 数据竞争检测 | ~5x 慢 |
-| **UBSan** | 未定义行为检测 | ~1.5x 慢 |
+| **AddressSanitizer** | 内存错误检测 | 开销因程序/平台而异，适合日常测试 |
+| **Valgrind Memcheck** | 指令级内存检查 | 通常开销更高，适合针对性复现 |
+| **ThreadSanitizer** | 数据竞争检测 | 开销因程序/平台而异，需独立测试配置 |
+| **UBSan** | 部分未定义行为检测 | 开销因启用检查项而异 |
 
 > [!tip]- **工程要点**：现代 C++ 调试首选 **AddressSanitizer**（快、准）。在 CI 中应开启 ASan + UBSan。与 GDB 配合使用：ASan 告诉你问题类型和位置，GDB 帮你分析上下文。
+
+> [!tip]- **工程要点**：把 Sanitizer 作为可重复的测试配置，而不是“跑过一次就安全”。ASan/UBSan 常适合日常 CI；TSan 通常独立运行；GDB 用于观察真实崩溃现场。具体组合以项目平台、依赖与测试时长为准。
 
 ---
 

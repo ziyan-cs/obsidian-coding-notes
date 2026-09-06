@@ -128,7 +128,7 @@ EXPECT_CALL(mock, method(Eq("exact"), _))
 ## Catch2 轻量测试框架
 
 ```cpp
-// Catch2 是 header-only，更轻量
+// Catch2 的集成方式随主版本与包管理方式不同；按当前官方文档配置
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 
@@ -191,7 +191,11 @@ genhtml -o report coverage.info
 // src/module.cpp → tests/module_test.cpp
 ```
 
-> [!tip]- **工程要点**：好的单元测试是"**活的文档**"——阅读测试代码就能理解模块的预期行为。在 CI 中集成测试（`cmake --build . --target test`），确保每次提交都自动运行。**测试不是可选品**，是工程质量的基线。
+> [!tip]- **工程要点**：好的单元测试是“**活的文档**”——阅读测试代码就能理解模块的预期行为。CMake/CTest 项目通常用 `ctest --test-dir build --output-on-failure` 执行已注册测试；具体 target 名称由项目定义。测试是工程质量的基线，但也要避免过度 mock 而失去真实集成覆盖。
+
+## 30 秒回答
+
+单元测试验证一个明确行为并隔离外部依赖；集成测试验证模块协作；E2E 只覆盖少量关键用户路径。Mock 应替换不可控、昂贵或难复现的边界，不应用来断言内部调用细节。失败信息、可重复性和快速反馈比单纯覆盖率数字更重要。
 
 ---
 
