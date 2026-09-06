@@ -47,23 +47,37 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' |
             return
         }
 
-        if ($All -or $parsedDate.Date -le $today) {
-            $items.Add([pscustomobject]@{
-                Due  = $parsedDate.Date
-                Name = $file.Name
-            })
-        }
+        $items.Add([pscustomobject]@{
+            Due  = $parsedDate.Date
+            Name = $file.Name
+        })
     }
 
 Write-Output ''
 
-if ($items.Count -eq 0) {
+$displayItems = @()
+if ($All) {
+    $displayItems = $items | Sort-Object Due, Name
+}
+else {
+    $dueNow = @($items | Where-Object { $_.Due -le $today } | Sort-Object Due, Name)
+    if ($dueNow.Count -gt 0) {
+        $displayItems = $dueNow
+    }
+    elseif ($items.Count -gt 0) {
+        $nextDate = ($items | Sort-Object Due | Select-Object -First 1).Due
+        $displayItems = $items | Where-Object { $_.Due -eq $nextDate } | Sort-Object Name
+    }
+}
+
+if ($displayItems.Count -eq 0) {
     Write-Output '没有到期或待复习的笔记。'
 }
 else {
-    Write-Output ("[ REVIEW_DUE | TODAY: {0:yyyy-MM-dd} | COUNT: {1} ]" -f $today, $items.Count)
+    $mode = if ($All) { 'ALL' } elseif (($displayItems | Select-Object -First 1).Due -gt $today) { 'NEXT' } else { 'DUE' }
+    Write-Output ("[ REVIEW_DUE | MODE: {0} | TODAY: {1:yyyy-MM-dd} | COUNT: {2} ]" -f $mode, $today, $displayItems.Count)
 
-    foreach ($item in ($items | Sort-Object Due, Name)) {
+    foreach ($item in $displayItems) {
         $label = if ($item.Due -lt $today) {
             'OVERDUE'
         }
