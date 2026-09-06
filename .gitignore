@@ -1,28 +1,18 @@
-# Obsidian Git Sync: 仅同步笔记 & 核心配置
-# 设备界面与状态
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/workspace*.lock
-.obsidian/app.json
-.obsidian/hotkeys.json
-.obsidian/graph.json
-.obsidian/cache/
-journal.db
+# Obsidian：默认忽略全部本机配置
+.obsidian/*
 
-# 插件：仅同步启用列表
-.obsidian/plugins/*
+# 保留跨设备一致的外观与启用插件清单
+!.obsidian/appearance.json
 !.obsidian/community-plugins.json
 !.obsidian/core-plugins.json
+!.obsidian/snippets/
+!.obsidian/snippets/**
 
-# 主题：仅同步选择配置
-.obsidian/themes/*
-!.obsidian/appearance.json
-
-# 回收站与备份
+# 本机工作区、缓存、回收站、备份
 .trash/
-.obsidian/backups/
+journal.db
 
-# 系统/IDE临时文件
+# 系统与编辑器临时文件
 .DS_Store
 Thumbs.db
 .vscode/
@@ -31,6 +21,15 @@ Thumbs.db
 *~
 *.tmp
 
-# 第三方文件
+# AI 工具本机配置
 .claude/
+.codex/
 CLAUDE.md
+
+# 未来若加入项目代码，避免误提交密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa*
