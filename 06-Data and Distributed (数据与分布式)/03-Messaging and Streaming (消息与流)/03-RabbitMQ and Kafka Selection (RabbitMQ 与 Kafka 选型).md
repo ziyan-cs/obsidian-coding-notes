@@ -1,0 +1,84 @@
+---
+status: stable
+review_due: 2026-09-13
+confidence: high
+verified: 2026-09-06
+---
+
+# 03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)
+
+> [!abstract] 阅读定位
+>
+> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+
+## 04-RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
+
+> [!abstract] 核心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
+
+> [!warning] 不用固定吞吐和延迟为产品贴标签
+> 性能取决于消息大小、确认语义、持久化、批量、分区/队列、硬件与网络；RabbitMQ 和 Kafka 都能覆盖多种工作负载。选型先写清投递语义、重放需求、路由模型、运维能力和压测证据。
+
+## 设计哲学对比
+
+| 维度 | RabbitMQ | Kafka |
+|------|----------|-------|
+| 定位 | 消息代理（Message Broker） | 分布式流处理平台 |
+| 模型 | Exchange -> Queue -> Consumer | Topic -> Partition -> Consumer Group |
+| 消息存储 | 消费即删除（默认） | 持久化日志，按时间/大小清理 |
+| 消费模式 | Push（推） | Pull（拉） |
+| 顺序保证 | 单队列有序 | 分区内有序 |
+| 路由能力 | 灵活（direct/topic/fanout/headers） | 基于 key hash |
+
+---
+
+## 性能特征
+
+```
+Kafka 的分区日志、批量处理与重放能力常适合高吞吐事件流；RabbitMQ 的 exchange/queue 路由与确认语义常适合任务分发。两者都可能因持久化、确认、批量和网络配置改变延迟/吞吐表现，必须在目标 workload 下压测。
+```
+
+---
+
+## 选型指南
+
+### 选 RabbitMQ
+
+| 场景 | 原因 |
+|------|------|
+| 复杂路由 | Exchange 类型丰富 |
+| 需要灵活路由/确认/死信语义 | Exchange 与 queue 模型直接表达业务路由 |
+| 业务系统（订单/支付） | 消息确认机制成熟 |
+| 灵活的死信队列 | DLX + TTL 支持 |
+| 任务队列式工作负载 | 结合确认、重试、死信与消费者行为设计 |
+
+### 选 Kafka
+
+| 场景 | 原因 |
+|------|------|
+| 高吞吐日志/埋点 | 分区日志、批量与消费组适合事件流 |
+| 流处理/实时计算 | Kafka Streams / Flink |
+| 消息重播/回溯 | 持久化日志，可重置 offset |
+| 数据管道（ETL） | 批量消费、顺序写 |
+| 大数据生态 | Hadoop / Spark 天然对接 |
+
+---
+
+## 经典题型速查
+
+| 题型 | 要点 |
+|------|------|
+| Kafka 为什么快 | 顺序写 + 零拷贝 + 批量 + 分区 |
+| RabbitMQ 消息模型 | Exchange 绑定 Queue，消费即删 |
+| RabbitMQ 死信队列 | 消息过期/拒绝 -> DLX |
+| 如何选型 | 低延迟灵活路由选 RabbitMQ；高吞吐流处理选 Kafka |
+
+> [!tip]- **工程要点**
+> 不要把“微服务 = RabbitMQ、大数据 = Kafka”当作硬规则。先明确是否需要重放、顺序范围、复杂路由、延迟 SLO、消费者重试和团队运维能力；若两者都能满足，再用最小原型和压测比较。
+
+## 30 秒回答
+
+RabbitMQ 的核心是 broker 路由、queue 与确认语义；Kafka 的核心是可分区、可保留和可重放的日志。前者常用于任务分发与复杂路由，后者常用于事件流与多消费者回放，但两者没有固定性能分界。选型应从语义和运维约束开始，再用真实消息模型压测。
+
+---
+
+消息队列基础概念详解见 → [Why MQ：Decoupling, Peak Shaving, Async (消息队列三大作用)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03a-Why%20MQ：Decoupling,%20Peak%20Shaving,%20Async%20(消息队列三大作用).md)

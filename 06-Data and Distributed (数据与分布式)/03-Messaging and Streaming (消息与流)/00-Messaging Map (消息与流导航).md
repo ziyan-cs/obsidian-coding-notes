@@ -5,7 +5,7 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 00-Distributed Fundamentals Map (分布式基础导航)
+# 00-Messaging Map (消息与流导航)
 
 > [!abstract] 阅读定位
 >
