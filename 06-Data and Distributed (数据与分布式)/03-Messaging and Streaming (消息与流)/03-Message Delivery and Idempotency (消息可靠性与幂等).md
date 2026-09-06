@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Message Delivery Guarantees — 消息可靠性
+# 03-Message Delivery and Idempotency (消息可靠性与幂等)
 
 > [!abstract] 核心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# System Calls Overview — 常用系统调用速查
+# 10-System Calls Overview (常用系统调用速查)
 
 > [!abstract] 核心考点：文件/进程/网络/内存管理相关系统调用速查、用户态与内核态切换、系统调用开销
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Virtual Memory — 虚拟内存
+# 01-Virtual Memory (虚拟内存)
 
 > [!abstract] 核心考点：虚拟地址 vs 物理地址、MMU/TLB、缺页中断、页面置换、页表结构
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Cache Mechanism — 缓存机制
+# 04-Cache Mechanism (缓存机制)
 
 > [!abstract] 核心考点：> Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
 

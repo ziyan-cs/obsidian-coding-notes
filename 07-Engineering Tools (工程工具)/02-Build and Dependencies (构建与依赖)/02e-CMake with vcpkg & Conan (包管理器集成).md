@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# CMake with vcpkg & Conan — 包管理器集成
+# 02e-CMake with vcpkg & Conan (包管理器集成)
 
 > [!abstract] 核心考点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
 

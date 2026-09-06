@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Consistency Models：Strong, Eventual — 一致性模型
+# 02-Consistency Models (一致性模型)
 
 > [!abstract] 核心考点：> 一致性模型分级（强/弱/最终）、Quorum 机制、读写模型、Dynamo 风格
 

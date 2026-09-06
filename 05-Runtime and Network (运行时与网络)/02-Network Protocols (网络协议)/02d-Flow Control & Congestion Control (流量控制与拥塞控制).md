@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Flow Control & Congestion Control — 流量控制与拥塞控制
+# 02d-Flow Control & Congestion Control (流量控制与拥塞控制)
 
 > [!abstract] 核心考点：两者的区别、滑动窗口、拥塞控制四个阶段
 

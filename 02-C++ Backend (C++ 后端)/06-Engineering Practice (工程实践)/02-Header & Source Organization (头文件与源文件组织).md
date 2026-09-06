@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Header & Source Organization — 头文件与源文件组织
+# 02-Header & Source Organization (头文件与源文件组织)
 
 > [!abstract] 核心考点：头文件职责、源文件职责、include 顺序、模块化设计
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# HTTP Methods & Status Codes — 方法与状态码
+# 06b-HTTP Methods & Status Codes (方法与状态码)
 
 > [!abstract] 核心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# C++ Backend Core Map — C++ 主线能力图
+# 00-C++ Backend Core Map (后端能力地图)
 
 > [!abstract] 一句话结论：C++ 后端的竞争力不在会多少语法，而在能用生命周期、并发、网络、系统和测量方法构建可解释的服务。
 

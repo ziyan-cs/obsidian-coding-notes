@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Binlog vs Redo Log：Differences — 两者区别
+# 07c-Binlog vs Redo Log：Differences (两者区别)
 
 > [!abstract] 核心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 

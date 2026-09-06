@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Distributed Transaction：2PC & Saga — 分布式事务
+# 07-Distributed Transactions and Saga (分布式事务与Saga)
 
 > [!abstract] 核心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
 

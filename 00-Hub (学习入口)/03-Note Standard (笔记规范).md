@@ -4,7 +4,7 @@ status: solid
 verified: 2026-09-05
 ---
 
-# Note Standard — 笔记书写规范
+# 03-Note Standard (笔记规范)
 
 > [!abstract] 一篇好笔记不是信息堆积：不看正文时，你仍能说清它解决的问题、写出核心例子，并知道最容易错在哪里。
 

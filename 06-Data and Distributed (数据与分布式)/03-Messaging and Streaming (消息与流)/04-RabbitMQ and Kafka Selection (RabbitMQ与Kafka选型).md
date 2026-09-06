@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# RabbitMQ vs Kafka：Comparison — 两者对比
+# 04-RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
 
 > [!abstract] 核心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 

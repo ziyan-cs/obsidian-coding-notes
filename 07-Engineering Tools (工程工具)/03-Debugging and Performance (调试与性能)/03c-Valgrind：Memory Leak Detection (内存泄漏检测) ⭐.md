@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Valgrind：Memory Leak Detection — 内存泄漏检测
+# 03c-Valgrind：Memory Leak Detection (内存泄漏检测)
 
 > [!abstract] 核心考点：Memcheck 的错误类型、如何读报告、抑制误报
 

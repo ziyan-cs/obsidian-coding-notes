@@ -7,7 +7,7 @@ confidence: 1
 verified: NEEDS_VERIFY
 ---
 
-# EXPLAIN & Execution Plan Analysis — 执行计划分析
+# 08a-EXPLAIN & Execution Plan Analysis (执行计划分析)
 
 > [!abstract] 核心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 

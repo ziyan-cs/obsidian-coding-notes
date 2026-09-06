@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Testing & Quality — 用测试定义可相信的行为
+# 04-Testing and Quality (测试与质量)
 
 > [!abstract] 一句话结论：先把业务规则写成纯函数和 table-driven test，再测试 HTTP；测试应验证可观察行为，而不是内部实现细节。
 

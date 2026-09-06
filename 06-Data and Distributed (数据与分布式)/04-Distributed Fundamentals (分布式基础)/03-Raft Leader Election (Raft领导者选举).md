@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 04c1-Leader Election — 领导者选举
+# 03-Raft Leader Election (Raft领导者选举)
 
 > [!abstract] 核心考点：> Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 

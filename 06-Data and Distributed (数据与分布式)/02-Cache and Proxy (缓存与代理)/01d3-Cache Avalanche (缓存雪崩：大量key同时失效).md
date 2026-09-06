@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01d3-Cache Avalanche — 缓存雪崩：大量key同时失效
+# 01d3-Cache Avalanche (缓存雪崩：大量key同时失效)
 
 > [!abstract] 核心考点：> 缓存雪崩的原因、过期时间加随机化、多级缓存、降级与限流
 

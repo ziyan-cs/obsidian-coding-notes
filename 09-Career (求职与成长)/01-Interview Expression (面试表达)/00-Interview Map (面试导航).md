@@ -1,21 +1,30 @@
 ---
-tags: [vault/navigation, career/interview]
-status: seed
-verified: 2026-09-05
+status: stable
+review_due: 2026-09-13
+confidence: high
+verified: 2026-09-06
 ---
 
-# Career Prep MOC — 面试与成长导航
+# 00-Interview Map (面试导航)
 
-> 面试表达是「用 30 秒说清结论，3 分钟讲透原理与取舍」；八股是索引，项目是证据。
+> [!abstract] 一句话结论：好回答先给结论，再讲关键机制和代价，最后落到真实代码、项目证据或反例。
 
-## 主题分组
-- 八股文：[[13-Career Prep (面试与成长)/01-Interview Knowledge (面试知识)/01-C++ Interview (C++ 专项面试)/00-C++ Backend Interview Top 100 (C++ 后端面试高频 100 题) ⭐|C++ 高频 100 题]] · [[13-Career Prep (面试与成长)/01-Interview Knowledge (面试知识)/01-C++ Interview (C++ 专项面试)/01-Data Quick Reference (数据速记)|数据速记]]
-- 项目讲解（面试/系统设计）：[[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/96-Short-URL (短URL系统设计)|短 URL 设计]] · [[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/97-IM-System (即时通讯系统设计)|IM 设计]] · [[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/98-Flash-Sale (秒杀系统设计)|秒杀设计]] · [[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/99-Config-Center (配置中心设计)|配置中心设计]] · [[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/100-API-Gateway (API网关设计)|API 网关设计]] · [[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/101-Project Deep Dive (C++ 后端项目难点)|项目难点总结]]
-- 学习路线：[[13-Career Prep (面试与成长)/04-Learning Roadmap & Review (学习路线与复盘)/00-C++ Backend Learning Roadmap (C++ 后端技术栈路线)|C++ 后端技术栈路线]]
+## 阅读顺序
 
-## 学习顺序
-1. 用八股文建立考点索引 → 2. 项目讲解串联系统设计 → 3. 学习路线校准阶段目标。
+1. `01-C++ Backend Interview Top 100`：建立 C++ 后端考点索引。
+2. `02-Data Quick Reference`：把网络、数据库、缓存的高频概念压缩成复习入口。
+3. `03-Project Deep Dive`：把经历转换成可追问的技术故事。
+4. `02-System Design`：用系统设计练习吞吐、可靠性与一致性的表达。
 
-## 与项目 / 证据入口
-- 面试题 ↔ 动手实现：96–100 各篇顶部已链接 [[12-Backend Projects (后端项目)/02-URL Shortener (短链接服务)|URL Shortener]] · [[12-Backend Projects (后端项目)/03-IM & Notification (即时通讯与通知)|IM]] · [[12-Backend Projects (后端项目)/04-Flash Sale (秒杀系统)|Flash Sale]] · [[12-Backend Projects (后端项目)/05-Config Center (配置中心)|Config Center]]。
-- 复盘与证据 → [[12-Backend Projects (后端项目)/06-Portfolio Evidence Checklist (项目证据清单)|证据清单]]
+## 回答模板
+
+1. **结论**：一句话回答它是什么、解决什么问题。
+2. **机制**：解释最关键的一到两个实现点。
+3. **代价**：说明边界、失败模式或性能成本。
+4. **证据**：给出代码、压测、排障或项目场景。
+
+## 常见误区
+
+- 把名词解释当作回答，没有做选择也没有边界。
+- 只说“高性能”“高可用”，不给指标、条件或故障场景。
+- 项目没有亲手证据，却把设计稿当成已实现系统。

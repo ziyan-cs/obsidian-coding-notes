@@ -11,7 +11,7 @@ verified: stable
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构
 
-# 模型结构
+# 06-Multi Reactor Architecture (多Reactor架构)
 
 ```text
 ┌────────────────────────────────────────────────┐

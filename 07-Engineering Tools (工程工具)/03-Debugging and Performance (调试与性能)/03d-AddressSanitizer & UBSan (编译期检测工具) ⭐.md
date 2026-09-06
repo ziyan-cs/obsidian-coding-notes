@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# AddressSanitizer & UBSan — 编译期检测工具
+# 03d-AddressSanitizer & UBSan (编译期检测工具)
 
 > [!abstract] 核心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 

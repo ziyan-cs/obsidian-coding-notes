@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Floating Point — 浮点数
+# 03-Floating Point (浮点数)
 
 > [!abstract] 核心考点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
 

@@ -4,9 +4,11 @@ tags:
 status: 🌱
 ---
 
-# C++ Backend Learning Roadmap — C++ 后端技术栈路线
+# 01-C++ Backend Roadmap (C++ 后端路线)
 
-> [!important] **核心思路**
+> [!abstract] 阅读定位
+>
+> 核心思路
 > 以 C++17 为主线，让核心基础在新特性学习中自然扎根。目标是：**给你一个工程，你能独立接手、读得懂、改得动、写得出。**
 
 ```

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Modules, Packages & Tooling — 依赖和代码组织
+# 02-Modules Packages and Tooling (模块包与工具链)
 
 > [!abstract] 一句话结论：module 是依赖版本边界，package 是代码命名空间；目录结构应服务于业务边界，而不是照搬 C++ 的头文件层级。
 

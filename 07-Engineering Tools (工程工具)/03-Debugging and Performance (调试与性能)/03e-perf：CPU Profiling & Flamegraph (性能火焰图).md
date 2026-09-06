@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# perf：CPU Profiling & Flamegraph — 性能火焰图
+# 03e-perf：CPU Profiling & Flamegraph (性能火焰图)
 
 > [!abstract] 核心考点：perf 采样原理、常用子命令、如何生成火焰图并解读
 

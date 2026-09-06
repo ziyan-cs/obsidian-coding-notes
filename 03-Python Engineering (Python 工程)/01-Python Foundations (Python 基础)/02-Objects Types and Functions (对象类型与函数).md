@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Core Types, Data Model & Functions — 先理解对象和引用
+# 02-Objects Types and Functions (对象类型与函数)
 
 > [!abstract] 一句话结论：Python 变量绑定对象而非“存放一个 C++ 值”；可变对象共享引用是初学阶段最重要的坑。
 

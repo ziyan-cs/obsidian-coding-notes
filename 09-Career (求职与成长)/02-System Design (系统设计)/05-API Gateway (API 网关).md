@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# API-Gateway — API网关设计
+# 05-API Gateway (API 网关)
 
 > [!abstract] 核心考点：> 路由转发 + 过滤器链（鉴权/限流/熔断/日志）+ 高性能代理设计，核心是看你对"网关层职责边界"的理解
 

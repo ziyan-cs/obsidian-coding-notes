@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Reverse Proxy & Load Balancing Config — 反向代理配置
+# 02b-Reverse Proxy & Load Balancing Config (反向代理配置)
 
 > [!abstract] 核心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 

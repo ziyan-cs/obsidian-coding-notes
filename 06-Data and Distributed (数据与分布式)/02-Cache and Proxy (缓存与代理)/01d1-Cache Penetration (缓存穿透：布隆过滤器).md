@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# 01d1-Cache Penetration — 缓存穿透：布隆过滤器
+# 01d1-Cache Penetration (缓存穿透：布隆过滤器)
 
 > [!abstract] 核心考点：> 缓存穿透原因、布隆过滤器原理、误判率与哈希函数数、解决方案对比
 

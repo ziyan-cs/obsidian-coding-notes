@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Paxos Overview — Paxos概念了解
+# 06-Paxos Overview (Paxos概览)
 
 > [!abstract] 核心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 

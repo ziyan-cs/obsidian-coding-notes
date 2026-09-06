@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# WAL：Write-Ahead Logging — WAL机制
+# 07a-WAL：Write-Ahead Logging (WAL机制)
 
 > [!abstract] 核心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 

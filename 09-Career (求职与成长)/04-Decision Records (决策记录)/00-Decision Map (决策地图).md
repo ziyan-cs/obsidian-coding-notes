@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Decision Map — 把“会什么”变成“为什么这样选”
+# 00-Decision Map (决策地图)
 
 > [!abstract] 一句话结论：技术选型没有脱离约束的正确答案；决策记录应写清上下文、候选项、权衡、结论和可逆性。
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# IO Multiplexing： select, poll, epoll — 多路复用对比
+# 07c-IO Multiplexing： select, poll, epoll (多路复用对比)
 
 > [!abstract] 核心考点：> select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
 

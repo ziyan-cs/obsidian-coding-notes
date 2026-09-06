@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Observability：Logging, Metrics, Tracing — 可观测性
+# 09-Observability：Logging, Metrics, Tracing (可观测性)
 
 > [!abstract] 核心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 

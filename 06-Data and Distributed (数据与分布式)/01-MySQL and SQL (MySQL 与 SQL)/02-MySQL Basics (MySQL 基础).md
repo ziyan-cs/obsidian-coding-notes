@@ -8,7 +8,7 @@ status: 🌱
 
 > [!warning] **平台/版本说明（NEEDS_VERIFY）**：以下路径以 **Windows 本机 MySQL 8.0** 为例，路径含版本号 `MySQL Server 8.0`，升级版本后需同步更新。Linux（vm-ubuntu）下的对应关系：程序 `mysqld`/`mysql`、配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf`、数据目录 `datadir`（用 `SHOW VARIABLES LIKE 'datadir'` 查询）、服务管理用 `systemctl` 而非 Windows 服务。
 
-# MySQL Basics — MySQL 基础
+# 02-MySQL Basics (MySQL 基础)
 
 ## 核心配置与目录
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# reset vs revert vs restore — 撤销三兄弟
+# 01d-reset vs revert vs restore (撤销三兄弟)
 
 > [!abstract] 核心考点：三者的作用范围、是否改写历史、适用场景
 

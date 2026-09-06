@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Instruction Cycle — 指令执行周期
+# 02-Instruction Cycle (指令执行周期)
 
 > [!abstract] 核心考点：取指-译码-执行周期、CPU 流水线各阶段、流水线冒险与解决
 

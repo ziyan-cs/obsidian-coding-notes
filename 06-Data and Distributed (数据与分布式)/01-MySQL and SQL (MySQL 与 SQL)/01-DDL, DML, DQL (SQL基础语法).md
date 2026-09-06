@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 > [!abstract] 核心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
-# SQL Fundamentals — SQL 基础语法
+# 01-DDL, DML, DQL (SQL基础语法)
 
 ## DDL（数据定义）
 ### 1. 数据库操作

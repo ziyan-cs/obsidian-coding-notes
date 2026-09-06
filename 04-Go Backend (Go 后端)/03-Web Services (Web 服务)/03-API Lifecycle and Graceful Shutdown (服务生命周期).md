@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# API Lifecycle & Graceful Shutdown — 服务如何正确停止
+# 03-API Lifecycle and Graceful Shutdown (服务生命周期)
 
 > [!abstract] 一句话结论：生产服务不是 `ListenAndServe` 后就结束；它必须响应取消、停止接收新请求、给在途请求有限时间，并关闭依赖。
 

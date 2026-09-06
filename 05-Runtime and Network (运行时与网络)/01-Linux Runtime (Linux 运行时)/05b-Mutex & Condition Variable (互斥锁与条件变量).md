@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Mutex & Condition Variable — 互斥锁与条件变量
+# 05b-Mutex & Condition Variable (互斥锁与条件变量)
 
 > [!abstract] 核心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 

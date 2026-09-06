@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Shell Tools：grep, sed, awk, tmux — Shell效率工具
+# 04c-Shell Tools：grep, sed, awk, tmux (Shell效率工具)
 
 > [!abstract] 核心考点：各工具的核心用法、组合管道使用、tmux 会话管理
 

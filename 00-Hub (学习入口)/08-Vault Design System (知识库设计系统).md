@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-06
 ---
 
-# Vault Design System — 知识库设计系统
+# 08-Vault Design System (知识库设计系统)
 
 > **目标**：让每一篇笔记看起来像同一套教材的一个章节，而不是不同阶段收集的网页摘录。
 

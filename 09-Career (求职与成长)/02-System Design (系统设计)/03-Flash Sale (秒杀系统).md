@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Flash-Sale — 秒杀系统设计
+# 03-Flash Sale (秒杀系统)
 
 > [!abstract] 核心考点：> 流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"
 

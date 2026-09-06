@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Functions — 函数
+# 03-Functions (函数)
 
 > [!abstract] 核心考点：函数重载、默认参数、值传递/引用传递、inline 函数
 

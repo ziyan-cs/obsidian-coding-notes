@@ -6,8 +6,10 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Mistake Log — 错误与易错点记录
+# 05-Mistake Log (错误记录)
 
+> [!abstract] 阅读定位
+>
 > 错误不是“不会”，而是下一次可被提前识别的触发条件。
 
 ## 使用方式

@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# IM / Notification — 连接与消息可靠性
+# 02-IM and Notification (即时通讯与通知)
 
-> **目标**：理解“连接活着、消息送达、用户看到”是三个不同问题。
+> [!abstract] 阅读定位
+>
+> 目标：理解“连接活着、消息送达、用户看到”是三个不同问题。
 
 > 面试/系统设计参考：[[13-Career Prep (面试与成长)/02-System Design Cases (系统设计案例)/97-IM-System (即时通讯系统设计)|97 即时通讯系统设计]]。
 

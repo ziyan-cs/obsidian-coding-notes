@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Single Reactor Single Thread — 单reactor单线程
+# 04-Reactor Pattern (Reactor模式)
 
 > [!abstract] 核心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
 > 代表：Redis 6.0 之前的网络处理部分

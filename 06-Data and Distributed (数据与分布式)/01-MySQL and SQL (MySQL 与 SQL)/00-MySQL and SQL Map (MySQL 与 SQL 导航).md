@@ -4,8 +4,10 @@ status: seed
 verified: 2026-09-05
 ---
 
-# Database MOC — MySQL 导航
+# 00-MySQL and SQL Map (MySQL 与 SQL 导航)
 
+> [!abstract] 阅读定位
+>
 > SQL 是入口，InnoDB 存储引擎与事务才是后端面试与排查的核心。
 
 ## 主题分组

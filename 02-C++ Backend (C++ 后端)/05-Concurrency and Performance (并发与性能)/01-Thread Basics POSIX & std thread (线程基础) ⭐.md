@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Thread Basics POSIX & std thread — 线程基础
+# 01-Thread Basics POSIX & std thread (线程基础)
 
 > [!abstract] 核心考点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 

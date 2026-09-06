@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Sticky Packet Problem & Solutions — 粘包问题与解决
+# 02e-Sticky Packet Problem & Solutions (粘包问题与解决)
 
 > [!abstract] 核心考点：什么是粘包、根本原因、四种解决方案
 

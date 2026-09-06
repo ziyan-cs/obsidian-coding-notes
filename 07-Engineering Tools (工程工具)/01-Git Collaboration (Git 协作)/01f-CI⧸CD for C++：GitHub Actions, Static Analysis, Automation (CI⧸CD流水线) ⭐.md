@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# CI⧸CD for C++：GitHub Actions, Static Analysis, Automation — CI⧸CD流水线
+# 01f-CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
 
 > [!abstract] 核心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
 

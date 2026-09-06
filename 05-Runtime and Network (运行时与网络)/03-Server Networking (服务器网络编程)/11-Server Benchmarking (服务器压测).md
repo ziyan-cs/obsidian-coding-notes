@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Server Performance：Benchmarking with wrk — 压测
+# 11-Server Benchmarking (服务器压测)
 
 > [!abstract] 核心考点：wrk/ab 压测工具使用、QPS/TPS/延迟指标分析、性能瓶颈定位方法
 

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# C++ to Go Decision Notes — 不要把 C++ 逐行翻译成 Go
+# 02-C++ to Go Decision Notes (C++到Go迁移决策)
 
 > [!abstract] 一句话结论：C++ 训练你控制资源、成本和底层细节；Go 训练你用更小的语言表面积交付并维护服务。二者是互补，不是替代关系。
 

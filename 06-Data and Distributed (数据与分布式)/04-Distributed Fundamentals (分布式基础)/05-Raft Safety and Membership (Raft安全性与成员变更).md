@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 04c3-Safety & Membership Change — 安全性保证
+# 05-Raft Safety and Membership (Raft安全性与成员变更)
 
 > [!abstract] 核心考点：> Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 

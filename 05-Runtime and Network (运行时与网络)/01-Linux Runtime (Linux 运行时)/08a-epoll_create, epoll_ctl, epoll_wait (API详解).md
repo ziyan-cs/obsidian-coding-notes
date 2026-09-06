@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# epoll_create, epoll_ctl, epoll_wait — API详解
+# 08a-epoll_create, epoll_ctl, epoll_wait (API详解)
 
 > [!abstract] 核心考点：> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Blocking vs Non-blocking IO — 阻塞与非阻塞
+# 07a-Blocking vs Non-blocking IO (阻塞与非阻塞)
 
 > [!abstract] 核心考点：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
 

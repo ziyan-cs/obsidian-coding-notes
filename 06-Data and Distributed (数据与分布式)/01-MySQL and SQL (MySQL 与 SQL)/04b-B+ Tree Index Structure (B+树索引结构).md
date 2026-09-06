@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# B+ Tree Index Structure — B+树索引结构
+# 04b-B+ Tree Index Structure (B+树索引结构)
 
 > [!abstract] 核心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
 

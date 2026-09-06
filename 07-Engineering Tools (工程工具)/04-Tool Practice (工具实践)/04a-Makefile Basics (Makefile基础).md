@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Makefile Basics — Makefile基础
+# 04a-Makefile Basics (Makefile基础)
 
 > [!abstract] 核心考点：规则语法、变量、自动变量、伪目标、增量构建原理
 

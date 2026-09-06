@@ -9,7 +9,7 @@ verified: stable
 
 > [!abstract] 核心考点：> 为什么是三次/四次、每步状态变化、异常场景
 
-# TCP Handshake & Teardown — 三次握手四次挥手
+# 02a-Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)
 
 > [!abstract] 核心考点：> 三次握手同步双方初始序列号并处理历史报文；挥手由两条独立发送方向决定，TIME_WAIT 的具体时长依赖协议栈与配置。
 

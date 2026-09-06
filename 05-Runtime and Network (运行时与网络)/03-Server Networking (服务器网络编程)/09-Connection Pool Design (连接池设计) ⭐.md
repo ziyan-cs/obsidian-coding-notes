@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Connection Pool Design — 连接池设计
+# 09-Connection Pool Design (连接池设计)
 
 > [!abstract] 核心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
 

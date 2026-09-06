@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Resource Lifetime — RAII、defer、GC 的边界
+# 01-Resource Lifetime (资源生命周期)
 
-> **结论**：GC 只处理内存可达性；文件、socket、锁、事务等资源仍须有确定的关闭协议。
+> [!abstract] 阅读定位
+>
+> 结论：GC 只处理内存可达性；文件、socket、锁、事务等资源仍须有确定的关闭协议。
 
 | 维度 | C++ | Go | Python |
 | --- | --- | --- | --- |

@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Concurrency Models — 线程、goroutine、asyncio
+# 02-Concurrency Models (并发模型)
 
-> **结论**：并发模型改变表达方式，不会消除共享状态、取消、背压和错误传播问题。
+> [!abstract] 阅读定位
+>
+> 结论：并发模型改变表达方式，不会消除共享状态、取消、背压和错误传播问题。
 
 | 维度 | C++ | Go | Python |
 | --- | --- | --- | --- |

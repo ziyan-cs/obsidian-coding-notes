@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# IM-System — 即时通讯系统设计
+# 02-IM System (即时通信系统)
 
 > [!abstract] 核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 

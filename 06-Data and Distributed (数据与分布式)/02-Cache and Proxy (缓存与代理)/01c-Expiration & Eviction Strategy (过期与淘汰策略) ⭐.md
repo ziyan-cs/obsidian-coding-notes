@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Expiration & Eviction Strategy — 过期与淘汰策略
+# 01c-Expiration & Eviction Strategy (过期与淘汰策略)
 
 > [!abstract] 核心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 

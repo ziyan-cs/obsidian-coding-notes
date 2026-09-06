@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# C++ Go Python Decision Notes — 三种语言的职责边界
+# 03-C++ Go Python Collaboration (多语言协作)
 
 > [!abstract] 一句话结论：按问题的约束选语言：C++ 负责底层控制与性能，Go 负责后端服务交付，Python 负责自动化和数据工具；同一项目应让它们协作而不是竞争。
 

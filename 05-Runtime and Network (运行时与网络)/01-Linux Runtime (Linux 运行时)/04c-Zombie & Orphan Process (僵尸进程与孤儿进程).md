@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Zombie & Orphan Process — 僵尸进程与孤儿进程
+# 04c-Zombie & Orphan Process (僵尸进程与孤儿进程)
 
 > [!abstract] 核心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Lock-free Structures Overview — 无锁结构概念
+# 06-Lock-free Structures Overview (无锁结构概念)
 
 > [!abstract] 核心考点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 

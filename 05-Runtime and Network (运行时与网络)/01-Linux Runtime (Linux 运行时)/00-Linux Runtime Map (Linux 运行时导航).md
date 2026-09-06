@@ -4,8 +4,10 @@ status: seed
 verified: 2026-09-05
 ---
 
-# Linux MOC — 系统层导航
+# 00-Linux Runtime Map (Linux 运行时导航)
 
+> [!abstract] 阅读定位
+>
 > Linux 是 C++ 后端的运行底座；按「基础 → 进程线程 → I/O → 系统调用」四层组织，最终服务于 C++ 网络服务器。
 
 ## 主题分组

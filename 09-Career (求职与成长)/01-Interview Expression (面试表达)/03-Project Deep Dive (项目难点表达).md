@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Project Deep Dive — C++ 后端项目难点
+# 03-Project Deep Dive (项目难点表达)
 
 > [!abstract] 核心考点：> C++ 后端项目的常见难点和亮点设计、面试如何讲清楚项目
 

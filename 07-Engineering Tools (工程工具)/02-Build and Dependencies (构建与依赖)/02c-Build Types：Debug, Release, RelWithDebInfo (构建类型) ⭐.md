@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Build Types：Debug, Release, RelWithDebInfo — 构建类型
+# 02c-Build Types：Debug, Release, RelWithDebInfo (构建类型)
 
 > [!abstract] 核心考点：四种构建类型的使用场景、优化级别、常用配置
 

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# pytest & Test Doubles — 把脚本变成可维护工具
+# 01-pytest Fixtures and Test Doubles (测试夹具与替身)
 
 > [!abstract] 一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
 

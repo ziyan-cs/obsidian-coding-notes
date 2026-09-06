@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Backend Architecture Patterns：分层架构, CQRS, 事件驱动 — 后端架构模式
+# 13-Backend Architecture Patterns (后端架构模式)
 
 > [!abstract] 核心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 

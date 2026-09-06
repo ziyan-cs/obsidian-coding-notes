@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# CMakeLists.txt Structure — 项目结构模板
+# 02a-CMakeLists․txt Structure (项目结构模板)
 
 > [!abstract] 核心考点：最小可用结构、各指令的作用与顺序
 

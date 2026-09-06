@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Page Structure & Buffer Pool — 页结构与缓冲池
+# 04a-Page Structure & Buffer Pool (页结构与缓冲池)
 
 > [!abstract] 核心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
 

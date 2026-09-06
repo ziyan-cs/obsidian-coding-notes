@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# First Month Checklist — Python 第一个月
+# 01-First Month Plan (首月计划)
 
-> **完成标准**：交付三个自己会再次使用的、有参数和测试的小工具。
+> [!abstract] 阅读定位
+>
+> 完成标准：交付三个自己会再次使用的、有参数和测试的小工具。
 
 ## Week 1：环境与对象
 

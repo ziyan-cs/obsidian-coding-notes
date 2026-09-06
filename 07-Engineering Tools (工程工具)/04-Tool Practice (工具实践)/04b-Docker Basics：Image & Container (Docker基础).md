@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Docker Basics：Image & Container — Docker 基础
+# 04b-Docker Basics：Image & Container (Docker基础)
 
 > [!abstract] 核心考点：镜像 vs 容器、核心命令、Dockerfile 写法、网络与卷
 

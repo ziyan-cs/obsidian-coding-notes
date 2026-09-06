@@ -4,8 +4,10 @@ status: seed
 verified: 2026-09-05
 ---
 
-# Algorithms MOC — 算法与数据结构导航
+# 00-Algorithms MOC (算法导航)
 
+> [!abstract] 阅读定位
+>
 > 算法不是背题解，而是识别「问题模式 → 数据结构 → 时间复杂度」；模板库负责记忆，错题本负责复盘。
 
 ## 主题分组

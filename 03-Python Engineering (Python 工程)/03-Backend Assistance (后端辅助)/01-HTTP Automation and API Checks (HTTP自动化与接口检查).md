@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# HTTP Automation & API Checks — 用 Python 验证服务
+# 01-HTTP Automation and API Checks (HTTP自动化与接口检查)
 
 > [!abstract] 一句话结论：接口检查工具要验证 status、body、超时和失败信息；绝不能无超时地发请求，也不能把 token 打进日志。
 

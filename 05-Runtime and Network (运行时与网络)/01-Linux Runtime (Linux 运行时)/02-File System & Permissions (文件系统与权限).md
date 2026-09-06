@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# File System & Permissions — 文件系统与权限
+# 02-File System & Permissions (文件系统与权限)
 
 > [!abstract] 核心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
 

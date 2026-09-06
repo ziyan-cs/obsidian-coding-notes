@@ -6,7 +6,7 @@ status: 🌱
 
 > [!abstract] 核心考点：UDP 与 TCP 的本质差异、UDP 的特性细节、适用场景、以及基于 UDP 的可靠传输如何实现
 
-# UDP 是什么
+# 03-UDP Characteristics & Use Cases (UDP特性与使用场景)
 
 UDP（用户数据报协议）是传输层协议，与 TCP 并列。它的设计哲学是：**把尽可能多的控制权交给应用层，协议本身只做最少的事。**
 

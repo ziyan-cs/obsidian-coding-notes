@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Atomic & Memory Order — 原子操作与内存序
+# 04-Atomic & Memory Order (原子操作与内存序)
 
 > [!abstract] 核心考点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: NEEDS_VERIFY
 ---
 
-# CMake Build System — CMake构建系统
+# 07-CMake Build System (CMake构建系统)
 
 > [!abstract] 核心考点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 

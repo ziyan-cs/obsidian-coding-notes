@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Goroutines, Channels & sync — 并发不等于自动正确
+# 01-Goroutines Channels and sync (并发原语)
 
 > [!abstract] 一句话结论：goroutine 很轻，但泄漏、竞态和死锁仍真实存在；先定义所有权、退出条件和背压，再选 channel 或 mutex。
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Redis Single Thread Model — 单线程模型为何高性能
+# 01e-Redis Single Thread Model (单线程模型为何高性能)
 
 > [!abstract] 核心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 

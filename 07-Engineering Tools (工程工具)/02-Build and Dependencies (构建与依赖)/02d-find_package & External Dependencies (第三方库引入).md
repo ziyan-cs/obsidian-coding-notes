@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# find_package & External Dependencies — 第三方库引入
+# 02d-find_package & External Dependencies (第三方库引入)
 
 > [!abstract] 核心考点：find_package 的两种模式（Module/Config）、搜索路径、如何编写 Find 脚本
 

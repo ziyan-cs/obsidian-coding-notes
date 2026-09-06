@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Debugging gdb & Sanitizers — 调试工具
+# 05-Debugging gdb & Sanitizers (调试工具)
 
 > [!abstract] 核心考点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 

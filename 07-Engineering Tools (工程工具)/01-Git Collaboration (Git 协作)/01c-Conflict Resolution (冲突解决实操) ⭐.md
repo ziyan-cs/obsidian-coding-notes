@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Conflict Resolution — 冲突解决实操
+# 01c-Conflict Resolution (冲突解决实操)
 
 > [!abstract] 核心考点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
 

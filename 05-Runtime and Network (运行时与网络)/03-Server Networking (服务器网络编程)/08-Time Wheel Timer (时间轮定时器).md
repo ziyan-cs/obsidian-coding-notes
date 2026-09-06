@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Time Wheel Timer — 时间轮定时器
+# 08-Time Wheel Timer (时间轮定时器)
 
 > [!abstract] 核心考点：时间轮定时器分槽管理、精度与效率权衡、单轮/多轮时间轮对比
 

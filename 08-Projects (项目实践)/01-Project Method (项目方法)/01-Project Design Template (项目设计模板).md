@@ -4,7 +4,7 @@ status: solid
 verified: 2026-09-05
 ---
 
-# Project Design Template — 每个项目先写这张纸
+# 01-Project Design Template (项目设计模板)
 
 ```md
 ---
@@ -12,6 +12,8 @@ tags: [project/backend]
 status: seed
 ---
 # 项目名
+> [!abstract] 阅读定位
+>
 > 一句话：为谁解决什么问题；不承诺解决什么。
 
 ## 用户故事与非目标

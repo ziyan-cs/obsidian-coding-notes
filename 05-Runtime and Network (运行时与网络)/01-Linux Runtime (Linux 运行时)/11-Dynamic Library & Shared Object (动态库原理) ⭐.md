@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Dynamic Library & Shared Object — 动态库原理
+# 11-Dynamic Library & Shared Object (动态库原理)
 
 > [!abstract] 核心考点：动态库与静态库的区别、共享对象 (.so) 的加载与链接、PLT/GOT 与位置无关代码
 

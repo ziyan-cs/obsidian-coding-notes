@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Errors, defer & context — 失败、清理与取消
+# 03-Errors defer and context (错误defer与context)
 
 > [!abstract] 一句话结论：Go 用显式 `error` 表达可预期失败，用 `defer` 绑定局部清理，用 `context` 传播请求取消、截止时间和请求范围数据。
 

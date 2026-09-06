@@ -4,8 +4,10 @@ tags:
 status: 🌱
 ---
 
-# Algorithm Contest Plan (2026-08 -> 2027-06)
+# 03-Weekly Practice Plan (每周练习计划)
 
+> [!abstract] 阅读定位
+>
 > Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
 > Main line: 深化 C++ -> 蓝桥杯冲省一 + GPLT 天梯赛 + online rating; ICPC/CCPC regionals from 大二下
 > 总节奏: 9月 C++ 深化 4 周 -> 10-12月 12 周专题 -> 寒假真题冲刺 -> 4月省赛

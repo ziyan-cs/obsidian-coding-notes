@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# POSIX Thread： pthread_create & lifecycle — 线程生命周期
+# 05a-POSIX Thread： pthread_create & lifecycle (线程生命周期)
 
 > [!abstract] 核心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 

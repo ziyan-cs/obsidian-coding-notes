@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# 01b2-AOF：Write-Ahead Log & Rewrite — 日志重写
+# 01b2-AOF：Write-Ahead Log & Rewrite (日志重写)
 
 > [!abstract] 核心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 

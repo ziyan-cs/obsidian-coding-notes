@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 > [!abstract] 核心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
-# Aggregate Functions & Group By — 聚合与分组
+# 03-Aggregate Functions & Group By (聚合与分组)
 
 ## 数据库操作
 

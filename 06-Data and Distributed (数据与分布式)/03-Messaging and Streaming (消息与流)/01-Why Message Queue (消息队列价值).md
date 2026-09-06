@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Why MQ：Decoupling, Peak Shaving, Async — 消息队列三大作用
+# 01-Why Message Queue (消息队列价值)
 
 > [!abstract] 核心考点：> 消息队列三大作用、同步 vs 异步对比、MQ 引入的问题
 

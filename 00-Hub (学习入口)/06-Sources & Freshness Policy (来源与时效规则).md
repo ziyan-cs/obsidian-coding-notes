@@ -4,8 +4,10 @@ status: solid
 verified: 2026-09-05
 ---
 
-# Sources & Freshness Policy — 来源与时效性
+# 06-Sources & Freshness Policy (来源与时效规则)
 
+> [!abstract] 阅读定位
+>
 > 原理笔记追求正确且稳定；工具、版本、API 与生态笔记必须可追溯且标记验证日期。
 
 ## 来源优先级

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Joins & Subqueries — 多表查询与子查询
+# 02-Joins & Subqueries (多表查询与子查询)
 
 > [!abstract] 核心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 

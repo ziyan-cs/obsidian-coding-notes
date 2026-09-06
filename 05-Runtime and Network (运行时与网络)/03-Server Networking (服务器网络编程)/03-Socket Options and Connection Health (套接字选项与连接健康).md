@@ -6,7 +6,7 @@ status: 🌱
 
 > [!abstract] 核心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
-# Socket Options — 套接字选项
+# 03-Socket Options and Connection Health (套接字选项与连接健康)
 
 ## setsockopt
 

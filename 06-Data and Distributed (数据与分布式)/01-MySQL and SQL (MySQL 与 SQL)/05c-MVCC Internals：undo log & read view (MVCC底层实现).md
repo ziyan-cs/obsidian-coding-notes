@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# MVCC Internals：undo log & read view — MVCC底层实现
+# 05c-MVCC Internals：undo log & read view (MVCC底层实现)
 
 > [!abstract] 核心考点：> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Git Flow & Feature Branch Workflow — 团队协作流
+# 01b2-Git Flow & Feature Branch Workflow (团队协作流)
 
 > [!abstract] 核心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
 

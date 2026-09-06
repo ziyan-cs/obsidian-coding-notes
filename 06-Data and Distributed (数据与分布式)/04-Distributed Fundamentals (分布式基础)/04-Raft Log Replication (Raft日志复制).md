@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 04c2-Log Replication — 日志复制
+# 04-Raft Log Replication (Raft日志复制)
 
 > [!abstract] 核心考点：> 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
 

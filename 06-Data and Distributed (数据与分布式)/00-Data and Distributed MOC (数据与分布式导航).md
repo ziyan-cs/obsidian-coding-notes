@@ -5,7 +5,7 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# Data and Distributed MOC (数据与分布式导航)
+# 00-Data and Distributed MOC (数据与分布式导航)
 
 > [!abstract] 一句话结论：先保证单机数据正确，再解决缓存与异步带来的不一致，最后用分布式协议管理跨节点故障与协调。
 

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# CLI with argparse — 让脚本可复用而非一次性
+# 04-CLI and Configuration (命令行与配置)
 
 > [!abstract] 一句话结论：脚本从“改源码里的路径再运行”升级为工具的第一步，是用 `argparse` 接收参数、提供 `--help` 和明确退出码。
 

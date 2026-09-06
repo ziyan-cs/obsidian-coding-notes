@@ -1,24 +1,24 @@
 ---
 tags: [language/go, career/backend]
-status: seed
-review_due: 2026-09-12
-confidence: 1
-verified: 2026-09-05
+status: stable
+review_due: 2026-09-13
+confidence: high
+verified: 2026-09-06
 ---
 
-# Go Map & Setup — 学什么、如何开始
+# 00-Go Map (Go导航)
 
 > [!abstract] 一句话结论：先用标准库做出可测试的 HTTP 服务，再学习框架；Go 的价值不在“更像 C++”，而在简单的并发模型和一致的工程工具链。
 
 ## 第一阶段路线
 
 ```text
-安装与 go 命令 → 类型/函数/interface → module/package
-→ error/defer/context → goroutine/channel/sync → testing
-→ net/http + JSON + middleware → 一个小型 API
+安装与 go 命令 → 类型 / 函数 / interface → module / package
+→ error / defer / context → goroutine / channel / sync → runtime / GC
+→ HTTP 服务 → SQL / Redis / MQ → 可观测的小型 API
 ```
 
-当前基线为 Go 1.27（验证于 2026-09-05）；Go 只维护最新两个大版本，升级时统一查看官方 release notes。不要将每个新特性当成必学内容。
+当前学习基线为 Go 1.27。Go 采用约六个月一次的发布节奏，并在出现两个更新大版本后停止旧版本的常规维护；升级时统一阅读官方 release notes。不要将每个新特性当成必学内容。
 
 ## 最小环境检查（Windows PowerShell）
 
@@ -60,4 +60,4 @@ func main() { fmt.Println("hello, Go") }
 
 - [官方入门教程](https://go.dev/doc/tutorial/getting-started)
 - [Go release history](https://go.dev/doc/devel/release)
-- 验证日期：2026-09-05
+- 验证日期：2026-09-06

@@ -6,8 +6,10 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Engineering English Glossary — 高频技术英语
+# 04-Engineering English Glossary (工程英语术语)
 
+> [!abstract] 阅读定位
+>
 > 不背脱离语境的单词；每次在代码、报错、文档中遇到术语时，补一个自己能用的句子。
 
 | Term | 常用中文 | 一句话理解 | 例句 / 搭配 |

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Problem Template Library — 常用模板总库
+# 02-Template Library (模板库)
 
 > [!abstract] 核心考点：> 常用算法模板汇总、各数据结构的操作接口速查、面试速记
 

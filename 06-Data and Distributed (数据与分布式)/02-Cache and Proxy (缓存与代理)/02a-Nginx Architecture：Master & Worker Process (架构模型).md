@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Nginx Architecture：Master & Worker Process — 架构模型
+# 02a-Nginx Architecture：Master & Worker Process (架构模型)
 
 > [!abstract] 核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 

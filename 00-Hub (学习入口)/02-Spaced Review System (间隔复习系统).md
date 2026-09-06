@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Spaced Review System — 不依赖插件的间隔复习
+# 02-Spaced Review System (间隔复习系统)
 
-> **目标**：把“我看过”变为“我能在需要时想起来并写出来”。
+> [!abstract] 阅读定位
+>
+> 目标：把“我看过”变为“我能在需要时想起来并写出来”。
 
 ## 复习节奏
 

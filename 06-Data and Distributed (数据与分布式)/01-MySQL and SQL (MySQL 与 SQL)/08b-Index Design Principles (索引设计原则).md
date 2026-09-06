@@ -5,7 +5,7 @@ status: 🌱
 ---
 
 > [!abstract] 核心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
-# Index Design Principles — 索引设计原则
+# 08b-Index Design Principles (索引设计原则)
 
 ## 基础概念
 

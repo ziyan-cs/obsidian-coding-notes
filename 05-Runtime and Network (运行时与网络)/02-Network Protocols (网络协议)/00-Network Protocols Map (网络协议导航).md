@@ -4,8 +4,10 @@ status: seed
 verified: 2026-09-05
 ---
 
-# Network MOC — 网络编程导航
+# 00-Network Protocols Map (网络协议导航)
 
+> [!abstract] 阅读定位
+>
 > 从协议栈到服务器设计模式；核心落点是「用 C++ 写一个可用的高并发网络服务器」。
 
 ## 主题分组

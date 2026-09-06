@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Data Processing Boundaries — 何时用 Python，何时不用
+# 02-Data Processing Boundaries (数据处理边界)
 
 > [!abstract] 一句话结论：Python 很适合离线分析、清洗、报告与自动化；线上高并发核心路径应基于性能、延迟、团队和已有系统选择语言，而非“Python 写得快”。
 

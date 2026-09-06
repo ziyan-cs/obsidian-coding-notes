@@ -4,9 +4,11 @@ tags:
 status: 🌱
 ---
 
-# Data Quick Reference — 数据速记
+# 02-Data Quick Reference (数据速记)
 
-> [!important] **面试速查卡片 — 考前 10 分钟快速翻阅**
+> [!abstract] 阅读定位
+>
+> 面试速查卡片 — 考前 10 分钟快速翻阅
 > 2 的幂、整型范围、位运算结论、ASCII、补码、时间/端口常量
 
 ## 2 的幂速记

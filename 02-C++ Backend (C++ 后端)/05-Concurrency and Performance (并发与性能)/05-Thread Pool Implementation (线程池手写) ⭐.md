@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Thread Pool Implementation — 线程池手写
+# 05-Thread Pool Implementation (线程池手写)
 
 > [!abstract] 核心考点：> 线程池的设计与实现、任务队列、动态扩缩容、C++ 后端面试手撕代码
 

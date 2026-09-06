@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Buffer Design：Read & Write Buffer — 缓冲区设计
+# 10-Protocol Framing and Buffering (协议分帧与缓冲区)
 
 > [!abstract] 核心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 

@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Types, Functions & Interfaces — Go 的表达方式
+# 01-Types Functions and Interfaces (类型函数与接口)
 
 > [!abstract] 一句话结论：Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
 

@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# Clustered vs Secondary Index — 聚簇索引与二级索引
+# 04c-Clustered vs Secondary Index (聚簇索引与二级索引)
 
 > [!abstract] 核心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
 

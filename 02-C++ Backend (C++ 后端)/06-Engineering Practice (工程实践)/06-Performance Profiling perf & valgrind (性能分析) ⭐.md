@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Performance Profiling perf & valgrind — 性能分析
+# 06-Performance Profiling perf & valgrind (性能分析)
 
 > [!abstract] 核心考点：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
 

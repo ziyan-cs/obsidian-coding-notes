@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Type Hints, Logging & Quality — 让脚本能被未来的你读懂
+# 02-Type Hints Logging and Linting (类型日志与静态检查)
 
 > [!abstract] 一句话结论：类型标注、结构化日志和小函数并不让 Python 失去灵活性，反而让一次性脚本可以安全长大。
 

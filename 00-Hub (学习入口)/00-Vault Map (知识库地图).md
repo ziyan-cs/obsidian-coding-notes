@@ -6,7 +6,7 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# Vault Map (知识库地图)
+# 00-Vault Map (知识库地图)
 
 > [!abstract] 一句话目标：两年后，能以 C++ 理解后端底层与性能，以 Python 建立自动化能力，再以 Go 交付可靠、可观测的服务。
 

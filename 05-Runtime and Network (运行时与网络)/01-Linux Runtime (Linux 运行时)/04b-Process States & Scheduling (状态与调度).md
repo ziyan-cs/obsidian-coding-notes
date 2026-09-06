@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Process States & Scheduling — 状态与调度
+# 04b-Process States & Scheduling (状态与调度)
 
 > [!abstract] 核心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
 

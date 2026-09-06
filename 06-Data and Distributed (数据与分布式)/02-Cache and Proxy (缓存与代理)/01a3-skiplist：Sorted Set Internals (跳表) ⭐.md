@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01a3-skiplist：Sorted Set Internals — 跳表
+# 01a3-skiplist：Sorted Set Internals (跳表)
 
 > [!abstract] 核心考点：> 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 

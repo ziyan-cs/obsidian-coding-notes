@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Non-blocking Socket & O_NONBLOCK — 非阻塞Socket
+# 02-Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
 > [!abstract] 核心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 

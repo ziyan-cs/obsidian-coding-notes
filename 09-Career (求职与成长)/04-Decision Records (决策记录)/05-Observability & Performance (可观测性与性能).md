@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Observability & Performance — 先定义问题，再测量
+# 05-Observability & Performance (可观测性与性能)
 
-> **结论**：优化必须以可观察指标为起点；吞吐、平均延迟、p99、CPU、内存和错误率不能相互替代。
+> [!abstract] 阅读定位
+>
+> 结论：优化必须以可观察指标为起点；吞吐、平均延迟、p99、CPU、内存和错误率不能相互替代。
 
 ## 最小观测面
 

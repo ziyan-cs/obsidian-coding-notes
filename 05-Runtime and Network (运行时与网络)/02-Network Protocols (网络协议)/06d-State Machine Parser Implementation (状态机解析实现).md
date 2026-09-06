@@ -7,7 +7,7 @@ confidence: 1
 verified: stable
 ---
 
-# State Machine Parser Implementation — 状态机解析实现
+# 06d-State Machine Parser Implementation (状态机解析实现)
 
 > [!abstract] 核心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 

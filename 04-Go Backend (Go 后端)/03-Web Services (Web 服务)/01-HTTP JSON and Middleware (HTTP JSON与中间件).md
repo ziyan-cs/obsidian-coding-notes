@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# HTTP, JSON & Middleware — 标准库写 API
+# 01-HTTP JSON and Middleware (HTTP JSON与中间件)
 
 > [!abstract] 一句话结论：HTTP handler 负责协议转换，service 负责业务；先用 `net/http` 和 `httptest` 看清请求生命周期，再引入框架。
 

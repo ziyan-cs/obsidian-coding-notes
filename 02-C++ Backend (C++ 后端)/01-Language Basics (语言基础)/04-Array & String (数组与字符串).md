@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# Array & String — 数组与字符串
+# 04-Array & String (数组与字符串)
 
 > [!abstract] 核心考点：C 风格数组与指针的关系、std::string 的操作与性能、C 字符串函数
 

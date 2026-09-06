@@ -6,9 +6,11 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# HTTP Service Design — 语言无关的服务边界
+# 04-HTTP Service Design (HTTP 服务设计)
 
-> **结论**：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
+> [!abstract] 阅读定位
+>
+> 结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
 
 ```text
 client → routing/middleware → handler → service → repository → DB/cache

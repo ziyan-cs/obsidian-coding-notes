@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# GDB Essentials：breakpoint, watch, backtrace — GDB核心用法
+# 03a-GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
 
 > [!abstract] 核心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
 

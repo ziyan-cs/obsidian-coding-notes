@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# Path, Files, JSON & CSV — 脚本的真实输入输出
+# 03-Path Files and Serialization (路径文件与序列化)
 
 > [!abstract] 一句话结论：用 `pathlib` 表达路径，用 context manager 保证关闭文件，用 `json`/`csv` 做显式的输入校验和输出格式。
 
