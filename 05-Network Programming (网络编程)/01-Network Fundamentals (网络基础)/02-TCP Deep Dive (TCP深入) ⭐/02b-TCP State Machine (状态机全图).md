@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# TCP State Machine — 状态机全图
+
 > [!important] **核心考点**：每个状态的含义、转换条件、服务端/客户端各自的状态路径
 
 ## 完整状态列表

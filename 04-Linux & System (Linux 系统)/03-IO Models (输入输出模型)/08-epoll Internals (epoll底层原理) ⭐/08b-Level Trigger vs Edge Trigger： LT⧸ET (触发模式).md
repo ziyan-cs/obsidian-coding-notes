@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Level Trigger vs Edge Trigger： LT⧸ET — 触发模式
+
 > [!important] **核心考点**：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
 
 ## 水平触发 LT（Level-Triggered）

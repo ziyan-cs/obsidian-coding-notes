@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Constructor & Destructor Order — 构造析构顺序
+
 > [!important] **核心考点**：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
 
 ### 构造顺序

@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# 01a4-dict：Hash Table Rehashing — 字典与渐进式rehash
+
 > [!important] **核心考点**
 > dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 

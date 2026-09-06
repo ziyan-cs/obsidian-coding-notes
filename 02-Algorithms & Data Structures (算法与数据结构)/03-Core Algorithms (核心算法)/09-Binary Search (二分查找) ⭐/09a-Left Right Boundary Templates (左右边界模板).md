@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Left Right Boundary Templates — 左右边界模板
+
 > [!important] **核心考点**：边界条件、三种模板的使用场景、二分答案
 
 ## 二分的本质

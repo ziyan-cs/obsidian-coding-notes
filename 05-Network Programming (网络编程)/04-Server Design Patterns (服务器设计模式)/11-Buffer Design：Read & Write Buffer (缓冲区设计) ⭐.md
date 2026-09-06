@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Buffer Design：Read & Write Buffer — 缓冲区设计
+
 > [!important] **核心考点**：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 
 ## 为什么需要 Buffer

@@ -1,10 +1,18 @@
 ---
 tags:
   - devtools/cmake
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# find_package & External Dependencies — 第三方库引入
+
 > [!important] **核心考点**：find_package 的两种模式（Module/Config）、搜索路径、如何编写 Find 脚本
+
+> [!warning] 依赖“能找到”不代表配置可复现
+> 不要依赖某台机器碰巧安装了库。明确依赖版本、目标名和安装来源；CI 或全新环境能从零配置成功，才说明构建边界真正成立。
 
 ## find_package 基础
 
@@ -49,6 +57,16 @@ FetchContent_MakeAvailable(googletest)   # 下载并添加到构建
 
 target_link_libraries(my_test PRIVATE GTest::gtest_main)
 ```
+
+## 30 秒回答
+
+`find_package` 把已安装依赖暴露为可链接的 CMake target；优先使用库提供的 Config package 和 `Foo::Bar` 目标，让 include path、编译选项和传递依赖随 target 传播。`FetchContent` 能在配置期获取源码，但会引入网络、版本和供应链边界，需要固定版本并考虑离线/CI 场景。
+
+## 自测
+
+1. Config mode 与 Module mode 的来源分别是什么？
+2. 为什么 `target_link_libraries(myapp PRIVATE Foo::Foo)` 优于手写库文件路径？
+3. 使用 `FetchContent` 时，怎样避免构建结果随远端默认分支变化？
 
 ---
 

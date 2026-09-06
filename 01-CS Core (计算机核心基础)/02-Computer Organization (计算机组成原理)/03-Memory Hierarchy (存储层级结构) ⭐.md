@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Memory Hierarchy — 存储层级结构
+
 > [!important] **核心考点**
 > 存储金字塔结构、Cache 的位置与作用、局部性原理的硬件利用、不同层级的速度差异
 

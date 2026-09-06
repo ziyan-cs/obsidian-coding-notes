@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# CPU Execution Model — CPU执行模型
+
 > [!important] **核心考点**：CPU 核心组成（数据通路 + 控制单元）、寄存器、ALU、控制器实现方式
 
 ## CPU 的核心组成

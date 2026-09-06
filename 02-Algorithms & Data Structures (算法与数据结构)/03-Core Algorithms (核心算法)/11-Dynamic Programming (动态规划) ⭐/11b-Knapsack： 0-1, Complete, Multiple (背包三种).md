@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Knapsack： 0-1, Complete, Multiple — 背包三种
+
 > [!important] **核心考点**：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
 ## 背包问题核心框架

@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Synchronous vs Asynchronous IO — 同步与异步
+
 > [!important] **核心考点**：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
 
 ## 同步 vs 异步的本质

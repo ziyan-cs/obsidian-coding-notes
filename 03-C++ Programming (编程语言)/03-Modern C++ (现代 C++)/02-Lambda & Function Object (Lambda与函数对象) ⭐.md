@@ -7,7 +7,12 @@ confidence: 1
 verified: stable
 ---
 
+# Lambda & Function Object — Lambda与函数对象
+
 > [!important] **核心考点**：捕获方式、泛型 lambda、std::function 的开销
+
+> [!warning] 捕获列表就是生命周期契约
+> 值捕获复制状态，引用捕获依赖外部对象仍然存活。把 lambda 存起来、异步执行或作为回调传出时，默认引用捕获尤其容易产生悬空引用。
 
 ## Lambda 基本语法
 
@@ -15,7 +20,7 @@ verified: stable
 [捕获列表](参数列表) mutable -> 返回类型 { 函数体 }
 
 auto add = [](int a, int b) -> int { return a + b; };
-auto greet = [] { std::cout << "hello\n"; };  // 无参数可省略括号（C++23前需要括号）
+auto greet = [] { std::cout << "hello\n"; };  // 无参数时参数列表可省略
 ```
 
 ## 捕获方式
@@ -112,11 +117,11 @@ process(nums, [](int x){ return x % 2 == 0; });  // 删除偶数
 
 ### std::function 的代价
 
-`std::function` 使用**类型擦除**（虚函数或函数指针间接调用），有以下开销：
+`std::function` 使用**类型擦除**保存不同种类的可调用对象。实现细节不由标准规定，但相较模板参数通常可能带来以下成本：
 
-- 间接调用（无法内联）
-- 可能堆分配（捕获较大时）
-- 性能敏感场景用模板参数代替
+- 间接调用，调用点通常不易内联
+- 某些实现或较大捕获对象可能发生额外分配
+- 性能敏感且类型可在编译期确定时，可优先传模板参数
 
 ```cpp
 // 性能敏感时：模板参数（编译期确定类型，可内联）
@@ -129,3 +134,13 @@ void process(std::vector<int>& v, F pred) {
 ---
 
 完美转发与 Lambda 表达式常配合使用，详见 → [Perfect Forwarding & Universal Reference (完美转发)](/03-C++%20Programming%20(编程语言)/03-Modern%20C++%20(现代%20C++)/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+
+## 30 秒回答
+
+lambda 是编译器生成的闭包对象；捕获方式决定它保存副本还是引用。短期算法谓词常用无捕获或值捕获，跨作用域/异步回调要把对象生命周期说清。`std::function` 适合需要统一回调类型的运行时接口；若类型可见且处于热点路径，模板参数更容易优化。
+
+## 自测
+
+1. 为什么 `[&]` 返回的 lambda 可能在调用者处悬空？
+2. `[this]` 与 `[*this]` 的资源与生命周期语义有什么差异？
+3. 什么时候 API 应接收 `std::function`，什么时候用模板参数？

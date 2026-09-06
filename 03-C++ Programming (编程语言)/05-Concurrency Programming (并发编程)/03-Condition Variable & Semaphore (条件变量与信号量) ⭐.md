@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Condition Variable & Semaphore — 条件变量与信号量
+
 > [!important] **核心考点**：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
 ## 条件变量（condition_variable）

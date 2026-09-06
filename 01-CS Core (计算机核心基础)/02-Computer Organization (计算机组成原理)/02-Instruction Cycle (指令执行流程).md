@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Instruction Cycle — 指令执行流程
+
 > [!important] **核心考点**：指令执行全流程、各阶段微操作、流水线深度对性能的影响
 
 ## 指令执行详解

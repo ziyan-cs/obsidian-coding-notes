@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Abstract Class & Pure Virtual — 抽象类
+
 > [!important] **核心考点**：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
 
 ```cpp

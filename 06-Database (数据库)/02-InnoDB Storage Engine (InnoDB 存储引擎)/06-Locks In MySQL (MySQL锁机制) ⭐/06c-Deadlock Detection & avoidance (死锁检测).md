@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Deadlock Detection & avoidance — 死锁检测
+
 > [!important] **核心考点**：死锁检测机制（等待图）、InnoDB 死锁处理策略（回滚代价较小的事务）、预防死锁方法
 
 ## 死锁的产生条件

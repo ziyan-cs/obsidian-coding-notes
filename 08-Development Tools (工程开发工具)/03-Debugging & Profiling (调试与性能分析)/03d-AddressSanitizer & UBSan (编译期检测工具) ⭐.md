@@ -1,15 +1,22 @@
 ---
 tags:
   - devtools/debug
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# AddressSanitizer & UBSan — 编译期检测工具
 
 > [!important] **核心考点**：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 
+> [!warning] Sanitizer 是测试工具，不是正确性证明
+> 它只能覆盖实际执行到的路径，且编译器、平台、标准库和启用的子选项都会影响效果。将 Sanitizer 构建作为测试配置运行，发现报告先定位根因，不要仅压制错误。
+
 ## AddressSanitizer（ASan）
 
-Google 开发的内存错误检测工具，**直接编译进二进制**，性能远优于 Valgrind（约慢 2 倍）：
+AddressSanitizer（ASan）通过编译器插桩检测常见内存错误，通常比 Valgrind Memcheck 更适合日常开发与 CI；具体性能开销取决于程序、平台和编译器，应以本机测量为准（NEEDS_VERIFY）。
 
 ```bash
 g++ -fsanitize=address -fno-omit-frame-pointer -g -O1 -o myapp main.cpp
@@ -56,8 +63,7 @@ g++ -fsanitize=undefined -g -o myapp main.cpp
 ### 能检测的未定义行为
 
 ```bash
-# 常用子项（可单独开启）
--fsanitize=integer          # 整数溢出
+# 常用子项（不同编译器支持集合不同，先查所用编译器文档）
 -fsanitize=null             # 空指针解引用
 -fsanitize=bounds           # 数组越界
 -fsanitize=alignment        # 内存对齐错误
@@ -91,7 +97,7 @@ g++ -fsanitize=address,undefined \
 
 | |ASan|Valgrind Memcheck|
 |---|---|---|
-|性能损耗|~2x|~10~30x|
+|性能损耗|因程序/平台而异，需本机测量|因程序/平台而异，通常更重|
 |检测方式|编译时插桩|运行时模拟|
 |需要重新编译|是|否|
 |栈越界检测|✅|❌|
@@ -120,6 +126,22 @@ WARNING: ThreadSanitizer: data race (pid=1234)
 ```
 
 > ASan 和 TSan **不能同时使用**（会冲突），需要分开跑。
+
+## 30 秒回答
+
+ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未定义行为，TSan 发现数据竞争。它们通过不同的插桩和运行时工作，通常应拆成独立测试配置；报告是否出现取决于测试是否真正走到问题路径，不能代替单元测试、代码审查或性能测量。
+
+## 自测
+
+1. 为什么 ASan 与 TSan 通常要分开构建和运行？
+2. “Sanitizer 没报错”为什么不能证明程序没有内存或并发问题？
+3. 遇到 sanitizer report 时，为什么应先做最小复现而不是关掉检查？
+
+## Sources
+
+- [Clang Sanitizers documentation](https://clang.llvm.org/docs/index.html)
+- [GCC instrumentation options](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html)
+- 验证日期：2026-09-05
 
 ---
 

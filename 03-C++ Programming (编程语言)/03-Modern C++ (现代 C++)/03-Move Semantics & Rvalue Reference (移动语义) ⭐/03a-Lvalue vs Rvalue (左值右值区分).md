@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Lvalue vs Rvalue — 左值右值区分
+
 > [!important] **核心考点**：左值/右值/将亡值的定义，右值引用的绑定规则
 
 ### 值类别

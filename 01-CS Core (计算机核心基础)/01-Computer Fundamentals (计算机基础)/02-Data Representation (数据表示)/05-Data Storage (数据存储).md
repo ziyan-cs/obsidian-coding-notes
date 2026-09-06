@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Data Storage — 数据存储
+
 > [!important] **核心考点**：字节序（大小端）、数据对齐、存储层次、数据持久化
 
 ## 字节序（Endianness）

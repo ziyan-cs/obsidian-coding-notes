@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Memory Pool Implementation — 内存池实现
+
 > [!important] **核心考点**：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
 
 ### 为什么需要内存池

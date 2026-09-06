@@ -1,11 +1,18 @@
 ---
 tags:
   - devtools/cmake
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# CMakeLists.txt Structure — 项目结构模板
 
 > [!important] **核心考点**：最小可用结构、各指令的作用与顺序
+
+> [!tip] CMake 的核心单位是 target
+> 把可执行文件和库声明为明确的 target，并让 include path、编译选项和依赖跟随 target 传播。全局变量和全局 `include_directories()` 在小项目能工作，却会在工程变大后制造隐式耦合。
 
 ## 最小工程模板
 
@@ -76,6 +83,16 @@ cmake ..                  # 配置阶段：生成 Makefile / Ninja 文件
 cmake --build .           # 构建阶段：实际编译
 cmake --install .         # 安装（可选）
 ```
+
+## 30 秒回答
+
+CMake 的配置阶段读取 `CMakeLists.txt` 并生成构建系统，构建阶段再实际编译。一个可维护项目从 `add_executable` / `add_library` 定义 target 开始，子目录用 `add_subdirectory` 组织；依赖与编译属性应尽量挂在具体 target 上，而不是散落在全局变量里。
+
+## 自测
+
+1. `cmake -S . -B build` 与在 `build/` 中运行 `cmake ..` 有什么关系？为什么前者更明确？
+2. 什么信息应属于一个 library target，而不应写成全局设置？
+3. `add_subdirectory` 为什么比在根文件里堆所有源文件更利于维护？
 
 ---
 

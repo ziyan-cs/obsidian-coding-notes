@@ -10,6 +10,9 @@ verified: 2026-09-05
 
 > **一句话结论**：module 是依赖版本边界，package 是代码命名空间；目录结构应服务于业务边界，而不是照搬 C++ 的头文件层级。
 
+> [!tip] 先按业务组织，再抽公共层
+> 对第一个服务，`internal/todo` 这样的业务包比 `utils`、`common` 更容易维护。只有出现稳定、重复且语义明确的能力，再抽取共享 package。
+
 ## 三个概念
 
 - **module**：由 `go.mod` 定义的一组 packages 和依赖版本。
@@ -40,6 +43,16 @@ todo-api/
 - 不要手改 `go.sum` 来“解决”依赖问题；先理解是版本、网络还是 import 错误。
 - `internal/` 外的 package 无法导入其下目录，这是刻意的封装边界。
 - 不在同一项目中随意创建多个 module；初学项目先保持一个 `go.mod`。
+
+## 30 秒回答
+
+`go.mod` 定义 module，也就是依赖和版本的边界；package 是一个目录内共同编译的代码单元。`internal/` 是编译器帮助执行的封装规则：同 module 外的代码不能导入它。项目先维持一个 module、清晰的业务 package，再用 `go mod tidy` 与测试命令保持依赖真实可用。
+
+## 自测
+
+1. `go mod tidy` 为什么不是“万能修复命令”？它会做什么、不做什么？
+2. `cmd/api/main.go` 与 `internal/todo/service.go` 分别应承担什么职责？
+3. 当一个 package 出现循环 import，优先检查哪种边界设计问题？
 
 ## 练习
 

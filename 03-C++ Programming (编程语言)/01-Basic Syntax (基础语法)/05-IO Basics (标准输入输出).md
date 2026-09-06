@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# IO Basics — 标准输入输出
+
 > [!important] **核心考点**：iostream 格式化、文件读写、输入缓冲机制、性能注意事项
 
 ```cpp

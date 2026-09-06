@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Integer Representation — 整数表示
+
 > [!important] **核心考点**：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
 
 ## 有符号与无符号

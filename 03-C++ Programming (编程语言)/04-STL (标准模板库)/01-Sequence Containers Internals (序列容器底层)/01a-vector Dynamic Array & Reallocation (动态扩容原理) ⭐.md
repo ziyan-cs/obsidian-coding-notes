@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# vector Dynamic Array & Reallocation — 动态扩容原理
+
 > [!important] **核心考点**：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
 
 ## 内存布局与核心特性

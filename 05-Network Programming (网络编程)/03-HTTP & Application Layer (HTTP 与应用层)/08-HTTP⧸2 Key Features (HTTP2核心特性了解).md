@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# HTTP⧸2 Key Features — HTTP2核心特性了解
+
 > [!important] **核心考点**：HTTP/2 多路复用、头部压缩 HPACK、二进制分帧、服务器推送等核心特性
 
 ## HTTP/2 要解决的问题

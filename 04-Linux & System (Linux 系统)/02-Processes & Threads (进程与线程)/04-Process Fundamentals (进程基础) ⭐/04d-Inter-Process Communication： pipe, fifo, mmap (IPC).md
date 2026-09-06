@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Inter-Process Communication： pipe, fifo, mmap — IPC
+
 > [!important] **核心考点**：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
 > 核心考点：各 IPC 机制的特点、适用场景、使用方式
 

@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# 01a1-SDS：Simple Dynamic String — 简单动态字符串
+
 > [!important] **核心考点**
 > SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 

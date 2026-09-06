@@ -1,11 +1,18 @@
 ---
 tags:
   - devtools/git
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# reset vs revert vs restore — 撤销三兄弟
 
 > [!important] **核心考点**：三者的作用范围、是否改写历史、适用场景
+
+> [!warning] 先确认目标，再执行会丢数据的命令
+> `reset --hard` 与 `restore` 可能丢掉未提交内容。先用 `git status`、`git diff` 确认目标；重要改动先做 commit、stash 或文件级备份。公共分支默认优先考虑 `revert`。
 
 ## 速查
 
@@ -66,6 +73,16 @@ git restore file.cpp              # 丢弃工作区改动，恢复到暂存区�
 git restore --staged file.cpp     # 将文件从暂存区移出（不影响工作区）
 git restore --source=HEAD~2 file  # 将文件恢复到指定 commit 的版本
 ```
+
+## 30 秒回答
+
+`reset` 移动当前分支指针，并按模式影响暂存区/工作区，适合重整尚未共享的本地历史；`revert` 新增一个反向 commit，保留公共历史；`restore` 只处理工作区或暂存区的文件内容。选择前先问：改动是否已共享？我是否需要保留历史？是否有未提交内容？
+
+## 自测
+
+1. 已推送到团队共用分支的一次错误提交，为什么通常优先 `revert`？
+2. `git restore --staged file` 会如何影响工作区？
+3. 使用 `reset --hard` 前，你会做哪两项只读检查？
 
 ---
 

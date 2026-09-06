@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Single Reactor Multi Thread — 单reactor多线程
+
 > [!important] **核心考点**
 > 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题

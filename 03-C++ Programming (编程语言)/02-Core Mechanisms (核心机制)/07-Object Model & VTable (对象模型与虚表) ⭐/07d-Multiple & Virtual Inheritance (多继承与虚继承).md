@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Multiple & Virtual Inheritance — 多继承与虚继承
+
 > [!important] **核心考点**：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
 
 ### 多继承

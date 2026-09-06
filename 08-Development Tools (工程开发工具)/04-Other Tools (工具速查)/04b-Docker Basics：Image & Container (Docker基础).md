@@ -1,11 +1,18 @@
 ---
 tags:
   - devtools/tools
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# Docker Basics：Image & Container — Docker 基础
 
 > [!important] **核心考点**：镜像 vs 容器、核心命令、Dockerfile 写法、网络与卷
+
+> [!warning] 删除与清理命令要先看范围
+> `prune`、`rm`、`rmi` 会改变本机资源；先列出目标并确认没有重要容器、镜像或卷。学习阶段用 `--rm` 和明确的容器名，避免积累难以辨认的残留。
 
 ## 核心概念
 
@@ -49,8 +56,8 @@ docker run --rm myapp                  # 运行结束后自动删除容器
 
 docker ps                              # 查看运行中的容器
 docker ps -a                           # 查看所有容器（含已停止）
-docker stop mycontainer                # 优雅停止（发 SIGTERM）
-docker kill mycontainer                # 强制停止（发 SIGKILL）
+docker stop mycontainer                # 先请求停止；超时后强制结束（信号依平台/配置而异）
+docker kill mycontainer                # 立即发送指定终止信号，默认是 KILL
 docker rm mycontainer                  # 删除容器
 docker container prune                 # 删除所有已停止的容器
 
@@ -106,7 +113,7 @@ RUN g++ -O2 -o myapp main.cpp
 FROM debian:bookworm-slim
 COPY --from=builder /build/myapp /usr/local/bin/
 CMD ["myapp"]
-# 最终镜像从 ~1.4GB 缩小到 ~80MB
+# 最终镜像通常只保留运行时需要的内容；实际体积取决于基础镜像和依赖
 ```
 
 ---
@@ -139,6 +146,16 @@ docker run --network mynet myapp         # 指定网络
 docker run --network mynet --name db postgres
 docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据库
 ```
+
+## 30 秒回答
+
+镜像（image）是可复用的只读模板，容器（container）是它启动后的运行实例和可写层。Dockerfile 描述如何构建镜像，volume 负责持久数据，network 负责容器通信。开发中把构建、配置、数据和日志的边界说清楚，比背命令更重要。
+
+## 自测
+
+1. 为什么容器删除后，未挂载在 volume 的数据通常不能作为持久数据依赖？
+2. `docker stop` 和 `docker kill` 分别适合什么场景？
+3. 多阶段构建为什么能降低最终镜像的攻击面和体积？
 
 ---
 

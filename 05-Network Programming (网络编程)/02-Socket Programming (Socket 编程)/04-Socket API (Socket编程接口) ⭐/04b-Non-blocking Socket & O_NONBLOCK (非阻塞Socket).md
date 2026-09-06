@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Non-blocking Socket & O_NONBLOCK — 非阻塞Socket
+
 > [!important] **核心考点**：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
 ## 阻塞 vs 非阻塞

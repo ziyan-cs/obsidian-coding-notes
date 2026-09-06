@@ -7,6 +7,8 @@ confidence: 1
 verified: NEEDS_VERIFY
 ---
 
+# gRPC & Protobuf — RPC框架与序列化
+
 > [!important] **核心考点**：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
 ## 为什么需要 RPC

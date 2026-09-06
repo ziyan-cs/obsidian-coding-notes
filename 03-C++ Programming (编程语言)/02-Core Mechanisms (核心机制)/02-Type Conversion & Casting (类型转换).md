@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Type Conversion & Casting — 类型转换
+
 > [!important] **核心考点**：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
 
 ## 四种命名转换（Named Casts）

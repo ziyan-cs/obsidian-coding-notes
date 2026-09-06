@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Exception Handling — 异常处理
+
 > [!important] **核心考点**：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
 ## 三种异常安全保证

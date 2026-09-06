@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# 01d2-Cache Breakdown — 缓存击穿：热点key失效
+
 > [!important] **核心考点**
 > 缓存击穿原因、互斥锁方案、逻辑过期方案、热点 key 处理
 

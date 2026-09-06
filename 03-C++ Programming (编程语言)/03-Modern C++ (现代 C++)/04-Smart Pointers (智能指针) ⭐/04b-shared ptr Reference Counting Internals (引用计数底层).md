@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# shared ptr Reference Counting Internals — 引用计数底层
+
 > [!important] **核心考点**：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
 
 `shared_ptr` 允许多个指针共享同一资源，内部维护**引用计数**，计数归零时自动释放。

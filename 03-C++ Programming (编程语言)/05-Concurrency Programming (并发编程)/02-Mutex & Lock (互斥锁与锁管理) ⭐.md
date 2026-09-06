@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Mutex & Lock — 互斥锁与锁管理
+
 > [!important] **核心考点**：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
 
 ## std::mutex 与 RAII 锁

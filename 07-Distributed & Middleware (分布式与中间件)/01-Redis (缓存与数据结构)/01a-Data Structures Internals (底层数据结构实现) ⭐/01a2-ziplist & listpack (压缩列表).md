@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# 01a2-ziplist & listpack — 压缩列表
+
 > [!important] **核心考点**
 > ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 

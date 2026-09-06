@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Iterators & Iterator Categories — 迭代器分类
+
 > [!important] **核心考点**：迭代器分类是 STL 算法与容器的桥梁，决定了算法可以用于哪些容器
 
 ## 迭代器分类体系

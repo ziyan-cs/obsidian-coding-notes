@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# CAP Theorem & BASE Theory — CAP理论
+
 > [!important] **核心考点**
 > CAP 定理（一致性/可用性/分区容错）、BASE 理论、CP vs AP 权衡、PACELC
 

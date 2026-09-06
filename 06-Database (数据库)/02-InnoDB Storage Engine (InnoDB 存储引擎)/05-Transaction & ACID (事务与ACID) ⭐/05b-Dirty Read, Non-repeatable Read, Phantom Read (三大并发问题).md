@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Dirty Read, Non-repeatable Read, Phantom Read — 三大并发问题
+
 > [!important] **核心考点**：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
 
 ## 脏读（Dirty Read）

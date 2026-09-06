@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Thread vs Process： Cost Comparison — 线程进程对比
+
 > [!important] **核心考点**：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
 ## 创建开销

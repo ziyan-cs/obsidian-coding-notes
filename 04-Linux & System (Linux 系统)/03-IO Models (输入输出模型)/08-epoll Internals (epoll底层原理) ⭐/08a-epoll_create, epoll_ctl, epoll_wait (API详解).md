@@ -7,8 +7,13 @@ confidence: 1
 verified: stable
 ---
 
+# epoll_create, epoll_ctl, epoll_wait — API详解
+
 > [!important] **核心考点**
 > epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
+
+> [!warning] 示例循环省略了生产级错误处理
+> `accept`、`read`、`write` 都可能返回 `EAGAIN`、`EINTR` 或错误。ET 模式还必须循环读/accept 到 `EAGAIN`；不要把下面的最小骨架直接当成完整服务器。
 
 ## epoll_create
 

@@ -1,10 +1,18 @@
 ---
 tags:
   - devtools/git
-status: 🌱
+status: learning
+review_due: 2026-09-12
+confidence: 1
+verified: 2026-09-05
 ---
 
+# Git Flow & Feature Branch Workflow — 团队协作流
+
 > [!important] **核心考点**：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
+
+> [!tip] 先选最小能保障质量的流程
+> 对个人项目和多数小团队，短生命周期 feature branch + review + CI 往往足够。只有确有固定发版、并行维护等约束时，再承担 Git Flow 的额外分支成本。
 
 ### Feature Branch Workflow（功能分支工作流）
 
@@ -52,14 +60,24 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ---
 
-### Trunk-Based Development（主干开发，现代替代）
+### Trunk-Based Development（主干开发）
 
-Google、Meta 等大厂采用的模式：
+以短分支或直接向主干集成为特征的模式：
 
-- 所有人直接提交到 main（或通过极短命 feature branch，<1天）
+- 通过直接提交或极短生命周期 feature branch 保持与主干同步
 - 用 Feature Flag 控制功能开关，而非靠分支隔离
 - 配合完善的 CI/CD 保证主干质量
 - 适合：高频发布、DevOps 成熟的团队
+
+## 30 秒回答
+
+分支策略的目的不是制造流程，而是让主干始终可集成、变更可审查、发布可追溯。个人项目可用短 feature branch；有固定发版节奏时 Git Flow 可能更清晰；高频交付团队可采用 trunk-based。选择依据是发布节奏、CI 可靠度和团队协作成本。
+
+## 自测
+
+1. Git Flow 为什么可能不适合一个快速迭代的小项目？
+2. feature branch 合并前，最少要有哪些质量信号？
+3. 什么时候 feature flag 比长期分支更合适？
 
 ---
 

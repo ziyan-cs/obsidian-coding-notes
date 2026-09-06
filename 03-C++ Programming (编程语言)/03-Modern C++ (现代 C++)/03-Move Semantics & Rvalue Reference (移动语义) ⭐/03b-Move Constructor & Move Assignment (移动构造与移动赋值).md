@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Move Constructor & Move Assignment — 移动构造与移动赋值
+
 > [!important] **核心考点**：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义
 
 移动语义允许"偷走"临时对象的资源，而非深拷贝，大幅降低开销。

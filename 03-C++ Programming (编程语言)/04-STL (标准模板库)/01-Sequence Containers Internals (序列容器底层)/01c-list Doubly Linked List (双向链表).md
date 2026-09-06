@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# list Doubly Linked List — 双向链表
+
 > [!important] **核心考点**：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
 
 ## 内存布局

@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Signals & Signal Handling — 信号机制
+
 > [!important] **核心考点**：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 
 ## 信号的本质

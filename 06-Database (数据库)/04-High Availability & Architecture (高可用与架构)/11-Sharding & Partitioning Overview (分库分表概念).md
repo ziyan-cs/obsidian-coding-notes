@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Sharding & Partitioning Overview — 分库分表概念
+
 > [!important] **核心考点**：分库分表策略（水平/垂直拆分）、Sharding Key 选择、跨节点查询与分布式事务问题
 
 ## 何时需要分库分表

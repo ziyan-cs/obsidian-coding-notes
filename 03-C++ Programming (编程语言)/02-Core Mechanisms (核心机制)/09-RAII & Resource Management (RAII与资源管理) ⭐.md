@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# RAII & Resource Management — RAII与资源管理
+
 > [!important] **核心考点**：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
 
 ## 什么是 RAII

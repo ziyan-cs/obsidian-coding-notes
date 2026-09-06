@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# CPU Scheduling — CPU调度
+
 > [!important] **核心考点**：调度算法（FCFS/SJF/RR/MLFQ）、调度时机、CFS（完全公平调度）、优先级与时间片
 
 ## 调度目标

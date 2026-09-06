@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# MySQL vs Redis：Caching Strategy — 缓存策略对比
+
 > [!important] **核心考点**：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
 
 ## MySQL vs Redis 定位

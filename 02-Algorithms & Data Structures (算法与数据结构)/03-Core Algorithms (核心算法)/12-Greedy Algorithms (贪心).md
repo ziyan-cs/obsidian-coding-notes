@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Greedy Algorithms — 贪心
+
 > [!important] **核心考点**：贪心局部最优推全局最优、排序预处理、区间调度、经典贪心问题证明思路
 
 ## 贪心核心思想

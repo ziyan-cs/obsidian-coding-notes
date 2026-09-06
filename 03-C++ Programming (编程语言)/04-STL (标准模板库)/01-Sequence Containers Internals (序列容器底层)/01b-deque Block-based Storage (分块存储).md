@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# deque Block-based Storage — 分块存储
+
 > [!important] **核心考点**：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
 
 ## 内存布局

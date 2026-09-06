@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Merge Sort & Inversion Count — 归并排序
+
 > [!important] **核心考点**：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
 
 ```cpp

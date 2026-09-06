@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# Graceful Shutdown — 优雅关闭
+
 > [!important] **核心考点**：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 ## 为什么需要优雅关闭

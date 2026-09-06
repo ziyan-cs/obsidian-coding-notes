@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Templates Basics — 模板基础
+
 > [!important] **核心考点**：函数模板、类模板、模板特化、SFINAE 初步
 
 ## 函数模板

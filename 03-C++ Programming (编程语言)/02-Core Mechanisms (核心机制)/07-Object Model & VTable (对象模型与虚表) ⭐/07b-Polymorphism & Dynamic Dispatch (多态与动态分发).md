@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Polymorphism & Dynamic Dispatch — 多态与动态分发
+
 > [!important] **核心考点**：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp

@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# LCA & Path Problems — 公共祖先与路径
+
 > [!important] **核心考点**：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
 > [!important] **核心考点**：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
 

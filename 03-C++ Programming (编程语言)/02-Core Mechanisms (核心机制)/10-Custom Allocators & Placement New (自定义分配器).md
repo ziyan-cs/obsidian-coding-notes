@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# Custom Allocators & Placement New — 自定义分配器
+
 > [!important] **核心考点**：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
 ## Placement New

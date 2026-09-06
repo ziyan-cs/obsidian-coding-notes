@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# C++ Concurrency & Performance Optimization：Lock-free, Cache, NUMA — 并发性能优化
+
 > [!important] **核心考点**：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
 
 ## 锁竞争优化

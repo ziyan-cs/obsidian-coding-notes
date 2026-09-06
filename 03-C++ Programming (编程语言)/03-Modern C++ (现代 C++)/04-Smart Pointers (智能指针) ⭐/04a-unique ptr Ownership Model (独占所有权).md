@@ -7,6 +7,8 @@ confidence: 1
 verified: stable
 ---
 
+# unique ptr Ownership Model — 独占所有权
+
 > [!important] **核心考点**
 > unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
 

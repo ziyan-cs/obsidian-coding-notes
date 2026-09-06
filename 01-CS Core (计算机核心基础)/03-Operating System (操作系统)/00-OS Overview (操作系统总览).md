@@ -4,6 +4,8 @@ tags:
 status: 🌱
 ---
 
+# OS Overview — 操作系统总览
+
 > [!important] **核心考点**：OS 四大功能、内核态 vs 用户态、系统调用、操作系统类型与架构
 
 ## 操作系统定义

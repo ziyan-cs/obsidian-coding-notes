@@ -17,3 +17,22 @@ verified: 2026-09-05
 | Python | exception | 边界处捕获特定异常、记录上下文、映射退出码/HTTP 错误 |
 
 **反例**：`catch (...)` / `except Exception: pass` / 忽略 `err` 都会把可定位失败变成静默数据错误。
+
+## 服务端错误边界
+
+```text
+底层错误（I/O / DB / dependency）
+        → 领域错误（not found / conflict / validation）
+        → 协议错误（HTTP status + safe response）
+```
+
+- 日志记录完整上下文和 cause chain；响应只返回调用方需要的安全信息。
+- 重试仅针对可判定为 transient 的失败，且必须设上限、退避和幂等条件。
+- `panic` / 未捕获 exception 只适合不可恢复的进程级错误；请求错误应正常返回。
+
+## 30 秒回答与自测
+
+**回答**：好的错误处理保留原因、上下文和边界语义。底层不直接决定 HTTP 文案；在 service/handler 边界把可预期错误映射为稳定响应，并让未知错误可观测。
+
+- 自测：`duplicate key` 应映射为哪类领域错误？是否该让客户端看到原始 SQL？
+- 自测：一次超时为什么不能无条件重试？
