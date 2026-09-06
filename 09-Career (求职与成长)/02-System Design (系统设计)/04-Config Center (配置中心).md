@@ -320,6 +320,12 @@ int timeout = cfg->rpc_timeout_ms;
 
 配置中心依赖的分布式共识协议详解见 → [Leader Election (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [Log Replication (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
+
 ## 常见误区
 
 - 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
@@ -329,9 +335,7 @@ int timeout = cfg->rpc_timeout_ms;
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Config Center (配置中心)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Config Center (配置中心)**。
 
 ### 最小验证
 

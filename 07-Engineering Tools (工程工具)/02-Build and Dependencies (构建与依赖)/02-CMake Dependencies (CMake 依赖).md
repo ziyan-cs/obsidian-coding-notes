@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-CMake Dependencies (CMake 依赖)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 一句话结论：CMake 依赖管理应围绕可传递 target、可固定版本和可复现安装展开；“本机能找到库”不是构建成功的标准。
 
 ## CMake External Dependencies (CMake 外部依赖)
 
-> [!abstract] 核心考点：find_package 的两种模式（Module/Config）、搜索路径、如何编写 Find 脚本
+> [!note] 本节重点心考点：优先消费库提供的 Config package 与 imported target；只有缺少包配置时才考虑 Module mode 或自定义 Find 脚本。
 
 > [!warning] 依赖“能找到”不代表配置可复现
 > 不要依赖某台机器碰巧安装了库。明确依赖版本、目标名和安装来源；CI 或全新环境能从零配置成功，才说明构建边界真正成立。
@@ -86,7 +84,7 @@ target_link_libraries(my_test PRIVATE GTest::gtest_main)
 
 ## CMake Package Managers (CMake 包管理器)
 
-> [!abstract] 核心考点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
+> [!note] 本节重点心考点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
 
 ## 为什么需要包管理器
 
@@ -187,6 +185,12 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 - [find_package & External Dependencies (第三方库引入)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02d-find_package%20&%20External%20Dependencies%20(第三方库引入).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -196,9 +200,7 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-CMake Dependencies (CMake 依赖)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-CMake Dependencies (CMake 依赖)**。
 
 ### 最小验证
 

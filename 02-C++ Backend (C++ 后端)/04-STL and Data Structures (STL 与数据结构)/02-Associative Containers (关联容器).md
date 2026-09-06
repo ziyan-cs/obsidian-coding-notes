@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## map and set (红黑树与有序容器)
 
-> [!abstract] 核心考点：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
+> [!note] 本节重点心考点：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
 
 ## 底层结构：红黑树
 
@@ -128,7 +128,7 @@ m.emplace(std::piecewise_construct,
 
 ## unordered map Hash Table (哈希表与冲突)
 
-> [!abstract] 核心考点：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
+> [!note] 本节重点心考点：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
 
 ## 底层结构：Separate Chaining（链地址法）
 
@@ -240,6 +240,12 @@ m.insert(batch.begin(), batch.end());
 
 红黑树实现的有序容器对比详见 → [map & set Red-Black Tree (红黑树与有序容器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02a-map%20&%20set%20Red-Black%20Tree%20(红黑树与有序容器).md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -249,9 +255,7 @@ m.insert(batch.begin(), batch.end());
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Associative Containers (关联容器)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Associative Containers (关联容器)**。
 
 ### 最小验证
 

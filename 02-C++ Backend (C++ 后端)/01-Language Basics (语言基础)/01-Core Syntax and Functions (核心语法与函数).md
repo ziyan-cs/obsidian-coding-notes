@@ -19,7 +19,7 @@ verified: 2026-09-06
 ## Variables, Types & Operators (变量、类型与运算符)
 
 ****
-> [!abstract] 核心考点：C++ 基本类型的大小与范围、类型转换规则、const 与引用
+> [!note] 本节重点心考点：C++ 基本类型的大小与范围、类型转换规则、const 与引用
 
 ## 基本类型与大小
 
@@ -117,7 +117,7 @@ u + i;   // i 被转换为 unsigned，结果是巨大的正数！
 
 ## Control Flow (流程控制)
 
-> [!abstract] 核心考点：条件分支（if/switch）、循环（for/while/do-while）、break/continue 控制流
+> [!note] 本节重点心考点：条件分支（if/switch）、循环（for/while/do-while）、break/continue 控制流
 
 ```cpp
 // if-else
@@ -159,7 +159,7 @@ do { ... } while (cond);
 
 ## Functions (函数)
 
-> [!abstract] 核心考点：函数重载、默认参数、值传递/引用传递、inline 函数
+> [!note] 本节重点心考点：函数重载、默认参数、值传递/引用传递、inline 函数
 
 ```cpp
 // 函数重载（编译期，根据参数类型/数量区分）
@@ -189,6 +189,12 @@ int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 ---
 
 变量与类型系统是函数的基础，详见 → [Variables, Types & Operators (变量、类型与运算符)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
 ## 常见误区
 

@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 07-Debugging and Tracing (调试与追踪)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
 ## Debugging and Tracing (调试与追踪)
 
-> [!abstract] 核心考点：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
+> [!note] 本节重点心考点：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
 
 ## strace：系统调用追踪
 
@@ -152,6 +150,12 @@ Performance counter stats for './prog':
 
 调试与追踪工具见 → [System Calls Overview (常用系统调用速查)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Dynamic Library & Shared Object (动态库原理)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -161,9 +165,7 @@ Performance counter stats for './prog':
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-07-Debugging and Tracing (调试与追踪)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **07-Debugging and Tracing (调试与追踪)**。
 
 ### 最小验证
 

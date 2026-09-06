@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 01-SQL Fundamentals (SQL 基础)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## SQL Basics (SQL 基础语法)
 
-> [!abstract] 核心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
+> [!note] 本节重点心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
 
 ## DDL（数据定义）
 ### 1. 数据库操作
@@ -431,7 +429,7 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ## Joins and Subqueries (多表查询与子查询)
 
-> [!abstract] 核心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
+> [!note] 本节重点心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
 ## 联合查询
 
@@ -529,7 +527,7 @@ SELECT * FROM orders WHERE user_id IN (
 
 ## Aggregation and Grouping (聚合与分组)
 
-> [!abstract] 核心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
+> [!note] 本节重点心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
 
 ## 数据库操作
 
@@ -696,7 +694,7 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ## MySQL Overview (MySQL 基础)
 
-> [!abstract] 核心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
+> [!note] 本节重点心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
 
 > [!warning] **平台/版本说明（NEEDS_VERIFY）**：以下路径以 **Windows 本机 MySQL 8.0** 为例，路径含版本号 `MySQL Server 8.0`，升级版本后需同步更新。Linux（vm-ubuntu）下的对应关系：程序 `mysqld`/`mysql`、配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf`、数据目录 `datadir`（用 `SHOW VARIABLES LIKE 'datadir'` 查询）、服务管理用 `systemctl` 而非 Windows 服务。
 
@@ -794,6 +792,12 @@ show variables like 'datadir';
 
 SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -803,9 +807,7 @@ SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Sys
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-SQL Fundamentals (SQL 基础)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-SQL Fundamentals (SQL 基础)**。
 
 ### 最小验证
 

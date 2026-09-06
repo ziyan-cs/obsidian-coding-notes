@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## Lvalues and Rvalues (左值与右值)
 
-> [!abstract] 核心考点：左值/右值/将亡值的定义，右值引用的绑定规则
+> [!note] 本节重点心考点：左值/右值/将亡值的定义，右值引用的绑定规则
 
 ### 值类别
 
@@ -57,7 +57,7 @@ void foo(int&& r) {
 
 ## Move Construction and Assignment (移动构造与移动赋值)
 
-> [!abstract] 核心考点：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义
+> [!note] 本节重点心考点：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义
 
 移动语义允许"偷走"临时对象的资源，而非深拷贝，大幅降低开销。
 
@@ -143,7 +143,7 @@ v.push_back(MyString("hello"));
 
 ## std move and RVO (移动语义与返回值优化)
 
-> [!abstract] 核心考点：std::move 的本质（右值引用转换）、RVO/NRVO 编译器优化、返回值优化触发条件
+> [!note] 本节重点心考点：std::move 的本质（右值引用转换）、RVO/NRVO 编译器优化、返回值优化触发条件
 
 ### std::move
 
@@ -201,6 +201,12 @@ std::string bar() {
 
 移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -210,9 +216,7 @@ std::string bar() {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Value Categories and Move (值类别与移动语义)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Value Categories and Move (值类别与移动语义)**。
 
 ### 最小验证
 

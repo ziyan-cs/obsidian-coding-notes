@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## Exception Handling (异常处理)
 
-> [!abstract] 核心考点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
+> [!note] 本节重点心考点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
 ## 三种异常安全保证
 
@@ -163,7 +163,7 @@ if (ec) { /* 处理不存在等预期情况 */ }
 
 ## Debugging gdb & Sanitizers (调试工具)
 
-> [!abstract] 核心考点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
+> [!note] 本节重点心考点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
 ## GDB 核心命令
 
@@ -285,6 +285,12 @@ valgrind --tool=callgrind ./main
 
 性能分析工具详见 → [Performance Profiling perf & valgrind (性能分析)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/06-Performance%20Profiling%20perf%20&%20valgrind%20(性能分析)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -294,9 +300,7 @@ valgrind --tool=callgrind ./main
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Exceptions and Debugging (异常与调试)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Exceptions and Debugging (异常与调试)**。
 
 ### 最小验证
 

@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 03-Docker Delivery (Docker 交付)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
 ## Docker Multi Stage Build (Docker 多阶段构建)
 
-> [!abstract] 核心考点：多阶段构建原理、C++ 二进制最小化、Alpine vs Ubuntu 抉择、CI 集成
+> [!note] 本节重点心考点：多阶段构建原理、C++ 二进制最小化、Alpine vs Ubuntu 抉择、CI 集成
 
 ## 为什么 C++ 需要多阶段构建
 
@@ -174,6 +172,12 @@ cmake-build-*
 - [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -183,9 +187,7 @@ cmake-build-*
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Docker Delivery (Docker 交付)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Docker Delivery (Docker 交付)**。
 
 ### 最小验证
 

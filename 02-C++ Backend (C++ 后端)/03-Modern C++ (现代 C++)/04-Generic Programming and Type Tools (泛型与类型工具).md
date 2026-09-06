@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Perfect Forwarding and Universal References (完美转发)
 
-> [!abstract] 核心考点：万能引用、引用折叠、std::forward 的作用
+> [!note] 本节重点心考点：万能引用、引用折叠、std::forward 的作用
 
 > [!warning] `std::forward` 只用于保留原始值类别
 > 它不是“更快的 `std::move`”。转发同一个对象后仍继续依赖其状态会让调用者难以判断所有权；只有下游确实需要按原值类别重载时才使用。
@@ -118,7 +118,7 @@ decltype(auto) timed_call(F&& f, Args&&... args) {
 
 ## constexpr and Compile Time Computation (编译期计算)
 
-> [!abstract] 核心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
+> [!note] 本节重点心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
 
 ## constexpr 变量
 
@@ -209,7 +209,7 @@ g = 100;                    // 运行期可修改
 
 ## optional and variant (新类型工具)
 
-> [!abstract] 核心考点：optional、variant、any 三种新型类型工具的适用场景
+> [!note] 本节重点心考点：optional、variant、any 三种新型类型工具的适用场景
 
 ## std::optional（C++17）
 
@@ -302,7 +302,7 @@ optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详
 
 ## string view and Structured Bindings (轻量视图)
 
-> [!abstract] 核心考点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
+> [!note] 本节重点心考点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
 
 ## std::string_view（C++17）
 
@@ -407,7 +407,7 @@ string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [
 
 ## Concepts and SFINAE (概念与模板元编程)
 
-> [!abstract] 核心考点：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
+> [!note] 本节重点心考点：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
 
 ## Concept 基础（C++20）
 
@@ -584,6 +584,12 @@ void print(const Container auto& c) { /* ... */ }
 
 Concepts 是 C++20 约束模板参数的重要特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -593,9 +599,7 @@ Concepts 是 C++20 约束模板参数的重要特性，详见 → [Modern C++ Ov
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Generic Programming and Type Tools (泛型与类型工具)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Generic Programming and Type Tools (泛型与类型工具)**。
 
 ### 最小验证
 

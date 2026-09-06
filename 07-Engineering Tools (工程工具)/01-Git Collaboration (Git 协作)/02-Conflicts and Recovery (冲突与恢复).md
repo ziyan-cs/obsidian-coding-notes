@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Conflicts and Recovery (冲突与恢复)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## Conflict Resolution (冲突解决)
 
-> [!abstract] 核心考点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
+> [!note] 本节重点心考点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
 
 ## 冲突何时产生
 
@@ -105,7 +103,7 @@ git rebase --abort    # 回到 rebase 前
 
 ## reset revert and restore (撤销操作)
 
-> [!abstract] 核心考点：三者的作用范围、是否改写历史、适用场景
+> [!note] 本节重点心考点：三者的作用范围、是否改写历史、适用场景
 
 > [!warning] 先确认目标，再执行会丢数据的命令
 > `reset --hard` 与 `restore` 可能丢掉未提交内容。先用 `git status`、`git diff` 确认目标；重要改动先做 commit、stash 或文件级备份。公共分支默认优先考虑 `revert`。
@@ -193,7 +191,7 @@ git restore --source=HEAD~2 file  # 将文件恢复到指定 commit 的版本
 
 ## stash tag and reflog (实用命令)
 
-> [!abstract] 核心考点：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
+> [!note] 本节重点心考点：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
 
 ## git stash（临时搁置）
 
@@ -270,6 +268,12 @@ git checkout -b rescue ghi9012  # 从丢失的 commit 创建新分支
 - [CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01f-CI⧸CD%20for%20C++：GitHub%20Actions,%20Static%20Analysis,%20Automation%20(CI⧸CD流水线)%20⭐.md)
 - [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -279,9 +283,7 @@ git checkout -b rescue ghi9012  # 从丢失的 commit 创建新分支
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Conflicts and Recovery (冲突与恢复)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Conflicts and Recovery (冲突与恢复)**。
 
 ### 最小验证
 

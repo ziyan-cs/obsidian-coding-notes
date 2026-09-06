@@ -38,6 +38,12 @@ failure while constructing
 | 临界区 | `std::lock_guard` / `std::unique_lock` | 锁的获取与释放不会因异常或分支漏掉 |
 | 自定义句柄 | 小型 move-only RAII wrapper | 把关闭协议集中在一个类型中 |
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - **RAII 不是“只要有析构函数就行”**：对象必须清楚表达谁拥有资源，拷贝、移动和析构的语义必须一致。
@@ -53,7 +59,7 @@ failure while constructing
 
 ## RAII and Resource Management (RAII 与资源管理)
 
-> [!abstract] 核心考点：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
+> [!note] 本节重点心考点：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
 
 ## 什么是 RAII
 
@@ -242,7 +248,7 @@ RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & Refe
 
 ## Custom Allocators and Placement New (自定义分配器)
 
-> [!abstract] 核心考点：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
+> [!note] 本节重点心考点：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
 ## Placement New
 
@@ -426,9 +432,7 @@ using ScopedVec = std::vector<String,
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-06-RAII and Custom Allocation (RAII 与自定义分配)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-RAII and Custom Allocation (RAII 与自定义分配)**。
 
 ### 最小验证
 

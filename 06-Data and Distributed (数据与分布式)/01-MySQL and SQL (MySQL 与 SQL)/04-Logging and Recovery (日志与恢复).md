@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 04-Logging and Recovery (日志与恢复)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## Write Ahead Logging (预写日志)
 
-> [!abstract] 核心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
+> [!note] 本节重点心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 
 ## WAL 的核心思想
 
@@ -118,7 +116,7 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 ## Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 
-> [!abstract] 核心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
+> [!note] 本节重点心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
 ## Redo Log 的物理结构
 
@@ -259,7 +257,7 @@ LSN 的作用：
 
 ## Binlog and Redo Log (Binlog 与 Redo Log)
 
-> [!abstract] 核心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
+> [!note] 本节重点心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
 ## Binlog vs Redo Log 概览
 
@@ -393,6 +391,12 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 > [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -402,9 +406,7 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Logging and Recovery (日志与恢复)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Logging and Recovery (日志与恢复)**。
 
 ### 最小验证
 

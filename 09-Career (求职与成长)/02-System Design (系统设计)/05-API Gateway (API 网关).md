@@ -371,6 +371,12 @@ func handleRequest(ctx *Context) {
 
 API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
 
+
+
+## 零基础阅读路径
+
+先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
+
 ## 常见误区
 
 - 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
@@ -380,9 +386,7 @@ API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-05-API Gateway (API 网关)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-API Gateway (API 网关)**。
 
 ### 最小验证
 

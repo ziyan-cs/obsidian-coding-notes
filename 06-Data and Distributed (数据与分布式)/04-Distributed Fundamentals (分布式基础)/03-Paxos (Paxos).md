@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 03-Paxos (Paxos)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## Paxos Overview (Paxos概览)
 
-> [!abstract] 核心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
+> [!note] 本节重点心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 ## Paxos 简介
 
@@ -124,6 +122,12 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 
 Paxos 与分布式理论基础详解见 → [CAP Theorem & BASE Theory (CAP理论)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Consistency Models：Strong, Eventual (一致性模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -133,9 +137,7 @@ Paxos 与分布式理论基础详解见 → [CAP Theorem & BASE Theory (CAP理�
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Paxos (Paxos)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Paxos (Paxos)**。
 
 ### 最小验证
 

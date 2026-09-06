@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## vector Dynamic Array and Reallocation (动态扩容原理)
 
-> [!abstract] 核心考点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
+> [!note] 本节重点心考点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
 
 ## 内存布局与核心特性
 
@@ -141,7 +141,7 @@ v.shrink_to_fit();
 
 ## deque Block Based Storage (分块存储)
 
-> [!abstract] 核心考点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
+> [!note] 本节重点心考点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
 
 ## 内存布局
 
@@ -240,7 +240,7 @@ vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocatio
 
 ## list Doubly Linked List (双向链表)
 
-> [!abstract] 核心考点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
+> [!note] 本节重点心考点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
 
 ## 内存布局 · 延伸要点 2
 `list` 是一个**双向循环链表**（GCC 实现为带哨兵节点的循环链表）：
@@ -334,6 +334,12 @@ auto iter = pending.insert(pending.end(), {42});
 
 vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -343,9 +349,7 @@ vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Sequence Containers (顺序容器)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Sequence Containers (顺序容器)**。
 
 ### 最小验证
 

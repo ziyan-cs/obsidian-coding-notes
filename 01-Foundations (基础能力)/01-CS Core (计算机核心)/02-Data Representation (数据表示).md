@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## Binary and Encoding (二进制与编码)
 
-> [!abstract] 核心考点：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
+> [!note] 本节重点心考点：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
 
 ## 进制转换
 
@@ -90,7 +90,7 @@ string fromDecimal(int val, int base) {
 
 ## Integer Representation (整数表示)
 
-> [!abstract] 核心考点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
+> [!note] 本节重点心考点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
 
 ## 有符号与无符号
 
@@ -148,7 +148,7 @@ int16_t y = x;             // 0x5678（高位丢失）
 
 ## Floating Point (浮点数)
 
-> [!abstract] 核心考点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
+> [!note] 本节重点心考点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
 
 ## IEEE 754 浮点数格式
 
@@ -212,7 +212,7 @@ float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16
 
 ## Bitwise Operations (位运算)
 
-> [!abstract] 核心考点：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果
+> [!note] 本节重点心考点：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果
 
 ## 基本位运算
 
@@ -281,6 +281,12 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 
 二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
 
+
+
+## 零基础阅读路径
+
+先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
+
 ## 常见误区
 
 - 把 **02-Data Representation (数据表示)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -290,9 +296,7 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Data Representation (数据表示)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Data Representation (数据表示)**。
 
 ### 最小验证
 

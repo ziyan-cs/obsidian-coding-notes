@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 01-Redis Data Structures (Redis 数据结构)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## SDS Strings (简单动态字符串)
 
-> [!abstract] 核心考点：> SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
+> [!note] 本节重点心考点：> SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
 ## SDS 结构
 
@@ -108,7 +106,7 @@ sdsfree(s);                     // 释放
 
 ## ziplist and listpack (压缩列表)
 
-> [!abstract] 核心考点：> ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
+> [!note] 本节重点心考点：> ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 
 ## ziplist（压缩列表）
 
@@ -203,7 +201,7 @@ Redis 底层数据结构详解见 → [01a1-SDS：Simple Dynamic String (简单�
 
 ## skiplist (跳表)
 
-> [!abstract] 核心考点：> 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
+> [!note] 本节重点心考点：> 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 
 ## 跳表（Skiplist）
 
@@ -319,7 +317,7 @@ typedef struct zset {
 
 ## dict Hash Table (字典与渐进式 rehash)
 
-> [!abstract] 核心考点：> dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
+> [!note] 本节重点心考点：> dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
 ## Redis dict 结构
 
@@ -442,6 +440,12 @@ void dictRehash(dict *d, int n) {
 
 压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -451,9 +455,7 @@ void dictRehash(dict *d, int n) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Redis Data Structures (Redis 数据结构)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Redis Data Structures (Redis 数据结构)**。
 
 ### 最小验证
 

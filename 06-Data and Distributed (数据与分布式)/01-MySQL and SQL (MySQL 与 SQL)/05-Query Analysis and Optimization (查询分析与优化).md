@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 05-Query Analysis and Optimization (查询分析与优化)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## EXPLAIN and Execution Plans (执行计划分析)
 
-> [!abstract] 核心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
+> [!note] 本节重点心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
 ## EXPLAIN 输出详解
 
@@ -167,7 +165,7 @@ SELECT * FROM user WHERE age = 20;
 
 ## Index Design Principles (索引设计原则)
 
-> [!abstract] 核心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
+> [!note] 本节重点心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
 
 ## 基础概念
 
@@ -335,7 +333,7 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ## Slow Query Optimization (慢查询优化)
 
-> [!abstract] 核心考点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
+> [!note] 本节重点心考点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
 
 ## 慢查询日志配置
 
@@ -481,6 +479,12 @@ pt-query-digest /var/log/mysql/slow.log
 
 > [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -490,9 +494,7 @@ pt-query-digest /var/log/mysql/slow.log
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-05-Query Analysis and Optimization (查询分析与优化)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Query Analysis and Optimization (查询分析与优化)**。
 
 ### 最小验证
 

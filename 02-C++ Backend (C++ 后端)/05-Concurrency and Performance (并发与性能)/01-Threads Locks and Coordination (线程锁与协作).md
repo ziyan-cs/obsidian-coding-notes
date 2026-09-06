@@ -31,6 +31,12 @@ verified: 2026-09-06
 3. 多把锁必须有固定顺序，或使用统一的加锁策略，避免死锁。
 4. 线程退出、任务取消与队列关闭都要有明确协议，不能依赖进程结束回收。
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 用 `volatile` 修复数据竞争；它不提供线程同步。
@@ -46,7 +52,7 @@ verified: 2026-09-06
 
 ## Thread Basics POSIX & std thread (线程基础)
 
-> [!abstract] 核心考点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
+> [!note] 本节重点心考点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 
 ## std::thread 基础
 
@@ -165,7 +171,7 @@ try {
 
 ## Mutex & Lock (互斥锁与锁管理)
 
-> [!abstract] 核心考点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
+> [!note] 本节重点心考点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
 
 ## std::mutex 与 RAII 锁
 
@@ -324,7 +330,7 @@ void unchecked() {  // ❌ 忘记加锁
 
 ## Condition Variable & Semaphore (条件变量与信号量)
 
-> [!abstract] 核心考点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
+> [!note] 本节重点心考点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
 ## 条件变量（condition_variable）
 
@@ -451,9 +457,7 @@ cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Threads Locks and Coordination (线程锁与协作)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Threads Locks and Coordination (线程锁与协作)**。
 
 ### 最小验证
 

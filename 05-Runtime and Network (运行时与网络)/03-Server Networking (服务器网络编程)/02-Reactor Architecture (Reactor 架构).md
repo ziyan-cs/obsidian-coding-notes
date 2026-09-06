@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Reactor Architecture (Reactor 架构)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## Reactor Pattern (Reactor模式)
 
-> [!abstract] 核心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
+> [!note] 本节重点心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
 > 代表：Redis 6.0 之前的网络处理部分
 
 ## 模型结构
@@ -103,7 +101,7 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 
 ## Reactor Threading Models (Reactor线程模型)
 
-> [!abstract] 核心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
+> [!note] 本节重点心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题
 
 ## 模型结构 · 延伸要点 2
@@ -214,7 +212,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 ## Multi Reactor Architecture (多Reactor架构)
 
-> [!abstract] 核心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
+> [!note] 本节重点心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构
 
@@ -314,6 +312,12 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 另两种变体见 → [Single Reactor Single Thread](05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md) · [Single Reactor Multi Thread](05b-Single%20Reactor%20Multi%20Thread%20(单reactor多线程).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -323,9 +327,7 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Reactor Architecture (Reactor 架构)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Reactor Architecture (Reactor 架构)**。
 
 ### 最小验证
 

@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 04-Redis Runtime and Client (Redis 运行时与客户端)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## Redis Event Loop (Redis 事件循环)
 
-> [!abstract] 核心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
+> [!note] 本节重点心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
 ## Redis 单线程模型
 
@@ -209,7 +207,7 @@ Redis 的底层数据结构详解见 → [SDS](01a1-SDS：Simple%20Dynamic%20Str
 
 ## Redis Client Integration (Redis 客户端集成)
 
-> [!abstract] 核心考点：> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
+> [!note] 本节重点心考点：> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
 
 ## hiredis 库
 
@@ -394,6 +392,12 @@ public:
 
 Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Expiration & Eviction Strategy (过期与淘汰策略)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01c-Expiration%20&%20Eviction%20Strategy%20(过期与淘汰策略)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -403,9 +407,7 @@ Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单�
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Redis Runtime and Client (Redis 运行时与客户端)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Redis Runtime and Client (Redis 运行时与客户端)**。
 
 ### 最小验证
 

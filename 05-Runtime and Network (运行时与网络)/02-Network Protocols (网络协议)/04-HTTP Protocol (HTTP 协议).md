@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 04-HTTP Protocol (HTTP 协议)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## HTTP Request and Response (HTTP 请求与响应)
 
-> [!abstract] 核心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
+> [!note] 本节重点心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
 ## HTTP 请求结构
 
@@ -116,7 +114,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 
 ## HTTP Methods and Status Codes (HTTP 方法与状态码)
 
-> [!abstract] 核心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
+> [!note] 本节重点心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
 ## HTTP 请求方法
 
@@ -214,7 +212,7 @@ HTTP 协议结构见 → [Request & Response Structure (请求响应结构)](</0
 
 ## HTTP Connection Management (HTTP 连接管理)
 
-> [!abstract] 核心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
+> [!note] 本节重点心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
 ## 短连接 vs 长连接
 
@@ -310,7 +308,7 @@ Keep-Alive 时间过长：
 
 ## HTTP Parser State Machine (HTTP 解析状态机)
 
-> [!abstract] 核心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
+> [!note] 本节重点心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 
 ## 为什么用状态机解析 HTTP
 
@@ -477,6 +475,12 @@ TCP 数据到达 → buffer 写入 → parse() 逐字节消费
 
 HTTP 协议基础见 → [Request & Response Structure (请求响应结构)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06a-Request%20&%20Response%20Structure%20(请求响应结构).md>) · [Keep-Alive & Connection Management (长连接)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06c-Keep-Alive%20&%20Connection%20Management%20(长连接).md>)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -486,9 +490,7 @@ HTTP 协议基础见 → [Request & Response Structure (请求响应结构)](</0
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-HTTP Protocol (HTTP 协议)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-HTTP Protocol (HTTP 协议)**。
 
 ### 最小验证
 

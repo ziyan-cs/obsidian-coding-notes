@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Compilation & Linking (编译与链接)
 
-> [!abstract] 核心考点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
+> [!note] 本节重点心考点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
 ## 编译的四个阶段
 
@@ -164,7 +164,7 @@ inline int square(int x) { return x * x; }
 
 ## Header & Source Organization (头文件与源文件组织)
 
-> [!abstract] 核心考点：头文件职责、源文件职责、include 顺序、模块化设计
+> [!note] 本节重点心考点：头文件职责、源文件职责、include 顺序、模块化设计
 
 ## 头文件职责
 
@@ -291,7 +291,7 @@ project/
 
 ## Preprocessor & Macros (预处理与宏)
 
-> [!abstract] 核心考点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
+> [!note] 本节重点心考点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
 ## 预处理指令概览
 
@@ -417,6 +417,12 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 编译过程中预处理阶段详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -426,9 +432,7 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Build Organization and Preprocessing (构建组织与预处理)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Build Organization and Preprocessing (构建组织与预处理)**。
 
 ### 最小验证
 

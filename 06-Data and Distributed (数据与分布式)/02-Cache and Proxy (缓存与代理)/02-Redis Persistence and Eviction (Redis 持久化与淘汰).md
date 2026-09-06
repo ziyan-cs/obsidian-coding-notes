@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Redis Persistence and Eviction (Redis 持久化与淘汰)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## RDB Persistence (RDB 持久化)
 
-> [!abstract] 核心考点：> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
+> [!note] 本节重点心考点：> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
 ## RDB 快照
 
@@ -113,7 +111,7 @@ AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrit
 
 ## AOF Persistence (AOF 持久化)
 
-> [!abstract] 核心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
+> [!note] 本节重点心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
 ## AOF 日志
 
@@ -255,7 +253,7 @@ RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (�
 
 ## Expiration and Eviction (过期与淘汰)
 
-> [!abstract] 核心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
+> [!note] 本节重点心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 
 > [!warning] Redis 配置与实现细节随版本变化
 > `hz`、采样数、时间预算、可用淘汰策略以及对象内部位布局都应以当前 Redis 官方文档和实际配置为准。这里保留机制心智模型，不把示意常量当作稳定面试答案。
@@ -402,6 +400,12 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Redis Integration：C++ Client hiredis (项目集成)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01f-Redis%20Integration：C++%20Client%20hiredis%20(项目集成)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -411,9 +415,7 @@ Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (�
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Redis Persistence and Eviction (Redis 持久化与淘汰)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Redis Persistence and Eviction (Redis 持久化与淘汰)**。
 
 ### 最小验证
 

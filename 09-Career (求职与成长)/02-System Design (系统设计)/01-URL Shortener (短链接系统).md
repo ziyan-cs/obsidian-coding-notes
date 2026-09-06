@@ -218,6 +218,12 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 
 短 URL 系统分布式与缓存基础详解见 → [CAP Theorem & BASE Theory](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Redis Cache Patterns](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
+
 ## 常见误区
 
 - 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
@@ -227,9 +233,7 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-URL Shortener (短链接系统)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-URL Shortener (短链接系统)**。
 
 ### 最小验证
 

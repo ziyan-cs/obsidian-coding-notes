@@ -60,6 +60,20 @@ type UserStore interface { Find(context.Context, int64) (User, error) }
 1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
 2. 哪种情况下该先写 interface，哪种情况下不该？
 
+
+
+## 从零建立模型
+
+本页主题是 **01-Types Functions and Interfaces (类型函数与接口)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
+
+## 最小实践
+
+写一个十到三十行的最小程序或测试：覆盖正常输入、边界输入和取消/错误路径之一。运行 `go test`；涉及并发时再运行 `go test -race`，把工具输出作为结论证据。
+
+## 工程检查点
+
+channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
+
 ## 常见误区
 
 - 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
@@ -69,9 +83,7 @@ type UserStore interface { Find(context.Context, int64) (User, error) }
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Types Functions and Interfaces (类型函数与接口)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Types Functions and Interfaces (类型函数与接口)**。
 
 ### 最小验证
 

@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Sockets and Event Loop (Socket 与事件循环)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## Socket API and Options (Socket API与选项)
 
-> [!abstract] 核心考点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
+> [!note] 本节重点心考点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
 ## 函数调用链
 
@@ -230,7 +228,7 @@ Socket 编程进阶见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](
 
 ## Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
-> [!abstract] 核心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
+> [!note] 本节重点心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
 ## 阻塞 vs 非阻塞
 
@@ -282,7 +280,7 @@ while (true) {
 
 ## Socket Options and Connection Health (套接字选项与连接健康)
 
-> [!abstract] 核心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
+> [!note] 本节重点心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
 
 ## setsockopt
@@ -369,6 +367,12 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -378,9 +382,7 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Sockets and Event Loop (Socket 与事件循环)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Sockets and Event Loop (Socket 与事件循环)**。
 
 ### 最小验证
 

@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 09-MySQL and Redis Caching (MySQL 与 Redis 缓存)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## MySQL and Redis Caching (MySQL 与 Redis 缓存)
 
-> [!abstract] 核心考点：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
+> [!note] 本节重点心考点：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
 
 ## MySQL vs Redis 定位
 
@@ -228,6 +226,12 @@ C 端对一致性要求高的场景：
 
 主从复制原理见 → [Master-Slave Replication (主从复制原理)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md) · [Sharding & Partitioning Overview (分库分表概念)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -237,9 +241,7 @@ C 端对一致性要求高的场景：
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-09-MySQL and Redis Caching (MySQL 与 Redis 缓存)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **09-MySQL and Redis Caching (MySQL 与 Redis 缓存)**。
 
 ### 最小验证
 

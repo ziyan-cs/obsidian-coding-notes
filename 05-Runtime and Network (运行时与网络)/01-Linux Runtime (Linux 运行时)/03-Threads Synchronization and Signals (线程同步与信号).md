@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 03-Threads Synchronization and Signals (线程同步与信号)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## POSIX Thread Lifecycle (POSIX 线程生命周期)
 
-> [!abstract] 核心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
+> [!note] 本节重点心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
 ## 线程的本质
 
@@ -110,7 +108,7 @@ POSIX 线程详解见 → [Mutex & Condition Variable (互斥锁与条件变量)
 
 ## Mutex and Condition Variable (互斥锁与条件变量)
 
-> [!abstract] 核心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
+> [!note] 本节重点心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
 ## 互斥锁（Mutex）
 
@@ -233,7 +231,7 @@ mutex 保护共享不变量；condition variable 不保存条件本身，只负�
 
 ## Deadlock Causes and Prevention (死锁原因与预防)
 
-> [!abstract] 核心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
+> [!note] 本节重点心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
 ## 死锁的四个必要条件（Coffman 条件）
 
@@ -315,7 +313,7 @@ valgrind --tool=helgrind ./myapp
 
 ## Threads and Processes (线程与进程)
 
-> [!abstract] 核心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
+> [!note] 本节重点心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
 ## 创建开销
 
@@ -354,7 +352,7 @@ valgrind --tool=helgrind ./myapp
 
 ## Semaphores (信号量)
 
-> [!abstract] 核心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
+> [!note] 本节重点心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
 
 ## 信号量的本质
 
@@ -429,7 +427,7 @@ sem_post(&empty);           // 通知生产者
 
 ## Signals and Signal Handling (信号与处理)
 
-> [!abstract] 核心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
+> [!note] 本节重点心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 
 ## 信号的本质
 
@@ -600,6 +598,12 @@ int main() {
 
 信号机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -609,9 +613,7 @@ int main() {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Threads Synchronization and Signals (线程同步与信号)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Threads Synchronization and Signals (线程同步与信号)**。
 
 ### 最小验证
 

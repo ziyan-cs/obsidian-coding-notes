@@ -52,6 +52,20 @@ def test_loader_rejects_bad_json(tmp_path):
 - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
 - 验证日期：2026-09-05
 
+
+
+## 从零建立模型
+
+本页主题是 **01-pytest Fixtures and Test Doubles (测试夹具与替身)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。
+
+## 最小实践
+
+把本页概念做成一个可运行函数或 CLI：准备正常、空值和错误输入各一份；打印或断言结果。若涉及文件和网络，使用临时目录或 test double，不能依赖本机隐式状态。
+
+## 工程检查点
+
+Python 的动态性不等于不需要契约。公共函数应写类型标注、异常语义和示例；密钥、绝对路径、真实生产数据都不应写死在示例里。
+
 ## 常见误区
 
 - 把脚本一次跑通当成工程正确，忽略环境隔离、输入校验、错误分类和可重复运行。
@@ -61,9 +75,7 @@ def test_loader_rejects_bad_json(tmp_path):
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-pytest Fixtures and Test Doubles (测试夹具与替身)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-pytest Fixtures and Test Doubles (测试夹具与替身)**。
 
 ### 最小验证
 

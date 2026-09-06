@@ -18,8 +18,8 @@ verified: 2026-09-06
 
 ## Tree Depth First Traversal (树的深度优先遍历)
 
-> [!abstract] 核心考点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
-> [!abstract] 核心考点：二叉树 DFS 前序/中序/后序三种遍历方式、递归与迭代实现、遍历序列还原树结构
+> [!note] 本节重点心考点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
+> [!note] 本节重点心考点：二叉树 DFS 前序/中序/后序三种遍历方式、递归与迭代实现、遍历序列还原树结构
 
 ### 递归模板
 
@@ -141,7 +141,7 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 
 ## Tree Breadth First Traversal (树的层序遍历)
 
-> [!abstract] 核心考点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
+> [!note] 本节重点心考点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
 >见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
 
 层序遍历的变体：
@@ -204,8 +204,8 @@ vector<int> rightSideView(TreeNode* root) {
 
 ## LCA and Tree Paths (最近公共祖先与路径)
 
-> [!abstract] 核心考点：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
-> [!abstract] 核心考点：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
+> [!note] 本节重点心考点：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
+> [!note] 本节重点心考点：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
 
 ### 最近公共祖先（LCA）
 
@@ -261,6 +261,12 @@ int pathSum(TreeNode* root, int target) {
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
 
+
+
+## 零基础阅读路径
+
+先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
+
 ## 常见误区
 
 - 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -270,9 +276,7 @@ int pathSum(TreeNode* root, int target) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Tree Traversal and Paths (树遍历与路径)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Tree Traversal and Paths (树遍历与路径)**。
 
 ### 最小验证
 

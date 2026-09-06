@@ -24,6 +24,12 @@ atomic 保证单个原子对象的读改写不发生 data race，但不自动让
 | 发布数据给读线程 | release store + acquire load |
 | 纯统计且不参与同步 | relaxed，仍需确认不会依赖顺序 |
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - atomic 不等于 lock-free；用 `is_lock_free()` 查询，不把实现特性当保证。
@@ -38,7 +44,7 @@ atomic 保证单个原子对象的读改写不发生 data race，但不自动让
 
 ## Atomic & Memory Order (原子操作与内存序)
 
-> [!abstract] 核心考点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
+> [!note] 本节重点心考点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
 
 ## std::atomic 基础
 
@@ -194,9 +200,7 @@ if (big.is_lock_free()) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Atomics and Memory Order (原子与内存序)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Atomics and Memory Order (原子与内存序)**。
 
 ### 最小验证
 

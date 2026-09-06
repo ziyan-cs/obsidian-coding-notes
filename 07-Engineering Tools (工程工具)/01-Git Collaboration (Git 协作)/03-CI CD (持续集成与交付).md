@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 03-CI CD (持续集成与交付)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
 ## CI CD for C Plus Plus (C Plus Plus 持续集成)
 
-> [!abstract] 核心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
+> [!note] 本节重点心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
 
 ## C++ CI/CD 流水线
 
@@ -163,6 +161,12 @@ CMakeLists.txt   @tech-lead
 - [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
 - [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -172,9 +176,7 @@ CMakeLists.txt   @tech-lead
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-CI CD (持续集成与交付)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-CI CD (持续集成与交付)**。
 
 ### 最小验证
 

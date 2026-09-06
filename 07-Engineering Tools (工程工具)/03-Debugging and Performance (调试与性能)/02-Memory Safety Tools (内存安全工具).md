@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Memory Safety Tools (内存安全工具)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## Valgrind Memory Leaks (Valgrind 内存泄漏)
 
-> [!abstract] 核心考点：Memcheck 的错误类型、如何读报告、抑制误报
+> [!note] 本节重点心考点：Memcheck 的错误类型、如何读报告、抑制误报
 
 ## Valgrind 是什么
 
@@ -126,7 +124,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ## AddressSanitizer and UBSan (Sanitizer 工具)
 
-> [!abstract] 核心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
+> [!note] 本节重点心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 
 > [!warning] Sanitizer 是测试工具，不是正确性证明
 > 它只能覆盖实际执行到的路径，且编译器、平台、标准库和启用的子选项都会影响效果。将 Sanitizer 构建作为测试配置运行，发现报告先定位根因，不要仅压制错误。
@@ -268,6 +266,12 @@ ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未
 - [perf：CPU Profiling & Flamegraph (性能火焰图)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03e-perf：CPU%20Profiling%20&%20Flamegraph%20(性能火焰图).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -277,9 +281,7 @@ ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Memory Safety Tools (内存安全工具)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Memory Safety Tools (内存安全工具)**。
 
 ### 最小验证
 

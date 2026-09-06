@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 06-Connection Pool (连接池)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## Connection Pool (连接池)
 
-> [!abstract] 核心考点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
+> [!note] 本节重点心考点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
 ## MySQL C API 基础
 
@@ -208,6 +206,12 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 
 MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -217,9 +221,7 @@ MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Syste
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-06-Connection Pool (连接池)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-Connection Pool (连接池)**。
 
 ### 最小验证
 

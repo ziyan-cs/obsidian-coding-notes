@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Type System Basics (类型系统基础)
 
-> [!abstract] 核心考点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
+> [!note] 本节重点心考点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
 
 ## const
 
@@ -79,7 +79,7 @@ switch (d) {
 
 ## Type Conversion and Casting (类型转换)
 
-> [!abstract] 核心考点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
+> [!note] 本节重点心考点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
 
 ## 四种命名转换（Named Casts）
 
@@ -164,7 +164,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ## Pointers and References (指针与引用)
 
-> [!abstract] 核心考点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
+> [!note] 本节重点心考点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
 
 > [!warning] 地址运算必须受对象边界约束
 > 指针算术只在同一数组对象（含末尾后一位置）范围内才有定义；“指针就是整数地址”是有用的直觉，但不是可以随意加减、转换和解引用的许可证。
@@ -258,6 +258,12 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 1. 为什么 `int* p = arr; ++p` 与对任意对象地址做 `++p` 的安全性不同？
 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
+
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
 ## 常见误区
 

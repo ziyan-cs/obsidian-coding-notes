@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
 
-> [!abstract] 核心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
+> [!note] 本节重点心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 
 > [!warning] 不用固定吞吐和延迟为产品贴标签
 > 性能取决于消息大小、确认语义、持久化、批量、分区/队列、硬件与网络；RabbitMQ 和 Kafka 都能覆盖多种工作负载。选型先写清投递语义、重放需求、路由模型、运维能力和压测证据。
@@ -83,6 +81,12 @@ RabbitMQ 的核心是 broker 路由、queue 与确认语义；Kafka 的核心是
 
 消息队列基础概念详解见 → [Why MQ：Decoupling, Peak Shaving, Async (消息队列三大作用)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03a-Why%20MQ：Decoupling,%20Peak%20Shaving,%20Async%20(消息队列三大作用).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -92,9 +96,7 @@ RabbitMQ 的核心是 broker 路由、queue 与确认语义；Kafka 的核心是
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)**。
 
 ### 最小验证
 

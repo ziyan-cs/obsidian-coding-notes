@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 04-Distributed Transactions (分布式事务)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## Distributed Transactions and Saga (分布式事务与Saga)
 
-> [!abstract] 核心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
+> [!note] 本节重点心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
 
 ## 分布式事务场景
 
@@ -165,6 +163,12 @@ transactional outbox flow
 
 分布式事务的 CAP 权衡与一致性模型详解见 → [CAP Theorem & BASE Theory (CAP理论)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Consistency Models：Strong, Eventual (一致性模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -174,9 +178,7 @@ transactional outbox flow
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Distributed Transactions (分布式事务)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Distributed Transactions (分布式事务)**。
 
 ### 最小验证
 

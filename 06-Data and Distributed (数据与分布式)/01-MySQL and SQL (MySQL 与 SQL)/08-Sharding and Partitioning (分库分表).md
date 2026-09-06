@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 08-Sharding and Partitioning (分库分表)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## Sharding and Partitioning (分库分表)
 
-> [!abstract] 核心考点：分库分表策略（水平/垂直拆分）、Sharding Key 选择、跨节点查询与分布式事务问题
+> [!note] 本节重点心考点：分库分表策略（水平/垂直拆分）、Sharding Key 选择、跨节点查询与分布式事务问题
 
 ## 何时需要分库分表
 
@@ -170,6 +168,12 @@ CREATE TABLE order (
 
 主从复制原理见 → [Master-Slave Replication (主从复制原理)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md) · [MySQL vs Redis：Caching Strategy (缓存策略对比)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -179,9 +183,7 @@ CREATE TABLE order (
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-08-Sharding and Partitioning (分库分表)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **08-Sharding and Partitioning (分库分表)**。
 
 ### 最小验证
 

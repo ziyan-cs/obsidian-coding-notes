@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-CMake Project and Targets (CMake 项目与目标)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## CMakeLists Structure (CMake 项目结构)
 
-> [!abstract] 核心考点：最小可用结构、各指令的作用与顺序
+> [!note] 本节重点心考点：最小可用结构、各指令的作用与顺序
 
 > [!tip] CMake 的核心单位是 target
 > 把可执行文件和库声明为明确的 target，并让 include path、编译选项和依赖跟随 target 传播。全局变量和全局 `include_directories()` 在小项目能工作，却会在工程变大后制造隐式耦合。
@@ -110,7 +108,7 @@ CMake 的配置阶段读取 `CMakeLists.txt` 并生成构建系统，构建阶�
 
 ## CMake Target Dependencies (CMake 目标依赖)
 
-> [!abstract] 核心考点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
+> [!note] 本节重点心考点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
 
 ## 现代 CMake 的核心思想
 
@@ -188,7 +186,7 @@ target_compile_definitions(myapp PRIVATE
 
 ## CMake Build Types (CMake 构建类型)
 
-> [!abstract] 核心考点：四种构建类型的使用场景、优化级别、常用配置
+> [!note] 本节重点心考点：四种构建类型的使用场景、优化级别、常用配置
 
 
 ## 四种标准构建类型
@@ -239,6 +237,12 @@ cmake --build . --config Debug
 - [CMake with vcpkg & Conan (包管理器集成)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02e-CMake%20with%20vcpkg%20&%20Conan%20(包管理器集成).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -248,9 +252,7 @@ cmake --build . --config Debug
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-CMake Project and Targets (CMake 项目与目标)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-CMake Project and Targets (CMake 项目与目标)**。
 
 ### 最小验证
 

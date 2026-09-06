@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## Memory Hierarchy (存储层级结构)
 
-> [!abstract] 核心考点：> 存储金字塔结构、Cache 的位置与作用、局部性原理的硬件利用、不同层级的速度差异
+> [!note] 本节重点心考点：> 存储金字塔结构、Cache 的位置与作用、局部性原理的硬件利用、不同层级的速度差异
 
 ## 存储金字塔
 
@@ -85,7 +85,7 @@ Cache 的映射策略与替换算法详解 → [Cache 机制](../04-Cache%20Mech
 
 ## Cache Mechanism (缓存机制)
 
-> [!abstract] 核心考点：> Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
+> [!note] 本节重点心考点：> Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
 
 ## Cache 基本结构
 
@@ -178,7 +178,7 @@ struct alignas(64) Data { int a; int b; };  // 分属不同 cache line
 
 ## Data Storage (数据存储)
 
-> [!abstract] 核心考点：字节序（大小端）、数据对齐、存储层次、数据持久化
+> [!note] 本节重点心考点：字节序（大小端）、数据对齐、存储层次、数据持久化
 
 ## 字节序（Endianness）
 
@@ -256,7 +256,7 @@ struct Packed {
 
 ## Bus System (总线系统)
 
-> [!abstract] 核心考点：总线结构（数据/地址/控制）、总线仲裁、总线事务、常见总线标准
+> [!note] 本节重点心考点：总线结构（数据/地址/控制）、总线仲裁、总线事务、常见总线标准
 
 ## 总线的基本概念
 
@@ -322,7 +322,7 @@ CPU执行模型与基础输入输出详见 → [CPU Execution Model（CPU执行�
 
 ## Basic Input and Output (基础输入输出)
 
-> [!abstract] 核心考点：I/O 三种方式（程序控制/中断/DMA）、中断处理流程、DMA 传输机制
+> [!note] 本节重点心考点：I/O 三种方式（程序控制/中断/DMA）、中断处理流程、DMA 传输机制
 
 ## I/O 的三种方式
 
@@ -402,6 +402,12 @@ DMA.interrupt_handler() {    // 传输完毕
 
 总线系统与CPU执行模型详见 → [Bus System（总线系统）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/05-Bus%20System%20(总线系统).md) · [CPU Execution Model（CPU执行模型）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/01-CPU%20Execution%20Model%20(CPU执行模型).md)
 
+
+
+## 零基础阅读路径
+
+先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
+
 ## 常见误区
 
 - 把 **04-Memory Hierarchy and IO (存储层级与输入输出)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -411,9 +417,7 @@ DMA.interrupt_handler() {    // 传输完毕
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Memory Hierarchy and IO (存储层级与输入输出)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Memory Hierarchy and IO (存储层级与输入输出)**。
 
 ### 最小验证
 

@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Make and Shell Tools (Make 与 Shell 工具)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## Makefile Basics (Makefile 基础)
 
-> [!abstract] 核心考点：规则语法、变量、自动变量、伪目标、增量构建原理
+> [!note] 本节重点心考点：规则语法、变量、自动变量、伪目标、增量构建原理
 
 ## 基本语法
 
@@ -102,7 +100,7 @@ make -p        # 打印所有内置规则和变量
 
 ## Docker Images and Containers (Docker 镜像与容器)
 
-> [!abstract] 核心考点：镜像 vs 容器、核心命令、Dockerfile 写法、网络与卷
+> [!note] 本节重点心考点：镜像 vs 容器、核心命令、Dockerfile 写法、网络与卷
 
 > [!warning] 删除与清理命令要先看范围
 > `prune`、`rm`、`rmi` 会改变本机资源；先列出目标并确认没有重要容器、镜像或卷。学习阶段用 `--rm` 和明确的容器名，避免积累难以辨认的残留。
@@ -253,7 +251,7 @@ docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据�
 
 ## Shell Productivity Tools (Shell 效率工具)
 
-> [!abstract] 核心考点：各工具的核心用法、组合管道使用、tmux 会话管理
+> [!note] 本节重点心考点：各工具的核心用法、组合管道使用、tmux 会话管理
 
 ## grep（文本搜索）
 
@@ -414,6 +412,12 @@ strace ./myapp 2>&1 | grep open     # 追踪文件打开操作
 - [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -423,9 +427,7 @@ strace ./myapp 2>&1 | grep open     # 追踪文件打开操作
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Make and Shell Tools (Make 与 Shell 工具)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Make and Shell Tools (Make 与 Shell 工具)**。
 
 ### 最小验证
 

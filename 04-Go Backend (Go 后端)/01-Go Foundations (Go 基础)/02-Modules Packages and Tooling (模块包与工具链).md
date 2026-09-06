@@ -19,6 +19,8 @@ verified: 2026-09-05
 - **package**：同一目录内、同一个 `package` 名的 Go 文件组成的编译单元。
 - **import path**：引用 package 的路径，例如 `example.com/app/internal/user`。
 
+如果 module 未来会被其他项目依赖，module path 应是可定位的规范路径；主版本为 v2 及以上时，path 需要包含 `/vN` 后缀。`go.mod` 记录当前 module path、所需 Go 最低版本和依赖约束，`go.sum` 保存模块内容校验信息；二者都应由 Go 工具维护并提交。
+
 ```text
 todo-api/
   - go.mod
@@ -58,6 +60,18 @@ todo-api/
 
 建立 `todo-api` 骨架，创建一个 `internal/todo` package，并让 `cmd/api` 调用它。解释为什么 handler 不应直接操作数据库细节。
 
+## 官方资料
+
+- [Go Modules Reference](https://go.dev/ref/mod)
+- [go.mod file reference](https://go.dev/doc/modules/gomod-ref)
+- 核验日期：2026-09-06
+
+
+
+## 零基础阅读路径
+
+先理解普通函数、显式错误和 package 边界；接着跟一条请求经过 handler、service、repository；最后阅读 goroutine、context 与运行时部分。并发章节必须配最小程序。
+
 ## 常见误区
 
 - 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
@@ -67,9 +81,7 @@ todo-api/
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Modules Packages and Tooling (模块包与工具链)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Modules Packages and Tooling (模块包与工具链)**。
 
 ### 最小验证
 

@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Sorting Overview (排序总览)
 
-> [!abstract] 核心考点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
+> [!note] 本节重点心考点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
 
 ## 核心
 
@@ -205,7 +205,7 @@ void radixSort(vector<int>& a) {
 
 ## Quick Sort (快速排序)
 
-> [!abstract] 核心考点：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现
+> [!note] 本节重点心考点：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现
 
 ```cpp
 void quickSortV1(vector<int>& arr, int L, int R) {
@@ -293,7 +293,7 @@ void quickSortV3(vector<int>& arr, int L, int R) {
 
 ## Merge Sort and Inversion Count (归并排序与逆序对)
 
-> [!abstract] 核心考点：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
+> [!note] 本节重点心考点：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
 
 ```cpp
 // 对外接口
@@ -335,7 +335,7 @@ void merge(vector<int>& arr, int L, int M, int R) {
 
 ## Heap Sort (堆排序)
 
-> [!abstract] 核心考点：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性
+> [!note] 本节重点心考点：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性
 
 ```cpp
 // 大顶堆（默认）
@@ -382,6 +382,12 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 
+
+
+## 零基础阅读路径
+
+先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
+
 ## 常见误区
 
 - 把 **08-Sorting Algorithms (排序算法)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -391,9 +397,7 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-08-Sorting Algorithms (排序算法)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **08-Sorting Algorithms (排序算法)**。
 
 ### 最小验证
 

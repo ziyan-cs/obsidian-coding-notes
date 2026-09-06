@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-InnoDB Storage and Indexes (InnoDB 存储与索引)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## InnoDB Pages and Buffer Pool (页结构与缓冲池)
 
-> [!abstract] 核心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
+> [!note] 本节重点心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
 
 ## InnoDB 页结构
 
@@ -125,7 +123,7 @@ B+树索引结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03
 
 ## B Plus Tree Index (B Plus 树索引)
 
-> [!abstract] 核心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
+> [!note] 本节重点心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
 
 > [!warning] 页容量与树高只能按真实表结构估算
 > 记录头、页目录、变长列、二级索引主键、填充率与缓存命中都会改变扇出和 I/O。下面的数值只用于理解数量级，不能当作任意表的性能结论；实际用 `EXPLAIN`、表结构和压测验证。
@@ -237,7 +235,7 @@ InnoDB 每页 16KB，假设：
 
 ## Clustered and Secondary Indexes (聚簇与二级索引)
 
-> [!abstract] 核心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
+> [!note] 本节重点心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
 
 ## 聚簇索引（Clustered Index）
 
@@ -342,7 +340,7 @@ B+树结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backe
 
 ## Index Pushdown and Covering Indexes (索引下推与覆盖索引)
 
-> [!abstract] 核心考点：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化
+> [!note] 本节重点心考点：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化
 
 ## 索引条件下推（ICP）
 
@@ -460,6 +458,12 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -469,9 +473,7 @@ B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backe
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-InnoDB Storage and Indexes (InnoDB 存储与索引)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-InnoDB Storage and Indexes (InnoDB 存储与索引)**。
 
 ### 最小验证
 

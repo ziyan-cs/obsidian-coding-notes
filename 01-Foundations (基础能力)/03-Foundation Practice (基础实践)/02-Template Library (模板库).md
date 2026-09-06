@@ -272,6 +272,12 @@ vector<int> buildNext(string& p) {
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 
+
+
+## 零基础阅读路径
+
+先阅读问题与最小例子，再理解机制与边界，最后做验证或练习。无法复述因果关系时，先回到输入、状态和输出。
+
 ## 常见误区
 
 - 把 **02-Template Library (模板库)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -281,9 +287,7 @@ vector<int> buildNext(string& p) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Template Library (模板库)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Template Library (模板库)**。
 
 ### 最小验证
 

@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 04-Connections Buffers and Framing (连接缓冲与分帧)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
 ## Connection Pool Design (连接池设计)
 
-> [!abstract] 核心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
+> [!note] 本节重点心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
 
 ## 为什么需要连接池
 
@@ -240,7 +238,7 @@ void *health_check_thread(void *arg) {
 
 ## Protocol Framing and Buffering (协议分帧与缓冲区)
 
-> [!abstract] 核心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
+> [!note] 本节重点心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 
 ## 为什么需要 Buffer
 
@@ -459,6 +457,12 @@ ssize_t n = writev(fd, iov, iovcnt);
 
 服务器设计模式系列见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -468,9 +472,7 @@ ssize_t n = writev(fd, iov, iovcnt);
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Connections Buffers and Framing (连接缓冲与分帧)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Connections Buffers and Framing (连接缓冲与分帧)**。
 
 ### 最小验证
 

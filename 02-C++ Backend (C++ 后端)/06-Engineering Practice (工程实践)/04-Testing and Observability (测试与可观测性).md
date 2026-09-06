@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Testing & Mocking (测试与模拟)
 
-> [!abstract] 核心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
+> [!note] 本节重点心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
 ## 测试金字塔
 
@@ -207,7 +207,7 @@ genhtml -o report coverage.info
 
 ## Observability Logging Metrics and Tracing (可观测性)
 
-> [!abstract] 核心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
+> [!note] 本节重点心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 
 ## 可观测性三大支柱
 
@@ -444,6 +444,12 @@ auto stub = UserService::NewStub(tracing_channel);
 
 可观测性与调试工具共同保障服务稳定性，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -453,9 +459,7 @@ auto stub = UserService::NewStub(tracing_channel);
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Testing and Observability (测试与可观测性)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Testing and Observability (测试与可观测性)**。
 
 ### 最小验证
 

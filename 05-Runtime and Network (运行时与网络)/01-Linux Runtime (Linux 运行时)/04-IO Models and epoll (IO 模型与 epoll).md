@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 04-IO Models and epoll (IO 模型与 epoll)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
@@ -36,7 +34,7 @@ epoll_wait 返回就绪 fd → 非阻塞 read/write 尽量推进 → 处理 EAGA
 
 ## Blocking and Nonblocking IO (阻塞与非阻塞 I O)
 
-> [!abstract] 核心考点：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
+> [!note] 本节重点心考点：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
 
 ## 阻塞 IO
 
@@ -91,7 +89,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 ## Synchronous and Asynchronous IO (同步与异步 I O)
 
-> [!abstract] 核心考点：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
+> [!note] 本节重点心考点：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
 
 ## 同步 vs 异步的本质
 
@@ -147,7 +145,7 @@ ssize_t ret = aio_return(&cb);
 
 ## IO Multiplexing (I O 多路复用)
 
-> [!abstract] 核心考点：> select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
+> [!note] 本节重点心考点：> select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
 
 ## select
 
@@ -248,7 +246,7 @@ epoll 底层原理详解 → [epoll API详解](../08-epoll%20Internals%20(epoll�
 
 ## epoll API (epoll API)
 
-> [!abstract] 核心考点：> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
+> [!note] 本节重点心考点：> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
 
 > [!warning] 示例循环省略了生产级错误处理
 > `accept`、`read`、`write` 都可能返回 `EAGAIN`、`EINTR` 或错误。ET 模式还必须循环读/accept 到 `EAGAIN`；不要把下面的最小骨架直接当成完整服务器。
@@ -345,7 +343,7 @@ epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/03-Backe
 
 ## Level and Edge Triggering (水平与边缘触发)
 
-> [!abstract] 核心考点：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
+> [!note] 本节重点心考点：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
 
 ## 水平触发 LT（Level-Triggered）
 
@@ -430,7 +428,7 @@ epoll 触发模式见 → [epoll_create, epoll_ctl, epoll_wait (API详解)](/03-
 
 ## epoll Internals (epoll 底层实现)
 
-> [!abstract] 核心考点：> epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
+> [!note] 本节重点心考点：> epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
 
 ## select 的局限性
 
@@ -553,6 +551,12 @@ epoll:       返回 50 → O(k)，k=50
 epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md)
 - [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -562,9 +566,7 @@ epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigge
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-IO Models and epoll (IO 模型与 epoll)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-IO Models and epoll (IO 模型与 epoll)**。
 
 ### 最小验证
 

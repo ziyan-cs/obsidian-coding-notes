@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Kafka Delivery and Idempotency (Kafka 投递与幂等)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## Kafka Core Concepts (Kafka核心概念)
 
-> [!abstract] 核心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
+> [!note] 本节重点心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
 ## Kafka 核心概念
 
@@ -120,7 +118,7 @@ max.poll.records=500        # 每次拉取条数
 
 ## Message Delivery and Idempotency (消息可靠性与幂等)
 
-> [!abstract] 核心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
+> [!note] 本节重点心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
 > [!warning] “Exactly Once” 必须说明边界
 > Kafka 的幂等与事务能约束 Kafka 内部的写入/消费链路；把消息处理结果写进 MySQL 等外部系统时，不能仅凭一段本地 SQL 就宣称端到端 exactly-once。通常要使用幂等写入、去重键、outbox/inbox 或可恢复的状态机。
@@ -234,6 +232,12 @@ Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 
 
 Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -243,9 +247,7 @@ Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心�
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Kafka Delivery and Idempotency (Kafka 投递与幂等)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Kafka Delivery and Idempotency (Kafka 投递与幂等)**。
 
 ### 最小验证
 

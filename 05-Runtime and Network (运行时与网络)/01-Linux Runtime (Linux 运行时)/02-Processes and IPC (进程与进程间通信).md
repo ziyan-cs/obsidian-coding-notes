@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 02-Processes and IPC (进程与进程间通信)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
 ## Process Lifecycle (进程生命周期)
 
-> [!abstract] 核心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
+> [!note] 本节重点心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
 
 ## 进程的本质
 
@@ -225,7 +223,7 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 
 ## Process States and Scheduling (进程状态与调度)
 
-> [!abstract] 核心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
+> [!note] 本节重点心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
 
 ## 进程状态 · 延伸要点 2
 ```
@@ -274,7 +272,7 @@ renice 5 -p 1234       # 修改运行中进程的 nice 值
 
 ## Zombie and Orphan Processes (僵尸进程与孤儿进程)
 
-> [!abstract] 核心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
+> [!note] 本节重点心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 
 ## 僵尸进程（Zombie）
 
@@ -344,7 +342,7 @@ close(STDERR_FILENO);
 
 ## Interprocess Communication (进程间通信)
 
-> [!abstract] 核心考点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
+> [!note] 本节重点心考点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
 > 核心考点：各 IPC 机制的特点、适用场景、使用方式
 
 ## IPC 机制对比
@@ -441,6 +439,12 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -450,9 +454,7 @@ IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Processes and IPC (进程与进程间通信)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Processes and IPC (进程与进程间通信)**。
 
 ### 最小验证
 

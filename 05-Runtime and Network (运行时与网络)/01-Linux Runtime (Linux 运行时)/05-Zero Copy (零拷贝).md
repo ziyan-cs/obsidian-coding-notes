@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 05-Zero Copy (零拷贝)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## Zero Copy and sendfile (零拷贝与 sendfile)
 
-> [!abstract] 核心考点：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
+> [!note] 本节重点心考点：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
 
 > [!warning] “零拷贝”是相对用户态 CPU copy 的工程术语
 > 实际数据路径受内核版本、文件系统、TLS、网卡卸载与硬件能力影响。不要把“0 次 CPU 拷贝”当作任何机器上的保证；应以目标环境的 profile、吞吐和尾延迟决定是否使用。
@@ -99,6 +97,12 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -108,9 +112,7 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-05-Zero Copy (零拷贝)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Zero Copy (零拷贝)**。
 
 ### 最小验证
 

@@ -32,6 +32,12 @@ moved-from object -> valid for destruction and assignment
 | Rule of Five | 类直接拥有裸资源、句柄或自定义分配 | 同时审视析构、拷贝构造/赋值、移动构造/赋值 |
 | 禁止拷贝、允许移动 | 独占 socket、文件、锁等资源 | 删除 copy，保证 move 后源对象仍有效 |
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只写析构函数，却忘记自定义拷贝，导致浅拷贝与 double free。
@@ -46,7 +52,7 @@ moved-from object -> valid for destruction and assignment
 
 ## Object Oriented Programming (面向对象编程)
 
-> [!abstract] 核心考点：封装、继承、多态三大面向对象特性在 C++ 中的实现
+> [!note] 本节重点心考点：封装、继承、多态三大面向对象特性在 C++ 中的实现
 
 ## 封装（Encapsulation）
 
@@ -148,7 +154,7 @@ struct Circle : Shape<Circle> {
 
 ## Construction and Destruction (构造与析构)
 
-> [!abstract] 核心考点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
+> [!note] 本节重点心考点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
 
 ### 构造顺序
 
@@ -227,7 +233,7 @@ public:
 
 ## Copy Control and Rule of Five (拷贝控制与五法则)
 
-> [!abstract] 核心考点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
+> [!note] 本节重点心考点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
 
 ```cpp
     int*   data_;
@@ -304,7 +310,7 @@ public:
 
 ## Operator Overloading (运算符重载)
 
-> [!abstract] 核心考点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
+> [!note] 本节重点心考点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
 
 ```cpp
 public:

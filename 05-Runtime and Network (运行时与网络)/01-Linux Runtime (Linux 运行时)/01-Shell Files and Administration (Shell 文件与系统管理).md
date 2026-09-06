@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 01-Shell Files and Administration (Shell 文件与系统管理)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
 ## Shell and Basic Commands (命令行与 Shell)
 
-> [!abstract] 核心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
+> [!note] 本节重点心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
 
 ## 帮助命令
 
@@ -423,7 +421,7 @@ Shell 命令与脚本详解见 → [File System & Permissions (文件系统与�
 
 ## File System and Permissions (文件系统与权限)
 
-> [!abstract] 核心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
+> [!note] 本节重点心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
 
 ## Vim 使用
 
@@ -643,7 +641,7 @@ ln <src> <dst>       # 创建硬链接
 
 ## System Administration Basics (系统管理基础)
 
-> [!abstract] 核心考点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
+> [!note] 本节重点心考点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
 
 ## 用户与组管理
 
@@ -897,6 +895,12 @@ grep "error" /var/log/auth.log  # 过滤错误信息
 
 系统管理基础见 → [Shell & Basic Commands (命令行与Shell编程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md) · [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -906,9 +910,7 @@ grep "error" /var/log/auth.log  # 过滤错误信息
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Shell Files and Administration (Shell 文件与系统管理)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Shell Files and Administration (Shell 文件与系统管理)**。
 
 ### 最小验证
 

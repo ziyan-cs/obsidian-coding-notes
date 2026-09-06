@@ -18,7 +18,7 @@ verified: 2026-09-06
 
 ## Computer System Overview (计算机系统总览)
 
-> [!abstract] 核心考点：计算机的五大逻辑部件、冯·诺依曼架构、存储程序概念、指令与数据同存
+> [!note] 本节重点心考点：计算机的五大逻辑部件、冯·诺依曼架构、存储程序概念、指令与数据同存
 
 ## 计算机的本质
 
@@ -97,7 +97,7 @@ PC → Address → Fetch instruction → IR
 
 ## System Abstraction (系统抽象层次)
 
-> [!abstract] 核心考点：计算机系统的层次抽象模型、每层屏蔽下层细节、抽象是控制复杂度的核心手段
+> [!note] 本节重点心考点：计算机系统的层次抽象模型、每层屏蔽下层细节、抽象是控制复杂度的核心手段
 
 ## 抽象层次模型
 
@@ -155,7 +155,7 @@ PC → Address → Fetch instruction → IR
 
 ## Hardware and Software (硬件与软件)
 
-> [!abstract] 核心考点：软硬件的逻辑等价性、分层抽象、固件的角色、ISA 作为软硬件分界
+> [!note] 本节重点心考点：软硬件的逻辑等价性、分层抽象、固件的角色、ISA 作为软硬件分界
 
 ## 硬件与软件的关系
 
@@ -210,6 +210,12 @@ ISA 是软硬件的**契约**：
 
 计算机本质与系统抽象详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
 
+
+
+## 零基础阅读路径
+
+先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
+
 ## 常见误区
 
 - 把 **01-Computer System Overview (计算机系统总览)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -219,9 +225,7 @@ ISA 是软硬件的**契约**：
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Computer System Overview (计算机系统总览)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Computer System Overview (计算机系统总览)**。
 
 ### 最小验证
 

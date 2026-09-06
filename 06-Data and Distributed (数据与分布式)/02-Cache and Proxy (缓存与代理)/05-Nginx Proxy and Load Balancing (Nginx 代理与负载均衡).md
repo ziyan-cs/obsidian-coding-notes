@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
 ## Nginx Architecture (Nginx 架构)
 
-> [!abstract] 核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
+> [!note] 本节重点心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
 ## Nginx 进程模型
 
@@ -149,7 +147,7 @@ Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反�
 
 ## Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
-> [!abstract] 核心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
+> [!note] 本节重点心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
 ## 反向代理配置
 
@@ -295,7 +293,7 @@ Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process
 
 ## Nginx and Application Server (Nginx 与应用服务器)
 
-> [!abstract] 核心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
+> [!note] 本节重点心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
 ## 为什么用 Nginx + 自写 Server
 
@@ -395,6 +393,12 @@ Nginx（路由）
 
 Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Reverse Proxy & Load Balancing Config (反向代理配置)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -404,9 +408,7 @@ Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)**。
 
 ### 最小验证
 

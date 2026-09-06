@@ -7,16 +7,14 @@ verified: 2026-09-06
 
 # 02-TCP Lifecycle and Reliability (TCP 生命周期与可靠性)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## TCP Handshake and Teardown (TCP 建连与挥手)
 
-> [!abstract] 核心考点：> 为什么是三次/四次、每步状态变化、异常场景
+> [!note] 本节重点心考点：> 为什么是三次/四次、每步状态变化、异常场景
 
 
-> [!abstract] 核心考点：> 三次握手同步双方初始序列号并处理历史报文；挥手由两条独立发送方向决定，TIME_WAIT 的具体时长依赖协议栈与配置。
+> [!note] 本节重点心考点：> 三次握手同步双方初始序列号并处理历史报文；挥手由两条独立发送方向决定，TIME_WAIT 的具体时长依赖协议栈与配置。
 
 ## 三次握手（建立连接）
 
@@ -110,7 +108,7 @@ Active Closer             Passive Closer
 
 ## TCP State Machine (TCP 状态机)
 
-> [!abstract] 核心考点：每个状态的含义、转换条件、服务端/客户端各自的状态路径
+> [!note] 本节重点心考点：每个状态的含义、转换条件、服务端/客户端各自的状态路径
 
 ## 完整状态列表
 
@@ -181,7 +179,7 @@ Notes on TIME_WAIT:
 
 ## TIME WAIT (TIME WAIT 原因与处理)
 
-> [!abstract] 核心考点：为什么存在、带来什么问题、如何正确处理
+> [!note] 本节重点心考点：为什么存在、带来什么问题、如何正确处理
 
 ## 为什么存在 TIME_WAIT？
 
@@ -282,7 +280,7 @@ TIME_WAIT 在 TCP 状态机中的位置见 → [TCP State Machine (状态机全�
 
 ## Flow and Congestion Control (流量与拥塞控制)
 
-> [!abstract] 核心考点：两者的区别、滑动窗口、拥塞控制四个阶段
+> [!note] 本节重点心考点：两者的区别、滑动窗口、拥塞控制四个阶段
 
 ## 核心区别
 
@@ -411,7 +409,7 @@ TCP 传输相关延伸见 → [Sticky Packet Problem & Solutions (粘包问题�
 
 ## Stream Framing (流式协议分帧)
 
-> [!abstract] 核心考点：什么是粘包、根本原因、四种解决方案
+> [!note] 本节重点心考点：什么是粘包、根本原因、四种解决方案
 
 ## 什么是粘包？
 
@@ -603,6 +601,12 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 
 粘包与 TCP 流式传输机制详解见 → [Flow Control & Congestion Control (流量控制与拥塞控制)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md>) · [TCP State Machine (状态机全图)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md>)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -612,9 +616,7 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-TCP Lifecycle and Reliability (TCP 生命周期与可靠性)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-TCP Lifecycle and Reliability (TCP 生命周期与可靠性)**。
 
 ### 最小验证
 

@@ -38,7 +38,7 @@ verified: 2026-09-06
 
 ## Memory Layout (内存布局)
 
-> [!abstract] 核心考点：> 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
+> [!note] 本节重点心考点：> 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
 
 ```text
 ┌──────────────────────────────────────────────┐
@@ -98,7 +98,7 @@ void foo() {
 
 ## Memory Alignment (内存对齐)
 
-> [!abstract] 核心考点：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
+> [!note] 本节重点心考点：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
 
 ### 对齐规则
 
@@ -165,7 +165,7 @@ static_assert(sizeof(Example) == 24);
 
 ## Memory Pool (内存池)
 
-> [!abstract] 核心考点：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
+> [!note] 本节重点心考点：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
 
 ### 为什么需要内存池
 
@@ -243,6 +243,12 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 ---
 
 内存对齐对内存池实现至关重要，详见 → [Memory Alignment (内存对齐)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)
+
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
 ## 常见误区
 

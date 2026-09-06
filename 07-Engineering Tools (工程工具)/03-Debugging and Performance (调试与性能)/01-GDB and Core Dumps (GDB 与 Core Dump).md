@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 01-GDB and Core Dumps (GDB 与 Core Dump)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
 ## GDB Essentials (GDB 核心用法)
 
-> [!abstract] 核心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
+> [!note] 本节重点心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
 
 ## 启动方式
 
@@ -158,7 +156,7 @@ Ctrl+L                    # 刷新屏幕（TUI 花屏时用）
 
 ## Core Dump Analysis (核心转储分析)
 
-> [!abstract] 核心考点：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
+> [!note] 本节重点心考点：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
 
 ## 什么是 Core Dump
 
@@ -255,6 +253,12 @@ void enable_core_dump() {
 - [perf：CPU Profiling & Flamegraph (性能火焰图)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03e-perf：CPU%20Profiling%20&%20Flamegraph%20(性能火焰图).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -264,9 +268,7 @@ void enable_core_dump() {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-GDB and Core Dumps (GDB 与 Core Dump)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-GDB and Core Dumps (GDB 与 Core Dump)**。
 
 ### 最小验证
 

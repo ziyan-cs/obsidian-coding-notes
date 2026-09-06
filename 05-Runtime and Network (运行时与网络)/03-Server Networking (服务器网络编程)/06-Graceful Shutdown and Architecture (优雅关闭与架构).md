@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 06-Graceful Shutdown and Architecture (优雅关闭与架构)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
 ## Graceful Shutdown (优雅关闭)
 
-> [!abstract] 核心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
+> [!note] 本节重点心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 ## 为什么需要优雅关闭
 
@@ -249,7 +247,7 @@ Kubernetes 删除 Pod 时：
 
 ## Backend Architecture Patterns (后端架构模式)
 
-> [!abstract] 核心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
+> [!note] 本节重点心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 
 ## 分层架构（Layered Architecture）
 
@@ -499,6 +497,12 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 生产环境实践见 → [Graceful Shutdown (优雅关闭)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
 
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
+
 ## 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
@@ -508,9 +512,7 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-06-Graceful Shutdown and Architecture (优雅关闭与架构)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-Graceful Shutdown and Architecture (优雅关闭与架构)**。
 
 ### 最小验证
 

@@ -7,18 +7,16 @@ verified: 2026-09-06
 
 # 06-gRPC and Protobuf (gRPC 与 Protobuf)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 一句话结论：gRPC 用 Protobuf 契约与 HTTP/2 流承载服务间 RPC；它适合受控的内部服务边界，但不自动解决 deadline、兼容性、鉴权和可观测性。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+**核心结论**：gRPC 的价值是可生成的强类型契约、流式 RPC 与 HTTP/2 连接复用；生产可靠性仍取决于 deadline、取消、错误分类、版本演进和监控。
 
 
 ## gRPC and Protobuf (RPC 与序列化)
 
-> [!abstract] 核心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
+> [!note] 本节重点心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
 ## 为什么需要 RPC
 
@@ -193,7 +191,7 @@ private:
 
 | 维度 | gRPC | HTTP/REST |
 |------|------|-----------|
-| 协议 | HTTP/2（二进制，多路复用） | HTTP/1.1（文本，队头阻塞） |
+| 传输 | 通常使用 HTTP/2（二进制帧、多路复用） | 常见为 HTTP/1.1，也可运行在 HTTP/2 或 HTTP/3 上 |
 | 序列化 | Protobuf（二进制，强类型） | JSON（文本，弱类型） |
 | 接口契约 | `.proto` 文件（代码生成） | OpenAPI/Swagger（文档） |
 | 流式通信 | 原生支持四种模式 | 需 WebSocket/SSE 补充 |
@@ -204,7 +202,7 @@ private:
 **工程建议：**
 - **内部服务间通信** → gRPC（性能好，强类型，流式支持）
 - **外部客户端/浏览器** → REST/gRPC-Web
-- **C++ 后端** → gRPC 几乎是唯一成熟的 RPC 方案
+- **C++ 后端** → gRPC 是成熟且常用的 RPC 方案之一；也可按生态、运维和互操作需求评估 Thrift、HTTP/JSON 或自研协议
 
 ---
 
@@ -270,11 +268,23 @@ class LogInterceptor : public grpc::Interceptor {
 | gRPC 为什么快 | Protobuf 编解码快 + HTTP/2 多路复用减少连接数 |
 | Channel 的安全性 | 多个 Stub 共享 Channel 是线程安全的，不需要额外锁 |
 
-> [!tip]- **工程要点**：gRPC 是 C++ 后端微服务间通信的首选方案。关键配置：超时必须设置（默认无限等待）、Keepalive 必须启用（防止中间设备断开空闲连接）、Channel 复用而非每次新建。注意 gRPC 1.x 版本之间可能有 ABI 不兼容，CMake 中锁定版本。
+> [!tip]- **工程要点**：内部服务可优先评估 gRPC，但不是默认答案。每个 RPC 都应显式设置 deadline；复用 Channel 而非每次新建。Keepalive 应按代理、负载均衡器和服务端策略配置，过于激进会制造无效流量。CMake 中锁定并验证所用 gRPC 版本与 ABI。
+
+## 官方资料
+
+- [gRPC C++ 文档](https://grpc.io/docs/languages/cpp/)
+- [Protocol Buffers 文档](https://protobuf.dev/)
+- 核验日期：2026-09-06
 
 ---
 
 gRPC 底层协议见 → [HTTP/2 Key Features (HTTP2核心特性了解)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/08-HTTP⧸2%20Key%20Features%20(HTTP2核心特性了解).md>) · [HTTPS & TLS Overview (HTTPS原理概览)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md>)
+
+
+
+## 零基础阅读路径
+
+先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
 ## 常见误区
 
@@ -285,9 +295,7 @@ gRPC 底层协议见 → [HTTP/2 Key Features (HTTP2核心特性了解)](</03-Ba
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-06-gRPC and Protobuf (gRPC 与 Protobuf)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-gRPC and Protobuf (gRPC 与 Protobuf)**。
 
 ### 最小验证
 

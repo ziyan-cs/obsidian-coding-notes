@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Monotonic Stack (单调栈)
 
-> [!abstract] 核心考点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
+> [!note] 本节重点心考点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
 
 
 单调栈维护一个**严格单调递增或递减**的栈，用于解决"下一个更大/更小元素"类问题，时间复杂度 O(n)（每个元素最多入栈出栈一次）。
@@ -99,7 +99,7 @@ int largestRectangleArea(vector<int>& heights) {
 
 ## Queue and Breadth First Search (队列与广度优先搜索)
 
-> [!abstract] 核心考点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
+> [!note] 本节重点心考点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
 
 
 BFS 用队列实现，**按层扩展**，保证找到的路径是最短路径（无权图）。
@@ -190,7 +190,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 ## Hash Table (哈希表)
 
-> [!abstract] 核心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
+> [!note] 本节重点心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
 
 ## 哈希表原理
 
@@ -276,6 +276,12 @@ unordered_map<pair<int,int>, int, PairHash> mp;
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 - [BFS with Queue (队列BFS)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md)
 
+
+
+## 零基础阅读路径
+
+先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
+
 ## 常见误区
 
 - 把 **02-Stack Queue and Hashing (栈队列与哈希)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -285,9 +291,7 @@ unordered_map<pair<int,int>, int, PairHash> mp;
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-02-Stack Queue and Hashing (栈队列与哈希)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Stack Queue and Hashing (栈队列与哈希)**。
 
 ### 最小验证
 

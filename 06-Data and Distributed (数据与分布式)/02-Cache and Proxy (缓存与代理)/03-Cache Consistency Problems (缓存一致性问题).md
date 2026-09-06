@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 03-Cache Consistency Problems (缓存一致性问题)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
@@ -38,7 +36,7 @@ verified: 2026-09-06
 
 ## Cache Penetration (缓存穿透)
 
-> [!abstract] 核心考点：> 缓存穿透原因、布隆过滤器原理、误判率与哈希函数数、解决方案对比
+> [!note] 本节重点心考点：> 缓存穿透原因、布隆过滤器原理、误判率与哈希函数数、解决方案对比
 
 ## 缓存穿透
 
@@ -143,7 +141,7 @@ if (id <= 0 || id > MAX_VALID_ID) {
 
 ## Cache Breakdown (缓存击穿)
 
-> [!abstract] 核心考点：> 缓存击穿原因、互斥锁方案、逻辑过期方案、热点 key 处理
+> [!note] 本节重点心考点：> 缓存击穿原因、互斥锁方案、逻辑过期方案、热点 key 处理
 
 ## 缓存击穿
 
@@ -266,7 +264,7 @@ while (true) {
 
 ## Cache Avalanche (缓存雪崩)
 
-> [!abstract] 核心考点：> 缓存雪崩的原因、过期时间加随机化、多级缓存、降级与限流
+> [!note] 本节重点心考点：> 缓存雪崩的原因、过期时间加随机化、多级缓存、降级与限流
 
 ## 缓存雪崩
 
@@ -374,6 +372,12 @@ string getWithDegrade(string key) {
 
 缓存三大问题系列详解见 → [01d1-Cache Penetration (缓存穿透：布隆过滤器)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d1-Cache%20Penetration%20(缓存穿透：布隆过滤器).md) · [01d2-Cache Breakdown (缓存击穿：热点key失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d2-Cache%20Breakdown%20(缓存击穿：热点key失效).md)
 
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
+
 ## 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
@@ -383,9 +387,7 @@ string getWithDegrade(string key) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Cache Consistency Problems (缓存一致性问题)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Cache Consistency Problems (缓存一致性问题)**。
 
 ### 最小验证
 

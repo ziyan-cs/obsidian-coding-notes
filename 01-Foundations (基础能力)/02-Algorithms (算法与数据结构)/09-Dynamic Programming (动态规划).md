@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## One Dimensional Dynamic Programming (一维动态规划)
 
-> [!abstract] 核心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
+> [!note] 本节重点心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
 
 ## 一维 DP 核心思想
 
@@ -207,7 +207,7 @@ int numDecodings(string s) {
 
 ## Knapsack Dynamic Programming (背包动态规划)
 
-> [!abstract] 核心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
+> [!note] 本节重点心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
 ## 背包问题核心框架
 
@@ -362,7 +362,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 ## Interval Dynamic Programming (区间动态规划)
 
-> [!abstract] 核心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
+> [!note] 本节重点心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
 
 ## 区间 DP 核心思想
 
@@ -510,7 +510,7 @@ for (int len = 2; len <= n; len++) {
 
 ## Longest Common Subsequence and LIS (最长子序列)
 
-> [!abstract] 核心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
+> [!note] 本节重点心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
 ## 最长递增子序列（LIS）
 
@@ -663,6 +663,12 @@ int longestPalindromeSubseq(string s) {
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 
+
+
+## 零基础阅读路径
+
+先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
+
 ## 常见误区
 
 - 把 **09-Dynamic Programming (动态规划)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -672,9 +678,7 @@ int longestPalindromeSubseq(string s) {
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-09-Dynamic Programming (动态规划)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **09-Dynamic Programming (动态规划)**。
 
 ### 最小验证
 

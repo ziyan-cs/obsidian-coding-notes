@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 03-Transactions MVCC and Locks (事务 MVCC 与锁)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 ## 30 秒回答
 
@@ -21,6 +19,12 @@ verified: 2026-09-06
 2. 检查访问路径是否命中合适索引；锁范围由索引与查询条件决定。
 3. 区分一致性快照读与当前读；后者可能加记录锁、gap lock 或 next-key lock。
 4. 对死锁保留日志并重试完整事务，而不是只重试其中一条 SQL。
+
+
+
+## 零基础阅读路径
+
+先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
 ## 常见误区
 
@@ -36,7 +40,7 @@ verified: 2026-09-06
 
 ## Transaction Isolation Levels (事务隔离级别)
 
-> [!abstract] 核心考点：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
+> [!note] 本节重点心考点：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
 
 ## SQL 标准隔离级别
 
@@ -161,7 +165,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 ## Transaction Anomalies (事务并发异常)
 
-> [!abstract] 核心考点：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
+> [!note] 本节重点心考点：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
 
 ## 脏读（Dirty Read）
 
@@ -287,7 +291,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ## MVCC Internals (MVCC 底层实现)
 
-> [!abstract] 核心考点：> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
+> [!note] 本节重点心考点：> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
 ## MVCC 核心思想
 
@@ -462,7 +466,7 @@ RR 级别下 MVCC 搭配 Next-Key Lock 解决幻读 → [隔离级别](05a-Isola
 
 ## Table and Row Locks (表锁与行锁)
 
-> [!abstract] 核心考点：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
+> [!note] 本节重点心考点：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
 
 ## 表锁 vs 行锁
 
@@ -585,7 +589,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ## Gap and Next Key Locks (间隙锁与临键锁)
 
-> [!abstract] 核心考点：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
+> [!note] 本节重点心考点：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
 
 ## 为什么需要 Gap Lock
 
@@ -721,7 +725,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 ## Deadlock Detection and Avoidance (死锁检测与避免)
 
-> [!abstract] 核心考点：死锁检测机制（等待图）、InnoDB 死锁处理策略（回滚代价较小的事务）、预防死锁方法
+> [!note] 本节重点心考点：死锁检测机制（等待图）、InnoDB 死锁处理策略（回滚代价较小的事务）、预防死锁方法
 
 ## 死锁的产生条件
 
@@ -872,9 +876,7 @@ SELECT * FROM sys.innodb_lock_waits\G
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-03-Transactions MVCC and Locks (事务 MVCC 与锁)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Transactions MVCC and Locks (事务 MVCC 与锁)**。
 
 ### 最小验证
 

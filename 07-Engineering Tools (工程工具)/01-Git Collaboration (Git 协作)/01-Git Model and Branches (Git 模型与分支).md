@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Git Model and Branches (Git 模型与分支)
 
-> [!abstract] 阅读定位
->
-> 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
+> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 ## Git Working Tree Index and HEAD (Git 三区模型)
 
-> [!abstract] 核心考点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
+> [!note] 本节重点心考点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
 
 ## 三区模型
 
@@ -120,7 +118,7 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 ## merge rebase and cherry pick (合并策略)
 
-> [!abstract] 核心考点：三者的本质区别、各自的使用场景、rebase 的黄金法则
+> [!note] 本节重点心考点：三者的本质区别、各自的使用场景、rebase 的黄金法则
 
 ## merge（合并）
 
@@ -232,7 +230,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ## Branch Workflow (分支协作流)
 
-> [!abstract] 核心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
+> [!note] 本节重点心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
 
 > [!tip] 先选最小能保障质量的流程
 > 对个人项目和多数小团队，短生命周期 feature branch + review + CI 往往足够。只有确有固定发版、并行维护等约束时，再承担 Git Flow 的额外分支成本。
@@ -311,6 +309,12 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 - [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
 - [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
 
+
+
+## 零基础阅读路径
+
+先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
+
 ## 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
@@ -320,9 +324,7 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-01-Git Model and Branches (Git 模型与分支)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Git Model and Branches (Git 模型与分支)**。
 
 ### 最小验证
 

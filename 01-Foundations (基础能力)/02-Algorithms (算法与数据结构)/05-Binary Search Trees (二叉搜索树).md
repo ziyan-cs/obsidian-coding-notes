@@ -13,7 +13,7 @@ verified: 2026-09-06
 
 ## Binary Search Tree and AVL (二叉搜索树与 AVL)
 
-> [!abstract] 核心考点：BST 中序遍历递增性质、查找/插入/删除的迭代与递归、AVL 旋转平衡机制
+> [!note] 本节重点心考点：BST 中序遍历递增性质、查找/插入/删除的迭代与递归、AVL 旋转平衡机制
 
 ## BST 性质
 
@@ -100,6 +100,12 @@ AVL 树保证严格平衡，查找 O(log n)；代价是插入/删除可能需要
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 - [BFS with Queue (队列BFS)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md)
 
+
+
+## 零基础阅读路径
+
+先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
+
 ## 常见误区
 
 - 把 **05-Binary Search Trees (二叉搜索树)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
@@ -109,9 +115,7 @@ AVL 树保证严格平衡，查找 O(log n)；代价是插入/删除可能需要
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-05-Binary Search Trees (二叉搜索树)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Binary Search Trees (二叉搜索树)**。
 
 ### 最小验证
 

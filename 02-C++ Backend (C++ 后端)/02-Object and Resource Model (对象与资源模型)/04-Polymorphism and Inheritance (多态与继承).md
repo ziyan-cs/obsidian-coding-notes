@@ -38,7 +38,7 @@ verified: 2026-09-06
 
 ## Virtual Functions and VTable (虚函数与虚表)
 
-> [!abstract] 核心考点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
+> [!note] 本节重点心考点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
 
 ## 虚函数表（VTable）
 
@@ -120,7 +120,7 @@ class Leaf final : public Derived { };  // 禁止继承 Leaf
 
 ## Polymorphism and Dynamic Dispatch (多态与动态分发)
 
-> [!abstract] 核心考点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
+> [!note] 本节重点心考点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp
 // 动态分派：运行时根据对象实际类型查 VTable
@@ -179,7 +179,7 @@ public:
 
 ## Abstract Classes and Pure Virtual (抽象类与纯虚函数)
 
-> [!abstract] 核心考点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
+> [!note] 本节重点心考点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
 
 ```cpp
 class Shape {
@@ -220,7 +220,7 @@ void Shape::draw() const { std::cout << "default draw\n"; }
 
 ## Multiple and Virtual Inheritance (多继承与虚继承)
 
-> [!abstract] 核心考点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
+> [!note] 本节重点心考点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
 
 ### 多继承
 
@@ -293,6 +293,12 @@ Diamond Virtual Inheritance Layout:
 
 虚函数表在多继承中的布局详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
 
+
+
+## 零基础阅读路径
+
+先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
+
 ## 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
@@ -302,9 +308,7 @@ Diamond Virtual Inheritance Layout:
 
 ### 从零复述
 
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **
-04-Polymorphism and Inheritance (多态与继承)
-**。
+- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Polymorphism and Inheritance (多态与继承)**。
 
 ### 最小验证
 
