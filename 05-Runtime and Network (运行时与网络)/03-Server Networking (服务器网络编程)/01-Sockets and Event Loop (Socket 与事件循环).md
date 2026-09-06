@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Socket API and Options (Socket API与选项)
 
-> [!note] 本节重点心考点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
+> [!note] 本节重点：核心考点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
 ## 函数调用链
 
@@ -228,7 +228,7 @@ Socket 编程进阶见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](
 
 ## Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
-> [!note] 本节重点心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
+> [!note] 本节重点：核心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
 ## 阻塞 vs 非阻塞
 
@@ -280,7 +280,7 @@ while (true) {
 
 ## Socket Options and Connection Health (套接字选项与连接健康)
 
-> [!note] 本节重点心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
+> [!note] 本节重点：核心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
 
 ## setsockopt

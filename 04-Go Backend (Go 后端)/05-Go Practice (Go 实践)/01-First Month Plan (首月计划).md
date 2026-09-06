@@ -8,13 +8,11 @@ verified: 2026-09-05
 
 # 01-First Month Plan (首月计划)
 
-> [!abstract] 阅读定位
->
-> 完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
+> [!abstract] 学习定位：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
+**核心结论**：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
 
 
 ## Week 1：命令、类型和 module

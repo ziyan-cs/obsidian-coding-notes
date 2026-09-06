@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Shell and Basic Commands (命令行与 Shell)
 
-> [!note] 本节重点心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
+> [!note] 本节重点：核心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
 
 ## 帮助命令
 
@@ -421,7 +421,7 @@ Shell 命令与脚本详解见 → [File System & Permissions (文件系统与�
 
 ## File System and Permissions (文件系统与权限)
 
-> [!note] 本节重点心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
+> [!note] 本节重点：核心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
 
 ## Vim 使用
 
@@ -641,7 +641,7 @@ ln <src> <dst>       # 创建硬链接
 
 ## System Administration Basics (系统管理基础)
 
-> [!note] 本节重点心考点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
+> [!note] 本节重点：核心考点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
 
 ## 用户与组管理
 

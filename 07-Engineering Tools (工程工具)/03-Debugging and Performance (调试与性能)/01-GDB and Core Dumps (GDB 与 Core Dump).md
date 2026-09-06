@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## GDB Essentials (GDB 核心用法)
 
-> [!note] 本节重点心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
+> [!note] 本节重点：核心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
 
 ## 启动方式
 
@@ -156,7 +156,7 @@ Ctrl+L                    # 刷新屏幕（TUI 花屏时用）
 
 ## Core Dump Analysis (核心转储分析)
 
-> [!note] 本节重点心考点：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
+> [!note] 本节重点：核心考点：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
 
 ## 什么是 Core Dump
 

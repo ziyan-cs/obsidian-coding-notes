@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## CMakeLists Structure (CMake 项目结构)
 
-> [!note] 本节重点心考点：最小可用结构、各指令的作用与顺序
+> [!note] 本节重点：核心考点：最小可用结构、各指令的作用与顺序
 
 > [!tip] CMake 的核心单位是 target
 > 把可执行文件和库声明为明确的 target，并让 include path、编译选项和依赖跟随 target 传播。全局变量和全局 `include_directories()` 在小项目能工作，却会在工程变大后制造隐式耦合。
@@ -108,7 +108,7 @@ CMake 的配置阶段读取 `CMakeLists.txt` 并生成构建系统，构建阶�
 
 ## CMake Target Dependencies (CMake 目标依赖)
 
-> [!note] 本节重点心考点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
+> [!note] 本节重点：核心考点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
 
 ## 现代 CMake 的核心思想
 
@@ -186,7 +186,7 @@ target_compile_definitions(myapp PRIVATE
 
 ## CMake Build Types (CMake 构建类型)
 
-> [!note] 本节重点心考点：四种构建类型的使用场景、优化级别、常用配置
+> [!note] 本节重点：核心考点：四种构建类型的使用场景、优化级别、常用配置
 
 
 ## 四种标准构建类型

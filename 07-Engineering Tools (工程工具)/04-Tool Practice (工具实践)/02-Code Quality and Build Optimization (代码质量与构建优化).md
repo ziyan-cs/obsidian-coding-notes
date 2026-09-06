@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Code Quality and Build Optimization (代码质量与构建优化)
 
-> [!note] 本节重点心考点：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
+> [!note] 本节重点：核心考点：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
 
 ## 代码质量工具
 

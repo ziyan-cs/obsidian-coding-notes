@@ -41,6 +41,20 @@ Python 是后端工程的“杠杆语言”：它很适合把日志、接口、�
 
 读取压测 CSV，按 endpoint 汇总请求数、错误率和 p95；输出 Markdown 表格。先用标准库 `csv`，数据量或分析需求明显增长后再学习 pandas。
 
+## 分块读取的最小例子
+
+```python
+import csv
+from collections import Counter
+
+counts: Counter[str] = Counter()
+with open("access.csv", newline="", encoding="utf-8") as f:
+    for row in csv.DictReader(f):
+        counts[row["endpoint"]] += 1
+```
+
+这个例子一次只保留当前行与聚合结果；若聚合结果本身也可能无限增长，就需要限制维度、写入数据库或使用外部排序。所谓“流式”不是魔法，它只解决输入不能一次装入内存的问题。
+
 
 
 ## 从零建立模型

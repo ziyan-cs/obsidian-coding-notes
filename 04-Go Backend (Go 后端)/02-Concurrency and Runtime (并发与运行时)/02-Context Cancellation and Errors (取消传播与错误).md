@@ -20,6 +20,25 @@ verified: 2026-09-06
 3. worker 的 `select` 是否监听 `ctx.Done()`？
 4. 超时后是否停止重试和后台写入，而不是仅向客户端返回错误？
 
+## 最小取消示例
+
+```go
+func work(ctx context.Context) error {
+    select {
+    case <-time.After(time.Second):
+        return nil
+    case <-ctx.Done():
+        return ctx.Err()
+    }
+}
+
+ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+defer cancel()
+err := work(ctx) // err is context.DeadlineExceeded
+```
+
+`cancel` 必须被调用，即使 timeout 最终会触发；这样可尽早释放派生 context 关联的资源。真实 I/O 应优先使用 `http.NewRequestWithContext`、`QueryContext` 等支持 context 的 API，而不是只在入口处检查一次。
+
 
 
 ## 从零建立模型

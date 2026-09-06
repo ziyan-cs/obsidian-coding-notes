@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 02-Memory Layout and Allocation (内存布局与分配)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -38,7 +36,7 @@ verified: 2026-09-06
 
 ## Memory Layout (内存布局)
 
-> [!note] 本节重点心考点：> 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
+> [!note] 本节重点：核心考点：> 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
 
 ```text
 ┌──────────────────────────────────────────────┐
@@ -98,7 +96,7 @@ void foo() {
 
 ## Memory Alignment (内存对齐)
 
-> [!note] 本节重点心考点：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
+> [!note] 本节重点：核心考点：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
 
 ### 对齐规则
 
@@ -165,7 +163,7 @@ static_assert(sizeof(Example) == 24);
 
 ## Memory Pool (内存池)
 
-> [!note] 本节重点心考点：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
+> [!note] 本节重点：核心考点：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
 
 ### 为什么需要内存池
 

@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Connection Pool (连接池)
 
-> [!note] 本节重点心考点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
+> [!note] 本节重点：核心考点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
 ## MySQL C API 基础
 

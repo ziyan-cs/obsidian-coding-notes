@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## gRPC and Protobuf (RPC 与序列化)
 
-> [!note] 本节重点心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
+> [!note] 本节重点：核心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
 ## 为什么需要 RPC
 

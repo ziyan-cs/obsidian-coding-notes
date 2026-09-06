@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 04-Polymorphism and Inheritance (多态与继承)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -38,7 +36,7 @@ verified: 2026-09-06
 
 ## Virtual Functions and VTable (虚函数与虚表)
 
-> [!note] 本节重点心考点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
+> [!note] 本节重点：核心考点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
 
 ## 虚函数表（VTable）
 
@@ -48,7 +46,7 @@ verified: 2026-09-06
 ┌───────────────────────┐    ┌─────────────────────────┐    ┌─────────────────────┐
 │  Object Layout        │    │  VTable (one per class) │    │  Code Segment       │
 ├───────────────────────┤    ├─────────────────────────┤    ├─────────────────────┤
-│  vptr (8 bytes) ──────│───→│  [0] virtual ~Base()   │    │  Base::foo()        │
+│  vptr (8 bytes) ──────│───→│  [0] virtual ~Base()    │    │  Base::foo()        │
 ├───────────────────────┤    ├─────────────────────────┤    │    implementation   │
 │  int a                │    │  [1] virtual foo() ─────│───→│                     │
 │    (member variable)  │    ├─────────────────────────┤    ├─────────────────────┤
@@ -120,7 +118,7 @@ class Leaf final : public Derived { };  // 禁止继承 Leaf
 
 ## Polymorphism and Dynamic Dispatch (多态与动态分发)
 
-> [!note] 本节重点心考点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
+> [!note] 本节重点：核心考点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp
 // 动态分派：运行时根据对象实际类型查 VTable
@@ -179,7 +177,7 @@ public:
 
 ## Abstract Classes and Pure Virtual (抽象类与纯虚函数)
 
-> [!note] 本节重点心考点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
+> [!note] 本节重点：核心考点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
 
 ```cpp
 class Shape {
@@ -220,7 +218,7 @@ void Shape::draw() const { std::cout << "default draw\n"; }
 
 ## Multiple and Virtual Inheritance (多继承与虚继承)
 
-> [!note] 本节重点心考点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
+> [!note] 本节重点：核心考点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
 
 ### 多继承
 

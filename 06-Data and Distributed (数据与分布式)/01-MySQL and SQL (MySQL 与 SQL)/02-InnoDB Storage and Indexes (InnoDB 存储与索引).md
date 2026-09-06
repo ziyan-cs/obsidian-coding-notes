@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## InnoDB Pages and Buffer Pool (页结构与缓冲池)
 
-> [!note] 本节重点心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
+> [!note] 本节重点：核心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
 
 ## InnoDB 页结构
 
@@ -123,7 +123,7 @@ B+树索引结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03
 
 ## B Plus Tree Index (B Plus 树索引)
 
-> [!note] 本节重点心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
+> [!note] 本节重点：核心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
 
 > [!warning] 页容量与树高只能按真实表结构估算
 > 记录头、页目录、变长列、二级索引主键、填充率与缓存命中都会改变扇出和 I/O。下面的数值只用于理解数量级，不能当作任意表的性能结论；实际用 `EXPLAIN`、表结构和压测验证。
@@ -235,7 +235,7 @@ InnoDB 每页 16KB，假设：
 
 ## Clustered and Secondary Indexes (聚簇与二级索引)
 
-> [!note] 本节重点心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
+> [!note] 本节重点：核心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
 
 ## 聚簇索引（Clustered Index）
 
@@ -340,7 +340,7 @@ B+树结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backe
 
 ## Index Pushdown and Covering Indexes (索引下推与覆盖索引)
 
-> [!note] 本节重点心考点：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化
+> [!note] 本节重点：核心考点：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化
 
 ## 索引条件下推（ICP）
 

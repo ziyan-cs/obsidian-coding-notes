@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 11-String and Bit Algorithms (字符串与位运算)
 
-> [!abstract] 阅读定位
->
-> 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 ## KMP Pattern Matching (KMP 模式匹配)
 
-> [!note] 本节重点心考点：KMP next 数组构建、匹配过程 O(n+m)、next 数组含义（最长公共前后缀）
+> [!note] 本节重点：核心考点：KMP next 数组构建、匹配过程 O(n+m)、next 数组含义（最长公共前后缀）
 
 ## KMP 核心思想
 
@@ -131,7 +129,7 @@ int minCycle(string& s) {
 
 ## Bit Manipulation (位运算技巧)
 
-> [!note] 本节重点心考点：位运算基本操作、常用位技巧、Brian Kernighan 算法、^ 异或的妙用、掩码与状态压缩
+> [!note] 本节重点：核心考点：位运算基本操作、常用位技巧、Brian Kernighan 算法、^ 异或的妙用、掩码与状态压缩
 
 ## 位运算基础
 

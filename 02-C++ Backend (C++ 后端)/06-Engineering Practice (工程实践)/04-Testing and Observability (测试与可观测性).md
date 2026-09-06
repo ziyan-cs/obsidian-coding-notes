@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 04-Testing and Observability (测试与可观测性)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## Testing & Mocking (测试与模拟)
 
-> [!note] 本节重点心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
+> [!note] 本节重点：核心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
 ## 测试金字塔
 
@@ -207,7 +205,7 @@ genhtml -o report coverage.info
 
 ## Observability Logging Metrics and Tracing (可观测性)
 
-> [!note] 本节重点心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
+> [!note] 本节重点：核心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 
 ## 可观测性三大支柱
 

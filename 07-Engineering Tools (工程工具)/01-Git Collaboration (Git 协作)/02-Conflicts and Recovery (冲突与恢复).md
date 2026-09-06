@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Conflict Resolution (冲突解决)
 
-> [!note] 本节重点心考点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
+> [!note] 本节重点：核心考点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
 
 ## 冲突何时产生
 
@@ -103,7 +103,7 @@ git rebase --abort    # 回到 rebase 前
 
 ## reset revert and restore (撤销操作)
 
-> [!note] 本节重点心考点：三者的作用范围、是否改写历史、适用场景
+> [!note] 本节重点：核心考点：三者的作用范围、是否改写历史、适用场景
 
 > [!warning] 先确认目标，再执行会丢数据的命令
 > `reset --hard` 与 `restore` 可能丢掉未提交内容。先用 `git status`、`git diff` 确认目标；重要改动先做 commit、stash 或文件级备份。公共分支默认优先考虑 `revert`。
@@ -191,7 +191,7 @@ git restore --source=HEAD~2 file  # 将文件恢复到指定 commit 的版本
 
 ## stash tag and reflog (实用命令)
 
-> [!note] 本节重点心考点：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
+> [!note] 本节重点：核心考点：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
 
 ## git stash（临时搁置）
 

@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Kafka Core Concepts (Kafka核心概念)
 
-> [!note] 本节重点心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
+> [!note] 本节重点：核心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
 ## Kafka 核心概念
 
@@ -118,7 +118,7 @@ max.poll.records=500        # 每次拉取条数
 
 ## Message Delivery and Idempotency (消息可靠性与幂等)
 
-> [!note] 本节重点心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
+> [!note] 本节重点：核心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
 > [!warning] “Exactly Once” 必须说明边界
 > Kafka 的幂等与事务能约束 Kafka 内部的写入/消费链路；把消息处理结果写进 MySQL 等外部系统时，不能仅凭一段本地 SQL 就宣称端到端 exactly-once。通常要使用幂等写入、去重键、outbox/inbox 或可恢复的状态机。

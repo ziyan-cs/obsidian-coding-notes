@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Modern C++ Foundations (现代 C++ 基础)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## Modern C++ Overview (现代 C++ 总览)
 
-> [!note] 本节重点心考点：> C++11/14/17/20 关键特性一览、现代 C++ 的核心设计理念
+> [!note] 本节重点：核心考点：> C++11/14/17/20 关键特性一览、现代 C++ 的核心设计理念
 
 |特性|标准|核心价值|
 |---|---|---|
@@ -40,7 +38,7 @@ verified: 2026-09-06
 
 ## Type Deduction (类型推导)
 
-> [!note] 本节重点心考点：auto 的推导规则、decltype 与 auto 的区别、trailing return type
+> [!note] 本节重点：核心考点：auto 的推导规则、decltype 与 auto 的区别、trailing return type
 
 ## auto
 
@@ -128,7 +126,7 @@ decltype(auto) call(F&& f, Args&&... args) {
 
 ## Lambda and Function Objects (Lambda 与函数对象)
 
-> [!note] 本节重点心考点：捕获方式、泛型 lambda、std::function 的开销
+> [!note] 本节重点：核心考点：捕获方式、泛型 lambda、std::function 的开销
 
 > [!warning] 捕获列表就是生命周期契约
 > 值捕获复制状态，引用捕获依赖外部对象仍然存活。把 lambda 存起来、异步执行或作为回调传出时，默认引用捕获尤其容易产生悬空引用。

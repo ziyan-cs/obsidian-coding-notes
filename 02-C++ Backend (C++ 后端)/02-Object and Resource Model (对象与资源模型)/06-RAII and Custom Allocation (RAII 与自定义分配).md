@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 06-RAII and Custom Allocation (RAII 与自定义分配)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -59,7 +57,7 @@ failure while constructing
 
 ## RAII and Resource Management (RAII 与资源管理)
 
-> [!note] 本节重点心考点：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
+> [!note] 本节重点：核心考点：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
 
 ## 什么是 RAII
 
@@ -248,7 +246,7 @@ RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & Refe
 
 ## Custom Allocators and Placement New (自定义分配器)
 
-> [!note] 本节重点心考点：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
+> [!note] 本节重点：核心考点：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
 ## Placement New
 

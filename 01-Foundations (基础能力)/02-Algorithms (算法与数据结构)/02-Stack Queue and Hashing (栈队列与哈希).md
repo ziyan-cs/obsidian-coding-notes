@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 02-Stack Queue and Hashing (栈队列与哈希)
 
-> [!abstract] 阅读定位
->
-> 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 ## Monotonic Stack (单调栈)
 
-> [!note] 本节重点心考点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
+> [!note] 本节重点：核心考点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
 
 
 单调栈维护一个**严格单调递增或递减**的栈，用于解决"下一个更大/更小元素"类问题，时间复杂度 O(n)（每个元素最多入栈出栈一次）。
@@ -99,7 +97,7 @@ int largestRectangleArea(vector<int>& heights) {
 
 ## Queue and Breadth First Search (队列与广度优先搜索)
 
-> [!note] 本节重点心考点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
+> [!note] 本节重点：核心考点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
 
 
 BFS 用队列实现，**按层扩展**，保证找到的路径是最短路径（无权图）。
@@ -190,7 +188,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 ## Hash Table (哈希表)
 
-> [!note] 本节重点心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
+> [!note] 本节重点：核心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
 
 ## 哈希表原理
 

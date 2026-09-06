@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Paxos Overview (Paxos概览)
 
-> [!note] 本节重点心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
+> [!note] 本节重点：核心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 ## Paxos 简介
 

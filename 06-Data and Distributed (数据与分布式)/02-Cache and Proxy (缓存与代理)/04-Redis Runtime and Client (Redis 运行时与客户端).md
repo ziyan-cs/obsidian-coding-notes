@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Redis Event Loop (Redis 事件循环)
 
-> [!note] 本节重点心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
+> [!note] 本节重点：核心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
 ## Redis 单线程模型
 
@@ -207,7 +207,7 @@ Redis 的底层数据结构详解见 → [SDS](01a1-SDS：Simple%20Dynamic%20Str
 
 ## Redis Client Integration (Redis 客户端集成)
 
-> [!note] 本节重点心考点：> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
+> [!note] 本节重点：核心考点：> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
 
 ## hiredis 库
 

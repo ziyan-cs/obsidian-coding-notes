@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## POSIX Thread Lifecycle (POSIX 线程生命周期)
 
-> [!note] 本节重点心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
+> [!note] 本节重点：核心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
 ## 线程的本质
 
@@ -108,7 +108,7 @@ POSIX 线程详解见 → [Mutex & Condition Variable (互斥锁与条件变量)
 
 ## Mutex and Condition Variable (互斥锁与条件变量)
 
-> [!note] 本节重点心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
+> [!note] 本节重点：核心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
 ## 互斥锁（Mutex）
 
@@ -231,7 +231,7 @@ mutex 保护共享不变量；condition variable 不保存条件本身，只负�
 
 ## Deadlock Causes and Prevention (死锁原因与预防)
 
-> [!note] 本节重点心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
+> [!note] 本节重点：核心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
 ## 死锁的四个必要条件（Coffman 条件）
 
@@ -313,7 +313,7 @@ valgrind --tool=helgrind ./myapp
 
 ## Threads and Processes (线程与进程)
 
-> [!note] 本节重点心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
+> [!note] 本节重点：核心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
 ## 创建开销
 
@@ -352,7 +352,7 @@ valgrind --tool=helgrind ./myapp
 
 ## Semaphores (信号量)
 
-> [!note] 本节重点心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
+> [!note] 本节重点：核心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
 
 ## 信号量的本质
 
@@ -427,7 +427,7 @@ sem_post(&empty);           // 通知生产者
 
 ## Signals and Signal Handling (信号与处理)
 
-> [!note] 本节重点心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
+> [!note] 本节重点：核心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 
 ## 信号的本质
 

@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Graceful Shutdown (优雅关闭)
 
-> [!note] 本节重点心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
+> [!note] 本节重点：核心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 ## 为什么需要优雅关闭
 
@@ -247,7 +247,7 @@ Kubernetes 删除 Pod 时：
 
 ## Backend Architecture Patterns (后端架构模式)
 
-> [!note] 本节重点心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
+> [!note] 本节重点：核心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 
 ## 分层架构（Layered Architecture）
 

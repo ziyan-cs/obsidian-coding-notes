@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Connection Pool Design (连接池设计)
 
-> [!note] 本节重点心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
+> [!note] 本节重点：核心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
 
 ## 为什么需要连接池
 
@@ -238,7 +238,7 @@ void *health_check_thread(void *arg) {
 
 ## Protocol Framing and Buffering (协议分帧与缓冲区)
 
-> [!note] 本节重点心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
+> [!note] 本节重点：核心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 
 ## 为什么需要 Buffer
 

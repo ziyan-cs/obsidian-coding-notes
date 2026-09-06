@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## TCP and IP Stack (TCP 与 IP 协议栈)
 
-> [!note] 本节重点心考点：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
+> [!note] 本节重点：核心考点：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
 
 
 ## 层级关系

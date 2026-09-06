@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 04-Generic Programming and Type Tools (泛型与类型工具)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## Perfect Forwarding and Universal References (完美转发)
 
-> [!note] 本节重点心考点：万能引用、引用折叠、std::forward 的作用
+> [!note] 本节重点：核心考点：万能引用、引用折叠、std::forward 的作用
 
 > [!warning] `std::forward` 只用于保留原始值类别
 > 它不是“更快的 `std::move`”。转发同一个对象后仍继续依赖其状态会让调用者难以判断所有权；只有下游确实需要按原值类别重载时才使用。
@@ -118,7 +116,7 @@ decltype(auto) timed_call(F&& f, Args&&... args) {
 
 ## constexpr and Compile Time Computation (编译期计算)
 
-> [!note] 本节重点心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
+> [!note] 本节重点：核心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
 
 ## constexpr 变量
 
@@ -209,7 +207,7 @@ g = 100;                    // 运行期可修改
 
 ## optional and variant (新类型工具)
 
-> [!note] 本节重点心考点：optional、variant、any 三种新型类型工具的适用场景
+> [!note] 本节重点：核心考点：optional、variant、any 三种新型类型工具的适用场景
 
 ## std::optional（C++17）
 
@@ -302,7 +300,7 @@ optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详
 
 ## string view and Structured Bindings (轻量视图)
 
-> [!note] 本节重点心考点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
+> [!note] 本节重点：核心考点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
 
 ## std::string_view（C++17）
 
@@ -407,7 +405,7 @@ string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [
 
 ## Concepts and SFINAE (概念与模板元编程)
 
-> [!note] 本节重点心考点：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
+> [!note] 本节重点：核心考点：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
 
 ## Concept 基础（C++20）
 

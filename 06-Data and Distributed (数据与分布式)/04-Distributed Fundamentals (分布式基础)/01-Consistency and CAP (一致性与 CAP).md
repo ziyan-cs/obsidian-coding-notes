@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## CAP BASE and Consistency (CAP BASE与一致性)
 
-> [!note] 本节重点心考点：> CAP 定理（一致性/可用性/分区容错）、BASE 理论、CP vs AP 权衡、PACELC
+> [!note] 本节重点：核心考点：> CAP 定理（一致性/可用性/分区容错）、BASE 理论、CP vs AP 权衡、PACELC
 
 ## CAP 定理
 
@@ -130,7 +130,7 @@ CAP 讨论的是网络分区发生时的取舍：若要保证线性一致，某�
 
 ## Consistency Models (一致性模型)
 
-> [!note] 本节重点心考点：> 一致性模型分级（强/弱/最终）、Quorum 机制、读写模型、Dynamo 风格
+> [!note] 本节重点：核心考点：> 一致性模型分级（强/弱/最终）、Quorum 机制、读写模型、Dynamo 风格
 
 ## 一致性模型分级
 

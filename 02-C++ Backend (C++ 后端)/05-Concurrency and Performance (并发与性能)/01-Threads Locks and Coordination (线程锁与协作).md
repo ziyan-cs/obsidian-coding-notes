@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 01-Threads Locks and Coordination (线程锁与协作)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -52,7 +50,7 @@ verified: 2026-09-06
 
 ## Thread Basics POSIX & std thread (线程基础)
 
-> [!note] 本节重点心考点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
+> [!note] 本节重点：核心考点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 
 ## std::thread 基础
 
@@ -171,7 +169,7 @@ try {
 
 ## Mutex & Lock (互斥锁与锁管理)
 
-> [!note] 本节重点心考点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
+> [!note] 本节重点：核心考点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
 
 ## std::mutex 与 RAII 锁
 
@@ -330,7 +328,7 @@ void unchecked() {  // ❌ 忘记加锁
 
 ## Condition Variable & Semaphore (条件变量与信号量)
 
-> [!note] 本节重点心考点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
+> [!note] 本节重点：核心考点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
 ## 条件变量（condition_variable）
 

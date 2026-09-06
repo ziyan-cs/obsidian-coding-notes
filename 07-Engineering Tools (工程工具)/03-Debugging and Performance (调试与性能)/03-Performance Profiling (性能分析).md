@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## perf and Flamegraphs (perf 与火焰图)
 
-> [!note] 本节重点心考点：perf 采样原理、常用子命令、如何生成火焰图并解读
+> [!note] 本节重点：核心考点：perf 采样原理、常用子命令、如何生成火焰图并解读
 
 ## perf 基础
 

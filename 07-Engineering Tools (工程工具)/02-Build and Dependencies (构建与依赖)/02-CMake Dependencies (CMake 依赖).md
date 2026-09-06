@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## CMake External Dependencies (CMake 外部依赖)
 
-> [!note] 本节重点心考点：优先消费库提供的 Config package 与 imported target；只有缺少包配置时才考虑 Module mode 或自定义 Find 脚本。
+> [!note] 本节重点：核心考点：优先消费库提供的 Config package 与 imported target；只有缺少包配置时才考虑 Module mode 或自定义 Find 脚本。
 
 > [!warning] 依赖“能找到”不代表配置可复现
 > 不要依赖某台机器碰巧安装了库。明确依赖版本、目标名和安装来源；CI 或全新环境能从零配置成功，才说明构建边界真正成立。
@@ -84,7 +84,7 @@ target_link_libraries(my_test PRIVATE GTest::gtest_main)
 
 ## CMake Package Managers (CMake 包管理器)
 
-> [!note] 本节重点心考点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
+> [!note] 本节重点：核心考点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
 
 ## 为什么需要包管理器
 

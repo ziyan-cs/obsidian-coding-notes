@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Reactor Pattern (Reactor模式)
 
-> [!note] 本节重点心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
+> [!note] 本节重点：核心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
 > 代表：Redis 6.0 之前的网络处理部分
 
 ## 模型结构
@@ -101,7 +101,7 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 
 ## Reactor Threading Models (Reactor线程模型)
 
-> [!note] 本节重点心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
+> [!note] 本节重点：核心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题
 
 ## 模型结构 · 延伸要点 2
@@ -212,7 +212,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 ## Multi Reactor Architecture (多Reactor架构)
 
-> [!note] 本节重点心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
+> [!note] 本节重点：核心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构
 

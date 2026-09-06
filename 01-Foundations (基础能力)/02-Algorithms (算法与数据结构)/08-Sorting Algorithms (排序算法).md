@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 08-Sorting Algorithms (排序算法)
 
-> [!abstract] 阅读定位
->
-> 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 ## Sorting Overview (排序总览)
 
-> [!note] 本节重点心考点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
+> [!note] 本节重点：核心考点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
 
 ## 核心
 
@@ -205,7 +203,7 @@ void radixSort(vector<int>& a) {
 
 ## Quick Sort (快速排序)
 
-> [!note] 本节重点心考点：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现
+> [!note] 本节重点：核心考点：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现
 
 ```cpp
 void quickSortV1(vector<int>& arr, int L, int R) {
@@ -293,7 +291,7 @@ void quickSortV3(vector<int>& arr, int L, int R) {
 
 ## Merge Sort and Inversion Count (归并排序与逆序对)
 
-> [!note] 本节重点心考点：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
+> [!note] 本节重点：核心考点：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
 
 ```cpp
 // 对外接口
@@ -335,7 +333,7 @@ void merge(vector<int>& arr, int L, int M, int R) {
 
 ## Heap Sort (堆排序)
 
-> [!note] 本节重点心考点：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性
+> [!note] 本节重点：核心考点：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性
 
 ```cpp
 // 大顶堆（默认）

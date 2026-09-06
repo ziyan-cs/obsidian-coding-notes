@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Sequence Containers (顺序容器)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## vector Dynamic Array and Reallocation (动态扩容原理)
 
-> [!note] 本节重点心考点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
+> [!note] 本节重点：核心考点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
 
 ## 内存布局与核心特性
 
@@ -141,7 +139,7 @@ v.shrink_to_fit();
 
 ## deque Block Based Storage (分块存储)
 
-> [!note] 本节重点心考点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
+> [!note] 本节重点：核心考点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
 
 ## 内存布局
 
@@ -240,7 +238,7 @@ vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocatio
 
 ## list Doubly Linked List (双向链表)
 
-> [!note] 本节重点心考点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
+> [!note] 本节重点：核心考点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
 
 ## 内存布局 · 延伸要点 2
 `list` 是一个**双向循环链表**（GCC 实现为带哨兵节点的循环链表）：

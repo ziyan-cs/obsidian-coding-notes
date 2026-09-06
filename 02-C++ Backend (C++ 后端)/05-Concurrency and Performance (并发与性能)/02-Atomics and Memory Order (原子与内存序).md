@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 02-Atomics and Memory Order (原子与内存序)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -44,7 +42,7 @@ atomic 保证单个原子对象的读改写不发生 data race，但不自动让
 
 ## Atomic & Memory Order (原子操作与内存序)
 
-> [!note] 本节重点心考点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
+> [!note] 本节重点：核心考点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
 
 ## std::atomic 基础
 

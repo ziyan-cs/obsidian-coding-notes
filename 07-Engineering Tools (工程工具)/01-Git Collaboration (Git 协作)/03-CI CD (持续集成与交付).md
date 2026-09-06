@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## CI CD for C Plus Plus (C Plus Plus 持续集成)
 
-> [!note] 本节重点心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
+> [!note] 本节重点：核心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
 
 ## C++ CI/CD 流水线
 

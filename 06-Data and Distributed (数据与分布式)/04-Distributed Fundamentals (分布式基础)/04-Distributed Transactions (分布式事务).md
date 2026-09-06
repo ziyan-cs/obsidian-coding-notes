@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Distributed Transactions and Saga (分布式事务与Saga)
 
-> [!note] 本节重点心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
+> [!note] 本节重点：核心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
 
 ## 分布式事务场景
 

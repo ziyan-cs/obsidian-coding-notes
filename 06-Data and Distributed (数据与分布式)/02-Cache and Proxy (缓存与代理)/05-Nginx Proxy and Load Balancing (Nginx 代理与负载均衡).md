@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Nginx Architecture (Nginx 架构)
 
-> [!note] 本节重点心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
+> [!note] 本节重点：核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
 ## Nginx 进程模型
 
@@ -147,7 +147,7 @@ Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反�
 
 ## Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
-> [!note] 本节重点心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
+> [!note] 本节重点：核心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
 ## 反向代理配置
 
@@ -293,7 +293,7 @@ Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process
 
 ## Nginx and Application Server (Nginx 与应用服务器)
 
-> [!note] 本节重点心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
+> [!note] 本节重点：核心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
 ## 为什么用 Nginx + 自写 Server
 

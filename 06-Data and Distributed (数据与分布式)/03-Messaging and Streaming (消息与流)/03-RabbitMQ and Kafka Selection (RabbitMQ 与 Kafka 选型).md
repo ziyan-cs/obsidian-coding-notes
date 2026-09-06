@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
 
-> [!note] 本节重点心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
+> [!note] 本节重点：核心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 
 > [!warning] 不用固定吞吐和延迟为产品贴标签
 > 性能取决于消息大小、确认语义、持久化、批量、分区/队列、硬件与网络；RabbitMQ 和 Kafka 都能覆盖多种工作负载。选型先写清投递语义、重放需求、路由模型、运维能力和压测证据。

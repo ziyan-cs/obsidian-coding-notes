@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 01-Types Pointers and References (类型指针与引用)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## Type System Basics (类型系统基础)
 
-> [!note] 本节重点心考点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
+> [!note] 本节重点：核心考点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
 
 ## const
 
@@ -79,7 +77,7 @@ switch (d) {
 
 ## Type Conversion and Casting (类型转换)
 
-> [!note] 本节重点心考点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
+> [!note] 本节重点：核心考点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
 
 ## 四种命名转换（Named Casts）
 
@@ -164,7 +162,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ## Pointers and References (指针与引用)
 
-> [!note] 本节重点心考点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
+> [!note] 本节重点：核心考点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
 
 > [!warning] 地址运算必须受对象边界约束
 > 指针算术只在同一数组对象（含末尾后一位置）范围内才有定义；“指针就是整数地址”是有用的直觉，但不是可以随意加减、转换和解引用的许可证。

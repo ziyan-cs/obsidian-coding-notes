@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Write Ahead Logging (预写日志)
 
-> [!note] 本节重点心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
+> [!note] 本节重点：核心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 
 ## WAL 的核心思想
 
@@ -116,7 +116,7 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 ## Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 
-> [!note] 本节重点心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
+> [!note] 本节重点：核心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
 ## Redo Log 的物理结构
 
@@ -257,7 +257,7 @@ LSN 的作用：
 
 ## Binlog and Redo Log (Binlog 与 Redo Log)
 
-> [!note] 本节重点心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
+> [!note] 本节重点：核心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
 ## Binlog vs Redo Log 概览
 

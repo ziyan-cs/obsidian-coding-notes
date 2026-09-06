@@ -7,13 +7,11 @@ verified: 2026-09-06
 
 # 09-Dynamic Programming (动态规划)
 
-> [!abstract] 阅读定位
->
-> 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 ## One Dimensional Dynamic Programming (一维动态规划)
 
-> [!note] 本节重点心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
+> [!note] 本节重点：核心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
 
 ## 一维 DP 核心思想
 
@@ -207,7 +205,7 @@ int numDecodings(string s) {
 
 ## Knapsack Dynamic Programming (背包动态规划)
 
-> [!note] 本节重点心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
+> [!note] 本节重点：核心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
 ## 背包问题核心框架
 
@@ -362,7 +360,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 ## Interval Dynamic Programming (区间动态规划)
 
-> [!note] 本节重点心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
+> [!note] 本节重点：核心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
 
 ## 区间 DP 核心思想
 
@@ -510,7 +508,7 @@ for (int len = 2; len <= n; len++) {
 
 ## Longest Common Subsequence and LIS (最长子序列)
 
-> [!note] 本节重点心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
+> [!note] 本节重点：核心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
 ## 最长递增子序列（LIS）
 

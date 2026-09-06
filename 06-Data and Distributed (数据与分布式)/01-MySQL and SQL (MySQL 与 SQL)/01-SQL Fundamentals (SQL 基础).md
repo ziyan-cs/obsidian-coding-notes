@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## SQL Basics (SQL 基础语法)
 
-> [!note] 本节重点心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
+> [!note] 本节重点：核心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
 
 ## DDL（数据定义）
 ### 1. 数据库操作
@@ -429,7 +429,7 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ## Joins and Subqueries (多表查询与子查询)
 
-> [!note] 本节重点心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
+> [!note] 本节重点：核心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
 ## 联合查询
 
@@ -527,7 +527,7 @@ SELECT * FROM orders WHERE user_id IN (
 
 ## Aggregation and Grouping (聚合与分组)
 
-> [!note] 本节重点心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
+> [!note] 本节重点：核心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
 
 ## 数据库操作
 
@@ -694,7 +694,7 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ## MySQL Overview (MySQL 基础)
 
-> [!note] 本节重点心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
+> [!note] 本节重点：核心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
 
 > [!warning] **平台/版本说明（NEEDS_VERIFY）**：以下路径以 **Windows 本机 MySQL 8.0** 为例，路径含版本号 `MySQL Server 8.0`，升级版本后需同步更新。Linux（vm-ubuntu）下的对应关系：程序 `mysqld`/`mysql`、配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf`、数据目录 `datadir`（用 `SHOW VARIABLES LIKE 'datadir'` 查询）、服务管理用 `systemctl` 而非 Windows 服务。
 

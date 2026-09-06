@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Git Working Tree Index and HEAD (Git 三区模型)
 
-> [!note] 本节重点心考点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
+> [!note] 本节重点：核心考点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
 
 ## 三区模型
 
@@ -118,7 +118,7 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 ## merge rebase and cherry pick (合并策略)
 
-> [!note] 本节重点心考点：三者的本质区别、各自的使用场景、rebase 的黄金法则
+> [!note] 本节重点：核心考点：三者的本质区别、各自的使用场景、rebase 的黄金法则
 
 ## merge（合并）
 
@@ -230,7 +230,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ## Branch Workflow (分支协作流)
 
-> [!note] 本节重点心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
+> [!note] 本节重点：核心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
 
 > [!tip] 先选最小能保障质量的流程
 > 对个人项目和多数小团队，短生命周期 feature branch + review + CI 往往足够。只有确有固定发版、并行维护等约束时，再承担 Git Flow 的额外分支成本。

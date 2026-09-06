@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Zero Copy and sendfile (零拷贝与 sendfile)
 
-> [!note] 本节重点心考点：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
+> [!note] 本节重点：核心考点：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
 
 > [!warning] “零拷贝”是相对用户态 CPU copy 的工程术语
 > 实际数据路径受内核版本、文件系统、TLS、网卡卸载与硬件能力影响。不要把“0 次 CPU 拷贝”当作任何机器上的保证；应以目标环境的 profile、吞吐和尾延迟决定是否使用。

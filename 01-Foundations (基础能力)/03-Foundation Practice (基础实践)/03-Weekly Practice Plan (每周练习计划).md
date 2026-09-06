@@ -6,13 +6,11 @@ status: 🌱
 
 # 03-Weekly Practice Plan (每周练习计划)
 
-> [!abstract] 阅读定位
->
-> Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
+> [!abstract] 学习定位：Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
 
 ## 30 秒回答
 
-**核心结论**：阅读定位 Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
+**核心结论**：Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
 
 
 ## 1. Key Dates

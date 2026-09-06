@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## Valgrind Memory Leaks (Valgrind 内存泄漏)
 
-> [!note] 本节重点心考点：Memcheck 的错误类型、如何读报告、抑制误报
+> [!note] 本节重点：核心考点：Memcheck 的错误类型、如何读报告、抑制误报
 
 ## Valgrind 是什么
 
@@ -124,7 +124,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ## AddressSanitizer and UBSan (Sanitizer 工具)
 
-> [!note] 本节重点心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
+> [!note] 本节重点：核心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 
 > [!warning] Sanitizer 是测试工具，不是正确性证明
 > 它只能覆盖实际执行到的路径，且编译器、平台、标准库和启用的子选项都会影响效果。将 Sanitizer 构建作为测试配置运行，发现报告先定位根因，不要仅压制错误。

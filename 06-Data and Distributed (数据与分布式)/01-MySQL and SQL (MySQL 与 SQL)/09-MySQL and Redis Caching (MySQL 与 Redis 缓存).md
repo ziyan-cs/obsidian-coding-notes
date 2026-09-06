@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## MySQL and Redis Caching (MySQL 与 Redis 缓存)
 
-> [!note] 本节重点心考点：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
+> [!note] 本节重点：核心考点：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
 
 ## MySQL vs Redis 定位
 

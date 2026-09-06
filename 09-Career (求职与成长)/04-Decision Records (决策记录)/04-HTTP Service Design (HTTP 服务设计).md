@@ -8,13 +8,11 @@ verified: 2026-09-05
 
 # 04-HTTP Service Design (HTTP 服务设计)
 
-> [!abstract] 阅读定位
->
-> 结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
+> [!abstract] 学习定位：结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
 
 ## 30 秒回答
 
-**核心结论**：阅读定位  结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
+**核心结论**：结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
 
 
 ## 必须统一的约定

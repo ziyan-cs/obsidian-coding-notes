@@ -21,7 +21,7 @@ verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 
 # English Topic — 中文主题
 
-> [!note] 本节重点句话结论：
+> [!note] 本节重点：句话结论：
 
 ## 解决的问题
 ## 心智模型

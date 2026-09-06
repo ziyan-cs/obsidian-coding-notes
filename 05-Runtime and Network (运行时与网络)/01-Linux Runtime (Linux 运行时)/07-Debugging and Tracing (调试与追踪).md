@@ -16,7 +16,7 @@ verified: 2026-09-06
 
 ## Debugging and Tracing (调试与追踪)
 
-> [!note] 本节重点心考点：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
+> [!note] 本节重点：核心考点：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
 
 ## strace：系统调用追踪
 

@@ -7,9 +7,7 @@ verified: 2026-09-06
 
 # 03-Smart Pointers (智能指针)
 
-> [!abstract] 阅读定位
->
-> 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 ## 30 秒回答
 
@@ -43,7 +41,7 @@ verified: 2026-09-06
 
 ## unique ptr Ownership (unique ptr 独占所有权)
 
-> [!note] 本节重点心考点：> unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
+> [!note] 本节重点：核心考点：> unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
 
 `unique_ptr` 独占资源，不可拷贝，只能移动。超出作用域时自动释放。
 
@@ -92,7 +90,7 @@ shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals
 
 ## shared ptr Reference Counting (shared ptr 引用计数)
 
-> [!note] 本节重点心考点：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
+> [!note] 本节重点：核心考点：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
 
 `shared_ptr` 允许多个指针共享同一资源，内部维护**引用计数**，计数归零时自动释放。
 
@@ -161,7 +159,7 @@ weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与�
 
 ## weak ptr and Circular References (weak ptr 与循环引用)
 
-> [!note] 本节重点心考点：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
+> [!note] 本节重点：核心考点：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
 
 `weak_ptr` 是对 `shared_ptr` 管理对象的**非拥有观察者**，不增加强引用计数，只增加弱引用计数。
 

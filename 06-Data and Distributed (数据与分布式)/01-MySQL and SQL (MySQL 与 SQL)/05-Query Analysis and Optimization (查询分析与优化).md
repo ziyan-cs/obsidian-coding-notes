@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## EXPLAIN and Execution Plans (执行计划分析)
 
-> [!note] 本节重点心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
+> [!note] 本节重点：核心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
 ## EXPLAIN 输出详解
 
@@ -165,7 +165,7 @@ SELECT * FROM user WHERE age = 20;
 
 ## Index Design Principles (索引设计原则)
 
-> [!note] 本节重点心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
+> [!note] 本节重点：核心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
 
 ## 基础概念
 
@@ -333,7 +333,7 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ## Slow Query Optimization (慢查询优化)
 
-> [!note] 本节重点心考点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
+> [!note] 本节重点：核心考点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
 
 ## 慢查询日志配置
 

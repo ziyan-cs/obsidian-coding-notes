@@ -11,7 +11,7 @@ verified: 2026-09-06
 
 ## HTTP Request and Response (HTTP 请求与响应)
 
-> [!note] 本节重点心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
+> [!note] 本节重点：核心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
 ## HTTP 请求结构
 
@@ -114,7 +114,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 
 ## HTTP Methods and Status Codes (HTTP 方法与状态码)
 
-> [!note] 本节重点心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
+> [!note] 本节重点：核心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
 ## HTTP 请求方法
 
@@ -212,7 +212,7 @@ HTTP 协议结构见 → [Request & Response Structure (请求响应结构)](</0
 
 ## HTTP Connection Management (HTTP 连接管理)
 
-> [!note] 本节重点心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
+> [!note] 本节重点：核心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
 ## 短连接 vs 长连接
 
@@ -308,7 +308,7 @@ Keep-Alive 时间过长：
 
 ## HTTP Parser State Machine (HTTP 解析状态机)
 
-> [!note] 本节重点心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
+> [!note] 本节重点：核心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 
 ## 为什么用状态机解析 HTTP
 
