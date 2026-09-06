@@ -38,7 +38,7 @@ SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 │    Dirty Read: No       Non-repeatable Read: No       Phantom: No   │
 └─────────────────────────────────────────────────────────────────────┘
 
-Note: InnoDB's RR level prevents phantom reads via MVCC + Next-Key Lock.
+Note: InnoDB 的一致性快照读在 RR 下可保持事务内视图一致；锁定读/写入的范围保护与 Next-Key Lock 有关。具体“幻读”必须区分快照读与 locking read。
 ```
 
 ## RU（Read Uncommitted，读未提交）
@@ -92,7 +92,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 事务 A: SELECT * FROM t WHERE id=1;  -- 仍读到 {id=1, val=10}（快照读）
 ```
 
-**InnoDB 默认隔离级别**。RR 在标准 SQL 中允许幻读，但 InnoDB 通过 Gap Lock 在 RR 级别也防止了幻读。
+**InnoDB 默认隔离级别**。RR 下普通一致性读依靠事务级 Read View；`FOR UPDATE` 等锁定读的范围保护由 next-key/gap locking 等机制决定，需结合索引与语句分析。
 
 ## Serializable（可串行化）
 
@@ -100,7 +100,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 ```
 
-**行为：** 所有事务串行执行，通过锁实现。读加共享锁，写加排他锁。
+**行为：** InnoDB 会让普通读具有锁定读语义，从而显著减少可并发的读写组合；它不是简单地把所有事务排成一个全局队列。
 
 ```
 事务 A: SELECT * FROM t WHERE id=1;  -- 加共享锁
@@ -114,9 +114,9 @@ SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 | 隔离级别 | MVCC 快照 | 使用的锁 | 常见场景 |
 |---------|----------|---------|---------|
 | RU | 无 | 无（读不加锁） | 极少使用 |
-| RC | 每语句 Read View | Record Lock | 大部分业务系统 |
-| RR | 事务级 Read View | Record Lock + Gap Lock | 默认级别，复杂查询 |
-| Serializable | 无快照 | 所有读加共享锁 | 银行/金融类操作 |
+| RC | 一致性读通常为每语句 Read View | 锁范围依语句、索引、约束而定 | 需要较弱读隔离时的候选 |
+| RR | 一致性读通常复用事务内 Read View | 锁定读可能使用 record/next-key/gap lock | InnoDB 默认，需理解范围锁 |
+| Serializable | 读具锁定语义 | 并发能力显著下降 | 极少数需强隔离且可接受代价的操作 |
 
 ## 如何选择隔离级别
 
@@ -145,7 +145,11 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 ```
 
-> [!tip]- **工程要点**：绝大多数业务系统选 RC 就足够了。InnoDB 默认 RR 是历史原因（MySQL 主从复制基于 binlog，RC 在 statement 格式下主从不一致），但 MySQL 5.7+ 的 ROW 格式 binlog 下 RC 也安全。**RR 的 Gap Lock 是双刃剑——避免幻读的同时也增加了锁竞争和死锁概率。**
+> [!tip]- **工程要点**：选择 RC 还是 RR 应从业务读语义、锁定读、死锁模式、复制配置和压测结果出发，不要把任一隔离级别当成通用最优解。RR 下的范围锁可能增加锁等待；RC 也不是“完全没有 gap lock”，外键/重复键检查等场景仍要以当前版本文档验证。
+
+## 30 秒回答
+
+隔离级别决定并发事务能观察到什么，以及为此付出的锁与并发代价。InnoDB 的 RC 通常每条一致性读建立视图，RR 通常让同一事务的快照读保持一致；但锁定读、索引范围和约束会改变实际锁行为。排查问题时先区分“快照读还是锁定读”，再看执行计划和锁信息。
 
 ---
 
