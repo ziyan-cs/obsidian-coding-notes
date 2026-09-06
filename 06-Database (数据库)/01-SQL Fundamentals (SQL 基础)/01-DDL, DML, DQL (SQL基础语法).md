@@ -5,7 +5,9 @@ status: 🌱
 ---
 
 > [!important] **核心考点**：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
-# DDL（数据定义）
+# SQL Fundamentals — SQL 基础语法
+
+## DDL（数据定义）
 ### 1. 数据库操作
 
 ```sql
@@ -100,7 +102,7 @@ ALTER TABLE [表名] DROP COLUMN [字段名];
 SHOW FULL COLUMNS FROM [表名];
 ```
 
-# DML（数据操作）
+## DML（数据操作）
 
 ### 1. 增
 
@@ -162,7 +164,7 @@ CREATE TABLE [新表名] LIKE [原表名];
 INSERT INTO [新表名] SELECT * FROM [原表名];
 ```
 
-# DQL（数据查询）
+## DQL（数据查询）
 
 ### 1. 基础查询
 

@@ -146,7 +146,11 @@ LSN 的作用：
   Last checkpoint at           123400000    ← checkpoint 位置
 ```
 
-> [!tip]- **工程要点**：redo log 太小会导致频繁 checkpoint（强制刷脏页），表现为 IO 尖刺和性能抖动。经验公式：redo log 总大小应能容纳 1-2 小时的写入量。监控指标：`SHOW ENGINE INNODB STATUS` 中的 `Log sequence number` 与 `Last checkpoint at` 的差距不应持续超过 redo log 总大小的 70%。恢复时间与 redo log 总大小成正比——512×3=1.5GB 的 redo log 恢复时间通常在 5 分钟内。
+> [!tip]- **工程要点**：redo log 太小可能增加 checkpoint 压力并造成写入抖动；过大又会拉长恢复扫描窗口。容量、checkpoint 进度与恢复时间受版本、写入模式、设备和恢复流程影响，不能套用固定“小时数、百分比或分钟数”公式。应采集日志生成速率、脏页与恢复演练数据后再调优。
+
+## 30 秒回答
+
+**Checkpoint 为什么重要？** 它记录了恢复时不必再从更早日志重放的位置。redo log 过小会更频繁推动脏页刷盘，过大则可能扩大恢复工作量；大小必须以写入负载、存储能力和可接受恢复时间共同决定。
 
 ---
 

@@ -8,7 +8,9 @@ status: 🌱
 
 > [!warning] **平台/版本说明（NEEDS_VERIFY）**：以下路径以 **Windows 本机 MySQL 8.0** 为例，路径含版本号 `MySQL Server 8.0`，升级版本后需同步更新。Linux（vm-ubuntu）下的对应关系：程序 `mysqld`/`mysql`、配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf`、数据目录 `datadir`（用 `SHOW VARIABLES LIKE 'datadir'` 查询）、服务管理用 `systemctl` 而非 Windows 服务。
 
-# 核心配置与目录
+# MySQL Basics — MySQL 基础
+
+## 核心配置与目录
 
 ### 程序安装目录
 
@@ -60,7 +62,7 @@ bind-address=127.0.0.1
 - 注意
     - 只能在停止 `MySQL80` 服务后备份整个 `data` 目录
 
-# 系统自带数据库（4 个）
+## 系统自带数据库
 
 - **information_schema**
     - 存储数据库、表、字段的元信息
@@ -76,7 +78,7 @@ bind-address=127.0.0.1
 - **sys**
     - 简化性能查看的系统库
 
-# MySQL 连接与退出
+## MySQL 连接与退出
 
 
 ```sql
@@ -89,7 +91,7 @@ mysql -h [主机IP] -P [端口号] -u [用户名] -p
 
 ```
 
-# ### 配置与状态查询
+## 配置与状态查询
 
 ```sql
 # 查看当前端口号 (默认3306)

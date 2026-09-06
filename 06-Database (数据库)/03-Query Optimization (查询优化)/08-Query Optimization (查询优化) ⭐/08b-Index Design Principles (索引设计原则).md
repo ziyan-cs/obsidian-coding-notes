@@ -5,7 +5,9 @@ status: 🌱
 ---
 
 > [!important] **核心考点**：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
-# 基础概念
+# Index Design Principles — 索引设计原则
+
+## 基础概念
 
 - 索引是数据库中**加速查询**的一种数据结构，相当于表的「目录」
 - 查询时间复杂度从 `O(n)` 降低到 `O(log n)`
@@ -19,7 +21,7 @@ SHOW INDEX FROM [表名];
 
 ---
 
-# 索引类型
+## 索引类型
 
 - 主键索引（Primary Key Index）
 	
@@ -104,7 +106,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-# InnoDB 索引底层原理（B + 树）
+## InnoDB 索引底层原理（B + 树）
 
 - 索引的底层数据结构为 **B + 树**，所有数据都存储在叶子节点
 - 聚簇索引：叶子节点直接存储完整的行数据，数据按主键顺序物理存储
@@ -113,7 +115,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-# 索引设计原则（面试高频）
+## 索引设计原则（面试高频）
 
 - 优先为 **WHERE、JOIN、ORDER BY、GROUP BY** 条件中的字段创建索引
 - 复合索引遵循**最左匹配原则**，将区分度高的字段放在前面
@@ -123,7 +125,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-# 索引失效场景（必背）
+## 索引失效场景（必背）
 
 - 使用 `OR` 连接条件，且非所有条件都包含索引字段
 - 索引列参与运算、使用函数（如 `DATE(create_time)`）
@@ -133,7 +135,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-# 索引相关 SQL 操作
+## 索引相关 SQL 操作
 
 ```sql
 -- 1. 创建索引（表已存在）
@@ -151,7 +153,7 @@ EXPLAIN SELECT * FROM [表名] WHERE [条件];
 
 ---
 
-# 索引优化实践
+## 索引优化实践
 
 ```sql
 -- 查看查询执行计划，判断索引是否生效

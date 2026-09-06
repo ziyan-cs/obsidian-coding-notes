@@ -5,7 +5,9 @@ status: 🌱
 ---
 
 > [!important] **核心考点**：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
-# 数据库操作
+# Aggregate Functions & Group By — 聚合与分组
+
+## 数据库操作
 
 ```sql
 -- 查看所有数据库
@@ -39,7 +41,7 @@ SELECT DATABASE();
 SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '库名';
 ```
 
-# 数据表操作
+## 数据表操作
 
 ```sql
 -- 查看当前库的所有表
@@ -69,7 +71,7 @@ DROP TABLE [表名];
 SHOW TABLE STATUS LIKE '表名';
 ```
 
-# 字段操作
+## 字段操作
 
 ```sql
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型];
