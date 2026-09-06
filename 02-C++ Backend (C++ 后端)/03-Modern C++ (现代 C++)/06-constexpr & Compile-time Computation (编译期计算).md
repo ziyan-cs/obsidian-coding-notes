@@ -6,7 +6,7 @@ status: 🌱
 
 # constexpr & Compile-time Computation — 编译期计算
 
-> [!important] **核心考点**：constexpr 函数、if constexpr、编译期 vs 运行期的边界
+> [!abstract] 核心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
 
 ## constexpr 变量
 

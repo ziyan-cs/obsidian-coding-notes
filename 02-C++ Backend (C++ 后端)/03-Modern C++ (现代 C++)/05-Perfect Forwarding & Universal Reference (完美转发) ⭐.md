@@ -9,7 +9,7 @@ verified: stable
 
 # Perfect Forwarding & Universal Reference — 完美转发
 
-> [!important] **核心考点**：万能引用、引用折叠、std::forward 的作用
+> [!abstract] 核心考点：万能引用、引用折叠、std::forward 的作用
 
 > [!warning] `std::forward` 只用于保留原始值类别
 > 它不是“更快的 `std::move`”。转发同一个对象后仍继续依赖其状态会让调用者难以判断所有权；只有下游确实需要按原值类别重载时才使用。

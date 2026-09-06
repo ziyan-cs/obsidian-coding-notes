@@ -9,7 +9,7 @@ verified: stable
 
 # Lambda & Function Object — Lambda与函数对象
 
-> [!important] **核心考点**：捕获方式、泛型 lambda、std::function 的开销
+> [!abstract] 核心考点：捕获方式、泛型 lambda、std::function 的开销
 
 > [!warning] 捕获列表就是生命周期契约
 > 值捕获复制状态，引用捕获依赖外部对象仍然存活。把 lambda 存起来、异步执行或作为回调传出时，默认引用捕获尤其容易产生悬空引用。
