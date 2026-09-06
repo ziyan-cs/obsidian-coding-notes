@@ -76,3 +76,8 @@ channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Web Services Map (Web 服务导航)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/00-Web%20Services%20Map%20(Web%20服务导航).md)
+- 下一步：[04-Testing and Quality (测试与质量)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/04-Testing%20and%20Quality%20(测试与质量).md)

@@ -278,7 +278,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-四种隔离级别详解见 → [Isolation Levels：RU, RC, RR, Serializable (四种隔离级别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05a-Isolation%20Levels：RU,%20RC,%20RR,%20Serializable%20(四种隔离级别).md) · [MVCC Internals：undo log & read view (MVCC底层实现)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)
+四种隔离级别详解见 → Isolation Levels：RU, RC, RR, Serializable (四种隔离级别) · MVCC Internals：undo log & read view (MVCC底层实现)
 
 ---
 
@@ -574,7 +574,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-间隙锁与临键锁详解见 → [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
+间隙锁与临键锁详解见 → Gap Lock & Next-Key Lock (间隙锁与临键锁) · Deadlock Detection & avoidance (死锁检测)
 
 ---
 
@@ -708,7 +708,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 ---
 
-表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
+表锁与行锁基础见 → Table Lock vs Row Lock (表锁与行锁) · Deadlock Detection & avoidance (死锁检测)
 
 ---
 
@@ -876,3 +876,8 @@ SELECT * FROM sys.innodb_lock_waits\G
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- 下一步：[04-Logging and Recovery (日志与恢复)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/04-Logging%20and%20Recovery%20(日志与恢复).md)

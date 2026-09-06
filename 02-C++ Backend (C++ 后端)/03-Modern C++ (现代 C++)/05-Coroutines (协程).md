@@ -184,7 +184,7 @@ task<void> fetch_coro() {
 
 ---
 
-协程是 C++20 的核心新特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+协程是 C++20 的核心新特性，详见 → Modern C++ Overview (现代 C++ 特性总览)
 
 # 零基础阅读路径
 
@@ -210,3 +210,8 @@ task<void> fetch_coro() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Modern C++ Map (现代 C++ 导航)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Map%20(现代%20C++%20导航).md)
+- 下一步：[04-Generic Programming and Type Tools (泛型与类型工具)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Generic%20Programming%20and%20Type%20Tools%20(泛型与类型工具).md)

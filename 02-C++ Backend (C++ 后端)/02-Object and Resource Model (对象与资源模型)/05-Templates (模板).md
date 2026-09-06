@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-15
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-15
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -134,7 +134,7 @@ std::conditional_t<true, int, double>  // int
 
 ---
 
-类型别名与模板紧密相关，详见 → [Const, Typedef & Enum (类型系统基础)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+类型别名与模板紧密相关，详见 → Const, Typedef & Enum (类型系统基础)
 
 # 零基础阅读路径
 
@@ -160,3 +160,8 @@ std::conditional_t<true, int, double>  // int
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/06-RAII%20and%20Custom%20Allocation%20(RAII%20与自定义分配).md)

@@ -199,7 +199,7 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 
 ---
 
-MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md)
+MySQL基础连接配置见 → MySQL Basics (MySQL 基础)
 
 # 零基础阅读路径
 
@@ -225,3 +225,8 @@ MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Syste
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- 下一步：[07-Replication (复制)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/07-Replication%20(复制).md)

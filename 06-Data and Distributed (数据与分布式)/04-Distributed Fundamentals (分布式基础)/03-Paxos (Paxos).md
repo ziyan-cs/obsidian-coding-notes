@@ -116,7 +116,7 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 
 ---
 
-Paxos 与分布式理论基础详解见 → [CAP Theorem & BASE Theory (CAP理论)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Consistency Models：Strong, Eventual (一致性模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
+Paxos 与分布式理论基础详解见 → CAP Theorem & BASE Theory (CAP理论) · Consistency Models：Strong, Eventual (一致性模型)
 
 # 零基础阅读路径
 
@@ -142,3 +142,8 @@ Paxos 与分布式理论基础详解见 → [CAP Theorem & BASE Theory (CAP理�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Distributed Fundamentals Map (分布式基础导航)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/00-Distributed%20Fundamentals%20Map%20(分布式基础导航).md)
+- 下一步：[04-Distributed Transactions (分布式事务)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/04-Distributed%20Transactions%20(分布式事务).md)

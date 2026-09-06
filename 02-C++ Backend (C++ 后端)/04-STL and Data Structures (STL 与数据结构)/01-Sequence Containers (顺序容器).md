@@ -130,7 +130,7 @@ v.shrink_to_fit();
 
 ---
 
-其他序列容器对比详见 → [deque Block-based Storage (分块存储)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01b-deque%20Block-based%20Storage%20(分块存储).md) · [list Doubly Linked List (双向链表)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01c-list%20Doubly%20Linked%20List%20(双向链表).md)
+其他序列容器对比详见 → deque Block-based Storage (分块存储) · list Doubly Linked List (双向链表)
 
 ---
 
@@ -229,7 +229,7 @@ std::deque<std::function<void()>> tasks;
 
 ---
 
-vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+vector 的动态扩容机制对比详见 → vector Dynamic Array & Reallocation (动态扩容原理)
 
 ---
 
@@ -327,7 +327,7 @@ auto iter = pending.insert(pending.end(), {42});
 
 ---
 
-vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+vector 连续内存性能对比详见 → vector Dynamic Array & Reallocation (动态扩容原理)
 
 # 零基础阅读路径
 
@@ -353,3 +353,8 @@ vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-STL Map (STL 导航)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/00-STL%20Map%20(STL%20导航).md)
+- 下一步：[02-Associative Containers (关联容器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/02-Associative%20Containers%20(关联容器).md)

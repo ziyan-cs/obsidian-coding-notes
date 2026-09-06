@@ -187,7 +187,7 @@ if (big.is_lock_free()) {
 
 ---
 
-无锁结构基于原子操作实现，详见 → [Lock-free Structures Overview (无锁结构概念)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+无锁结构基于原子操作实现，详见 → Lock-free Structures Overview (无锁结构概念)
 
 # 学习闭环
 
@@ -204,3 +204,8 @@ if (big.is_lock_free()) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
+- 下一步：[03-Thread Pool (线程池)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/03-Thread%20Pool%20(线程池).md)

@@ -144,7 +144,7 @@ Performance counter stats for './prog':
 
 > [!tip]- **工程要点**：三把刀各有所长——strace 看"程序在做什么系统调用"，gdb 看"程序内部状态是什么"，perf 看"程序时间花在哪"。排查问题时先从 strace/perf 宏观定位，再到 gdb 微观确认。**不要上来就用 gdb 单步调试几万行的服务器程序。**
 
-调试与追踪工具见 → [System Calls Overview (常用系统调用速查)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Dynamic Library & Shared Object (动态库原理)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md)
+调试与追踪工具见 → System Calls Overview (常用系统调用速查) · Dynamic Library & Shared Object (动态库原理)
 
 # 零基础阅读路径
 
@@ -170,3 +170,8 @@ Performance counter stats for './prog':
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[06-System Calls and Libraries (系统调用与动态库)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/06-System%20Calls%20and%20Libraries%20(系统调用与动态库).md)

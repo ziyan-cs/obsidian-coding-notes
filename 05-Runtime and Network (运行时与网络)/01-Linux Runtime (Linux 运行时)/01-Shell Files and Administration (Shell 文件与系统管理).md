@@ -408,10 +408,10 @@ read -t 10 -p "Enter number: " num    # 10 秒超时
 > [!tip]- **工程要点**：
 > - 脚本中始终使用 `set -euo pipefail` 及早暴露错误
 > - 变量引用始终加双引号 `"$var"` 防止分词问题
-> - `[[ ]]` 比 `[ ]` 功能更强，支持 `&&` `||` 和正则
+> - `` 比 `[ ]` 功能更强，支持 `&&` `||` 和正则
 > - `$(( ))` 是最推荐的整数运算方式
 
-Shell 命令与脚本详解见 → [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
+Shell 命令与脚本详解见 → File System & Permissions (文件系统与权限) · System Administration Basics (系统管理基础)
 
 ---
 
@@ -630,7 +630,7 @@ ln -s <src> <dst>    # 创建软链接
 ln <src> <dst>       # 创建硬链接
 ```
 
-文件系统与权限详解见 → [Shell & Basic Commands (命令行与Shell编程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md) · [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
+文件系统与权限详解见 → Shell & Basic Commands (命令行与Shell编程) · System Administration Basics (系统管理基础)
 
 ---
 
@@ -888,7 +888,7 @@ tail -f /var/log/syslog       # 实时监控日志
 grep "error" /var/log/auth.log  # 过滤错误信息
 ```
 
-系统管理基础见 → [Shell & Basic Commands (命令行与Shell编程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md) · [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+系统管理基础见 → Shell & Basic Commands (命令行与Shell编程) · File System & Permissions (文件系统与权限)
 
 # 零基础阅读路径
 
@@ -914,3 +914,8 @@ grep "error" /var/log/auth.log  # 过滤错误信息
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[02-Processes and IPC (进程与进程间通信)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/02-Processes%20and%20IPC%20(进程与进程间通信).md)

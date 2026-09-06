@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [career/portfolio, project/evidence]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：简历写成果和证据，不写“使用了若干技术”；面试中所有数字都应能还原条件。
@@ -80,3 +80,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Project Map (项目地图)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/00-Project%20Map%20(项目地图).md)
+- 下一步：[01-Project Design Template (项目设计模板)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)

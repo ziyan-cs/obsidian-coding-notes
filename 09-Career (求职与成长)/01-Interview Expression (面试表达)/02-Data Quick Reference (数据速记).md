@@ -1,7 +1,8 @@
 ---
-tags:
-  - career/interview
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - career/interview
 ---
 
 > [!abstract] 学习定位：面试速查卡片 — 考前 10 分钟快速翻阅
@@ -127,3 +128,8 @@ EPOLLIN=0x001  EPOLLOUT=0x004  EPOLLET=0x80000000  // epoll 事件
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Interview Map (面试导航)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/00-Interview%20Map%20(面试导航).md)
+- 下一步：[03-Project Deep Dive (项目难点表达)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/03-Project%20Deep%20Dive%20(项目难点表达).md)

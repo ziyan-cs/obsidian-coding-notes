@@ -233,11 +233,11 @@ COPY .devcontainer/CMakePresets.json /workspace/
 
 # 关联笔记
 
-- [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
-- [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
-- [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
-- [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- Makefile Basics (Makefile基础)
+- Docker Basics：Image & Container (Docker基础)
+- Shell Tools：grep, sed, awk, tmux (Shell效率工具)
+- Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 # 零基础阅读路径
 
@@ -263,3 +263,8 @@ COPY .devcontainer/CMakePresets.json /workspace/
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Tool Practice Map (工具实践导航)](/07-Engineering%20Tools%20(工程工具)/04-Tool%20Practice%20(工具实践)/00-Tool%20Practice%20Map%20(工具实践导航).md)
+- 下一步：[03-Docker Delivery (Docker 交付)](/07-Engineering%20Tools%20(工程工具)/04-Tool%20Practice%20(工具实践)/03-Docker%20Delivery%20(Docker%20交付).md)

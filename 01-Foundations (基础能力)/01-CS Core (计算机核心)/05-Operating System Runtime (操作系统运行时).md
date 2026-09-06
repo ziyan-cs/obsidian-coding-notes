@@ -130,7 +130,7 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 
 ---
 
-进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
+进程线程与上下文切换详见 → Process vs Thread（进程与线程） · Context Switching（上下文切换）
 
 ---
 
@@ -282,7 +282,7 @@ int main() {
 
 ---
 
-上下文切换与CPU调度详见 → [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md) · [CPU Scheduling（CPU调度）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/03-CPU%20Scheduling%20(CPU调度).md)
+上下文切换与CPU调度详见 → Context Switching（上下文切换） · CPU Scheduling（CPU调度）
 
 ---
 
@@ -429,7 +429,7 @@ switch_to:
 
 ---
 
-进程线程与CPU调度详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [CPU Scheduling（CPU调度）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/03-CPU%20Scheduling%20(CPU调度).md)
+进程线程与CPU调度详见 → Process vs Thread（进程与线程） · CPU Scheduling（CPU调度）
 
 ---
 
@@ -597,7 +597,7 @@ static const int prio_to_weight[40] = {
 
 ---
 
-进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
+进程线程与上下文切换详见 → Process vs Thread（进程与线程） · Context Switching（上下文切换）
 
 # 零基础阅读路径
 
@@ -622,3 +622,8 @@ static const int prio_to_weight[40] = {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[06-Virtual Memory and File System (虚拟内存与文件系统)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/06-Virtual%20Memory%20and%20File%20System%20(虚拟内存与文件系统).md)

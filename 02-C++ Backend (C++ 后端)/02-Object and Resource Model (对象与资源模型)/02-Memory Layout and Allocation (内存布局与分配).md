@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-10
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-10
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -88,7 +88,7 @@ void foo() {
 
 ---
 
-内存布局相关概念详见 → [Memory Alignment (内存对齐)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md) · [Memory Pool Implementation (内存池实现)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04c-Memory%20Pool%20Implementation%20(内存池实现).md)
+内存布局相关概念详见 → Memory Alignment (内存对齐) · Memory Pool Implementation (内存池实现)
 
 ---
 
@@ -155,7 +155,7 @@ static_assert(sizeof(Example) == 24);
 
 ---
 
-内存布局与内存池实现详见 → [Stack, Heap, BSS, Text Segments (四区详解)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04a-Stack,%20Heap,%20BSS,%20Text%20Segments%20(四区详解).md) · [Memory Pool Implementation (内存池实现)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04c-Memory%20Pool%20Implementation%20(内存池实现).md)
+内存布局与内存池实现详见 → Stack, Heap, BSS, Text Segments (四区详解) · Memory Pool Implementation (内存池实现)
 
 ---
 
@@ -238,7 +238,7 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 
 ---
 
-内存对齐对内存池实现至关重要，详见 → [Memory Alignment (内存对齐)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)
+内存对齐对内存池实现至关重要，详见 → Memory Alignment (内存对齐)
 
 # 零基础阅读路径
 
@@ -263,3 +263,8 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)

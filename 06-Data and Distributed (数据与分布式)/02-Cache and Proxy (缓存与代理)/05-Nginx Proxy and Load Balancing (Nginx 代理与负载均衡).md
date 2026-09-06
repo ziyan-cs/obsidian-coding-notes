@@ -137,7 +137,7 @@ nginx -s reload
 
 ---
 
-Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反向代理配置)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)
+Nginx 配置与实践详解见 → Reverse Proxy & Load Balancing Config (反向代理配置) · Nginx vs webserver：Why Use Both (与自写server的关系)
 
 ---
 
@@ -283,7 +283,7 @@ server {
 
 ---
 
-Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Nginx vs webserver：Why Use Both (与自写server的关系)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02c-Nginx%20vs%20webserver：Why%20Use%20Both%20(与自写server的关系).md)
+Nginx 架构与实践详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Nginx vs webserver：Why Use Both (与自写server的关系)
 
 ---
 
@@ -387,7 +387,7 @@ Nginx（路由）
 
 ---
 
-Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Reverse Proxy & Load Balancing Config (反向代理配置)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md)
+Nginx 架构与配置详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Reverse Proxy & Load Balancing Config (反向代理配置)
 
 # 零基础阅读路径
 
@@ -413,3 +413,8 @@ Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- 下一步：[04-Redis Runtime and Client (Redis 运行时与客户端)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/04-Redis%20Runtime%20and%20Client%20(Redis%20运行时与客户端).md)

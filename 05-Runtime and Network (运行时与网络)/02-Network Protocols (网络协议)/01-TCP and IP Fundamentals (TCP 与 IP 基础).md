@@ -166,3 +166,8 @@ DNS（域名系统）将易读记的域名解析为机器可识别的 IP 地址
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Network Protocols Map (网络协议导航)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/00-Network%20Protocols%20Map%20(网络协议导航).md)
+- 下一步：[02-TCP Lifecycle and Reliability (TCP 生命周期与可靠性)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/02-TCP%20Lifecycle%20and%20Reliability%20(TCP%20生命周期与可靠性).md)

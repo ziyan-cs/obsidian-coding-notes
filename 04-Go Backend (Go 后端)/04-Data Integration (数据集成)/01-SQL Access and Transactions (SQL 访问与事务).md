@@ -77,3 +77,8 @@ channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Data Integration Map (数据集成导航)](/04-Go%20Backend%20(Go%20后端)/04-Data%20Integration%20(数据集成)/00-Data%20Integration%20Map%20(数据集成导航).md)
+- 下一步：[02-Redis Cache Patterns (Redis 缓存模式)](/04-Go%20Backend%20(Go%20后端)/04-Data%20Integration%20(数据集成)/02-Redis%20Cache%20Patterns%20(Redis%20缓存模式).md)

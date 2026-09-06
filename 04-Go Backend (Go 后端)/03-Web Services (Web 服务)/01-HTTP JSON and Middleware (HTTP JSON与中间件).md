@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [language/go, go/http]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：HTTP handler 负责协议转换，service 负责业务；先用 `net/http` 和 `httptest` 看清请求生命周期，再引入框架。
@@ -106,3 +106,8 @@ Go 的 HTTP 分层中，handler 只处理协议边界：路由、输入校验、
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Web Services Map (Web 服务导航)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/00-Web%20Services%20Map%20(Web%20服务导航).md)
+- 下一步：[02-Routing Validation and Errors (路由校验与错误)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/02-Routing%20Validation%20and%20Errors%20(路由校验与错误).md)

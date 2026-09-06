@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [comparison, backend/http]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
@@ -77,3 +77,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Decision Map (决策地图)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/00-Decision%20Map%20(决策地图).md)
+- 下一步：[05-Observability and Performance (可观测性与性能)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)

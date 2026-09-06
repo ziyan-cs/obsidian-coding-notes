@@ -188,11 +188,11 @@ void radixSort(vector<int>& a) {
 
 # 关联笔记
 
-- [Quick Sort： Partition & Pivot (快排实现)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10a-Quick%20Sort：%20Partition%20&%20Pivot%20(快排实现).md)
-- [Merge Sort & Inversion Count (归并排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10b-Merge%20Sort%20&%20Inversion%20Count%20(归并排序).md)
-- [Heap Sort (堆排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10c-Heap%20Sort%20(堆排序).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- Quick Sort： Partition & Pivot (快排实现)
+- Merge Sort & Inversion Count (归并排序)
+- Heap Sort (堆排序)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
 
 ---
 
@@ -276,11 +276,11 @@ void quickSortV3(vector<int>& arr, int L, int R) {
 ---
 
 # 关联笔记 · 延伸要点 2
-- [Merge Sort & Inversion Count (归并排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10b-Merge%20Sort%20&%20Inversion%20Count%20(归并排序).md)
-- [Heap Sort (堆排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10c-Heap%20Sort%20(堆排序).md)
-- [Sorting Algorithms (排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10z-Sorting%20Algorithms%20(排序).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- Merge Sort & Inversion Count (归并排序)
+- Heap Sort (堆排序)
+- Sorting Algorithms (排序)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
 
 ---
 
@@ -318,11 +318,11 @@ void merge(vector<int>& arr, int L, int M, int R) {
 ---
 
 # 关联笔记 · 延伸要点 3
-- [Quick Sort： Partition & Pivot (快排实现)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10a-Quick%20Sort：%20Partition%20&%20Pivot%20(快排实现).md)
-- [Heap Sort (堆排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10c-Heap%20Sort%20(堆排序).md)
-- [Sorting Algorithms (排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10z-Sorting%20Algorithms%20(排序).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- Quick Sort： Partition & Pivot (快排实现)
+- Heap Sort (堆排序)
+- Sorting Algorithms (排序)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
 
 ---
 
@@ -368,11 +368,11 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 ---
 
 # 关联笔记 · 延伸要点 4
-- [Quick Sort： Partition & Pivot (快排实现)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10a-Quick%20Sort：%20Partition%20&%20Pivot%20(快排实现).md)
-- [Merge Sort & Inversion Count (归并排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10b-Merge%20Sort%20&%20Inversion%20Count%20(归并排序).md)
-- [Sorting Algorithms (排序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/10-Sorting%20Algorithms%20(排序算法)%20⭐/10z-Sorting%20Algorithms%20(排序).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+- Quick Sort： Partition & Pivot (快排实现)
+- Merge Sort & Inversion Count (归并排序)
+- Sorting Algorithms (排序)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
 
 # 零基础阅读路径
 
@@ -397,3 +397,8 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
+- 下一步：[09-Dynamic Programming (动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-Dynamic%20Programming%20(动态规划).md)

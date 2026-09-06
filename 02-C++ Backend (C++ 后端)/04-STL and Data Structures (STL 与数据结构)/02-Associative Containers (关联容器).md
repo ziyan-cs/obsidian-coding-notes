@@ -116,7 +116,7 @@ m.emplace(std::piecewise_construct,
 
 ---
 
-哈希表实现的关联容器对比详见 → [unordered_map Hash Table & Collision (哈希表与冲突)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02b-unordered_map%20Hash%20Table%20&%20Collision%20(哈希表与冲突).md)
+哈希表实现的关联容器对比详见 → unordered_map Hash Table & Collision (哈希表与冲突)
 
 ---
 
@@ -232,7 +232,7 @@ m.insert(batch.begin(), batch.end());
 
 ---
 
-红黑树实现的有序容器对比详见 → [map & set Red-Black Tree (红黑树与有序容器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02a-map%20&%20set%20Red-Black%20Tree%20(红黑树与有序容器).md)
+红黑树实现的有序容器对比详见 → map & set Red-Black Tree (红黑树与有序容器)
 
 # 零基础阅读路径
 
@@ -258,3 +258,8 @@ m.insert(batch.begin(), batch.end());
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-STL Map (STL 导航)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/00-STL%20Map%20(STL%20导航).md)
+- 下一步：[03-Iterators Algorithms and Adapters (迭代器算法与适配器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/03-Iterators%20Algorithms%20and%20Adapters%20(迭代器算法与适配器).md)

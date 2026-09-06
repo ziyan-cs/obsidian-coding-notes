@@ -213,7 +213,7 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 | NI（Nice） | -20~19 | 用户设置的优先级偏移量 |
 | 最终优先级 | PR = NI + 20 | CFS 将其映射到 vruntime 权重 |
 
-进程生命周期详解见 → [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md) · [Zombie & Orphan Process (僵尸进程与孤儿进程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04c-Zombie%20&%20Orphan%20Process%20(僵尸进程与孤儿进程).md)
+进程生命周期详解见 → Process States & Scheduling (状态与调度) · Zombie & Orphan Process (僵尸进程与孤儿进程)
 
 ---
 
@@ -262,7 +262,7 @@ nice -n -10 ./myapp    # 以高优先级启动
 renice 5 -p 1234       # 修改运行中进程的 nice 值
 ```
 
-进程状态与调度详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Zombie & Orphan Process (僵尸进程与孤儿进程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04c-Zombie%20&%20Orphan%20Process%20(僵尸进程与孤儿进程).md)
+进程状态与调度详解见 → Process Lifecycle (生命周期) · Zombie & Orphan Process (僵尸进程与孤儿进程)
 
 ---
 
@@ -332,7 +332,7 @@ close(STDOUT_FILENO);
 close(STDERR_FILENO);
 ```
 
-僵尸与孤儿进程详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
+僵尸与孤儿进程详解见 → Process Lifecycle (生命周期) · Process States & Scheduling (状态与调度)
 
 ---
 
@@ -433,7 +433,7 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
-IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
+IPC 机制详解见 → Process Lifecycle (生命周期) · Process States & Scheduling (状态与调度)
 
 # 零基础阅读路径
 
@@ -459,3 +459,8 @@ IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[03-Threads Synchronization and Signals (线程同步与信号)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/03-Threads%20Synchronization%20and%20Signals%20(线程同步与信号).md)

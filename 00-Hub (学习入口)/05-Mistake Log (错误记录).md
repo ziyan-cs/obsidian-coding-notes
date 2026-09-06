@@ -1,8 +1,8 @@
 ---
-tags: [learning/mistakes, vault/system]
 status: learning
-confidence: 1
-verified: 2026-09-05
+confidence: low
+verified: 2026-09-06
+tags: [learning/mistakes, vault/system]
 ---
 
 > [!abstract] 学习定位：错误不是“不会”，而是下一次可被提前识别的触发条件。
@@ -26,7 +26,7 @@ verified: 2026-09-05
 - 正确模型 / 修正：
 - 最小复现或反例：
 - 下次触发器：看到 ___ 时先检查 ___。
-- 关联：[[笔记名]]
+- 关联：填写已存在笔记的根路径 Markdown 链接（见《笔记规范》）。
 - 复习日：YYYY-MM-DD
 ```
 
@@ -84,3 +84,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[06-Sources & Freshness Policy (来源与时效规则)](/00-Hub%20(学习入口)/06-Sources%20&%20Freshness%20Policy%20(来源与时效规则).md)

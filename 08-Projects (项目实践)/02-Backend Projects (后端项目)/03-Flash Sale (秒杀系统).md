@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [project/flash-sale, distributed/consistency]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：秒杀的首要目标是守住库存与订单幂等不变量；限流和异步化用于把不可承受的高峰变成可控的拒绝、排队和恢复过程。
@@ -88,3 +88,8 @@ WHERE sku_id = ? AND available > 0;
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Projects Map (后端项目导航)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/00-Backend%20Projects%20Map%20(后端项目导航).md)
+- 下一步：[04-Config Center (配置中心)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/04-Config%20Center%20(配置中心).md)

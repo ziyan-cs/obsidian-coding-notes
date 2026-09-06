@@ -1,45 +1,53 @@
-# Obsidian Coding Notes — Vault Conventions
+# Obsidian Coding Notes
 
-> **定位**：以 C++ 后端为主线，Go 用于现代服务端工程，Python 用于自动化、测试与数据处理。这个库服务于系统学习、可执行复习、项目实践和两年后的校招，而不是收藏百科。
+> **定位**：面向零基础系统学习的中文工程笔记库。主线是 C++ 后端；Python 先用于自动化、测试与辅助开发；随后进入 Go 服务端工程。每篇笔记追求“能理解、能实践、能复习”，而不是碎片收藏。
 
-## Start Here
+## 从这里开始
 
-先从 [[00-Vault Map (知识库地图)](00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)识库地图)](00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md) 进入；学习节奏见 [[/00-Hub (学习入口)/01-Backend Learning Roadmap (后端学习路线)|两年学习路线]]；每次学习后按 [[/00-Start Here (学习入口)/02-Spaced Review System (间隔复习系统)|间隔复习系统]] 回顾；新笔记使用 [[/00-Start Here (学习入口)/03-Note Standard (笔记规范)|笔记规范]]；全库的渐进深改顺序见 [[/00-Start Here (学习入口)/07-Vault Audit & Migration Queue (审计与迁移队列)|迁移队列]]。
+- 总入口：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 学习周期：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)
+- 到期复习：在根目录运行 `./List-ReviewDue.ps1`；查看完整队列运行 `./List-ReviewDue.ps1 -All`。
 
-## Note Frontmatter
+## 阅读约定
+
+1. 先读分类导航，再按文件序号学习；不要跳过“基础”和“最小实践”。
+2. 每篇以 `30 秒回答` 检验能否讲清概念，以“自测”检验是否真的掌握。
+3. `review_due` 只表示下一次建议复习日，学完或复习后由你按实际节奏调整；它不是固定死线。
+4. 文件末尾的“关联学习”只提供当前最值得去的两处入口：分类导航和相邻学习步骤，不堆砌链接。
+
+## 笔记属性
+
+所有笔记使用统一的 YAML 属性顺序；后两项按需存在：
 
 ```yaml
 ---
-tags: [language/cpp, topic/ownership]
-status: seed # seed | learning | review | solid
-review_due: 2026-09-12 # optional; YYYY-MM-DD
-confidence: 1 # 1-5; optional
-verified: 2026-09-05 # optional; required for volatile tooling/API facts
+status: learning       # learning | stable
+confidence: medium     # low | medium | high
+verified: 2026-09-06   # 最近一次编辑审阅日
+review_due: 2026-09-07 # 可选：下一次建议复习日
+tags: [topic/example]  # 可选：检索标签
 ---
 ```
 
-- `seed`：刚创建或只读过；`learning`：正在理解和练习；`review`：需要按计划复习；`solid`：可独立解释并写出最小实现。
-- 不要求把旧笔记一次性迁移。编辑一篇旧笔记时，再按新字段渐进补齐。
+`verified` 表示笔记经过编辑审阅的日期，不等同于所有外部事实在当天重新验证；涉及版本、API、性能数据的内容仍应优先查官方文档或本机测量。
 
-## Vault Layout
+## 知识地图
 
-> **Auto-maintain:** When adding/renaming/removing top-level dirs below, update this section.
+| 顺序 | 主题 | 入口 |
+| --- | --- | --- |
+| 00 | 学习入口 | [Vault Map](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md) |
+| 01 | 基础能力 | [Foundations Map](/01-Foundations%20(基础能力)/00-Foundations%20Map%20(基础能力导航).md) |
+| 02 | C++ 后端 | [C++ Backend Core Map](/02-C%2B%2B%20Backend%20(C%2B%2B%20后端)/00-C%2B%2B%20Backend%20Core%20Map%20(后端能力地图).md) |
+| 03 | Python 工程 | [Python Map](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md) |
+| 04 | Go 后端 | [Go Map](/04-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/00-Go%20Map%20(Go导航).md) |
+| 05 | 运行时与网络 | [Runtime and Network MOC](/05-Runtime%20and%20Network%20(运行时与网络)/00-Runtime%20and%20Network%20MOC%20(运行时与网络导航).md) |
+| 06 | 数据与分布式 | [Data and Distributed MOC](/06-Data%20and%20Distributed%20(数据与分布式)/00-Data%20and%20Distributed%20MOC%20(数据与分布式导航).md) |
+| 07 | 工程工具 | [Tools Map](/07-Engineering%20Tools%20(工程工具)/00-Tools%20Map%20(工程工具导航).md) |
+| 08 | 项目实践 | [Project Map](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/00-Project%20Map%20(项目地图).md) |
+| 09 | 求职与成长 | [Career Map](/09-Career%20(求职与成长)/00-Career%20Map%20(求职与成长导航).md) |
 
-| Directory                         | Content                                                       |
-| --------------------------------- | ------------------------------------------------------------- |
-| `00-Start Here (学习入口)`         | Navigation, review system, templates, learning roadmap        |
-| `01-CS Core (计算机核心基础)`      | Fundamentals, OS, computer organization                       |
-| `02-Algorithms & Data Structures (算法与数据结构)` | Trees, graphs, DP, strings, bit ops          |
-| `03-C++ Programming (编程语言)`    | Syntax, core mechanisms, modern C++, STL, concurrency, design |
-| `04-Linux & System (Linux 系统)`   | Basics, processes/threads, I/O models, syscalls               |
-| `05-Network Programming (网络编程)` | Foundations, socket, HTTP, server design patterns            |
-| `06-Database (数据库)`             | MySQL: SQL, InnoDB, query optimization, high-availability     |
-| `07-Distributed & Middleware (分布式与中间件)` | Redis, Nginx, MQ, distributed protocols      |
-| `08-Development Tools (工程开发工具)` | Git, CMake, debug/profiling, misc                           |
-| `09-Go Programming (Go 编程)`      | Go language and backend engineering                           |
-| `10-Python Toolkit (Python 工具链)` | Python for automation, testing, and data work                |
-| `11-Comparisons & Decision Records (技术选型与决策记录)` | Cross-language comparisons and technical decisions |
-| `12-Backend Projects (后端项目)`   | Project evidence, designs, experiments                        |
-| `13-Career Prep (面试与成长)`       | Interview knowledge, project walkthroughs, resume             |
+## 维护边界
 
-> `assets/` (Obsidian attachments) and dot-dirs (`.obsidian/`, `.git/`, `.claude/`) are tool-managed, not content folders.
+- `.obsidian/`、`.git/`、`.trash/` 与 `assets/` 不属于笔记正文，不由内容整理流程改动。
+- 历史深层目录的 Markdown 链接已清除；不要恢复旧路径。需要关联时，使用当前文件末尾的“关联学习”或分类导航。
+- 新增文件沿用 `序号-English (中文).md`，目录最多三级；先决定它应归属的分类，再开始写正文。

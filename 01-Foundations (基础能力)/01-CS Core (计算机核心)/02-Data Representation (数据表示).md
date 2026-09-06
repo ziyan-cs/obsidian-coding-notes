@@ -77,7 +77,7 @@ string fromDecimal(int val, int base) {
 
 ---
 
-整数与浮点数表示详见 → [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md) · [Floating Point（浮点数）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/03-Floating%20Point%20(浮点数).md)
+整数与浮点数表示详见 → Integer Representation（整数表示） · Floating Point（浮点数）
 
 ---
 
@@ -134,7 +134,7 @@ int16_t y = x;             // 0x5678（高位丢失）
 
 ---
 
-二进制编码与浮点数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Floating Point（浮点数）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/03-Floating%20Point%20(浮点数).md)
+二进制编码与浮点数表示详见 → Binary & Encoding（二进制与编码） · Floating Point（浮点数）
 
 ---
 
@@ -197,7 +197,7 @@ float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16
 
 ---
 
-二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
+二进制编码与整数表示详见 → Binary & Encoding（二进制与编码） · Integer Representation（整数表示）
 
 ---
 
@@ -269,7 +269,7 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 
 ---
 
-二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
+二进制编码与整数表示详见 → Binary & Encoding（二进制与编码） · Integer Representation（整数表示）
 
 # 零基础阅读路径
 
@@ -294,3 +294,8 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[03-Program Build and Execution (程序构建与执行)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Program%20Build%20and%20Execution%20(程序构建与执行).md)

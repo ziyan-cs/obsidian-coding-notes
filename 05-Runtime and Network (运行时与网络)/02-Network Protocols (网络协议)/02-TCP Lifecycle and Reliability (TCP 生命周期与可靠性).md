@@ -621,3 +621,8 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Network Protocols Map (网络协议导航)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/00-Network%20Protocols%20Map%20(网络协议导航).md)
+- 下一步：[03-UDP (UDP)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/03-UDP%20(UDP).md)

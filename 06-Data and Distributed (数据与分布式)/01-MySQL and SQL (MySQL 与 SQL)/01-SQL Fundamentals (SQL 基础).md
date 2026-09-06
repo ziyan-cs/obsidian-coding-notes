@@ -417,7 +417,7 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ---
 
-多表查询见 → [Joins & Subqueries (多表查询与子查询)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md) · [Aggregate Functions & Group By (聚合与分组)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)
+多表查询见 → Joins & Subqueries (多表查询与子查询) · Aggregate Functions & Group By (聚合与分组)
 
 ---
 
@@ -513,7 +513,7 @@ SELECT * FROM orders WHERE user_id IN (
 
 ---
 
-基础语法见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md) · [Aggregate Functions & Group By (聚合与分组)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)
+基础语法见 → DDL, DML, DQL (SQL基础语法) · Aggregate Functions & Group By (聚合与分组)
 
 ---
 
@@ -677,7 +677,7 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ---
 
-基础语法见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md) · [Joins & Subqueries (多表查询与子查询)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
+基础语法见 → DDL, DML, DQL (SQL基础语法) · Joins & Subqueries (多表查询与子查询)
 
 ---
 
@@ -773,7 +773,7 @@ show variables like 'datadir';
 
 ---
 
-SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+SQL基础语法详解见 → DDL, DML, DQL (SQL基础语法)
 
 # 零基础阅读路径
 
@@ -799,3 +799,8 @@ SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Sys
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- 下一步：[02-InnoDB Storage and Indexes (InnoDB 存储与索引)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/02-InnoDB%20Storage%20and%20Indexes%20(InnoDB%20存储与索引).md)

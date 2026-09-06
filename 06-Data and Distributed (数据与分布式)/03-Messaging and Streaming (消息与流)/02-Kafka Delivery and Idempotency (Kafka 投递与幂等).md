@@ -109,7 +109,7 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-消息可靠性保证详解见 → [03b2-Message Delivery Guarantees (消息可靠性)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)
+消息可靠性保证详解见 → 03b2-Message Delivery Guarantees (消息可靠性)
 
 ---
 
@@ -227,7 +227,7 @@ Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 
 
 ---
 
-Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)
+Kafka 核心概念详解见 → 03b1-Topic, Partition, Consumer Group (核心概念)
 
 # 零基础阅读路径
 
@@ -253,3 +253,8 @@ Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Messaging Map (消息与流导航)](/06-Data%20and%20Distributed%20(数据与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/00-Messaging%20Map%20(消息与流导航).md)
+- 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](/06-Data%20and%20Distributed%20(数据与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/03-RabbitMQ%20and%20Kafka%20Selection%20(RabbitMQ%20与%20Kafka%20选型).md)

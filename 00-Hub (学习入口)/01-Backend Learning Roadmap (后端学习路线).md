@@ -1,8 +1,8 @@
 ---
-tags: [career/roadmap, career/backend]
 status: learning
-confidence: 1
-verified: 2026-09-05
+confidence: low
+verified: 2026-09-06
+tags: [career/roadmap, career/backend]
 ---
 
 > [!abstract] 学习定位：北极星：拿到一个后端需求，你能拆分问题、实现服务、验证正确性、定位故障，并清楚说明技术取舍。
@@ -69,7 +69,7 @@ verified: 2026-09-05
 
 - 某主题能脱稿讲 3 分钟、改写最小例子、答对自测题，才从 `review` 升为 `solid`。
 - 连续两周没有可运行产物，则减少阅读量，改做一个 30 分钟小实验。
-- 新工具、框架或版本信息先查一手文档，记录验证日期；见 [[06-Sources & Freshness Policy (来源与时效规则)]]。
+- 新工具、框架或版本信息先查一手文档，记录验证日期；见 [06-Sources & Freshness Policy (来源与时效规则)](/00-Hub%20(学习入口)/06-Sources%20&%20Freshness%20Policy%20(来源与时效规则).md)。
 
 # 30 秒复盘
 
@@ -77,9 +77,9 @@ verified: 2026-09-05
 
 # 关联
 
-- [[00-Vault Map (知识库地图)]]
-- [[02-Spaced Review System (间隔复习系统)]]
-- [[05-Mistake Log (错误记录)]]
+- [00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- [02-Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)
+- [05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)
 
 # 零基础阅读路径
 
@@ -104,3 +104,8 @@ verified: 2026-09-05
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[02-Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)

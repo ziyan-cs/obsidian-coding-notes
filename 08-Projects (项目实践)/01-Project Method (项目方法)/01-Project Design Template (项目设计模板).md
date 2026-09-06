@@ -1,7 +1,8 @@
 ---
+status: stable
+confidence: medium
+verified: 2026-09-06
 tags: [project/template, backend/design]
-status: solid
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：一句话：为谁解决什么问题；不承诺解决什么。
@@ -90,3 +91,8 @@ status: seed
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Project Map (项目地图)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/00-Project%20Map%20(项目地图).md)
+- 下一步：[02-Testing Benchmark and Evidence (测试压测与证据)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)

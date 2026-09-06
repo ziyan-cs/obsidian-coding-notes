@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-11
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-11
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -142,7 +142,7 @@ struct Circle : Shape<Circle> {
 
 ---
 
-多态与对象模型详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
+多态与对象模型详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -221,7 +221,7 @@ public:
 
 ---
 
-拷贝控制与五法则详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)
+拷贝控制与五法则详见 → Copy Control & Rule of 5 (拷贝控制与五法则)
 
 ---
 
@@ -298,7 +298,7 @@ public:
 
 ---
 
-构造析构顺序详见 → [Constructor & Destructor Order (构造析构顺序)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)
+构造析构顺序详见 → Constructor & Destructor Order (构造析构顺序)
 
 ---
 
@@ -343,7 +343,7 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 ---
 
-拷贝控制与运算符重载常配合使用，详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)
+拷贝控制与运算符重载常配合使用，详见 → Copy Control & Rule of 5 (拷贝控制与五法则)
 
 # 学习闭环
 
@@ -359,3 +359,8 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[04-Polymorphism and Inheritance (多态与继承)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)

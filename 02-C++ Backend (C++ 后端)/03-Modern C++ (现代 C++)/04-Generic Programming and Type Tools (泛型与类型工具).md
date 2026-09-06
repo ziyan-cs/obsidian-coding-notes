@@ -97,7 +97,7 @@ decltype(auto) timed_call(F&& f, Args&&... args) {
 
 ---
 
-类型推导是完美转发的基础，详见 → [Type Deduction (类型推导)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/01-Type%20Deduction%20(类型推导).md)
+类型推导是完美转发的基础，详见 → Type Deduction (类型推导)
 
 # 30 秒回答
 
@@ -198,7 +198,7 @@ g = 100;                    // 运行期可修改
 
 ---
 
-现代 C++ 编译期计算作为核心特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+现代 C++ 编译期计算作为核心特性，详见 → Modern C++ Overview (现代 C++ 特性总览)
 
 ---
 
@@ -291,7 +291,7 @@ std::visit([](auto&& v) {
 
 ---
 
-optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详见 → Modern C++ Overview (现代 C++ 特性总览)
 
 ---
 
@@ -396,7 +396,7 @@ if (auto [lock, data] = acquireData(); data.valid()) {
 
 ---
 
-string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → Modern C++ Overview (现代 C++ 特性总览)
 
 ---
 
@@ -577,7 +577,7 @@ void print(const Container auto& c) { /* ... */ }
 
 ---
 
-Concepts 是 C++20 约束模板参数的重要特性，详见 → [Modern C++ Overview (现代 C++ 特性总览)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)
+Concepts 是 C++20 约束模板参数的重要特性，详见 → Modern C++ Overview (现代 C++ 特性总览)
 
 # 零基础阅读路径
 
@@ -603,3 +603,8 @@ Concepts 是 C++20 约束模板参数的重要特性，详见 → [Modern C++ Ov
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Modern C++ Map (现代 C++ 导航)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Map%20(现代%20C++%20导航).md)
+- 下一步：[05-Coroutines (协程)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/05-Coroutines%20(协程).md)

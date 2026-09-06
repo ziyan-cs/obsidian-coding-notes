@@ -142,11 +142,11 @@ Ctrl+L                    # 刷新屏幕（TUI 花屏时用）
 
 # 关联笔记
 
-- [Core Dump Analysis (核心转储分析)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03b-Core%20Dump%20Analysis%20(核心转储分析)%20⭐.md)
-- [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
-- [AddressSanitizer & UBSan (编译期检测工具)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03d-AddressSanitizer%20&%20UBSan%20(编译期检测工具)%20⭐.md)
-- [perf：CPU Profiling & Flamegraph (性能火焰图)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03e-perf：CPU%20Profiling%20&%20Flamegraph%20(性能火焰图).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- Core Dump Analysis (核心转储分析)
+- Valgrind：Memory Leak Detection (内存泄漏检测)
+- AddressSanitizer & UBSan (编译期检测工具)
+- perf：CPU Profiling & Flamegraph (性能火焰图)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 ---
 
@@ -243,11 +243,11 @@ void enable_core_dump() {
 ---
 
 # 关联笔记 · 延伸要点 2
-- [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
-- [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
-- [AddressSanitizer & UBSan (编译期检测工具)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03d-AddressSanitizer%20&%20UBSan%20(编译期检测工具)%20⭐.md)
-- [perf：CPU Profiling & Flamegraph (性能火焰图)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03e-perf：CPU%20Profiling%20&%20Flamegraph%20(性能火焰图).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
+- Valgrind：Memory Leak Detection (内存泄漏检测)
+- AddressSanitizer & UBSan (编译期检测工具)
+- perf：CPU Profiling & Flamegraph (性能火焰图)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 # 零基础阅读路径
 
@@ -273,3 +273,8 @@ void enable_core_dump() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Debugging and Performance Map (调试与性能导航)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/00-Debugging%20and%20Performance%20Map%20(调试与性能导航).md)
+- 下一步：[02-Memory Safety Tools (内存安全工具)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/02-Memory%20Safety%20Tools%20(内存安全工具).md)

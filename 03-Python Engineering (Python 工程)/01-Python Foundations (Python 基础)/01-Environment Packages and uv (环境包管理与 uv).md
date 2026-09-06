@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-21
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-21
 ---
 
 > [!abstract] 一句话结论：项目依赖必须隔离、可复现、可声明；不要把“电脑上能跑”误当成项目环境正确。
@@ -93,3 +93,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Python Map (Python导航)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md)
+- 下一步：[02-Objects Types and Functions (对象类型与函数)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Types%20and%20Functions%20(对象类型与函数).md)

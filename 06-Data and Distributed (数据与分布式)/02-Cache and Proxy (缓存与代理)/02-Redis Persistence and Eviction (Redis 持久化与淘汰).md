@@ -102,7 +102,7 @@ Client              Redis Main Process        Forked Child           Disk
 
 ---
 
-AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrite (日志重写)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b2-AOF：Write-Ahead%20Log%20&%20Rewrite%20(日志重写).md)
+AOF 日志与 RDB 快照对比详解见 → 01b2-AOF：Write-Ahead Log & Rewrite (日志重写)
 
 ---
 
@@ -244,7 +244,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ---
 
-RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (快照原理)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b1-RDB：Snapshot%20&%20BGSAVE%20(快照原理).md)
+RDB 快照与 AOF 持久化对比详解见 → 01b1-RDB：Snapshot & BGSAVE (快照原理)
 
 ---
 
@@ -395,7 +395,7 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 ---
 
-Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Redis Integration：C++ Client hiredis (项目集成)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01f-Redis%20Integration：C++%20Client%20hiredis%20(项目集成)%20⭐.md)
+Redis 单线程模型与项目集成详解见 → Redis Single Thread Model (单线程模型为何高性能) · Redis Integration：C++ Client hiredis (项目集成)
 
 # 零基础阅读路径
 
@@ -421,3 +421,8 @@ Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- 下一步：[03-Cache Consistency Problems (缓存一致性问题)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/03-Cache%20Consistency%20Problems%20(缓存一致性问题).md)

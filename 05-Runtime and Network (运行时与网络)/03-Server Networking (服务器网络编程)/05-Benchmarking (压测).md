@@ -128,3 +128,8 @@ ab -n 100000 -c 100 http://localhost:8080/
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
+- 下一步：[06-Graceful Shutdown and Architecture (优雅关闭与架构)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/06-Graceful%20Shutdown%20and%20Architecture%20(优雅关闭与架构).md)

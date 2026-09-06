@@ -1,7 +1,8 @@
 ---
-tags:
-  - career/interview
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - career/interview
 ---
 
 > [!abstract] 核心考点：> C++ 后端面试最高频的 100 道题，每题指向笔记库中的对应章节
@@ -22,76 +23,76 @@ status: 🌱
 
 | #   | 题目                                | 难度  | 笔记位置                                                                                                                                                                         |
 | --- | --------------------------------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | `const` 在不同位置的含义（指针、函数、成员函数）      | ★   | [Const & Static](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)                                                                  |
-| 2   | `static` 的 5 种用法                  | ★   | [Const & Static](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)                                                                  |
-| 3   | 左值引用 vs 右值引用 vs 万能引用              | ★★  | [Lvalue vs Rvalue](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03a-Lvalue%20vs%20Rvalue%20(左值右值区分).md)        |
-| 4   | 指针和引用的区别（底层实现角度）                  | ★   | [Pointers & References](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)                                           |
-| 5   | `sizeof` 和 `alignof` 在空类、虚继承下的结果  | ★★  | [Memory Model & Layout](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04a-Stack,%20Heap,%20BSS,%20Text%20Segments%20(四区详解).md) |
-| 6   | 重载、重写、隐藏的区别                       | ★   | [Constructor & Destructor Order](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06a-Constructor%20&%20Destructor%20Order%20(构造析构顺序).md)      |
-| 7   | `inline` 函数什么时候有用？什么时候无效？         | ★   | [Functions](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/03-Functions%20(函数).md)                                                                                     |
-| 8   | 函数指针 vs `std::function` vs lambda | ★★  | [Lambda & Function Object](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/02-Lambda%20&%20Function%20Object%20(Lambda与函数对象)%20⭐.md)                                        |
+| 1   | `const` 在不同位置的含义（指针、函数、成员函数）      | ★   | Const & Static                                                                  |
+| 2   | `static` 的 5 种用法                  | ★   | Const & Static                                                                  |
+| 3   | 左值引用 vs 右值引用 vs 万能引用              | ★★  | Lvalue vs Rvalue        |
+| 4   | 指针和引用的区别（底层实现角度）                  | ★   | Pointers & References                                           |
+| 5   | `sizeof` 和 `alignof` 在空类、虚继承下的结果  | ★★  | Memory Model & Layout |
+| 6   | 重载、重写、隐藏的区别                       | ★   | Constructor & Destructor Order      |
+| 7   | `inline` 函数什么时候有用？什么时候无效？         | ★   | Functions                                                                                     |
+| 8   | 函数指针 vs `std::function` vs lambda | ★★  | Lambda & Function Object                                        |
 
 ## OOP
 
 | #   | 题目                  | 难度  | 笔记位置                                                                                                                                                                                           |
 | --- | ------------------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 9   | 虚函数表（vtable）的内存布局   | ★★★ | [Virtual Function & VTable Layout](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md) |
-| 10  | 多继承的菱形问题与虚继承        | ★★★ | [Multiple & Virtual Inheritance](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07d-Multiple%20&%20Virtual%20Inheritance%20(多继承与虚继承).md)        |
-| 11  | 构造函数和析构函数中调用虚函数会怎样  | ★★  | [Multiple & Virtual Inheritance](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07d-Multiple%20&%20Virtual%20Inheritance%20(多继承与虚继承).md)        |
-| 12  | 为什么析构函数要用 virtual   | ★   | [Abstract Class & Pure Virtual](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07c-Abstract%20Class%20&%20Pure%20Virtual%20(抽象类).md)            |
-| 13  | Rule of Five（三/五法则） | ★★  | [Copy Control & Rule of 5](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)                            |
-| 14  | 拷贝构造函数参数为什么必须是引用    | ★   | [Pointers & References](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)                                                           |
+| 9   | 虚函数表（vtable）的内存布局   | ★★★ | Virtual Function & VTable Layout |
+| 10  | 多继承的菱形问题与虚继承        | ★★★ | Multiple & Virtual Inheritance        |
+| 11  | 构造函数和析构函数中调用虚函数会怎样  | ★★  | Multiple & Virtual Inheritance        |
+| 12  | 为什么析构函数要用 virtual   | ★   | Abstract Class & Pure Virtual            |
+| 13  | Rule of Five（三/五法则） | ★★  | Copy Control & Rule of 5                            |
+| 14  | 拷贝构造函数参数为什么必须是引用    | ★   | Pointers & References                                                           |
 
 ## 内存
 
 | #   | 题目                                            | 难度  | 笔记位置                                                                                                                                                                                                                                                                                                                              |
 | --- | --------------------------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 15  | 程序内存布局：stack / heap / BSS / data / text       | ★★  | [Stack, Heap, BSS, Text Segments](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04a-Stack,%20Heap,%20BSS,%20Text%20Segments%20(四区详解).md) |
-| 16  | 内存对齐的原则与 `#pragma pack`                       | ★★  | [Memory Alignment](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)                                           |
-| 17  | 栈上对象 vs 堆上对象的生命周期                             | ★   | [Memory Alignment](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04b-Memory%20Alignment%20(内存对齐).md)                                           |
-| 18  | 内存池的原理和适用场景                                   | ★★  | [Memory Pool Implementation](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/04-Memory%20Model%20&%20Layout%20(内存模型与布局)%20⭐/04c-Memory%20Pool%20Implementation%20(内存池实现).md)            |
-| 19  | placement new 和自定义分配器                         | ★★★ | [Custom Allocators & Placement New](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/10-Custom%20Allocators%20&%20Placement%20New%20(自定义分配器).md)                                                                                                 |
-| 20  | 智能指针：`unique_ptr` / `shared_ptr` / `weak_ptr` | ★★  | [Smart Pointers](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04a-unique%20ptr%20Ownership%20Model%20(独占所有权).md)                                                                          |
+| 15  | 程序内存布局：stack / heap / BSS / data / text       | ★★  | Stack, Heap, BSS, Text Segments |
+| 16  | 内存对齐的原则与 `#pragma pack`                       | ★★  | Memory Alignment                                           |
+| 17  | 栈上对象 vs 堆上对象的生命周期                             | ★   | Memory Alignment                                           |
+| 18  | 内存池的原理和适用场景                                   | ★★  | Memory Pool Implementation            |
+| 19  | placement new 和自定义分配器                         | ★★★ | Custom Allocators & Placement New                                                                                                 |
+| 20  | 智能指针：`unique_ptr` / `shared_ptr` / `weak_ptr` | ★★  | Smart Pointers                                                                          |
 
 ## Modern C++
 
 | #   | 题目                                               | 难度  | 笔记位置                                                                                                                                                                                                             |
 | --- | ------------------------------------------------ | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 21  | 移动语义干了什么？什么时候用 `std::move`？                      | ★★  | [Move Constructor & Move Assignment](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md) |
-| 22  | 完美转发的原理：引用折叠 + `std::forward`                    | ★★★ | [Perfect Forwarding & Universal Reference](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)                                                 |
-| 23  | `auto` 和 `decltype` 的类型推导规则                      | ★★  | [Modern C++ Overview](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Overview%20(现代%20C++%20特性总览).md)                                                                                        |
-| 24  | lambda 的捕获方式和生命周期                                | ★★  | [Lambda & Function Object](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/02-Lambda%20&%20Function%20Object%20(Lambda与函数对象)%20⭐.md)                                                                            |
-| 25  | `constexpr` 编译期计算 vs `consteval`                 | ★★  | [constexpr & Compile-time Computation](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/06-constexpr%20&%20Compile-time%20Computation%20(编译期计算).md)                                                              |
-| 26  | `if constexpr` 如何替代 SFINAE                       | ★★  | [constexpr & Compile-time Computation](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/06-constexpr%20&%20Compile-time%20Computation%20(编译期计算).md)                                                              |
-| 27  | `std::optional` / `std::variant` / `std::any`    | ★   | [optional & variant](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/07-optional%20&%20variant%20(新类型工具).md)                                                                                                    |
-| 28  | Coroutines：`co_await` / `co_yield` / `co_return` | ★★★ | [Coroutines Overview](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/10-Coroutines%20Overview%20(协程入门).md)                                                                                                     |
-| 29  | Concept 解决了什么问题                                  | ★★  | [Concepts & SFINAE](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/09-Concepts%20&%20SFINAE%20(概念与模板元编程)%20⭐.md)                                                                                               |
+| 21  | 移动语义干了什么？什么时候用 `std::move`？                      | ★★  | Move Constructor & Move Assignment |
+| 22  | 完美转发的原理：引用折叠 + `std::forward`                    | ★★★ | Perfect Forwarding & Universal Reference                                                 |
+| 23  | `auto` 和 `decltype` 的类型推导规则                      | ★★  | Modern C++ Overview                                                                                        |
+| 24  | lambda 的捕获方式和生命周期                                | ★★  | Lambda & Function Object                                                                            |
+| 25  | `constexpr` 编译期计算 vs `consteval`                 | ★★  | constexpr & Compile-time Computation                                                              |
+| 26  | `if constexpr` 如何替代 SFINAE                       | ★★  | constexpr & Compile-time Computation                                                              |
+| 27  | `std::optional` / `std::variant` / `std::any`    | ★   | optional & variant                                                                                                    |
+| 28  | Coroutines：`co_await` / `co_yield` / `co_return` | ★★★ | Coroutines Overview                                                                                                     |
+| 29  | Concept 解决了什么问题                                  | ★★  | Concepts & SFINAE                                                                                               |
 | 30  | Structured Binding（结构化绑定）                        | ★   | string_view & Structured Bindings                                                                                                                                                                                |
 
 ## 并发
 
 | # | 题目 | 难度 | 笔记位置 |
 |---|------|------|---------|
-| 31 | `std::thread` vs POSIX 线程 | ★ | [Thread Basics](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/01-Thread%20Basics%20POSIX%20&%20std%20thread%20(线程基础)%20⭐.md) |
-| 32 | `std::mutex` / `std::lock_guard` / `std::unique_lock` | ★ | [Mutex & Lock](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md) |
-| 33 | 死锁的四个必要条件与预防 | ★★ | [Mutex & Lock](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md) |
-| 34 | `std::atomic` 和 memory order | ★★★ | [Atomic & Memory Order](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md) |
-| 35 | 条件变量为什么必须配合 mutex | ★★ | [Condition Variable & Semaphore](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md) |
-| 36 | 线程池的设计要点（任务队列、动态扩缩） | ★★ | [Thread Pool Implementation](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/05-Thread%20Pool%20Implementation%20(线程池手写)%20⭐.md) |
-| 37 | 伪共享（False Sharing）的成因和解决 | ★★★ | [Concurrency & Performance Optimization](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/07-C++%20Concurrency%20&%20Performance%20Optimization：Lock-free,%20Cache,%20NUMA%20(并发性能优化)%20⭐.md) |
-| 38 | `std::future` / `std::promise` / `std::async` | ★★ | [Lock-free Structures](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md) |
-| 39 | 读写锁 (`shared_mutex`) 适用场景 | ★★ | [Concurrency & Performance Optimization](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/07-C++%20Concurrency%20&%20Performance%20Optimization：Lock-free,%20Cache,%20NUMA%20(并发性能优化)%20⭐.md) |
-| 40 | lock-free 编程的基本思路 | ★★★ | [Lock-free Structures](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md) |
+| 31 | `std::thread` vs POSIX 线程 | ★ | Thread Basics |
+| 32 | `std::mutex` / `std::lock_guard` / `std::unique_lock` | ★ | Mutex & Lock |
+| 33 | 死锁的四个必要条件与预防 | ★★ | Mutex & Lock |
+| 34 | `std::atomic` 和 memory order | ★★★ | Atomic & Memory Order |
+| 35 | 条件变量为什么必须配合 mutex | ★★ | Condition Variable & Semaphore |
+| 36 | 线程池的设计要点（任务队列、动态扩缩） | ★★ | Thread Pool Implementation |
+| 37 | 伪共享（False Sharing）的成因和解决 | ★★★ | Concurrency & Performance Optimization |
+| 38 | `std::future` / `std::promise` / `std::async` | ★★ | Lock-free Structures |
+| 39 | 读写锁 (`shared_mutex`) 适用场景 | ★★ | Concurrency & Performance Optimization |
+| 40 | lock-free 编程的基本思路 | ★★★ | Lock-free Structures |
 
 ## STL
 
 | #   | 题目                                 | 难度  | 笔记位置                                                                                                                                                                                    |
 | --- | ---------------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 41  | `vector` 扩容机制与 `reserve`           | ★★  | [vector Dynamic Array](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md) |
-| 42  | `map` vs `unordered_map` 底层结构对比    | ★★  | [STL Cheat Sheet](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/06-STL%20Cheat%20Sheet%20(STL速查总览).md)                                                                                  |
-| 43  | `deque` 的块状存储结构                    | ★★  | [STL Cheat Sheet](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/06-STL%20Cheat%20Sheet%20(STL速查总览).md)                                                                                  |
-| 44  | 迭代器失效的场景（vector/map/unordered_map） | ★★  | [Iterators & Iterator Categories](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/04-Iterators%20&%20Iterator%20Categories%20(迭代器分类).md)                                                  |
-| 45  | `std::sort` 的实现原理（内省排序）            | ★★  | [Algorithm Library](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)                                                                                  |
+| 41  | `vector` 扩容机制与 `reserve`           | ★★  | vector Dynamic Array |
+| 42  | `map` vs `unordered_map` 底层结构对比    | ★★  | STL Cheat Sheet                                                                                  |
+| 43  | `deque` 的块状存储结构                    | ★★  | STL Cheat Sheet                                                                                  |
+| 44  | 迭代器失效的场景（vector/map/unordered_map） | ★★  | Iterators & Iterator Categories                                                  |
+| 45  | `std::sort` 的实现原理（内省排序）            | ★★  | Algorithm Library                                                                                  |
 
 ---
 
@@ -99,21 +100,21 @@ status: 🌱
 
 | # | 题目 | 难度 | 笔记位置 |
 |---|------|------|---------|
-| 46 | 三次握手和四次挥手 State 变化 | ★★ | [Three-Way Handshake & Four-Way Teardown](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md) |
-| 47 | TIME_WAIT 为什么是 2MSL | ★★ | [TIME_WAIT](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02c-TIME_WAIT：Why%20&%20How%20to%20Handle%20(TIME_WAIT原因与处理).md) |
-| 48 | TCP 拥塞控制的四种算法 | ★★★ | [Flow Control & Congestion Control](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md) |
-| 49 | 粘包怎么解决（代码实现） | ★★ | [Sticky Packet Problem & Solutions](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md) |
-| 50 | select / poll / epoll 对比 | ★★★ | [epoll vs select](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md) |
-| 51 | epoll ET vs LT 模式 | ★★★ | [Level Trigger vs Edge Trigger](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md) |
-| 52 | Reactor 和 Proactor 的区别 | ★★★ | [Reactor & Proactor Pattern](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐/05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md) |
-| 53 | HTTPS TLS 握手过程 | ★★ | [HTTPS & TLS Overview](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md) |
-| 54 | HTTP/2 多路复用的原理 | ★★ | [HTTP/2 Key Features](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/08-HTTP⧸2%20Key%20Features%20(HTTP2核心特性了解).md) |
-| 55 | gRPC 四种通信模式 | ★★ | [gRPC & Protobuf](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/09-gRPC%20&%20Protobuf%20(RPC框架与序列化)%20⭐.md) |
-| 56 | Protobuf 编码原理（varint） | ★★★ | [gRPC & Protobuf](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/09-gRPC%20&%20Protobuf%20(RPC框架与序列化)%20⭐.md) |
-| 57 | 零拷贝：mmap + sendfile | ★★ | [Memory-mapped IO & sendfile](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/09-Memory-mapped%20IO%20&%20sendfile%20(零拷贝).md) |
-| 58 | 非阻塞 connect 怎么实现 | ★★ | [Non-blocking Socket](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04b-Non-blocking%20Socket%20&%20O_NONBLOCK%20(非阻塞Socket).md) |
-| 59 | SO_REUSEADDR 解决什么 | ★ | [SO_REUSEADDR & SO_KEEPALIVE](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04c-SO_REUSEADDR%20&%20SO_KEEPALIVE%20(套接字选项).md) |
-| 60 | HTTP 状态机解析怎么实现 | ★★ | [State Machine Parser Implementation](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06d-State%20Machine%20Parser%20Implementation%20(状态机解析实现).md) |
+| 46 | 三次握手和四次挥手 State 变化 | ★★ | Three-Way Handshake & Four-Way Teardown |
+| 47 | TIME_WAIT 为什么是 2MSL | ★★ | TIME_WAIT |
+| 48 | TCP 拥塞控制的四种算法 | ★★★ | Flow Control & Congestion Control |
+| 49 | 粘包怎么解决（代码实现） | ★★ | Sticky Packet Problem & Solutions |
+| 50 | select / poll / epoll 对比 | ★★★ | epoll vs select |
+| 51 | epoll ET vs LT 模式 | ★★★ | Level Trigger vs Edge Trigger |
+| 52 | Reactor 和 Proactor 的区别 | ★★★ | Reactor & Proactor Pattern |
+| 53 | HTTPS TLS 握手过程 | ★★ | HTTPS & TLS Overview |
+| 54 | HTTP/2 多路复用的原理 | ★★ | HTTP/2 Key Features |
+| 55 | gRPC 四种通信模式 | ★★ | gRPC & Protobuf |
+| 56 | Protobuf 编码原理（varint） | ★★★ | gRPC & Protobuf |
+| 57 | 零拷贝：mmap + sendfile | ★★ | Memory-mapped IO & sendfile |
+| 58 | 非阻塞 connect 怎么实现 | ★★ | Non-blocking Socket |
+| 59 | SO_REUSEADDR 解决什么 | ★ | SO_REUSEADDR & SO_KEEPALIVE |
+| 60 | HTTP 状态机解析怎么实现 | ★★ | State Machine Parser Implementation |
 
 ---
 
@@ -121,16 +122,16 @@ status: 🌱
 
 | #   | 题目             | 难度  | 笔记位置                                                                                                                                                                            |
 | --- | -------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 61  | 进程 vs 线程 vs 协程 | ★   | [Process vs Thread](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md)                                                                  |
-| 62  | 上下文切换的成本       | ★★  | [Context Switching](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)                                                                     |
-| 63  | 虚拟内存解决了什么问题    | ★★  | [Virtual Memory](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/04-Memory%20Management%20(内存管理)/01-Virtual%20Memory%20(虚拟内存).md)                                              |
-| 64  | 分页 vs 分段       | ★★  | [Paging & Segmentation](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/04-Memory%20Management%20(内存管理)/02-Paging%20&%20Segmentation%20(分页与分段).md)                             |
+| 61  | 进程 vs 线程 vs 协程 | ★   | Process vs Thread                                                                  |
+| 62  | 上下文切换的成本       | ★★  | Context Switching                                                                     |
+| 63  | 虚拟内存解决了什么问题    | ★★  | Virtual Memory                                              |
+| 64  | 分页 vs 分段       | ★★  | Paging & Segmentation                             |
 | 65  | 页面置换算法（LRU 实现） | ★★  | LRU（当前无专题笔记） |
-| 66  | 死锁的四个条件和解决方案   | ★★  | [Deadlock](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/03-Deadlock%20(死锁).md)                                                                 |
-| 67  | 互斥锁和信号量的本质区别   | ★   | [Mutex](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/01-Mutex%20(互斥锁).md)                                                                    |
-| 68  | CPU 调度算法对比     | ★★  | [CPU Scheduling](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/03-CPU%20Scheduling%20(CPU调度).md)                                                                         |
-| 69  | 硬链接 vs 软链接     | ★   | [File System Basics](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/06-File%20System%20Basics%20(文件系统基础).md)                                                              |
-| 70  | 零拷贝的几种实现方式     | ★★  | [Memory-mapped IO & sendfile](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/09-Memory-mapped%20IO%20&%20sendfile%20(零拷贝).md)                                            |
+| 66  | 死锁的四个条件和解决方案   | ★★  | Deadlock                                                                 |
+| 67  | 互斥锁和信号量的本质区别   | ★   | Mutex                                                                    |
+| 68  | CPU 调度算法对比     | ★★  | CPU Scheduling                                                                         |
+| 69  | 硬链接 vs 软链接     | ★   | File System Basics                                                              |
+| 70  | 零拷贝的几种实现方式     | ★★  | Memory-mapped IO & sendfile                                            |
 
 ---
 
@@ -138,21 +139,21 @@ status: 🌱
 
 | #   | 题目                               | 难度  | 笔记位置                                                                                                                                                                                         |
 | --- | -------------------------------- | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 71  | 索引的 B+ Tree 结构                   | ★★  | [B+ Tree Index Structure](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md)                     |
-| 72  | 聚簇索引 vs 二级索引 vs 覆盖索引             | ★★★ | [Clustered vs Secondary Index](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)         |
-| 73  | 索引下推是什么                          | ★★  | [Index Pushdown & Covering Index](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04d-Index%20Pushdown%20&%20Covering%20Index%20(索引下推与覆盖索引).md) |
-| 74  | 四种隔离级别和并发问题                      | ★★  | [Isolation Levels](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05a-Isolation%20Levels：RU,%20RC,%20RR,%20Serializable%20(四种隔离级别).md)               |
-| 75  | MVCC 实现原理（undo log + ReadView）   | ★★★ | [MVCC Internals](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)                   |
-| 76  | Next-Key Lock 解决幻读               | ★★★ | [Gap Lock & Next-Key Lock](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)                          |
-| 77  | EXPLAIN 怎么看（type/key/rows/Extra） | ★★  | [EXPLAIN & Execution Plan Analysis](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)                 |
-| 78  | 最左前缀匹配原则                         | ★★  | [EXPLAIN & Execution Plan Analysis](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)                 |
-| 79  | Redo Log 崩溃恢复原理                  | ★★★ | [Redo Log](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md)                                |
-| 80  | Binlog vs Redo Log 区别            | ★★  | [Binlog vs Redo Log](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07c-Binlog%20vs%20Redo%20Log：Differences%20(两者区别).md)             |
-| 81  | 主从复制的三种模式                        | ★★  | [Master-Slave Replication](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md)                                                                             |
-| 82  | JOIN 和子查询的性能差异                   | ★★  | [Joins & Subqueries](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)                                                                                      |
-| 83  | 分库分表的策略                          | ★★  | [Sharding & Partitioning](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)                                                                  |
-| 84  | 缓存穿透/击穿/雪崩                       | ★★  | [MySQL vs Redis](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)                                                                            |
-| 85  | Redis 为什么快（单线程模型）                | ★   | [Redis Single Thread Model](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md)                             |
+| 71  | 索引的 B+ Tree 结构                   | ★★  | B+ Tree Index Structure                     |
+| 72  | 聚簇索引 vs 二级索引 vs 覆盖索引             | ★★★ | Clustered vs Secondary Index         |
+| 73  | 索引下推是什么                          | ★★  | Index Pushdown & Covering Index |
+| 74  | 四种隔离级别和并发问题                      | ★★  | Isolation Levels               |
+| 75  | MVCC 实现原理（undo log + ReadView）   | ★★★ | MVCC Internals                   |
+| 76  | Next-Key Lock 解决幻读               | ★★★ | Gap Lock & Next-Key Lock                          |
+| 77  | EXPLAIN 怎么看（type/key/rows/Extra） | ★★  | EXPLAIN & Execution Plan Analysis                 |
+| 78  | 最左前缀匹配原则                         | ★★  | EXPLAIN & Execution Plan Analysis                 |
+| 79  | Redo Log 崩溃恢复原理                  | ★★★ | Redo Log                                |
+| 80  | Binlog vs Redo Log 区别            | ★★  | Binlog vs Redo Log             |
+| 81  | 主从复制的三种模式                        | ★★  | Master-Slave Replication                                                                             |
+| 82  | JOIN 和子查询的性能差异                   | ★★  | Joins & Subqueries                                                                                      |
+| 83  | 分库分表的策略                          | ★★  | Sharding & Partitioning                                                                  |
+| 84  | 缓存穿透/击穿/雪崩                       | ★★  | MySQL vs Redis                                                                            |
+| 85  | Redis 为什么快（单线程模型）                | ★   | Redis Single Thread Model                             |
 
 ---
 
@@ -160,16 +161,16 @@ status: 🌱
 
 | # | 题目 | 难度 | 笔记位置 |
 |---|------|------|---------|
-| 86 | CAP 理论和 PACELC | ★★ | [CAP Theorem & BASE Theory](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) |
-| 87 | Raft 的 Leader 选举过程 | ★★★ | [Leader Election](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) |
-| 88 | Raft 日志复制和安全性 | ★★★ | [Log Replication](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md) |
-| 89 | Paxos 和 Raft 的区别 | ★★★ | [Paxos Overview](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04d-Paxos%20Overview%20(Paxos概念了解).md) |
-| 90 | 2PC 和 Saga 的优缺点 | ★★ | [Distributed Transaction](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04e-Distributed%20Transaction：2PC%20&%20Saga%20(分布式事务).md) |
-| 91 | Kafka 消息可靠性的三种 ACK 模式 | ★★ | [Kafka Message Delivery](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md) |
-| 92 | 一致性哈希解决了什么问题 | ★★ | [Reverse Proxy & Load Balancing](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) |
-| 93 | Redis 过期策略和内存淘汰 | ★★ | [Expiration & Eviction Strategy](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01c-Expiration%20&%20Eviction%20Strategy%20(过期与淘汰策略)%20⭐.md) |
-| 94 | Redis 持久化：RDB vs AOF | ★★ | [Redis Persistence](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01b-Persistence：RDB%20&%20AOF%20(持久化机制)%20⭐/01b1-RDB：Snapshot%20&%20BGSAVE%20(快照原理).md) |
-| 95 | 布隆过滤器的原理 | ★★ | [Cache Penetration](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d1-Cache%20Penetration%20(缓存穿透：布隆过滤器).md) |
+| 86 | CAP 理论和 PACELC | ★★ | CAP Theorem & BASE Theory |
+| 87 | Raft 的 Leader 选举过程 | ★★★ | Leader Election |
+| 88 | Raft 日志复制和安全性 | ★★★ | Log Replication |
+| 89 | Paxos 和 Raft 的区别 | ★★★ | Paxos Overview |
+| 90 | 2PC 和 Saga 的优缺点 | ★★ | Distributed Transaction |
+| 91 | Kafka 消息可靠性的三种 ACK 模式 | ★★ | Kafka Message Delivery |
+| 92 | 一致性哈希解决了什么问题 | ★★ | Reverse Proxy & Load Balancing |
+| 93 | Redis 过期策略和内存淘汰 | ★★ | Expiration & Eviction Strategy |
+| 94 | Redis 持久化：RDB vs AOF | ★★ | Redis Persistence |
+| 95 | 布隆过滤器的原理 | ★★ | Cache Penetration |
 
 ---
 
@@ -177,11 +178,11 @@ status: 🌱
 
 | # | 题目 | 要点 | 笔记位置 |
 |---|------|------|---------|
-| 96 | 设计一个短 URL 系统 | 发号器 + 哈希 + 重定向 | [CAP Theorem & BASE Theory](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) |
-| 97 | 设计一个即时通讯系统 | WebSocket + 消息存储 + 推拉 | [gRPC & Protobuf](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/09-gRPC%20&%20Protobuf%20(RPC框架与序列化)%20⭐.md) |
-| 98 | 设计一个秒杀系统 | 限流 + 缓存 + 异步下单 | [MySQL vs Redis](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md) |
-| 99 | 设计一个配置中心 | etcd + watch + 版本管理 | [Leader Election](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) |
-| 100 | 设计一个 API 网关 | 路由 + 限流 + 鉴权 + 熔断 | [Backend Architecture Patterns](/03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md) |
+| 96 | 设计一个短 URL 系统 | 发号器 + 哈希 + 重定向 | CAP Theorem & BASE Theory |
+| 97 | 设计一个即时通讯系统 | WebSocket + 消息存储 + 推拉 | gRPC & Protobuf |
+| 98 | 设计一个秒杀系统 | 限流 + 缓存 + 异步下单 | MySQL vs Redis |
+| 99 | 设计一个配置中心 | etcd + watch + 版本管理 | Leader Election |
+| 100 | 设计一个 API 网关 | 路由 + 限流 + 鉴权 + 熔断 | Backend Architecture Patterns |
 
 > **复习建议**：100 题不要求全背。把★的答到流利，★★的理解原理能画图，★★★的至少能说出核心思想。标注的笔记位置指向完整笔记，不要只看本题——回到原笔记深挖。
 
@@ -549,3 +550,8 @@ status: 🌱
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Interview Map (面试导航)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/00-Interview%20Map%20(面试导航).md)
+- 下一步：[02-Data Quick Reference (数据速记)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/02-Data%20Quick%20Reference%20(数据速记).md)

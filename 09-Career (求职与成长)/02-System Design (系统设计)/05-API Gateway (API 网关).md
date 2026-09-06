@@ -1,7 +1,8 @@
 ---
-tags:
-  - distributed/system
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - distributed/system
 ---
 
 > [!abstract] 核心考点：> 路由转发 + 过滤器链（鉴权/限流/熔断/日志）+ 高性能代理设计，核心是看你对"网关层职责边界"的理解
@@ -392,3 +393,8 @@ API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+- 下一步：[04-Config Center (配置中心)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20(配置中心).md)

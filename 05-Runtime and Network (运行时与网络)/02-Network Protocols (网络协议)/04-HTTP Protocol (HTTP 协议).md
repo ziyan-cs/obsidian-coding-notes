@@ -496,3 +496,8 @@ HTTP 协议基础见 → [Request & Response Structure (请求响应结构)](</0
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Network Protocols Map (网络协议导航)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/00-Network%20Protocols%20Map%20(网络协议导航).md)
+- 下一步：[05-TLS and HTTP 2 (TLS 与 HTTP 2)](/05-Runtime%20and%20Network%20(运行时与网络)/02-Network%20Protocols%20(网络协议)/05-TLS%20and%20HTTP%202%20(TLS%20与%20HTTP%202).md)

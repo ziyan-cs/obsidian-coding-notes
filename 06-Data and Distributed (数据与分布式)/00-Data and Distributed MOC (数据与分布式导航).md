@@ -4,50 +4,16 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 一句话结论：先保证单机数据正确，再解决缓存与异步带来的不一致，最后用分布式协议管理跨节点故障与协调。
+> **用途**：Data and Distributed MOC (数据与分布式导航) 的学习入口。先按顺序建立主线，再按需要回看专题。
 
-# 30 秒回答
+# 学习入口
+- [00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- [00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- [00-Messaging Map (消息与流导航)](/06-Data%20and%20Distributed%20(数据与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/00-Messaging%20Map%20(消息与流导航).md)
+- [00-Distributed Fundamentals Map (分布式基础导航)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/00-Distributed%20Fundamentals%20Map%20(分布式基础导航).md)
 
-**核心结论**：一句话结论：先保证单机数据正确，再解决缓存与异步带来的不一致，最后用分布式协议管理跨节点故障与协调。
+# 使用方式
 
-# 学习顺序
-
-1. **MySQL and SQL（MySQL 与 SQL）**：查询、索引、事务、锁与执行计划。
-2. **Cache and Proxy（缓存与代理）**：Redis 数据结构、缓存一致性、Nginx 反向代理。
-3. **Messaging and Streaming（消息与流）**：异步解耦、投递语义、Kafka 与消息可靠性。
-4. **Distributed Fundamentals（分布式基础）**：CAP、一致性模型、Raft 与分布式事务。
-
-# 判断顺序
-
-面对一个架构选择，依次问：
-
-1. 数据的唯一事实来源是什么？
-2. 哪些读可以缓存，失效后怎样回源？
-3. 失败与重试会不会造成重复、乱序或不一致？
-4. 多节点故障时，系统选择可用性还是强一致性？
-
-# 本模块出口
-
-- 能为一个后端项目解释数据写入、缓存更新、异步通知与故障恢复的完整链路。
-- 能在面试或设计评审中明确说出每个一致性取舍的代价。
-
-# 常见误区
-
-- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
-- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **00-Data and Distributed MOC (数据与分布式导航)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
+1. 从上到下阅读，完成每篇的最小练习和自测。
+2. 遇到卡点时回到本页，不跨越基础直接记结论。
+3. 到期复习以 review_due 和学习周期页为准。

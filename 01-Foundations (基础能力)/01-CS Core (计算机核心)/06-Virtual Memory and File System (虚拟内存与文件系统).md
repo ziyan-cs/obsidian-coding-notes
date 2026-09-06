@@ -174,7 +174,7 @@ int main() {
 
 ---
 
-分页与分段机制详见 → [Paging & Segmentation（分页与分段）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/04-Memory%20Management%20(内存管理)/02-Paging%20&%20Segmentation%20(分页与分段).md)
+分页与分段机制详见 → Paging & Segmentation（分页与分段）
 
 ---
 
@@ -362,7 +362,7 @@ Linux 内核为小块对象分配优化的机制，预分配大小固定的缓�
 
 ---
 
-虚拟内存机制详见 → [Virtual Memory（虚拟内存）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/04-Memory%20Management%20(内存管理)/01-Virtual%20Memory%20(虚拟内存).md)
+虚拟内存机制详见 → Virtual Memory（虚拟内存）
 
 ---
 
@@ -572,7 +572,7 @@ int main() {
 
 ---
 
-操作系统概览详见 → [OS Overview（操作系统总览）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/00-OS%20Overview%20(操作系统总览).md)
+操作系统概览详见 → OS Overview（操作系统总览）
 
 # 零基础阅读路径
 
@@ -597,3 +597,8 @@ int main() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[07-Synchronization and Deadlock (同步与死锁)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/07-Synchronization%20and%20Deadlock%20(同步与死锁).md)

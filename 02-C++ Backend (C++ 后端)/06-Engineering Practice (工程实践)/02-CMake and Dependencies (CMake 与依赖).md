@@ -174,7 +174,7 @@ ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 
 ---
 
-编译与链接流程详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+编译与链接流程详见 → Compilation & Linking (编译与链接)
 
 # 零基础阅读路径
 
@@ -200,3 +200,8 @@ ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
+- 下一步：[03-Exceptions and Debugging (异常与调试)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/03-Exceptions%20and%20Debugging%20(异常与调试).md)

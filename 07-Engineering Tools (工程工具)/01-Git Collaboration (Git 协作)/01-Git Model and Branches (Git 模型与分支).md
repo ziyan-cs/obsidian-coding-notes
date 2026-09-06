@@ -105,11 +105,11 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 # 关联笔记
 
-- [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
-- [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
-- [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
-- [CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01f-CI⧸CD%20for%20C++：GitHub%20Actions,%20Static%20Analysis,%20Automation%20(CI⧸CD流水线)%20⭐.md)
-- [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
+- Conflict Resolution (冲突解决实操)
+- reset vs revert vs restore (撤销三兄弟)
+- stash, tag, reflog (实用命令)
+- CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
+- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
 
 ---
 
@@ -217,11 +217,11 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 ---
 
 # 关联笔记 · 延伸要点 2
-- [01b2-Git Flow & Feature Branch Workflow (团队协作流)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b2-Git%20Flow%20&%20Feature%20Branch%20Workflow%20(团队协作流).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-- [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
-- [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
-- [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
+- 01b2-Git Flow & Feature Branch Workflow (团队协作流)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
+- Conflict Resolution (冲突解决实操)
+- reset vs revert vs restore (撤销三兄弟)
+- stash, tag, reflog (实用命令)
 
 ---
 
@@ -300,11 +300,11 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 ---
 
 # 关联笔记 · 延伸要点 3
-- [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-- [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
-- [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
-- [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
+- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
+- Conflict Resolution (冲突解决实操)
+- reset vs revert vs restore (撤销三兄弟)
+- stash, tag, reflog (实用命令)
 
 # 零基础阅读路径
 
@@ -330,3 +330,8 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Git Collaboration Map (Git 协作导航)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/00-Git%20Collaboration%20Map%20(Git%20协作导航).md)
+- 下一步：[02-Conflicts and Recovery (冲突与恢复)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/02-Conflicts%20and%20Recovery%20(冲突与恢复).md)

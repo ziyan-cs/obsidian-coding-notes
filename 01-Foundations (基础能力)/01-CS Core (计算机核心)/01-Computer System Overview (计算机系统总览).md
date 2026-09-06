@@ -84,7 +84,7 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-计算机架构与抽象详见 → [Hardware vs Software（软硬件关系）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/02-Hardware%20vs%20Software%20(软硬件关系).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
+计算机架构与抽象详见 → Hardware vs Software（软硬件关系） · System Abstraction（系统抽象层次）
 
 ---
 
@@ -141,7 +141,7 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-计算机本质与软硬件关系详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [Hardware vs Software（软硬件关系）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/02-Hardware%20vs%20Software%20(软硬件关系).md)
+计算机本质与软硬件关系详见 → What is a Computer（计算机本质） · Hardware vs Software（软硬件关系）
 
 ---
 
@@ -199,7 +199,7 @@ ISA 是软硬件的**契约**：
 
 ---
 
-计算机本质与系统抽象详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
+计算机本质与系统抽象详见 → What is a Computer（计算机本质） · System Abstraction（系统抽象层次）
 
 # 零基础阅读路径
 
@@ -224,3 +224,8 @@ ISA 是软硬件的**契约**：
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[02-Data Representation (数据表示)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Data%20Representation%20(数据表示).md)

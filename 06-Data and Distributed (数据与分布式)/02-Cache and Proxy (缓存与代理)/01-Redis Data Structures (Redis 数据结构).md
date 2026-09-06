@@ -94,7 +94,7 @@ sdsfree(s);                     // 释放
 
 ---
 
-压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
+压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
 
 ---
 
@@ -189,7 +189,7 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 
 ---
 
-Redis 底层数据结构详解见 → [01a1-SDS：Simple Dynamic String (简单动态字符串)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
+Redis 底层数据结构详解见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a3-skiplist：Sorted Set Internals (跳表)
 
 ---
 
@@ -303,7 +303,7 @@ typedef struct zset {
 
 ---
 
-动态字符串实现见 → [01a1-SDS：Simple Dynamic String (简单动态字符串)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md) · [01a4-dict：Hash Table Rehashing (字典与渐进式rehash)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a4-dict：Hash%20Table%20Rehashing%20(字典与渐进式rehash)%20⭐.md)
+动态字符串实现见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a4-dict：Hash Table Rehashing (字典与渐进式rehash)
 
 ---
 
@@ -428,7 +428,7 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
+压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
 
 # 零基础阅读路径
 
@@ -454,3 +454,8 @@ void dictRehash(dict *d, int n) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/02-Redis%20Persistence%20and%20Eviction%20(Redis%20持久化与淘汰).md)

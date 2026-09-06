@@ -342,3 +342,8 @@ void wheel_tick_multi(time_wheel_multi *wheels) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
+- 下一步：[04-Connections Buffers and Framing (连接缓冲与分帧)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/04-Connections%20Buffers%20and%20Framing%20(连接缓冲与分帧).md)

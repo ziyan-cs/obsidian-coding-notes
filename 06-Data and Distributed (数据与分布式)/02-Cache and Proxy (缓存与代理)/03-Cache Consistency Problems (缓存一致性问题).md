@@ -132,7 +132,7 @@ if (id <= 0 || id > MAX_VALID_ID) {
 
 ---
 
-缓存三大问题系列详解见 → [01d2-Cache Breakdown (缓存击穿：热点key失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d2-Cache%20Breakdown%20(缓存击穿：热点key失效).md) · [01d3-Cache Avalanche (缓存雪崩：大量key同时失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d3-Cache%20Avalanche%20(缓存雪崩：大量key同时失效).md)
+缓存三大问题系列详解见 → 01d2-Cache Breakdown (缓存击穿：热点key失效) · 01d3-Cache Avalanche (缓存雪崩：大量key同时失效)
 
 ---
 
@@ -255,7 +255,7 @@ while (true) {
 
 ---
 
-缓存三大问题系列详解见 → [01d1-Cache Penetration (缓存穿透：布隆过滤器)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d1-Cache%20Penetration%20(缓存穿透：布隆过滤器).md) · [01d3-Cache Avalanche (缓存雪崩：大量key同时失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d3-Cache%20Avalanche%20(缓存雪崩：大量key同时失效).md)
+缓存三大问题系列详解见 → 01d1-Cache Penetration (缓存穿透：布隆过滤器) · 01d3-Cache Avalanche (缓存雪崩：大量key同时失效)
 
 ---
 
@@ -367,7 +367,7 @@ string getWithDegrade(string key) {
 
 ---
 
-缓存三大问题系列详解见 → [01d1-Cache Penetration (缓存穿透：布隆过滤器)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d1-Cache%20Penetration%20(缓存穿透：布隆过滤器).md) · [01d2-Cache Breakdown (缓存击穿：热点key失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d2-Cache%20Breakdown%20(缓存击穿：热点key失效).md)
+缓存三大问题系列详解见 → 01d1-Cache Penetration (缓存穿透：布隆过滤器) · 01d2-Cache Breakdown (缓存击穿：热点key失效)
 
 # 零基础阅读路径
 
@@ -393,3 +393,8 @@ string getWithDegrade(string key) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- 下一步：[04-Redis Runtime and Client (Redis 运行时与客户端)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/04-Redis%20Runtime%20and%20Client%20(Redis%20运行时与客户端).md)

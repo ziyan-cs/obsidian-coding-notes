@@ -1,8 +1,9 @@
 ---
+status: learning
+confidence: medium
+verified: 2026-09-06
 review_due: 2026-09-12
-tags:
-  - cs/algorithm
-status: 🌱
+tags: - cs/algorithm
 ---
 
 > [!abstract] 核心考点：> 高频易错题整理、边界条件与 corner case 总结、常见陷阱复盘
@@ -76,11 +77,11 @@ status: 🌱
 
 # 关联笔记
 
-- [Problem Template Library (常用模板总库)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Problem-Solving%20Practice%20(刷题与复盘)/00-Problem%20Template%20Library%20(常用模板总库)%20⭐.md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
-- [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
-- [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
+- Problem Template Library (常用模板总库)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+- Fast & Slow Pointers (快慢指针)
+- Monotonic Stack (单调栈)
 
 # 零基础阅读路径
 
@@ -105,3 +106,8 @@ status: 🌱
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Foundation Practice Map (基础实践导航)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/00-Foundation%20Practice%20Map%20(基础实践导航).md)
+- 下一步：[02-Template Library (模板库)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/02-Template%20Library%20(模板库).md)

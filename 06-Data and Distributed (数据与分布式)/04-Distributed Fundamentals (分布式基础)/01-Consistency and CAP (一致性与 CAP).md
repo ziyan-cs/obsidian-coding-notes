@@ -121,7 +121,7 @@ CAP 讨论的是网络分区发生时的取舍：若要保证线性一致，某�
 
 ---
 
-一致性模型与分布式事务详解见 → [Consistency Models：Strong, Eventual (一致性模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md) · [Distributed Transaction：2PC & Saga (分布式事务)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04e-Distributed%20Transaction：2PC%20&%20Saga%20(分布式事务).md)
+一致性模型与分布式事务详解见 → Consistency Models：Strong, Eventual (一致性模型) · Distributed Transaction：2PC & Saga (分布式事务)
 
 ---
 
@@ -240,7 +240,7 @@ D4 ([A:3])         <- A 更新 v3（与 D3 冲突！需要合并）
 
 ---
 
-一致性模型与分布式理论基础详解见 → [CAP Theorem & BASE Theory (CAP理论)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Paxos Overview (Paxos概念了解)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04d-Paxos%20Overview%20(Paxos概念了解).md)
+一致性模型与分布式理论基础详解见 → CAP Theorem & BASE Theory (CAP理论) · Paxos Overview (Paxos概念了解)
 
 # 零基础阅读路径
 
@@ -266,3 +266,8 @@ D4 ([A:3])         <- A 更新 v3（与 D3 冲突！需要合并）
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Distributed Fundamentals Map (分布式基础导航)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/00-Distributed%20Fundamentals%20Map%20(分布式基础导航).md)
+- 下一步：[02-Raft Consensus (Raft 共识)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/02-Raft%20Consensus%20(Raft%20共识).md)

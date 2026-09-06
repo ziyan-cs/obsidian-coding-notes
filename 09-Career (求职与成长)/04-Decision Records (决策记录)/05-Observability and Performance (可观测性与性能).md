@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [comparison, observability, performance]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：结论：优化必须以可观察指标为起点；吞吐、平均延迟、p99、CPU、内存和错误率不能相互替代。
@@ -78,3 +78,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Decision Map (决策地图)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/00-Decision%20Map%20(决策地图).md)
+- 下一步：[04-HTTP Service Design (HTTP 服务设计)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/04-HTTP%20Service%20Design%20(HTTP%20服务设计).md)

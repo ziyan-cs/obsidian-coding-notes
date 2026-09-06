@@ -1,9 +1,9 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 review_due: 2026-09-28
 tags: [language/python, python/testing]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
@@ -81,3 +81,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Quality and Automation Map (质量与自动化导航)](/03-Python%20Engineering%20(Python%20工程)/02-Quality%20and%20Automation%20(质量与自动化)/00-Quality%20and%20Automation%20Map%20(质量与自动化导航).md)
+- 下一步：[02-Type Hints Logging and Linting (类型日志与静态检查)](/03-Python%20Engineering%20(Python%20工程)/02-Quality%20and%20Automation%20(质量与自动化)/02-Type%20Hints%20Logging%20and%20Linting%20(类型日志与静态检查).md)

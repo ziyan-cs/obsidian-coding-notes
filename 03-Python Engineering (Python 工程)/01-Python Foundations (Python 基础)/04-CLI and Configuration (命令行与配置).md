@@ -1,9 +1,9 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 review_due: 2026-09-24
 tags: [language/python, python/cli]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：脚本从“改源码里的路径再运行”升级为工具的第一步，是用 `argparse` 接收参数、提供 `--help` 和明确退出码。
@@ -91,3 +91,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Python Map (Python导航)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md)
+- 下一步：[05-Exceptions Context Managers and Typing (异常上下文与类型)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/05-Exceptions%20Context%20Managers%20and%20Typing%20(异常上下文与类型).md)

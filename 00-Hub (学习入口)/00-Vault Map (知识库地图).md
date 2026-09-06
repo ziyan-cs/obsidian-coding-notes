@@ -1,74 +1,25 @@
 ---
-tags: [vault/navigation, backend-learning]
 status: stable
 confidence: high
 verified: 2026-09-06
+tags: [vault/navigation, backend-learning]
 ---
 
-> [!abstract] 一句话目标：8月秋招，能以 C++ 理解后端底层与性能，以 Python 建立自动化能力，再以 Go 交付可靠、可观测的服务。
-
-# 你现在在哪里
-
-- 身份：大学阶段系统学习的起点。
-- 已有主线：C++ 后端知识树。
-- 第二主线：Python 从零建立自动化、测试与数据辅助能力。
-- 第三主线：Go 从零建立并发、服务端与工程化能力。
-- 学习原则：**理解 → 最小代码 → 小功能 → 复习 → 讲解**。只读不算掌握。
+> **用途**：Vault Map (知识库地图) 的学习入口。先按顺序建立主线，再按需要回看专题。
 
 # 学习入口
+- [01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
+- [02-Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)
+- [03-Note Standard (笔记规范)](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md)
+- [04-Engineering English Glossary (工程英语术语)](/00-Hub%20(学习入口)/04-Engineering%20English%20Glossary%20(工程英语术语).md)
+- [05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)
+- [06-Sources & Freshness Policy (来源与时效规则)](/00-Hub%20(学习入口)/06-Sources%20&%20Freshness%20Policy%20(来源与时效规则).md)
+- [07-Vault Audit & Migration Queue (审计与迁移队列)](/00-Hub%20(学习入口)/07-Vault%20Audit%20&%20Migration%20Queue%20(审计与迁移队列).md)
+- [08-Vault Design System (知识库设计系统)](/00-Hub%20(学习入口)/08-Vault%20Design%20System%20(知识库设计系统).md)
+- [09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)
 
-| 如果你想解决… | 从这里开始 | 完成信号 |
-| --- | --- | --- |
-| 不知道本周学什么 | `01-Learning Roadmap` | 能说出当前阶段和本周交付物 |
-| 看过就忘 | `02-Spaced Review System` | 复习队列中有明确日期 |
-| 不知道怎样记笔记 | `03-Note Standard` | 新笔记有结论、代码、误区和自测 |
-| 英文术语卡住 | `04-Engineering English` | 能用中英术语解释同一概念 |
-| 又犯同样的错误 | `05-Mistake Log` | 错误有原因、修正和下次触发条件 |
-| 怀疑笔记过时 | `06-Sources and Freshness` | 找得到一手来源和验证日期 |
+# 使用方式
 
-# 知识主干与顺序
-
-```text
-Foundations ──> C++ Backend ──> Python Engineering ──> Go Backend
-      │               │                   │                 │
-      └──> Runtime / Data / Tools ────────┴────> Projects ──> Career
-```
-
-1. **01 Foundations**：计算机核心、算法与基础实践，先建立解决问题的共同语言。
-2. **02 C++ Backend**：生命周期、资源、并发、性能与工程实践，巩固既有主线。
-3. **03 Python Engineering**：自动化、测试、脚本与数据辅助，作为效率杠杆。
-4. **04 Go Backend**：并发运行时、Web 服务、数据集成与可交付项目。
-5. **05–07 横向支撑**：运行时与网络、数据与分布式、工程工具。
-6. **08–09 输出层**：项目证据、系统设计、面试表达与求职执行。
-
-# 每次学习的最小闭环（60–90 分钟）
-
-1. 选一个原子主题，先写下“我猜它解决什么问题”。
-2. 阅读并运行一个最小例子；改一个参数，观察失败或边界行为。
-3. 用自己的话写 3 条结论、1 个反例、2 道自测题。
-4. 在 `02-Spaced Review System` 记录下一次复习日；出错则写入 `05-Mistake Log`。
-
-# 每周复习入口
-
-- 固定一次复习：清空 `review_due` 到期的笔记；到期积压 > 5 条就暂停新主题，先消化。
-- 只优先复习核心主线（C++ 后端、Linux、网络、MySQL、Redis、项目），其余到期可降级延后。
-
-# 项目推进入口
-
-- 从 `08-Projects / 01-Project Method / 00-Project Map` 选一个进行中的项目，本周产出可演示增量（新接口 / 压测数据 / 故障复盘）。
-- 项目里的真实问题反哺回对应知识笔记，不另起新标题。
-
-# 不做什么
-
-- 不为“完整”收集大段解释，却没有代码、题目或项目落点。
-- 不为了追新把所有语言、库和版本都学一遍。
-- 不把 C++、Go、Python 的同名机制简单等同；必须记录差异与适用边界。
-
-> [!tip] 页面使用方式
-> 这页只负责选择下一步，不承担百科正文。学习时从“学习入口”表选一条路径；复习时从“每周复习入口”回到具体笔记。这样 Graph 和目录保持简洁，正文也不会被导航内容淹没。
-
-# 当前重点
-
-- **结构迁移进行中**：目录与文件已按最终体系收敛；笔记之间的知识依赖会在内容重写完成后统一重建。
-- **学习顺序不变**：C++ 继续强化，Python 先行，Go 后进；每周保留项目与复盘输出。
-- **行动入口**：见 `07-Action Queue`，按本周可交付成果推进。
+1. 从上到下阅读，完成每篇的最小练习和自测。
+2. 遇到卡点时回到本页，不跨越基础直接记结论。
+3. 到期复习以 review_due 和学习周期页为准。

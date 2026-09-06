@@ -1,8 +1,8 @@
 ---
-tags: [vault/architecture, vault/style]
-status: solid
-confidence: 1
+status: stable
+confidence: low
 verified: 2026-09-06
+tags: [vault/architecture, vault/style]
 ---
 
 > **目标**：让每一篇笔记看起来像同一套教材的一个章节，而不是不同阶段收集的网页摘录。
@@ -81,9 +81,9 @@ assets                         图片与附件，不放知识正文
 打开任一页面时，应在 10 秒内看出它解决什么问题、处于哪条学习主线、需要记住什么、以及下一步读哪里。
 
 # 关联 · 延伸要点 2
-- [[00-Vault Map (知识库地图)]]
-- [[03-Note Standard (笔记规范)]]
-- [[07-Vault Audit & Migration Queue (审计与迁移队列)]]
+- [00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- [03-Note Standard (笔记规范)](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md)
+- [07-Vault Audit & Migration Queue (审计与迁移队列)](/00-Hub%20(学习入口)/07-Vault%20Audit%20&%20Migration%20Queue%20(审计与迁移队列).md)
 
 # 零基础阅读路径
 
@@ -109,3 +109,8 @@ assets                         图片与附件，不放知识正文
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)

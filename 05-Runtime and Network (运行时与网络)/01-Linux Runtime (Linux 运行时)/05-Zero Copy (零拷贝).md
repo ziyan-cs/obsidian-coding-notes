@@ -92,7 +92,7 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 `mmap` 让文件页映射进进程虚拟地址空间，应用仍可读写该映射；`sendfile` 让内核在文件与 socket 之间组织传输，通常避免用户缓冲区 copy。它们解决的是数据搬运成本，不替代缓存策略、网络瓶颈或应用层处理；“是否更快”必须针对真实文件大小、TLS 和网卡环境验证。
 
-零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
+零拷贝与 mmap 详解见 → File System & Permissions (文件系统与权限) · Process Lifecycle (生命周期)
 
 # 零基础阅读路径
 
@@ -118,3 +118,8 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[06-System Calls and Libraries (系统调用与动态库)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/06-System%20Calls%20and%20Libraries%20(系统调用与动态库).md)

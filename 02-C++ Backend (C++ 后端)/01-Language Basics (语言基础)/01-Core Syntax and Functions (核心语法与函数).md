@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-07
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-07
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -106,7 +106,7 @@ u + i;   // i 被转换为 unsigned，结果是巨大的正数！
 
 ---
 
-类型系统深化详见 → [Const, Typedef & Enum (类型系统基础)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
+类型系统深化详见 → Const, Typedef & Enum (类型系统基础)
 
 ---
 
@@ -148,7 +148,7 @@ do { ... } while (cond);
 
 ---
 
-函数设计中的控制流应用详见 → [Functions (函数)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/03-Functions%20(函数).md)
+函数设计中的控制流应用详见 → Functions (函数)
 
 ---
 
@@ -183,7 +183,7 @@ int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 
 ---
 
-变量与类型系统是函数的基础，详见 → [Variables, Types & Operators (变量、类型与运算符)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+变量与类型系统是函数的基础，详见 → Variables, Types & Operators (变量、类型与运算符)
 
 # 零基础阅读路径
 
@@ -208,3 +208,8 @@ int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Language Basics Map (语言基础导航)](/02-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/00-Language%20Basics%20Map%20(语言基础导航).md)
+- 下一步：[02-Arrays Strings and IO (数组字符串与输入输出)](/02-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)

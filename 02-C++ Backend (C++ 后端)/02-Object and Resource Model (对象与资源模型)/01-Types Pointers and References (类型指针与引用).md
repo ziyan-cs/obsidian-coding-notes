@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-09
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-09
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -69,7 +69,7 @@ switch (d) {
 
 ---
 
-类型转换规则详见 → [Type Conversion & Casting (类型转换)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+类型转换规则详见 → Type Conversion & Casting (类型转换)
 
 ---
 
@@ -154,7 +154,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ---
 
-指针与引用的转换操作详见 → [Pointers & References In Depth (指针与引用深入)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+指针与引用的转换操作详见 → Pointers & References In Depth (指针与引用深入)
 
 ---
 
@@ -243,7 +243,7 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 
 ---
 
-指针类型转换详见 → [Type Conversion & Casting (类型转换)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/02-Type%20Conversion%20&%20Casting%20(类型转换).md)
+指针类型转换详见 → Type Conversion & Casting (类型转换)
 
 # 30 秒回答
 
@@ -278,3 +278,8 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[02-Memory Layout and Allocation (内存布局与分配)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/02-Memory%20Layout%20and%20Allocation%20(内存布局与分配).md)

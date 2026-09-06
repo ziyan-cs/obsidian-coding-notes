@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-26
 status: learning
 confidence: medium
 verified: 2026-09-06
+review_due: 2026-09-26
 ---
 
 > [!abstract] 一句话结论：Python 的第一批项目应该解决真实重复劳动，并留下输入、输出、日志、测试和失败处理的工程证据。
@@ -78,3 +78,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Python Practice Map (Python 实践导航)](/03-Python%20Engineering%20(Python%20工程)/04-Python%20Practice%20(Python%20实践)/00-Python%20Practice%20Map%20(Python%20实践导航).md)
+- 下一步：[01-First Month Plan (首月计划)](/03-Python%20Engineering%20(Python%20工程)/04-Python%20Practice%20(Python%20实践)/01-First%20Month%20Plan%20(首月计划).md)

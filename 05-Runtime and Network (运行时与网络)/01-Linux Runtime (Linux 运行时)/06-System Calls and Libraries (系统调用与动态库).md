@@ -93,7 +93,7 @@ verified: 2026-09-06
 
 > [!tip]- **工程要点**：频繁系统调用是性能瓶颈之一。减少系统调用的技术包括：用户态缓冲区（stdio 的 fread/fwrite）、批量处理（readv/writev 聚集 IO）、mmap 减少 read/write、epoll 替代 select/poll。
 
-系统调用速查见 → [Dynamic Library & Shared Object (动态库原理)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/11-Dynamic%20Library%20&%20Shared%20Object%20(动态库原理)%20⭐.md) · [Debugging & Tracing (调试追踪)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
+系统调用速查见 → Dynamic Library & Shared Object (动态库原理) · Debugging & Tracing (调试追踪)
 
 ---
 
@@ -193,7 +193,7 @@ dlclose(handle);
 
 > [!tip]- **工程要点**：`-fPIC` 对性能有轻微影响（多一次间接寻址），但这是动态库和 ASLR 的必要代价。如果不需要共享，静态库性能更优。`LD_PRELOAD` 环境变量可以劫持系统库函数——这是很多调试/监控工具的底层原理。
 
-动态库原理见 → [System Calls Overview (常用系统调用速查)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Debugging & Tracing (调试追踪)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
+动态库原理见 → System Calls Overview (常用系统调用速查) · Debugging & Tracing (调试追踪)
 
 # 零基础阅读路径
 
@@ -219,3 +219,8 @@ dlclose(handle);
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[07-Debugging and Tracing (调试与追踪)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/07-Debugging%20and%20Tracing%20(调试与追踪).md)

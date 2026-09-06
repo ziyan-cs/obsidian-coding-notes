@@ -112,7 +112,7 @@ innodb_page_cleaners = 8
 
 ---
 
-B+树索引结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md)
+B+树索引结构详解见 → B+ Tree Index Structure (B+树索引结构)
 
 ---
 
@@ -222,7 +222,7 @@ InnoDB 每页 16KB，假设：
 
 ---
 
-页结构基础见 → [Page Structure & Buffer Pool (页结构与缓冲池)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04a-Page%20Structure%20&%20Buffer%20Pool%20(页结构与缓冲池).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+页结构基础见 → Page Structure & Buffer Pool (页结构与缓冲池) · Clustered vs Secondary Index (聚簇索引与二级索引)
 
 ---
 
@@ -324,7 +324,7 @@ UUID/VARCHAR 主键：
 
 ---
 
-B+树结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Index Pushdown & Covering Index (索引下推与覆盖索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04d-Index%20Pushdown%20&%20Covering%20Index%20(索引下推与覆盖索引).md)
+B+树结构详解见 → B+ Tree Index Structure (B+树索引结构) · Index Pushdown & Covering Index (索引下推与覆盖索引)
 
 ---
 
@@ -444,7 +444,7 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 ---
 
-B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+B+树索引结构见 → B+ Tree Index Structure (B+树索引结构) · Clustered vs Secondary Index (聚簇索引与二级索引)
 
 # 零基础阅读路径
 
@@ -470,3 +470,8 @@ B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backe
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- 下一步：[03-Transactions MVCC and Locks (事务 MVCC 与锁)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/03-Transactions%20MVCC%20and%20Locks%20(事务%20MVCC%20与锁).md)

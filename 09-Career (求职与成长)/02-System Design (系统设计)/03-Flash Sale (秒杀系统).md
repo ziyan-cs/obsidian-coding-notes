@@ -1,7 +1,8 @@
 ---
-tags:
-  - distributed/system
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - distributed/system
 ---
 
 > [!abstract] 核心考点：> 流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"
@@ -305,3 +306,8 @@ Token 用完即废，防止囤积
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+- 下一步：[04-Config Center (配置中心)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20(配置中心).md)

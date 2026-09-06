@@ -99,7 +99,7 @@ pthread_setspecific(key, malloc(100));  // 设置当前线程的值
 void *val = pthread_getspecific(key);   // 获取当前线程的值
 ```
 
-POSIX 线程详解见 → [Mutex & Condition Variable (互斥锁与条件变量)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md) · [Deadlock (死锁原理与预防)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+POSIX 线程详解见 → Mutex & Condition Variable (互斥锁与条件变量) · Deadlock (死锁原理与预防)
 
 ---
 
@@ -218,7 +218,7 @@ pthread_rwlock_unlock(&rwlock);
 
 适合：**读多写少**的场景（如配置、缓存）。写多时写者频繁等待，反而不如 mutex。
 
-互斥锁与条件变量详解见 → [POSIX Thread (线程生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md) · [Deadlock (死锁原理与预防)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+互斥锁与条件变量详解见 → POSIX Thread (线程生命周期) · Deadlock (死锁原理与预防)
 
 # 30 秒回答
 
@@ -304,7 +304,7 @@ thread apply all bt
 valgrind --tool=helgrind ./myapp
 ```
 
-死锁原理与预防见 → [Mutex & Condition Variable (互斥锁与条件变量)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md) · [POSIX Thread (线程生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md)
+死锁原理与预防见 → Mutex & Condition Variable (互斥锁与条件变量) · POSIX Thread (线程生命周期)
 
 ---
 
@@ -343,7 +343,7 @@ valgrind --tool=helgrind ./myapp
 
 > **TLB 失效**是进程切换比线程切换慢的核心原因。现代 CPU 用 ASID（地址空间标识符）标记 TLB 条目，可部分缓解这个问题。
 
-线程进程对比见 → [POSIX Thread (线程生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md) · [Mutex & Condition Variable (互斥锁与条件变量)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md)
+线程进程对比见 → POSIX Thread (线程生命周期) · Mutex & Condition Variable (互斥锁与条件变量)
 
 ---
 
@@ -418,7 +418,7 @@ sem_post(&empty);           // 通知生产者
 |跨进程|需特殊配置|需特殊配置|POSIX 有名信号量支持|
 |锁的所有者|只有加锁者能解锁|—|任何线程可 post|
 
-信号量详解见 → [Mutex & Condition Variable (互斥锁与条件变量)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05b-Mutex%20&%20Condition%20Variable%20(互斥锁与条件变量).md) · [Deadlock (死锁原理与预防)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+信号量详解见 → Mutex & Condition Variable (互斥锁与条件变量) · Deadlock (死锁原理与预防)
 
 ---
 
@@ -593,7 +593,7 @@ int main() {
 }
 ```
 
-信号机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
+信号机制详解见 → Process Lifecycle (生命周期) · Process States & Scheduling (状态与调度)
 
 # 零基础阅读路径
 
@@ -619,3 +619,8 @@ int main() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[04-IO Models and epoll (IO 模型与 epoll)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/04-IO%20Models%20and%20epoll%20(IO%20模型与%20epoll).md)

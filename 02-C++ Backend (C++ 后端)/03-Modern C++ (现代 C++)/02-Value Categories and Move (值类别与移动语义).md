@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-18
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-18
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -46,7 +46,7 @@ void foo(int&& r) {
 
 ---
 
-移动构造与移动赋值详解见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
+移动构造与移动赋值详解见 → Move Constructor & Move Assignment (移动构造与移动赋值)
 
 ---
 
@@ -132,7 +132,7 @@ v.push_back(MyString("hello"));
 
 ---
 
-返回值优化与移动语义详见 → [move & RVO (移动语义与返回值优化)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03c-move%20&%20RVO%20(移动语义与返回值优化).md)
+返回值优化与移动语义详见 → move & RVO (移动语义与返回值优化)
 
 ---
 
@@ -194,7 +194,7 @@ std::string bar() {
 
 ---
 
-移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
+移动构造与移动赋值详见 → Move Constructor & Move Assignment (移动构造与移动赋值)
 
 # 零基础阅读路径
 
@@ -220,3 +220,8 @@ std::string bar() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Modern C++ Map (现代 C++ 导航)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Map%20(现代%20C++%20导航).md)
+- 下一步：[03-Smart Pointers (智能指针)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Smart%20Pointers%20(智能指针).md)

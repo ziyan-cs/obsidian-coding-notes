@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-08
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-08
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -69,7 +69,7 @@ std::string_view sv = s;
 
 ---
 
-数组类型的底层机制详见 → [Variables, Types & Operators (变量、类型与运算符)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+数组类型的底层机制详见 → Variables, Types & Operators (变量、类型与运算符)
 
 ---
 
@@ -115,7 +115,7 @@ fout << "result: " << 42 << '\n';
 
 ---
 
-输入输出与字符串处理密切相关，详见 → [Array & String(数组与字符串)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/04-Array%20&%20String%20(数组与字符串).md)
+输入输出与字符串处理密切相关，详见 → Array & String(数组与字符串)
 
 # 零基础阅读路径
 
@@ -140,3 +140,8 @@ fout << "result: " << 42 << '\n';
 
 1. 这个主题解决什么问题？
 2. 它在什么条件下会失效、变慢或需要替代方案？
+
+# 关联学习
+
+- 导航：[00-Language Basics Map (语言基础导航)](/02-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/00-Language%20Basics%20Map%20(语言基础导航).md)
+- 下一步：[01-Core Syntax and Functions (核心语法与函数)](/02-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/01-Core%20Syntax%20and%20Functions%20(核心语法与函数).md)

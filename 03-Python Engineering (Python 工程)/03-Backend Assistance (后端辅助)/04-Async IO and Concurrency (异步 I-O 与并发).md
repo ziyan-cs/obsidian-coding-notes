@@ -1,8 +1,8 @@
 ---
-review_due: 2026-10-03
 status: stable
 confidence: medium
 verified: 2026-09-06
+review_due: 2026-10-03
 ---
 
 > [!abstract] 一句话结论：`asyncio` 适合大量可等待的 I/O；CPU 密集计算仍需进程、原生扩展或交给专门服务，不要期待协程消除计算瓶颈。
@@ -73,3 +73,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Assistance Map (后端辅助导航)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/00-Backend%20Assistance%20Map%20(后端辅助导航).md)
+- 下一步：[03-C++ Go Python Collaboration (多语言协作)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/03-C++%20Go%20Python%20Collaboration%20(多语言协作).md)

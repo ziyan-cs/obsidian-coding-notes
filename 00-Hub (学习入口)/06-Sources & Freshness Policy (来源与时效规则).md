@@ -1,7 +1,8 @@
 ---
+status: stable
+confidence: medium
+verified: 2026-09-06
 tags: [vault/sources, learning/verification]
-status: solid
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：原理笔记追求正确且稳定；工具、版本、API 与生态笔记必须可追溯且标记验证日期。
@@ -85,3 +86,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[07-Vault Audit & Migration Queue (审计与迁移队列)](/00-Hub%20(学习入口)/07-Vault%20Audit%20&%20Migration%20Queue%20(审计与迁移队列).md)

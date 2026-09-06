@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-17
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-17
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -30,7 +30,7 @@ verified: 2026-09-06
 
 ---
 
-类型推导详见 → [Type Deduction (类型推导)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/01-Type%20Deduction%20(类型推导).md)
+类型推导详见 → Type Deduction (类型推导)
 
 ---
 
@@ -118,7 +118,7 @@ decltype(auto) call(F&& f, Args&&... args) {
 
 ---
 
-完美转发与类型推导紧密相关，详见 → [Perfect Forwarding & Universal Reference (完美转发)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+完美转发与类型推导紧密相关，详见 → Perfect Forwarding & Universal Reference (完美转发)
 
 ---
 
@@ -247,7 +247,7 @@ void process(std::vector<int>& v, F pred) {
 
 ---
 
-完美转发与 Lambda 表达式常配合使用，详见 → [Perfect Forwarding & Universal Reference (完美转发)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/05-Perfect%20Forwarding%20&%20Universal%20Reference%20(完美转发)%20⭐.md)
+完美转发与 Lambda 表达式常配合使用，详见 → Perfect Forwarding & Universal Reference (完美转发)
 
 # 30 秒回答
 
@@ -283,3 +283,8 @@ lambda 是编译器生成的闭包对象；捕获方式决定它保存副本还�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Modern C++ Map (现代 C++ 导航)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Map%20(现代%20C++%20导航).md)
+- 下一步：[02-Value Categories and Move (值类别与移动语义)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/02-Value%20Categories%20and%20Move%20(值类别与移动语义).md)

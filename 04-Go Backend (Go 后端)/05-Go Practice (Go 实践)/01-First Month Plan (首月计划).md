@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [language/go, learning/checklist]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
@@ -13,31 +13,31 @@ verified: 2026-09-05
 
 # Week 1：命令、类型和 module
 
-- [ ] 完成 [[00-Go Map & Setup (学习地图与环境)]]、[[01-Types, Functions & Interfaces (类型、函数与接口)]]、[[02-Modules, Packages & Tooling (模块、包与工具链)]]。
+- [ ] 完成 00-Go Map & Setup (学习地图与环境)、01-Types, Functions & Interfaces (类型、函数与接口)、02-Modules, Packages & Tooling (模块、包与工具链)。
 - [ ] 建立一个独立 Go module，能执行 format/test/vet。
 - [ ] 写一个 struct、一个方法、一个小 interface，并解释它们的可见性。
 
 # Week 2：错误、清理和并发
 
-- [ ] 完成 [[03-Errors, defer & context (错误处理、defer 与 context)]]、[[04-Goroutines, Channels & sync (并发原语)]]。
+- [ ] 完成 03-Errors, defer & context (错误处理、defer 与 context)、04-Goroutines, Channels & sync (并发原语)。
 - [ ] 写一个可取消的 worker；故意制造 race，再用 `-race` 观察。
 - [ ] 给错误至少包装一次，并用 `errors.Is` 判断。
 
 # Week 3：测试和 HTTP
 
-- [ ] 完成 [[05-Testing & Quality (测试与质量)]]、[[06-HTTP, JSON & Middleware (HTTP 服务基础)]]。
+- [ ] 完成 05-Testing & Quality (测试与质量)、06-HTTP, JSON & Middleware (HTTP 服务基础)。
 - [ ] 实现 `GET /healthz`、`POST /todos`、`GET /todos`。
 - [ ] 用 `httptest` 覆盖正常、错误方法、非法 JSON。
 
 # Week 4：服务收尾
 
-- [ ] 完成 [[07-API Lifecycle & Graceful Shutdown (服务生命周期与优雅关闭)]]、[[08-C++ to Go Decision Notes (C++ 到 Go 迁移决策)]]。
+- [ ] 完成 07-API Lifecycle & Graceful Shutdown (服务生命周期与优雅关闭)、08-C++ to Go Decision Notes (C++ 到 Go 迁移决策)。
 - [ ] 增加 request log 和 request ID。
 - [ ] 支持 Ctrl+C 优雅关闭，并写一篇 3 分钟项目讲解。
 
 # 每周复盘
 
-写入 [[00-Start Here (学习入口)/05-Mistake Log (错误记录)|Mistake Log]]：本周最难概念、一次真实错误、下周唯一改进点。
+写入 [Mistake Log](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)：本周最难概念、一次真实错误、下周唯一改进点。
 
 # 从零建立模型
 
@@ -77,3 +77,8 @@ channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Go Practice Map (Go 实践导航)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/00-Go%20Practice%20Map%20(Go%20实践导航).md)
+- 下一步：[02-C++ to Go Decision Notes (C++ 到 Go 迁移决策)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/02-C++%20to%20Go%20Decision%20Notes%20(C++%20到%20Go%20迁移决策).md)

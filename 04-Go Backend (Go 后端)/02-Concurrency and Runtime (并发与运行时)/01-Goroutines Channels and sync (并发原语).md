@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [language/go, go/concurrency]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：goroutine 很轻，但泄漏、竞态和死锁仍真实存在；先定义所有权、退出条件和背压，再选 channel 或 mutex。
@@ -97,3 +97,8 @@ channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Concurrency and Runtime Map (并发与运行时导航)](/04-Go%20Backend%20(Go%20后端)/02-Concurrency%20and%20Runtime%20(并发与运行时)/00-Concurrency%20and%20Runtime%20Map%20(并发与运行时导航).md)
+- 下一步：[02-Context Cancellation and Errors (取消传播与错误)](/04-Go%20Backend%20(Go%20后端)/02-Concurrency%20and%20Runtime%20(并发与运行时)/02-Context%20Cancellation%20and%20Errors%20(取消传播与错误).md)

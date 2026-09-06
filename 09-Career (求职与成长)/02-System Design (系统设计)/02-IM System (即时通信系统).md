@@ -1,7 +1,8 @@
 ---
-tags:
-  - distributed/system
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - distributed/system
 ---
 
 > [!abstract] 核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
@@ -314,3 +315,8 @@ IM 系统网络编程基础详解见 → [WebSocket Protocol](05-Network%20Progr
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+- 下一步：[03-Flash Sale (秒杀系统)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/03-Flash%20Sale%20(秒杀系统).md)

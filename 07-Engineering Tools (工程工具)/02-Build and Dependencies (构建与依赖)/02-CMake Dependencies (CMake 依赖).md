@@ -70,11 +70,11 @@ target_link_libraries(my_test PRIVATE GTest::gtest_main)
 
 # 关联笔记
 
-- [CMakeLists․txt Structure (项目结构模板)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02a-CMakeLists․txt%20Structure%20(项目结构模板)%20⭐.md)
-- [target_link_libraries & include_directories (依赖管理)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02b-target_link_libraries%20&%20include_directories%20(依赖管理)%20⭐.md)
-- [Build Types：Debug, Release, RelWithDebInfo (构建类型)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02c-Build%20Types：Debug,%20Release,%20RelWithDebInfo%20(构建类型)%20⭐.md)
-- [CMake with vcpkg & Conan (包管理器集成)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02e-CMake%20with%20vcpkg%20&%20Conan%20(包管理器集成).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- CMakeLists․txt Structure (项目结构模板)
+- target_link_libraries & include_directories (依赖管理)
+- Build Types：Debug, Release, RelWithDebInfo (构建类型)
+- CMake with vcpkg & Conan (包管理器集成)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 ---
 
@@ -175,11 +175,11 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 ---
 
 # 关联笔记 · 延伸要点 2
-- [CMakeLists․txt Structure (项目结构模板)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02a-CMakeLists․txt%20Structure%20(项目结构模板)%20⭐.md)
-- [target_link_libraries & include_directories (依赖管理)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02b-target_link_libraries%20&%20include_directories%20(依赖管理)%20⭐.md)
-- [Build Types：Debug, Release, RelWithDebInfo (构建类型)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02c-Build%20Types：Debug,%20Release,%20RelWithDebInfo%20(构建类型)%20⭐.md)
-- [find_package & External Dependencies (第三方库引入)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02d-find_package%20&%20External%20Dependencies%20(第三方库引入).md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- CMakeLists․txt Structure (项目结构模板)
+- target_link_libraries & include_directories (依赖管理)
+- Build Types：Debug, Release, RelWithDebInfo (构建类型)
+- find_package & External Dependencies (第三方库引入)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 # 零基础阅读路径
 
@@ -205,3 +205,8 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Build and Dependencies Map (构建与依赖导航)](/07-Engineering%20Tools%20(工程工具)/02-Build%20and%20Dependencies%20(构建与依赖)/00-Build%20and%20Dependencies%20Map%20(构建与依赖导航).md)
+- 下一步：[01-CMake Project and Targets (CMake 项目与目标)](/07-Engineering%20Tools%20(工程工具)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)

@@ -384,7 +384,7 @@ void philosopher(int i) {
 
 ---
 
-互斥锁与死锁详见 → [Mutex（互斥锁）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/01-Mutex%20(互斥锁).md) · [Deadlock（死锁）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/03-Deadlock%20(死锁).md)
+互斥锁与死锁详见 → Mutex（互斥锁） · Deadlock（死锁）
 
 ---
 
@@ -581,7 +581,7 @@ int main() {
 
 ---
 
-互斥锁与信号量详见 → [Mutex（互斥锁）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/01-Mutex%20(互斥锁).md) · [Semaphore（信号量）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/05-Synchronization%20(同步与互斥)/02-Semaphore%20(信号量).md)
+互斥锁与信号量详见 → Mutex（互斥锁） · Semaphore（信号量）
 
 # 零基础阅读路径
 
@@ -606,3 +606,8 @@ int main() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[08-Performance and System Thinking (性能与系统思维)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/08-Performance%20and%20System%20Thinking%20(性能与系统思维).md)

@@ -75,3 +75,8 @@ channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Go Practice Map (Go 实践导航)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/00-Go%20Practice%20Map%20(Go%20实践导航).md)
+- 下一步：[02-C++ to Go Decision Notes (C++ 到 Go 迁移决策)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/02-C++%20to%20Go%20Decision%20Notes%20(C++%20到%20Go%20迁移决策).md)

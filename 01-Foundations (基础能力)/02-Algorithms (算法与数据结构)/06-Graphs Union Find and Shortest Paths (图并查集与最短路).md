@@ -95,11 +95,11 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 
 # 关联笔记
 
-- [Union-Find (并查集)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08b-Union-Find%20(并查集).md)
-- [Shortest Path：Dijkstra & Bellman-Ford (最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08c-Shortest%20Path：Dijkstra%20&%20Bellman-Ford%20(最短路).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
-- [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+- Union-Find (并查集)
+- Shortest Path：Dijkstra & Bellman-Ford (最短路)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+- Fast & Slow Pointers (快慢指针)
 
 ---
 
@@ -157,11 +157,11 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 ---
 
 # 关联笔记 · 延伸要点 2
-- [DFS & BFS on Graph (图的搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08a-DFS%20&%20BFS%20on%20Graph%20(图的搜索).md)
-- [Shortest Path：Dijkstra & Bellman-Ford (最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08c-Shortest%20Path：Dijkstra%20&%20Bellman-Ford%20(最短路).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
-- [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+- DFS & BFS on Graph (图的搜索)
+- Shortest Path：Dijkstra & Bellman-Ford (最短路)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+- Fast & Slow Pointers (快慢指针)
 
 ---
 
@@ -245,11 +245,11 @@ void floydWarshall(vector<vector<int>>& dist) {
 ---
 
 # 关联笔记 · 延伸要点 3
-- [DFS & BFS on Graph (图的搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08a-DFS%20&%20BFS%20on%20Graph%20(图的搜索).md)
-- [Union-Find (并查集)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08b-Union-Find%20(并查集).md)
-- [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
-- [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
-- [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+- DFS & BFS on Graph (图的搜索)
+- Union-Find (并查集)
+- Array & Two Pointers (数组与双指针)
+- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+- Fast & Slow Pointers (快慢指针)
 
 # 零基础阅读路径
 
@@ -274,3 +274,8 @@ void floydWarshall(vector<vector<int>>& dist) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
+- 下一步：[07-Binary Search (二分查找)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/07-Binary%20Search%20(二分查找).md)

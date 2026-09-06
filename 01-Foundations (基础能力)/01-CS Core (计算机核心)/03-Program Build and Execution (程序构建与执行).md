@@ -70,7 +70,7 @@ ALU 输出标志位：
 
 ---
 
-指令执行流程详见 → [Instruction Cycle（指令执行流程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/02-Instruction%20Cycle%20(指令执行流程).md)
+指令执行流程详见 → Instruction Cycle（指令执行流程）
 
 ---
 
@@ -149,7 +149,7 @@ for (int x : random_data)
 
 ---
 
-编译链接加载详见 → [Compilation & Linking (编译链接加载)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/03-Program%20Execution%20(程序执行机制)/01-Compilation%20&%20Linking%20(编译链接加载).md)
+编译链接加载详见 → Compilation & Linking (编译链接加载)
 
 ---
 
@@ -227,7 +227,7 @@ Reg[rd] ← ALU_out
 
 ---
 
-CPU执行模型详见 → [CPU Execution Model（CPU执行模型）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/01-CPU%20Execution%20Model%20(CPU执行模型).md)
+CPU执行模型详见 → CPU Execution Model（CPU执行模型）
 
 ---
 
@@ -308,7 +308,7 @@ int main() {
 
 ---
 
-指令执行周期详见 → [Instruction Cycle (指令执行周期)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/03-Program%20Execution%20(程序执行机制)/02-Instruction%20Cycle%20(指令执行周期).md)
+指令执行周期详见 → Instruction Cycle (指令执行周期)
 
 # 零基础阅读路径
 
@@ -333,3 +333,8 @@ int main() {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[04-Memory Hierarchy and IO (存储层级与输入输出)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/04-Memory%20Hierarchy%20and%20IO%20(存储层级与输入输出).md)

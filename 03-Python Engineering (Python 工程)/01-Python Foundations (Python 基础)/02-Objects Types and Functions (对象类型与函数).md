@@ -1,9 +1,9 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 review_due: 2026-09-22
 tags: [language/python, python/basics]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：Python 变量绑定对象而非“存放一个 C++ 值”；可变对象共享引用是初学阶段最重要的坑。
@@ -91,3 +91,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Python Map (Python导航)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md)
+- 下一步：[03-Path Files and Serialization (路径文件与序列化)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/03-Path%20Files%20and%20Serialization%20(路径文件与序列化).md)

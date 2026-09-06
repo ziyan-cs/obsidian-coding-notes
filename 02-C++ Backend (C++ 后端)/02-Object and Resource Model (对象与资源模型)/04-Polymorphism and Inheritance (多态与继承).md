@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-14
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-14
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -110,7 +110,7 @@ class Leaf final : public Derived { };  // 禁止继承 Leaf
 
 ---
 
-多态与动态分发详见 → [Polymorphism & Dynamic Dispatch (多态与动态分发)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07b-Polymorphism%20&%20Dynamic%20Dispatch%20(多态与动态分发).md) · [Abstract Class & Pure Virtual (抽象类)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07c-Abstract%20Class%20&%20Pure%20Virtual%20(抽象类).md)
+多态与动态分发详见 → Polymorphism & Dynamic Dispatch (多态与动态分发) · Abstract Class & Pure Virtual (抽象类)
 
 ---
 
@@ -169,7 +169,7 @@ public:
 
 ---
 
-虚函数表机制详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
+虚函数表机制详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -210,7 +210,7 @@ void Shape::draw() const { std::cout << "default draw\n"; }
 
 ---
 
-虚函数表与多态机制详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
+虚函数表与多态机制详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -287,7 +287,7 @@ Diamond Virtual Inheritance Layout:
 
 ---
 
-虚函数表在多继承中的布局详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
+虚函数表在多继承中的布局详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 # 零基础阅读路径
 
@@ -313,3 +313,8 @@ Diamond Virtual Inheritance Layout:
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[05-Templates (模板)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/05-Templates%20(模板).md)

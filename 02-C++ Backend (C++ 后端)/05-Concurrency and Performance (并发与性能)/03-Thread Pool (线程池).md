@@ -174,7 +174,7 @@ class SimplePool {
 ---
 
 配套的并发原语见 → [Mutex & Lock](../02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md) · [Condition Variable](../03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md)
-- [Lock-free Structures Overview (无锁结构概念)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/06-Lock-free%20Structures%20Overview%20(无锁结构概念).md)
+- Lock-free Structures Overview (无锁结构概念)
 
 # 零基础阅读路径
 
@@ -200,3 +200,8 @@ class SimplePool {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
+- 下一步：[04-Lock Free and Performance (无锁与性能)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/04-Lock%20Free%20and%20Performance%20(无锁与性能).md)

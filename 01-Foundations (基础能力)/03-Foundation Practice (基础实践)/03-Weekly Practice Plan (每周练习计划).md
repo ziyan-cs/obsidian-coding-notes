@@ -1,7 +1,8 @@
 ---
-tags:
-  - cs/algorithm
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - cs/algorithm
 ---
 
 > [!abstract] 学习定位：Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
@@ -164,3 +165,8 @@ status: 🌱
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Foundation Practice Map (基础实践导航)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/00-Foundation%20Practice%20Map%20(基础实践导航).md)
+- 下一步：[02-Template Library (模板库)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/02-Template%20Library%20(模板库).md)

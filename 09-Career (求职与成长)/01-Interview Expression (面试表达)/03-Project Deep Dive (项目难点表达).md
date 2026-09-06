@@ -1,7 +1,8 @@
 ---
-tags:
-  - distributed/system
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - distributed/system
 ---
 
 > [!abstract] 核心考点：> C++ 后端项目的常见难点和亮点设计、面试如何讲清楚项目
@@ -138,3 +139,8 @@ status: 🌱
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Interview Map (面试导航)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/00-Interview%20Map%20(面试导航).md)
+- 下一步：[02-Data Quick Reference (数据速记)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/02-Data%20Quick%20Reference%20(数据速记).md)

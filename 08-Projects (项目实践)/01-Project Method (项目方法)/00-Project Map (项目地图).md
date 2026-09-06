@@ -4,29 +4,14 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 一句话结论：项目不是功能堆砌；它要证明你能定义边界、实现关键路径、验证正确性、测量性能，并复盘失败。
+> **用途**：Project Map (项目地图) 的学习入口。先按顺序建立主线，再按需要回看专题。
 
-# 项目梯度
-
-| 项目 | 先解决什么 | 主实现 | Python 配套 | 核心证据 |
-| --- | --- | --- | --- | --- |
-| URL Shortener | API、存储、缓存、限流 | Go | API 回归、数据生成 | 读写路径与缓存失效 |
-| IM / Notification | 长连接、消息顺序、离线投递 | Go；C++ 可做连接实验 | 协议、压测工具 | 连接生命周期与幂等 |
-| Flash Sale | 高峰、库存、一致性、削峰 | Go | 压测报告 | 超卖防护与故障降级 |
-| Config Center | watch、版本、灰度、可靠通知 | Go | 配置校验工具 | 一致性与回滚设计 |
-
-# 项目完成定义
-
-- [ ] 有需求、非目标（non-goals）和容量假设。
-- [ ] 有可运行服务、README、配置示例和最小测试。
-- [ ] 有 API、数据模型、关键路径与错误语义。
-- [ ] 有一次压测或故障演练，以及测量数据。
-- [ ] 有一份“失败方案与取舍”复盘，不把所有选择写成唯一正确答案。
+# 学习入口
+- [01-Project Design Template (项目设计模板)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)
+- [02-Testing Benchmark and Evidence (测试压测与证据)](/08-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)
 
 # 使用方式
 
-- `01-Project Design Template` 先限定问题和边界。
-- `02-Testing Benchmark Evidence` 保存测试、压测和排障证据。
-- `02-Backend Projects` 记录每一个可交付项目的设计与复盘。
-
-项目源码放独立仓库；本目录只保存设计、实验、接口约定、复盘和面试表达。
+1. 从上到下阅读，完成每篇的最小练习和自测。
+2. 遇到卡点时回到本页，不跨越基础直接记结论。
+3. 到期复习以 review_due 和学习周期页为准。

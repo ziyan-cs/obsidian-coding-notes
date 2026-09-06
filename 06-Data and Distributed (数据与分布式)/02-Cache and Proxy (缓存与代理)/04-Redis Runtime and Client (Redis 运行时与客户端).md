@@ -386,7 +386,7 @@ public:
 
 ---
 
-Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Expiration & Eviction Strategy (过期与淘汰策略)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01c-Expiration%20&%20Eviction%20Strategy%20(过期与淘汰策略)%20⭐.md)
+Redis 性能模型与缓存策略详解见 → Redis Single Thread Model (单线程模型为何高性能) · Expiration & Eviction Strategy (过期与淘汰策略)
 
 # 零基础阅读路径
 
@@ -412,3 +412,8 @@ Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
+- 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/05-Nginx%20Proxy%20and%20Load%20Balancing%20(Nginx%20代理与负载均衡).md)

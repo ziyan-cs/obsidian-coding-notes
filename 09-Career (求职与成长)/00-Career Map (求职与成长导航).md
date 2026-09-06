@@ -4,21 +4,16 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 一句话结论：校招准备不是额外背一套题，而是把已经理解的原理、完成的项目和犯过的错误压缩成可验证的表达。
+> **用途**：Career Map (求职与成长导航) 的学习入口。先按顺序建立主线，再按需要回看专题。
 
-# 四个模块
+# 学习入口
+- [00-Interview Map (面试导航)](/09-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/00-Interview%20Map%20(面试导航).md)
+- [00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+- [00-Career Execution Map (求职执行导航)](/09-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/00-Career%20Execution%20Map%20(求职执行导航).md)
+- [00-Decision Map (决策地图)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/00-Decision%20Map%20(决策地图).md)
 
-1. **Interview Expression（面试表达）**：高频知识、数据速记、30 秒与 3 分钟回答。
-2. **System Design（系统设计）**：短链接、IM、秒杀、配置中心、API 网关的设计练习。
-3. **Career Execution（求职执行）**：学习节奏、投递材料、项目证据与复盘。
-4. **Decision Records（决策记录）**：资源、并发、错误处理、服务设计和可观测性的取舍。
+# 使用方式
 
-# 每周最小动作
-
-- 任选一个主题，练习 30 秒结论、2 分钟机制、5 分钟取舍。
-- 从项目中补一个证据：测试、压测、设计权衡或故障复盘。
-- 把答不清的问题写进 `00-Hub / 05-Mistake Log`，而不是只收藏答案。
-
-# 判断是否准备好
-
-能对一个项目说清“需求与非目标、关键数据路径、失败模式、测量结果、下次会怎样改”，比背完题库更重要。
+1. 从上到下阅读，完成每篇的最小练习和自测。
+2. 遇到卡点时回到本页，不跨越基础直接记结论。
+3. 到期复习以 review_due 和学习周期页为准。

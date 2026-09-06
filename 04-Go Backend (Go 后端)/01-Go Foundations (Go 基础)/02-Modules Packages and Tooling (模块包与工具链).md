@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [language/go, go/tooling]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：module 是依赖版本边界，package 是代码命名空间；目录结构应服务于业务边界，而不是照搬 C++ 的头文件层级。
@@ -87,3 +87,8 @@ todo-api/
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Go Map (Go导航)](/04-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/00-Go%20Map%20(Go导航).md)
+- 下一步：[03-Errors Defer and Context (错误、defer 与 context)](/04-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/03-Errors%20Defer%20and%20Context%20(错误、defer%20与%20context).md)

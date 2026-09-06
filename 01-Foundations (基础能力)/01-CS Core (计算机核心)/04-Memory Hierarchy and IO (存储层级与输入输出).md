@@ -73,7 +73,7 @@ for (int i = 0; i < N; i++) total += a[i];
 ---
 
 Cache 的映射策略与替换算法详解 → [Cache 机制](../04-Cache%20Mechanism%20(缓存机制)%20⭐.md)
-- [Basic Input & Output（基础输入输出）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/06-Basic%20Input%20&%20Output%20(基础输入输出).md)
+- Basic Input & Output（基础输入输出）
 
 ---
 
@@ -243,7 +243,7 @@ struct Packed {
 
 ---
 
-二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
+二进制编码与整数表示详见 → Binary & Encoding（二进制与编码） · Integer Representation（整数表示）
 
 ---
 
@@ -308,7 +308,7 @@ CPU ──┬── Bus ──┬── Main Memory
 
 ---
 
-CPU执行模型与基础输入输出详见 → [CPU Execution Model（CPU执行模型）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/01-CPU%20Execution%20Model%20(CPU执行模型).md) · [Basic Input & Output（基础输入输出）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/06-Basic%20Input%20&%20Output%20(基础输入输出).md)
+CPU执行模型与基础输入输出详见 → CPU Execution Model（CPU执行模型） · Basic Input & Output（基础输入输出）
 
 ---
 
@@ -391,7 +391,7 @@ DMA.interrupt_handler() {    // 传输完毕
 
 ---
 
-总线系统与CPU执行模型详见 → [Bus System（总线系统）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/05-Bus%20System%20(总线系统).md) · [CPU Execution Model（CPU执行模型）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Computer%20Organization%20(计算机组成原理)/01-CPU%20Execution%20Model%20(CPU执行模型).md)
+总线系统与CPU执行模型详见 → Bus System（总线系统） · CPU Execution Model（CPU执行模型）
 
 # 零基础阅读路径
 
@@ -416,3 +416,8 @@ DMA.interrupt_handler() {    // 传输完毕
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[05-Operating System Runtime (操作系统运行时)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Runtime%20(操作系统运行时).md)

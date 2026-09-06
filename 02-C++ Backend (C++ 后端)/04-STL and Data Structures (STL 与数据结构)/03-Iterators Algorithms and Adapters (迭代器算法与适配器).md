@@ -97,7 +97,7 @@ std::priority_queue<int> pq(data.begin(), data.end());  // O(N) 构造
 
 ---
 
-STL 容器全览详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+STL 容器全览详见 → STL Cheat Sheet (STL速查总览)
 
 ---
 
@@ -215,7 +215,7 @@ std::vector<int> data(in, end);
 
 ---
 
-算法库与迭代器分类紧密相关，详见 → [Algorithm Library (算法库速查)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)
+算法库与迭代器分类紧密相关，详见 → Algorithm Library (算法库速查)
 
 ---
 
@@ -359,7 +359,7 @@ std::sort(people.begin(), people.end(),
 
 ---
 
-STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/06-STL%20Cheat%20Sheet%20(STL速查总览).md)
+STL 容器与算法速查详见 → STL Cheat Sheet (STL速查总览)
 
 ---
 
@@ -432,7 +432,7 @@ unordered 哈希表  飞一般的查找
 
 ---
 
-容器适配器与算法详见 → [Container Adapters (容器适配器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/03-Container%20Adapters%20(容器适配器).md) · [Algorithm Library (算法库速查)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)
+容器适配器与算法详见 → Container Adapters (容器适配器) · Algorithm Library (算法库速查)
 
 # 零基础阅读路径
 
@@ -458,3 +458,8 @@ unordered 哈希表  飞一般的查找
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-STL Map (STL 导航)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/00-STL%20Map%20(STL%20导航).md)
+- 下一步：[02-Associative Containers (关联容器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/02-Associative%20Containers%20(关联容器).md)

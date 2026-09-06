@@ -1,40 +1,21 @@
 ---
+status: stable
+confidence: high
+verified: 2026-09-06
 tags: [comparison, architecture/decision]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
-> [!abstract] 一句话结论：技术选型没有脱离约束的正确答案；决策记录应写清上下文、候选项、权衡、结论和可逆性。
+> **用途**：Decision Map (决策地图) 的学习入口。先按顺序建立主线，再按需要回看专题。
 
-# 使用场景
+# 学习入口
+- [01-Resource Lifetime (资源生命周期)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/01-Resource%20Lifetime%20(资源生命周期).md)
+- [02-Concurrency Models (并发模型)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)
+- [03-Error Handling (错误处理)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/03-Error%20Handling%20(错误处理).md)
+- [04-HTTP Service Design (HTTP 服务设计)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/04-HTTP%20Service%20Design%20(HTTP%20服务设计).md)
+- [05-Observability and Performance (可观测性与性能)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
 
-- C++、Go、Python 如何分工。
-- mutex 还是 channel，缓存还是数据库直读，同步还是异步。
-- 什么时候引入 Redis、MQ、gRPC、分库分表。
+# 使用方式
 
-# 决策模板（ADR-lite）
-
-```md
-# Decision: <标题>
-- Date:
-- Context: 当前约束、量级、团队、已有系统。
-- Options: A / B / C。
-- Decision: 选择什么。
-- Consequences: 得到什么、失去什么、后续成本。
-- Revisit trigger: 什么变化后需要重审。
-```
-
-# 规则
-
-- 没有真实约束时，写“学习实验”，不要伪装成生产决策。
-- 区分事实、推断和个人偏好。
-- 对版本、框架、性能数据写来源与验证日期。
-
-# 关联
-
-- [[01-Resource Lifetime (资源生命周期)]]
-- [[02-Concurrency Models (并发模型)]]
-- [[03-Error Handling (错误处理)]]
-- [[04-HTTP Service Design (HTTP 服务设计)]]
-- [[05-Observability & Performance (可观测性与性能)]]
+1. 从上到下阅读，完成每篇的最小练习和自测。
+2. 遇到卡点时回到本页，不跨越基础直接记结论。
+3. 到期复习以 review_due 和学习周期页为准。

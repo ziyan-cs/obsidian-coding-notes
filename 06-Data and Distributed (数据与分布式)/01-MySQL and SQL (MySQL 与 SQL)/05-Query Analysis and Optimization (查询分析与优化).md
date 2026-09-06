@@ -154,7 +154,7 @@ SELECT * FROM user WHERE age = 20;
 
 ---
 
-索引设计原则见 → [Index Design Principles (索引设计原则)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md) · [Slow Query Log & Optimization (慢查询分析)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08c-Slow%20Query%20Log%20&%20Optimization%20(慢查询分析).md)
+索引设计原则见 → Index Design Principles (索引设计原则) · Slow Query Log & Optimization (慢查询分析)
 
 ---
 
@@ -320,7 +320,7 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ---
 
-表设计与 SQL 基础见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md) · [EXPLAIN & Execution Plan Analysis (执行计划分析)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)
+表设计与 SQL 基础见 → MySQL Basics (MySQL 基础) · EXPLAIN & Execution Plan Analysis (执行计划分析)
 
 ---
 
@@ -496,3 +496,8 @@ pt-query-digest /var/log/mysql/slow.log
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-MySQL and SQL Map (MySQL 与 SQL 导航)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/00-MySQL%20and%20SQL%20Map%20(MySQL%20与%20SQL%20导航).md)
+- 下一步：[06-Connection Pool (连接池)](/06-Data%20and%20Distributed%20(数据与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/06-Connection%20Pool%20(连接池).md)

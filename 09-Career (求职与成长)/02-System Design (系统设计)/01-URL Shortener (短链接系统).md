@@ -1,7 +1,8 @@
 ---
-tags:
-  - distributed/system
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - distributed/system
 ---
 
 > [!abstract] 核心考点：> 发号器 + 哈希映射 + HTTP 重定向，重点在唯一 ID 生成策略和缓存加速
@@ -239,3 +240,8 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+- 下一步：[02-IM System (即时通信系统)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/02-IM%20System%20(即时通信系统).md)

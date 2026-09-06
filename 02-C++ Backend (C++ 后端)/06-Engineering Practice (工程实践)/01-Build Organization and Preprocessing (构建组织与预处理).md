@@ -153,7 +153,7 @@ inline int square(int x) { return x * x; }
 
 ---
 
-头文件与源文件组织详见 → [Header & Source Organization (头文件与源文件组织)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/02-Header%20&%20Source%20Organization%20(头文件与源文件组织).md)
+头文件与源文件组织详见 → Header & Source Organization (头文件与源文件组织)
 
 ---
 
@@ -280,7 +280,7 @@ project/
 
 ---
 
-编译与链接过程详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+编译与链接过程详见 → Compilation & Linking (编译与链接)
 
 ---
 
@@ -410,7 +410,7 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 ---
 
-编译过程中预处理阶段详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+编译过程中预处理阶段详见 → Compilation & Linking (编译与链接)
 
 # 零基础阅读路径
 
@@ -436,3 +436,8 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
+- 下一步：[02-CMake and Dependencies (CMake 与依赖)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/02-CMake%20and%20Dependencies%20(CMake%20与依赖).md)

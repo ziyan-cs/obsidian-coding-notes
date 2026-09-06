@@ -1,9 +1,9 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 review_due: 2026-10-01
 tags: [language/python, python/http, testing/api]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：接口检查工具要验证 status、body、超时和失败信息；绝不能无超时地发请求，也不能把 token 打进日志。
@@ -86,3 +86,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Assistance Map (后端辅助导航)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/00-Backend%20Assistance%20Map%20(后端辅助导航).md)
+- 下一步：[02-Data Processing Boundaries (数据处理边界)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/02-Data%20Processing%20Boundaries%20(数据处理边界).md)

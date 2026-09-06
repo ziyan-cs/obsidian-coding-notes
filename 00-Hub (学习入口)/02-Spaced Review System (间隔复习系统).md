@@ -1,8 +1,8 @@
 ---
-tags: [learning/review, vault/system]
 status: learning
-confidence: 1
-verified: 2026-09-05
+confidence: low
+verified: 2026-09-06
+tags: [learning/review, vault/system]
 ---
 
 > [!abstract] 学习定位：目标：把“我看过”变为“我能在需要时想起来并写出来”。
@@ -63,9 +63,9 @@ seed → learning → review → solid
 
 # 关联
 
-- [[03-Note Standard (笔记规范)]]
-- [[05-Mistake Log (错误记录)]]
-- [[01-Backend Learning Roadmap (后端学习路线)]]
+- [03-Note Standard (笔记规范)](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md)
+- [05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)
+- [01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
 
 # 从零建立模型
 
@@ -105,3 +105,8 @@ seed → learning → review → solid
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[03-Note Standard (笔记规范)](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md)

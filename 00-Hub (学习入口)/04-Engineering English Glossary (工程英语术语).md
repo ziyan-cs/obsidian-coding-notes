@@ -1,8 +1,8 @@
 ---
-tags: [english/engineering, learning/glossary]
 status: learning
-confidence: 1
-verified: 2026-09-05
+confidence: low
+verified: 2026-09-06
+tags: [english/engineering, learning/glossary]
 ---
 
 > [!abstract] 学习定位：不背脱离语境的单词；每次在代码、报错、文档中遇到术语时，补一个自己能用的句子。
@@ -55,3 +55,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)

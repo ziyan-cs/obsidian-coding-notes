@@ -88,7 +88,7 @@ asynchronous path
 
 ---
 
-消息队列选型对比详解见 → [RabbitMQ vs Kafka：Comparison (两者对比)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03c-RabbitMQ%20vs%20Kafka：Comparison%20(两者对比).md)
+消息队列选型对比详解见 → RabbitMQ vs Kafka：Comparison (两者对比)
 
 # 零基础阅读路径
 
@@ -114,3 +114,8 @@ asynchronous path
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Messaging Map (消息与流导航)](/06-Data%20and%20Distributed%20(数据与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/00-Messaging%20Map%20(消息与流导航).md)
+- 下一步：[02-Kafka Delivery and Idempotency (Kafka 投递与幂等)](/06-Data%20and%20Distributed%20(数据与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/02-Kafka%20Delivery%20and%20Idempotency%20(Kafka%20投递与幂等).md)

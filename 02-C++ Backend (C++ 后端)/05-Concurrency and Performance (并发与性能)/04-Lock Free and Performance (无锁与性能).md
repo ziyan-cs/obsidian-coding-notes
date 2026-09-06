@@ -137,7 +137,7 @@ std::atomic<TaggedPointer> head_;
 
 ---
 
-原子操作与内存序是无锁编程的基础，详见 → [Atomic & Memory Order (原子操作与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
+原子操作与内存序是无锁编程的基础，详见 → Atomic & Memory Order (原子操作与内存序)
 
 ---
 
@@ -398,7 +398,7 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-原子操作与内存序选择详见 → [Atomic & Memory Order (原子操作与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
+原子操作与内存序选择详见 → Atomic & Memory Order (原子操作与内存序)
 
 # 零基础阅读路径
 
@@ -424,3 +424,8 @@ for (int i = 0; i < numThreads; i++) {
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
+- 下一步：[03-Thread Pool (线程池)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/03-Thread%20Pool%20(线程池).md)

@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-19
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-19
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -80,7 +80,7 @@ std::unique_ptr<void, decltype(&free)> buf(malloc(1024), free);
 
 ---
 
-shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
+shared_ptr 引用计数机制详见 → shared ptr Reference Counting Internals (引用计数底层)
 
 ---
 
@@ -149,7 +149,7 @@ auto sp = std::shared_ptr<MyClass>(new MyClass(args...));
 
 ---
 
-weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与循环引用)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04c-weak_ptr%20&%20Circular%20Reference%20(弱引用与循环引用).md)
+weak_ptr 与循环引用详见 → weak_ptr & Circular Reference (弱引用与循环引用)
 
 ---
 
@@ -233,7 +233,7 @@ public:
 
 ---
 
-shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
+shared_ptr 引用计数机制详见 → shared ptr Reference Counting Internals (引用计数底层)
 
 # 学习闭环
 
@@ -250,3 +250,8 @@ shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Modern C++ Map (现代 C++ 导航)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/00-Modern%20C++%20Map%20(现代%20C++%20导航).md)
+- 下一步：[04-Generic Programming and Type Tools (泛型与类型工具)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Generic%20Programming%20and%20Type%20Tools%20(泛型与类型工具).md)

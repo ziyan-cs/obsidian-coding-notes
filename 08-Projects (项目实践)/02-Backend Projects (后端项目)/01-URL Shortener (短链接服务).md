@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [project/url-shortener, backend/api]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：目标：用户创建短链接，访问短码后重定向；重点是读写路径、冲突、缓存与统计边界，不是生成一个随机字符串。
@@ -79,3 +79,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Projects Map (后端项目导航)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/00-Backend%20Projects%20Map%20(后端项目导航).md)
+- 下一步：[02-IM and Notification (即时通讯与通知)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/02-IM%20and%20Notification%20(即时通讯与通知).md)

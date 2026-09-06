@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [language/cpp, language/go, language/python, comparison]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：按问题的约束选语言：C++ 负责底层控制与性能，Go 负责后端服务交付，Python 负责自动化和数据工具；同一项目应让它们协作而不是竞争。
@@ -74,3 +74,8 @@ Python 的动态性不等于不需要契约。公共函数应写类型标注、�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Assistance Map (后端辅助导航)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/00-Backend%20Assistance%20Map%20(后端辅助导航).md)
+- 下一步：[04-Async IO and Concurrency (异步 I-O 与并发)](/03-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/04-Async%20IO%20and%20Concurrency%20(异步%20I-O%20与并发).md)

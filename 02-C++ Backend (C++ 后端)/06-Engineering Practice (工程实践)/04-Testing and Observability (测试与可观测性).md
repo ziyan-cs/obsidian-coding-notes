@@ -196,7 +196,7 @@ genhtml -o report coverage.info
 
 ---
 
-测试与调试配合保障代码质量，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+测试与调试配合保障代码质量，详见 → Debugging gdb & Sanitizers (调试工具)
 
 ---
 
@@ -437,7 +437,7 @@ auto stub = UserService::NewStub(tracing_channel);
 
 ---
 
-可观测性与调试工具共同保障服务稳定性，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+可观测性与调试工具共同保障服务稳定性，详见 → Debugging gdb & Sanitizers (调试工具)
 
 # 零基础阅读路径
 
@@ -463,3 +463,8 @@ auto stub = UserService::NewStub(tracing_channel);
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
+- 下一步：[05-Profiling and Optimization (性能分析与优化)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Profiling%20and%20Optimization%20(性能分析与优化).md)

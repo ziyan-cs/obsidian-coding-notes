@@ -158,7 +158,7 @@ try {
 
 ---
 
-互斥锁与锁管理详见 → [Mutex & Lock (互斥锁与锁管理)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
+互斥锁与锁管理详见 → Mutex & Lock (互斥锁与锁管理)
 
 ---
 
@@ -317,7 +317,7 @@ void unchecked() {  // ❌ 忘记加锁
 
 ---
 
-条件变量与互斥锁配合使用，详见 → [Condition Variable & Semaphore (条件变量与信号量)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/03-Condition%20Variable%20&%20Semaphore%20(条件变量与信号量)%20⭐.md)
+条件变量与互斥锁配合使用，详见 → Condition Variable & Semaphore (条件变量与信号量)
 
 ---
 
@@ -444,7 +444,7 @@ cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 
 ---
 
-互斥锁与锁管理详见 → [Mutex & Lock (互斥锁与锁管理)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/02-Mutex%20&%20Lock%20(互斥锁与锁管理)%20⭐.md)
+互斥锁与锁管理详见 → Mutex & Lock (互斥锁与锁管理)
 
 # 学习闭环
 
@@ -461,3 +461,8 @@ cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
+- 下一步：[02-Atomics and Memory Order (原子与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/02-Atomics%20and%20Memory%20Order%20(原子与内存序).md)

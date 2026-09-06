@@ -1,8 +1,8 @@
 ---
-tags: [vault/audit, vault/migration]
 status: learning
-confidence: 1
-verified: 2026-09-05
+confidence: low
+verified: 2026-09-06
+tags: [vault/audit, vault/migration]
 ---
 
 > [!abstract] 学习定位：当前结论：知识库的结构、命名、导航、链接和主线内容已完成收口。接下来的瓶颈不再是“补更多笔记”，而是把知识转化为代码、测量、复盘与表达。
@@ -23,7 +23,7 @@ verified: 2026-09-05
 ## P0 — 每周必须做
 
 - [ ] 清理核心主线的 `review_due`：每次最多 6 篇；积压超过 5 篇时暂停加新主题。
-- [ ] 在 [[05-Mistake Log (错误记录)]] 记录本周最值得复盘的 1–3 个错误模式。
+- [ ] 在 [05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md) 记录本周最值得复盘的 1–3 个错误模式。
 - [ ] 为当前项目交付一个可演示增量：接口、测试、压测、监控或故障复盘至少选一项。
 
 ## P1 — 以项目触发
@@ -80,3 +80,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[08-Vault Design System (知识库设计系统)](/00-Hub%20(学习入口)/08-Vault%20Design%20System%20(知识库设计系统).md)

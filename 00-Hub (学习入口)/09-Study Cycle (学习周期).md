@@ -125,3 +125,8 @@ verified: 2026-09-06
 
 - [Spacing 与 retrieval practice 综述](https://doi.org/10.1038/s44159-022-00089-1)
 - [Dunlosky 等：有效学习技术综述](https://journals.sagepub.com/stoken/rbtfl/Z10jaVH/60XQM/full)
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[08-Vault Design System (知识库设计系统)](/00-Hub%20(学习入口)/08-Vault%20Design%20System%20(知识库设计系统).md)

@@ -65,7 +65,7 @@ P = 可优化部分占比，S = 该部分的加速比
 
 ---
 
-系统思维与计算机本质详见 → [System Thinking（系统思维）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/05-System%20Thinking%20(系统思维)%20⭐.md) · [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md)
+系统思维与计算机本质详见 → System Thinking（系统思维） · What is a Computer（计算机本质）
 
 ---
 
@@ -155,3 +155,8 @@ for (int j = 0; j < n; j++)     // ❌ 每步跨一整行，空间局部性极�
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-CS Core Map (计算机核心导航)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/00-CS%20Core%20Map%20(计算机核心导航).md)
+- 下一步：[07-Synchronization and Deadlock (同步与死锁)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/07-Synchronization%20and%20Deadlock%20(同步与死锁).md)

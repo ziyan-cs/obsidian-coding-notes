@@ -80,7 +80,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 > [!tip]- **工程要点**：非阻塞 IO 本身不提升性能，它的价值是和 IO 多路复用配合时让单个线程管理大量 fd。纯轮询非阻塞 IO（一直 read 检查 EAGAIN）反而更浪费 CPU。
 
-阻塞与非阻塞 IO 详解见 → [Synchronous vs Asynchronous IO (同步与异步)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07b-Synchronous%20vs%20Asynchronous%20IO%20(同步与异步).md) · [IO Multiplexing (多路复用对比)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)
+阻塞与非阻塞 IO 详解见 → Synchronous vs Asynchronous IO (同步与异步) · IO Multiplexing (多路复用对比)
 
 ---
 
@@ -136,7 +136,7 @@ ssize_t ret = aio_return(&cb);
 
 > [!tip]- **工程要点**：面试中"阻塞/非阻塞"描述**调用行为**，"同步/异步"描述**拷贝主体**。大部分高性能网络框架是"非阻塞同步 IO + 多路复用"组合。
 
-同步与异步 IO 详解见 → [Blocking vs Non-blocking IO (阻塞与非阻塞)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07a-Blocking%20vs%20Non-blocking%20IO%20(阻塞与非阻塞).md) · [IO Multiplexing (多路复用对比)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/07-IO%20Models%20Deep%20Dive%20(五种IO模型)%20⭐/07c-IO%20Multiplexing：%20select,%20poll,%20epoll%20(多路复用对比).md)
+同步与异步 IO 详解见 → Blocking vs Non-blocking IO (阻塞与非阻塞) · IO Multiplexing (多路复用对比)
 
 ---
 
@@ -237,7 +237,7 @@ for (int i = 0; i < n; i++) {
 ---
 
 epoll 底层原理详解 → [epoll API详解](../08-epoll%20Internals%20(epoll底层原理)%20⭐/08a-epoll_create,%20epoll_ctl,%20epoll_wait%20(API详解).md) · [LT vs ET](../08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md)
-- [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
+- System Administration Basics (系统管理基础)
 
 ---
 
@@ -334,7 +334,7 @@ close(epfd);
 - **常见误区**：用 `data.fd` 存 fd 后还要回查连接对象（应直接用 `data.ptr`）；多线程共享 epfd 时漏设 `EPOLLONESHOT`，导致同一事件被多线程重复处理。
 - **自测**：1) `epoll_event.data` 为什么是 union？ 2) `epoll_create` 的 size 参数为什么被忽略？
 
-epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md) · [epoll vs select (底层实现对比)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)
+epoll API 详解见 → Level Trigger vs Edge Trigger (触发模式) · epoll vs select (底层实现对比)
 
 ---
 
@@ -419,7 +419,7 @@ while (1) {
 
 > [!tip]- **工程要点**：ET 模式的核心问题是"怎么知道数据读完了"——只能通过 read 返回 EAGAIN 判断。这就要求 fd 必须是非阻塞的，否则最后一次无数据可读时 read 会阻塞线程。如果你发现 ET 模式下某些事件没触发，大概率是循环读逻辑不对或忘记设置非阻塞。
 
-epoll 触发模式见 → [epoll_create, epoll_ctl, epoll_wait (API详解)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08a-epoll_create,%20epoll_ctl,%20epoll_wait%20(API详解).md) · [epoll vs select (底层实现对比)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/03-IO%20Models%20(输入输出模型)/08-epoll%20Internals%20(epoll底层原理)%20⭐/08c-epoll%20vs%20select：%20Red-Black%20Tree%20&%20Event%20Queue%20(底层实现对比).md)
+epoll 触发模式见 → epoll_create, epoll_ctl, epoll_wait (API详解) · epoll vs select (底层实现对比)
 
 ---
 
@@ -546,7 +546,7 @@ epoll:       返回 50 → O(k)，k=50
 ---
 
 epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md)
-- [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
+- System Administration Basics (系统管理基础)
 
 # 零基础阅读路径
 
@@ -572,3 +572,8 @@ epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigge
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Linux Runtime Map (Linux 运行时导航)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/00-Linux%20Runtime%20Map%20(Linux%20运行时导航).md)
+- 下一步：[05-Zero Copy (零拷贝)](/05-Runtime%20and%20Network%20(运行时与网络)/01-Linux%20Runtime%20(Linux%20运行时)/05-Zero%20Copy%20(零拷贝).md)

@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [project/config-center, distributed/configuration]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 一句话结论：配置中心应将配置作为不可变、可验证、可回滚的发布物；watch 是通知加速器，版本化拉取才是恢复事实。
@@ -83,3 +83,8 @@ verified: 2026-09-05
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Backend Projects Map (后端项目导航)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/00-Backend%20Projects%20Map%20(后端项目导航).md)
+- 下一步：[03-Flash Sale (秒杀系统)](/08-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/03-Flash%20Sale%20(秒杀系统).md)

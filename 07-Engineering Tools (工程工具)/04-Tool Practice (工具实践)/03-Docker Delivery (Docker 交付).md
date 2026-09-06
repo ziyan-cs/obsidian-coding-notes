@@ -161,11 +161,11 @@ cmake-build-*
 
 # 关联笔记
 
-- [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
-- [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
-- [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
-- [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
-- [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
+- Makefile Basics (Makefile基础)
+- Docker Basics：Image & Container (Docker基础)
+- Shell Tools：grep, sed, awk, tmux (Shell效率工具)
+- Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)
+- Core Concepts：Working Tree, Index, HEAD (三区模型)
 
 # 零基础阅读路径
 
@@ -191,3 +191,8 @@ cmake-build-*
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Tool Practice Map (工具实践导航)](/07-Engineering%20Tools%20(工程工具)/04-Tool%20Practice%20(工具实践)/00-Tool%20Practice%20Map%20(工具实践导航).md)
+- 下一步：[02-Code Quality and Build Optimization (代码质量与构建优化)](/07-Engineering%20Tools%20(工程工具)/04-Tool%20Practice%20(工具实践)/02-Code%20Quality%20and%20Build%20Optimization%20(代码质量与构建优化).md)

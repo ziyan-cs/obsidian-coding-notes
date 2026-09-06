@@ -1,8 +1,8 @@
 ---
-review_due: 2026-09-16
 status: stable
 confidence: high
 verified: 2026-09-06
+review_due: 2026-09-16
 ---
 
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -236,7 +236,7 @@ class Server {
 
 ---
 
-RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & References In Depth (指针与引用深入)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+RAII 的核心是资源管理与指针生命周期，详见 → Pointers & References In Depth (指针与引用深入)
 
 ---
 
@@ -420,7 +420,7 @@ using ScopedVec = std::vector<String,
 
 ---
 
-内存管理与指针操作紧密相关，详见 → [Pointers & References In Depth (指针与引用深入)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
+内存管理与指针操作紧密相关，详见 → Pointers & References In Depth (指针与引用深入)
 
 # 学习闭环
 
@@ -437,3 +437,8 @@ using ScopedVec = std::vector<String,
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
+- 下一步：[05-Templates (模板)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/05-Templates%20(模板).md)

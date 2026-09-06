@@ -1,7 +1,8 @@
 ---
-tags:
-  - career/interview
-status: 🌱
+status: learning
+confidence: medium
+verified: 2026-09-06
+tags: - career/interview
 ---
 
 > [!abstract] 学习定位：核心思路
@@ -256,3 +257,7 @@ auto r = v | views::filter([](int n) { return n % 2 == 0; })
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Career Execution Map (求职执行导航)](/09-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/00-Career%20Execution%20Map%20(求职执行导航).md)

@@ -1,7 +1,8 @@
 ---
+status: stable
+confidence: medium
+verified: 2026-09-06
 tags: [vault/standard, learning/note-taking]
-status: solid
-verified: 2026-09-05
 ---
 
 > [!abstract] 一篇好笔记不是信息堆积：不看正文时，你仍能说清它解决的问题、写出核心例子，并知道最容易错在哪里。
@@ -29,7 +30,7 @@ verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 1. 
 2. 
 ## 关联
-- [[...]]
+- 使用根路径 Markdown 链接；例如：`[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)`。
 ```
 
 # 写作规则
@@ -60,10 +61,10 @@ verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 不要为了填表硬做三语言比较；只有概念确实对应时才填写。
 
 # 关联 · 延伸要点 2
-- [[00-Vault Map (知识库地图)]]
-- [[02-Spaced Review System (间隔复习系统)]]
-- [[06-Sources & Freshness Policy (来源与时效规则)]]
-- [[08-Vault Design System (知识库设计系统)]]
+- [00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- [02-Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)
+- [06-Sources & Freshness Policy (来源与时效规则)](/00-Hub%20(学习入口)/06-Sources%20&%20Freshness%20Policy%20(来源与时效规则).md)
+- [08-Vault Design System (知识库设计系统)](/00-Hub%20(学习入口)/08-Vault%20Design%20System%20(知识库设计系统).md)
 
 # 从零建立模型
 
@@ -103,3 +104,8 @@ verified: YYYY-MM-DD # 仅工具/API/版本等易变主题必填
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
+- 下一步：[04-Engineering English Glossary (工程英语术语)](/00-Hub%20(学习入口)/04-Engineering%20English%20Glossary%20(工程英语术语).md)

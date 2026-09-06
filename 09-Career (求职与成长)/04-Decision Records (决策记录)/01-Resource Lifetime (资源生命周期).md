@@ -1,8 +1,8 @@
 ---
+status: learning
+confidence: low
+verified: 2026-09-06
 tags: [comparison, resource/lifetime]
-status: seed
-confidence: 1
-verified: 2026-09-05
 ---
 
 > [!abstract] 学习定位：结论：GC 只处理内存可达性；文件、socket、锁、事务等资源仍须有确定的关闭协议。
@@ -73,3 +73,8 @@ acquire -> one clear owner -> use -> release
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Decision Map (决策地图)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/00-Decision%20Map%20(决策地图).md)
+- 下一步：[02-Concurrency Models (并发模型)](/09-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)

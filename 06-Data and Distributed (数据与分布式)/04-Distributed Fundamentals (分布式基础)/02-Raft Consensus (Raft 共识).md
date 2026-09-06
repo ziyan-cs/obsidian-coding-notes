@@ -143,7 +143,7 @@ Follower 投票前比较：
 
 ---
 
-Raft 日志复制与安全性详解见 → [04c2-Log Replication (日志复制)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md) · [04c3-Safety & Membership Change (安全性保证)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c3-Safety%20&%20Membership%20Change%20(安全性保证).md)
+Raft 日志复制与安全性详解见 → 04c2-Log Replication (日志复制) · 04c3-Safety & Membership Change (安全性保证)
 
 ---
 
@@ -279,7 +279,7 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 
 ---
 
-Raft 完整流程详解见 → [04c1-Leader Election (领导者选举)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [04c3-Safety & Membership Change (安全性保证)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c3-Safety%20&%20Membership%20Change%20(安全性保证).md)
+Raft 完整流程详解见 → 04c1-Leader Election (领导者选举) · 04c3-Safety & Membership Change (安全性保证)
 
 ---
 
@@ -404,7 +404,7 @@ Raft 节点需要持久化的状态：
 
 ---
 
-Raft 基础机制详解见 → [04c1-Leader Election (领导者选举)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [04c2-Log Replication (日志复制)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
+Raft 基础机制详解见 → 04c1-Leader Election (领导者选举) · 04c2-Log Replication (日志复制)
 
 # 零基础阅读路径
 
@@ -430,3 +430,8 @@ Raft 基础机制详解见 → [04c1-Leader Election (领导者选举)](/03-Back
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
 3. 什么时候应当换用另一种方案？
+
+# 关联学习
+
+- 导航：[00-Distributed Fundamentals Map (分布式基础导航)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/00-Distributed%20Fundamentals%20Map%20(分布式基础导航).md)
+- 下一步：[03-Paxos (Paxos)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/03-Paxos%20(Paxos).md)
