@@ -4,7 +4,7 @@
 
 ## Start Here
 
-先从 [[00-Start Here (学习入口)/00-Vault Map (知识库地图)|知识地图]] 进入；学习节奏见 [[00-Start Here (学习入口)/01-Backend Learning Roadmap (后端学习路线)|两年学习路线]]；每次学习后按 [[00-Start Here (学习入口)/02-Spaced Review System (间隔复习系统)|间隔复习系统]] 回顾；新笔记使用 [[00-Start Here (学习入口)/03-Note Standard (笔记规范)|笔记规范]]；全库的渐进深改顺序见 [[00-Start Here (学习入口)/07-Vault Audit & Migration Queue (审计与迁移队列)|迁移队列]]。
+先从 [[00-Vault Map (知识库地图)](00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)识库地图)](00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md) 进入；学习节奏见 [[/00-Hub (学习入口)/01-Backend Learning Roadmap (后端学习路线)|两年学习路线]]；每次学习后按 [[/00-Start Here (学习入口)/02-Spaced Review System (间隔复习系统)|间隔复习系统]] 回顾；新笔记使用 [[/00-Start Here (学习入口)/03-Note Standard (笔记规范)|笔记规范]]；全库的渐进深改顺序见 [[/00-Start Here (学习入口)/07-Vault Audit & Migration Queue (审计与迁移队列)|迁移队列]]。
 
 ## Note Frontmatter
 
