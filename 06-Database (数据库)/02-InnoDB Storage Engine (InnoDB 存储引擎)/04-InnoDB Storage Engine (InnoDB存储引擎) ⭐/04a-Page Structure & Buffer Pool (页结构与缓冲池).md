@@ -10,7 +10,7 @@ status: 🌱
 
 ## InnoDB 页结构
 
-InnoDB 以**页（Page）** 为最小存储单位，默认 16KB。
+InnoDB 以**页（Page）** 为最小存储单位；常见页大小为 16KB，但可在创建实例时配置，不能把它当作所有部署的固定值。
 
 ```text
 InnoDB Data Page (16KB)
@@ -52,10 +52,10 @@ Buffer Pool 是 InnoDB 在内存中的页缓存，所有读写操作都通过 Bu
 
 **核心参数：**
 ```ini
-# 缓冲池大小（通常设为物理内存的 60-80%）
+# 示例值：Buffer Pool 要为操作系统、连接、排序/临时内存和其他进程留出空间
 innodb_buffer_pool_size = 8G
 
-# 实例数（减少锁竞争，MySQL 5.5+）
+# 实例数属于版本/配置相关的调优项
 innodb_buffer_pool_instances = 8
 
 # 每个实例 ≈ 8GB / 8 = 1GB
@@ -82,7 +82,7 @@ InnoDB 使用改进的 LRU 算法管理 Buffer Pool，将链表分为**年轻代
   3. 否则被淘汰（防止大表扫描污染缓存）
 ```
 
-**innodb_old_blocks_time 的作用（默认 1000ms）：**
+**`innodb_old_blocks_time` 的作用：**
 防止全表扫描或大量数据导入时把热点数据挤出 Buffer Pool。
 
 ## 脏页刷盘
@@ -109,7 +109,11 @@ innodb_page_cleaners = 8
 # 由 innodb_adaptive_flushing = ON 控制
 ```
 
-> [!tip]- **工程要点**：Buffer Pool 命中率是数据库性能的核心指标——命中率 > 99% 意味着内存够大，磁盘 IO 压力小。如果命中率持续低于 95%，考虑增大 innodb_buffer_pool_size。改进型 LRU 的 old_blocks_time 机制对大表扫描场景非常关键，设置为 1000ms 可以有效减少扫描对缓存的冲击。
+> [!tip]- **工程要点**：命中率必须结合工作负载、磁盘延迟、脏页压力和可用内存看；高命中率不自动代表没有瓶颈，低命中率也不必然只靠扩容解决。调 `innodb_buffer_pool_size`、实例数或 old-block 策略前，先记录基线并在目标版本上验证。
+
+## 30 秒回答
+
+**Buffer Pool 做什么？** InnoDB 把数据页和索引页缓存到 Buffer Pool；读未命中才加载页，写先修改内存页，再由后台刷脏页。它用中点插入 LRU 减少大扫描污染热点，但具体参数是负载相关调优项。
 
 ---
 

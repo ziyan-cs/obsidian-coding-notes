@@ -33,7 +33,7 @@ Master                         Binlog         Slave                    Relay Log
   └──────────────────────────────┴──────────────┴─────────────────────────┴─────────────┘
 
 Notes:
-  Async Replication (default)
+  Async Replication (common default)
   Semi-sync: wait for at least one slave ACK before returning to client
   Slave may experience replication lag (seconds to minutes)
 ```
@@ -53,10 +53,10 @@ Slave:
     └─ 连接到主库，请求 binlog
     └─ 将接收到的 binlog 写入 relay log（中继日志）
 
-  SQL Thread
+  SQL / applier thread
     └─ 从 relay log 读取事件
     └─ 在从库上重放 SQL
-    └─ 单线程执行（多线程复制是 MySQL 5.7+ 特性）
+    └─ 可配置并行应用；具体能力和参数随 MySQL 版本变化
 ```
 
 ## 复制流程详解
@@ -91,7 +91,7 @@ Master                             Slave
 ### 半同步复制
 
 ```
-主库提交事务 → 等待至少一个从库确认收到 binlog → 返回客户端
+主库提交事务 → 等待至少一个副本确认收到所需复制日志 → 返回客户端
 
 vim /usr/my.cnf:
   plugin-load = semisync_master.so;semisync_slave.so
@@ -99,20 +99,20 @@ vim /usr/my.cnf:
   rpl_semi_sync_slave_enabled = 1
   rpl_semi_sync_master_timeout = 10000  # 10 秒超时
 
-优点：至少一个从库有数据，主库崩溃不丢数据
+优点：缩小已提交事务未到任何副本的窗口；是否可在故障切换后保住数据还取决于确认点、持久化、拓扑和切换流程
 缺点：写入延迟增加（至少 1 次网络往返）
 ```
 
 ### 组复制（Group Replication, MySQL 5.7+）
 
-使用 Paxos 协议实现多节点强一致性，用于 InnoDB Cluster。
+使用组通信与一致性机制协调成员，用于 InnoDB Cluster；语义、故障处理和版本能力应以当前官方文档验证。
 
 ## 主从延迟的原因
 
 ```
 SHOW SLAVE STATUS\G
 关键字段：
-  Seconds_Behind_Master: 0   ← 延迟秒数，0 表示无延迟
+  Seconds_Behind_Source / Seconds_Behind_Master: 0   ← 仅是一个参考指标；可能为 NULL 或不代表端到端可见性
 
 延迟原因：
   1. 从库 SQL Thread 单线程重放
@@ -177,16 +177,19 @@ WHERE variable_name = 'Seconds_Behind_Master';
 // 写入主库后立即读取 → 强制从主库读（暂时绕过从库）
 User user = masterDb.query("SELECT * FROM user WHERE id = ?", id);
 
-// 写入后等待 100ms 再从库读
-std::this_thread::sleep_for(100ms);
-User user = slaveDb.query("SELECT * FROM user WHERE id = ?", id);
+// 写后读需要明确一致性策略：读主、等待副本追至目标位点，或回退主库。
+// 固定 sleep 不能证明副本已经追上。
 
 // 或：主库写后记录时间戳，从库读时比较延迟
 auto writeTs = std::chrono::steady_clock::now();
 // ... 从库读取检查 repl lag，未追上则回退主库
 ```
 
-> [!tip]- **工程要点**：主从复制的核心矛盾——异步复制可能丢数据，半同步复制增加延迟。大多数业务选择异步复制 + 监控告警（接受秒级延迟的可能性）。对于不能接受任何数据丢失的业务，使用半同步复制或 MySQL InnoDB Cluster。**排查主从延迟的首选命令：** `SHOW SLAVE STATUS\G` 看 `Seconds_Behind_Master` 和 `Slave_SQL_Running_State`。
+> [!tip]- **工程要点**：异步复制、半同步与组复制是在延迟、可用性和数据丢失窗口间取舍，不存在单一“零丢失”按钮。写后读不要固定等待若干毫秒；要么读主，要么依据位点/GTID 等确认副本进度。管理命令和 `Master/Slave` 命名在新版本中已逐步演变为 `Source/Replica`，以当前版本为准。
+
+## 30 秒回答
+
+**复制延迟如何处理？** 先区分日志接收延迟与应用延迟，再看大事务、并行应用能力、硬件与读负载。需要写后读一致时，读主或等待指定复制进度；固定 sleep 只是在赌延迟。
 
 ---
 

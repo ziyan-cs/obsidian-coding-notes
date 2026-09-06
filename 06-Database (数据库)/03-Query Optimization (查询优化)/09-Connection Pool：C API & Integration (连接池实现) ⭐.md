@@ -71,10 +71,9 @@ typedef struct db_connection_pool {
 MySQL 连接可能因为网络超时、服务器重启等原因断开。使用前需要 ping：
 
 ```c
-// MySQL 自带的 ping 命令（自动重连）
+// MySQL 自带的 ping 命令
 int db_conn_alive(db_connection *conn) {
-    // mysql_ping 如果连接断开，会自动重连（如果 CLIENT_RECONNECT 已启用）
-    // 但自动重连不推荐在高并发场景使用（可能导致死锁）
+    // 不要依赖隐式自动重连：重连可能丢失会话状态、事务和临时对象。
     if (mysql_ping(conn->mysql) != 0) {
         // 连接真的断了
         return 0;
@@ -196,7 +195,11 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 }
 ```
 
-> [!tip]- **工程要点**：数据库连接池的坑：1) MySQL `wait_timeout` 默认 8 小时，连接池中的空闲连接可能被 MySQL 服务端断开——所以获取连接时必须先做 `mysql_ping` 或 `SELECT 1` 验证；2) 连接泄露——应用获取连接后必须保证在 finally 中 release；3) 事务未提交——获取连接时注意是否需要回滚残留事务。推荐 C++ 项目使用成熟的连接池库如 AliSQL 的 ConnectionPool 或自研基于 `MYSQL` 句柄池的封装。
+> [!tip]- **工程要点**：池大小、等待时间、`wait_timeout` 与服务端 `max_connections` 都必须按数据库容量和应用并发压测决定。归还连接前必须回滚未完成事务、清理会话状态；断线后显式重建连接，不依赖隐式自动重连。优先选维护活跃、与当前客户端库兼容的实现，而不是只因名称推荐某个连接池。
+
+## 30 秒回答
+
+**连接池为什么不能只调大？** 每个连接都消耗数据库端内存、线程/调度与锁竞争预算；池过大可能让数据库更慢。先设上限和超时，归还时清理事务状态，断线后显式建新，并用指标验证排队与数据库负载。
 
 ---
 

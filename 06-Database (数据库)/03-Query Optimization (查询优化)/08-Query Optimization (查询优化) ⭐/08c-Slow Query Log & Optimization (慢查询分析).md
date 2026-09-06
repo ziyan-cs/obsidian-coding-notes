@@ -14,7 +14,7 @@ status: 🌱
 # my.cnf 配置
 slow_query_log = ON
 slow_query_log_file = /var/log/mysql/slow.log
-long_query_time = 1            # 超过 1 秒的 SQL 记录（生产建议 0.5-1 秒）
+long_query_time = 1            # 示例阈值；按 SLO、负载和日志成本设定
 log_queries_not_using_indexes = ON  # 未使用索引的查询也记录
 log_slow_admin_statements = ON  # 记录 ALTER TABLE 等慢管理语句
 min_examined_row_limit = 100    # 只记录扫描行数 > 100 的查询
@@ -162,7 +162,11 @@ pt-query-digest /var/log/mysql/slow.log
 #       响应时间分布
 ```
 
-> [!tip]- **工程要点**：慢查询处理的黄金流程——1) `long_query_time=0.5` 开启慢查询日志；2) `pt-query-digest` 分析并找到 TOP N 慢 SQL；3) `EXPLAIN` 分析执行计划；4) 根据索引失效原因优化索引或重写 SQL；5) 验证优化效果。**不要试图一次优化所有慢查询——投入产出比最高的永远是执行频率高、单次耗时长的查询。**
+> [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
+
+## 30 秒回答
+
+**慢查询怎么优化？** 先从日志中按总影响排序，再复现真实参数，查看执行计划与扫描量，确认索引、数据分布和 SQL 语义。改完必须比较端到端延迟与写入成本；“看起来走索引”不是优化完成的证据。
 
 ---
 
