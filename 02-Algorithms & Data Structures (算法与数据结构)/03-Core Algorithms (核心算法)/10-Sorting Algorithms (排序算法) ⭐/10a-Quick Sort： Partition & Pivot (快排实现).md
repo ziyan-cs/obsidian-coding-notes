@@ -25,7 +25,7 @@ void quickSortV1(vector<int>& arr, int L, int R) {
 }
 ```
 
-# 快排 2.0
+## 快排 2.0
 
 ```cpp
 void quickSortV2(vector<int>& arr, int L, int R) {
@@ -52,7 +52,7 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 }
 ```
 
-# 快排 3.0
+## 快排 3.0
 
 ```cpp
 void quickSortV3(vector<int>& arr, int L, int R) {
