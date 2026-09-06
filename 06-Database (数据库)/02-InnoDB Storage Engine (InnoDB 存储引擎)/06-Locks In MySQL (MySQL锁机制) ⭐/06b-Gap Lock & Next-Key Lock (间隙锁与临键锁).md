@@ -15,6 +15,9 @@ verified: stable
 
 Gap Lock 解决**幻读**问题——在 RR 级别下防止其他事务插入新行：
 
+> [!warning] 锁范围不是按这页图示机械推导
+> 实际 record/gap/next-key 锁取决于隔离级别、语句是否为 locking read、索引是否命中、唯一性、范围边界和 MySQL 版本。图示用于理解区间模型；排障必须查看 `performance_schema.data_locks` 与实际执行计划。
+
 ```
 场景：用户表，id 为主键 1, 5, 10
 
@@ -125,7 +128,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 无索引       | 任何查询    | 全表锁（逐行加 Next-Key Lock）
 ```
 
-> [!tip]- **工程要点**：Gap Lock 的锁定范围比想象的大——一个 WHERE 条件可能会锁住大半个索引树。典型故障：RR 级别下一个大范围 UPDATE 导致整个表无法插入新数据。排查手段：`SELECT * FROM performance_schema.data_locks` 查看具体锁范围。如果业务不要求 RR 的可重复读，使用 RC 级别可以完全避免 Gap Lock。
+> [!tip]- **工程要点**：范围条件可能锁住比业务直觉更大的索引区间。排查时用 `performance_schema.data_locks`、事务信息和执行计划确认实际锁范围；切换 RC 可能减少部分 gap locking，但并不保证所有场景都没有 gap lock，须结合当前版本与约束验证。
 
 ## 30 秒回答 / 自测
 

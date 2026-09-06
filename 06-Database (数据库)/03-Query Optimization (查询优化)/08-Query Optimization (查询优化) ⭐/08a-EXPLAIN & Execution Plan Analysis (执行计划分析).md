@@ -24,7 +24,7 @@ EXPLAIN SELECT * FROM user WHERE age > 20\G
 | type | 访问类型 | system > const > eq_ref > ref > range > index > ALL |
 | key | 使用的索引 | 实际使用的索引名，NULL = 未使用索引 |
 | rows | 扫描行数估计 | 越小越好，与实际行数差距大说明统计信息不准 |
-| Extra | 额外信息 | Using index（好）、Using filesort（坏）、Using temporary（坏）|
+| Extra | 额外信息 | 结合语句与数据量解释；`Using index`、`filesort`、temporary 都不是脱离上下文的好坏标签 |
 
 ## type 访问类型详解
 
@@ -61,21 +61,21 @@ EXPLAIN SELECT * FROM user WHERE address = 'CN';
 
 ## Extra 信息解读
 
-**好兆头：**
+**需要理解的信号：**
 
 | Extra | 含义 |
 |-------|------|
 | Using index | 覆盖索引，无需回表 |
 | Using index condition | 索引条件下推（ICP） |
-| Using where | 在存储引擎层过滤 |
+| Using where | MySQL Server 层仍需按条件过滤一部分行；不必然是问题 |
 
 **坏兆头：**
 
 | Extra | 含义 | 优化方向 |
 |-------|------|---------|
-| Using filesort | 文件排序（非索引排序） | 添加排序字段到索引 |
-| Using temporary | 使用临时表（GROUP BY 无索引） | 添加 GROUP BY 字段到索引 |
-| Using join buffer | 联表未使用索引 | 为联表字段添加索引 |
+| Using filesort | 额外排序步骤，不等于一定落盘 | 结合行数、`ORDER BY`、LIMIT 与耗时判断 |
+| Using temporary | 中间结果需要临时表 | 检查聚合/排序/数据量，而非机械加索引 |
+| Using join buffer | join 未能直接使用理想索引访问 | 检查连接条件、驱动表与索引选择 |
 
 ## 常见慢 SQL 分析与优化
 
@@ -93,8 +93,8 @@ CREATE INDEX idx_status ON `order`(status);
 -- 慢（Extra: Using filesort）
 EXPLAIN SELECT * FROM user WHERE age > 20 ORDER BY create_time;
 
--- 优化：建立复合索引（过滤 + 排序一起满足）
-CREATE INDEX idx_age_create ON user(age, create_time);
+-- 注意：age 是范围条件时，(age, create_time) 通常不能同时消除 create_time 排序。
+-- 先用 EXPLAIN ANALYZE 比较候选索引与实际代价，再按业务的筛选/排序模式设计。
 ```
 
 **场景 3：大表 LIMIT 分页**
@@ -129,7 +129,7 @@ SELECT * FROM user WHERE MATCH(name) AGAINST('zhang');
 -- OR 可能不走索引
 SELECT * FROM user WHERE name = 'Bob' OR age = 20;
 
--- 优化：改为 UNION ALL
+-- 仅当两个分支语义不重叠，或你能接受/显式处理重复行时才考虑 UNION ALL
 SELECT * FROM user WHERE name = 'Bob'
 UNION ALL
 SELECT * FROM user WHERE age = 20;
@@ -147,7 +147,11 @@ SELECT * FROM user WHERE age = 20;
 -- 5. 联表时被驱动表的 type 是否为 eq_ref / ref？
 ```
 
-> [!tip]- **工程要点**：EXPLAIN 是 SQL 优化的第一工具，但 rows 是估计值不一定精确，可用 `ANALYZE TABLE` 更新统计信息。MySQL 8.0 的 `EXPLAIN ANALYZE` 可以给出实际执行时间：`EXPLAIN ANALYZE SELECT * FROM user WHERE age > 20`——比传统 EXPLAIN 更准确。
+> [!tip]- **工程要点**：EXPLAIN 是提出假设的起点，`rows` 是估计而非测量。可在合适环境用 `EXPLAIN ANALYZE`、慢日志与真实参数验证，再决定是否改索引或 SQL；避免为了消除某个 Extra 字段而制造更差的写入代价。
+
+## 30 秒回答
+
+读 EXPLAIN 先看访问路径、估算扫描行数、连接顺序与过滤/排序是否符合预期，而不是背 `type` 排名或见到 `filesort` 就建索引。索引必须同时服务真实的 WHERE、JOIN、ORDER BY 和写入成本；用实际执行数据验证优化是否减少端到端延迟。
 
 ---
 
