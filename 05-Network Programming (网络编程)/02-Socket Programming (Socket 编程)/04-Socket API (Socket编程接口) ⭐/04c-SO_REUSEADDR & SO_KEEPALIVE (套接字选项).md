@@ -4,8 +4,11 @@ tags:
 status: 🌱
 ---
 
-> [!important] **核心考点**：SO_REUSEADDR 解决 TIME_WAIT 复用、SO_KEEPALIVE 心跳保活、TCP_NODELAY 与 Nagle 算法
-# setsockopt
+> [!important] **核心考点**：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
+
+# Socket Options — 套接字选项
+
+## setsockopt
 
 ```cpp
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen); 
@@ -26,7 +29,7 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
     
 - **optval**: 选项值的指针（如 int、struct timeval 等）
 
-# SO_REUSEADDR
+## SO_REUSEADDR
 
 ```c
 int opt = 1;
@@ -36,7 +39,7 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 ## 作用一：服务端重启后立即端口复用
 
-服务端正常关闭后，监听端口会进入 **TIME_WAIT（2MSL）**，默认情况下这段时间内无法重新 bind 同一端口。开启 **SO_REUSEADDR** 可以直接绑定。
+是否可重绑及冲突规则受操作系统、绑定地址和已有 socket 状态影响。`SO_REUSEADDR` 常用于降低服务重启时的地址占用影响，但它不是跨平台的“无条件端口复用”开关；部署前应按目标系统验证。
 
 ## 作用二：允许多个 socket 绑定同一端口（配合 **SO_REUSEPORT**）
 
@@ -50,7 +53,7 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 ---
 
-# SO_KEEPALIVE
+## SO_KEEPALIVE
 
 ```c
 int opt = 1;
@@ -87,7 +90,11 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 | 检测粒度 | TCP 连接存活     | 应用进程是否正常响应 |
 | 推荐场景 | 兜底保障         | 生产环境主要机制   |
 
-> 应用层心跳能检测到"进程卡死但 TCP 连接还在"的情况，SO_KEEPALIVE 检测不到。
+> 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
+
+## 30 秒回答
+
+**`SO_REUSEADDR` 和 `SO_REUSEPORT` 有何区别？** 前者主要影响地址重用语义，后者在支持的平台上允许多个监听 socket 共享地址并参与内核分发；两者都不能脱离操作系统语义单独背结论。keepalive 是 TCP 层故障探测，不能替代业务心跳。
 
 ---
 

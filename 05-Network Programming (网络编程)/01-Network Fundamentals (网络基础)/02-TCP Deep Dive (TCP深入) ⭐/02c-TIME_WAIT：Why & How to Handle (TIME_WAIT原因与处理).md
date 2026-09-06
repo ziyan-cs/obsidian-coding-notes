@@ -13,7 +13,7 @@ verified: stable
 
 ## 为什么存在 TIME_WAIT？
 
-TIME_WAIT 是主动关闭方在发送最后一个 ACK 后进入的等待状态，持续 **2MSL**（通常 60~120 秒）。
+TIME_WAIT 是主动关闭方在发送最后一个 ACK 后进入的等待状态，持续 **2MSL**。实际时长、端口范围和相关 sysctl 取决于操作系统与内核版本；不要把某个 Linux 环境的数值当作通用常量。
 
 **两个核心原因：**
 
@@ -39,33 +39,33 @@ TIME_WAIT 是主动关闭方在发送最后一个 ACK 后进入的等待状态�
 在**高并发短连接**场景下（如 HTTP/1.0、频繁建连的微服务），TIME_WAIT 会大量堆积：
 
 - 每个 TIME_WAIT 状态的连接占用一个本地端口
-- Linux 默认端口范围约 28000 个（`/proc/sys/net/ipv4/ip_local_port_range`）
+- 可用临时端口范围受系统配置限制（Linux 可查看 `/proc/sys/net/ipv4/ip_local_port_range`）
 - 端口耗尽 → 新连接无法建立 → 服务不可用
 
 ---
 
 ## 处理方案
 
-### 方案一：开启 tcp_tw_reuse（推荐）
+### 方案一：评估 `tcp_tw_reuse`（仅在明确的 Linux 出站连接场景）
 
 bash
 
 ```bash
 # 允许将 TIME_WAIT 状态的连接重用于新的出站连接
 net.ipv4.tcp_tw_reuse = 1
-# 必须同时开启时间戳，才能安全区分新旧报文
+# 行为依内核版本和时间戳配置而异，变更前核对当前内核文档并压测验证
 net.ipv4.tcp_timestamps = 1
 ```
 
-- 只对**客户端（主动发起连接方）**有效
-- 依赖时间戳选项确保安全
+- 面向主动发起的出站连接；不应作为服务端监听端口重启的首选手段
+- 具体语义存在内核版本差异，标记为 **NEEDS_VERIFY**
 
-### 方案二：缩短 FIN_TIMEOUT
+### 不要混淆：`tcp_fin_timeout`
 
 bash
 
 ```bash
-net.ipv4.tcp_fin_timeout = 30   # 默认 60s，可适当减小
+net.ipv4.tcp_fin_timeout = 30   # 影响 FIN-WAIT-2 相关超时，不是 TIME_WAIT 时长开关
 ```
 
 ### 方案三：使用长连接 / 连接池（根本方案）
@@ -99,6 +99,10 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 |端口耗尽|大量短连接主动关闭|tcp_tw_reuse + 长连接|
 |服务重启失败|端口被 TIME_WAIT 占用|SO_REUSEADDR|
 |残留报文干扰|TIME_WAIT 本身的作用|不应跳过，依赖时间戳保护|
+
+## 30 秒回答
+
+**TIME_WAIT 为什么存在？** 它由主动关闭方保持，用于重发最后 ACK 的机会，并降低旧连接报文干扰同四元组新连接的风险。大量 TIME_WAIT 首先说明连接创建/关闭过于频繁；优先复用连接、控制请求生命周期，再谨慎评估内核参数。
 
 ---
 
