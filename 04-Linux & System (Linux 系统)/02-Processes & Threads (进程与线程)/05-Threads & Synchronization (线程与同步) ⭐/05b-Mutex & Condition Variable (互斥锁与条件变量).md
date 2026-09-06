@@ -87,7 +87,7 @@ void *producer(void *arg) {
 
 ### 为什么 while 而不是 if？
 
-**虚假唤醒（Spurious Wakeup）**：线程可能在没有收到 signal 的情况下被操作系统唤醒。用 `while` 重新检查条件，确保条件真正满足才继续。
+**虚假唤醒与竞争唤醒**：线程可能在没有收到 signal 的情况下醒来；即使收到通知，其他线程也可能先拿锁并改变条件。用 `while` 在持锁状态重新检查 predicate，确保条件真的满足。
 
 ### pthread_cond_wait 的原子性
 
@@ -120,3 +120,7 @@ pthread_rwlock_unlock(&rwlock);
 适合：**读多写少**的场景（如配置、缓存）。写多时写者频繁等待，反而不如 mutex。
 
 互斥锁与条件变量详解见 → [POSIX Thread (线程生命周期)](/04-Linux%20&%20System%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md) · [Deadlock (死锁原理与预防)](/04-Linux%20&%20System%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
+
+## 30 秒回答
+
+mutex 保护共享不变量；condition variable 不保存条件本身，只负责等待/通知，所以必须配合受同一 mutex 保护的 predicate，并在 `while` 中等待。通知不是“事件不会丢”的保证，正确性来自“修改 predicate 与检查 predicate 都在锁下”。

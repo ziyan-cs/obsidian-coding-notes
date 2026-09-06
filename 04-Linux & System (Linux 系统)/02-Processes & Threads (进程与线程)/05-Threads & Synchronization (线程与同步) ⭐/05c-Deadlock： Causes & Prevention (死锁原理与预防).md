@@ -50,10 +50,10 @@ lock(mutex2);  ←─等待─→     lock(mutex1);
 ```cpp
 // C++17 std::scoped_lock（自动避免死锁顺序问题）
 std::mutex m1, m2;
-std::scoped_lock lock(m1, m2);   // 原子地获取两个锁
+std::scoped_lock lock(m1, m2);   // 使用避免死锁的多锁获取算法
 ```
 
-`std::scoped_lock` 内部使用 `std::lock`，采用 **try-and-back-off** 策略避免死锁（如果拿不到所有锁，释放已拿到的，稍后重试）。
+`std::scoped_lock`（多锁构造）使用避免死锁的获取算法；它不表示“硬件原子地同时拿到所有锁”，而是保证调用按标准语义避免相互等待。
 
 ### 策略三：使用 trylock + 超时（破坏不可剥夺）
 
