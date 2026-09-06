@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Iterators Algorithms and Adapters (迭代器算法与适配器)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## Container Adapters (容器适配器)
+# Container Adapters (容器适配器)
 
 > [!note] 本节重点：核心考点：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
-## 适配器模式
+# 适配器模式
 
 容器适配器**封装**底层容器，只暴露特定接口：
 
@@ -23,7 +21,7 @@ verified: 2026-09-06
 | `queue`（队列） | `deque` | FIFO |
 | `priority_queue`（优先队列） | `vector` | 大根堆（默认）|
 
-## stack
+# stack
 
 ```cpp
 // 默认 deque 做底层，也可以指定 vector/list
@@ -42,7 +40,7 @@ s.empty(); s.size();
 - vector 尾部也是 O(1) 但可能重分配（拷贝所有元素）
 - list 尾部 O(1) 但内存开销大、缓存不友好
 
-## queue
+# queue
 
 ```cpp
 std::queue<int> q;
@@ -52,7 +50,7 @@ q.front();  q.back();   // 访问队首/队尾
 
 **不支持迭代器遍历**— 只能逐个出队。
 
-## priority_queue
+# priority_queue
 
 ```cpp
 // 默认大根堆（最大元素在 top）
@@ -104,11 +102,11 @@ STL 容器全览详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%20Backend
 
 ---
 
-## Iterators and Categories (迭代器分类)
+# Iterators and Categories (迭代器分类)
 
 > [!note] 本节重点：核心考点：迭代器分类是 STL 算法与容器的桥梁，决定了算法可以用于哪些容器
 
-## 迭代器分类体系
+# 迭代器分类体系
 
 ```text
 输入迭代器 (Input)
@@ -131,7 +129,7 @@ STL 容器全览详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%20Backend
 | **随机访问** | 双向 + `it+n`、`it-n`、`it[n]`、`it1-it2`、`<`/`>` | `vector`、`deque`、`array` |
 | **连续迭代器** | 随机访问 + 元素在内存中连续 | `vector`、`array`、`string` |
 
-## 迭代器标签与算法分发
+# 迭代器标签与算法分发
 
 ```cpp
 // 迭代器通过 tag 标识自己的类别
@@ -161,7 +159,7 @@ void advance(Iter& it, Dist n) {
 }
 ```
 
-## 迭代器失效速查
+# 迭代器失效速查
 
 | 容器 | insert | erase | push_back | resize | rehash |
 |------|--------|-------|-----------|--------|--------|
@@ -171,7 +169,7 @@ void advance(Iter& it, Dist n) {
 | `map`/`set` | ❌ 不影响 | ❌ 仅被删元素 | — | — | — |
 | `unordered_map` | 不 rehash 时通常不影响；rehash 时全失效 | 仅被删元素失效 | — | — | **全失效** |
 
-## 反向迭代器
+# 反向迭代器
 
 ```cpp
 // rbegin() → 最后一个元素
@@ -185,7 +183,7 @@ auto rit = v.rbegin();
 auto fit = rit.base();  // fit 指向 rit 的下一个位置（正向视角）
 ```
 
-## 迭代器适配器
+# 迭代器适配器
 
 | 适配器 | 作用 |
 |--------|------|
@@ -210,7 +208,7 @@ std::vector<int> data(in, end);
 
 > **面试重点**：为什么 `list::sort` 不使用标准 `std::sort`？因为 `std::sort` 需要**随机访问迭代器**（它使用快速排序/内省排序），而 `list` 只提供双向迭代器，所以 `list` 自带了基于归并排序的 `list::sort()`。
 
-## 30 秒回答
+# 30 秒回答
 
 **迭代器失效如何避免？** 先看操作会不会重分配或 `rehash`；对 `vector`，插入/扩容后不要继续使用旧迭代器；遍历删除时使用 `it = container.erase(it)` 接住返回值。容器的精确规则随操作和位置不同，拿不准时查对应容器文档，不要套用“某容器永不失效”的口诀。
 
@@ -222,13 +220,13 @@ std::vector<int> data(in, end);
 
 ---
 
-## Algorithm Library (算法库速查)
+# Algorithm Library (算法库速查)
 
 > [!note] 本节重点：核心考点：STL 算法的分类、迭代器要求、Lambda 配合使用
 
-## 分类速查
+# 分类速查
 
-### 不修改序列的操作
+## 不修改序列的操作
 
 | 算法 | 作用 | 迭代器要求 |
 |------|------|-----------|
@@ -241,7 +239,7 @@ std::vector<int> data(in, end);
 | `all_of` / `any_of` / `none_of` | 区间谓词判断 | Input |
 | `for_each` | 对每个元素执行操作 | Input |
 
-### 修改序列的操作
+## 修改序列的操作
 
 | 算法 | 作用 | 迭代器要求 |
 |------|------|-----------|
@@ -260,7 +258,7 @@ std::vector<int> data(in, end);
 
 > **重要**：`remove` 不删除元素，它把元素移到末尾返回新的 logical end，然后需要调用 `erase`（即 **erase-remove idiom**）。
 
-### 排序与二分
+## 排序与二分
 
 | 算法 | 作用 | 迭代器要求 |
 |------|------|-----------|
@@ -274,7 +272,7 @@ std::vector<int> data(in, end);
 | `partition` | 分区（不稳定）| Forward |
 | `stable_partition` | 稳定分区 | Bidirectional |
 
-### 集合操作（有序区间）
+## 集合操作（有序区间）
 
 | 算法 | 作用 |
 |------|------|
@@ -285,7 +283,7 @@ std::vector<int> data(in, end);
 | `includes` | 子集判断 |
 | `inplace_merge` | 原地归并 |
 
-### 堆操作
+## 堆操作
 
 | 算法 | 作用 |
 |------|------|
@@ -295,7 +293,7 @@ std::vector<int> data(in, end);
 | `sort_heap` | 堆排序 |
 | `is_heap` / `is_heap_until` | 检查是否为堆 |
 
-### 最值与排列
+## 最值与排列
 
 | 算法 | 作用 |
 |------|------|
@@ -305,7 +303,7 @@ std::vector<int> data(in, end);
 | `next_permutation` / `prev_permutation` | 全排列迭代 |
 | `lexicographical_compare` | 字典序比较 |
 
-## Erase-Remove Idiom（核心模式）
+# Erase-Remove Idiom（核心模式）
 
 ```cpp
 // remove 不会真正删除元素！
@@ -322,7 +320,7 @@ v.erase(new_end, v.end());
 v.erase(std::remove(v.begin(), v.end(), 2), v.end());
 ```
 
-## 自定义比较与 Lambda
+# 自定义比较与 Lambda
 
 ```cpp
 struct Person { std::string name; int age; };
@@ -344,7 +342,7 @@ std::sort(people.begin(), people.end(),
 // 但普通 STL 需要用 lambda 手动包装
 ```
 
-## 算法性能指南
+# 算法性能指南
 
 | 算法 | 复杂度 | 注意 |
 |------|--------|------|
@@ -366,11 +364,11 @@ STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%
 
 ---
 
-## STL Reference (STL 速查总览)
+# STL Reference (STL 速查总览)
 
 > [!note] 本节重点：核心考点：容器选择决策、复杂度一览、面试前快速复习用
 
-## 容器选择树
+# 容器选择树
 
 ```text
 需要连续内存？
@@ -385,7 +383,7 @@ STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%
                 └── 否 → O(1) 查找？→ unordered_map / unordered_set ⭐
 ```
 
-## 复杂度对比
+# 复杂度对比
 
 | 容器 | 随机访问 | 头插 | 尾插 | 中间插入 | 查找 |
 |------|---------|------|------|---------|------|
@@ -395,7 +393,7 @@ STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%
 | `map` | ❌ | — | — | O(log N) | O(log N) |
 | `unordered_map` | ❌ | — | — | 均摊 O(1) | 均摊 O(1) ✅ |
 
-## 内存与迭代器稳定性
+# 内存与迭代器稳定性
 
 | 容器 | 元素存储 | 插入迭代器影响 | erase 迭代器影响 |
 |------|---------|---------------|-----------------|
@@ -405,7 +403,7 @@ STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%
 | `map/set` | 树节点 | ❌ 不影响 | 仅被删元素 |
 | `unordered_map` | 哈希桶 | rehash 时全失效 | 仅被删元素 |
 
-## 记忆口诀
+# 记忆口诀
 
 ```text
 vector 数组动态长  随机访问最在行
@@ -415,19 +413,19 @@ map set 红黑树  排序查找两不误
 unordered 哈希表  飞一般的查找
 ```
 
-## 面试前必记
+# 面试前必记
 
-### 扩容策略
+## 扩容策略
 - `vector`：1.5x-2x 扩容，重分配时移动/拷贝所有元素
 - `unordered_map`：超过 max_load_factor 时 rehash（通常 2x bucket 数）
 - `deque`：不移动已有元素，只分配新 block
 
-### 迭代器失效
+## 迭代器失效
 - `vector` push_back 触发扩容 → **全部**失效
 - `deque` 中间插入 → **全部**失效（两端插入不影响）
 - `vector` erase(pos) → pos **之后**全部失效
 
-### 特例
+## 特例
 - `vector<bool>` 不是标准容器（bit-packed，`operator[]` 返回代理对象）
 - `list::sort` 用归并排序，不是 `std::sort`
 - `stack`/`queue` 默认底层是 `deque` 不是 `vector`
@@ -439,26 +437,26 @@ unordered 哈希表  飞一般的查找
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Iterators Algorithms and Adapters (迭代器算法与适配器)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

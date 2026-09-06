@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Redis Data Structures (Redis 数据结构)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
-## SDS Strings (简单动态字符串)
+# SDS Strings (简单动态字符串)
 
 > [!note] 本节重点：核心考点：> SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
-## SDS 结构
+# SDS 结构
 
 Redis 自定义的字符串类型，替代 C 字符串（`char*`）：
 
@@ -37,7 +35,7 @@ struct sdshdr8 {
 
 ---
 
-## SDS 相比 C 字符串的优势
+# SDS 相比 C 字符串的优势
 
 | 问题 | C 字符串 | SDS |
 |------|---------|-----|
@@ -49,7 +47,7 @@ struct sdshdr8 {
 
 ---
 
-## 内存预分配策略
+# 内存预分配策略
 
 ```c
 // SDS 扩容策略（sds.c 中的 sdsMakeRoomFor）
@@ -67,7 +65,7 @@ else
 
 ---
 
-## SDS API 速查
+# SDS API 速查
 
 ```c
 sds s = sdsnew("hello");        // 创建，O(len)
@@ -84,7 +82,7 @@ sdsfree(s);                     // 释放
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -99,16 +97,15 @@ sdsfree(s);                     // 释放
 ---
 
 
-
 压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
 
 ---
 
-## ziplist and listpack (压缩列表)
+# ziplist and listpack (压缩列表)
 
 > [!note] 本节重点：核心考点：> ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 
-## ziplist（压缩列表）
+# ziplist（压缩列表）
 
 Redis 为小数据量设计的紧凑型双向链表结构，连续内存存储：
 
@@ -120,7 +117,7 @@ ziplist 整体布局：
 └─────────┴────────┴───────┴───────┴───────┴─────┴───────┘
 ```
 
-### 每个 entry 的结构
+## 每个 entry 的结构
 
 ```
 ┌────────────────┬────────────────┬────────────────┐
@@ -133,7 +130,7 @@ ziplist 整体布局：
 - **encoding**：编码类型（整数/字符串长度）
 - **content**：实际数据
 
-### 连锁更新
+## 连锁更新
 
 ```c
 // 问题场景：连续多个 entry 长度都在 250-253 之间
@@ -148,7 +145,7 @@ ziplist 整体布局：
 
 ---
 
-## listpack（紧凑列表）
+# listpack（紧凑列表）
 
 Redis 5.0 引入，旨在替代 ziplist，解决连锁更新问题：
 
@@ -169,7 +166,7 @@ listpack: [encoding] [content]  [backlen]
 
 ---
 
-## 使用条件
+# 使用条件
 
 ```c
 // Redis 配置
@@ -182,7 +179,7 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | ziplist 连锁更新 | 修改一个 entry 导致后续 entry 的 prev_len 扩张，概率极低 |
@@ -199,11 +196,11 @@ Redis 底层数据结构详解见 → [01a1-SDS：Simple Dynamic String (简单�
 
 ---
 
-## skiplist (跳表)
+# skiplist (跳表)
 
 > [!note] 本节重点：核心考点：> 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 
-## 跳表（Skiplist）
+# 跳表（Skiplist）
 
 Redis Sorted Set 的有序结构核心，基于多级索引的链表：
 
@@ -220,7 +217,7 @@ Level 2: HEAD ────→ 12 ─→ 17 ──────→ 25 ────
 Level 1: HEAD ────→ 12 ─→ 17 → 19 ─→ 25 ─→ 31 ───────→ 55 ─────→ 67 ───→ ∞
 ```
 
-### 节点结构
+## 节点结构
 
 ```c
 #define ZSKIPLIST_MAXLEVEL 32  // 最大层数（2^32 个元素足够）
@@ -243,7 +240,7 @@ typedef struct zskiplist {
 } zskiplist;
 ```
 
-### 层高生成算法
+## 层高生成算法
 
 ```c
 // 每次创建节点时随机生成层高
@@ -260,7 +257,7 @@ int zslRandomLevel(void) {
 
 ---
 
-## 操作复杂度
+# 操作复杂度
 
 | 操作 | 跳表 | 平衡树 | B+ 树 |
 |------|------|--------|-------|
@@ -278,7 +275,7 @@ int zslRandomLevel(void) {
 
 ---
 
-## ZSet 使用的两种结构
+# ZSet 使用的两种结构
 
 ```c
 // ZSet 底层 = ziplist (小数据) + dict + skiplist (大数据)
@@ -295,7 +292,7 @@ typedef struct zset {
 
 ---
 
-## 经典题型速查 · 延伸要点 3
+# 经典题型速查 · 延伸要点 3
 | 题型 | 要点 |
 |------|------|
 | 跳表查找流程 | 从最高层向右&向下，类似"二分查找的链表版" |
@@ -310,16 +307,15 @@ typedef struct zset {
 ---
 
 
-
 动态字符串实现见 → [01a1-SDS：Simple Dynamic String (简单动态字符串)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a1-SDS：Simple%20Dynamic%20String%20(简单动态字符串).md) · [01a4-dict：Hash Table Rehashing (字典与渐进式rehash)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a4-dict：Hash%20Table%20Rehashing%20(字典与渐进式rehash)%20⭐.md)
 
 ---
 
-## dict Hash Table (字典与渐进式 rehash)
+# dict Hash Table (字典与渐进式 rehash)
 
 > [!note] 本节重点：核心考点：> dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
-## Redis dict 结构
+# Redis dict 结构
 
 ```c
 // Redis 字典核心结构
@@ -351,9 +347,9 @@ typedef struct dictEntry {
 
 ---
 
-## Rehash 机制
+# Rehash 机制
 
-### 触发条件
+## 触发条件
 
 ```c
 // 扩容条件（负载因子）
@@ -365,7 +361,7 @@ typedef struct dictEntry {
 // 扩容后新 size = 第一个 >= ht[0].used * 2 的 2^n
 ```
 
-### 渐进式 Rehash
+## 渐进式 Rehash
 
 ```c
 // 核心思想：分批迁移，避免一次 rehash 阻塞服务
@@ -409,7 +405,7 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-## 对比 Java HashMap
+# 对比 Java HashMap
 
 | 特性 | Redis dict | Java HashMap |
 |------|-----------|-------------|
@@ -421,7 +417,7 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-## 经典题型速查 · 延伸要点 4
+# 经典题型速查 · 延伸要点 4
 | 题型 | 要点 |
 |------|------|
 | 渐进式 rehash 如何不阻塞 | 每次操作只迁移 1 个 bucket，穿插在正常请求中 |
@@ -437,31 +433,30 @@ void dictRehash(dict *d, int n) {
 ---
 
 
-
 压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Redis Data Structures (Redis 数据结构)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

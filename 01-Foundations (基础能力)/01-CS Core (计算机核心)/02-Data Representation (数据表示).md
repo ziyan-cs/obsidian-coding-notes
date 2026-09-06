@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Data Representation (数据表示)
-
 > [!abstract] 学习定位：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
 
-## Binary and Encoding (二进制与编码)
+# Binary and Encoding (二进制与编码)
 
 > [!note] 本节重点：核心考点：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
 
-## 进制转换
+# 进制转换
 
 ```cpp
 // 任意进制转十进制：按权展开
@@ -49,7 +47,7 @@ string fromDecimal(int val, int base) {
 | 十进制 | 无 | `13` |
 | 十六进制 | `0x` | `0xD = 13` |
 
-## 原码、反码、补码
+# 原码、反码、补码
 
 | 编码 | 正数 | 负数 |
 |------|------|------|
@@ -59,13 +57,13 @@ string fromDecimal(int val, int base) {
 
 **补码设计的精妙之处：** 将减法转为加法，`x - y = x + (~y + 1)`，CPU 只需加法器。
 
-## ASCII 与 Unicode
+# ASCII 与 Unicode
 
 - **ASCII**：7 位编码（0-127），表示英文字母、数字、控制字符
 - **Unicode**：统一字符集，为世界上每种语言的每个字符分配唯一码点（U+xxxx）
 - **UTF-8**：Unicode 的可变长度编码（1-4 字节），向后兼容 ASCII
 
-### UTF-8 编码规则
+## UTF-8 编码规则
 
 | 码点范围 | 字节数 | 编码格式 |
 |----------|--------|----------|
@@ -81,16 +79,15 @@ string fromDecimal(int val, int base) {
 
 ---
 
-
 整数与浮点数表示详见 → [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md) · [Floating Point（浮点数）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/03-Floating%20Point%20(浮点数).md)
 
 ---
 
-## Integer Representation (整数表示)
+# Integer Representation (整数表示)
 
 > [!note] 本节重点：核心考点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
 
-## 有符号与无符号
+# 有符号与无符号
 
 | 类型 | N 位范围 | 说明 |
 |------|---------|------|
@@ -109,7 +106,7 @@ a < b;  // false！a 被隐式转为 unsigned → 4294967295 > 1
 
 **规则：** 有符号与无符号混合运算时，有符号隐式转为无符号。
 
-## 整数溢出
+# 整数溢出
 
 | 溢出类型 | 现象 | 例子 |
 |---------|------|------|
@@ -121,7 +118,7 @@ a < b;  // false！a 被隐式转为 unsigned → 4294967295 > 1
 - 用 `checked_add` / `__builtin_add_overflow` 检测溢出
 - 计算前做范围检查：`if (a > INT_MAX - b) { /* 溢出 */ }`
 
-## 符号扩展与截断
+# 符号扩展与截断
 
 ```cpp
 // 符号扩展：短类型→长类型，高位补符号位
@@ -139,16 +136,15 @@ int16_t y = x;             // 0x5678（高位丢失）
 
 ---
 
-
 二进制编码与浮点数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Floating Point（浮点数）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/03-Floating%20Point%20(浮点数).md)
 
 ---
 
-## Floating Point (浮点数)
+# Floating Point (浮点数)
 
 > [!note] 本节重点：核心考点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
 
-## IEEE 754 浮点数格式
+# IEEE 754 浮点数格式
 
 ```
 float (32 位)：  [1 位符号][8 位指数][23 位尾数]
@@ -161,7 +157,7 @@ double (64 位)： [1 位符号][11 位指数][52 位尾数]
 - **M**：尾数（隐含前导 1，即实际存储小数部分）
 - **E**：指数（偏移编码，float bias=127, double bias=1023）
 
-## 精度与范围
+# 精度与范围
 
 | 类型 | 有效位数 | 最大值 | 精度 |
 |------|---------|--------|------|
@@ -178,7 +174,7 @@ if (a == b)   // ❌
 if (fabs(a - b) < 1e-9)  // ✅
 ```
 
-## 特殊值
+# 特殊值
 
 | 值 | 指数 | 尾数 | 说明 |
 |----|------|------|------|
@@ -187,7 +183,7 @@ if (fabs(a - b) < 1e-9)  // ✅
 | ∞ | 全 1 | 全 0 | 正/负无穷大 |
 | NaN | 全 1 | 非 0 | 非法运算结果（如 0/0） |
 
-## 常见问题
+# 常见问题
 
 ```cpp
 // 大数吃小数
@@ -203,16 +199,15 @@ float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16
 
 ---
 
-
 二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
 
 ---
 
-## Bitwise Operations (位运算)
+# Bitwise Operations (位运算)
 
 > [!note] 本节重点：核心考点：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果
 
-## 基本位运算
+# 基本位运算
 
 | 操作 | 运算符 | 说明 |
 |------|--------|------|
@@ -223,7 +218,7 @@ float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16
 | 左移 | `<<` | 高位丢弃，低位补 0；相当于乘 2^k |
 | 右移 | `>>` | 逻辑右移补 0，算术右移补符号位（C++ 实现定义） |
 
-## 常用位操作技巧
+# 常用位操作技巧
 
 ```cpp
 // 取第 k 位
@@ -251,7 +246,7 @@ x &= x - 1;                  // Brian Kernighan
 x & 1;
 ```
 
-## 移位运算的行为
+# 移位运算的行为
 
 ```cpp
 // 左移：无符号与有符号行为不同
@@ -266,7 +261,7 @@ int b = 1 << (32 % 32);     // 实际行为，但不保证
 int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 ```
 
-## 位运算加速
+# 位运算加速
 
 - 位运算是一条 CPU 指令（通常 1 个时钟周期）
 - 乘/除法是数十个时钟周期
@@ -276,31 +271,30 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 
 ---
 
-
 二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
 
-## 常见误区
+# 常见误区
 
 - 把 **02-Data Representation (数据表示)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Data Representation (数据表示)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

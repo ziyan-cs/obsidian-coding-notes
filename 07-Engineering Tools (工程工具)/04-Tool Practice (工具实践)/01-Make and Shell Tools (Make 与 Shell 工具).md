@@ -5,22 +5,20 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Make and Shell Tools (Make 与 Shell 工具)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## Makefile Basics (Makefile 基础)
+# Makefile Basics (Makefile 基础)
 
 > [!note] 本节重点：核心考点：规则语法、变量、自动变量、伪目标、增量构建原理
 
-## 基本语法
+# 基本语法
 
 ```makefile
 目标: 依赖列表
 	命令（必须用 Tab 缩进，不能用空格）
 ```
 
-## 最小可用 Makefile
+# 最小可用 Makefile
 
 ```makefile
 CXX      = g++
@@ -41,7 +39,7 @@ clean:
 .PHONY: clean    # 声明 clean 是伪目标，不是文件名
 ```
 
-## 自动变量
+# 自动变量
 
 |变量|含义|
 |---|---|
@@ -50,7 +48,7 @@ clean:
 |`$^`|所有依赖文件（去重）|
 |`$*`|模式匹配的词干（如 `%.o: %.cpp` 中的文件名部分）|
 
-## 增量构建原理
+# 增量构建原理
 
 Make 通过比较**目标文件与依赖文件的时间戳**决定是否重新构建：
 
@@ -58,7 +56,7 @@ Make 通过比较**目标文件与依赖文件的时间戳**决定是否重新�
 - 若依赖比目标新 → 重新构建
 - 否则 → 跳过
 
-## 常用变量约定
+# 常用变量约定
 
 ```makefile
 CC       = gcc           # C 编译器
@@ -68,7 +66,7 @@ CXXFLAGS = -Wall -O2     # C++ 编译选项
 LDFLAGS  = -lpthread     # 链接选项
 ```
 
-## 实用技巧
+# 实用技巧
 
 ```makefile
 DEPS = $(OBJS:.o=.d)
@@ -88,7 +86,7 @@ make -p        # 打印所有内置规则和变量
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
 - [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
@@ -98,14 +96,14 @@ make -p        # 打印所有内置规则和变量
 
 ---
 
-## Docker Images and Containers (Docker 镜像与容器)
+# Docker Images and Containers (Docker 镜像与容器)
 
 > [!note] 本节重点：核心考点：镜像 vs 容器、核心命令、Dockerfile 写法、网络与卷
 
 > [!warning] 删除与清理命令要先看范围
 > `prune`、`rm`、`rmi` 会改变本机资源；先列出目标并确认没有重要容器、镜像或卷。学习阶段用 `--rm` 和明确的容器名，避免积累难以辨认的残留。
 
-## 核心概念
+# 核心概念
 
 ```
 Dockerfile → (build) → Image → (run) → Container
@@ -121,7 +119,7 @@ Dockerfile → (build) → Image → (run) → Container
 
 ---
 
-## 镜像操作
+# 镜像操作
 
 ```bash
 docker pull ubuntu:22.04               # 拉取镜像
@@ -137,7 +135,7 @@ docker load -i myapp.tar               # 从 tar 导入
 
 ---
 
-## 容器操作
+# 容器操作
 
 ```bash
 docker run -it ubuntu:22.04 bash       # 交互式运行
@@ -161,7 +159,7 @@ docker inspect mycontainer             # 查看容器详细信息
 
 ---
 
-## Dockerfile 最佳实践
+# Dockerfile 最佳实践
 
 ```dockerfile
 FROM ubuntu:22.04
@@ -187,7 +185,7 @@ EXPOSE 8080
 CMD ["myapp", "--port", "8080"]
 ```
 
-### 多阶段构建（Multi-stage Build）
+## 多阶段构建（Multi-stage Build）
 
 ```dockerfile
 FROM gcc:12 AS builder
@@ -202,7 +200,7 @@ CMD ["myapp"]
 
 ---
 
-## 数据卷（Volume）
+# 数据卷（Volume）
 
 ```bash
 docker run -v mydata:/app/data myapp
@@ -217,7 +215,7 @@ docker volume prune                      # 删除未使用的卷
 
 ---
 
-## 网络
+# 网络
 
 ```bash
 docker network ls                        # 列出网络
@@ -228,11 +226,11 @@ docker run --network mynet --name db postgres
 docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据库
 ```
 
-## 30 秒回答
+# 30 秒回答
 
 镜像（image）是可复用的只读模板，容器（container）是它启动后的运行实例和可写层。Dockerfile 描述如何构建镜像，volume 负责持久数据，network 负责容器通信。开发中把构建、配置、数据和日志的边界说清楚，比背命令更重要。
 
-## 自测
+# 自测
 
 1. 为什么容器删除后，未挂载在 volume 的数据通常不能作为持久数据依赖？
 2. `docker stop` 和 `docker kill` 分别适合什么场景？
@@ -240,7 +238,7 @@ docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据�
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
 - [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
 - [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
@@ -249,11 +247,11 @@ docker run --network mynet myapp         # myapp 可以通过 "db" 访问数据�
 
 ---
 
-## Shell Productivity Tools (Shell 效率工具)
+# Shell Productivity Tools (Shell 效率工具)
 
 > [!note] 本节重点：核心考点：各工具的核心用法、组合管道使用、tmux 会话管理
 
-## grep（文本搜索）
+# grep（文本搜索）
 
 ```bash
 grep "pattern" file.txt              # 基础搜索
@@ -277,7 +275,7 @@ ps aux | grep nginx | grep -v grep   # 查找进程，排除 grep 自身
 
 ---
 
-## sed（流编辑器）
+# sed（流编辑器）
 
 ```bash
 sed 's/old/new/' file.txt            # 替换每行第一个匹配
@@ -299,7 +297,7 @@ sed '/START/,/END/d' file.txt        # 删除 START 到 END 之间的行
 
 ---
 
-## awk（文本处理与报表）
+# awk（文本处理与报表）
 
 awk 按行处理文本，每行按分隔符切割成字段（`$1`, `$2`, ...，`$0` 是整行）：
 
@@ -326,11 +324,11 @@ ps aux | awk 'NR>1 {print $6, $11}' | sort -rn | head -5
 
 ---
 
-## tmux（终端复用）
+# tmux（终端复用）
 
 tmux 允许在一个终端中管理多个会话、窗口、面板，SSH 断开后会话依然保活。
 
-### 会话管理
+## 会话管理
 
 ```bash
 tmux                          # 新建会话
@@ -340,7 +338,7 @@ tmux attach -t mywork         # 重新连接会话（SSH 断线后恢复）
 tmux kill-session -t mywork   # 删除会话
 ```
 
-### 快捷键（前缀键默认 Ctrl+B，记作  `<prefix>`）
+## 快捷键（前缀键默认 Ctrl+B，记作  `<prefix>`）
 
 ```
 <prefix> d          → detach（离开会话，后台保活）
@@ -364,7 +362,7 @@ tmux kill-session -t mywork   # 删除会话
 <prefix> ?          → 查看所有快捷键
 ```
 
-### ~/.tmux.conf 常用配置
+## ~/.tmux.conf 常用配置
 
 ```bash
 set -g prefix C-a
@@ -383,7 +381,7 @@ bind - split-window -v
 
 ---
 
-## 常用管道组合
+# 常用管道组合
 
 ```bash
 find . -name "*.cpp" | xargs grep -v "^//" | grep -v "^$" | wc -l
@@ -405,7 +403,7 @@ strace ./myapp 2>&1 | grep open     # 追踪文件打开操作
 
 ---
 
-## 关联笔记 · 延伸要点 3
+# 关联笔记 · 延伸要点 3
 - [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
 - [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
 - [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
@@ -414,26 +412,26 @@ strace ./myapp 2>&1 | grep open     # 追踪文件打开操作
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Make and Shell Tools (Make 与 Shell 工具)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

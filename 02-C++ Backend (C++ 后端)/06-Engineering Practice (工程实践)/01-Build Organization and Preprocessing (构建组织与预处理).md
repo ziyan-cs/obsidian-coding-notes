@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Build Organization and Preprocessing (构建组织与预处理)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## Compilation & Linking (编译与链接)
+# Compilation & Linking (编译与链接)
 
 > [!note] 本节重点：核心考点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
-## 编译的四个阶段
+# 编译的四个阶段
 
 ```text
 Compilation Pipeline:
@@ -37,7 +35,7 @@ g++ main.o -o main            # 链接
 g++ main.cpp -o main
 ```
 
-## 目标文件的节区（Section）
+# 目标文件的节区（Section）
 
 ```text
 ELF 目标文件结构：
@@ -60,7 +58,7 @@ ELF 目标文件结构：
 └──────────────┘
 ```
 
-## 符号解析与重定位
+# 符号解析与重定位
 
 ```cpp
 // a.cpp
@@ -97,7 +95,7 @@ multiple definition of `global'
 // ✅ common.cpp: int counter = 0;
 ```
 
-## 静态链接 vs 动态链接
+# 静态链接 vs 动态链接
 
 | | 静态链接 (.a) | 动态链接 (.so / .dll) |
 |--|-------------|-------------------|
@@ -118,7 +116,7 @@ g++ -fPIC -shared lib.cpp -o libfoo.so
 g++ main.cpp -L. -lfoo -o main
 ```
 
-## 动态链接的细节：PLT & GOT
+# 动态链接的细节：PLT & GOT
 
 ```text
 调用共享库函数时的跳转流程：
@@ -131,7 +129,7 @@ main() 调用 foo():
 
 **延迟绑定（Lazy Binding）**：函数地址只在第一次调用时才解析，提高启动速度。
 
-## 工程最佳实践
+# 工程最佳实践
 
 ```cpp
 // ✅ 头文件守卫
@@ -150,7 +148,7 @@ inline int square(int x) { return x * x; }
 
 > **面试重点**：**声明 vs 定义**的区别——声明引入名字，定义提供实体（对对象而言通常也提供存储）。头文件通常放声明；需要放在头文件的 inline 函数、模板、`inline` 变量等是例外。避免在普通头文件定义具有外部链接的全局变量。
 
-## 30 秒回答
+# 30 秒回答
 
 编译把源文件分别变成目标文件，链接器再解析跨文件符号并重定位地址。`undefined reference` 先查“声明有了但定义/库没有参与链接”，`multiple definition` 先查“同一外部符号被定义多次”。静态/动态链接是部署、更新、隔离与启动成本的权衡，不能只用“谁更快”概括。
 
@@ -160,11 +158,11 @@ inline int square(int x) { return x * x; }
 
 ---
 
-## Header & Source Organization (头文件与源文件组织)
+# Header & Source Organization (头文件与源文件组织)
 
 > [!note] 本节重点：核心考点：头文件职责、源文件职责、include 顺序、模块化设计
 
-## 头文件职责
+# 头文件职责
 
 ```cpp
 // foo.h — 接口声明
@@ -197,7 +195,7 @@ private:
 - const/constexpr 常量
 - extern 声明
 
-## 源文件职责
+# 源文件职责
 
 ```cpp
 // foo.cpp — 实现
@@ -216,7 +214,7 @@ Foo::Foo(std::string name) : pImpl_(std::make_unique<Impl>()) {
 Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 ```
 
-## Include 顺序规范
+# Include 顺序规范
 
 ```cpp
 // Google C++ Style Guide 推荐顺序：
@@ -229,7 +227,7 @@ Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 **为什么关联头文件放在第一个**：
 如果 `foo.h` 缺少某个 `#include`，编译 `foo.cpp` 时第一个报错，而不是在其他文件中报出难以定位的错误。
 
-## Forward Declaration vs Include
+# Forward Declaration vs Include
 
 ```cpp
 // ✅ 只需要前向声明：
@@ -245,7 +243,7 @@ bar.someMethod();       // 调用成员函数
 sizeof(Bar);            // 获取大小
 ```
 
-## 模块化组织
+# 模块化组织
 
 ```text
 project/
@@ -263,7 +261,7 @@ project/
         └── test_impl.cpp
 ```
 
-## 常见陷阱
+# 常见陷阱
 
 ```cpp
 // ❌ 循环 include（A.h include B.h, B.h include A.h）
@@ -287,11 +285,11 @@ project/
 
 ---
 
-## Preprocessor & Macros (预处理与宏)
+# Preprocessor & Macros (预处理与宏)
 
 > [!note] 本节重点：核心考点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
-## 预处理指令概览
+# 预处理指令概览
 
 ```cpp
 // 文件包含
@@ -320,7 +318,7 @@ project/
 #error "message"     // 编译错误
 ```
 
-## 宏的陷阱（务必注意）
+# 宏的陷阱（务必注意）
 
 ```cpp
 // ❌ 问题 1：运算符优先级
@@ -349,7 +347,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
 #define REQUIRE(cond) do { if (!(cond)) return false; } while(0)
 ```
 
-## 条件编译的典型用途
+# 条件编译的典型用途
 
 ```cpp
 // 调试日志
@@ -384,7 +382,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
     Class& operator=(const Class&) = delete;
 ```
 
-## 常用预定义宏
+# 常用预定义宏
 
 ```cpp
 __FILE__             // 当前文件名
@@ -399,7 +397,7 @@ assert(ptr != nullptr);         // 运行时断言（NDEBUG 时消除）
 static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 ```
 
-## 宏 vs C++ 特性
+# 宏 vs C++ 特性
 
 | 目的 | 宏 | C++ 替代 |
 |------|-----|---------|
@@ -417,26 +415,26 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Build Organization and Preprocessing (构建组织与预处理)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

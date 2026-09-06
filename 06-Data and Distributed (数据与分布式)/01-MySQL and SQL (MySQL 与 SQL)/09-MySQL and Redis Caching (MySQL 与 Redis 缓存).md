@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 09-MySQL and Redis Caching (MySQL 与 Redis 缓存)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## MySQL and Redis Caching (MySQL 与 Redis 缓存)
+# MySQL and Redis Caching (MySQL 与 Redis 缓存)
 
 > [!note] 本节重点：核心考点：MySQL 与 Redis 缓存策略对比、缓存穿透/击穿/雪崩、读写缓存一致性方案
 
-## MySQL vs Redis 定位
+# MySQL vs Redis 定位
 
 | 特性 | MySQL | Redis |
 |------|-------|-------|
@@ -26,9 +24,9 @@ verified: 2026-09-06
 
 **缓存定位：** Redis 是 MySQL 的前置加速层，不是替代品。
 
-## 缓存架构模式
+# 缓存架构模式
 
-### Cache-Aside（旁路缓存）
+## Cache-Aside（旁路缓存）
 
 应用程序同时维护缓存和数据库——最常用的模式。
 
@@ -78,7 +76,7 @@ void updateUser(int userId, const string& data) {
   读取时如果缓存不存在 → 重建缓存 → 保证最终一致性
 ```
 
-### 其他模式
+## 其他模式
 
 **Read-Through（穿透读）：**
 ```
@@ -102,9 +100,9 @@ void updateUser(int userId, const string& data) {
 适合：日志/计数场景
 ```
 
-## 缓存三大问题
+# 缓存三大问题
 
-### 缓存穿透
+## 缓存穿透
 
 ```
 问题：查询一个**不存在**的数据
@@ -133,7 +131,7 @@ void updateUser(int userId, const string& data) {
    - 明显不合法的参数直接拒绝（如 user_id = -1）
 ```
 
-### 缓存击穿
+## 缓存击穿
 
 ```
 问题：一个**热点 key** 在缓存过期的一瞬间
@@ -168,7 +166,7 @@ void updateUser(int userId, const string& data) {
    - 适合不要求实时一致性的数据
 ```
 
-### 缓存雪崩
+## 缓存雪崩
 
 ```
 问题：大量缓存同时过期 或 Redis 崩溃
@@ -196,7 +194,7 @@ void updateUser(int userId, const string& data) {
    - 保护数据库不被打垮
 ```
 
-## 读写缓存一致性
+# 读写缓存一致性
 
 常见的最终一致性方案：
 
@@ -216,38 +214,37 @@ C 端对一致性要求高的场景：
 
 > [!tip]- **工程要点**：缓存必须有明确生命周期与失效责任，但不一定都用 TTL：部分配置/版本化数据可由显式失效管理。穿透、击穿、雪崩应分别处理。Cache-Aside 的“先写数据库再删缓存”能缩小不一致窗口，却不能保证强一致；要根据写后读语义、失败重试与消息丢失设计补偿。
 
-## 30 秒回答
+# 30 秒回答
 
 缓存是读路径加速与削峰层，不是数据库一致性的替代物。Cache-Aside 读时缓存未命中回源并回填，写时以权威数据库为准并失效缓存；并发、删除失败和复制延迟仍会产生不一致窗口。先定义哪些读可接受旧值，再选 TTL、显式失效、重试、限流与回退策略。
 
 ---
 
 
-
 主从复制原理见 → [Master-Slave Replication (主从复制原理)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md) · [Sharding & Partitioning Overview (分库分表概念)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **09-MySQL and Redis Caching (MySQL 与 Redis 缓存)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

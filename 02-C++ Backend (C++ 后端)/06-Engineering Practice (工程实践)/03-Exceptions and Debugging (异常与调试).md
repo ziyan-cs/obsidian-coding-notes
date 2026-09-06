@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Exceptions and Debugging (异常与调试)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 
-## Exception Handling (异常处理)
+# Exception Handling (异常处理)
 
 > [!note] 本节重点：核心考点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
-## 三种异常安全保证
+# 三种异常安全保证
 
 ```cpp
 // 1. 基本保证：抛出异常后，对象处于合法状态
@@ -41,7 +39,7 @@ public:
 };
 ```
 
-## noexcept
+# noexcept
 
 ```cpp
 // noexcept 有两种作用：
@@ -74,7 +72,7 @@ std::vector<Good> v2;
 // 所以：移动构造函数必须标记 noexcept！
 ```
 
-## 栈展开（Stack Unwinding）
+# 栈展开（Stack Unwinding）
 
 ```cpp
 struct Cleanup {
@@ -101,7 +99,7 @@ int main() {
 2. 每退出一层，该层栈上所有对象的析构函数被调用
 3. 找到匹配的 `catch` 后，进入异常处理
 
-## 异常安全编程指南
+# 异常安全编程指南
 
 ```cpp
 // ✅ 使用 RAII 管理资源（异常安全的核心）
@@ -128,7 +126,7 @@ void wrapper() {
 void swap(Foo&) noexcept;
 ```
 
-## 异常 vs 错误码
+# 异常 vs 错误码
 
 | | 异常 | 错误码 |
 |--|------|--------|
@@ -159,11 +157,11 @@ if (ec) { /* 处理不存在等预期情况 */ }
 
 ---
 
-## Debugging gdb & Sanitizers (调试工具)
+# Debugging gdb & Sanitizers (调试工具)
 
 > [!note] 本节重点：核心考点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
-## GDB 核心命令
+# GDB 核心命令
 
 ```bash
 g++ -g -O0 main.cpp -o main
@@ -173,7 +171,7 @@ gdb ./main core        # 分析 core dump
 gdb ./main 1234        # 附加到进程 1234
 ```
 
-### 常用命令速查
+## 常用命令速查
 
 | 命令 | 缩写 | 作用 |
 |------|------|------|
@@ -201,7 +199,7 @@ gdb> p variable           # 查看变量
 gdb> l                    # 看附近源码
 ```
 
-## AddressSanitizer (ASan)
+# AddressSanitizer (ASan)
 
 ```bash
 g++ -fsanitize=address -g -O1 main.cpp -o main
@@ -209,7 +207,7 @@ g++ -fsanitize=address -g -O1 main.cpp -o main
 ./main
 ```
 
-### ASan 检测的问题类型
+## ASan 检测的问题类型
 
 ```cpp
 int* p = new int[10];
@@ -227,7 +225,7 @@ int* r = &a;
 delete r;       // ✅ ASan 检测：delete on stack variable
 ```
 
-## 其他 Sanitizers
+# 其他 Sanitizers
 
 ```bash
 g++ -fsanitize=undefined -g main.cpp -o main
@@ -249,7 +247,7 @@ int a = 0;
 int b = 1 / a;    // division by zero
 ```
 
-## Core Dump 分析
+# Core Dump 分析
 
 ```bash
 ulimit -c unlimited
@@ -259,7 +257,7 @@ gdb ./main core.1234
 
 ```
 
-## Valgrind 基础
+# Valgrind 基础
 
 ```bash
 valgrind --tool=memcheck ./main
@@ -285,26 +283,26 @@ valgrind --tool=callgrind ./main
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Exceptions and Debugging (异常与调试)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

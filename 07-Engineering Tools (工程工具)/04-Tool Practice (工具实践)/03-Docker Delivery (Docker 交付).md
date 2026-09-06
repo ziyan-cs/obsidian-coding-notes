@@ -5,24 +5,22 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Docker Delivery (Docker 交付)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
-## Docker Multi Stage Build (Docker 多阶段构建)
+# Docker Multi Stage Build (Docker 多阶段构建)
 
 > [!note] 本节重点：核心考点：多阶段构建原理、C++ 二进制最小化、Alpine vs Ubuntu 抉择、CI 集成
 
-## 为什么 C++ 需要多阶段构建
+# 为什么 C++ 需要多阶段构建
 
 C++ 编译环境需要完整的工具链（cmake、g++、make、依赖库头文件），但**运行时只需要二进制和动态库**。多阶段构建让你用同一个 Dockerfile 完成"编译在一个镜像，跑在另一个更小的镜像"。
 
-## 多阶段构建示例
+# 多阶段构建示例
 
 ```dockerfile
 FROM ubuntu:22.04 AS builder
@@ -73,7 +71,7 @@ CMD ["/app/server"]
 
 ---
 
-## 更极致的方案：Alpine + musl
+# 更极致的方案：Alpine + musl
 
 ```dockerfile
 FROM alpine:3.18 AS builder
@@ -93,7 +91,7 @@ CMD ["/app/server"]
 
 ---
 
-## 依赖预缓存（CI 加速）
+# 依赖预缓存（CI 加速）
 
 ```dockerfile
 FROM ubuntu:22.04 AS deps
@@ -124,7 +122,7 @@ RUN cmake --build build --parallel
 
 ---
 
-## 生产 Dockerfile 清单
+# 生产 Dockerfile 清单
 
 | 配置 | 说明 |
 |------|------|
@@ -136,7 +134,7 @@ RUN cmake --build build --parallel
 | ca-certificates | gRPC/HTTPS 调用需要根证书 |
 | tzdata | 设置 `TZ=Asia/Shanghai` 统一时区 |
 
-### .dockerignore
+## .dockerignore
 
 ```gitignore
 .git/
@@ -150,7 +148,7 @@ cmake-build-*
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -164,7 +162,7 @@ cmake-build-*
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
 - [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
@@ -174,26 +172,26 @@ cmake-build-*
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Docker Delivery (Docker 交付)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Processes and IPC (进程与进程间通信)
-
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
 
-## Process Lifecycle (进程生命周期)
+# Process Lifecycle (进程生命周期)
 
 > [!note] 本节重点：核心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
 
-## 进程的本质
+# 进程的本质
 
 进程是**程序的一次运行实例**，操作系统资源分配的基本单位。每个进程有独立的：
 
@@ -31,7 +29,7 @@ verified: 2026-09-06
 
 ---
 
-## fork() 🔥
+# fork() 🔥
 
 ```c
 #include <unistd.h>
@@ -67,7 +65,7 @@ if (pid < 0) {
 | 信号处理设置 | 各自挂起的信号 |
 | 当前工作目录 | 各自的 PID、返回值与地址空间后续写入结果 |
 
-### Copy-On-Write（COW，写时拷贝）
+## Copy-On-Write（COW，写时拷贝）
 
 fork 之后，父子进程**共享同一份物理内存页**，并不立即复制。只有当某方尝试**写入**时，才触发缺页中断，内核将该页复制一份。
 
@@ -88,7 +86,7 @@ fork 后：
 
 ---
 
-## exec 族函数
+# exec 族函数
 
 `exec` 用一个新程序**替换当前进程的地址空间**，但保留 PID：
 
@@ -123,7 +121,7 @@ if (pid == 0) {
 
 ---
 
-## wait / waitpid
+# wait / waitpid
 
 父进程必须调用 `wait` 来回收子进程资源，否则子进程变成**僵尸进程**：
 
@@ -166,7 +164,7 @@ while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
 
 ---
 
-## 进程状态
+# 进程状态
 
 ```
               fork()
@@ -198,7 +196,7 @@ CREATED ───────────────────> READY
 
 ---
 
-## Linux 调度（调度器概念）
+# Linux 调度（调度器概念）
 
 Linux 的公平调度实现会随内核版本演进（例如 CFS/EEVDF 等），这里保留“按权重分配 CPU 时间”的心智模型；当前系统行为需查所用内核文档（NEEDS_VERIFY）：
 
@@ -221,11 +219,11 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 
 ---
 
-## Process States and Scheduling (进程状态与调度)
+# Process States and Scheduling (进程状态与调度)
 
 > [!note] 本节重点：核心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
 
-## 进程状态 · 延伸要点 2
+# 进程状态 · 延伸要点 2
 ```
               fork()
 CREATED ───────────────────> READY
@@ -253,7 +251,7 @@ CREATED ───────────────────> READY
 
 > **D 状态（不可中断睡眠）** 很危险：进程无法被 kill，通常意味着磁盘 I/O 卡住或 NFS 挂载问题，只能等待或重启。
 
-## Linux 调度器（CFS）
+# Linux 调度器（CFS）
 
 Linux 默认使用 **CFS（Completely Fair Scheduler，完全公平调度器）**：
 
@@ -270,11 +268,11 @@ renice 5 -p 1234       # 修改运行中进程的 nice 值
 
 ---
 
-## Zombie and Orphan Processes (僵尸进程与孤儿进程)
+# Zombie and Orphan Processes (僵尸进程与孤儿进程)
 
 > [!note] 本节重点：核心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 
-## 僵尸进程（Zombie）
+# 僵尸进程（Zombie）
 
 子进程已经退出，但父进程没有调用 `wait()` 回收其资源，子进程的 PCB（进程控制块）仍留在内核中，状态显示为 `Z`。
 
@@ -310,7 +308,7 @@ signal(SIGCHLD, sigchld_handler);
 
 ---
 
-## 孤儿进程（Orphan）
+# 孤儿进程（Orphan）
 
 父进程先于子进程退出，子进程成为孤儿，被 **init 进程（PID=1，现代系统为 systemd）** 收养。
 
@@ -340,12 +338,12 @@ close(STDERR_FILENO);
 
 ---
 
-## Interprocess Communication (进程间通信)
+# Interprocess Communication (进程间通信)
 
 > [!note] 本节重点：核心考点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
 > 核心考点：各 IPC 机制的特点、适用场景、使用方式
 
-## IPC 机制对比
+# IPC 机制对比
 
 |机制|数据方向|有无名字|跨主机|特点|
 |---|---|---|---|---|
@@ -358,7 +356,7 @@ close(STDERR_FILENO);
 
 ---
 
-## 匿名管道（pipe）
+# 匿名管道（pipe）
 
 ```c
 int pipefd[2];
@@ -387,7 +385,7 @@ if (pid == 0) {
 
 ---
 
-## 命名管道（FIFO）
+# 命名管道（FIFO）
 
 ```c
 mkfifo("/tmp/myfifo", 0666);     // 创建命名管道（也可用 shell: mkfifo /tmp/myfifo）
@@ -406,7 +404,7 @@ read(fd, buf, sizeof(buf));
 
 ---
 
-## 共享内存（mmap）
+# 共享内存（mmap）
 
 最高效的 IPC 方式，零拷贝，多个进程直接读写同一块物理内存：
 
@@ -441,26 +439,26 @@ IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
-## 常见误区
+# 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
 - 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Processes and IPC (进程与进程间通信)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

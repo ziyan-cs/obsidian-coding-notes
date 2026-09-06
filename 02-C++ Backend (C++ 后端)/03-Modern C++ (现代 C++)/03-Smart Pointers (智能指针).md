@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Smart Pointers (智能指针)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 智能指针不是自动 delete 的裸指针，而是所有权语义的类型化表达：`unique_ptr` 表示唯一拥有者，`shared_ptr` 表示共享拥有者，`weak_ptr` 观察共享对象且不延长其生命周期。能用值类型就不用指针；能唯一拥有就不用共享拥有。
 
-## 选择顺序
+# 选择顺序
 
 1. **值对象**：没有动态所有权需求时最简单。
 2. **`unique_ptr`**：默认的动态所有权选择，明确 move-only 语义。
@@ -22,24 +20,24 @@ verified: 2026-09-06
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 从同一个裸指针构造两个 `shared_ptr`，会形成两个控制块并 double delete。
 - 把 `shared_ptr` 当对象图的默认指针，会让所有权与循环引用难以排查。
 - `weak_ptr::lock()` 后不检查结果；对象可能已销毁。
 - 用智能指针管理不是 `new` 得到的地址；deleter 必须与资源获取方式匹配。
 
-## 自测
+# 自测
 
 1. 为什么工厂函数通常返回 `unique_ptr` 而不是裸指针？
 2. 双向关联怎样用 `weak_ptr` 避免循环引用？
 3. `make_shared` 与 `shared_ptr(new T)` 在分配和异常安全上有什么差别？
 
-## unique ptr Ownership (unique ptr 独占所有权)
+# unique ptr Ownership (unique ptr 独占所有权)
 
 > [!note] 本节重点：核心考点：> unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
 
@@ -65,7 +63,7 @@ void use(const std::unique_ptr<int>& p); // 不转移，只使用
 void use(int* p);                       // 更通用：直接传裸指针 p.get()
 ```
 
-### 自定义删除器
+## 自定义删除器
 
 ```cpp
 // 管理 FILE*
@@ -76,7 +74,7 @@ std::unique_ptr<FILE, decltype(fileDeleter)> fp(fopen("a.txt","r"), fileDeleter)
 std::unique_ptr<void, decltype(&free)> buf(malloc(1024), free);
 ```
 
-## 30 秒回答 / 自测
+# 30 秒回答 / 自测
 
 - **30 秒回答**：`unique_ptr` 独占所有权、不可拷贝只可移动，通常不需要独立控制块；`shared_ptr` 以引用计数表达共享所有权；`weak_ptr` 不拥有、只观察。默认首选 `unique_ptr`，确需共享才用 `shared_ptr`。自定义删除器的类型和大小仍会影响 `unique_ptr` 对象布局。
 - **常见误区**：把 `p.get()` 返回的裸指针交给另一个 `unique_ptr` 管理 → 双重释放；`p.release()` 后忘记手动 `delete`。
@@ -88,7 +86,7 @@ shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals
 
 ---
 
-## shared ptr Reference Counting (shared ptr 引用计数)
+# shared ptr Reference Counting (shared ptr 引用计数)
 
 > [!note] 本节重点：核心考点：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
 
@@ -103,7 +101,7 @@ sp2.reset();                            // 计数 = 2
 // sp1 离开作用域 → 计数 = 0 → delete
 ```
 
-### 控制块（Control Block）
+## 控制块（Control Block）
 
 ```text
 shared_ptr Internal Structure:
@@ -146,7 +144,7 @@ auto sp = std::make_shared<MyClass>(args...);
 auto sp = std::shared_ptr<MyClass>(new MyClass(args...));
 ```
 
-### shared_ptr 的线程安全
+## shared_ptr 的线程安全
 
 - **引用计数的增减**是原子操作，线程安全
 - **指针指向的对象**本身不是线程安全的，并发读写需要额外同步
@@ -157,13 +155,13 @@ weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与�
 
 ---
 
-## weak ptr and Circular References (weak ptr 与循环引用)
+# weak ptr and Circular References (weak ptr 与循环引用)
 
 > [!note] 本节重点：核心考点：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
 
 `weak_ptr` 是对 `shared_ptr` 管理对象的**非拥有观察者**，不增加强引用计数，只增加弱引用计数。
 
-### 循环引用问题
+## 循环引用问题
 
 ```cpp
 struct Node {
@@ -186,7 +184,7 @@ struct Node {
 };
 ```
 
-### weak_ptr 的使用
+## weak_ptr 的使用
 
 ```cpp
 auto sp = std::make_shared<int>(42);
@@ -203,7 +201,7 @@ wp.expired();   // 快速检查：强引用计数是否为 0（对象已销毁�
 wp.use_count(); // 强引用计数
 ```
 
-### 典型应用：Observer 模式 / 缓存
+## 典型应用：Observer 模式 / 缓存
 
 ```cpp
 // 缓存：用 weak_ptr 存缓存，对象被外部释放后自动失效
@@ -220,7 +218,7 @@ public:
 };
 ```
 
-### 三种智能指针对比
+## 三种智能指针对比
 
 | |unique_ptr|shared_ptr|weak_ptr|
 |---|---|---|---|
@@ -230,7 +228,7 @@ public:
 |开销|零开销|控制块 + 原子操作|同 shared_ptr|
 |使用场景|默认首选|共享所有权|打破循环引用、缓存、观察者|
 
-## 30 秒回答 / 自测 · 延伸要点 2
+# 30 秒回答 / 自测 · 延伸要点 2
 - **30 秒回答**：`weak_ptr` 是 `shared_ptr` 的"非拥有观察者"，不增加强引用计数。用 `lock()` 临时提升为 `shared_ptr` 来安全访问，避免悬垂。
 - **常见误区**：直接用 `weak_ptr` 解引用（不可行，必须先 `lock()`）；把缓存/观察者设计成 `shared_ptr` 导致对象永远不释放。
 - **自测**：1) `expired()` 返回 true 与 `lock()` 返回空，两者何时结果不一致（竞态）？ 2) 为什么 `weak_ptr` 需要在控制块里额外记录 weak count？
@@ -239,17 +237,17 @@ public:
 
 shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Smart Pointers (智能指针)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

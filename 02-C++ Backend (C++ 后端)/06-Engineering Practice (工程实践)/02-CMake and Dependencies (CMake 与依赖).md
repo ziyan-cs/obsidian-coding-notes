@@ -5,19 +5,17 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-CMake and Dependencies (CMake 与依赖)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 工程结论
+# 工程结论
 
 CMake 的核心不是生成命令，而是声明 target 及其源文件、编译选项、包含路径和依赖。依赖应沿 target 边界传播；避免全局目录命令把配置偷偷影响到其他模块。
 
-## 依赖模型
+# 依赖模型
 
 ```text
 library target
@@ -26,24 +24,24 @@ library target
 executable target -> links the library target
 ```
 
-## 选型边界
+# 选型边界
 
 - 优先 `target_link_libraries`、`target_include_directories`，少用全局 `include_directories`。
 - Debug/Release 差异由 target 属性与 toolchain 明确表达，不靠手改宏。
 - 第三方库优先使用导入 target；`find_package` 失败时记录版本、来源和可复现安装步骤。
 
-## 自测
+# 自测
 
 1. PUBLIC、PRIVATE、INTERFACE 依赖分别向谁传播？
 2. 为什么 target-based CMake 比全局 include path 更易维护？
 3. 一个可复现构建至少需要声明哪些输入？
 
 
-## CMake Build System (CMake构建系统)
+# CMake Build System (CMake构建系统)
 
 > [!note] 本节重点：核心考点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 
-## 最小 CMake 项目
+# 最小 CMake 项目
 
 ```cmake
 cmake_minimum_required(VERSION 3.16)
@@ -62,7 +60,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j$(nproc)
 ```
 
-## 目标导向（Target-Based）设计
+# 目标导向（Target-Based）设计
 
 ```cmake
 
@@ -89,7 +87,7 @@ target_link_libraries(main PRIVATE mylib)
 | `PUBLIC` | ✅ 应用 | ✅ 传递 |
 | `INTERFACE` | ❌ 不应用 | ✅ 仅传递（适合头文件库）|
 
-## 常用构建配置
+# 常用构建配置
 
 ```cmake
 cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -103,7 +101,7 @@ if(BUILD_TESTING)
 endif()
 ```
 
-## 查找与使用外部库
+# 查找与使用外部库
 
 ```cmake
 find_package(Boost REQUIRED COMPONENTS filesystem system)
@@ -119,7 +117,7 @@ FetchContent_MakeAvailable(nlohmann_json)
 target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)
 ```
 
-## 现代 CMake 最佳实践
+# 现代 CMake 最佳实践
 
 ```cmake
 set(CMAKE_CXX_FLAGS "-O2 -Wall")  # 全局修改，不模块化
@@ -132,7 +130,7 @@ target_compile_options(mylib PRIVATE -Wall -Wextra)
 target_compile_definitions(mylib PRIVATE DEBUG)
 ```
 
-## 项目目录结构
+# 项目目录结构
 
 ```text
 project/
@@ -161,7 +159,7 @@ add_subdirectory(src)
 add_subdirectory(tests)
 ```
 
-## 常用 CMake 变量
+# 常用 CMake 变量
 
 ```cmake
 ${PROJECT_NAME}          # 项目名
@@ -182,26 +180,26 @@ ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-CMake and Dependencies (CMake 与依赖)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Kafka Delivery and Idempotency (Kafka 投递与幂等)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## Kafka Core Concepts (Kafka核心概念)
+# Kafka Core Concepts (Kafka核心概念)
 
 > [!note] 本节重点：核心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
-## Kafka 核心概念
+# Kafka 核心概念
 
 Producer -> Topic -> Consumer Group
 
@@ -29,7 +27,7 @@ offset: 0     1     2     3     4     5
 - **全局无序**：不同分区之间不保证顺序
 - **分区数决定并行度**：一个分区同时只能被一个消费者消费
 
-### Consumer Group
+## Consumer Group
 
 ```properties
 
@@ -37,7 +35,7 @@ offset: 0     1     2     3     4     5
 
 ---
 
-## 分区与消息路由
+# 分区与消息路由
 
 ```cpp
 // 生产者决定消息写入哪个分区
@@ -58,7 +56,7 @@ rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
 
 ---
 
-## 消费者 Rebalance
+# 消费者 Rebalance
 
 当消费者加入/退出或分区数变更时触发 Rebalance：
 
@@ -81,7 +79,7 @@ Consumer-3 宕机 -> Rebalance:
 
 ---
 
-## 关键配置
+# 关键配置
 
 ```properties
 acks=all                    # 等待所有副本确认
@@ -97,7 +95,7 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -116,14 +114,14 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-## Message Delivery and Idempotency (消息可靠性与幂等)
+# Message Delivery and Idempotency (消息可靠性与幂等)
 
 > [!note] 本节重点：核心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
 > [!warning] “Exactly Once” 必须说明边界
 > Kafka 的幂等与事务能约束 Kafka 内部的写入/消费链路；把消息处理结果写进 MySQL 等外部系统时，不能仅凭一段本地 SQL 就宣称端到端 exactly-once。通常要使用幂等写入、去重键、outbox/inbox 或可恢复的状态机。
 
-## Kafka 消息可靠性语义
+# Kafka 消息可靠性语义
 
 | 语义 | 说明 | 设置方式 |
 |------|------|---------|
@@ -133,9 +131,9 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-## 生产者端
+# 生产者端
 
-### ACK 机制
+## ACK 机制
 
 ```properties
 acks=0      # 发完即走，不管是否写入（吞吐最高，可能丢）
@@ -143,13 +141,13 @@ acks=1      # Leader 写入成功即返回（不等待 Follower）
 acks=all    # Leader + 所有 ISR 副本写入成功（最可靠）
 ```
 
-### 幂等生产者
+## 幂等生产者
 
 ```properties
 enable.idempotence=true   # Kafka 0.11+
 ```
 
-### 事务性写入
+## 事务性写入
 
 ```properties
 transactional.id=my-txn-id
@@ -157,7 +155,7 @@ transactional.id=my-txn-id
 
 ---
 
-## Broker 端
+# Broker 端
 
 ```properties
 replication.factor=3          # 3 副本
@@ -168,7 +166,7 @@ Leader 崩溃 -> 从 ISR（In-Sync Replicas）中选举新 Leader
 
 ---
 
-## 消费者端
+# 消费者端
 
 ```cpp
 // 手动提交 offset（处理完再提交，librdkafka 回调模式）
@@ -181,7 +179,7 @@ class ConsumerCb : public RdKafka::ConsumeCb {
 };
 ```
 
-### 外部系统的处理一致性
+## 外部系统的处理一致性
 
 ```
 Kafka -> MySQL 的常见目标是“至少一次投递 + 幂等落库”：
@@ -194,7 +192,7 @@ COMMIT;
 
 ---
 
-## 消息不丢失总结
+# 消息不丢失总结
 
 ```
 Producer -> Broker -> Consumer
@@ -207,7 +205,7 @@ Producer -> Broker -> Consumer
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | Exactly Once 三层 | 生产者幂等、broker 副本、消费者事务 |
@@ -218,11 +216,11 @@ Producer -> Broker -> Consumer
 > [!tip]- **工程要点**
 > 生产推荐 acks=all + enable.idempotence=true + 手动 commit。追求极致吞吐可降为 acks=1，但需接受极端情况可能丢消息。
 
-## 30 秒回答
+# 30 秒回答
 
 Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 和幂等生产者降低写入丢失/重复风险，消费者在业务成功后提交 offset 得到 at-least-once。若副作用进入数据库或第三方服务，必须额外设计幂等键与恢复流程；“exactly-once”永远要先问它覆盖到哪里。
 
-## 自测
+# 自测
 
 1. 为什么手动提交 offset 仍可能造成重复消费？
 2. Kafka transaction 能否让 Kafka 与 MySQL 自动成为同一个原子事务？
@@ -234,26 +232,26 @@ Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心�
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Kafka Delivery and Idempotency (Kafka 投递与幂等)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

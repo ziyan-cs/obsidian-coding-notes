@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 06-RAII and Custom Allocation (RAII 与自定义分配)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 RAII（Resource Acquisition Is Initialization）的核心是：**资源的拥有期由对象生命周期表示**。构造函数成功后对象应处于可用状态；析构函数负责释放资源，因此无论正常返回、异常抛出还是提前 `return`，作用域退出时都能回收文件、锁、socket、内存或事务等资源。实际代码优先使用标准库封装，如 `std::vector`、智能指针和 `std::lock_guard`，而不是手写 `new/delete`。
 
-## 先建立的模型
+# 先建立的模型
 
 ```text
 acquire resource
@@ -27,7 +25,7 @@ failure while constructing
 
 这里的“资源”不等于堆内存。凡是必须成对获取与释放的东西都适用：文件描述符、互斥锁、数据库事务、网络连接、临时状态和系统句柄。
 
-## 设计判断
+# 设计判断
 
 | 场景 | 首选 | 原因 |
 | --- | --- | --- |
@@ -38,28 +36,28 @@ failure while constructing
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - **RAII 不是“只要有析构函数就行”**：对象必须清楚表达谁拥有资源，拷贝、移动和析构的语义必须一致。
 - **`shared_ptr` 不是默认选择**：它解决共享所有权，不解决所有对象的生命周期问题；循环引用仍会泄漏。
 - **析构函数不应抛异常**：栈展开期间再次抛出通常会导致程序终止；析构中的失败应转换为可记录、可忽略或显式关闭前处理。
 - **内存池不是 RAII 替代品**：它优化分配策略，不能替代所有权、析构和异常安全设计。
 
-## 自测
+# 自测
 
 1. 为什么“构造函数获取、析构函数释放”比手写 `open/close` 更能保证异常安全？
 2. 一个 socket wrapper 需要禁止拷贝、允许移动吗？为什么？
 3. 什么时候 `shared_ptr` 反而会让设计更难排查？
 
-## RAII and Resource Management (RAII 与资源管理)
+# RAII and Resource Management (RAII 与资源管理)
 
 > [!note] 本节重点：核心考点：RAII 是 C++ 最核心的资源管理范式、资源获取即初始化、析构函数释放、异常安全的基础
 
-## 什么是 RAII
+# 什么是 RAII
 
 RAII（Resource Acquisition Is Initialization）：**在构造函数中获取资源，在析构函数中释放资源**。
 
@@ -91,7 +89,7 @@ void good() {
 2. 资源在析构函数中释放
 3. 资源不能离开对象独立存在（禁用拷贝或正确管理生命周期）
 
-## RAII 管理的资源类型
+# RAII 管理的资源类型
 
 ```cpp
 // RAII 不只管理内存——管理所有需要成对获取/释放的资源
@@ -124,7 +122,7 @@ public:
 // 5. POSIX 信号量/socket/其他系统资源
 ```
 
-## 智能指针是 RAII 的典型应用
+# 智能指针是 RAII 的典型应用
 
 ```cpp
 // unique_ptr：独占所有权
@@ -140,7 +138,7 @@ auto sptr = std::make_shared<Foo>();     // 引用计数 = 1
 // 引用计数 = 0 时自动 delete
 ```
 
-## RAII + 异常安全的黄金法则
+# RAII + 异常安全的黄金法则
 
 ```cpp
 // 使用 RAII 包装所有资源 → 自动获得基本异常安全保证
@@ -174,7 +172,7 @@ public:
 };
 ```
 
-## RAII 的常见错误
+# RAII 的常见错误
 
 ```cpp
 // ❌ 错误 1：RAII 类没有正确处理拷贝
@@ -214,7 +212,7 @@ public:
 };
 ```
 
-## 工程习惯
+# 工程习惯
 
 ```cpp
 // ✅ 每次看到"配对操作"（open/close, lock/unlock, new/delete, malloc/free）
@@ -244,11 +242,11 @@ RAII 的核心是资源管理与指针生命周期，详见 → [Pointers & Refe
 
 ---
 
-## Custom Allocators and Placement New (自定义分配器)
+# Custom Allocators and Placement New (自定义分配器)
 
 > [!note] 本节重点：核心考点：自定义分配器用于高性能场景（内存池、特定分配策略）、placement new 构造对象、operator new 重载
 
-## Placement New
+# Placement New
 
 ```cpp
 #include <new>  // placement new 所需头文件
@@ -272,7 +270,7 @@ operator delete(buffer);  // 只释放内存，不调用析构
 // 不要混用 placement new 和普通 delete！
 ```
 
-## 标准分配器接口（std::allocator）
+# 标准分配器接口（std::allocator）
 
 ```cpp
 // std::allocator 的典型实现（简化版）
@@ -297,7 +295,7 @@ std::vector<int, MyAllocator<int>> custom_vec;
 // 但注意：标准容器默认使用 std::allocator，替换需谨慎
 ```
 
-## 实现自定义分配器
+# 实现自定义分配器
 
 ```cpp
 // 简单的池分配器（线性分配，不释放单个对象）
@@ -329,7 +327,7 @@ std::vector<int, LinearAllocator<int>> v;
 // 适合：短期任务、需要避免内存碎片的场景
 ```
 
-## 有状态的分配器（C++11+）
+# 有状态的分配器（C++11+）
 
 ```cpp
 // C++11 前，分配器必须是无状态的
@@ -366,7 +364,7 @@ public:
 // 使用前需要注意：容器拷贝时需要决定使用哪个分配器
 ```
 
-## 重载 operator new 和 operator delete
+# 重载 operator new 和 operator delete
 
 ```cpp
 // 全局重载（影响巨大，很少使用）
@@ -393,7 +391,7 @@ public:
 };
 ```
 
-## 分配器适配器
+# 分配器适配器
 
 ```cpp
 #include <scoped_allocator>  // C++11
@@ -409,7 +407,7 @@ using ScopedVec = std::vector<String,
     std::scoped_allocator_adaptor<MyAllocator<String>>>;
 ```
 
-## 何时需要自定义分配器？
+# 何时需要自定义分配器？
 
 | 场景 | 推荐方案 |
 |------|---------|
@@ -426,17 +424,17 @@ using ScopedVec = std::vector<String,
 
 内存管理与指针操作紧密相关，详见 → [Pointers & References In Depth (指针与引用深入)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/03-Pointers%20&%20References%20In%20Depth%20(指针与引用深入)%20⭐.md)
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-RAII and Custom Allocation (RAII 与自定义分配)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

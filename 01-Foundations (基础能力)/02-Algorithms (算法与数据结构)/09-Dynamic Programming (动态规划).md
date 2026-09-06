@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 09-Dynamic Programming (动态规划)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## One Dimensional Dynamic Programming (一维动态规划)
+# One Dimensional Dynamic Programming (一维动态规划)
 
 > [!note] 本节重点：核心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
 
-## 一维 DP 核心思想
+# 一维 DP 核心思想
 
 一维 DP 的状态 `dp[i]` 通常表示**以第 i 个位置结尾**（或前 i 个）的最优解/方案数。关键是找到**递推关系**——当前状态如何由前一个或前几个状态转移而来。
 
@@ -23,9 +21,9 @@ verified: 2026-09-06
 3. 初始化边界条件
 4. 确定遍历顺序
 
-## 爬楼梯系列
+# 爬楼梯系列
 
-### 基础爬楼梯
+## 基础爬楼梯
 
 ```cpp
 // 爬楼梯：每次 1 或 2 阶，求到达顶部的方案数
@@ -47,7 +45,7 @@ int climbStairs(int n) {
 - 最小花费爬楼梯：`dp[i] = min(dp[i-1], dp[i-2]) + cost[i]`
 - 每次可走 1..k 阶：`dp[i] = sum(dp[i-j] for j in 1..k)`
 
-### 最小花费爬楼梯
+## 最小花费爬楼梯
 
 ```cpp
 int minCostClimbingStairs(vector<int>& cost) {
@@ -63,9 +61,9 @@ int minCostClimbingStairs(vector<int>& cost) {
 }
 ```
 
-## 打家劫舍系列
+# 打家劫舍系列
 
-### 打家劫舍 I（线性排列）
+## 打家劫舍 I（线性排列）
 
 ```cpp
 // 相邻房屋不能同时偷，求最大金额
@@ -84,7 +82,7 @@ int rob(vector<int>& nums) {
 // dp[i] = max(dp[i-1], dp[i-2] + nums[i])
 ```
 
-### 打家劫舍 II（环形排列）
+## 打家劫舍 II（环形排列）
 
 ```cpp
 // 首尾相连，不能同时偷第一家 and 最后一家
@@ -107,7 +105,7 @@ int robRange(vector<int>& nums, int l, int r) {
 }
 ```
 
-### 打家劫舍 III（树形）
+## 打家劫舍 III（树形）
 
 ```cpp
 // 二叉树，不能偷直接相连的两个节点
@@ -125,9 +123,9 @@ int robIII(TreeNode* root) {
 }
 ```
 
-## 其他经典一维 DP
+# 其他经典一维 DP
 
-### 最大子数组和（Kadane 算法）
+## 最大子数组和（Kadane 算法）
 
 ```cpp
 int maxSubArray(vector<int>& nums) {
@@ -140,7 +138,7 @@ int maxSubArray(vector<int>& nums) {
 }
 ```
 
-### 乘积最大子数组
+## 乘积最大子数组
 
 ```cpp
 int maxProduct(vector<int>& nums) {
@@ -155,7 +153,7 @@ int maxProduct(vector<int>& nums) {
 }
 ```
 
-### 解码方法
+## 解码方法
 
 ```cpp
 int numDecodings(string s) {
@@ -173,7 +171,7 @@ int numDecodings(string s) {
 }
 ```
 
-## 一维 DP 经典题型速查
+# 一维 DP 经典题型速查
 
 | 题型 | dp[i] 含义 | 递推 | 复杂度 |
 |------|-----------|------|--------|
@@ -185,7 +183,7 @@ int numDecodings(string s) {
 
 > [!tip]- **工程要点**：一维 DP 的核心是状态定义。大多数线性 DP 只需记录前几个状态，可以用滚动变量替代数组，将空间从 O(n) 优化到 O(1)。遇到新题先想：`dp[i]` 表示什么？怎么从 `dp[i-1]` 或 `dp[i-2]` 转移过来？
 
-## 30 秒回答
+# 30 秒回答
 
 **一维 DP 怎么写稳？** 先用一句话定义状态，再列出“选/不选”或“从哪些前态来”的转移，最后单独处理空输入、长度为 1 和第一个可转移位置。滚动变量只是在已经证明状态依赖范围很小时的空间优化，不应反过来替代状态定义。
 
@@ -193,7 +191,7 @@ int numDecodings(string s) {
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Knapsack： 0-1, Complete, Multiple (背包三种)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
 - [Interval DP (区间DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
@@ -203,11 +201,11 @@ int numDecodings(string s) {
 
 ---
 
-## Knapsack Dynamic Programming (背包动态规划)
+# Knapsack Dynamic Programming (背包动态规划)
 
 > [!note] 本节重点：核心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
-## 背包问题核心框架
+# 背包问题核心框架
 
 背包问题的本质：给定一组物品（每个有重量和价值），在容量限制下最大化总价值。
 
@@ -218,7 +216,7 @@ int numDecodings(string s) {
 
 ---
 
-## 1 背包（每种物品最多选一次）
+# 1 背包（每种物品最多选一次）
 
 ```cpp
 int knapsack01(vector<int>& w, vector<int>& v, int cap) {
@@ -239,7 +237,7 @@ int knapsack01(vector<int>& w, vector<int>& v, int cap) {
 
 ---
 
-## 完全背包（每种物品无限次）
+# 完全背包（每种物品无限次）
 
 ```cpp
 int knapsackComplete(vector<int>& w, vector<int>& v, int cap) {
@@ -283,9 +281,9 @@ int change(int amount, vector<int>& coins) {
 
 ---
 
-## 多重背包（每种物品有限次）
+# 多重背包（每种物品有限次）
 
-### 解法一：暴力拆成 0-1（容易超时）
+## 解法一：暴力拆成 0-1（容易超时）
 
 ```cpp
 int knapsackMultiple(vector<int>& w, vector<int>& v, vector<int>& cnt, int cap) {
@@ -302,7 +300,7 @@ int knapsackMultiple(vector<int>& w, vector<int>& v, vector<int>& cnt, int cap) 
 // 时间复杂度 O(cap * sum(cnt))，数据量大时会超时
 ```
 
-### 解法二：二进制优化（推荐）
+## 解法二：二进制优化（推荐）
 
 将 cnt 个物品拆成 **1, 2, 4, ..., 2^k, 剩余** 个一组，每组作为一个 0-1 物品，覆盖 0..cnt 的所有组合：
 
@@ -327,7 +325,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 ---
 
-## 背包问题对比
+# 背包问题对比
 
 | 类型 | 容量遍历 | 物品遍历 | 时间复杂度 | 空间优化后 |
 |------|---------|---------|-----------|-----------|
@@ -336,7 +334,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 | 多重背包（暴力） | 逆序 | 三层循环 | O(cap·Σcnt) | O(cap) |
 | 多重背包（二进制） | 逆序 | 拆后 0-1 | O(cap·Σlog(cnt)) | O(cap) |
 
-## 背包问题常见变体
+# 背包问题常见变体
 
 | 变体 | 解法要点 |
 |------|---------|
@@ -349,7 +347,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 > [!tip]- **工程要点**：背包问题的核心就两点——**物品在外还是容量在外**决定是组合还是排列，**容量正序还是逆序**决定是完全还是 0-1。面试时先写出暴力二维版本再优化为一维，不易出错。
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Interval DP (区间DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
 - [LCS & LIS (最长子序列类)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11d-LCS%20&%20LIS%20(最长子序列类).md)
@@ -358,11 +356,11 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 ---
 
-## Interval Dynamic Programming (区间动态规划)
+# Interval Dynamic Programming (区间动态规划)
 
 > [!note] 本节重点：核心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
 
-## 区间 DP 核心思想
+# 区间 DP 核心思想
 
 区间 DP 解决的是**在一段区间上做决策**的问题，大区间依赖于小区间的最优解。
 
@@ -386,7 +384,7 @@ for (int len = 2; len <= n; len++) {                // 枚举区间长度
 - 枚举分割点 `k` 将区间一分为二
 - 复杂度通常 O(n³)
 
-## 石子合并
+# 石子合并
 
 一排石子，相邻两堆可合并，代价为两堆重量和，求最小总代价。
 
@@ -416,7 +414,7 @@ int mergeStones(vector<int>& stones) {
 
 **代价理解：** `prefix[j] - prefix[i-1]` 是最后一次合并时把 [i,k] 和 [k+1,j] 两堆合起来的重量总和——无论分割点在哪，合并区间 [i,j] 的总重量都一样，所以作为固定成本。
 
-## 矩阵链乘
+# 矩阵链乘
 
 给定矩阵维度序列，求最小乘法次数。
 
@@ -440,7 +438,7 @@ int matrixChain(vector<int>& dims) {
 }
 ```
 
-## 回文分割
+# 回文分割
 
 最少分割次数使每个子串都是回文。
 
@@ -465,7 +463,7 @@ int minCut(string s) {
 }
 ```
 
-## 四边形不等式优化
+# 四边形不等式优化
 
 Knuth 优化要求问题满足特定的四边形不等式/决策单调性等条件，才能把分割点搜索范围缩为 `opt[i][j-1]..opt[i+1][j]`；**不能只因看到区间 DP 就套用**。应先证明条件，并妥善初始化边界与 `opt`。
 
@@ -485,7 +483,7 @@ for (int len = 2; len <= n; len++) {
 }
 ```
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 状态定义 | 转移 | 复杂度 |
 |------|---------|------|--------|
@@ -497,7 +495,7 @@ for (int len = 2; len <= n; len++) {
 
 > [!tip]- **工程要点**：区间 DP 常为 O(n³)，能否通过取决于语言、常数、内存和题目时限；先估算 `n³` 的量级，再考虑优化。核心是理解“大区间由小区间推导”的依赖方向。
 
-## 关联笔记 · 延伸要点 3
+# 关联笔记 · 延伸要点 3
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Knapsack： 0-1, Complete, Multiple (背包三种)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
 - [LCS & LIS (最长子序列类)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11d-LCS%20&%20LIS%20(最长子序列类).md)
@@ -506,13 +504,13 @@ for (int len = 2; len <= n; len++) {
 
 ---
 
-## Longest Common Subsequence and LIS (最长子序列)
+# Longest Common Subsequence and LIS (最长子序列)
 
 > [!note] 本节重点：核心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
-## 最长递增子序列（LIS）
+# 最长递增子序列（LIS）
 
-### O(n²) DP 解法
+## O(n²) DP 解法
 
 ```cpp
 int lengthOfLIS(vector<int>& nums) {
@@ -530,7 +528,7 @@ int lengthOfLIS(vector<int>& nums) {
 }
 ```
 
-### O(n log n) 贪心 + 二分（重点）
+## O(n log n) 贪心 + 二分（重点）
 
 维护 `tails[k]` = 长度为 k+1 的递增子序列的最小末尾元素：
 
@@ -552,7 +550,7 @@ int lengthOfLIS(vector<int>& nums) {
 
 ---
 
-## 最长公共子序列（LCS）
+# 最长公共子序列（LCS）
 
 ```cpp
 int longestCommonSubsequence(string a, string b) {
@@ -592,7 +590,7 @@ int longestCommonSubstring(string a, string b) {
 
 ---
 
-## 编辑距离
+# 编辑距离
 
 ```cpp
 int minDistance(string a, string b) {
@@ -617,7 +615,7 @@ int minDistance(string a, string b) {
 
 ---
 
-## 最长回文子序列
+# 最长回文子序列
 
 ```cpp
 int longestPalindromeSubseq(string s) {
@@ -640,7 +638,7 @@ int longestPalindromeSubseq(string s) {
 
 ---
 
-## 题型速查
+# 题型速查
 
 | 题型 | 解法 | 复杂度 |
 |------|------|--------|
@@ -654,7 +652,7 @@ int longestPalindromeSubseq(string s) {
 
 > [!tip]- **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。
 
-## 关联笔记 · 延伸要点 4
+# 关联笔记 · 延伸要点 4
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Knapsack： 0-1, Complete, Multiple (背包三种)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
 - [Interval DP (区间DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
@@ -663,26 +661,26 @@ int longestPalindromeSubseq(string s) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **09-Dynamic Programming (动态规划)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **09-Dynamic Programming (动态规划)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

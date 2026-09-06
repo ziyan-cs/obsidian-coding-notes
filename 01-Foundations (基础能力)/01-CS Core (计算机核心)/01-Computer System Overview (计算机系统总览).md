@@ -5,24 +5,22 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Computer System Overview (计算机系统总览)
-
 > [!abstract] 学习定位：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
 
-## Computer System Overview (计算机系统总览)
+# Computer System Overview (计算机系统总览)
 
 > [!note] 本节重点：核心考点：计算机的五大逻辑部件、冯·诺依曼架构、存储程序概念、指令与数据同存
 
-## 计算机的本质
+# 计算机的本质
 
 计算机是一种**存储程序**的通用电子设备：将指令和数据以二进制形式存储在内存中，运行时逐条取指令、译码、执行。
 
-## 冯·诺依曼架构
+# 冯·诺依曼架构
 
 ```
                      ┌────────────────────┐
@@ -53,14 +51,14 @@ verified: 2026-09-06
 | **Input Device**                | Send external data into the computer       |
 | **Output Device**               | Output computation results                 |
 
-## 存储程序概念
+# 存储程序概念
 
 - 指令和数据**没有区别**——都是二进制数，存在同一内存中
 - 指令由 **操作码（opcode）+ 操作数（operand）** 组成
 - 程序执行 = 重复：取指令 → 译码 → 执行
 - 这意味着**程序可以修改自身**（自修改代码，现代架构通常禁止）
 
-## 指令执行基本流程
+# 指令执行基本流程
 
 ```
 PC → Address → Fetch instruction → IR
@@ -76,7 +74,7 @@ PC → Address → Fetch instruction → IR
                                 Repeat...
 ```
 
-## 现代 CPU 的改进
+# 现代 CPU 的改进
 
 冯·诺依曼架构的**瓶颈**：CPU 和内存之间的速度差距（**冯·诺依曼瓶颈**），即内存带宽限制了 CPU 的指令/数据吞吐。
 
@@ -88,16 +86,15 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-
 计算机架构与抽象详见 → [Hardware vs Software（软硬件关系）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/02-Hardware%20vs%20Software%20(软硬件关系).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
 
 ---
 
-## System Abstraction (系统抽象层次)
+# System Abstraction (系统抽象层次)
 
 > [!note] 本节重点：核心考点：计算机系统的层次抽象模型、每层屏蔽下层细节、抽象是控制复杂度的核心手段
 
-## 抽象层次模型
+# 抽象层次模型
 
 每一层**隐藏下层实现细节**，仅暴露接口给上层：
 
@@ -134,7 +131,7 @@ PC → Address → Fetch instruction → IR
 └──────────────────────────────────────────────────┘
 ```
 
-## 抽象的好处与代价
+# 抽象的好处与代价
 
 | 好处 | 代价 |
 |------|------|
@@ -146,16 +143,15 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-
 计算机本质与软硬件关系详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [Hardware vs Software（软硬件关系）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/02-Hardware%20vs%20Software%20(软硬件关系).md)
 
 ---
 
-## Hardware and Software (硬件与软件)
+# Hardware and Software (硬件与软件)
 
 > [!note] 本节重点：核心考点：软硬件的逻辑等价性、分层抽象、固件的角色、ISA 作为软硬件分界
 
-## 硬件与软件的关系
+# 硬件与软件的关系
 
 硬件是计算机的物理实体，软件是运行在硬件上的指令和数据。二者在**逻辑上等价**——任何由软件实现的功能，理论上都可以用硬件实现（反之亦然）。
 
@@ -175,7 +171,7 @@ ISA 是软硬件的**契约**：
 - 硬件保证：正确执行 ISA 中定义的每一条指令
 - 软件保证：只使用 ISA 定义的指令
 
-## 分层抽象
+# 分层抽象
 
 | 层 | 例子 | 抽象内容 |
 |----|------|---------|
@@ -187,14 +183,14 @@ ISA 是软硬件的**契约**：
 | 微架构层 | 流水线、缓存 | 指令实现细节 |
 | 电路层 | 逻辑门、晶体管 | 布尔逻辑 |
 
-## 固件
+# 固件
 
 固件（Firmware）是存储在 ROM/Flash 中的软件，介于硬件和操作系统之间：
 
 - **BIOS**：传统 x86 固件，16 位实模式，负责 POST → 加载引导程序
 - **UEFI**：现代替代，32/64 位，支持更大磁盘，模块化驱动
 
-## OS 的角色
+# OS 的角色
 
 | 角色 | 职责 |
 |------|------|
@@ -205,31 +201,30 @@ ISA 是软硬件的**契约**：
 
 ---
 
-
 计算机本质与系统抽象详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
 
-## 常见误区
+# 常见误区
 
 - 把 **01-Computer System Overview (计算机系统总览)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Computer System Overview (计算机系统总览)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

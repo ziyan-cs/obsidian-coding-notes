@@ -4,18 +4,16 @@ tags:
 status: 🌱
 ---
 
-# 02-IM System (即时通信系统)
-
 > [!abstract] 核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
 
-## 需求分析
+# 需求分析
 
-### 功能需求
+## 功能需求
 
 | 需求 | 说明 |
 |------|------|
@@ -27,7 +25,7 @@ status: 🌱
 | 多端同步 | 手机、PC、Web 同时在线，消息同步 |
 | 文件/图片 | 附件消息的上传和下载 |
 
-### 非功能需求
+## 非功能需求
 
 | 维度 | 指标 |
 |------|------|
@@ -39,7 +37,7 @@ status: 🌱
 | 可用性 | 99.99%（消息不允许丢） |
 | 消息不丢 | 写入持久化后才返回 ACK |
 
-## 数据量估算
+# 数据量估算
 
 | 项目 | 计算 |
 |------|------|
@@ -53,7 +51,7 @@ status: 🌱
 
 > **关键结论**：IM 是典型的**写密集型 + 高并发连接**系统。存储是最大挑战，必须分库分表 + 冷热分离。
 
-## 核心模型
+# 核心模型
 
 ```sql
 -- 消息内容表（按 conversation_id 分表，1024 张）
@@ -97,7 +95,7 @@ CREATE TABLE group_member (
 -- KEY: online:{user_id} → SET of device_ids (TTL: 5 min, heartbeat refresh)
 ```
 
-## 架构设计图
+# 架构设计图
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────┐
@@ -173,7 +171,7 @@ CREATE TABLE group_member (
 └─────────────────────────┴───────────────────────┴────────────────────┘
 ```
 
-### 消息投递流程
+## 消息投递流程
 
 ```text
 Sender           Connection Gateway    Router Service     Receiver GW      Message Store
@@ -208,7 +206,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
   │◄──── (optional) ─────┤◄──────────────────┤   receipt      │                │
 ```
 
-## 消息分发模型对比
+# 消息分发模型对比
 
 | 模型 | 原理 | 优点 | 缺点 | 适用场景 |
 |------|------|------|------|---------|
@@ -221,9 +219,9 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 - **群聊 ≤ 500 人**：写扩散，逐个推送
 - **群聊 > 500 人**：读扩散，写入 Group Timeline，成员拉取
 
-## 关键难点与解决方案
+# 关键难点与解决方案
 
-### 1. 消息序号（Sequence）的全局有序
+## 1. 消息序号（Sequence）的全局有序
 
 **问题**：分布式环境下如何保证消息的顺序性且不重复。
 
@@ -236,7 +234,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 断点续传：客户端携带 last_server_seq，服务端返回后续消息
 ```
 
-### 2. 消息可靠投递
+## 2. 消息可靠投递
 
 **问题**：网络断开、服务重启、进程崩溃都可能导致消息丢失。
 
@@ -252,7 +250,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 超时未 ACK：客户端重试，服务端通过 (sender_id, client_seq) 去重
 ```
 
-### 3. 多端同步
+## 3. 多端同步
 
 **问题**：手机、PC、Web 同时在线，消息不能重复推送。
 
@@ -261,7 +259,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 - 设备上线时，从 sync_cursor+1 开始拉取未同步消息
 - 消息推送时带上 server_seq，设备按 seq 去重
 
-### 4. 群聊写放大
+## 4. 群聊写放大
 
 **问题**：2000 人群每人发一条 → 2000 次写扩散 = 400 万次写入。
 
@@ -270,7 +268,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 - 500 人以上群：读扩散（写入 Group Timeline，成员 Pull）
 - 分层混合策略，按群活跃度动态切换
 
-### 5. 连接网关的水平扩展
+## 5. 连接网关的水平扩展
 
 **问题**：WebSocket 有状态，连接固定在某台机器。
 
@@ -279,7 +277,7 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 - 客户端重连时，DNS/LVS 分配到任意 Gateway（新连接重新注册到 Router Service）
 - 消息推送时，Router 查用户当前所在 Gateway，转发过去
 
-## 面试追问
+# 面试追问
 
 | 追问方向 | 参考回答 |
 |---------|---------|
@@ -295,26 +293,26 @@ IM 系统网络编程基础详解见 → [WebSocket Protocol](05-Network%20Progr
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
 
-## 常见误区
+# 常见误区
 
 - 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
 - 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-IM System (即时通信系统)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

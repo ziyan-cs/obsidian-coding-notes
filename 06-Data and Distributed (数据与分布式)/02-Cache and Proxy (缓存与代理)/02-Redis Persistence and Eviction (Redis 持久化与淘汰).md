@@ -5,19 +5,17 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Redis Persistence and Eviction (Redis 持久化与淘汰)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## RDB Persistence (RDB 持久化)
+# RDB Persistence (RDB 持久化)
 
 > [!note] 本节重点：核心考点：> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
-## RDB 快照
+# RDB 快照
 
 RDB 是 Redis 的全量快照持久化方式，将内存数据全部写入磁盘文件（`dump.rdb`）。
 
-### 触发方式
+## 触发方式
 
 ```ini
 save 900 1           # 900 秒内至少 1 个 key 变化 → BGSAVE
@@ -26,7 +24,7 @@ save 60  10000       # 60 秒内至少 10000 个 key 变化 → BGSAVE
 
 ```
 
-### BGSAVE 写时复制（COW）
+## BGSAVE 写时复制（COW）
 
 ```text
 Client              Redis Main Process        Forked Child           Disk
@@ -55,7 +53,7 @@ Client              Redis Main Process        Forked Child           Disk
 
 **COW 代价：** fork 后如果有大量写入，每个写操作的页（默认 4KB）都会触发复制，增加内存和延迟。`info persistence` 可监控 `rdb_changes_since_last_save`。
 
-### RDB 文件结构
+## RDB 文件结构
 
 ```
 ┌──────────┬─────────────┬──────────────┬──────────────┬────────────┐
@@ -73,7 +71,7 @@ Client              Redis Main Process        Forked Child           Disk
 
 ---
 
-## RDB 优缺点
+# RDB 优缺点
 
 | 优点 | 缺点 |
 |------|------|
@@ -84,7 +82,7 @@ Client              Redis Main Process        Forked Child           Disk
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -97,7 +95,7 @@ Client              Redis Main Process        Forked Child           Disk
 > [!tip]- **工程要点**
 > RDB + AOF 混合使用是最佳实践（Redis 4.0+ 支持混合持久化 = AOF rewrite 时生成 RDB 段 + AOF 增量段）。`latency-monitor-threshold` 可用于监控 fork 阻塞。
 
-## 30 秒回答 / 自测
+# 30 秒回答 / 自测
 
 - **30 秒回答**：RDB 是全量快照；BGSAVE 用 fork 子进程 + COW 异步写，主进程不阻塞（但 fork 本身会短暂阻塞，写量大时内存可能翻倍）；最多丢最后一次快照后的数据，适合备份/灾备，不适合高持久化要求，需搭配 AOF。
 - **常见误区**：以为 BGSAVE 完全零开销（fork 大内存实例可达秒级）；只开 RDB 却要求"不丢数据"（应配 AOF/混合持久化）。
@@ -109,15 +107,15 @@ AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrit
 
 ---
 
-## AOF Persistence (AOF 持久化)
+# AOF Persistence (AOF 持久化)
 
 > [!note] 本节重点：核心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
-## AOF 日志
+# AOF 日志
 
 AOF（Append Only File）记录每个写命令，重启时重放恢复数据。
 
-### 写回策略
+## 写回策略
 
 ```ini
 appendfsync always     # 每条命令都 fsync 到磁盘（最安全，最慢）
@@ -131,7 +129,7 @@ appendfsync no         # 交给 OS 决定刷盘（最快，丢最多）
 | everysec | 最多丢 1 秒数据 | ≈ 数万 |
 | no | 最多丢若干秒数据 | ≈ 十数万 |
 
-### AOF 文件格式
+## AOF 文件格式
 
 ```
 *3\r\n$3\r\nSET\r\n$3\r\nkey\r\n$5\r\nvalue\r\n
@@ -147,18 +145,18 @@ $5 → value  → 值
 
 ---
 
-## AOF 重写（Rewrite）
+# AOF 重写（Rewrite）
 
 AOF 文件随时间增长无限膨胀，需要定期压缩——重写不是读取旧 AOF，而是直接从内存数据生成。
 
-### 触发时机
+## 触发时机
 
 ```ini
 auto-aof-rewrite-percentage 100    # 文件比上次重写增大 100%
 auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 ```
 
-### 重写过程
+## 重写过程
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -202,7 +200,7 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 
 ---
 
-## 混合持久化（Redis 4.0+）
+# 混合持久化（Redis 4.0+）
 
 ```ini
 aof-use-rdb-preamble yes
@@ -221,7 +219,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ---
 
-## RDB vs AOF 对比
+# RDB vs AOF 对比
 
 | 特性 | RDB | AOF | 混合 |
 |------|-----|-----|------|
@@ -233,7 +231,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | AOF everysec 最推荐 | 丢 1 秒数据 vs always 的性能代价权衡 |
@@ -251,18 +249,18 @@ RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (�
 
 ---
 
-## Expiration and Eviction (过期与淘汰)
+# Expiration and Eviction (过期与淘汰)
 
 > [!note] 本节重点：核心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 
 > [!warning] Redis 配置与实现细节随版本变化
 > `hz`、采样数、时间预算、可用淘汰策略以及对象内部位布局都应以当前 Redis 官方文档和实际配置为准。这里保留机制心智模型，不把示意常量当作稳定面试答案。
 
-## 过期策略
+# 过期策略
 
 Redis 中 key 过期后的删除机制，混合使用两种策略：
 
-### 惰性删除（Lazy Deletion）
+## 惰性删除（Lazy Deletion）
 
 ```
 访问 key → 检查是否过期 → 过期则删除并返回 nil
@@ -272,7 +270,7 @@ Redis 中 key 过期后的删除机制，混合使用两种策略：
 - **优点**：CPU 友好，只在访问时检查
 - **缺点**：过期 key 可能长期占用内存（不被访问就不删除）
 
-### 定期删除（Active Expiration）
+## 定期删除（Active Expiration）
 
 ```c
 // serverCron 定时调用的 activeExpireCycle（简化）
@@ -302,7 +300,7 @@ void activeExpireCycle(void) {
 
 ---
 
-## 内存淘汰（Eviction）
+# 内存淘汰（Eviction）
 
 当 `maxmemory` 达到上限时，按策略淘汰 key 释放内存。
 
@@ -311,7 +309,7 @@ maxmemory 4gb
 maxmemory-policy allkeys-lru       # 8 种策略之一
 ```
 
-### 8 种淘汰策略
+## 8 种淘汰策略
 
 | 策略 | 范围 | 淘汰依据 | 说明 |
 |------|------|---------|------|
@@ -326,7 +324,7 @@ maxmemory-policy allkeys-lru       # 8 种策略之一
 
 ---
 
-## LRU 近似实现
+# LRU 近似实现
 
 Redis 没有用精确 LRU（代价高），而是采样近似 LRU：
 
@@ -353,7 +351,7 @@ unsigned long long estimateObjectIdleTime(robj *o) {
 
 ---
 
-## LFU 实现
+# LFU 实现
 
 Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
@@ -374,7 +372,7 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 ---
 
-## 经典题型速查 · 延伸要点 3
+# 经典题型速查 · 延伸要点 3
 | 题型 | 要点 |
 |------|------|
 | 惰性删除 + 定期删除的效果 | 在内存及时回收与 CPU 开销间折中，效果受负载和配置影响 |
@@ -386,11 +384,11 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 > [!tip]- **工程要点**
 > 生产环境通常 `maxmemory-policy allkeys-lru` + 合理设置 `maxmemory`（通常为机器内存的 50-70%，留余量给 COW 和 OS）。监控 `evicted_keys` 指标，如果持续增长说明内存不足需要扩容。
 
-## 30 秒回答
+# 30 秒回答
 
 过期是 key 的生命周期语义，淘汰是在内存达到 `maxmemory` 后的资源策略；二者不能混为一谈。Redis 通过访问时检查与后台主动清理处理过期 key，再按 `maxmemory-policy` 在候选 key 中淘汰。生产选型要看数据是否允许被驱逐、TTL 覆盖率、写入峰值和持久化/COW 内存余量。
 
-## 自测
+# 自测
 
 1. 一个 key 有 TTL 却迟迟未访问，为什么不应假设它会立刻释放内存？
 2. `volatile-*` 与 `allkeys-*` 的候选集合有何不同？
@@ -402,26 +400,26 @@ Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (�
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Redis Persistence and Eviction (Redis 持久化与淘汰)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

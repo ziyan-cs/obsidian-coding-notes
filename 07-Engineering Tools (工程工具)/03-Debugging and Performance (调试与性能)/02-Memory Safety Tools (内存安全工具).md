@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Memory Safety Tools (内存安全工具)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## Valgrind Memory Leaks (Valgrind 内存泄漏)
+# Valgrind Memory Leaks (Valgrind 内存泄漏)
 
 > [!note] 本节重点：核心考点：Memcheck 的错误类型、如何读报告、抑制误报
 
-## Valgrind 是什么
+# Valgrind 是什么
 
 Valgrind 是一个动态分析框架，其最常用工具 **Memcheck** 能在程序运行时检测：
 
@@ -27,7 +25,7 @@ Valgrind 是一个动态分析框架，其最常用工具 **Memcheck** 能在程
 
 ---
 
-## 基本用法
+# 基本用法
 
 ```bash
 g++ -g -O0 -o myapp main.cpp
@@ -49,9 +47,9 @@ valgrind --leak-check=full \
 
 ---
 
-## 报告解读
+# 报告解读
 
-### 内存泄漏
+## 内存泄漏
 
 ```
 ==1234== LEAK SUMMARY:
@@ -66,7 +64,7 @@ valgrind --leak-check=full \
 ==1234==    by 0x108812: main (main.cpp:15)            ← main 调用了 createNode
 ```
 
-### 使用未初始化内存
+## 使用未初始化内存
 
 ```
 ==1234== Conditional jump or move depends on uninitialised value(s)
@@ -75,7 +73,7 @@ valgrind --leak-check=full \
 ==1234==    at 0x108700: main (main.cpp:10)
 ```
 
-### Use-After-Free
+## Use-After-Free
 
 ```
 ==1234== Invalid read of size 4
@@ -87,7 +85,7 @@ valgrind --leak-check=full \
 
 ---
 
-## 抑制误报（Suppression）
+# 抑制误报（Suppression）
 
 某些第三方库或系统库会触发 Valgrind 警告，可通过抑制文件忽略：
 
@@ -100,7 +98,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ---
 
-## Valgrind 其他工具
+# Valgrind 其他工具
 
 |工具|用途|启动方式|
 |---|---|---|
@@ -112,7 +110,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
 - [Core Dump Analysis (核心转储分析)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03b-Core%20Dump%20Analysis%20(核心转储分析)%20⭐.md)
@@ -122,14 +120,14 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ---
 
-## AddressSanitizer and UBSan (Sanitizer 工具)
+# AddressSanitizer and UBSan (Sanitizer 工具)
 
 > [!note] 本节重点：核心考点：ASan/UBSan 的检测能力、与 Valgrind 的对比、如何开启
 
 > [!warning] Sanitizer 是测试工具，不是正确性证明
 > 它只能覆盖实际执行到的路径，且编译器、平台、标准库和启用的子选项都会影响效果。将 Sanitizer 构建作为测试配置运行，发现报告先定位根因，不要仅压制错误。
 
-## AddressSanitizer（ASan）
+# AddressSanitizer（ASan）
 
 AddressSanitizer（ASan）通过编译器插桩检测常见内存错误，通常比 Valgrind Memcheck 更适合日常开发与 CI；具体性能开销取决于程序、平台和编译器，应以本机测量为准（NEEDS_VERIFY）。
 
@@ -138,7 +136,7 @@ g++ -fsanitize=address -fno-omit-frame-pointer -g -O1 -o myapp main.cpp
 ./myapp
 ```
 
-### 能检测的问题
+## 能检测的问题
 
 |错误类型|说明|
 |---|---|
@@ -151,7 +149,7 @@ g++ -fsanitize=address -fno-omit-frame-pointer -g -O1 -o myapp main.cpp
 |Double free|重复释放|
 |Memory leaks|内存泄漏（需加 `LeakSanitizer`）|
 
-### 报告示例
+## 报告示例
 
 ```
 ==1234==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000014
@@ -167,7 +165,7 @@ READ of size 4 at 0x602000000014 thread T0
 
 ---
 
-## UndefinedBehaviorSanitizer（UBSan）
+# UndefinedBehaviorSanitizer（UBSan）
 
 检测 C++ 中的**未定义行为**：
 
@@ -175,7 +173,7 @@ READ of size 4 at 0x602000000014 thread T0
 g++ -fsanitize=undefined -g -o myapp main.cpp
 ```
 
-### 能检测的未定义行为
+## 能检测的未定义行为
 
 ```bash
 -fsanitize=null             # 空指针解引用
@@ -196,7 +194,7 @@ main.cpp:15:5: runtime error: signed integer overflow: 2147483647 + 1
 
 ---
 
-## 组合使用（推荐）
+# 组合使用（推荐）
 
 ```bash
 g++ -fsanitize=address,undefined \
@@ -207,7 +205,7 @@ g++ -fsanitize=address,undefined \
 
 ---
 
-## ASan vs Valgrind
+# ASan vs Valgrind
 
 | |ASan|Valgrind Memcheck|
 |---|---|---|
@@ -222,7 +220,7 @@ g++ -fsanitize=address,undefined \
 
 ---
 
-## ThreadSanitizer（TSan）
+# ThreadSanitizer（TSan）
 
 检测多线程的数据竞争（Data Race）：
 
@@ -241,17 +239,17 @@ WARNING: ThreadSanitizer: data race (pid=1234)
 
 > ASan 和 TSan **不能同时使用**（会冲突），需要分开跑。
 
-## 30 秒回答
+# 30 秒回答
 
 ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未定义行为，TSan 发现数据竞争。它们通过不同的插桩和运行时工作，通常应拆成独立测试配置；报告是否出现取决于测试是否真正走到问题路径，不能代替单元测试、代码审查或性能测量。
 
-## 自测
+# 自测
 
 1. 为什么 ASan 与 TSan 通常要分开构建和运行？
 2. “Sanitizer 没报错”为什么不能证明程序没有内存或并发问题？
 3. 遇到 sanitizer report 时，为什么应先做最小复现而不是关掉检查？
 
-## Sources
+# Sources
 
 - [Clang Sanitizers documentation](https://clang.llvm.org/docs/index.html)
 - [GCC instrumentation options](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html)
@@ -259,7 +257,7 @@ ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
 - [Core Dump Analysis (核心转储分析)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03b-Core%20Dump%20Analysis%20(核心转储分析)%20⭐.md)
 - [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
@@ -268,26 +266,26 @@ ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Memory Safety Tools (内存安全工具)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

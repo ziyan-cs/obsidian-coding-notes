@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Lock Free and Performance (无锁与性能)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 
-## Lock-free Structures Overview (无锁结构概念)
+# Lock-free Structures Overview (无锁结构概念)
 
 > [!note] 本节重点：核心考点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
-## 什么是无锁（Lock-Free）
+# 什么是无锁（Lock-Free）
 
 ```cpp
 // 有锁版本
@@ -43,7 +41,7 @@ void push(int val) {
 - 任意线程挂起不会阻塞其他线程的进度
 - 系统中至少有一个线程能在有限步内完成操作
 
-## 无锁栈（Lock-Free Stack）
+# 无锁栈（Lock-Free Stack）
 
 ```cpp
 template<typename T>
@@ -75,7 +73,7 @@ public:
 };
 ```
 
-## ABA 问题
+# ABA 问题
 
 ```cpp
 // ABA 问题场景：
@@ -96,7 +94,7 @@ std::atomic<TaggedPointer> head_;
 // - 或用 std::atomic<std::shared_ptr<T>> (C++20)
 ```
 
-## 内存管理难题
+# 内存管理难题
 
 ```cpp
 // 无锁结构的最大问题：何时释放内存？
@@ -112,7 +110,7 @@ std::atomic<TaggedPointer> head_;
 // 4. Epoch-Based Reclamation (EBR)
 ```
 
-## 何时用无锁？
+# 何时用无锁？
 
 | 适合无锁 | 不适合无锁 |
 |---------|-----------|
@@ -127,7 +125,7 @@ std::atomic<TaggedPointer> head_;
 // "Lock-free programming is like a sharp knife — useful but easy to cut yourself"
 ```
 
-## C++ 中的无锁设施
+# C++ 中的无锁设施
 
 | 设施 | 说明 |
 |------|------|
@@ -145,15 +143,15 @@ std::atomic<TaggedPointer> head_;
 
 ---
 
-## C++ Concurrency and Performance Optimization (C++ 并发性能优化)
+# C++ Concurrency and Performance Optimization (C++ 并发性能优化)
 
 > [!note] 本节重点：核心考点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
 
-## 锁竞争优化
+# 锁竞争优化
 
 高并发场景下锁竞争是最大的性能杀手。下面是优化思路，按性价比排序。
 
-### 1. 缩小临界区
+## 1. 缩小临界区
 
 ```cpp
 // ❌ 差：整个函数加锁
@@ -177,7 +175,7 @@ void processOrder(Order& order) {
 }
 ```
 
-### 2. 读写锁（shared_mutex）
+## 2. 读写锁（shared_mutex）
 
 读多写少的场景用 `shared_mutex`，读不互斥：
 
@@ -202,7 +200,7 @@ public:
 };
 ```
 
-### 3. 无锁数据结构
+## 3. 无锁数据结构
 
 只在确实成为瓶颈时使用。参考 `folly::ConcurrentHashMap`。
 
@@ -223,9 +221,9 @@ public:
 
 ---
 
-## Cache Line 与伪共享（False Sharing）
+# Cache Line 与伪共享（False Sharing）
 
-### 问题
+## 问题
 
 CPU 缓存以 cache line（通常 64 字节）为单位加载。两个线程修改同一 cache line 中的不同变量 → 各自的缓存行反复失效 → 性能骤降。
 
@@ -239,7 +237,7 @@ struct Data {
 // 线程 1 写 a → 线程 2 的缓存行失效 → 重新加载 → 性能下降 10 倍+
 ```
 
-### 解决方案：对齐填充
+## 解决方案：对齐填充
 
 ```cpp
 // ✅ 对齐到 cache line
@@ -259,7 +257,7 @@ struct Data {
 
 ---
 
-## 内存序选择
+# 内存序选择
 
 C++ 内存序不是"越强越安全"，越强意味着越多的 CPU 屏障：
 
@@ -295,7 +293,7 @@ void consumer() {
 
 ---
 
-## 线程池与 task 窃取（Work Stealing）
+# 线程池与 task 窃取（Work Stealing）
 
 均匀分配任务可能导致负载不均——某个线程空闲而其他线程繁忙。Work Stealing 允许空闲线程"偷取"其他线程队列尾部的任务。
 
@@ -329,7 +327,7 @@ class WorkStealingPool {
 
 ---
 
-## NUMA 感知
+# NUMA 感知
 
 现代多路服务器（如 Intel 双路/四路）中，访问本地内存 vs 远端内存延迟差异可达 **1.5-2 倍**。
 
@@ -371,7 +369,7 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-## 性能分析清单
+# 性能分析清单
 
 当你的 C++ 后端服务性能不达标，按这个顺序排查：
 
@@ -387,7 +385,7 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -406,26 +404,26 @@ for (int i = 0; i < numThreads; i++) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Lock Free and Performance (无锁与性能)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

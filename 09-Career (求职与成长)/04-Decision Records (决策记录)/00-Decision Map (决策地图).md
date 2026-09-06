@@ -6,17 +6,15 @@ confidence: 1
 verified: 2026-09-05
 ---
 
-# 00-Decision Map (决策地图)
-
 > [!abstract] 一句话结论：技术选型没有脱离约束的正确答案；决策记录应写清上下文、候选项、权衡、结论和可逆性。
 
-## 使用场景
+# 使用场景
 
 - C++、Go、Python 如何分工。
 - mutex 还是 channel，缓存还是数据库直读，同步还是异步。
 - 什么时候引入 Redis、MQ、gRPC、分库分表。
 
-## 决策模板（ADR-lite）
+# 决策模板（ADR-lite）
 
 ```md
 # Decision: <标题>
@@ -28,13 +26,13 @@ verified: 2026-09-05
 - Revisit trigger: 什么变化后需要重审。
 ```
 
-## 规则
+# 规则
 
 - 没有真实约束时，写“学习实验”，不要伪装成生产决策。
 - 区分事实、推断和个人偏好。
 - 对版本、框架、性能数据写来源与验证日期。
 
-## 关联
+# 关联
 
 - [[01-Resource Lifetime (资源生命周期)]]
 - [[02-Concurrency Models (并发模型)]]

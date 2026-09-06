@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 06-Connection Pool (连接池)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## Connection Pool (连接池)
+# Connection Pool (连接池)
 
 > [!note] 本节重点：核心考点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
-## MySQL C API 基础
+# MySQL C API 基础
 
 ```c
 #include <mysql/mysql.h>
@@ -39,7 +37,7 @@ mysql_free_result(result);
 mysql_close(conn);
 ```
 
-## 连接池核心设计
+# 连接池核心设计
 
 数据库连接池的核心与通用网络连接池类似，但增加了 MySQL 特有的检查机制：
 
@@ -71,7 +69,7 @@ typedef struct db_connection_pool {
 } db_connection_pool;
 ```
 
-## 连接有效性检查
+# 连接有效性检查
 
 MySQL 连接可能因为网络超时、服务器重启等原因断开。使用前需要 ping：
 
@@ -98,7 +96,7 @@ int db_conn_validate(db_connection *conn) {
 }
 ```
 
-## MySQL 连接池的关键参数
+# MySQL 连接池的关键参数
 
 ```c
 // 连接池初始化
@@ -139,7 +137,7 @@ max_wait = 30ms        # 获取连接最大等待时间
 timeout = 30s          # 连接超时时间（MySQL wait_timeout 默认 8h）
 ```
 
-## MySQL Server 端配置
+# MySQL Server 端配置
 
 ```ini
 max_connections = 500           # 最大连接数（默认 151）
@@ -149,7 +147,7 @@ thread_cache_size = 64          # 线程缓存
 
 ```
 
-## 多线程安全
+# 多线程安全
 
 ```c
 db_connection *pool_get_connection(db_connection_pool *pool) {
@@ -196,38 +194,37 @@ db_connection *pool_get_connection(db_connection_pool *pool) {
 
 > [!tip]- **工程要点**：池大小、等待时间、`wait_timeout` 与服务端 `max_connections` 都必须按数据库容量和应用并发压测决定。归还连接前必须回滚未完成事务、清理会话状态；断线后显式重建连接，不依赖隐式自动重连。优先选维护活跃、与当前客户端库兼容的实现，而不是只因名称推荐某个连接池。
 
-## 30 秒回答
+# 30 秒回答
 
 **连接池为什么不能只调大？** 每个连接都消耗数据库端内存、线程/调度与锁竞争预算；池过大可能让数据库更慢。先设上限和超时，归还时清理事务状态，断线后显式建新，并用指标验证排队与数据库负载。
 
 ---
 
 
-
 MySQL基础连接配置见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-Connection Pool (连接池)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

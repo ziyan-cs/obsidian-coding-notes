@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Logging and Recovery (日志与恢复)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## Write Ahead Logging (预写日志)
+# Write Ahead Logging (预写日志)
 
 > [!note] 本节重点：核心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 
-## WAL 的核心思想
+# WAL 的核心思想
 
 **WAL（Write-Ahead Logging）：** 在将数据写入磁盘之前，先确保日志已经写入磁盘。
 
@@ -35,7 +33,7 @@ WAL 写入：
 | 写入位置 | 固定文件末尾 | 分散在不同位置 |
 | 写入效率 | 极高 | 低（需要寻道） |
 
-## Redo Log 的写入流程
+# Redo Log 的写入流程
 
 ```
 UPDATE user SET balance=100 WHERE id=1;
@@ -51,7 +49,7 @@ UPDATE user SET balance=100 WHERE id=1;
 
 **关键点：** redo 已按策略持久化后，崩溃恢复可重放必要修改；但数据库持久性还受硬件写缓存、操作系统/电源故障、binlog 配置和复制拓扑影响，不能简化成“任何故障都零丢失”。
 
-## Redo Log Buffer 与刷盘时机
+# Redo Log Buffer 与刷盘时机
 
 ```ini
 innodb_log_buffer_size = 16M
@@ -74,7 +72,7 @@ innodb_flush_log_at_trx_commit = 1
 批量导入 → innodb_flush_log_at_trx_commit = 0（然后设为 1）
 ```
 
-## Undo Log 的作用
+# Undo Log 的作用
 
 Undo Log 是 WAL 的另一面——记录**修改前的数据**，用于事务回滚和 MVCC：
 
@@ -91,7 +89,7 @@ MVCC 快照读时：
   如果需要读取旧版本 → 通过 undo log 版本链找到
 ```
 
-## WAL 与 ACID 的对应
+# WAL 与 ACID 的对应
 
 ```
 A（原子性）← undo log：事务回滚
@@ -102,23 +100,22 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 > [!tip]- **工程要点**：WAL 把“日志先于数据页持久化”作为恢复基础。`innodb_flush_log_at_trx_commit` 的选择是耐久性、延迟和设备语义之间的权衡；任何可承受丢失窗口或性能提升倍数都必须以当前版本、存储栈和压测结果验证。redo/undo 的具体记录格式也属于实现细节。
 
-## 30 秒回答
+# 30 秒回答
 
 **redo 和 undo 分别解决什么？** redo 支持崩溃后的重做，保证已提交修改可恢复；undo 保存旧版本，用于回滚与 MVCC。WAL 的核心顺序是先让恢复所需日志按策略持久化，再异步刷数据页。
 
 ---
 
 
-
 崩溃恢复详解见 → [Redo Log：Crash Recovery (崩溃恢复)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md) · [Binlog vs Redo Log：Differences (两者区别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07c-Binlog%20vs%20Redo%20Log：Differences%20(两者区别).md)
 
 ---
 
-## Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
+# Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 
 > [!note] 本节重点：核心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
-## Redo Log 的物理结构
+# Redo Log 的物理结构
 
 Redo Log 是**物理日志**——记录的是"在某个页的某个偏移量写入了什么数据"，而非 SQL 语句。
 
@@ -148,7 +145,7 @@ innodb_log_files_in_group = 3
 
 ```
 
-## Redo Log 的循环写入
+# Redo Log 的循环写入
 
 Redo log 文件不是无限增长的——它使用**固定大小的循环缓冲区**：
 
@@ -166,7 +163,7 @@ redo log 文件组（3 个文件，循环使用）：
   当 write_pos 追到 checkpoint 时 → 强制刷脏页 → 推进 checkpoint
 ```
  
-## Checkpoint 机制
+# Checkpoint 机制
 
 Checkpoint 解决了两个问题：
 1. **缩减恢复时间**：不需要重放所有 redo log，只需重放 checkpoint 之后的
@@ -189,7 +186,7 @@ Checkpoint 解决了两个问题：
 - Page Cleaner 线程后台持续刷脏页
 - 当 redo log 空间即将用尽时，加速刷脏页
 
-## 崩溃恢复流程
+# 崩溃恢复流程
 
 ```text
 ┌──────────────────────────────┐
@@ -233,7 +230,7 @@ Checkpoint 解决了两个问题：
 └───────────────────────────────┘
 ```
 
-## LSN（Log Sequence Number）
+# LSN（Log Sequence Number）
 
 LSN 是 redo log 的唯一标识，单调递增：
 
@@ -255,11 +252,11 @@ LSN 的作用：
 
 > [!tip]- **工程要点**：redo log 太小可能增加 checkpoint 压力并造成写入抖动；过大又会拉长恢复扫描窗口。容量、checkpoint 进度与恢复时间受版本、写入模式、设备和恢复流程影响，不能套用固定“小时数、百分比或分钟数”公式。应采集日志生成速率、脏页与恢复演练数据后再调优。
 
-## Binlog and Redo Log (Binlog 与 Redo Log)
+# Binlog and Redo Log (Binlog 与 Redo Log)
 
 > [!note] 本节重点：核心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
-## Binlog vs Redo Log 概览
+# Binlog vs Redo Log 概览
 
 | 特性 | Redo Log | Binlog |
 |------|----------|--------|
@@ -270,7 +267,7 @@ LSN 的作用：
 | 记录内容 | "在页 X 的偏移 Y 写入了 Z" | "执行了 SQL" 或 "某行从 A 变成 B" |
 | 同步方式 | 事务提交时刷盘（由参数控制） | 事务提交时刷盘（由 sync_binlog 控制） |
 
-## 物理日志 vs 逻辑日志
+# 物理日志 vs 逻辑日志
 
 ```
 Redo Log（物理日志）：
@@ -291,9 +288,9 @@ Binlog（逻辑日志）：
 - 主从复制时主库和从库可以不同版本
 - 支持时间点恢复（可以恢复到任意一秒）
 
-## Binlog 三种格式
+# Binlog 三种格式
 
-### STATEMENT 格式
+## STATEMENT 格式
 
 ```sql
 -- 配置
@@ -311,7 +308,7 @@ UPDATE user SET update_time = NOW() WHERE id=1;
 -- 从库重放时 NOW() = 2024-01-01 12:05:30  ← 不一致！
 ```
 
-### ROW 格式（MySQL 5.7+ 默认）
+## ROW 格式（MySQL 5.7+ 默认）
 
 ```sql
 -- 记录的是每一行修改前后的值
@@ -324,7 +321,7 @@ UPDATE user SET balance=balance-100 WHERE id=1;
 **优点：** 相比 statement 格式更能准确表达行变更，减少许多语义差异；仍要考虑版本、复制配置、DDL 与故障恢复边界
 **缺点：** 批量操作会产生大量 binlog 数据
 
-### MIXED 格式
+## MIXED 格式
 
 MySQL 自动判断：如果 SQL 是确定性的，用 STATEMENT；否则用 ROW。
 
@@ -338,7 +335,7 @@ UPDATE user SET update_time=NOW() WHERE id=1;
 -- binlog: 记录行修改前后的完整值
 ```
 
-## 两阶段提交（Two-Phase Commit）
+# 两阶段提交（Two-Phase Commit）
 
 Binlog 和 Redo Log 需要在事务提交时保持一致——两阶段提交解决这个问题。
 
@@ -393,26 +390,26 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Logging and Recovery (日志与恢复)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

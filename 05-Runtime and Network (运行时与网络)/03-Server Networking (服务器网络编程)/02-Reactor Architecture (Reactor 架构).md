@@ -5,16 +5,14 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Reactor Architecture (Reactor 架构)
-
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-## Reactor Pattern (Reactor模式)
+# Reactor Pattern (Reactor模式)
 
 > [!note] 本节重点：核心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
 > 代表：Redis 6.0 之前的网络处理部分
 
-## 模型结构
+# 模型结构
 
 ```text
 ┌───────────────────────────────────────────────┐
@@ -39,7 +37,7 @@ verified: 2026-09-06
 └───────────────────────────────────────────────┘
 ```
 
-## 核心代码结构
+# 核心代码结构
 
 ```cpp
 // Reactor 单线程事件循环核心框架
@@ -73,19 +71,19 @@ public:
 };
 ```
 
-## 工作流程
+# 工作流程
 
 1. Reactor 调用 `epoll_wait()` 等待事件
 2. 新连接事件 → Acceptor 调用 `accept()`，注册新 fd 到 Reactor
 3. 读写事件 → Handler 负责 `read()` → 业务处理 → `write()`
 4. 回到步骤 1
 
-## 优点
+# 优点
 
 - 模型简单，无锁，无线程切换开销
 - 适合 I/O 密集、业务逻辑极轻的场景
 
-## 缺点
+# 缺点
 
 - **业务处理阻塞 = 所有连接阻塞**：单线程中一旦某个 Handler 业务处理耗时，整个 Reactor 卡住
 - 无法利用多核 CPU
@@ -99,12 +97,12 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 
 ---
 
-## Reactor Threading Models (Reactor线程模型)
+# Reactor Threading Models (Reactor线程模型)
 
 > [!note] 本节重点：核心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题
 
-## 模型结构 · 延伸要点 2
+# 模型结构 · 延伸要点 2
 ```text
 ┌───────────────────────────────────────────┐
 │  Main Thread (Reactor)                    │
@@ -137,7 +135,7 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 └──────────┴──────────┴─────────────────────┘
 ```
 
-## 核心代码结构 · 延伸要点 2
+# 核心代码结构 · 延伸要点 2
 ```cpp
 // 主线程 Reactor + 工作线程池（简化）
 class ThreadPool {
@@ -184,23 +182,23 @@ void Handler::on_readable() {
 }
 ```
 
-## 工作流程 · 延伸要点 2
+# 工作流程 · 延伸要点 2
 1. 主线程 Reactor 监听事件，Acceptor 接受新连接
 2. 读事件到来，Handler 在**主线程**完成 `read()`，将数据投递给线程池
 3. 工作线程处理业务逻辑
 4. 工作线程将结果投递回 Reactor；所属 I/O 线程更新 write buffer 与 `EPOLLOUT`
 
-## 优点 · 延伸要点 2
+# 优点 · 延伸要点 2
 - 业务处理与 I/O 解耦，业务耗时不影响 I/O 响应
 - 能利用多核 CPU
 
-## 缺点 · 延伸要点 2
+# 缺点 · 延伸要点 2
 - **单 Reactor 仍是瓶颈**：所有 I/O 事件都在一个线程处理
 - 工作线程写回时需要注意线程安全（共享的 fd → 加锁或排队写）
 
 > **与 05a 的区别：** 05a 所有工作在单线程串行；05b 将业务逻辑卸载到工作线程，I/O 读写与连接状态仍归 Reactor 线程所有。高并发下主线程仍可能成为瓶颈——进一步优化见 05c 主从 Reactor 模型。
 
-## 30 秒回答
+# 30 秒回答
 
 单 Reactor 多线程把连接 I/O 与业务计算拆开，但不把一个连接的状态随意交给多个线程。Reactor 线程读请求并拥有 fd/read-write buffer；worker 只处理独立业务数据，完成后通过线程安全队列投递结果回 Reactor。关键风险是任务积压、连接已关闭和响应乱序。
 
@@ -210,7 +208,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 ---
 
-## Multi Reactor Architecture (多Reactor架构)
+# Multi Reactor Architecture (多Reactor架构)
 
 > [!note] 本节重点：核心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
@@ -247,17 +245,17 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
       └─────────────────────────────────────┘
 ```
 
-## "One Loop Per Thread" 的含义
+# "One Loop Per Thread" 的含义
 
 每个 Sub Reactor 是一个独立的 **event loop**，运行在自己的线程中，负责管理一批连接的所有 I/O 操作。线程之间的连接互不干扰，**天然无锁**。
 
-## 工作流程 · 延伸要点 3
+# 工作流程 · 延伸要点 3
 1. Main Reactor 只监听 listening fd，`accept()` 新连接
 2. 通过负载均衡策略（轮询、最少连接）将新连接的 fd 分配给某个 Sub Reactor
 3. 各 Sub Reactor 在自己的线程中独立运行 event loop，处理分配给它的所有连接的读写
 4. 业务逻辑若复杂，可再投递给线程池处理
 
-## 核心优势
+# 核心优势
 
 |特性|说明|
 |---|---|
@@ -266,7 +264,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 |无锁设计|同一连接的所有操作在同一线程，无需加锁|
 |线性扩展|Sub Reactor 数量通常 = CPU 核数|
 
-## 与前两种模型的对比
+# 与前两种模型的对比
 
 |模型|线程数|accept|I/O|业务处理|适用场景|
 |---|---|---|---|---|---|
@@ -276,7 +274,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 ---
 
-## Proactor 模式（补充对比）
+# Proactor 模式（补充对比）
 
 Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
@@ -291,7 +289,7 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 ---
 
-## 实际框架对应
+# 实际框架对应
 
 | 框架/项目       | 模型                                                              |
 | ----------- | --------------------------------------------------------------- |
@@ -314,26 +312,26 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
-## 常见误区
+# 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
 - 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Reactor Architecture (Reactor 架构)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

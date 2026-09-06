@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Heap and Top K (堆与 Top K)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 
-## Heap and Top K (堆与 Top K)
+# Heap and Top K (堆与 Top K)
 
 > [!note] 本节重点：核心考点：堆的 push/pop 操作、TopK 的堆解法 vs 快速选择、海量数据处理的堆思路
 
-## 堆的性质
+# 堆的性质
 
 - **最小堆**：父节点 ≤ 子节点，堆顶是最小值
 - **最大堆**：父节点 ≥ 子节点，堆顶是最大值
@@ -43,9 +41,9 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
 
 ---
 
-## Top-K Problems 解决
+# Top-K Problems 解决
 
-### 方案对比
+## 方案对比
 
 |方案|时间复杂度|适用场景|
 |---|---|---|
@@ -53,7 +51,7 @@ priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
 |最小堆维护大小为 K 的窗口|O(n log K)|**最常用**，n 大 K 小|
 |快速选择（QuickSelect）|O(n) 平均|只需第 K 大，不需要排序|
 
-### 最小堆求 Top-K 最大值
+## 最小堆求 Top-K 最大值
 
 ```cpp
 vector<int> topKLargest(vector<int>& nums, int k) {
@@ -68,7 +66,7 @@ vector<int> topKLargest(vector<int>& nums, int k) {
 }
 ```
 
-### QuickSelect（平均 O(n) 找第 K 大）
+## QuickSelect（平均 O(n) 找第 K 大）
 
 ```cpp
 int findKthLargest(vector<int>& nums, int k) {
@@ -89,7 +87,7 @@ int findKthLargest(vector<int>& nums, int k) {
 }
 ```
 
-### 经典变体
+## 经典变体
 
 ```cpp
 // 前 K 个高频元素
@@ -147,7 +145,7 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
@@ -157,26 +155,26 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **03-Heap and Top K (堆与 Top K)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Heap and Top K (堆与 Top K)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,28 +5,26 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 07-Binary Search (二分查找)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 
-## Binary Search Boundaries (二分边界)
+# Binary Search Boundaries (二分边界)
 
 > [!note] 本节重点：核心考点：边界条件、三种模板的使用场景、二分答案
 
-## 二分的本质
+# 二分的本质
 
 在**有序**（或具有单调性）的搜索空间中，每次排除一半，将 O(n) 降到 O(log n)。
 
 ---
 
-## 三种模板
+# 三种模板
 
-### 模板一：精确查找（找到即返回）
+## 模板一：精确查找（找到即返回）
 
 ```cpp
 int binarySearch(vector<int>& nums, int target) {
@@ -45,7 +43,7 @@ int binarySearch(vector<int>& nums, int target) {
 
 ---
 
-### 模板二：查找左边界（第一个 ≥ target 的位置）
+## 模板二：查找左边界（第一个 ≥ target 的位置）
 
 ```cpp
 // 第一个 >= target 的位置（lower_bound）
@@ -60,7 +58,7 @@ int lowerBound(vector<int>& nums, int target) {
 }
 ```
 
-### 模板三：查找右边界（最后一个 ≤ target 的位置）
+## 模板三：查找右边界（最后一个 ≤ target 的位置）
 
 ```cpp
 // 最后一个 <= target 的位置（upper_bound - 1）
@@ -89,7 +87,7 @@ auto it = upper_bound(nums.begin(), nums.end(), target);  // 第一个 > target 
 
 ---
 
-## 二分答案（最重要的应用）
+# 二分答案（最重要的应用）
 
 **适用场景：** 答案在某个范围内，且答案越大（或越小）越容易满足条件（单调性），可以二分答案，把"求最值"转化为"验证是否可行"。
 
@@ -110,7 +108,7 @@ while (lo < hi) {
 return lo;
 ```
 
-### 经典例题
+## 经典例题
 
 **木材切割（二分最大长度）：**
 
@@ -178,7 +176,7 @@ int shipWithinDays(vector<int>& weights, int days) {
 
 ---
 
-## 旋转数组中的二分
+# 旋转数组中的二分
 
 ```cpp
 // 搜索旋转排序数组（无重复）
@@ -201,7 +199,7 @@ int searchRotated(vector<int>& nums, int target) {
 
 ---
 
-## 二分常见陷阱
+# 二分常见陷阱
 
 |陷阱|说明|解决|
 |---|---|---|
@@ -211,7 +209,7 @@ int searchRotated(vector<int>& nums, int target) {
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
@@ -221,26 +219,26 @@ int searchRotated(vector<int>& nums, int target) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **07-Binary Search (二分查找)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **07-Binary Search (二分查找)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

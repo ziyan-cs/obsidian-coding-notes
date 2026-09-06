@@ -5,22 +5,20 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Arrays and Linked Lists (数组与链表)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 
-## Arrays and Two Pointers (数组与双指针)
+# Arrays and Two Pointers (数组与双指针)
 
 > [!note] 本节重点：核心考点：双指针的四种模式、滑动窗口、前缀和
 
-## 双指针四种模式
+# 双指针四种模式
 
-### 模式一：对撞指针（左右夹逼）
+## 模式一：对撞指针（左右夹逼）
 
 两指针从两端向中间移动，适合**有序数组**的搜索问题：
 
@@ -40,11 +38,11 @@ vector<int> twoSum(vector<int>& nums, int target) {
 
 典型题：Two Sum II、三数之和、盛最多水的容器、回文判断。
 
-### 模式二：快慢指针
+## 模式二：快慢指针
 
 两指针同向，速度不同，用于**链表环检测、找中点**（详见链表章节）。
 
-### 模式三：滑动窗口
+## 模式三：滑动窗口
 
 维护一个可变长度的窗口 `[l, r]`，右指针扩张，左指针收缩：
 
@@ -80,7 +78,7 @@ int lengthOfLongestSubstring(string s) {
 }
 ```
 
-### 模式四：快速分区（原地操作）
+## 模式四：快速分区（原地操作）
 
 ```cpp
 // 颜色分类 0/1/2，O(n) 时间 O(1) 空间
@@ -94,7 +92,7 @@ void sortColors(vector<int>& nums) {
 }
 ```
 
-## 前缀和
+# 前缀和
 
 ```cpp
 // 构建前缀和，O(1) 区间查询
@@ -110,7 +108,7 @@ int rangeSum = prefix[r + 1] - prefix[l];
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Hash Table (哈希表)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/04-Hash%20Table%20(哈希表)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
@@ -120,7 +118,7 @@ int rangeSum = prefix[r + 1] - prefix[l];
 
 ---
 
-## Linked List Patterns (链表反转判环与合并)
+# Linked List Patterns (链表反转判环与合并)
 
 > [!note] 本节重点：核心考点：链表反转的迭代与递归实现、环检测 Floyd 算法、有序链表合并、链表归并排序
 
@@ -133,7 +131,7 @@ struct ListNode {
 };
 ```
 
-## 反转链表（迭代）
+# 反转链表（迭代）
 
 ```cpp
 ListNode* reverseList(ListNode* head) {
@@ -151,7 +149,7 @@ ListNode* reverseList(ListNode* head) {
 
 **反转区间 [left, right]（92题）：** 找到 left-1 位置的节点，断开后反转子链表，再拼接。
 
-## 环检测（Floyd 判圈）
+# 环检测（Floyd 判圈）
 
 ```cpp
 bool hasCycle(ListNode* head) {
@@ -187,7 +185,7 @@ ListNode* detectCycle(ListNode* head) {
 
 **原理：** 设链表头到环入口距离为 a，环长为 b。相遇时 slow 走了 a+k，fast 走了 a+k+nb（n 圈），因 fast=2×slow，所以 nb=a+k，即从相遇点再走 a 步回到入口。
 
-## 合并两个有序链表
+# 合并两个有序链表
 
 ```cpp
 ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
@@ -224,7 +222,7 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
@@ -233,7 +231,7 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 ---
 
-## Fast and Slow Pointers (快慢指针)
+# Fast and Slow Pointers (快慢指针)
 
 > [!note] 本节重点：核心考点：快慢指针找中点/倒数第 K 个/环入口、回文链表判断、Floyd 判环算法
 
@@ -272,7 +270,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 
 ---
 
-## 关联笔记 · 延伸要点 3
+# 关联笔记 · 延伸要点 3
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
@@ -281,26 +279,26 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **01-Arrays and Linked Lists (数组与链表)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Arrays and Linked Lists (数组与链表)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

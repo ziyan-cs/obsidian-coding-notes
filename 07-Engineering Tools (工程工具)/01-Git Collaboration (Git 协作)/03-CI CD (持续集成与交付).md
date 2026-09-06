@@ -5,22 +5,20 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-CI CD (持续集成与交付)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
-## CI CD for C Plus Plus (C Plus Plus 持续集成)
+# CI CD for C Plus Plus (C Plus Plus 持续集成)
 
 > [!note] 本节重点：核心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
 
-## C++ CI/CD 流水线
+# C++ CI/CD 流水线
 
-### GitHub Actions 配置
+## GitHub Actions 配置
 
 ```yaml
 name: C++ CI
@@ -74,7 +72,7 @@ jobs:
         path: build/Testing/
 ```
 
-### 关键配置说明
+## 关键配置说明
 
 | 配置 | 用途 |
 |------|------|
@@ -84,7 +82,7 @@ jobs:
 | `ctest` | CMake 原生测试框架，直接输出测试报告 |
 | `fail-fast: false` | Debug 失败后继续跑 Release，拿到全部结果 |
 
-### 流水线阶段
+## 流水线阶段
 
 ```
 Commit/Push → Build → Unit Tests → Lint → Integration Tests → Deploy(可选)
@@ -95,7 +93,7 @@ Commit/Push → Build → Unit Tests → Lint → Integration Tests → Deploy(�
 
 ---
 
-## 静态分析集成（clang-tidy）
+# 静态分析集成（clang-tidy）
 
 ```yaml
 - name: Static analysis
@@ -117,7 +115,7 @@ endif()
 
 ---
 
-## Code Review 自动化
+# Code Review 自动化
 
 使用 GitHub 的 CODEOWNERS + 自动标注：
 
@@ -138,7 +136,7 @@ CMakeLists.txt   @tech-lead
 
 ---
 
-## C++ 项目典型 CI 技巧
+# C++ 项目典型 CI 技巧
 
 | 场景 | 做法 |
 |------|------|
@@ -153,7 +151,7 @@ CMakeLists.txt   @tech-lead
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
@@ -163,26 +161,26 @@ CMakeLists.txt   @tech-lead
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-CI CD (持续集成与交付)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

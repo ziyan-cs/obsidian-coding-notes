@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Redis Runtime and Client (Redis 运行时与客户端)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
-## Redis Event Loop (Redis 事件循环)
+# Redis Event Loop (Redis 事件循环)
 
 > [!note] 本节重点：核心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
-## Redis 单线程模型
+# Redis 单线程模型
 
 Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O、持久化和后台任务的线程/进程模型随版本与配置而变：
 
@@ -65,7 +63,7 @@ Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O�
 
 ---
 
-## 为什么单线程还这么快
+# 为什么单线程还这么快
 
 | 原因 | 说明 |
 |------|------|
@@ -75,7 +73,7 @@ Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O�
 | **无锁竞争** | 单线程不存在锁竞争和上下文切换 |
 | **数据结构优化** | SDS、ziplist 等针对内存效率优化 |
 
-### 延迟对比
+## 延迟对比
 
 ```
 内存访问（L1/L2/L3）:  ~1-10 ns
@@ -91,7 +89,7 @@ Redis 瓶颈通常在网络 I/O，而非 CPU
 
 ---
 
-## I/O 多路复用
+# I/O 多路复用
 
 ```c
 // Redis 事件循环核心（ae.c）
@@ -126,7 +124,7 @@ int aeProcessEvents(aeEventLoop *el, int flags) {
 
 ---
 
-## 单线程的问题
+# 单线程的问题
 
 | 问题 | 影响 | 解决方案 |
 |------|------|---------|
@@ -135,7 +133,7 @@ int aeProcessEvents(aeEventLoop *el, int flags) {
 | 大 key 操作 | 阻塞时间与 key 大小成正比 | `UNLINK`（异步删除）、拆分大 key |
 | Lua 脚本超时 | 脚本内循环或死循环 | 脚本设执行时间上限 |
 
-### 什么命令慢
+## 什么命令慢
 
 ```bash
 slowlog-log-slower-than 10000  # 单位微秒（默认 10ms）
@@ -151,7 +149,7 @@ LTRIM / LREM   # 列表操作可能 O(N)
 
 ---
 
-## Redis 6.0 多线程 I/O
+# Redis 6.0 多线程 I/O
 
 ```ini
 io-threads 4          # I/O 线程数（默认 4）
@@ -186,7 +184,7 @@ Main Thread                       I/O Threads
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -205,22 +203,22 @@ Redis 的底层数据结构详解见 → [SDS](01a1-SDS：Simple%20Dynamic%20Str
 
 ---
 
-## Redis Client Integration (Redis 客户端集成)
+# Redis Client Integration (Redis 客户端集成)
 
 > [!note] 本节重点：核心考点：> hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
 
-## hiredis 库
+# hiredis 库
 
 Redis 官方 C 客户端库，轻量、同步/异步 API 支持。
 
-### 编译链接
+## 编译链接
 
 ```bash
 git clone https://github.com/redis/hiredis.git
 cd hiredis && make && make install
 ```
 
-### 同步 API
+## 同步 API
 
 ```cpp
 #include <hiredis/hiredis.h>
@@ -263,7 +261,7 @@ int main() {
 }
 ```
 
-### 异步 API（基于 libevent）
+## 异步 API（基于 libevent）
 
 ```cpp
 #include <hiredis/async.h>
@@ -300,7 +298,7 @@ int main() {
 
 ---
 
-## 连接池设计（C++ 简单实现）
+# 连接池设计（C++ 简单实现）
 
 ```cpp
 class RedisPool {
@@ -351,7 +349,7 @@ public:
 
 ---
 
-## 项目集成架构
+# 项目集成架构
 
 ```
 ┌──────────────────────────┐
@@ -376,7 +374,7 @@ public:
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | redisCommand 的返回值 | `redisReply*`，用完必须 `freeReplyObject` |
@@ -394,26 +392,26 @@ Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单�
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Redis Runtime and Client (Redis 运行时与客户端)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

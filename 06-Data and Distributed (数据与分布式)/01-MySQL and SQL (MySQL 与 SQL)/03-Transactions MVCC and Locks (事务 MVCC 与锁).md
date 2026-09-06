@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Transactions MVCC and Locks (事务 MVCC 与锁)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## 30 秒回答
+# 30 秒回答
 
 事务保证一组读写以明确的隔离语义完成；MVCC 让读通常不阻塞写，但不消除锁和冲突。设计时先写出业务不变量，再选择隔离级别、索引和重试策略；不要把默认 RR 误认为所有并发问题都会自动解决。
 
-## 排查顺序
+# 排查顺序
 
 1. 写出事务中的读写序列和必须保持的不变量。
 2. 检查访问路径是否命中合适索引；锁范围由索引与查询条件决定。
@@ -22,27 +20,27 @@ verified: 2026-09-06
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - MVCC 不是完全无锁；写操作与当前读仍需协调。
 - 长事务并不更安全；它会占用 undo、阻塞清理并扩大锁冲突。
 - 死锁不是数据库故障；并发系统中必须识别并有限重试。
 
-## 自测
+# 自测
 
 1. 快照读和当前读的可见性与加锁行为有什么不同？
 2. 为什么缺失合适索引会扩大锁冲突？
 3. 为什么事务重试必须从业务边界开始？
 
-## Transaction Isolation Levels (事务隔离级别)
+# Transaction Isolation Levels (事务隔离级别)
 
 > [!note] 本节重点：核心考点：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
 
-## SQL 标准隔离级别
+# SQL 标准隔离级别
 
 SQL 标准定义了四种隔离级别，从低到高依次递增防护能力：
 
@@ -57,7 +55,7 @@ InnoDB range protection for locking reads and writes involves Next-Key Lock.
 Always distinguish snapshot reads from locking reads when discussing phantoms.
 ```
 
-## RU（Read Uncommitted，读未提交）
+# RU（Read Uncommitted，读未提交）
 
 ```sql
 SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
@@ -74,7 +72,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 
 **问题：** 脏读。实际生产中几乎不用。
 
-## RC（Read Committed，读已提交）
+# RC（Read Committed，读已提交）
 
 ```sql
 SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
@@ -93,7 +91,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 **实现：** 每条语句开始时生成一个 Read View（MVCC）。
 
-## RR（Repeatable Read，可重复读）
+# RR（Repeatable Read，可重复读）
 
 ```sql
 SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -110,7 +108,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
 **InnoDB 默认隔离级别**。RR 下普通一致性读依靠事务级 Read View；`FOR UPDATE` 等锁定读的范围保护由 next-key/gap locking 等机制决定，需结合索引与语句分析。
 
-## Serializable（可串行化）
+# Serializable（可串行化）
 
 ```sql
 SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
@@ -125,7 +123,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
 **问题：** 并发性能极低。只有数据一致性要求极严格的场景使用。
 
-## InnoDB 隔离级别对照
+# InnoDB 隔离级别对照
 
 | 隔离级别 | MVCC 快照 | 使用的锁 | 常见场景 |
 |---------|----------|---------|---------|
@@ -134,7 +132,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 | RR | 一致性读通常复用事务内 Read View | 锁定读可能使用 record/next-key/gap lock | InnoDB 默认，需理解范围锁 |
 | Serializable | 读具锁定语义 | 并发能力显著下降 | 极少数需强隔离且可接受代价的操作 |
 
-## 如何选择隔离级别
+# 如何选择隔离级别
 
 **RC vs RR 生产选择：**
 ```
@@ -163,11 +161,11 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 > [!tip]- **工程要点**：选择 RC 还是 RR 应从业务读语义、锁定读、死锁模式、复制配置和压测结果出发，不要把任一隔离级别当成通用最优解。RR 下的范围锁可能增加锁等待；RC 也不是“完全没有 gap lock”，外键/重复键检查等场景仍要以当前版本文档验证。
 
-## Transaction Anomalies (事务并发异常)
+# Transaction Anomalies (事务并发异常)
 
 > [!note] 本节重点：核心考点：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
 
-## 脏读（Dirty Read）
+# 脏读（Dirty Read）
 
 事务读到另一个事务**未提交**的数据。
 
@@ -193,7 +191,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 **解决：** 升级到 RC 或更高——只读已提交的数据。
 
-## 不可重复读（Non-repeatable Read）
+# 不可重复读（Non-repeatable Read）
 
 同一事务内两次读取**同一行**数据，结果不同（因为被其他事务修改并提交了）。
 
@@ -221,7 +219,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 **解决：** RR 或更高——通过 MVCC 快照隔离同一事务的多次读取。
 
-## 幻读（Phantom Read）
+# 幻读（Phantom Read）
 
 同一事务内两次查询**同一条件**，返回的行数不同（其他事务插入了新行）。
 
@@ -253,7 +251,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 **InnoDB 的解决方案：** Gap Lock（间隙锁），在 RR 级别也防止了幻读。但对于快照读（普通 SELECT），MVCC 本身已经避免了幻读——只有当前读（SELECT ... FOR UPDATE/LOCK IN SHARE MODE）才需要 Gap Lock 防护。
 
-## 三类并发问题的对比
+# 三类并发问题的对比
 
 | 问题 | 本质 | 操作类型 | 避免级别 | InnoDB 解决方式 |
 |------|------|---------|---------|----------------|
@@ -261,7 +259,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 | 不可重复读 | 同行的数据不一致 | UPDATE + COMMIT | RR 及以上 | MVCC 事务级快照 |
 | 幻读 | 行数不一致 | INSERT/DELETE + COMMIT | Serializable | Gap Lock + MVCC |
 
-## 实战排查
+# 实战排查
 
 ```sql
 -- 检查当前会话的隔离级别
@@ -284,16 +282,15 @@ SELECT * FROM performance_schema.data_lock_waits\G
 ---
 
 
-
 四种隔离级别详解见 → [Isolation Levels：RU, RC, RR, Serializable (四种隔离级别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05a-Isolation%20Levels：RU,%20RC,%20RR,%20Serializable%20(四种隔离级别).md) · [MVCC Internals：undo log & read view (MVCC底层实现)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)
 
 ---
 
-## MVCC Internals (MVCC 底层实现)
+# MVCC Internals (MVCC 底层实现)
 
 > [!note] 本节重点：核心考点：> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
-## MVCC 核心思想
+# MVCC 核心思想
 
 MVCC（Multi-Version Concurrency Control，多版本并发控制）允许**读不阻塞写，写不阻塞读**。
 
@@ -306,7 +303,7 @@ MVCC 机制：
   事务 B 读行 1 → 读取快照版本（旧版本）→ 无需等待
 ```
 
-## 三列隐藏字段
+# 三列隐藏字段
 
 InnoDB 的每行记录有三个隐藏列：
 
@@ -327,7 +324,7 @@ DB_TRX_ID：最近修改此行的事务 ID（递增）
 DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
 ```
 
-## undo log 版本链
+# undo log 版本链
 
 每次 UPDATE 产生一条 undo log，通过 DB_ROLL_PTR 串联成版本链：
 
@@ -348,7 +345,7 @@ DB_ROLL_PTR：指向回滚段中的 undo log 记录（可找到历史版本）
                                            └───────────────────────────┘
 ```
 
-## Read View 可见性判断
+# Read View 可见性判断
 
 Read View 是 MVCC 实现的核心——它定义了"哪些事务的修改对当前事务可见"。
 
@@ -412,7 +409,7 @@ Transaction Timeline (ordered by DB_TRX_ID)
   Txn 6: >= max_trx_id → INVISIBLE
 ```
 
-## 快照读 vs 当前读
+# 快照读 vs 当前读
 
 ```sql
 -- 快照读（Snapshot Read）：读 MVCC 历史版本，不加锁
@@ -438,7 +435,7 @@ RR（Repeatable Read）：
   → 同一事务内多次 SELECT 结果一致（可重复读）
 ```
 
-## MVCC 实战场景
+# MVCC 实战场景
 
 ```
 RR 级别下：
@@ -452,7 +449,7 @@ RR 级别下：
 > [!tip]- **工程要点**
 > MVCC 的核心优势是"读不阻塞写"——这在 OLTP 系统中极其重要。快照读是 MVCC 的主角，不加任何锁。而当前读（SELECT ... FOR UPDATE）不走 MVCC，直接读最新数据并加锁——这在高并发下容易成为瓶颈。在线业务中，尽量用快照读，只在"检测并更新"（如扣库存）的原子操作中使用当前读。
 
-## 30 秒回答 / 自测
+# 30 秒回答 / 自测
 
 - **30 秒回答**：MVCC 靠 undo log 版本链 + 隐藏列（DB_TRX_ID/DB_ROLL_PTR）实现读不阻塞写；快照读通过 Read View 判断可见性（creator/min/max + m_ids 规则），不加锁；当前读（FOR UPDATE）读最新版并加锁。RC 每条语句建新 Read View，RR 事务首个快照读建一次。
 - **常见误区**：以为 RR 下 `BEGIN` 时就建 Read View（实际首次快照读才建）；把 `LOCK IN SHARE MODE` 当成快照读（它是当前读）。
@@ -464,11 +461,11 @@ RR 级别下 MVCC 搭配 Next-Key Lock 解决幻读 → [隔离级别](05a-Isola
 
 ---
 
-## Table and Row Locks (表锁与行锁)
+# Table and Row Locks (表锁与行锁)
 
 > [!note] 本节重点：核心考点：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
 
-## 表锁 vs 行锁
+# 表锁 vs 行锁
 
 | 特性 | 表锁（Table Lock） | 行锁（Row Lock） |
 |------|-------------------|-----------------|
@@ -492,7 +489,7 @@ InnoDB：行锁 + 表锁
   UPDATE/DELETE：行级排他锁（自动）
 ```
 
-## InnoDB 行锁类型
+# InnoDB 行锁类型
 
 ```sql
 -- 共享锁（S Lock）：允许其他事务读，阻塞写
@@ -509,7 +506,7 @@ DELETE FROM t WHERE id = 1;            -- 自动加 X 锁
 --    X 和 X 互斥
 ```
 
-## 行锁基于索引
+# 行锁基于索引
 
 InnoDB 的行锁不是锁"行"，而是锁**索引记录**。
 
@@ -531,7 +528,7 @@ UPDATE t SET val = 10 WHERE name = 'Bob' AND age = 20;
 - 通过二级索引加锁时，InnoDB 还需要锁住对应的聚簇索引记录
 - 索引设计直接影响锁的粒度
 
-## 意向锁（Intention Lock）
+# 意向锁（Intention Lock）
 
 意向锁是**表级锁**，用于快速判断表中是否有行级锁，避免逐行检查。
 
@@ -556,7 +553,7 @@ UPDATE t SET val = 10 WHERE name = 'Bob' AND age = 20;
 | S（表共享） | 兼容 | 互斥 | 兼容 | 互斥 |
 | X（表排他） | 互斥 | 互斥 | 互斥 | 互斥 |
 
-## 行锁的实现开销
+# 行锁的实现开销
 
 ```
 行锁的内存结构（lock_t）：
@@ -582,16 +579,15 @@ SELECT * FROM performance_schema.data_lock_waits\G
 ---
 
 
-
 间隙锁与临键锁详解见 → [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
 
 ---
 
-## Gap and Next Key Locks (间隙锁与临键锁)
+# Gap and Next Key Locks (间隙锁与临键锁)
 
 > [!note] 本节重点：核心考点：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
 
-## 为什么需要 Gap Lock
+# 为什么需要 Gap Lock
 
 Gap Lock 解决**幻读**问题——在 RR 级别下防止其他事务插入新行：
 
@@ -612,7 +608,7 @@ Gap Lock 解决**幻读**问题——在 RR 级别下防止其他事务插入新
   → 事务 A 再次 SELECT → 出现幻读(id=4)
 ```
 
-## Gap Lock 的工作原理
+# Gap Lock 的工作原理
 
 Gap Lock 锁的是**索引记录之间的间隙**，而不是记录本身：
 
@@ -637,7 +633,7 @@ SELECT * FROM user WHERE id > 3 FOR UPDATE;
 - 不同事务的 Gap Lock 可以共存（间隙锁之间不冲突）
 - Gap Lock 只在 RR 和 Serializable 级别生效
 
-## Next-Key Lock（临键锁）
+# Next-Key Lock（临键锁）
 
 Next-Key Lock = **Record Lock（行锁）+ Gap Lock（间隙锁）**。InnoDB 默认的锁机制。
 
@@ -665,7 +661,7 @@ SELECT * FROM user WHERE id = 5 FOR UPDATE;
 -- 不锁 (<1) 的间隙：其他事务可以在 id<1 的范围内插入（如 id=0）
 ```
 
-## 唯一索引的特殊优化
+# 唯一索引的特殊优化
 
 当 WHERE 条件命中**唯一索引**时，Next-Key Lock 退化为 **Record Lock**：
 
@@ -682,7 +678,7 @@ SELECT * FROM user WHERE id > 5 FOR UPDATE;
 -- Next-Key Lock 完整生效，锁住 (5, +∞)
 ```
 
-## Gap Lock 导致的性能问题
+# Gap Lock 导致的性能问题
 
 Gap Lock 是 RR 级别下锁争用的常见原因：
 
@@ -698,7 +694,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
   3. 在代码层面做唯一性校验而非依赖 Gap Lock
 ```
 
-## 锁升级路径
+# 锁升级路径
 
 ```
 索引类型     | 查询类型    | 锁类型
@@ -710,7 +706,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 > [!tip]- **工程要点**：范围条件可能锁住比业务直觉更大的索引区间。排查时用 `performance_schema.data_locks`、事务信息和执行计划确认实际锁范围；切换 RC 可能减少部分 gap locking，但并不保证所有场景都没有 gap lock，须结合当前版本与约束验证。
 
-## 30 秒回答 / 自测 · 延伸要点 2
+# 30 秒回答 / 自测 · 延伸要点 2
 - **30 秒回答**：Next-Key Lock = Record Lock + Gap Lock，左开右闭；普通索引/范围查询用它锁住行与行前间隙防止幻读；命中唯一索引等值查询退化为 Record Lock；Gap Lock 只在 RR/Serializable 生效，间隙锁之间可共存。
 - **常见误区**：以为唯一索引查询一定会退化（范围查询不退化）；以为 Gap Lock 锁的是记录本身（实际锁间隙，所以同间隙可共存）；忽略"无索引"导致全表逐行加锁。
 - **自测**：1) 为什么唯一索引等值查询能退化为 Record Lock？ 2) 索引 1,5,10 上 `WHERE id=5 FOR UPDATE` 的 Next-Key Lock 锁哪些范围？
@@ -718,16 +714,15 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 ---
 
 
-
 表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
 
 ---
 
-## Deadlock Detection and Avoidance (死锁检测与避免)
+# Deadlock Detection and Avoidance (死锁检测与避免)
 
 > [!note] 本节重点：核心考点：死锁检测机制（等待图）、InnoDB 死锁处理策略（回滚代价较小的事务）、预防死锁方法
 
-## 死锁的产生条件
+# 死锁的产生条件
 
 死锁需要满足四个必要条件（CoFF 条件）：
 1. **互斥**：资源一次只能被一个事务占用
@@ -747,7 +742,7 @@ UPDATE t SET val=1 WHERE id=2;      UPDATE t SET val=2 WHERE id=1;
           → 形成循环等待 → 死锁！
 ```
 
-## InnoDB 死锁检测
+# InnoDB 死锁检测
 
 InnoDB 通过**等待图（Wait-for Graph）** 检测死锁：
 
@@ -767,7 +762,7 @@ InnoDB 通过**等待图（Wait-for Graph）** 检测死锁：
 - 如果在等待图中发现环 → 死锁
 - InnoDB 选择**回滚代价最小的事务**（undo log 较少的那个）作为牺牲品
 
-## 死锁信息查看
+# 死锁信息查看
 
 ```sql
 -- 查看最近一次死锁信息
@@ -794,7 +789,7 @@ RECORD LOCKS space id 10 page no 3 n bits 72
 *** WE ROLL BACK TRANSACTION (2)  ← InnoDB 选择了事务 2 回滚
 ```
 
-## 死锁后的事务处理
+# 死锁后的事务处理
 
 ```sql
 -- 应用层死锁重试
@@ -817,7 +812,7 @@ while (retry_count > 0) {
 }
 ```
 
-## 死锁预防策略
+# 死锁预防策略
 
 **1. 统一加锁顺序**
 ```sql
@@ -855,7 +850,7 @@ COMMIT;
 - 确保 UPDATE/DELETE 的 WHERE 条件有合适索引，否则会扫描并锁住大量记录，扩大冲突范围
 - InnoDB 不会因为“未走索引”自动把行锁升级成传统表锁；表锁同样可能参与死锁
 
-## 死锁监控
+# 死锁监控
 
 ```sql
 -- 开启死锁日志
@@ -872,17 +867,17 @@ SELECT * FROM sys.innodb_lock_waits\G
 
 > [!tip]- **工程要点**：死锁是并发写入中需要设计处理的正常失败路径，但重试次数、退避策略和是否可安全重试必须由业务幂等性决定。统一锁顺序、缩短事务、优化索引能降低概率；检测代价和响应时间取决于负载与锁图，不能承诺“毫秒级”。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Transactions MVCC and Locks (事务 MVCC 与锁)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

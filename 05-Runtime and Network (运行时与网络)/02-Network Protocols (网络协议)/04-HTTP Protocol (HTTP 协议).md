@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-HTTP Protocol (HTTP 协议)
-
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-## HTTP Request and Response (HTTP 请求与响应)
+# HTTP Request and Response (HTTP 请求与响应)
 
 > [!note] 本节重点：核心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
-## HTTP 请求结构
+# HTTP 请求结构
 
 ```
 GET /index.html HTTP/1.1\r\n                    ← 请求行
@@ -42,7 +40,7 @@ body content                                     ← 请求体（可选）
 | Authorization  | 认证信息              | Authorization: Bearer token    |
 | Accept         | 接受的响应类型           | Accept: application/json       |
 
-## HTTP 响应结构
+# HTTP 响应结构
 
 ```
 HTTP/1.1 200 OK\r\n                              ← 状态行
@@ -70,7 +68,7 @@ Date: Mon, 01 Jan 2024 00:00:00 GMT\r\n          ← 响应头
 | Cache-Control | 缓存策略 | Cache-Control: max-age=3600 |
 | Server | 服务器信息 | Server: nginx/1.20.1 |
 
-## Content-Length vs Transfer-Encoding: chunked
+# Content-Length vs Transfer-Encoding: chunked
 
 **Content-Length**：响应体大小已知，直接指定字节数，接收方读完即止。
 
@@ -88,7 +86,7 @@ Hello\r\n                   ← 块数据
 \r\n                        ← 尾部空行
 ```
 
-## HTTP 消息的文本协议特点
+# HTTP 消息的文本协议特点
 
 HTTP/1.1 是基于文本的协议，协议头是 ASCII 文本，用 `\r\n` 分隔行：
 
@@ -112,11 +110,11 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 
 ---
 
-## HTTP Methods and Status Codes (HTTP 方法与状态码)
+# HTTP Methods and Status Codes (HTTP 方法与状态码)
 
 > [!note] 本节重点：核心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
-## HTTP 请求方法
+# HTTP 请求方法
 
 | 方法 | 语义 | 幂等 | 安全 | 请求体 | 响应体 | 典型场景 |
 |------|------|------|------|--------|--------|---------|
@@ -132,7 +130,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 
 **安全（Safe）：** 不会修改服务器状态。GET/HEAD/OPTIONS 是安全的，可以放心预取。
 
-## 状态码分类
+# 状态码分类
 
 ```
 1xx (Informational): 请求已接收，继续处理
@@ -142,7 +140,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 5xx (Server Error):  服务器处理请求失败
 ```
 
-## 常见状态码详解
+# 常见状态码详解
 
 **2xx 成功：**
 
@@ -185,7 +183,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 | 503 Service Unavailable | 服务暂时不可用 | 服务器过载、维护中 |
 | 504 Gateway Timeout | 网关超时 | 上游服务响应超时 |
 
-## RESTful API 设计中的方法使用
+# RESTful API 设计中的方法使用
 
 ```
 GET    /users          → 获取用户列表    200 OK
@@ -198,7 +196,7 @@ DELETE /users/42       → 删除用户        204 No Content / 404
 
 > [!tip]- **工程要点**：优先用 HTTP 状态码表达传输/资源层语义；业务错误码仍可放在结构化响应体中，便于客户端精确处理。关键是团队约定一致，而不是把所有失败都包装成 `200 OK`。例如：`{"error": {"code": "VALIDATION_ERROR", "message": "email is required"}}`。
 
-## 30 秒回答
+# 30 秒回答
 
 **幂等和安全有什么区别？** 安全方法不应改变服务器的预期状态；幂等方法允许改变状态，但重复执行后的资源状态应等价。`DELETE` 通常幂等但不安全；POST 通常既不安全也不幂等。重试前必须同时看方法语义、请求体和服务端幂等键设计。
 
@@ -210,11 +208,11 @@ HTTP 协议结构见 → [Request & Response Structure (请求响应结构)](</0
 
 ---
 
-## HTTP Connection Management (HTTP 连接管理)
+# HTTP Connection Management (HTTP 连接管理)
 
 > [!note] 本节重点：核心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
-## 短连接 vs 长连接
+# 短连接 vs 长连接
 
 **短连接（HTTP/1.0 默认）：**
 ```
@@ -228,7 +226,7 @@ HTTP 协议结构见 → [Request & Response Structure (请求响应结构)](</0
 ```
 复用同一 TCP 连接发送多个请求，避免连接建立开销。
 
-## Connection 头
+# Connection 头
 
 HTTP/1.1 默认开启 Keep-Alive，通过 Connection 头控制：
 
@@ -242,7 +240,7 @@ Connection: close
 **Connection: close 的行为：**
 服务端发送完当前响应后关闭连接。常用于处理异常或负载过高的场景。
 
-## Pipeline：请求管道
+# Pipeline：请求管道
 
 管道（Pipelining）允许客户端在**收到上一个响应之前**发送下一个请求：
 
@@ -264,7 +262,7 @@ Connection: close
 - **浏览器默认关闭**：实际推广失败，绝大多数客户端不启用
 - **代理兼容性差**：很多中间代理不支持 Pipelining
 
-## 队头阻塞（Head-of-Line Blocking）
+# 队头阻塞（Head-of-Line Blocking）
 
 HTTP/1.1 的核心缺陷：同一连接上的请求必须有序返回。
 
@@ -282,7 +280,7 @@ HTTP/1.1 的核心缺陷：同一连接上的请求必须有序返回。
 | 域名分片 | 将资源分散到不同域名 | DNS 开销、管理复杂 |
 | HTTP/2 多路复用 | 二进制分帧，请求交错 | 需要升级协议 |
 
-## Keep-Alive 工程配置
+# Keep-Alive 工程配置
 
 **Nginx 配置：**
 ```nginx
@@ -306,11 +304,11 @@ Keep-Alive 时间过长：
 
 > [!tip]- **工程要点**：HTTP/1.1 长连接减少建连成本，但管道化的响应有序性会导致应用层 HOL。HTTP/2 用流多路复用消除了这类请求级 HOL，却仍受 TCP 丢包的传输层 HOL 影响；是否升级应结合客户端覆盖、代理链路和实际压测决定。
 
-## HTTP Parser State Machine (HTTP 解析状态机)
+# HTTP Parser State Machine (HTTP 解析状态机)
 
 > [!note] 本节重点：核心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 
-## 为什么用状态机解析 HTTP
+# 为什么用状态机解析 HTTP
 
 HTTP 协议是基于文本的流式协议，数据可能分多次到达（TCP 流特性）。状态机能很好地处理**部分到达**的数据——解析到哪一步就停在对应状态，新数据到达后继续。
 
@@ -323,7 +321,7 @@ TCP 流可能分段到达：
 状态机：每次处理到当前数据末尾 → 保存状态 → 等待下次数据
 ```
 
-## HTTP 解析状态定义
+# HTTP 解析状态定义
 
 ```c
 typedef enum {
@@ -368,7 +366,7 @@ typedef enum {
 } http_parser_state;
 ```
 
-## 核心解析循环
+# 核心解析循环
 
 ```c
 typedef struct {
@@ -430,7 +428,7 @@ http_parser_state http_parser_execute(http_parser *parser, const char *data, siz
 }
 ```
 
-## 缓冲区管理
+# 缓冲区管理
 
 ```c
 // 环形缓冲区或线性缓冲区的管理
@@ -455,7 +453,7 @@ typedef struct {
 - 缓冲区用尽时扩展或 compact
 - HTTP 头部大小通常限制在 8KB 内防止恶意请求
 
-## 完整解析流程
+# 完整解析流程
 
 ```
 TCP 数据到达 → buffer 写入 → parse() 逐字节消费
@@ -477,26 +475,26 @@ HTTP 协议基础见 → [Request & Response Structure (请求响应结构)](</0
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
-## 常见误区
+# 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
 - 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-HTTP Protocol (HTTP 协议)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

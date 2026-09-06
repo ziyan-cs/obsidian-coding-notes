@@ -5,24 +5,22 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 05-Operating System Runtime (操作系统运行时)
-
 > [!abstract] 学习定位：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
 
-## Operating System Overview (操作系统总览)
+# Operating System Overview (操作系统总览)
 
 > [!note] 本节重点：核心考点：OS 四大功能、内核态 vs 用户态、系统调用、操作系统类型与架构
 
-## 操作系统定义
+# 操作系统定义
 
 操作系统是管理计算机硬件和软件资源的系统软件，提供用户与计算机之间的接口。
 
-### 四大功能
+## 四大功能
 
 | 功能 | 说明 |
 |------|------|
@@ -31,7 +29,7 @@ verified: 2026-09-06
 | **文件系统** | 文件存储、目录结构、权限控制 |
 | **I/O 管理** | 设备驱动、中断处理、DMA |
 
-### 内核态 vs 用户态
+## 内核态 vs 用户态
 
 ```cpp
 // 系统调用示例（C++ 中调用 Linux 系统调用）
@@ -50,7 +48,7 @@ int main() {
 - **内核态**：可执行特权指令，访问所有硬件资源
 - **用户态**：受限执行，通过系统调用（`int 0x80` / `syscall` 指令）陷入内核
 
-### 系统调用流程
+## 系统调用流程
 
 ```
 用户程序 → write() (libc 封装) → syscall 指令 → 内核 sys_write → 返回用户态
@@ -58,7 +56,7 @@ int main() {
 
 ---
 
-## 操作系统类型
+# 操作系统类型
 
 | 类型 | 特点 | 代表 |
 |------|------|------|
@@ -68,7 +66,7 @@ int main() {
 | 分布式 OS | 多机统一资源管理 | Amoeba |
 | 嵌入式 OS | 资源受限，专用性强 | VxWorks, µC/OS |
 
-### 宏内核 vs 微内核
+## 宏内核 vs 微内核
 
 ```cpp
 // 宏内核（Linux）：驱动在内核空间，性能好但崩溃影响大
@@ -107,7 +105,7 @@ int main() {
 
 ---
 
-## 操作系统启动流程（x86）
+# 操作系统启动流程（x86）
 
 ```
 BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → init 进程
@@ -120,7 +118,7 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -134,16 +132,15 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 
 ---
 
-
 进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
 
 ---
 
-## Processes and Threads (进程与线程)
+# Processes and Threads (进程与线程)
 
 > [!note] 本节重点：核心考点：进程与线程的区别、PCB/TCB、进程状态转换、进程创建（fork）、协程
 
-## 进程 vs 线程
+# 进程 vs 线程
 
 | 维度 | 进程（Process） | 线程（Thread） |
 |------|----------------|----------------|
@@ -153,7 +150,7 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 | 健壮性 | 进程间隔离，一个崩溃不影响其他 | 一个线程崩溃可能影响整个进程 |
 | 创建开销 | 高（fork 需要复制页表） | 低（pthread_create 轻量） |
 
-### 进程控制块（PCB）
+## 进程控制块（PCB）
 
 内核为每个进程维护的 PCB（Linux 中为 `task_struct`）：
 
@@ -174,7 +171,7 @@ struct task_struct {
 
 ---
 
-## 进程状态
+# 进程状态
 
 ```text
 [*]
@@ -210,7 +207,7 @@ Note for RUNNING:
 
 ---
 
-## 进程创建
+# 进程创建
 
 ```cpp
 #include <unistd.h>
@@ -239,7 +236,7 @@ int main() {
 
 ---
 
-## 线程与协程
+# 线程与协程
 
 ```cpp
 // POSIX 线程创建
@@ -274,7 +271,7 @@ int main() {
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | fork 返回值 | 父进程返回子 PID，子进程返回 0，错误返回 -1 |
@@ -287,20 +284,19 @@ int main() {
 
 ---
 
-
 上下文切换与CPU调度详见 → [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md) · [CPU Scheduling（CPU调度）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/03-CPU%20Scheduling%20(CPU调度).md)
 
 ---
 
-## Context Switching (上下文切换)
+# Context Switching (上下文切换)
 
 > [!note] 本节重点：核心考点：上下文切换的流程、切换代价、TLB 失效、切换 vs 模式切换的区别
 
-## 上下文切换
+# 上下文切换
 
 CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状态并恢复目标状态的过程。
 
-### 切换内容
+## 切换内容
 
 ```
 ┌───────────── Running Process ──────────┐     ┌────────────── Ready Process ──────────┐
@@ -319,7 +315,7 @@ CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状�
 - **线程切换**：同进程内切换不需要换页表
 - **模式切换（系统调用）**：不切换进程，仅切换 ring 级别
 
-### 触发场景
+## 触发场景
 
 1. **时间片耗尽**（时钟中断 → scheduler_tick → schedule）
 2. **阻塞操作**（I/O、sleep、锁等待 → 主动调用 schedule）
@@ -328,7 +324,7 @@ CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状�
 
 ---
 
-## 切换代价
+# 切换代价
 
 ```
 操作                    ≈ 延迟（现代 CPU）
@@ -342,7 +338,7 @@ TLB miss/latency          50-200 ns
 进程切换 ≈ 10000-100000 条指令
 ```
 
-### 直接代价（显性）
+## 直接代价（显性）
 
 ```cpp
 // 模拟上下文切换开销的测试
@@ -366,7 +362,7 @@ int main() {
 }
 ```
 
-### 间接代价（隐性）
+## 间接代价（隐性）
 
 1. **TLB 失效**：切换页表后 TLB 需重新填充，导致后续内存访问变慢
 2. **Cache 污染**：当前缓存的热数据被目标进程的冷数据覆盖
@@ -374,7 +370,7 @@ int main() {
 
 ---
 
-## 上下文切换流程（Linux）
+# 上下文切换流程（Linux）
 
 ```text
 Process A                 Kernel (Scheduler)          Process B
@@ -421,7 +417,7 @@ switch_to:
 
 ---
 
-## 减少上下文切换的方法
+# 减少上下文切换的方法
 
 | 方法 | 原理 | 适用场景 |
 |------|------|---------|
@@ -435,16 +431,15 @@ switch_to:
 
 ---
 
-
 进程线程与CPU调度详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [CPU Scheduling（CPU调度）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/03-CPU%20Scheduling%20(CPU调度).md)
 
 ---
 
-## CPU Scheduling (CPU 调度)
+# CPU Scheduling (CPU 调度)
 
 > [!note] 本节重点：核心考点：调度算法（FCFS/SJF/RR/MLFQ）、调度时机、CFS（完全公平调度）、优先级与时间片
 
-## 调度目标
+# 调度目标
 
 | 场景 | 目标 | 策略 |
 |------|------|------|
@@ -452,7 +447,7 @@ switch_to:
 | 交互式系统 | 低响应时间 | RR, MLFQ |
 | 实时系统 | 可预测性、满足截止时间 | 优先级调度, EDF |
 
-### 评价指标
+## 评价指标
 
 - **周转时间** = 完成时间 − 到达时间（关注整体效率）
 - **响应时间** = 首次运行 − 到达时间（关注交互体验）
@@ -461,9 +456,9 @@ switch_to:
 
 ---
 
-## 经典调度算法
+# 经典调度算法
 
-### FCFS（先来先服务）
+## FCFS（先来先服务）
 
 ```cpp
 struct Process {
@@ -485,12 +480,12 @@ void fcfs(vector<Process>& procs) {
 
 **问题：**  convoy effect（护航效应）— 长作业在前，短作业等待过久。
 
-### SJF（短作业优先）
+## SJF（短作业优先）
 
 - 可证明最小平均周转时间（最优）
 - **问题：** 不公平，长作业可能饥饿；需要预估运行时间
 
-### RR（时间片轮转）
+## RR（时间片轮转）
 
 ```cpp
 void rr(vector<Process>& procs, int quantum) {
@@ -518,7 +513,7 @@ void rr(vector<Process>& procs, int quantum) {
 - 太小 → 上下文切换开销过大
 - 典型值：10-100ms（Linux 默认 100ms）
 
-### MLFQ（多级反馈队列）
+## MLFQ（多级反馈队列）
 
 ```text
 ┌────────────────────────────────────────────┐
@@ -553,7 +548,7 @@ void rr(vector<Process>& procs, int quantum) {
 
 ---
 
-## Linux CFS（完全公平调度）
+# Linux CFS（完全公平调度）
 
 Linux 默认调度器（CFS, Completely Fair Scheduler）：
 
@@ -590,7 +585,7 @@ static const int prio_to_weight[40] = {
 
 ---
 
-## 经典题型速查 · 延伸要点 3
+# 经典题型速查 · 延伸要点 3
 | 题型 | 要点 |
 |------|------|
 | FCFS convoy effect | 长作业先到导致短作业等待时间过长 |
@@ -604,31 +599,30 @@ static const int prio_to_weight[40] = {
 
 ---
 
-
 进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
 
-## 常见误区
+# 常见误区
 
 - 把 **05-Operating System Runtime (操作系统运行时)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Operating System Runtime (操作系统运行时)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

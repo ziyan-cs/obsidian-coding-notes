@@ -5,6 +5,4 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 00-Cache and Proxy Map (缓存与代理导航)
-
 > [!abstract] 学习定位：本目录已收敛为少量完整专题，按编号学习并结合代码与项目验证。

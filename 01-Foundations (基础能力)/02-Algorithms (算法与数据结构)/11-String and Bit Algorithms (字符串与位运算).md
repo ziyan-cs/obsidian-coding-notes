@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 11-String and Bit Algorithms (字符串与位运算)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## KMP Pattern Matching (KMP 模式匹配)
+# KMP Pattern Matching (KMP 模式匹配)
 
 > [!note] 本节重点：核心考点：KMP next 数组构建、匹配过程 O(n+m)、next 数组含义（最长公共前后缀）
 
-## KMP 核心思想
+# KMP 核心思想
 
 KMP 解决字符串匹配问题：在主串 `s` 中查找模式串 `p` 的所有出现位置。
 
@@ -21,7 +19,7 @@ KMP 解决字符串匹配问题：在主串 `s` 中查找模式串 `p` 的所有
 
 **核心：** 当 `s[i] != p[j]` 时，将 `j` 回退到 `next[j]`（前 `j` 个字符的最长公共前后缀长度），而不是从头开始。
 
-## next 数组构建
+# next 数组构建
 
 `next[j]` 表示 `p[0..j-1]`（即前 j 个字符）中**最长相等前后缀的长度**。
 
@@ -49,7 +47,7 @@ vector<int> buildNext(string& p) {
 - `next[i] = k` 表示 `p[0..k-1] == p[i-k+1..i]`
 - 回退时 `j = next[j-1]` 利用了已算好的前缀信息
 
-## 匹配过程
+# 匹配过程
 
 ```cpp
 vector<int> kmp(string& s, string& p) {
@@ -75,7 +73,7 @@ vector<int> kmp(string& s, string& p) {
 
 时间复杂度 O(n+m)，空间复杂度 O(m)。
 
-## 手动推演示例
+# 手动推演示例
 
 模式串 `p = "ABABAC"` 的 next 数组：
 
@@ -88,7 +86,7 @@ vector<int> kmp(string& s, string& p) {
 | 4 | A | ABABA | ABA | 3 |
 | 5 | C | ABABAC | 0 | 0 |
 
-## 求最短循环节
+# 求最短循环节
 
 **定理：** 如果字符串 `s` 由某个循环节重复构成，那么最小循环节长度 = `n - next[n-1]`，其中 n = s.length()。
 
@@ -103,7 +101,7 @@ int minCycle(string& s) {
 }
 ```
 
-## 经典题型
+# 经典题型
 
 | 题型 | 思路 |
 |------|------|
@@ -117,7 +115,7 @@ int minCycle(string& s) {
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Sliding Window (滑动窗口)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/04-Strings%20&%20Bit%20Manipulation%20(字符串与位运算)/13-String%20Algorithms%20(字符串算法)/13a-Sliding%20Window%20(滑动窗口)%20⭐.md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
@@ -127,11 +125,11 @@ int minCycle(string& s) {
 
 ---
 
-## Bit Manipulation (位运算技巧)
+# Bit Manipulation (位运算技巧)
 
 > [!note] 本节重点：核心考点：位运算基本操作、常用位技巧、Brian Kernighan 算法、^ 异或的妙用、掩码与状态压缩
 
-## 位运算基础
+# 位运算基础
 
 | 操作 | 运算符 | 说明 |
 |------|--------|------|
@@ -146,9 +144,9 @@ int minCycle(string& s) {
 
 ---
 
-## 常用位操作技巧
+# 常用位操作技巧
 
-### 基本操作
+## 基本操作
 
 ```cpp
 // 取出最低位的 1
@@ -176,7 +174,7 @@ bool isPowerOfTwo = (x > 0) && (x & (x - 1)) == 0;
 bool odd = x & 1;
 ```
 
-### 异或的妙用
+## 异或的妙用
 
 ```cpp
 // 交换两个数：生产代码优先 std::swap(a, b)。
@@ -211,7 +209,7 @@ int missingNumber(vector<int>& nums) {
 }
 ```
 
-### 位图与子集枚举
+## 位图与子集枚举
 
 ```cpp
 // 用 bitset 统计出现次数（每个数出现次数 mod 3）
@@ -246,7 +244,7 @@ for (int sub = mask; sub; sub = (sub - 1) & mask) {
 
 ---
 
-## Brian Kernighan 算法
+# Brian Kernighan 算法
 
 用于统计二进制中 1 的个数，每次将最低位的 1 置零：
 
@@ -264,7 +262,7 @@ int countBits(int x) {
 
 ---
 
-## 常用掩码
+# 常用掩码
 
 ```cpp
 // 取低 k 位
@@ -285,7 +283,7 @@ if (isalnum(ch)) ...
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 解法 |
 |------|------|
@@ -302,7 +300,7 @@ if (isalnum(ch)) ...
 
 > [!tip]- **工程要点**：位运算极其高效，面试中解"出现次数"类问题的利器是**异或**（出现两次）和**有限状态自动机**（出现三次）。`x & (-x)` 取最低位 1 是树状数组和许多位运算题的基础。
 
-## 30 秒回答
+# 30 秒回答
 
 **位运算最容易错在哪里？** 先明确类型与位宽：涉及移位、掩码和 `lowbit` 时优先使用无符号整数，避免移位位数越界和依赖负数右移。异或适合成对抵消；它不是“无临时变量交换”的工程推荐方案。
 
@@ -310,7 +308,7 @@ if (isalnum(ch)) ...
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
@@ -319,26 +317,26 @@ if (isalnum(ch)) ...
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **11-String and Bit Algorithms (字符串与位运算)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **11-String and Bit Algorithms (字符串与位运算)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 10-Greedy and Sliding Window (贪心与滑动窗口)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## Greedy and Interval Algorithms (贪心与区间算法)
+# Greedy and Interval Algorithms (贪心与区间算法)
 
 > [!note] 本节重点：核心考点：贪心局部最优推全局最优、排序预处理、区间调度、经典贪心问题证明思路
 
-## 贪心核心思想
+# 贪心核心思想
 
 每一步都做出当前看起来最优的选择，希望最终结果全局最优。
 
@@ -25,9 +23,9 @@ verified: 2026-09-06
 
 ---
 
-## 区间调度类
+# 区间调度类
 
-### 无重叠区间（选最多不重叠区间）
+## 无重叠区间（选最多不重叠区间）
 
 按**结束时间**排序，优先选结束早的：
 
@@ -49,7 +47,7 @@ int eraseOverlapIntervals(vector<vector<int>>& intervals) {
 
 **选择策略：** 按结束时间最早 → 为后面留更多空间 → 能选最多区间。
 
-### 合并区间
+## 合并区间
 
 按**开始时间**排序，合并重叠区间：
 
@@ -67,7 +65,7 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 }
 ```
 
-### 插入区间
+## 插入区间
 
 ```cpp
 vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
@@ -88,9 +86,9 @@ vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInter
 
 ---
 
-## 跳跃游戏类
+# 跳跃游戏类
 
-### 跳跃游戏（能否到达末尾）
+## 跳跃游戏（能否到达末尾）
 
 ```cpp
 bool canJump(vector<int>& nums) {
@@ -103,7 +101,7 @@ bool canJump(vector<int>& nums) {
 }
 ```
 
-### 跳跃游戏 II（最少步数）
+## 跳跃游戏 II（最少步数）
 
 ```cpp
 int jump(vector<int>& nums) {
@@ -121,9 +119,9 @@ int jump(vector<int>& nums) {
 
 ---
 
-## 分配问题类
+# 分配问题类
 
-### 分发饼干
+## 分发饼干
 
 ```cpp
 int findContentChildren(vector<int>& g, vector<int>& s) {
@@ -137,7 +135,7 @@ int findContentChildren(vector<int>& g, vector<int>& s) {
 }
 ```
 
-### 加油站
+## 加油站
 
 ```cpp
 int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
@@ -153,7 +151,7 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 贪心策略 | 排序方式 |
 |------|---------|---------|
@@ -169,7 +167,7 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 
 > [!tip]- **工程要点**：面试中的贪心题通常需要先尝试**排序**或**堆**来辅助决策。证明贪心正确性常用**交换论证法**——假设最优解与贪心解不同，交换后不会使解变差。如果不确定能否贪心，先想 DP 再找贪心特征。
 
-## 30 秒回答
+# 30 秒回答
 
 **怎样判断能不能贪心？** 先写出每一步的局部选择，再用交换论证或不变式证明：任一最优解都能替换成该选择而不变差。区间调度按最早结束时间就是典型；若无法证明，保留多个可能状态的 DP 往往更可靠。
 
@@ -177,7 +175,7 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
@@ -187,17 +185,17 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 
 ---
 
-## Sliding Window (滑动窗口)
+# Sliding Window (滑动窗口)
 
 > [!note] 本节重点：核心考点：滑动窗口模板（可变长度/固定长度）、窗口收缩条件判断、哈希表维护字符频次
 
-## 滑动窗口核心思想
+# 滑动窗口核心思想
 
 维护一个窗口 `[left, right)`，右指针扩展窗口，左指针收缩窗口。每个元素最多进出窗口各一次，**时间复杂度 O(n)**。
 
 **适用场景：** 连续子数组/子串问题、需要维护一个动态集合的问题。
 
-## 可变长度窗口（求最值）
+# 可变长度窗口（求最值）
 
 ```cpp
 // 求最长/最小满足条件的子数组/子串
@@ -226,7 +224,7 @@ int slidingWindow(vector<int>& nums) {
 }
 ```
 
-## 固定长度窗口（滑动）
+# 固定长度窗口（滑动）
 
 ```cpp
 // 固定窗口大小 k，求窗口内的最大值/平均值等
@@ -249,7 +247,7 @@ int fixedWindow(vector<int>& nums, int k) {
 }
 ```
 
-## 无重复字符的最长子串
+# 无重复字符的最长子串
 
 ```cpp
 int lengthOfLongestSubstring(string s) {
@@ -270,7 +268,7 @@ int lengthOfLongestSubstring(string s) {
 }
 ```
 
-## 最小覆盖子串
+# 最小覆盖子串
 
 ```cpp
 string minWindow(string s, string t) {
@@ -306,7 +304,7 @@ string minWindow(string s, string t) {
 }
 ```
 
-## 长度最小的子数组
+# 长度最小的子数组
 
 ```cpp
 int minSubArrayLen(int target, vector<int>& nums) {
@@ -325,7 +323,7 @@ int minSubArrayLen(int target, vector<int>& nums) {
 }
 ```
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 窗口类型 | 收缩条件 | 结果更新时机 |
 |------|---------|---------|------------|
 | 无重复最长子串 | 可变 | 出现重复字符 | 每次 right 扩展后 |
@@ -338,7 +336,7 @@ int minSubArrayLen(int target, vector<int>& nums) {
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [KMP Pattern Matching (KMP算法)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/04-Strings%20&%20Bit%20Manipulation%20(字符串与位运算)/13-String%20Algorithms%20(字符串算法)/13b-KMP%20Pattern%20Matching%20(KMP算法).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
@@ -347,26 +345,26 @@ int minSubArrayLen(int target, vector<int>& nums) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **10-Greedy and Sliding Window (贪心与滑动窗口)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **10-Greedy and Sliding Window (贪心与滑动窗口)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

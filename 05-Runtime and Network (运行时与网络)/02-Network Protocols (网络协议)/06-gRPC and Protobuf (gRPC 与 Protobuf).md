@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 06-gRPC and Protobuf (gRPC 与 Protobuf)
-
 > [!abstract] 一句话结论：gRPC 用 Protobuf 契约与 HTTP/2 流承载服务间 RPC；它适合受控的内部服务边界，但不自动解决 deadline、兼容性、鉴权和可观测性。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：gRPC 的价值是可生成的强类型契约、流式 RPC 与 HTTP/2 连接复用；生产可靠性仍取决于 deadline、取消、错误分类、版本演进和监控。
 
 
-## gRPC and Protobuf (RPC 与序列化)
+# gRPC and Protobuf (RPC 与序列化)
 
 > [!note] 本节重点：核心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
-## 为什么需要 RPC
+# 为什么需要 RPC
 
 微服务架构中，服务之间需要通信。HTTP/REST 虽然简单，但存在痛点：
 - 文本协议（JSON）序列化/反序列化开销大
@@ -29,9 +27,9 @@ verified: 2026-09-06
 
 ---
 
-## Protobuf（协议缓冲区）
+# Protobuf（协议缓冲区）
 
-### 定义接口（.proto 文件）
+## 定义接口（.proto 文件）
 
 ```protobuf
 syntax = "proto3";
@@ -60,7 +58,7 @@ message User {
 }
 ```
 
-### Protobuf 编码特点
+## Protobuf 编码特点
 
 | 特性 | 说明 |
 |------|------|
@@ -74,7 +72,7 @@ message User {
 
 ---
 
-## C++ gRPC 服务端
+# C++ gRPC 服务端
 
 ```cpp
 #include <grpcpp/grpcpp.h>
@@ -125,7 +123,7 @@ int main() {
 
 ---
 
-## C++ gRPC 客户端
+# C++ gRPC 客户端
 
 ```cpp
 #include <grpcpp/grpcpp.h>
@@ -176,7 +174,7 @@ private:
 
 ---
 
-## gRPC 四种通信模式
+# gRPC 四种通信模式
 
 | 模式 | 说明 | 适用场景 |
 |------|------|---------|
@@ -187,7 +185,7 @@ private:
 
 ---
 
-## gRPC vs HTTP/REST
+# gRPC vs HTTP/REST
 
 | 维度 | gRPC | HTTP/REST |
 |------|------|-----------|
@@ -206,9 +204,9 @@ private:
 
 ---
 
-## 生产配置要点
+# 生产配置要点
 
-### 连接池与复用
+## 连接池与复用
 
 ```cpp
 // 创建连接池，复用 channel（channel 是线程安全的）
@@ -224,7 +222,7 @@ args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, 1); // 无活跃请求也 p
 auto ch = grpc::CreateCustomChannel(target, creds, args);
 ```
 
-### 超时与重试
+## 超时与重试
 
 ```cpp
 // 客户端超时
@@ -238,7 +236,7 @@ if (std::chrono::system_clock::now() >= deadline) {
 }
 ```
 
-### 拦截器（Interceptor）
+## 拦截器（Interceptor）
 
 ```cpp
 // 日志拦截器示例

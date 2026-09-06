@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-Git Model and Branches (Git 模型与分支)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## Git Working Tree Index and HEAD (Git 三区模型)
+# Git Working Tree Index and HEAD (Git 三区模型)
 
 > [!note] 本节重点：核心考点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
 
-## 三区模型
+# 三区模型
 
 ```text
 Three Areas of Git:
@@ -43,7 +41,7 @@ Three Areas of Git:
 |Index|暂存区、Stage|`.git/index`|下次 commit 将要提交的内容快照|
 |Repository|本地仓库|`.git/objects/`|已提交的历史记录，永久保存|
 
-### 为什么需要暂存区？
+## 为什么需要暂存区？
 
 暂存区允许你**精确控制每次提交的内容**，而不是把所有改动一股脑提交：
 
@@ -57,7 +55,7 @@ git commit -m "feat(core): add Epoll class"   # 只提交暂存的内容
 
 ---
 
-## HEAD 是什么
+# HEAD 是什么
 
 HEAD 是一个指针，**指向当前所在的提交**，通常通过分支间接指向：
 
@@ -72,7 +70,7 @@ cat .git/HEAD          # 输出: ref: refs/heads/main
 cat .git/refs/heads/main   # 输出: abc1234（commit hash）
 ```
 
-### Detached HEAD（分离头指针）
+## Detached HEAD（分离头指针）
 
 当 HEAD 直接指向某个 commit（而不是分支）时，就是 detached HEAD：
 
@@ -87,7 +85,7 @@ git checkout abc1234   # HEAD 直接指向 commit，而非分支
 
 ---
 
-## 文件状态流转
+# 文件状态流转
 
 ```
 Untracked → (git add) → Staged → (git commit) → Unmodified
@@ -106,7 +104,7 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
 - [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
@@ -116,11 +114,11 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 ---
 
-## merge rebase and cherry pick (合并策略)
+# merge rebase and cherry pick (合并策略)
 
 > [!note] 本节重点：核心考点：三者的本质区别、各自的使用场景、rebase 的黄金法则
 
-## merge（合并）
+# merge（合并）
 
 将两个分支的历史合并，产生一个新的 merge commit：
 
@@ -148,7 +146,7 @@ git merge --no-ff feature   # 强制产生 merge commit，保留分支痕迹
 
 ---
 
-## rebase（变基）
+# rebase（变基）
 
 将当前分支的 commit 「移植」到目标分支的最新 commit 之后，**重写提交历史**：
 
@@ -181,7 +179,7 @@ git rebase -i HEAD~3    # 对最近 3 个 commit 进行交互式操作
 
 ---
 
-## cherry-pick（摘取）
+# cherry-pick（摘取）
 
 将指定的某个（或某几个）commit 应用到当前分支，不合并整个分支：
 
@@ -207,7 +205,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-## 三者对比
+# 三者对比
 
 | |merge|rebase|cherry-pick|
 |---|---|---|---|
@@ -219,7 +217,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [01b2-Git Flow & Feature Branch Workflow (团队协作流)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b2-Git%20Flow%20&%20Feature%20Branch%20Workflow%20(团队协作流).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
@@ -228,14 +226,14 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-## Branch Workflow (分支协作流)
+# Branch Workflow (分支协作流)
 
 > [!note] 本节重点：核心考点：Git Flow 五分支模型、Feature Branch Workflow、CI/CD 集成中的分支策略
 
 > [!tip] 先选最小能保障质量的流程
 > 对个人项目和多数小团队，短生命周期 feature branch + review + CI 往往足够。只有确有固定发版、并行维护等约束时，再承担 Git Flow 的额外分支成本。
 
-### Feature Branch Workflow（功能分支工作流）
+## Feature Branch Workflow（功能分支工作流）
 
 最基础的团队协作模型：每个功能/修复都在独立分支上开发，完成后通过 PR/MR 合并到主分支。
 
@@ -252,7 +250,7 @@ feature/pay        ─ commit ─ commit ──> （PR → merge）
 
 ---
 
-### Git Flow（经典发版模型）
+## Git Flow（经典发版模型）
 
 适合有明确版本发布节奏的项目（如软件产品）：
 
@@ -281,7 +279,7 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ---
 
-### Trunk-Based Development（主干开发）
+## Trunk-Based Development（主干开发）
 
 以短分支或直接向主干集成为特征的模式：
 
@@ -290,11 +288,11 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 - 配合完善的 CI/CD 保证主干质量
 - 适合：高频发布、DevOps 成熟的团队
 
-## 30 秒回答
+# 30 秒回答
 
 分支策略的目的不是制造流程，而是让主干始终可集成、变更可审查、发布可追溯。个人项目可用短 feature branch；有固定发版节奏时 Git Flow 可能更清晰；高频交付团队可采用 trunk-based。选择依据是发布节奏、CI 可靠度和团队协作成本。
 
-## 自测
+# 自测
 
 1. Git Flow 为什么可能不适合一个快速迭代的小项目？
 2. feature branch 合并前，最少要有哪些质量信号？
@@ -302,7 +300,7 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 ---
 
-## 关联笔记 · 延伸要点 3
+# 关联笔记 · 延伸要点 3
 - [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 - [Conflict Resolution (冲突解决实操)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01c-Conflict%20Resolution%20(冲突解决实操)%20⭐.md)
@@ -311,26 +309,26 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Git Model and Branches (Git 模型与分支)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,22 +5,20 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Code Quality and Build Optimization (代码质量与构建优化)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
-## Code Quality and Build Optimization (代码质量与构建优化)
+# Code Quality and Build Optimization (代码质量与构建优化)
 
 > [!note] 本节重点：核心考点：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
 
-## 代码质量工具
+# 代码质量工具
 
-### clang-format（自动格式化）
+## clang-format（自动格式化）
 
 团队统一代码风格，告别格式争论：
 
@@ -40,7 +38,7 @@ AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Right
 ```
 
-### clang-tidy（静态分析）
+## clang-tidy（静态分析）
 
 比编译器更聪明的 lint 工具，能发现潜在 bug：
 
@@ -62,7 +60,7 @@ clang-tidy src/server.cpp -checks='modernize-*' --fix
 | `clang-analyzer-*` | 空指针解引用、内存泄漏 |
 | `cppcoreguidelines-*` | C++ Core Guidelines 违规 |
 
-### include-what-you-use（IWYU）
+## include-what-you-use（IWYU）
 
 检查冗余/缺失的头文件包含：
 
@@ -74,9 +72,9 @@ cmake -B build -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=include-what-you-use
 
 ---
 
-## 构建加速
+# 构建加速
 
-### ccache（编译缓存）
+## ccache（编译缓存）
 
 编译器输出的缓存，第二次编译相同文件直接命中缓存：
 
@@ -88,7 +86,7 @@ cmake -B build -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 ccache --show-stats
 ```
 
-### Ninja（比 make 更快的构建系统）
+## Ninja（比 make 更快的构建系统）
 
 ```bash
 cmake -B build -G Ninja
@@ -105,11 +103,11 @@ cmake --build build --parallel $(nproc)
 
 ---
 
-## Google Benchmark（微基准测试）
+# Google Benchmark（微基准测试）
 
 精确测量函数的纳秒级/微秒级性能，防止性能退化：
 
-### 基础用法
+## 基础用法
 
 ```cpp
 #include <benchmark/benchmark.h>
@@ -146,7 +144,7 @@ g++ -O2 -std=c++17 bench.cpp -lbenchmark -lpthread -o bench
 
 ```
 
-### 对比测试
+## 对比测试
 
 ```cpp
 // 比较 std::shared_ptr 和 raw ptr
@@ -171,7 +169,7 @@ BENCHMARK(BM_RawPtr);
 
 ---
 
-## 环境一致性：DevContainer
+# 环境一致性：DevContainer
 
 VSCode DevContainer 或 Docker Compose，保证团队开发环境一致：
 
@@ -219,7 +217,7 @@ COPY .devcontainer/CMakePresets.json /workspace/
 
 ---
 
-## 工程要点汇总
+# 工程要点汇总
 
 | 工具 | 用途 | 优先级 |
 |------|------|--------|
@@ -235,7 +233,7 @@ COPY .devcontainer/CMakePresets.json /workspace/
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Makefile Basics (Makefile基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04a-Makefile%20Basics%20(Makefile基础).md)
 - [Docker Basics：Image & Container (Docker基础)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04b-Docker%20Basics：Image%20&%20Container%20(Docker基础).md)
@@ -245,26 +243,26 @@ COPY .devcontainer/CMakePresets.json /workspace/
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Code Quality and Build Optimization (代码质量与构建优化)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

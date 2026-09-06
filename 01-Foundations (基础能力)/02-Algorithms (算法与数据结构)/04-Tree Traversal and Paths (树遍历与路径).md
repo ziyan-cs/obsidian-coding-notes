@@ -5,21 +5,19 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Tree Traversal and Paths (树遍历与路径)
-
 > [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 
-## Tree Depth First Traversal (树的深度优先遍历)
+# Tree Depth First Traversal (树的深度优先遍历)
 
 > [!note] 本节重点：核心考点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
 > [!note] 本节重点：核心考点：二叉树 DFS 前序/中序/后序三种遍历方式、递归与迭代实现、遍历序列还原树结构
 
-### 递归模板
+## 递归模板
 
 ```cpp
 void preorder(TreeNode* root, vector<int>& res) {
@@ -30,7 +28,7 @@ void preorder(TreeNode* root, vector<int>& res) {
 }
 ```
 
-### 迭代实现（必须掌握）
+## 迭代实现（必须掌握）
 
 ```cpp
 // 迭代中序（面试高频）
@@ -79,7 +77,7 @@ vector<int> postorderIter(TreeNode* root) {
 }
 ```
 
-### 通用 DFS 解题思路
+## 通用 DFS 解题思路
 
 解二叉树题时问自己两个问题：
 
@@ -127,7 +125,7 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [BFS： Level Order Traversal (层序遍历)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06b-BFS：%20Level%20Order%20Traversal%20(层序遍历).md)
 - [LCA & Path Problems (公共祖先与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06c-LCA%20&%20Path%20Problems%20(公共祖先与路径).md)
@@ -137,7 +135,7 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 
 ---
 
-## Tree Breadth First Traversal (树的层序遍历)
+# Tree Breadth First Traversal (树的层序遍历)
 
 > [!note] 本节重点：核心考点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
 >见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
@@ -191,7 +189,7 @@ vector<int> rightSideView(TreeNode* root) {
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06a-DFS：%20Preorder%20⧸%20Inorder%20⧸%20Postorder%20(前中后序).md)
 - [LCA & Path Problems (公共祖先与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06c-LCA%20&%20Path%20Problems%20(公共祖先与路径).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
@@ -200,12 +198,12 @@ vector<int> rightSideView(TreeNode* root) {
 
 ---
 
-## LCA and Tree Paths (最近公共祖先与路径)
+# LCA and Tree Paths (最近公共祖先与路径)
 
 > [!note] 本节重点：核心考点：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
 > [!note] 本节重点：核心考点：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
 
-### 最近公共祖先（LCA）
+## 最近公共祖先（LCA）
 
 ```cpp
 TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
@@ -219,7 +217,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
 **原理：** 后序遍历，自底向上，当某节点的左右子树分别找到 p 和 q 时，该节点即 LCA。
 
-### 路径总和问题
+## 路径总和问题
 
 ```cpp
 // 路径总和（根到叶）
@@ -252,7 +250,7 @@ int pathSum(TreeNode* root, int target) {
 
 ---
 
-## 关联笔记 · 延伸要点 3
+# 关联笔记 · 延伸要点 3
 - [DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06a-DFS：%20Preorder%20⧸%20Inorder%20⧸%20Postorder%20(前中后序).md)
 - [BFS： Level Order Traversal (层序遍历)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06b-BFS：%20Level%20Order%20Traversal%20(层序遍历).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
@@ -261,26 +259,26 @@ int pathSum(TreeNode* root, int target) {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
 
-## 常见误区
+# 常见误区
 
 - 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Tree Traversal and Paths (树遍历与路径)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

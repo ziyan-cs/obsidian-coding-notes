@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Testing and Observability (测试与可观测性)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## Testing & Mocking (测试与模拟)
+# Testing & Mocking (测试与模拟)
 
 > [!note] 本节重点：核心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
-## 测试金字塔
+# 测试金字塔
 
 ```text
 test pyramid
@@ -28,7 +26,7 @@ test pyramid
 | 集成测试 | 秒级 | 中 | 中 |
 | E2E 测试 | 分钟级 | 少 | 高 |
 
-## Google Test 基础
+# Google Test 基础
 
 ```cpp
 #include <gtest/gtest.h>
@@ -64,7 +62,7 @@ TEST_F(MyTest, CanQuery) {
 }
 ```
 
-## 断言速查
+# 断言速查
 
 | 断言 | 用途 |
 |------|------|
@@ -78,7 +76,7 @@ TEST_F(MyTest, CanQuery) {
 
 `ASSERT_*` 版本在失败时**终止当前测试**（而非继续）。`EXPECT_*` 则继续执行后续行。
 
-## GMock
+# GMock
 
 ```cpp
 #include <gmock/gmock.h>
@@ -110,7 +108,7 @@ TEST(ServiceTest, SaveData) {
 }
 ```
 
-### GMock 匹配器
+## GMock 匹配器
 
 ```cpp
 using ::testing::_;
@@ -127,7 +125,7 @@ EXPECT_CALL(mock, method(Eq("exact"), _))
     .Times(Exactly(2));                   // 精确调用 2 次
 ```
 
-## Catch2 轻量测试框架
+# Catch2 轻量测试框架
 
 ```cpp
 // Catch2 的集成方式随主版本与包管理方式不同；按当前官方文档配置
@@ -153,7 +151,7 @@ TEST_CASE("vectors can be resized") {
 }
 ```
 
-## 测试驱动开发（TDD）流程
+# 测试驱动开发（TDD）流程
 
 ```text
 1. 写一个失败的测试（RED）
@@ -162,7 +160,7 @@ TEST_CASE("vectors can be resized") {
 4. 重复
 ```
 
-## 测试覆盖率
+# 测试覆盖率
 
 ```bash
 g++ -coverage main.cpp -o main
@@ -172,7 +170,7 @@ lcov -c -d . -o coverage.info
 genhtml -o report coverage.info
 ```
 
-## 工程实践
+# 工程实践
 
 ```cpp
 // ✅ 测试应当：
@@ -193,7 +191,7 @@ genhtml -o report coverage.info
 
 > [!tip]- **工程要点**：好的单元测试是“**活的文档**”——阅读测试代码就能理解模块的预期行为。CMake/CTest 项目通常用 `ctest --test-dir build --output-on-failure` 执行已注册测试；具体 target 名称由项目定义。测试是工程质量的基线，但也要避免过度 mock 而失去真实集成覆盖。
 
-## 30 秒回答
+# 30 秒回答
 
 单元测试验证一个明确行为并隔离外部依赖；集成测试验证模块协作；E2E 只覆盖少量关键用户路径。Mock 应替换不可控、昂贵或难复现的边界，不应用来断言内部调用细节。失败信息、可重复性和快速反馈比单纯覆盖率数字更重要。
 
@@ -203,11 +201,11 @@ genhtml -o report coverage.info
 
 ---
 
-## Observability Logging Metrics and Tracing (可观测性)
+# Observability Logging Metrics and Tracing (可观测性)
 
 > [!note] 本节重点：核心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 
-## 可观测性三大支柱
+# 可观测性三大支柱
 
 ```
 可观测性（Observability）
@@ -220,11 +218,11 @@ genhtml -o report coverage.info
 
 ---
 
-## 日志（Logging）：spdlog
+# 日志（Logging）：spdlog
 
 C++ 中最常用的高性能日志库，header-only 可选，支持异步、多 sinks、格式化。
 
-### 快速上手
+## 快速上手
 
 ```cpp
 #include <spdlog/spdlog.h>
@@ -260,7 +258,7 @@ int main() {
 }
 ```
 
-### 日志最佳实践
+## 日志最佳实践
 
 | 级别 | 用途 | 频率 |
 |------|------|------|
@@ -273,11 +271,11 @@ int main() {
 
 ---
 
-## 指标（Metrics）：Prometheus
+# 指标（Metrics）：Prometheus
 
 C++ 服务暴露 HTTP `/metrics` 端点，Prometheus 定期拉取。
 
-### Prometheus C++ Client 集成
+## Prometheus C++ Client 集成
 
 ```cpp
 #include <prometheus/counter.h>
@@ -321,7 +319,7 @@ void handleRequest() {
 }
 ```
 
-### 核心指标（RED 方法）
+## 核心指标（RED 方法）
 
 | 指标 | 类型 | 说明 |
 |------|------|------|
@@ -333,11 +331,11 @@ void handleRequest() {
 
 ---
 
-## 链路追踪（Tracing）：OpenTelemetry
+# 链路追踪（Tracing）：OpenTelemetry
 
 跨多个微服务追踪一次请求的完整路径。
 
-### OpenTelemetry C++ 集成
+## OpenTelemetry C++ 集成
 
 ```cpp
 #include <opentelemetry/trace/span.h>
@@ -376,7 +374,7 @@ void handleRequest(const Request& req) {
 }
 ```
 
-### gRPC 自动追踪
+## gRPC 自动追踪
 
 ```cpp
 // 使用 OpenTelemetry gRPC 拦截器自动追踪
@@ -389,7 +387,7 @@ auto stub = UserService::NewStub(tracing_channel);
 
 ---
 
-## 三板斧整合架构
+# 三板斧整合架构
 
 ```
 客户端请求
@@ -425,7 +423,7 @@ auto stub = UserService::NewStub(tracing_channel);
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -444,26 +442,26 @@ auto stub = UserService::NewStub(tracing_channel);
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Testing and Observability (测试与可观测性)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

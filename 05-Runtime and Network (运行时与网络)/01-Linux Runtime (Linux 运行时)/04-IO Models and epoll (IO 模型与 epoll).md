@@ -5,38 +5,36 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-IO Models and epoll (IO 模型与 epoll)
-
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-## 30 秒回答
+# 30 秒回答
 
 阻塞/非阻塞描述一次系统调用是否等待；同步/异步描述完成通知与数据传递方式；I/O multiplexing 则让一个线程等待多个 fd 的就绪事件。epoll 是 Linux 的就绪通知接口，不是 mmap 零拷贝，也不替你读写业务数据。
 
-## 事件循环边界
+# 事件循环边界
 
 ```text
 epoll_wait 返回就绪 fd → 非阻塞 read/write 尽量推进 → 处理 EAGAIN / EOF / error
                          → 不在 I/O 线程执行长 CPU 或阻塞业务
 ```
 
-## 选择与误区
+# 选择与误区
 
 - LT 更易写对；ET 要求一次读/写到 `EAGAIN`，否则可能错过后续通知。
 - 一个 fd 就绪不代表完整业务报文已到达；字节流仍需 buffer 和 framing。
 - epoll 的优势与活跃 fd 数相关，不能脱离工作负载宣称固定倍数。
 
-## 自测
+# 自测
 
 1. 为什么 ET 模式下必须循环读取到 `EAGAIN`？
 2. select/poll/epoll 分别如何保存与遍历关注的 fd？
 3. 哪些工作不应放在 reactor I/O 线程？
 
-## Blocking and Nonblocking IO (阻塞与非阻塞 I O)
+# Blocking and Nonblocking IO (阻塞与非阻塞 I O)
 
 > [!note] 本节重点：核心考点：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
 
-## 阻塞 IO
+# 阻塞 IO
 
 **行为：** 系统调用直到操作完成才返回，调用线程在此期间挂起等待。
 
@@ -49,7 +47,7 @@ ssize_t n = read(fd, buf, sizeof(buf));
 
 **问题：** 一个线程只能处理一个 IO 操作。多线程处理多连接时，线程数随连接数增长，上下文切换开销大。
 
-## 非阻塞 IO
+# 非阻塞 IO
 
 **行为：** 系统调用立即返回，操作无法完成时返回 `EAGAIN` 或 `EWOULDBLOCK`。
 
@@ -64,7 +62,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 **典型场景：** 配合 epoll 使用，单线程管理大量 fd。
 
-## 核心对比
+# 核心对比
 
 | 特性 | 阻塞 IO | 非阻塞 IO |
 |------|--------|----------|
@@ -73,7 +71,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 | CPU 利用率 | 等待时不占 CPU | 轮询消耗 CPU |
 | 编程复杂度 | 简单 | 需处理 EAGAIN |
 
-## 本质理解
+# 本质理解
 
 阻塞 vs 非阻塞描述的是**数据未就绪时系统调用的行为**：
 - 阻塞：**等**数据就绪才返回
@@ -87,18 +85,18 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 ---
 
-## Synchronous and Asynchronous IO (同步与异步 I O)
+# Synchronous and Asynchronous IO (同步与异步 I O)
 
 > [!note] 本节重点：核心考点：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
 
-## 同步 vs 异步的本质
+# 同步 vs 异步的本质
 
 区分标准：**数据拷贝（内核→用户）由谁完成、是否需要等待**。
 
 - **同步 IO**：用户线程等待或轮询数据就绪后，自己调用 read 拷贝数据——**拷贝过程阻塞**
 - **异步 IO**：用户发起请求立即返回，内核完成数据拷贝后通知用户——**整个过程不阻塞**
 
-## 五种 IO 模型总览
+# 五种 IO 模型总览
 
 | 模型 | 就绪阶段 | 拷贝阶段 | 归类 |
 |------|---------|---------|------|
@@ -110,7 +108,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 **关键理解：** 前四种模型的数据拷贝都由用户线程完成，因此都是同步 IO。只有 AIO 是内核做完全部工作后才通知。
 
-## 异步 IO（AIO）
+# 异步 IO（AIO）
 
 ```c
 #include <aio.h>
@@ -129,7 +127,7 @@ while (aio_error(&cb) == EINPROGRESS) {
 ssize_t ret = aio_return(&cb);
 ```
 
-## 工程选型
+# 工程选型
 
 实际高并发服务器（Nginx、Redis、Netty）几乎全部使用 **IO 多路复用 + 非阻塞 IO**，而非 AIO。原因：
 
@@ -143,11 +141,11 @@ ssize_t ret = aio_return(&cb);
 
 ---
 
-## IO Multiplexing (I O 多路复用)
+# IO Multiplexing (I O 多路复用)
 
 > [!note] 本节重点：核心考点：> select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
 
-## select
+# select
 
 ```c
 fd_set rfds;
@@ -167,7 +165,7 @@ if (FD_ISSET(fd, &rfds)) {
 - 内核遍历所有 fd 检查事件，O(n)
 - 修改后的 fd_set 需要重新初始化
 
-## poll
+# poll
 
 ```c
 struct pollfd fds[1];
@@ -189,7 +187,7 @@ if (fds[0].revents & POLLIN) {
 - 内核仍遍历全部 fd，O(n)
 - 大量 fd 时性能下降明显
 
-## epoll（Linux 专属）
+# epoll（Linux 专属）
 
 ```c
 // 创建 epoll 实例
@@ -216,7 +214,7 @@ for (int i = 0; i < n; i++) {
 - **就绪链表**：内核把就绪的 fd 链入就绪链表，epoll_wait 直接读取
 - **无上限**：受系统最大文件数限制（cat /proc/sys/fs/file-max）
 
-## 三者的详细对比
+# 三者的详细对比
 
 | 特性 | select | poll | epoll |
 |------|--------|------|-------|
@@ -228,7 +226,7 @@ for (int i = 0; i < n; i++) {
 | 平台 | 几乎所有平台 | 几乎所有平台 | Linux 2.6+ |
 | 修改 fd | 重设 fd_set | 重设 pollfd | epoll_ctl 增量更新 |
 
-## 选型建议
+# 选型建议
 
 - **select**：仅用于兼容性要求极高的场景
 - **poll**：fd 数量少（几百以内）且追求可移植性时可用
@@ -244,14 +242,14 @@ epoll 底层原理详解 → [epoll API详解](../08-epoll%20Internals%20(epoll�
 
 ---
 
-## epoll API (epoll API)
+# epoll API (epoll API)
 
 > [!note] 本节重点：核心考点：> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
 
 > [!warning] 示例循环省略了生产级错误处理
 > `accept`、`read`、`write` 都可能返回 `EAGAIN`、`EINTR` 或错误。ET 模式还必须循环读/accept 到 `EAGAIN`；不要把下面的最小骨架直接当成完整服务器。
 
-## epoll_create
+# epoll_create
 
 ```c
 #include <sys/epoll.h>
@@ -264,7 +262,7 @@ int epfd = epoll_create1(int flags); // 推荐：EPOLL_CLOEXEC
 - **红黑树（rbr）**：存储所有注册的 fd 及事件
 - **就绪链表（rdllist）**：存储有事件发生的 fd
 
-## epoll_ctl
+# epoll_ctl
 
 ```c
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
@@ -286,7 +284,7 @@ typedef union epoll_data {
 
 **常用事件：** EPOLLIN（可读）、EPOLLOUT（可写）、EPOLLERR（错误）、EPOLLET（边缘触发）、EPOLLONESHOT（一次性）。
 
-## epoll_wait
+# epoll_wait
 
 ```c
 int epoll_wait(int epfd, struct epoll_event *events,
@@ -304,7 +302,7 @@ for (int i = 0; i < nfds; i++) {
 }
 ```
 
-## 典型事件循环
+# 典型事件循环
 
 ```c
 int epfd = epoll_create1(EPOLL_CLOEXEC);
@@ -331,7 +329,7 @@ close(epfd);
 
 > [!tip]- **工程要点**：`epoll_event.data` 是联合体，推荐用 `data.ptr` 指向连接对象（struct），避免再通过 fd 做映射查找。
 
-## 30 秒回答 / 自测
+# 30 秒回答 / 自测
 
 - **30 秒回答**：`epoll_create1(EPOLL_CLOEXEC)` 建实例（内核红黑树存 fd + 就绪链表）；`epoll_ctl` 增删改 fd 与事件；`epoll_wait` 阻塞取就绪事件，从 `events[i].data` 取用户数据。
 - **常见误区**：用 `data.fd` 存 fd 后还要回查连接对象（应直接用 `data.ptr`）；多线程共享 epfd 时漏设 `EPOLLONESHOT`，导致同一事件被多线程重复处理。
@@ -341,11 +339,11 @@ epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/03-Backe
 
 ---
 
-## Level and Edge Triggering (水平与边缘触发)
+# Level and Edge Triggering (水平与边缘触发)
 
 > [!note] 本节重点：核心考点：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
 
-## 水平触发 LT（Level-Triggered）
+# 水平触发 LT（Level-Triggered）
 
 **默认模式。** 只要 fd 还有数据可读，每次 `epoll_wait` 都会返回该 fd。
 
@@ -363,7 +361,7 @@ ev.events = EPOLLIN;  // 默认为 LT
 **缺点：**
 - 同一个 fd 可能被重复通知，多线程下需注意
 
-## 边缘触发 ET（Edge-Triggered）
+# 边缘触发 ET（Edge-Triggered）
 
 **状态变化时触发一次。** 只有当 fd 从"无数据可读"变为"有数据可读"时才通知。如果一次没读完，剩余数据不会再触发通知（除非有新的数据到达）。
 
@@ -397,7 +395,7 @@ while (1) {
 }
 ```
 
-## LT vs ET 对比
+# LT vs ET 对比
 
 | 特性 | LT | ET |
 |------|-----|-----|
@@ -408,13 +406,13 @@ while (1) {
 | epoll_wait 调用次数 | 可能更多（重复通知） | 更少（变化才通知） |
 | 性能 | 略低 | 略高 |
 
-## ET 为什么高效
+# ET 为什么高效
 
 - 避免**同 fd 被反复唤醒**：LT 模式下，大量数据分批读取时，epoll_wait 每次都会返回同一个 fd，造成重复的事件循环
 - 减少**用户态/内核态切换**：ET 一次事件驱动用户读完所有数据，事件通知次数更少
 - 配合非阻塞 IO，单次系统调用批量处理数据
 
-## 实际选型
+# 实际选型
 
 - **Nginx**：使用 ET 模式（追求极致性能）
 - **Redis**：使用 LT 模式（追求简单、事件驱动明确）
@@ -426,11 +424,11 @@ epoll 触发模式见 → [epoll_create, epoll_ctl, epoll_wait (API详解)](/03-
 
 ---
 
-## epoll Internals (epoll 底层实现)
+# epoll Internals (epoll 底层实现)
 
 > [!note] 本节重点：核心考点：> epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
 
-## select 的局限性
+# select 的局限性
 
 select 是最早的 IO 多路复用接口，核心缺陷源于其数据结构：
 
@@ -462,7 +460,7 @@ for (int i = 0; i <= max_fd; i++) {
 }
 ```
 
-## epoll 的数据结构优势
+# epoll 的数据结构优势
 
 epoll 通过内核内建数据结构消除了 select 的 O(n) 瓶颈：
 
@@ -492,7 +490,7 @@ Key Advantage:
   Subsequent epoll_wait calls incur no fd_set copy overhead.
 ```
 
-## 事件驱动 vs 轮询
+# 事件驱动 vs 轮询
 
 | 特性 | select | poll | epoll |
 |------|--------|------|-------|
@@ -504,7 +502,7 @@ Key Advantage:
 | 就绪获取 | O(n) — 遍历全部 | O(n) — 遍历全部 | O(k) — 仅遍历就绪 fd |
 | 触发模式 | 仅水平触发 | 仅水平触发 | LT + ET |
 
-## 回调机制详解
+# 回调机制详解
 
 epoll 的核心设计是**回调驱动**而非**轮询扫描**：
 
@@ -524,11 +522,11 @@ epoll 的核心设计是**回调驱动**而非**轮询扫描**：
    - 时间复杂度 O(k)，k = 就绪事件数
 ```
 
-## 就绪事件如何返回用户态
+# 就绪事件如何返回用户态
 
 内核维护关注集合与就绪集合；epoll_wait 将就绪事件返回到用户提供的 events 缓冲区。epoll 不以 mmap 共享用户态/内核态事件区作为其机制——就绪事件经 copy_to_user 拷入用户空间，代价 O(k)（k 为就绪事件数）。
 
-## 性能对比数字
+# 性能对比数字
 
 ```
 场景：100 万个连接，只有 1 个活跃连接
@@ -553,26 +551,26 @@ epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigge
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
-## 常见误区
+# 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
 - 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-IO Models and epoll (IO 模型与 epoll)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

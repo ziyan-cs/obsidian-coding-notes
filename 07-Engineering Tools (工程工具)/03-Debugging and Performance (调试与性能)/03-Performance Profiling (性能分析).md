@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Performance Profiling (性能分析)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
-## perf and Flamegraphs (perf 与火焰图)
+# perf and Flamegraphs (perf 与火焰图)
 
 > [!note] 本节重点：核心考点：perf 采样原理、常用子命令、如何生成火焰图并解读
 
-## perf 基础
+# perf 基础
 
 `perf` 是 Linux 内核提供的性能分析工具，通过**采样**方式统计程序在各函数上花费的时间，几乎无性能损耗（采样频率通常 99Hz）。
 
@@ -35,7 +33,7 @@ perf annotate                  # 在源码/汇编级别显示热点
 
 ---
 
-## perf stat 输出解读
+# perf stat 输出解读
 
 ```bash
 perf stat ./myapp
@@ -57,7 +55,7 @@ perf stat ./myapp
 
 ---
 
-## perf record & report
+# perf record & report
 
 ```bash
 perf record -g --call-graph dwarf -o perf.data ./myapp
@@ -67,7 +65,7 @@ perf report -i perf.data
 
 ---
 
-## 生成火焰图（Flamegraph）
+# 生成火焰图（Flamegraph）
 
 Brendan Gregg 的火焰图是可视化性能热点的最佳工具：
 
@@ -84,7 +82,7 @@ perf script | ./FlameGraph/stackcollapse-perf.pl | \
 
 ---
 
-## 如何读火焰图
+# 如何读火焰图
 
 ```
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  main()
@@ -99,7 +97,7 @@ perf script | ./FlameGraph/stackcollapse-perf.pl | \
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
 - [Core Dump Analysis (核心转储分析)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03b-Core%20Dump%20Analysis%20(核心转储分析)%20⭐.md)
@@ -109,26 +107,26 @@ perf script | ./FlameGraph/stackcollapse-perf.pl | \
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Performance Profiling (性能分析)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

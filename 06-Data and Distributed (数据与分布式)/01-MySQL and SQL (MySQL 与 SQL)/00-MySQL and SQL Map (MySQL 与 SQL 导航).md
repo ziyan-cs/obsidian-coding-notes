@@ -5,6 +5,4 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 00-MySQL and SQL Map (MySQL 与 SQL 导航)
-
 > [!abstract] 学习定位：本目录已收敛为少量完整专题，按编号学习并结合代码与项目验证。

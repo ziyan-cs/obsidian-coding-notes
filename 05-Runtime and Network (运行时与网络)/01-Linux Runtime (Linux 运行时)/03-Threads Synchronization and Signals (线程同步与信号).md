@@ -5,15 +5,13 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 03-Threads Synchronization and Signals (线程同步与信号)
-
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-## POSIX Thread Lifecycle (POSIX 线程生命周期)
+# POSIX Thread Lifecycle (POSIX 线程生命周期)
 
 > [!note] 本节重点：核心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
-## 线程的本质
+# 线程的本质
 
 线程是进程内的**执行流**，共享进程的地址空间、文件描述符、信号处理，但拥有独立的：
 
@@ -24,7 +22,7 @@ verified: 2026-09-06
 
 ---
 
-## 创建与等待
+# 创建与等待
 
 ```c
 #include <pthread.h>
@@ -53,7 +51,7 @@ int main() {
 
 ---
 
-## 线程属性
+# 线程属性
 
 ```c
 pthread_attr_t attr;
@@ -71,7 +69,7 @@ pthread_attr_destroy(&attr);
 
 ---
 
-## 分离（detach）与合并（join）
+# 分离（detach）与合并（join）
 
 ```c
 // join：主线程等待子线程，获取返回值
@@ -87,7 +85,7 @@ pthread_detach(pthread_self());
 
 ---
 
-## 线程本地存储（TLS）
+# 线程本地存储（TLS）
 
 每个线程有独立的副本，互不干扰：
 
@@ -106,11 +104,11 @@ POSIX 线程详解见 → [Mutex & Condition Variable (互斥锁与条件变量)
 
 ---
 
-## Mutex and Condition Variable (互斥锁与条件变量)
+# Mutex and Condition Variable (互斥锁与条件变量)
 
 > [!note] 本节重点：核心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
-## 互斥锁（Mutex）
+# 互斥锁（Mutex）
 
 保护临界区，防止多线程同时访问共享资源：
 
@@ -156,7 +154,7 @@ void func() {
 
 ---
 
-## 条件变量（Condition Variable）
+# 条件变量（Condition Variable）
 
 用于线程间的**等待/通知**机制，解决"等待某个条件成立"的问题：
 
@@ -187,11 +185,11 @@ void *producer(void *arg) {
 }
 ```
 
-### 为什么 while 而不是 if？
+## 为什么 while 而不是 if？
 
 **虚假唤醒与竞争唤醒**：线程可能在没有收到 signal 的情况下醒来；即使收到通知，其他线程也可能先拿锁并改变条件。用 `while` 在持锁状态重新检查 predicate，确保条件真的满足。
 
-### pthread_cond_wait 的原子性
+## pthread_cond_wait 的原子性
 
 `pthread_cond_wait` 内部做了三件事，且保证原子：
 
@@ -201,7 +199,7 @@ void *producer(void *arg) {
 
 ---
 
-## 读写锁（rwlock）
+# 读写锁（rwlock）
 
 允许多个读者并发，写者独占：
 
@@ -223,17 +221,17 @@ pthread_rwlock_unlock(&rwlock);
 
 互斥锁与条件变量详解见 → [POSIX Thread (线程生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05a-POSIX%20Thread：%20pthread_create%20&%20lifecycle%20(线程生命周期).md) · [Deadlock (死锁原理与预防)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/05-Threads%20&%20Synchronization%20(线程与同步)%20⭐/05c-Deadlock：%20Causes%20&%20Prevention%20(死锁原理与预防).md)
 
-## 30 秒回答
+# 30 秒回答
 
 mutex 保护共享不变量；condition variable 不保存条件本身，只负责等待/通知，所以必须配合受同一 mutex 保护的 predicate，并在 `while` 中等待。通知不是“事件不会丢”的保证，正确性来自“修改 predicate 与检查 predicate 都在锁下”。
 
 ---
 
-## Deadlock Causes and Prevention (死锁原因与预防)
+# Deadlock Causes and Prevention (死锁原因与预防)
 
 > [!note] 本节重点：核心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
-## 死锁的四个必要条件（Coffman 条件）
+# 死锁的四个必要条件（Coffman 条件）
 
 同时满足以下四个条件才会发生死锁：
 
@@ -248,7 +246,7 @@ mutex 保护共享不变量；condition variable 不保存条件本身，只负�
 
 ---
 
-## 经典死锁场景
+# 经典死锁场景
 
 ```c
 // 线程 A                    // 线程 B
@@ -259,9 +257,9 @@ lock(mutex2);  ←─等待─→     lock(mutex1);
 
 ---
 
-## 预防策略
+# 预防策略
 
-### 策略一：固定加锁顺序（破坏循环等待）
+## 策略一：固定加锁顺序（破坏循环等待）
 
 所有线程按相同顺序申请锁：
 
@@ -270,7 +268,7 @@ lock(mutex2);  ←─等待─→     lock(mutex1);
 // 线程 A 和 B 都遵守这个顺序 → 不会形成环
 ```
 
-### 策略二：一次性申请所有锁（破坏占有并等待）
+## 策略二：一次性申请所有锁（破坏占有并等待）
 
 ```cpp
 // C++17 std::scoped_lock（自动避免死锁顺序问题）
@@ -280,7 +278,7 @@ std::scoped_lock lock(m1, m2);   // 使用避免死锁的多锁获取算法
 
 `std::scoped_lock`（多锁构造）使用避免死锁的获取算法；它不表示“硬件原子地同时拿到所有锁”，而是保证调用按标准语义避免相互等待。
 
-### 策略三：使用 trylock + 超时（破坏不可剥夺）
+## 策略三：使用 trylock + 超时（破坏不可剥夺）
 
 ```c
 while (true) {
@@ -293,13 +291,13 @@ while (true) {
 }
 ```
 
-### 策略四：锁层次（Lock Hierarchy）
+## 策略四：锁层次（Lock Hierarchy）
 
 给每个锁分配层级编号，只允许从高层级向低层级申请锁，不允许反向申请。
 
 ---
 
-## 检测死锁
+# 检测死锁
 
 ```bash
 thread apply all bt
@@ -311,11 +309,11 @@ valgrind --tool=helgrind ./myapp
 
 ---
 
-## Threads and Processes (线程与进程)
+# Threads and Processes (线程与进程)
 
 > [!note] 本节重点：核心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
-## 创建开销
+# 创建开销
 
 |操作|典型耗时|原因|
 |---|---|---|
@@ -323,7 +321,7 @@ valgrind --tool=helgrind ./myapp
 |pthread_create()|~10μs|只分配栈和 TCB，共享进程地址空间|
 |协程切换|~100ns|用户态切换，只保存少量寄存器|
 
-## 核心对比
+# 核心对比
 
 |维度|进程|线程|
 |---|---|---|
@@ -334,7 +332,7 @@ valgrind --tool=helgrind ./myapp
 |上下文切换|大（需切换页表、刷 TLB）|小（同一地址空间，只换栈和寄存器）|
 |适用场景|需要强隔离（浏览器多进程）|需要高效通信（Web 服务器工作线程）|
 
-## 上下文切换的代价
+# 上下文切换的代价
 
 线程切换：
 
@@ -350,11 +348,11 @@ valgrind --tool=helgrind ./myapp
 
 ---
 
-## Semaphores (信号量)
+# Semaphores (信号量)
 
 > [!note] 本节重点：核心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
 
-## 信号量的本质
+# 信号量的本质
 
 信号量是一个非负整数计数器，支持两个原子操作：
 
@@ -365,7 +363,7 @@ valgrind --tool=helgrind ./myapp
 
 ---
 
-## POSIX 信号量（推荐）
+# POSIX 信号量（推荐）
 
 ```c
 #include <semaphore.h>
@@ -388,7 +386,7 @@ sem_close(sem);
 sem_unlink("/mysem");       // 删除
 ```
 
-### 用信号量实现生产者-消费者
+## 用信号量实现生产者-消费者
 
 ```c
 sem_t empty;   // 空槽数量（初始 = 缓冲区大小）
@@ -412,7 +410,7 @@ sem_post(&empty);           // 通知生产者
 
 ---
 
-## 信号量 vs 互斥锁 vs 条件变量
+# 信号量 vs 互斥锁 vs 条件变量
 
 | |互斥锁|条件变量|信号量|
 |---|---|---|---|
@@ -425,17 +423,17 @@ sem_post(&empty);           // 通知生产者
 
 ---
 
-## Signals and Signal Handling (信号与处理)
+# Signals and Signal Handling (信号与处理)
 
 > [!note] 本节重点：核心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 
-## 信号的本质
+# 信号的本质
 
 信号是 Linux 的**异步通知机制**，内核或进程可以向另一个进程发送信号，目标进程在下次从内核态返回用户态时处理信号。
 
 ---
 
-## 常见信号
+# 常见信号
 
 | 分类       | 信号        | 编号    | 默认行为      | 常见来源            |
 | -------- | --------- | ----- | --------- | --------------- |
@@ -455,7 +453,7 @@ sem_post(&empty);           // 通知生产者
 
 ---
 
-## 发送信号
+# 发送信号
 
 ```c
 kill(pid, SIGTERM);           // 向进程发信号
@@ -474,7 +472,7 @@ killall nginx      # 按名称发信号
 
 ---
 
-## 信号处理三种方式
+# 信号处理三种方式
 
 ```c
 #include <signal.h>
@@ -496,7 +494,7 @@ signal(SIGTERM, handler);
 
 ---
 
-## sigaction（更安全的注册方式）
+# sigaction（更安全的注册方式）
 
 ```c
 struct sigaction sa;
@@ -512,7 +510,7 @@ sigaction(SIGTERM, &sa, NULL);
 
 ---
 
-## 可重入函数（Async-Signal-Safe）
+# 可重入函数（Async-Signal-Safe）
 
 信号处理函数可能在任意时刻打断主程序，若主程序正在执行 `malloc` 而信号处理函数也调用 `malloc`，会导致堆数据结构损坏。
 
@@ -548,7 +546,7 @@ int main() {
 
 ---
 
-## 信号屏蔽（Signal Mask）
+# 信号屏蔽（Signal Mask）
 
 每个线程有独立的信号屏蔽字，被屏蔽的信号会被挂起，直到解除屏蔽：
 
@@ -566,7 +564,7 @@ pthread_sigmask(SIG_UNBLOCK, &set, NULL);
 
 ---
 
-## 信号与多线程
+# 信号与多线程
 
 - 信号是发给**进程**的，内核选择一个没有屏蔽该信号的线程处理
 - 最佳实践：**主线程屏蔽所有信号，专门用一个线程用 `sigwait()` 同步处理信号**：
@@ -600,26 +598,26 @@ int main() {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
 
-## 常见误区
+# 常见误区
 
 - 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
 - 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Threads Synchronization and Signals (线程同步与信号)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

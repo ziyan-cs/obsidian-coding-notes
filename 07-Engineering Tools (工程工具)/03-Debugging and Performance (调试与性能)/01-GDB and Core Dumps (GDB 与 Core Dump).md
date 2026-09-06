@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 01-GDB and Core Dumps (GDB 与 Core Dump)
-
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
 
-## GDB Essentials (GDB 核心用法)
+# GDB Essentials (GDB 核心用法)
 
 > [!note] 本节重点：核心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
 
-## 启动方式
+# 启动方式
 
 ```bash
 gdb ./myapp                        # 直接调试程序
@@ -34,7 +32,7 @@ gdb --args ./myapp arg1 arg2       # 带参数启动
 
 ---
 
-## 断点（Breakpoint）
+# 断点（Breakpoint）
 
 ```bash
 b main                    # 在函数入口打断点
@@ -53,7 +51,7 @@ tbreak main.cpp:50
 
 ---
 
-## 执行控制
+# 执行控制
 
 ```bash
 run                       # 启动程序（简写 r）
@@ -70,7 +68,7 @@ quit                      # 退出 GDB（简写 q）
 
 ---
 
-## 查看变量与内存
+# 查看变量与内存
 
 ```bash
 print x                   # 打印变量 x（简写 p）
@@ -89,7 +87,7 @@ x/10xw 0x7fff1234        # 查看内存：10个单元，十六进制，word(4字
 
 ---
 
-## 观察点（Watchpoint）
+# 观察点（Watchpoint）
 
 当变量值改变时自动停下，用于追踪"某个变量是在哪里被修改的"：
 
@@ -103,7 +101,7 @@ info watchpoints          # 查看所有观察点
 
 ---
 
-## 调用栈（Backtrace）
+# 调用栈（Backtrace）
 
 ```bash
 backtrace                 # 打印调用栈（简写 bt）
@@ -118,7 +116,7 @@ down                      # 下移一帧（被调用者）
 
 ---
 
-## 多线程调试
+# 多线程调试
 
 ```bash
 info threads              # 列出所有线程
@@ -132,7 +130,7 @@ set scheduler-locking off # 恢复所有线程运行
 
 ---
 
-## 常用 TUI 模式
+# 常用 TUI 模式
 
 ```bash
 gdb -tui ./myapp          # 启动带源码窗口的 TUI 模式
@@ -144,7 +142,7 @@ Ctrl+L                    # 刷新屏幕（TUI 花屏时用）
 
 ---
 
-## 关联笔记
+# 关联笔记
 
 - [Core Dump Analysis (核心转储分析)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03b-Core%20Dump%20Analysis%20(核心转储分析)%20⭐.md)
 - [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
@@ -154,17 +152,17 @@ Ctrl+L                    # 刷新屏幕（TUI 花屏时用）
 
 ---
 
-## Core Dump Analysis (核心转储分析)
+# Core Dump Analysis (核心转储分析)
 
 > [!note] 本节重点：核心考点：core dump 的产生条件、如何开启、如何用 GDB 分析崩溃现场
 
-## 什么是 Core Dump
+# 什么是 Core Dump
 
 程序因信号（SIGSEGV、SIGABRT 等）异常崩溃时，操作系统将**进程的内存快照**转储到文件（core 文件）。通过 GDB 加载 core 文件，可以还原崩溃瞬间的完整现场：调用栈、变量值、内存状态。
 
 ---
 
-## 开启 Core Dump
+# 开启 Core Dump
 
 ```bash
 ulimit -c
@@ -175,7 +173,7 @@ ulimit -c unlimited
 * hard core unlimited
 ```
 
-### 设置 core 文件路径和命名
+## 设置 core 文件路径和命名
 
 ```bash
 echo '/var/cores/core.%e.%p.%t' > /proc/sys/kernel/core_pattern
@@ -183,7 +181,7 @@ echo '/var/cores/core.%e.%p.%t' > /proc/sys/kernel/core_pattern
 
 ---
 
-## 用 GDB 分析 Core Dump
+# 用 GDB 分析 Core Dump
 
 ```bash
 gdb ./myapp /var/cores/core.myapp.1234.1720000000
@@ -203,7 +201,7 @@ thread apply all bt       # 多线程程序看所有线程栈
 
 ---
 
-## 常见崩溃信号与原因
+# 常见崩溃信号与原因
 
 |信号|常见原因|
 |---|---|
@@ -215,7 +213,7 @@ thread apply all bt       # 多线程程序看所有线程栈
 
 ---
 
-## 分析案例：空指针崩溃
+# 分析案例：空指针崩溃
 
 ```
 (gdb) bt
@@ -232,7 +230,7 @@ $1 = (Node *) 0x0      ← 空指针！
 
 ---
 
-## 主动触发 Core Dump（调试技巧）
+# 主动触发 Core Dump（调试技巧）
 
 ```bash
 kill -SIGABRT <pid>
@@ -246,7 +244,7 @@ void enable_core_dump() {
 
 ---
 
-## 关联笔记 · 延伸要点 2
+# 关联笔记 · 延伸要点 2
 - [GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03a-GDB%20Essentials：breakpoint,%20watch,%20backtrace%20(GDB核心用法)%20⭐.md)
 - [Valgrind：Memory Leak Detection (内存泄漏检测)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03c-Valgrind：Memory%20Leak%20Detection%20(内存泄漏检测)%20⭐.md)
 - [AddressSanitizer & UBSan (编译期检测工具)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03d-AddressSanitizer%20&%20UBSan%20(编译期检测工具)%20⭐.md)
@@ -255,26 +253,26 @@ void enable_core_dump() {
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
 
-## 常见误区
+# 常见误区
 
 - 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
 - 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-GDB and Core Dumps (GDB 与 Core Dump)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

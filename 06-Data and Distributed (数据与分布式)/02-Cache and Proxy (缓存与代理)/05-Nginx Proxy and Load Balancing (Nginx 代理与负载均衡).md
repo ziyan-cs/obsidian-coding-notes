@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
-## Nginx Architecture (Nginx 架构)
+# Nginx Architecture (Nginx 架构)
 
 > [!note] 本节重点：核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
-## Nginx 进程模型
+# Nginx 进程模型
 
 ```text
 	              ┌───────────────────────────────────────┐
@@ -49,7 +47,7 @@ verified: 2026-09-06
     └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 各进程职责
+## 各进程职责
 
 | 进程 | 职责 | 权限 |
 |------|------|------|
@@ -60,9 +58,9 @@ verified: 2026-09-06
 
 ---
 
-## 为什么 Nginx 性能好
+# 为什么 Nginx 性能好
 
-### 1. 事件驱动 + 非阻塞
+## 1. 事件驱动 + 非阻塞
 
 Nginx 事件循环（与 Redis 类似），每个 worker 独立的事件循环，使用 epoll（Linux）收集就绪事件：
 
@@ -75,13 +73,13 @@ for (;;) {
 }
 ```
 
-### 2. Worker 进程数量 = CPU 核数
+## 2. Worker 进程数量 = CPU 核数
 
 ```nginx
 worker_processes auto;  # = CPU 核心数
 ```
 
-### 3. 无阻塞调用
+## 3. 无阻塞调用
 
 ```
 - 文件读取 → 异步 I/O（aio）
@@ -91,7 +89,7 @@ worker_processes auto;  # = CPU 核心数
 
 ---
 
-## 惊群问题（Thundering Herd）
+# 惊群问题（Thundering Herd）
 
 多进程同时 accept 同一个 socket，内核唤醒所有等待的 worker，但只有一个能成功。
 
@@ -106,7 +104,7 @@ accept_mutex_delay 500ms;    # 拿锁失败后等待时间
 
 ---
 
-## 热加载（Hot Reload）
+# 热加载（Hot Reload）
 
 ```bash
 nginx -s reload
@@ -114,7 +112,7 @@ nginx -s reload
 
 ---
 
-## 架构对比
+# 架构对比
 
 | 特性 | Nginx | Apache |
 |------|-------|--------|
@@ -126,7 +124,7 @@ nginx -s reload
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -145,11 +143,11 @@ Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反�
 
 ---
 
-## Reverse Proxy and Load Balancing (反向代理与负载均衡)
+# Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
 > [!note] 本节重点：核心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
-## 反向代理配置
+# 反向代理配置
 
 ```nginx
 server {
@@ -172,7 +170,7 @@ server {
 
 ---
 
-## 负载均衡策略
+# 负载均衡策略
 
 ```nginx
 upstream backend_server {
@@ -201,7 +199,7 @@ upstream backend_server {
 
 ---
 
-## location 匹配规则
+# location 匹配规则
 
 ```
 优先级从高到低：
@@ -220,7 +218,7 @@ upstream backend_server {
 
 ---
 
-## 动静分离
+# 动静分离
 
 ```nginx
 server {
@@ -248,7 +246,7 @@ server {
 
 ---
 
-## HTTPS 配置
+# HTTPS 配置
 
 ```nginx
 server {
@@ -273,7 +271,7 @@ server {
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | location 匹配顺序 | 精确 > ^~ 前缀 > 正则 > 普通前缀 > / |
@@ -291,15 +289,15 @@ Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process
 
 ---
 
-## Nginx and Application Server (Nginx 与应用服务器)
+# Nginx and Application Server (Nginx 与应用服务器)
 
 > [!note] 本节重点：核心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
-## 为什么用 Nginx + 自写 Server
+# 为什么用 Nginx + 自写 Server
 
 纯自写 Web Server（Go/Java/C++）也可以处理 HTTP，但生产环境通常在前面放一层 Nginx。
 
-### 各自职责
+## 各自职责
 
 ```
 客户端 → Nginx（基础设施）→ 自写 Server（业务逻辑）
@@ -318,21 +316,21 @@ Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process
 
 ---
 
-## Nginx 的优势
+# Nginx 的优势
 
-### 零拷贝静态文件
+## 零拷贝静态文件
 
 ```nginx
 ```
 
-### 连接管理
+## 连接管理
 
 ```
 Nginx：单一进程处理数万并发（epoll 事件驱动）
 自写 Server：连接越多开销越大
 ```
 
-### 安全隔离
+## 安全隔离
 
 ```
 Nginx 做限流、IP 黑名单、过滤恶意请求
@@ -341,14 +339,14 @@ Nginx 做限流、IP 黑名单、过滤恶意请求
 
 ---
 
-## 常见部署架构
+# 常见部署架构
 
-### 单层
+## 单层
 ```
 Nginx → App Server → Database
 ```
 
-### 多层（高并发）
+## 多层（高并发）
 ```
 负载均衡器（LVS）
     ↓
@@ -359,7 +357,7 @@ App Server 集群（业务）
 Redis → MySQL
 ```
 
-### 微服务
+## 微服务
 ```
 Nginx（路由）
  ├── /api/user → User Service
@@ -369,7 +367,7 @@ Nginx（路由）
 
 ---
 
-## 什么时候不需要 Nginx
+# 什么时候不需要 Nginx
 
 - 纯内网微服务（gRPC 直连）
 - 非 HTTP 协议服务（TCP/UDP）
@@ -377,7 +375,7 @@ Nginx（路由）
 
 ---
 
-## 经典题型速查 · 延伸要点 3
+# 经典题型速查 · 延伸要点 3
 | 题型 | 要点 |
 |------|------|
 | 为什么用 Nginx 而不是全用自写 Server | Nginx 处理静态/TLS/限流/负载均衡更擅长 |
@@ -395,26 +393,26 @@ Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

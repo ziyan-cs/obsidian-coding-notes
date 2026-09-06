@@ -5,22 +5,20 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 02-Raft Consensus (Raft 共识)
-
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
 
-## Raft Leader Election (Raft领导者选举)
+# Raft Leader Election (Raft领导者选举)
 
 > [!note] 本节重点：核心考点：> Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 
-## Raft 角色与任期
+# Raft 角色与任期
 
-### 三种角色
+## 三种角色
 
 ```
 Leader（领导者）     → 处理客户端请求、管理日志复制
@@ -36,7 +34,7 @@ Follower ->（选举超时，发起选举）-> Candidate ->（获得多数票）
 Leader ->（收到更高任期请求）-> Follower
 ```
 
-### 任期（Term）
+## 任期（Term）
 
 ```
 Term 1        Term 2        Term 3          Term 4
@@ -52,7 +50,7 @@ Term 1        Term 2        Term 3          Term 4
 
 ---
 
-## 选举流程
+# 选举流程
 
 ```
 1. Follower 在 election timeout 内未收到 Leader 心跳
@@ -98,7 +96,7 @@ void Node::startElection() {
 
 ---
 
-## 随机超时时间
+# 随机超时时间
 
 **为什么要随机？** 避免 split vote（多个节点同时成为 Candidate，各得一半票）：
 
@@ -116,7 +114,7 @@ void Node::startElection() {
 
 ---
 
-## 选举限制
+# 选举限制
 
 **只有拥有全部已提交日志的节点才能当选 Leader：**
 
@@ -132,7 +130,7 @@ Follower 投票前比较：
 
 ---
 
-## 经典题型速查
+# 经典题型速查
 
 | 题型 | 要点 |
 |------|------|
@@ -151,11 +149,11 @@ Raft 日志复制与安全性详解见 → [04c2-Log Replication (日志复制)]
 
 ---
 
-## Raft Log Replication (Raft日志复制)
+# Raft Log Replication (Raft日志复制)
 
 > [!note] 本节重点：核心考点：> 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
 
-## Raft 日志结构
+# Raft 日志结构
 
 每条日志条目包含：**状态机命令 + 任期号 + 索引号**
 
@@ -172,7 +170,7 @@ Leader 视角的日志：
 
 ---
 
-## 日志复制流程
+# 日志复制流程
 
 ```text
 Client               Leader              Follower 1          Follower 2
@@ -213,7 +211,7 @@ Client               Leader              Follower 1          Follower 2
 
 ---
 
-## 日志匹配特性
+# 日志匹配特性
 
 Raft 的**核心一致性保证**——两条关键性质：
 
@@ -233,7 +231,7 @@ AppendEntries RPC 携带 prevLogIndex 和 prevLogTerm
 
 ---
 
-## Leader 崩溃恢复
+# Leader 崩溃恢复
 
 ```
 正常：    S1(L) 1 1 1 2 2 3
@@ -249,7 +247,7 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 
 ---
 
-## 日志压缩与快照
+# 日志压缩与快照
 
 ```
 日志会无限增长 -> 需要快照压缩
@@ -269,7 +267,7 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 
 ---
 
-## 经典题型速查 · 延伸要点 2
+# 经典题型速查 · 延伸要点 2
 | 题型 | 要点 |
 |------|------|
 | 日志何时算提交 | 写入多数节点（过半）即提交 |
@@ -287,15 +285,15 @@ Raft 完整流程详解见 → [04c1-Leader Election (领导者选举)](/03-Back
 
 ---
 
-## Raft Safety and Membership (Raft安全性与成员变更)
+# Raft Safety and Membership (Raft安全性与成员变更)
 
 > [!note] 本节重点：核心考点：> Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 
-## Raft 安全性保证
+# Raft 安全性保证
 
 Raft 保证以下安全性：
 
-### 1. Election Safety（选举安全）
+## 1. Election Safety（选举安全）
 
 **一个 Term 内最多只有一个 Leader**
 
@@ -305,7 +303,7 @@ Raft 保证以下安全性：
 不可能出现两个节点都获得多数票
 ```
 
-### 2. Leader Completeness（Leader 完整性）
+## 2. Leader Completeness（Leader 完整性）
 
 **Leader 一定包含所有已提交的日志**
 
@@ -318,7 +316,7 @@ Raft 保证以下安全性：
 => 当选 Leader 一定包含全部已提交日志
 ```
 
-### 3. State Machine Safety（状态机安全）
+## 3. State Machine Safety（状态机安全）
 
 **如果某个节点将某条日志应用到状态机，其他节点不会在该位置应用不同的日志**
 
@@ -327,13 +325,13 @@ Raft 保证以下安全性：
 只有 Leader 能提交日志，提交的日志一定是多数派一致的
 ```
 
-### 4. Log Matching（日志匹配）
+## 4. Log Matching（日志匹配）
 
 已在 04c2 中详述——相同 index/term 的条目内容及之前日志完全一致。
 
 ---
 
-## 成员变更（集群扩容/缩容）
+# 成员变更（集群扩容/缩容）
 
 Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到新配置**（可能同时出现两个 Majority）：
 
@@ -346,7 +344,7 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
   - 可能选出两个 Leader，导致脑裂
 ```
 
-### 联合共识（Joint Consensus）
+## 联合共识（Joint Consensus）
 
 ```
 联合共识（Joint Consensus）两阶段变更：
@@ -367,7 +365,7 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
 
 ---
 
-## 节点恢复
+# 节点恢复
 
 ```
 节点恢复流程：
@@ -380,7 +378,7 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
 
 ---
 
-## 持久化
+# 持久化
 
 Raft 节点需要持久化的状态：
 
@@ -394,7 +392,7 @@ Raft 节点需要持久化的状态：
 
 ---
 
-## 经典题型速查 · 延伸要点 3
+# 经典题型速查 · 延伸要点 3
 | 题型 | 要点 |
 |------|------|
 | 脑裂如何防止 | Leader Completeness + 多数派保证 |
@@ -412,26 +410,26 @@ Raft 基础机制详解见 → [04c1-Leader Election (领导者选举)](/03-Back
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
 
-## 常见误区
+# 常见误区
 
 - 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
 - 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Raft Consensus (Raft 共识)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

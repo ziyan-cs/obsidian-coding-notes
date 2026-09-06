@@ -5,20 +5,18 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 05-Profiling and Optimization (性能分析与优化)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 30 秒回答
+# 30 秒回答
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 
-## Performance Profiling perf & valgrind (性能分析)
+# Performance Profiling perf & valgrind (性能分析)
 
 > [!note] 本节重点：核心考点：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
 
-## 性能分析的原则
+# 性能分析的原则
 
 ```text
 1. 先测量，再优化（不要猜测瓶颈）
@@ -41,7 +39,7 @@ public:
 };
 ```
 
-## perf（Linux 性能分析利器）
+# perf（Linux 性能分析利器）
 
 ```bash
 perf record ./main           # 运行并记录
@@ -66,7 +64,7 @@ Overhead  Command  Shared Object     Symbol
 
 → **瓶颈明确**：`process_request` 占 45%，优先优化它。
 
-## perf 热点分析实战
+# perf 热点分析实战
 
 ```bash
 perf record -F 99 -ag -- ./main   # 99Hz 采样
@@ -82,7 +80,7 @@ perf script | ./FlameGraph/stackcollapse-perf.pl > out.folded
 - 关注 **宽顶** → 函数本身消耗大
 - 关注 **宽塔** → 调用链消耗大
 
-## 常见性能瓶颈与优化
+# 常见性能瓶颈与优化
 
 ```cpp
 // 1. 不必要的拷贝
@@ -112,7 +110,7 @@ for (auto& item : vec) process(item);   // cache hit ✓
 // ✅ 考虑 CRTP / std::variant + visit
 ```
 
-## Google Benchmark（微基准测试）
+# Google Benchmark（微基准测试）
 
 ```cpp
 // 安装：https://github.com/google/benchmark
@@ -131,7 +129,7 @@ BENCHMARK(BM_VectorPushBack)->Arg(1000)->Arg(10000)->Arg(100000);
 BENCHMARK_MAIN();
 ```
 
-## Google PerfTools（tcmalloc）
+# Google PerfTools（tcmalloc）
 
 ```bash
 CPUPROFILE=main.prof ./main
@@ -140,7 +138,7 @@ pprof --text ./main main.prof
 HEAPPROFILE=main.heap ./main
 ```
 
-## 性能优化清单
+# 性能优化清单
 
 | 检查项 | 工具 |
 |--------|------|
@@ -159,26 +157,26 @@ HEAPPROFILE=main.heap ./main
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Profiling and Optimization (性能分析与优化)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？

@@ -5,18 +5,16 @@ confidence: high
 verified: 2026-09-06
 ---
 
-# 04-Generic Programming and Type Tools (泛型与类型工具)
-
 > [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## Perfect Forwarding and Universal References (完美转发)
+# Perfect Forwarding and Universal References (完美转发)
 
 > [!note] 本节重点：核心考点：万能引用、引用折叠、std::forward 的作用
 
 > [!warning] `std::forward` 只用于保留原始值类别
 > 它不是“更快的 `std::move`”。转发同一个对象后仍继续依赖其状态会让调用者难以判断所有权；只有下游确实需要按原值类别重载时才使用。
 
-## 万能引用（Universal Reference）
+# 万能引用（Universal Reference）
 
 `T&&` 出现在**类型推导上下文**中是万能引用，可以绑定左值也可以绑定右值：
 
@@ -29,7 +27,7 @@ auto&& x = expr;     // auto&& 也是万能引用
 
 注意区分：`std::vector<int>&&` 是右值引用（类型已确定，无推导）。
 
-## 引用折叠规则
+# 引用折叠规则
 
 T 被推导为引用类型时，`T&&` 按以下规则折叠：
 
@@ -50,7 +48,7 @@ foo(42);          // T = int,   arg 类型 int&&
 foo(std::move(x));// T = int,   arg 类型 int&&
 ```
 
-## std::forward（完美转发）
+# std::forward（完美转发）
 
 在函数内部，参数 `arg` 无论如何都是**左值**（有名字）。`std::forward<T>(arg)` 根据 T 的推导结果，将 arg 恢复为原来的值类别：
 
@@ -66,7 +64,7 @@ void wrapper(T&& arg) {
 }
 ```
 
-## 完美转发的实际应用
+# 完美转发的实际应用
 
 ```cpp
 // make_unique 的简化实现
@@ -102,11 +100,11 @@ decltype(auto) timed_call(F&& f, Args&&... args) {
 
 类型推导是完美转发的基础，详见 → [Type Deduction (类型推导)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/01-Type%20Deduction%20(类型推导).md)
 
-## 30 秒回答
+# 30 秒回答
 
 转发引用（常称 universal reference）只在 `T&&` 且 `T` 发生推导时成立。传入左值会让 `T` 推导为左值引用，传入右值会让 `T` 推导为非引用类型；函数参数本身有名字，表达式永远是左值，因此用 `std::forward<T>(arg)` 才能把原始值类别交给下游。
 
-## 自测
+# 自测
 
 1. 为什么 `foo(arg)` 与 `foo(std::move(arg))` 都不是通用 wrapper 的正确默认写法？
 2. `std::vector<int>&&` 为什么不是转发引用？
@@ -114,11 +112,11 @@ decltype(auto) timed_call(F&& f, Args&&... args) {
 
 ---
 
-## constexpr and Compile Time Computation (编译期计算)
+# constexpr and Compile Time Computation (编译期计算)
 
 > [!note] 本节重点：核心考点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
 
-## constexpr 变量
+# constexpr 变量
 
 ```cpp
 constexpr int N = 100;           // 编译期常量
@@ -130,7 +128,7 @@ const int x = rand();            // OK：运行期 const
 constexpr int y = rand();        // 错误：constexpr 必须编译期可知
 ```
 
-## constexpr 函数（C++11/14/17 逐步放宽限制）
+# constexpr 函数（C++11/14/17 逐步放宽限制）
 
 ```cpp
 // C++11：函数体只能有 return 语句
@@ -157,7 +155,7 @@ std::cin >> n;
 int runtime_fib = fibonacci(n);      // 运行期计算，完全合法
 ```
 
-## constexpr 类
+# constexpr 类
 
 ```cpp
 struct Point {
@@ -171,7 +169,7 @@ constexpr double d = p.dist2();   // 25.0，编译期计算
 static_assert(d == 25.0);         // 编译期断言
 ```
 
-## if constexpr（C++17，编译期条件分支）
+# if constexpr（C++17，编译期条件分支）
 
 ```cpp
 template<typename T>
@@ -187,7 +185,7 @@ void print(T val) {
 }
 ```
 
-## consteval & constinit（C++20）
+# consteval & constinit（C++20）
 
 ```cpp
 // consteval：必须在编译期求值，不能作为运行期函数
@@ -205,11 +203,11 @@ g = 100;                    // 运行期可修改
 
 ---
 
-## optional and variant (新类型工具)
+# optional and variant (新类型工具)
 
 > [!note] 本节重点：核心考点：optional、variant、any 三种新型类型工具的适用场景
 
-## std::optional（C++17）
+# std::optional（C++17）
 
 表示"可能有值也可能没有值"，替代空指针、哨兵值、`bool` + 输出参数：
 
@@ -241,7 +239,7 @@ auto opt = parse("5")
 
 ---
 
-## std::variant（C++17）
+# std::variant（C++17）
 
 类型安全的联合体（Tagged Union），可以存储多种类型之一：
 
@@ -271,7 +269,7 @@ std::visit([](auto&& val) {
 }, v);
 ```
 
-### 用 variant 实现错误处理
+## 用 variant 实现错误处理
 
 ```cpp
 using Result = std::variant<std::string, std::error_code>;
@@ -298,11 +296,11 @@ optional 与 variant 是现代 C++ 新增的重要类型工具，其他特性详
 
 ---
 
-## string view and Structured Bindings (轻量视图)
+# string view and Structured Bindings (轻量视图)
 
 > [!note] 本节重点：核心考点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
 
-## std::string_view（C++17）
+# std::string_view（C++17）
 
 对字符串的**非拥有只读视图**，避免不必要的字符串拷贝：
 
@@ -323,7 +321,7 @@ sv.starts_with("hello");   // C++20
 sv.find("world");
 ```
 
-### string_view 的生命周期陷阱
+## string_view 的生命周期陷阱
 
 ```cpp
 // 危险！string_view 持有临时 string 的引用，函数返回后悬空
@@ -349,7 +347,7 @@ void new_func(std::string_view sv);
 
 ---
 
-## Structured Bindings（结构化绑定，C++17）
+# Structured Bindings（结构化绑定，C++17）
 
 解包 pair、tuple、struct、数组到多个命名变量：
 
@@ -381,7 +379,7 @@ auto& [rx, ry] = pt;
 rx = 10.0;   // 修改 pt.x
 ```
 
-### 与 if/switch 结合（C++17 init-statement）
+## 与 if/switch 结合（C++17 init-statement）
 
 ```cpp
 // 在 if 的初始化语句中使用结构化绑定
@@ -403,11 +401,11 @@ string_view 与结构化绑定是现代 C++ 的轻量视图特性，详见 → [
 
 ---
 
-## Concepts and SFINAE (概念与模板元编程)
+# Concepts and SFINAE (概念与模板元编程)
 
 > [!note] 本节重点：核心考点：Concepts (C++20) 约束模板参数、SFINAE 是实现模板重载的传统技法、enable_if 的使用
 
-## Concept 基础（C++20）
+# Concept 基础（C++20）
 
 ```cpp
 #include <concepts>
@@ -438,7 +436,7 @@ void print(const HasSize auto& container) {
 std::integral auto half(std::integral auto x) { return x / 2; }
 ```
 
-## 常用标准 Concepts
+# 常用标准 Concepts
 
 ```cpp
 // 核心 concepts
@@ -463,7 +461,7 @@ concept SortableContainer = requires(T c) {
 } && std::regular<T>;
 ```
 
-## requires 表达式的三种形式
+# requires 表达式的三种形式
 
 ```cpp
 // 1. 简单需求：成员存在
@@ -488,7 +486,7 @@ concept LargeIntegral = std::integral<T> && requires {
 };
 ```
 
-## SFINAE（Substitution Failure Is Not An Error）
+# SFINAE（Substitution Failure Is Not An Error）
 
 ```cpp
 // 最基础的 enable_if 用法
@@ -507,7 +505,7 @@ template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
 void func(T val);
 ```
 
-## 更多 SFINAE 技法
+# 更多 SFINAE 技法
 
 ```cpp
 // 检测成员是否存在（传统 SFINAE）
@@ -529,7 +527,7 @@ auto process(const T& t) -> decltype(t.size(), void(), t[0]) {
 }
 ```
 
-## Concepts 如何改进 SFINAE
+# Concepts 如何改进 SFINAE
 
 | 方面 | 传统 SFINAE | C++20 Concepts |
 |------|------------|----------------|
@@ -557,7 +555,7 @@ concept Container = requires(T t) {
 void print(const Container auto& c) { /* ... */ }
 ```
 
-## 工程建议
+# 工程建议
 
 ```cpp
 // ✅ 如果你用 C++20，优先用 Concepts 而非 SFINAE
@@ -584,26 +582,26 @@ Concepts 是 C++20 约束模板参数的重要特性，详见 → [Modern C++ Ov
 
 
 
-## 零基础阅读路径
+# 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
 
-## 常见误区
+# 常见误区
 
 - 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
 - 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
 
-## 学习闭环
+# 学习闭环
 
-### 从零复述
+## 从零复述
 
 - 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Generic Programming and Type Tools (泛型与类型工具)**。
 
-### 最小验证
+## 最小验证
 
 - 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
 
-### 自测
+## 自测
 
 1. 它解决的工程问题是什么？
 2. 核心机制在哪个环节生效？
