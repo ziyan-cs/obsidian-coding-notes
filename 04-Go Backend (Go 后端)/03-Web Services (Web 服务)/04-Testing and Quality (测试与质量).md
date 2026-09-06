@@ -9,7 +9,7 @@ tags: [language/go, go/testing]
 
 # 30 秒回答
 
-**核心结论**：一句话结论：先把业务规则写成纯函数和 table-driven test，再测试 HTTP；测试应验证可观察行为，而不是内部实现细节。
+**回答展开**：用 table-driven test 覆盖输入、输出与边界；把纯业务规则从 HTTP 细节中抽出；HTTP 测试只验证路由、序列化和状态码等协议行为。
 
 # 基线命令
 

@@ -10,7 +10,7 @@ tags: [language/python, python/testing]
 
 # 30 秒回答
 
-**核心结论**：一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
+**回答展开**：fixture 负责可复用的准备与清理；临时目录隔离文件副作用；mock、fake 等 test double 替代不可控依赖，断言最终行为而非实现过程。
 
 # 命令与规则
 

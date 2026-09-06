@@ -9,7 +9,7 @@ tags: [language/go, go/errors, go/context]
 
 # 30 秒回答
 
-**核心结论**：一句话结论：Go 用显式 `error` 表达可预期失败，用 `defer` 绑定局部清理，用 `context` 传播请求取消、截止时间和请求范围数据。
+**回答展开**：函数返回后立刻处理 `error` 并补充上下文；资源一获取就 `defer` 释放；跨调用链只传递派生出的 `context`，并尊重取消与超时。
 
 # 最小例子
 

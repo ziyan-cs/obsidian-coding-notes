@@ -9,7 +9,7 @@ tags: [language/go, go/basics]
 
 # 30 秒回答
 
-**核心结论**：一句话结论：Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
+**回答展开**：先用 struct 表达数据，用函数表达操作；当调用方只依赖少数行为时，在消费者一侧定义小 interface，让具体类型隐式满足。
 
 # 核心语法
 
