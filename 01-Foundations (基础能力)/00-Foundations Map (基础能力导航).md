@@ -6,7 +6,7 @@ confidence: 1
 verified: 2026-09-06
 ---
 
-# 00-Foundations MOC (基础能力导航)
+# 00-Foundations Map (基础能力导航)
 
 > [!abstract] 先建立“程序如何运行”和“如何解决问题”的共同语言；基础不是孤立背诵，而是后续 C++、系统与项目的解释工具。
 

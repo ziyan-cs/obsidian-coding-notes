@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01-What is a Computer (计算机本质)
+# 01-Computer System Overview (计算机系统总览)
 
 > [!abstract] 核心考点：计算机的五大逻辑部件、冯·诺依曼架构、存储程序概念、指令与数据同存
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 05-System Thinking (系统思维)
+# 28-System Thinking (系统思维)
 
 > [!abstract] 核心考点：> 局部性原理、空间/时间局部性、缓存友好的代码、并发与并行的区分
 

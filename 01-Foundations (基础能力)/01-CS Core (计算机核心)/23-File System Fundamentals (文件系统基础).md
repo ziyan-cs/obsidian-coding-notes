@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 06-File System Basics (文件系统基础)
+# 23-File System Fundamentals (文件系统基础)
 
 > [!abstract] 核心考点：文件系统结构、inode、目录结构、文件分配方式、磁盘调度、硬链接 vs 软链接
 

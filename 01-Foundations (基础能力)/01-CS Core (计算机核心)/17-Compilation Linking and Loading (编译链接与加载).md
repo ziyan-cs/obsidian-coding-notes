@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01-Compilation & Linking (编译链接加载)
+# 17-Compilation Linking and Loading (编译链接与加载)
 
 > [!abstract] 核心考点：编译四阶段（预处理/编译/汇编/链接）、静态链接 vs 动态链接、链接器符号解析与重定位
 

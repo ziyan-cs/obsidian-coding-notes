@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 02-Integer Representation (整数表示)
+# 05-Integer Representation (整数表示)
 
 > [!abstract] 核心考点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
 

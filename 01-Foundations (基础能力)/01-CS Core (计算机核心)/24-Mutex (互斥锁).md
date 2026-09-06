@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01-Mutex (互斥锁)
+# 24-Mutex (互斥锁)
 
 > [!abstract] 核心考点：> 临界区与竞态条件、锁的实现（Peterson/硬件原子/自旋锁）、互斥锁 vs 自旋锁
 

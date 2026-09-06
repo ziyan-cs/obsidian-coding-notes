@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 01-Process vs Thread (进程与线程)
+# 18-Processes and Threads (进程与线程)
 
 > [!abstract] 核心考点：进程与线程的区别、PCB/TCB、进程状态转换、进程创建（fork）、协程
 

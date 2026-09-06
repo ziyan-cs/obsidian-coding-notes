@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 03-System Abstraction (系统抽象层次)
+# 02-System Abstraction (系统抽象层次)
 
 > [!abstract] 核心考点：计算机系统的层次抽象模型、每层屏蔽下层细节、抽象是控制复杂度的核心手段
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 05-Bus System (总线系统)
+# 14-Bus System (总线系统)
 
 > [!abstract] 核心考点：总线结构（数据/地址/控制）、总线仲裁、总线事务、常见总线标准
 

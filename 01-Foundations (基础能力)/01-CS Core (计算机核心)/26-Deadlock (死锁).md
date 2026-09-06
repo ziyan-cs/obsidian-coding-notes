@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 03-Deadlock (死锁)
+# 26-Deadlock (死锁)
 
 > [!abstract] 核心考点：死锁四条件、死锁预防/避免/检测/恢复、银行家算法、资源分配图
 

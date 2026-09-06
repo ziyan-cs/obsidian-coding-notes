@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 02-Paging & Segmentation (分页与分段)
+# 22-Paging and Segmentation (分页与分段)
 
 > [!abstract] 核心考点：分页 vs 分段、多级页表、页表项格式、段页式结合、内存碎片
 

@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 04-Basic Performance (性能基础)
+# 27-Performance Fundamentals (性能基础)
 
 > [!abstract] 核心考点：延迟 vs 吞吐量、Amdahl 定律、CPU 性能公式、性能度量指标
 

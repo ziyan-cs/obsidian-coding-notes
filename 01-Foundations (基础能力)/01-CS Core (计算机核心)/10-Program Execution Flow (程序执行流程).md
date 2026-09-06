@@ -4,7 +4,7 @@ tags:
 status: 🌱
 ---
 
-# 02-Instruction Cycle (指令执行流程)
+# 10-Program Execution Flow (程序执行流程)
 
 > [!abstract] 核心考点：指令执行全流程、各阶段微操作、流水线深度对性能的影响
 
