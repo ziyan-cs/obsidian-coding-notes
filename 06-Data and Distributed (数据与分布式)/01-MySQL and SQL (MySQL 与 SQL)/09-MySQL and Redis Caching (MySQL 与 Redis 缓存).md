@@ -220,10 +220,7 @@ C 端对一致性要求高的场景：
 
 ---
 
-
 主从复制原理见 → [Master-Slave Replication (主从复制原理)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md) · [Sharding & Partitioning Overview (分库分表概念)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md)
-
-
 
 # 零基础阅读路径
 

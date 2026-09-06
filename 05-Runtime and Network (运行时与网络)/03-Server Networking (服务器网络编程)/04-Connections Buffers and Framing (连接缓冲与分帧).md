@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Connection Pool Design (连接池设计)
 
 > [!note] 本节重点：核心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
@@ -454,8 +453,6 @@ ssize_t n = writev(fd, iov, iovcnt);
 ---
 
 服务器设计模式系列见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
-
-
 
 # 零基础阅读路径
 

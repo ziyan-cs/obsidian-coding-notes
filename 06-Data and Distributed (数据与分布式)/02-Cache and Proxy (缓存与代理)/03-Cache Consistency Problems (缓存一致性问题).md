@@ -370,8 +370,6 @@ string getWithDegrade(string key) {
 
 缓存三大问题系列详解见 → [01d1-Cache Penetration (缓存穿透：布隆过滤器)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d1-Cache%20Penetration%20(缓存穿透：布隆过滤器).md) · [01d2-Cache Breakdown (缓存击穿：热点key失效)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐/01d2-Cache%20Breakdown%20(缓存击穿：热点key失效).md)
 
-
-
 # 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。

@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # Redis Event Loop (Redis 事件循环)
 
 > [!note] 本节重点：核心考点：> Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
@@ -389,8 +388,6 @@ public:
 ---
 
 Redis 性能模型与缓存策略详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Expiration & Eviction Strategy (过期与淘汰策略)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01c-Expiration%20&%20Eviction%20Strategy%20(过期与淘汰策略)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

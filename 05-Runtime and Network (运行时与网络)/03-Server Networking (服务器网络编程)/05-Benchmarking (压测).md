@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Server Benchmarking (服务器压测)
 
 > [!note] 本节重点：核心考点：wrk/ab 压测工具使用、QPS/TPS/延迟指标分析、性能瓶颈定位方法
@@ -32,7 +31,6 @@ wrk 是轻量级 HTTP 压测工具，利用多线程 + epoll 生成高并发负�
 
 ```bash
 wrk -t12 -c400 -d30s http://localhost:8080
-
 
 ```
 
@@ -80,7 +78,6 @@ wrk -t2 -c50 -d10s -s pipeline.lua http://localhost:8080
 ```bash
 ab -n 100000 -c 100 http://localhost:8080/
 
-
 ```
 
 # 常见问题与分析方法
@@ -107,8 +104,6 @@ ab -n 100000 -c 100 http://localhost:8080/
 ---
 
 性能优化相关见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Buffer Design：Read & Write Buffer (缓冲区设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>)
-
-
 
 # 零基础阅读路径
 

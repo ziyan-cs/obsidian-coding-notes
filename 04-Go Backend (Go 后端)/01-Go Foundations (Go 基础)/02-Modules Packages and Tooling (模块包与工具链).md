@@ -64,8 +64,6 @@ todo-api/
 - [go.mod file reference](https://go.dev/doc/modules/gomod-ref)
 - 核验日期：2026-09-06
 
-
-
 # 零基础阅读路径
 
 先理解普通函数、显式错误和 package 边界；接着跟一条请求经过 handler、service、repository；最后阅读 goroutine、context 与运行时部分。并发章节必须配最小程序。

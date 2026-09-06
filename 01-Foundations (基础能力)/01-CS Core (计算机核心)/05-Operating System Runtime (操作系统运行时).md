@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-
 # Operating System Overview (操作系统总览)
 
 > [!note] 本节重点：核心考点：OS 四大功能、内核态 vs 用户态、系统调用、操作系统类型与架构
@@ -601,8 +600,6 @@ static const int prio_to_weight[40] = {
 
 进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
 
-
-
 # 零基础阅读路径
 
 先读本页的总览与术语，再沿“数据/指令 → 硬件状态 → 操作系统抽象 → 可见结果”追踪一个例子。遇到性能数字先跳过，等能解释状态流转后再回来比较。
@@ -610,7 +607,6 @@ static const int prio_to_weight[40] = {
 # 常见误区
 
 - 把 **05-Operating System Runtime (操作系统运行时)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
 
 # 学习闭环
 

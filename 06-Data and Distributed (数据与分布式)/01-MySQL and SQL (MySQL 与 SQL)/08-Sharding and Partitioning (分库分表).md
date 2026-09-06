@@ -162,10 +162,7 @@ CREATE TABLE order (
 
 ---
 
-
 主从复制原理见 → [Master-Slave Replication (主从复制原理)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/10-Master-Slave%20Replication%20(主从复制原理).md) · [MySQL vs Redis：Caching Strategy (缓存策略对比)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
-
-
 
 # 零基础阅读路径
 

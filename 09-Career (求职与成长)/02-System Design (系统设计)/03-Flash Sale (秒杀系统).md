@@ -10,7 +10,6 @@ status: 🌱
 
 **核心结论**：核心考点：> 流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"
 
-
 # 需求分析
 
 ## 功能需求
@@ -281,8 +280,6 @@ Token 用完即废，防止囤积
 | **下单 Token 怎么保证不提前泄漏？** | Token 含时间戳和签名（HMAC-SHA256），服务端验证时间窗口（±5s）。Token 在秒杀开始时才生效，提前预发的 Token 在活动时间前被拒绝 |
 
 秒杀系统缓存与消息队列详解见 → [Cache Penetration / Breakdown / Avalanche](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md) · [Kafka Message Delivery Guarantees](07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)
-
-
 
 # 零基础阅读路径
 

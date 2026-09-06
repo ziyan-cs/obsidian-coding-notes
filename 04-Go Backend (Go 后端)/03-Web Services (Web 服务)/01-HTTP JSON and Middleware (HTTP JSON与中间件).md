@@ -83,8 +83,6 @@ Go 的 HTTP 分层中，handler 只处理协议边界：路由、输入校验、
 
 写 `GET /healthz` 与 `POST /todos`，并用 `httptest.NewRecorder` 覆盖 200、400、405。
 
-
-
 # 零基础阅读路径
 
 先理解普通函数、显式错误和 package 边界；接着跟一条请求经过 handler、service、repository；最后阅读 goroutine、context 与运行时部分。并发章节必须配最小程序。

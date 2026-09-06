@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-
 # Arrays and Two Pointers (数组与双指针)
 
 > [!note] 本节重点：核心考点：双指针的四种模式、滑动窗口、前缀和
@@ -121,7 +120,6 @@ int rangeSum = prefix[r + 1] - prefix[l];
 # Linked List Patterns (链表反转判环与合并)
 
 > [!note] 本节重点：核心考点：链表反转的迭代与递归实现、环检测 Floyd 算法、有序链表合并、链表归并排序
-
 
 ```cpp
 struct ListNode {
@@ -235,7 +233,6 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 > [!note] 本节重点：核心考点：快慢指针找中点/倒数第 K 个/环入口、回文链表判断、Floyd 判环算法
 
-
 |问题|技巧|
 |---|---|
 |链表中点|快慢指针，fast 到尾时 slow 在中间|
@@ -277,8 +274,6 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 - [BFS with Queue (队列BFS)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md)
 - [Hash Table (哈希表)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/04-Hash%20Table%20(哈希表)%20⭐.md)
 
-
-
 # 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
@@ -286,7 +281,6 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 # 常见误区
 
 - 把 **01-Arrays and Linked Lists (数组与链表)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
 
 # 学习闭环
 

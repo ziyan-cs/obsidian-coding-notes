@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：一句话结论：goroutine 很轻但并非免费；调度、栈增长、分配和 GC 都会影响尾延迟，性能优化先用 profile 证明问题存在。
 
-
 # 心智模型
 
 - Go 运行时调度 goroutine 到 OS thread 上执行；阻塞系统调用、忙循环和无界 goroutine 都可能影响调度效率。
@@ -36,8 +35,6 @@ scheduler chooses next runnable goroutine
 
 用 `go test -bench=. -benchmem` 比较“循环中 `fmt.Sprintf`”与“复用 `strings.Builder`”的 `allocs/op`。随后用 `go tool pprof` 看 CPU 或 alloc profile。实验的结论应是某段代码在当前输入下的证据，而不是“所有分配都必须消除”。
 
-
-
 # 从零建立模型
 
 本页主题是 **03-Scheduler GC and Memory (调度 GC 与内存)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
@@ -49,8 +46,6 @@ scheduler chooses next runnable goroutine
 # 工程检查点
 
 channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-
 
 # 渐进练习
 

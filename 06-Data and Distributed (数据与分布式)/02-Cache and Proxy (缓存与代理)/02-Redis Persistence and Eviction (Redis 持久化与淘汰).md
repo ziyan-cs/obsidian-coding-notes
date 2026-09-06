@@ -398,8 +398,6 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Redis Integration：C++ Client hiredis (项目集成)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01f-Redis%20Integration：C++%20Client%20hiredis%20(项目集成)%20⭐.md)
 
-
-
 # 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。

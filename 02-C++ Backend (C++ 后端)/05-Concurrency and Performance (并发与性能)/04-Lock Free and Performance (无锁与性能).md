@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Lock-free Structures Overview (无锁结构概念)
 
 > [!note] 本节重点：核心考点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
@@ -401,8 +400,6 @@ for (int i = 0; i < numThreads; i++) {
 ---
 
 原子操作与内存序选择详见 → [Atomic & Memory Order (原子操作与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

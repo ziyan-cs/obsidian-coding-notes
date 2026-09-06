@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # map and set (红黑树与有序容器)
 
 > [!note] 本节重点：核心考点：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
@@ -235,8 +234,6 @@ m.insert(batch.begin(), batch.end());
 ---
 
 红黑树实现的有序容器对比详见 → [map & set Red-Black Tree (红黑树与有序容器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/02-Associative%20Containers%20Internals%20(关联容器底层)%20⭐/02a-map%20&%20set%20Red-Black%20Tree%20(红黑树与有序容器).md)
-
-
 
 # 零基础阅读路径
 

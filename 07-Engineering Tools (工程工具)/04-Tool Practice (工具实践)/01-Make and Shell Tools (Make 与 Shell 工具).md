@@ -410,8 +410,6 @@ strace ./myapp 2>&1 | grep open     # 追踪文件打开操作
 - [Docker Multi-stage Build for C++：Deploy Optimization (Docker多阶段构建与部署)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04e-Docker%20Multi-stage%20Build%20for%20C++：Deploy%20Optimization%20(Docker多阶段构建与部署).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
 
-
-
 # 零基础阅读路径
 
 先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。

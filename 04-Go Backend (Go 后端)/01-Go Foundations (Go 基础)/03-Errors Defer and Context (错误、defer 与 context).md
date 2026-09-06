@@ -12,7 +12,6 @@ verified: 2026-09-05
 
 **核心结论**：一句话结论：Go 用显式 `error` 表达可预期失败，用 `defer` 绑定局部清理，用 `context` 传播请求取消、截止时间和请求范围数据。
 
-
 # 最小例子
 
 ```go
@@ -53,8 +52,6 @@ func readName(ctx context.Context, path string) (string, error) {
 2. 为什么不能用 `context` 传数据库连接或业务参数？
 3. 什么时候应该包装 error，什么时候原样返回？
 
-
-
 # 从零建立模型
 
 本页主题是 **03-Errors Defer and Context (错误、defer 与 context)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
@@ -66,8 +63,6 @@ func readName(ctx context.Context, path string) (string, error) {
 # 工程检查点
 
 channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-
 
 # 渐进练习
 

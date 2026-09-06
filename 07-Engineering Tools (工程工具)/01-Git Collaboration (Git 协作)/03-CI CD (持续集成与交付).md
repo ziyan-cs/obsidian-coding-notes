@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-
 # CI CD for C Plus Plus (C Plus Plus 持续集成)
 
 > [!note] 本节重点：核心考点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
@@ -158,8 +157,6 @@ CMakeLists.txt   @tech-lead
 - [reset vs revert vs restore (撤销三兄弟)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01d-reset%20vs%20revert%20vs%20restore%20(撤销三兄弟)%20⭐.md)
 - [stash, tag, reflog (实用命令)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01e-stash,%20tag,%20reflog%20(实用命令).md)
 - [01b1-merge vs rebase vs cherry-pick (三种合并对比)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01b-Branch%20Model%20&%20Merge%20Strategies%20(分支策略与合并)/01b1-merge%20vs%20rebase%20vs%20cherry-pick%20(三种合并对比)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

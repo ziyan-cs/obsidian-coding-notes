@@ -596,8 +596,6 @@ int main() {
 
 信号机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
 
-
-
 # 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。

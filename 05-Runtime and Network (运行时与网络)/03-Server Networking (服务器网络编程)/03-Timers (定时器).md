@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Min Heap Timer (小根堆定时器)
 
 > [!note] 本节重点：核心考点：小根堆定时器实现原理、定时器节点管理、超时检测与回调处理
@@ -319,8 +318,6 @@ void wheel_tick_multi(time_wheel_multi *wheels) {
 ---
 
 另一种定时器实现见 → [Min-Heap Timer (小根堆定时器)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/09-Timer%20Implementation%20(定时器实现)%20⭐/09a-Min-Heap%20Timer%20(小根堆定时器).md>)
-
-
 
 # 零基础阅读路径
 

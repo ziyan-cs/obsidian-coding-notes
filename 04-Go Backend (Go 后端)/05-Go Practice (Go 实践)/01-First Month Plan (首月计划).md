@@ -12,7 +12,6 @@ verified: 2026-09-05
 
 **核心结论**：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
 
-
 # Week 1：命令、类型和 module
 
 - [ ] 完成 [[00-Go Map & Setup (学习地图与环境)]]、[[01-Types, Functions & Interfaces (类型、函数与接口)]]、[[02-Modules, Packages & Tooling (模块、包与工具链)]]。
@@ -41,8 +40,6 @@ verified: 2026-09-05
 
 写入 [[00-Start Here (学习入口)/05-Mistake Log (错误记录)|Mistake Log]]：本周最难概念、一次真实错误、下周唯一改进点。
 
-
-
 # 从零建立模型
 
 本页主题是 **01-First Month Plan (首月计划)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
@@ -54,8 +51,6 @@ verified: 2026-09-05
 # 工程检查点
 
 channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-
 
 # 渐进练习
 

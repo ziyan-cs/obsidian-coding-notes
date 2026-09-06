@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # Raft Leader Election (Raft领导者选举)
 
 > [!note] 本节重点：核心考点：> Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
@@ -407,8 +406,6 @@ Raft 节点需要持久化的状态：
 ---
 
 Raft 基础机制详解见 → [04c1-Leader Election (领导者选举)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [04c2-Log Replication (日志复制)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

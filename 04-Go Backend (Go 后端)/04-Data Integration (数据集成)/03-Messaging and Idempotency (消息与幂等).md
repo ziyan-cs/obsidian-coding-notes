@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：一句话结论：可靠消息系统通常提供至少一次投递，因此消费者必须把重复、延迟与乱序当成正常输入。
 
-
 # 消费者基线
 
 - 使用唯一业务键或幂等记录识别重复请求。
@@ -38,8 +37,6 @@ transaction: record processed key + apply state change
 2. consumer 提交数据库但还未来得及 ack 时崩溃，会怎样？
 3. 同一业务键乱序到达时，状态机允许哪些转换？
 
-
-
 # 从零建立模型
 
 本页主题是 **03-Messaging and Idempotency (消息与幂等)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
@@ -51,8 +48,6 @@ transaction: record processed key + apply state change
 # 工程检查点
 
 channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-
 
 # 渐进练习
 

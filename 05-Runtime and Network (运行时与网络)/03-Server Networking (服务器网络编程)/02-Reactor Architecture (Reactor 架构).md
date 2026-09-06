@@ -214,7 +214,6 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
 > 最成熟的高性能网络服务器架构
 
-
 ```text
 ┌────────────────────────────────────────────────┐
 │  Main Thread (Main Reactor)                    │
@@ -309,8 +308,6 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 >
 
 另两种变体见 → [Single Reactor Single Thread](05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md) · [Single Reactor Multi Thread](05b-Single%20Reactor%20Multi%20Thread%20(单reactor多线程).md)
-
-
 
 # 零基础阅读路径
 

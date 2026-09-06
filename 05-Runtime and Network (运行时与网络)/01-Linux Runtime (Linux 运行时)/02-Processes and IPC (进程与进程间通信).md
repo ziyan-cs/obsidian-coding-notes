@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Process Lifecycle (进程生命周期)
 
 > [!note] 本节重点：核心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
@@ -436,8 +435,6 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
 IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
-
-
 
 # 零基础阅读路径
 

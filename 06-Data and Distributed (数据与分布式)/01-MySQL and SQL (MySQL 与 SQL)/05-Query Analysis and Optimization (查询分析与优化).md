@@ -155,7 +155,6 @@ SELECT * FROM user WHERE age = 20;
 
 ---
 
-
 索引设计原则见 → [Index Design Principles (索引设计原则)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md) · [Slow Query Log & Optimization (慢查询分析)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08c-Slow%20Query%20Log%20&%20Optimization%20(慢查询分析).md)
 
 ---
@@ -322,7 +321,6 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ---
 
-
 表设计与 SQL 基础见 → [MySQL Basics (MySQL 基础)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-MySQL%20Basics%20(MySQL%20基础).md) · [EXPLAIN & Execution Plan Analysis (执行计划分析)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md)
 
 ---
@@ -474,8 +472,6 @@ pt-query-digest /var/log/mysql/slow.log
 ```
 
 > [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
-
-
 
 # 零基础阅读路径
 

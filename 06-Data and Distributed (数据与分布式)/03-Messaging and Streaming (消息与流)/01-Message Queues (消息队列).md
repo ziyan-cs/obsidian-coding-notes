@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # Why Message Queue (消息队列价值)
 
 > [!note] 本节重点：核心考点：> 消息队列三大作用、同步 vs 异步对比、MQ 引入的问题
@@ -91,8 +90,6 @@ asynchronous path
 ---
 
 消息队列选型对比详解见 → [RabbitMQ vs Kafka：Comparison (两者对比)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03c-RabbitMQ%20vs%20Kafka：Comparison%20(两者对比).md)
-
-
 
 # 零基础阅读路径
 

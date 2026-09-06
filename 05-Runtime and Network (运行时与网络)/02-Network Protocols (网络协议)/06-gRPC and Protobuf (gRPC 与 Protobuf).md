@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：gRPC 的价值是可生成的强类型契约、流式 RPC 与 HTTP/2 连接复用；生产可靠性仍取决于 deadline、取消、错误分类、版本演进和监控。
 
-
 # gRPC and Protobuf (RPC 与序列化)
 
 > [!note] 本节重点：核心考点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
@@ -252,7 +251,6 @@ class LogInterceptor : public grpc::Interceptor {
 ```
 
 > **版本/API 需验证（NEEDS_VERIFY）**：拦截器 C++ API 在不同 gRPC 版本间有变化（`grpc::Interceptor` 基类、`InterceptorBatchMethods`、工厂注册方式等），上例为示意，编译前以所用 gRPC 版本头文件为准。
-```
 
 ---
 
@@ -277,8 +275,6 @@ class LogInterceptor : public grpc::Interceptor {
 ---
 
 gRPC 底层协议见 → [HTTP/2 Key Features (HTTP2核心特性了解)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/08-HTTP⧸2%20Key%20Features%20(HTTP2核心特性了解).md>) · [HTTPS & TLS Overview (HTTPS原理概览)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md>)
-
-
 
 ## 零基础阅读路径
 

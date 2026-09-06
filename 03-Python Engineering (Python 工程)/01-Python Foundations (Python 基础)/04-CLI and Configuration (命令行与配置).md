@@ -59,8 +59,6 @@ if __name__ == "__main__":
 - [argparse 官方文档](https://docs.python.org/3/library/argparse.html)
 - 验证日期：2026-09-05
 
-
-
 # 从零建立模型
 
 本页主题是 **04-CLI and Configuration (命令行与配置)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。

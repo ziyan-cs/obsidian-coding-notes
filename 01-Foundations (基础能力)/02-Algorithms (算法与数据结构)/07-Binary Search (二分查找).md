@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-
 # Binary Search Boundaries (二分边界)
 
 > [!note] 本节重点：核心考点：边界条件、三种模板的使用场景、二分答案
@@ -217,8 +216,6 @@ int searchRotated(vector<int>& nums, int target) {
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 - [BFS with Queue (队列BFS)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md)
 
-
-
 # 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
@@ -226,7 +223,6 @@ int searchRotated(vector<int>& nums, int target) {
 # 常见误区
 
 - 把 **07-Binary Search (二分查找)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
 
 # 学习闭环
 

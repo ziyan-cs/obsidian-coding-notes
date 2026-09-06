@@ -12,7 +12,6 @@ verified: 2026-09-05
 
 **核心结论**：一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
 
-
 # 命令与规则
 
 ```text
@@ -49,8 +48,6 @@ def test_loader_rejects_bad_json(tmp_path):
 
 - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
 - 验证日期：2026-09-05
-
-
 
 # 从零建立模型
 

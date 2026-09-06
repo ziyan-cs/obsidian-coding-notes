@@ -50,8 +50,6 @@ def load_config(path: Path) -> dict:
 
 写 `summarize_logs.py <directory>`：递归读取 `.log`，统计每级日志数量，输出 JSON。先实现 `--dry-run`，再实现写文件。
 
-
-
 # 从零建立模型
 
 本页主题是 **03-Path Files and Serialization (路径文件与序列化)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。

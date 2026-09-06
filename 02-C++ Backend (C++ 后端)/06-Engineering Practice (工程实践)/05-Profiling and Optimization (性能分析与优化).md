@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Performance Profiling perf & valgrind (性能分析)
 
 > [!note] 本节重点：核心考点：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
@@ -154,8 +153,6 @@ HEAPPROFILE=main.heap ./main
 ---
 
 调试工具与分析搭配使用，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

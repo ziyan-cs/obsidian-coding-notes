@@ -79,8 +79,6 @@ RabbitMQ 的核心是 broker 路由、queue 与确认语义；Kafka 的核心是
 
 消息队列基础概念详解见 → [Why MQ：Decoupling, Peak Shaving, Async (消息队列三大作用)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03a-Why%20MQ：Decoupling,%20Peak%20Shaving,%20Async%20(消息队列三大作用).md)
 
-
-
 # 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。

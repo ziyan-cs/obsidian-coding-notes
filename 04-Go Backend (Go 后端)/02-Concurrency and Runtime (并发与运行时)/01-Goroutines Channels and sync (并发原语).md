@@ -66,8 +66,6 @@ goroutine 是 Go 调度器管理的轻量执行单元；channel 适合表达任�
 
 Go channel 类似“带同步语义的消息通道”，不是 `std::queue`；mutex 与 C++ mutex 同样需要保护不变量。Go 不让你免于理解并发，只减少线程创建和调度细节。
 
-
-
 # 从零建立模型
 
 本页主题是 **01-Goroutines Channels and sync (并发原语)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。

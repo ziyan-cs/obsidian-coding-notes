@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Graceful Shutdown (优雅关闭)
 
 > [!note] 本节重点：核心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
@@ -494,8 +493,6 @@ bus.publish(OrderCreated{1001, 42, 9900});
 ---
 
 生产环境实践见 → [Graceful Shutdown (优雅关闭)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
-
-
 
 # 零基础阅读路径
 

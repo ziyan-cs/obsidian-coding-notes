@@ -10,7 +10,6 @@ status: 🌱
 
 **核心结论**：核心考点：> 路由转发 + 过滤器链（鉴权/限流/熔断/日志）+ 高性能代理设计，核心是看你对"网关层职责边界"的理解
 
-
 # 需求分析
 
 ## 功能需求
@@ -368,8 +367,6 @@ func handleRequest(ctx *Context) {
 | **全链路追踪在网关层如何实现？**                                    | 网关生成 Trace ID（`X-Request-Id` / `X-Trace-Id`），透传给所有下游。<br>使用 OpenTelemetry SDK 集成 Jaeger / Zipkin。<br>网关层记录 span：网关收到请求 → 过滤器执行 → 后端请求 → 响应返回                    |
 
 API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
-
-
 
 # 零基础阅读路径
 

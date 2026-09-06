@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-
 # Docker Multi Stage Build (Docker 多阶段构建)
 
 > [!note] 本节重点：核心考点：多阶段构建原理、C++ 二进制最小化、Alpine vs Ubuntu 抉择、CI 集成
@@ -76,7 +75,6 @@ CMD ["/app/server"]
 ```dockerfile
 FROM alpine:3.18 AS builder
 RUN apk add --no-cache cmake ninja g++ linux-headers spdlog-dev fmt-dev
-
 
 FROM alpine:3.18 AS runtime
 RUN apk add --no-cache spdlog fmt libssl3 ca-certificates tzdata
@@ -169,8 +167,6 @@ cmake-build-*
 - [Shell Tools：grep, sed, awk, tmux (Shell效率工具)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04c-Shell%20Tools：grep,%20sed,%20awk,%20tmux%20(Shell效率工具).md)
 - [Code Quality & Build Optimization：clang-tidy, ccache, Ninja, Benchmark (代码质量与构建加速)](/04-Engineering%20Tools%20(工程工具)/04-Other%20Tools%20(工具速查)/04d-Code%20Quality%20&%20Build%20Optimization：clang-tidy,%20ccache,%20Ninja,%20Benchmark%20(代码质量与构建加速)%20⭐.md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

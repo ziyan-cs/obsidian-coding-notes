@@ -47,7 +47,6 @@ Server                    OS Kernel                Client
   ├──────── close() ───────→│                        │
 ```
 
-
 ---
 
 # 接口语义
@@ -280,7 +279,6 @@ while (true) {
 
 > [!note] 本节重点：核心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
-
 # setsockopt
 
 ```cpp
@@ -364,8 +362,6 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 | 推荐场景 | 兜底保障         | 生产环境主要机制   |
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
-
-
 
 # 零基础阅读路径
 

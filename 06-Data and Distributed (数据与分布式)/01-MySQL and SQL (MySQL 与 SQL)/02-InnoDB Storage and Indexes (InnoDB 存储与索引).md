@@ -113,7 +113,6 @@ innodb_page_cleaners = 8
 
 ---
 
-
 B+树索引结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md)
 
 ---
@@ -224,7 +223,6 @@ InnoDB 每页 16KB，假设：
 
 ---
 
-
 页结构基础见 → [Page Structure & Buffer Pool (页结构与缓冲池)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04a-Page%20Structure%20&%20Buffer%20Pool%20(页结构与缓冲池).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
 
 ---
@@ -265,7 +263,6 @@ Note: Secondary index leaf nodes store index columns + primary key value,
 # 二级索引（Secondary Index）
 
 二级索引的叶节点存储**主键值**而非整行数据。
-
 
 # 回表查询
 
@@ -327,7 +324,6 @@ UUID/VARCHAR 主键：
 > [!tip]- **工程要点**：回表是二级索引查询的主要成本。优化思路：1) 利用覆盖索引避免回表；2) 尽量用自增主键保证聚簇索引紧凑（非随机写入）。EXPLAIN 看到 `Using index` 是好事，看到 `Using index condition` 表示用了索引下推但仍然需要回表。
 
 ---
-
 
 B+树结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Index Pushdown & Covering Index (索引下推与覆盖索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04d-Index%20Pushdown%20&%20Covering%20Index%20(索引下推与覆盖索引).md)
 
@@ -449,10 +445,7 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 ---
 
-
 B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
-
-
 
 # 零基础阅读路径
 

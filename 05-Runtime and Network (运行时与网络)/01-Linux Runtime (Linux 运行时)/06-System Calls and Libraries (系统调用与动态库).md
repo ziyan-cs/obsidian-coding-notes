@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # System Calls Overview (常用系统调用)
 
 > [!note] 本节重点：核心考点：文件/进程/网络/内存管理相关系统调用速查、用户态与内核态切换、系统调用开销
@@ -196,8 +195,6 @@ dlclose(handle);
 > [!tip]- **工程要点**：`-fPIC` 对性能有轻微影响（多一次间接寻址），但这是动态库和 ASLR 的必要代价。如果不需要共享，静态库性能更优。`LD_PRELOAD` 环境变量可以劫持系统库函数——这是很多调试/监控工具的底层原理。
 
 动态库原理见 → [System Calls Overview (常用系统调用速查)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/10-System%20Calls%20Overview%20(常用系统调用速查).md) · [Debugging & Tracing (调试追踪)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/04-System%20Calls%20&%20Tools%20(系统调用与工具)/12-Debugging%20&%20Tracing：%20strace,%20gdb,%20perf%20(调试追踪)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

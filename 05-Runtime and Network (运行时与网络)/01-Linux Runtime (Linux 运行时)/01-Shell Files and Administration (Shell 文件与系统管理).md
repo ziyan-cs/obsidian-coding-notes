@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # Shell and Basic Commands (命令行与 Shell)
 
 > [!note] 本节重点：核心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
@@ -590,7 +589,6 @@ umask 控制新文件/目录的默认权限：**实际权限 = 最大权限 - um
 umask                  # 查看当前值（通常是 022）
 umask 022              # 临时修改（重启失效）
 
-
 echo "umask 002" >> ~/.bashrc
 ```
 
@@ -892,8 +890,6 @@ grep "error" /var/log/auth.log  # 过滤错误信息
 ```
 
 系统管理基础见 → [Shell & Basic Commands (命令行与Shell编程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md) · [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
-
-
 
 # 零基础阅读路径
 

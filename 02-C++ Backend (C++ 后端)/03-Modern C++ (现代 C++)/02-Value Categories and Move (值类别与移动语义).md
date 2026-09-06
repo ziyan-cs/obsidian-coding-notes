@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Lvalues and Rvalues (左值与右值)
 
 > [!note] 本节重点：核心考点：左值/右值/将亡值的定义，右值引用的绑定规则
@@ -196,8 +195,6 @@ std::string bar() {
 ---
 
 移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
-
-
 
 # 零基础阅读路径
 

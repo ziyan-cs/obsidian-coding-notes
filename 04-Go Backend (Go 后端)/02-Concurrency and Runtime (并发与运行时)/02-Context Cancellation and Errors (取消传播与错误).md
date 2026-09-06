@@ -37,8 +37,6 @@ err := work(ctx) // err is context.DeadlineExceeded
 
 `cancel` 必须被调用，即使 timeout 最终会触发；这样可尽早释放派生 context 关联的资源。真实 I/O 应优先使用 `http.NewRequestWithContext`、`QueryContext` 等支持 context 的 API，而不是只在入口处检查一次。
 
-
-
 # 从零建立模型
 
 本页主题是 **02-Context Cancellation and Errors (取消传播与错误)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
@@ -50,8 +48,6 @@ err := work(ctx) // err is context.DeadlineExceeded
 # 工程检查点
 
 channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-
 
 # 渐进练习
 

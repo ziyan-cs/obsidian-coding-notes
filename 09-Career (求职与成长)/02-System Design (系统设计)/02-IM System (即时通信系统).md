@@ -10,7 +10,6 @@ status: 🌱
 
 **核心结论**：核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
-
 # 需求分析
 
 ## 功能需求
@@ -290,8 +289,6 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 | **消息表分片键怎么选？** | 按 `conversation_id` 哈希分片，保证同一会话所有消息落入同一分片，天然支持范围查询（会话内翻页）。查询用户历史消息时需广播到所有分片 |
 
 IM 系统网络编程基础详解见 → [WebSocket Protocol](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/10-WebSocket%20Protocol%20(WebSocket协议).md) · [Reactor & Proactor Pattern](05-Network%20Programming%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

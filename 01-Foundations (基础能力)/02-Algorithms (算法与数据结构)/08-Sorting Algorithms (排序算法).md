@@ -96,7 +96,6 @@ void insertSort(vector<int>& arr) {
 }
 ```
 
-
 ## 2.5 快速排序（Quick Sort）⭐
 
 ## 2.6 堆排序（Heap Sort）⭐
@@ -117,7 +116,6 @@ void countingSort(vector<int>& arr) {
     }
 }
 ```
-
 
 ## 2.8 希尔排序（Shell Sort）
 
@@ -340,7 +338,6 @@ priority_queue<int> maxHeap;
 priority_queue<int, vector<int>, greater<int>> minHeap;
 ```
 
-
 ```cpp
 // 对外接口
 void heapSort(vector<int>& arr) {
@@ -378,8 +375,6 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 
-
-
 # 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
@@ -387,7 +382,6 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 # 常见误区
 
 - 把 **08-Sorting Algorithms (排序算法)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
 
 # 学习闭环
 

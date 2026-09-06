@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-
 # Tree Depth First Traversal (树的深度优先遍历)
 
 > [!note] 本节重点：核心考点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
@@ -257,8 +256,6 @@ int pathSum(TreeNode* root, int target) {
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
 
-
-
 # 零基础阅读路径
 
 先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
@@ -266,7 +263,6 @@ int pathSum(TreeNode* root, int target) {
 # 常见误区
 
 - 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
 
 # 学习闭环
 

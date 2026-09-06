@@ -11,11 +11,9 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-
 # TCP and IP Stack (TCP 与 IP 协议栈)
 
 > [!note] 本节重点：核心考点：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
-
 
 # 层级关系
 
@@ -115,7 +113,6 @@ DNS（域名系统）将易读记的域名解析为机器可识别的 IP 地址
 
 # 完整解析流程
 
-
 ```txt
 用户输入域名
     ↓
@@ -145,8 +142,6 @@ DNS（域名系统）将易读记的域名解析为机器可识别的 IP 地址
 ---
 
 传输层核心协议详解见 → [UDP Characteristics & Use Cases (UDP特性与使用场景)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/03-UDP%20Characteristics%20&%20Use%20Cases%20(UDP特性与使用场景).md>) · [Three-Way Handshake & Four-Way Teardown (三次握手四次挥手)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02a-Three-Way%20Handshake%20&%20Four-Way%20Teardown%20(三次握手四次挥手).md>)
-
-
 
 # 零基础阅读路径
 

@@ -440,8 +440,6 @@ auto stub = UserService::NewStub(tracing_channel);
 
 可观测性与调试工具共同保障服务稳定性，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
 
-
-
 # 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。

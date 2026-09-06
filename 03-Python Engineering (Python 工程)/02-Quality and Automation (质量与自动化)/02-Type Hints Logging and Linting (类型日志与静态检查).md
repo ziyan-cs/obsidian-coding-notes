@@ -49,8 +49,6 @@ def mean(values: Iterable[float]) -> float:
 2. 为什么 `log.info("id=%s", user_id)` 优于 f-string 日志？
 3. 遇到无法恢复的配置错误时，怎样既保留异常上下文又让 CLI 明确失败？
 
-
-
 # 从零建立模型
 
 本页主题是 **02-Type Hints Logging and Linting (类型日志与静态检查)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。

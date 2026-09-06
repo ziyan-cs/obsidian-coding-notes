@@ -230,8 +230,6 @@ Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 
 
 Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)
 
-
-
 # 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。

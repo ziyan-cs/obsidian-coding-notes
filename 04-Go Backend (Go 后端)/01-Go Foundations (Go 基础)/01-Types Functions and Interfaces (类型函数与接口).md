@@ -12,7 +12,6 @@ verified: 2026-09-05
 
 **核心结论**：一句话结论：Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
 
-
 # 核心语法
 
 ```go
@@ -57,8 +56,6 @@ type UserStore interface { Find(context.Context, int64) (User, error) }
 
 1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
 2. 哪种情况下该先写 interface，哪种情况下不该？
-
-
 
 # 从零建立模型
 

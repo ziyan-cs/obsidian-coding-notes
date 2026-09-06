@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # SQL Basics (SQL 基础语法)
 
 > [!note] 本节重点：核心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
@@ -419,7 +418,6 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ---
 
-
 多表查询见 → [Joins & Subqueries (多表查询与子查询)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md) · [Aggregate Functions & Group By (聚合与分组)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)
 
 ---
@@ -515,7 +513,6 @@ SELECT * FROM orders WHERE user_id IN (
 > [!tip]- **工程要点**：多表查询关联字段必须有索引（EXPLAIN 看 type 列：`ref` 好于 `ALL`）。超过 3 张表 JOIN 考虑拆分 SQL 或冗余字段。
 
 ---
-
 
 基础语法见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md) · [Aggregate Functions & Group By (聚合与分组)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/03-Aggregate%20Functions%20&%20Group%20By%20(聚合与分组).md)
 
@@ -619,7 +616,6 @@ ALTER TABLE [表名] DROP COLUMN [字段名];
 SHOW FULL COLUMNS FROM [表名];
 ```
 
-
 ## 1. 增
 
 ```sql
@@ -682,7 +678,6 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ---
 
-
 基础语法见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md) · [Joins & Subqueries (多表查询与子查询)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/02-Joins%20&%20Subqueries%20(多表查询与子查询).md)
 
 ---
@@ -692,7 +687,6 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 > [!note] 本节重点：核心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
 
 > [!warning] **平台/版本说明（NEEDS_VERIFY）**：以下路径以 **Windows 本机 MySQL 8.0** 为例，路径含版本号 `MySQL Server 8.0`，升级版本后需同步更新。Linux（vm-ubuntu）下的对应关系：程序 `mysqld`/`mysql`、配置文件 `/etc/mysql/mysql.conf.d/mysqld.cnf`、数据目录 `datadir`（用 `SHOW VARIABLES LIKE 'datadir'` 查询）、服务管理用 `systemctl` 而非 Windows 服务。
-
 
 # 核心配置与目录
 
@@ -760,12 +754,10 @@ bind-address=127.0.0.1
 
 # MySQL 连接与退出
 
-
 ```sql
 Test-NetConnection [主机IP] -Port 3306
 
 mysql -h [主机IP] -P [端口号] -u [用户名] -p
-
 
 ```
 
@@ -778,15 +770,11 @@ show variables like 'character_set_server';
 
 show variables like 'datadir';
 
-
 ```
 
 ---
 
-
 SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
-
-
 
 # 零基础阅读路径
 

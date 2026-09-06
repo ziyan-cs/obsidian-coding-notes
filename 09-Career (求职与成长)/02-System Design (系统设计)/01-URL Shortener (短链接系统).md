@@ -10,7 +10,6 @@ status: 🌱
 
 **核心结论**：核心考点：> 发号器 + 哈希映射 + HTTP 重定向，重点在唯一 ID 生成策略和缓存加速
 
-
 # 需求分析
 
 ## 功能需求
@@ -215,8 +214,6 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 | **一致性哈希在短链系统中的作用？** | 通常不需要，短链系统无状态，前端 Nginx 直接轮询即可。但如果要做用户级分片存储，可按 user_id 一致性哈希分库 |
 
 短 URL 系统分布式与缓存基础详解见 → [CAP Theorem & BASE Theory](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Redis Cache Patterns](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

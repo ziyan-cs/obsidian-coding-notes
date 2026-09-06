@@ -34,8 +34,6 @@ failure while constructing
 | 临界区 | `std::lock_guard` / `std::unique_lock` | 锁的获取与释放不会因异常或分支漏掉 |
 | 自定义句柄 | 小型 move-only RAII wrapper | 把关闭协议集中在一个类型中 |
 
-
-
 # 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。

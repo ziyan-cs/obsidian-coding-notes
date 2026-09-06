@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Template Basics (模板基础)
 
 > [!note] 本节重点：核心考点：函数模板、类模板、模板特化、SFINAE 初步
@@ -136,8 +135,6 @@ std::conditional_t<true, int, double>  // int
 ---
 
 类型别名与模板紧密相关，详见 → [Const, Typedef & Enum (类型系统基础)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/01-Const,%20Typedef%20&%20Enum%20(类型系统基础).md)
-
-
 
 # 零基础阅读路径
 

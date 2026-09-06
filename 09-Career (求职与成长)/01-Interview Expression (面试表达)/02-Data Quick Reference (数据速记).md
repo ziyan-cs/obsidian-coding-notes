@@ -10,7 +10,6 @@ status: 🌱
 
 **核心结论**：面试速查卡片 — 考前 10 分钟快速翻阅
 
-
 # 2 的幂速记
 
 > [!tip]- 记忆口诀
@@ -103,8 +102,6 @@ SIGINT=2  SIGKILL=9  SIGTERM=15           // 常见信号
 O_RDONLY=0  O_WRONLY=1  O_RDWR=2          // open flags
 EPOLLIN=0x001  EPOLLOUT=0x004  EPOLLET=0x80000000  // epoll 事件
 ```
-
-
 
 # 零基础阅读路径
 

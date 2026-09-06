@@ -158,7 +158,6 @@ target_link_libraries(myapp PRIVATE mylib)
 
 # target_compile_options & target_compile_definitions
 
-
 ```cmake
 target_compile_options(myapp PRIVATE
     -Wall -Wextra -Wpedantic   # 开启警告
@@ -185,7 +184,6 @@ target_compile_definitions(myapp PRIVATE
 # CMake Build Types (CMake 构建类型)
 
 > [!note] 本节重点：核心考点：四种构建类型的使用场景、优化级别、常用配置
-
 
 # 四种标准构建类型
 
@@ -234,8 +232,6 @@ cmake --build . --config Debug
 - [find_package & External Dependencies (第三方库引入)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02d-find_package%20&%20External%20Dependencies%20(第三方库引入).md)
 - [CMake with vcpkg & Conan (包管理器集成)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02e-CMake%20with%20vcpkg%20&%20Conan%20(包管理器集成).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

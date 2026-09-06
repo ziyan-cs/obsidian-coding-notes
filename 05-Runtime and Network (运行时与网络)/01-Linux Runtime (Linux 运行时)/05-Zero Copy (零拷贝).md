@@ -95,8 +95,6 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 
 零拷贝与 mmap 详解见 → [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md) · [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md)
 
-
-
 # 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。

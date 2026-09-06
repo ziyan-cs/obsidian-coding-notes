@@ -44,7 +44,6 @@ CMake 会在以下位置搜索：
 
 无需手动安装第三方库，CMake 自动从网络下载并构建：
 
-
 ```cmake
 include(FetchContent)
 
@@ -182,8 +181,6 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 - [Build Types：Debug, Release, RelWithDebInfo (构建类型)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02c-Build%20Types：Debug,%20Release,%20RelWithDebInfo%20(构建类型)%20⭐.md)
 - [find_package & External Dependencies (第三方库引入)](/04-Engineering%20Tools%20(工程工具)/02-CMake%20(构建系统)/02d-find_package%20&%20External%20Dependencies%20(第三方库引入).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

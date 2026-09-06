@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # Nginx Architecture (Nginx 架构)
 
 > [!note] 本节重点：核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
@@ -390,8 +389,6 @@ Nginx（路由）
 ---
 
 Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Reverse Proxy & Load Balancing Config (反向代理配置)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md)
-
-
 
 # 零基础阅读路径
 

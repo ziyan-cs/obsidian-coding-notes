@@ -106,7 +106,6 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 ---
 
-
 崩溃恢复详解见 → [Redo Log：Crash Recovery (崩溃恢复)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md) · [Binlog vs Redo Log：Differences (两者区别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07c-Binlog%20vs%20Redo%20Log：Differences%20(两者区别).md)
 
 ---
@@ -387,8 +386,6 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 ```
 
 > [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
-
-
 
 # 零基础阅读路径
 

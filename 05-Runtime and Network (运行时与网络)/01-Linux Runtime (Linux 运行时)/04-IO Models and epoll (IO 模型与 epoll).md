@@ -549,8 +549,6 @@ epoll:       返回 50 → O(k)，k=50
 epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md)
 - [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
 
-
-
 # 零基础阅读路径
 
 先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。

@@ -51,8 +51,6 @@ if err := srv.Shutdown(shutdownCtx); err != nil { log.Printf("shutdown: %v", err
 
 与 C++ server 的“优雅关闭”目标相同：停止接入、排空在途任务、释放资源。差异在于 Go 通常以 `context` 从入口向下传播取消信号。
 
-
-
 # 从零建立模型
 
 本页主题是 **03-API Lifecycle and Graceful Shutdown (服务生命周期)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。

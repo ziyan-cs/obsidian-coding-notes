@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-
 # Distributed Transactions and Saga (分布式事务与Saga)
 
 > [!note] 本节重点：核心考点：> 分布式事务方案（2PC/XA、TCC、Saga、本地消息表）、Seata AT 模式、CAP 权衡
@@ -160,8 +159,6 @@ transactional outbox flow
 ---
 
 分布式事务的 CAP 权衡与一致性模型详解见 → [CAP Theorem & BASE Theory (CAP理论)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Consistency Models：Strong, Eventual (一致性模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04b-Consistency%20Models：Strong,%20Eventual%20(一致性模型).md)
-
-
 
 # 零基础阅读路径
 

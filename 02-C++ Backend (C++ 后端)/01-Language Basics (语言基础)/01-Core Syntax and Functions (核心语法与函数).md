@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Variables, Types & Operators (变量、类型与运算符)
 
 ****
@@ -185,8 +184,6 @@ int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 ---
 
 变量与类型系统是函数的基础，详见 → [Variables, Types & Operators (变量、类型与运算符)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
-
-
 
 # 零基础阅读路径
 

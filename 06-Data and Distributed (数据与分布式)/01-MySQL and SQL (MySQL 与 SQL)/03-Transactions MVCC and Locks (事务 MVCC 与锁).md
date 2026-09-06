@@ -18,8 +18,6 @@ verified: 2026-09-06
 3. 区分一致性快照读与当前读；后者可能加记录锁、gap lock 或 next-key lock。
 4. 对死锁保留日志并重试完整事务，而不是只重试其中一条 SQL。
 
-
-
 # 零基础阅读路径
 
 先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
@@ -280,7 +278,6 @@ SELECT * FROM performance_schema.data_lock_waits\G
 > [!tip]- **工程要点**：脏读在实践中很少遇到（RU 极少使用）。不可重复读在高并发写入场景很常见，RC 级别下如果业务要求同一事务内读一致性，需要应用层加锁。幻读最容易在"检查且插入"的场景出现（如注册时检查用户名是否存在），Gap Lock 在 RR 级别下防护，但在 RC 级别下需要用应用层唯一约束或悲观锁来防止。
 
 ---
-
 
 四种隔离级别详解见 → [Isolation Levels：RU, RC, RR, Serializable (四种隔离级别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05a-Isolation%20Levels：RU,%20RC,%20RR,%20Serializable%20(四种隔离级别).md) · [MVCC Internals：undo log & read view (MVCC底层实现)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)
 
@@ -578,7 +575,6 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-
 间隙锁与临键锁详解见 → [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
 
 ---
@@ -712,7 +708,6 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 - **自测**：1) 为什么唯一索引等值查询能退化为 Record Lock？ 2) 索引 1,5,10 上 `WHERE id=5 FOR UPDATE` 的 Next-Key Lock 锁哪些范围？
 
 ---
-
 
 表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Deadlock Detection & avoidance (死锁检测)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06c-Deadlock%20Detection%20&%20avoidance%20(死锁检测).md)
 

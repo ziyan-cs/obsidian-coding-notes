@@ -330,8 +330,6 @@ auto iter = pending.insert(pending.end(), {42});
 
 vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
 
-
-
 # 零基础阅读路径
 
 先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。

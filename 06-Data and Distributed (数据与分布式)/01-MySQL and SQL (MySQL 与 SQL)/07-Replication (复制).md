@@ -174,10 +174,7 @@ auto writeTs = std::chrono::steady_clock::now();
 
 ---
 
-
 分库分表概念见 → [Sharding & Partitioning Overview (分库分表概念)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/11-Sharding%20&%20Partitioning%20Overview%20(分库分表概念).md) · [MySQL vs Redis：Caching Strategy (缓存策略对比)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/04-High%20Availability%20&%20Architecture%20(高可用与架构)/12-MySQL%20vs%20Redis：Caching%20Strategy%20(缓存策略对比).md)
-
-
 
 # 零基础阅读路径
 

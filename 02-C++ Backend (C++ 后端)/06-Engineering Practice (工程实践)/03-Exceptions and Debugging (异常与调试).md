@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-
 # Exception Handling (异常处理)
 
 > [!note] 本节重点：核心考点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
@@ -280,8 +279,6 @@ valgrind --tool=callgrind ./main
 ---
 
 性能分析工具详见 → [Performance Profiling perf & valgrind (性能分析)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/06-Performance%20Profiling%20perf%20&%20valgrind%20(性能分析)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

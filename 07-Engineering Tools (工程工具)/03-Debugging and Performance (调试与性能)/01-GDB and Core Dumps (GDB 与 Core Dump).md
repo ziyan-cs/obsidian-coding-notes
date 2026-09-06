@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 **核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-
 # GDB Essentials (GDB 核心用法)
 
 > [!note] 本节重点：核心考点：GDB 启动方式、断点控制、变量观察、调用栈分析、多线程调试
@@ -250,8 +249,6 @@ void enable_core_dump() {
 - [AddressSanitizer & UBSan (编译期检测工具)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03d-AddressSanitizer%20&%20UBSan%20(编译期检测工具)%20⭐.md)
 - [perf：CPU Profiling & Flamegraph (性能火焰图)](/04-Engineering%20Tools%20(工程工具)/03-Debugging%20&%20Profiling%20(调试与性能分析)/03e-perf：CPU%20Profiling%20&%20Flamegraph%20(性能火焰图).md)
 - [Core Concepts：Working Tree, Index, HEAD (三区模型)](/04-Engineering%20Tools%20(工程工具)/01-Version%20Control%20(版本控制)/01a-Core%20Concepts：Working%20Tree,%20Index,%20HEAD%20(三区模型)%20⭐.md)
-
-
 
 # 零基础阅读路径
 

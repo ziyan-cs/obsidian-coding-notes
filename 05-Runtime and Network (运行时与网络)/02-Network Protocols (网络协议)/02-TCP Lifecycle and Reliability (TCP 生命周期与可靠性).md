@@ -11,7 +11,6 @@ verified: 2026-09-06
 
 > [!note] 本节重点：核心考点：> 为什么是三次/四次、每步状态变化、异常场景
 
-
 > [!note] 本节重点：核心考点：> 三次握手同步双方初始序列号并处理历史报文；挥手由两条独立发送方向决定，TIME_WAIT 的具体时长依赖协议栈与配置。
 
 # 三次握手（建立连接）
@@ -598,8 +597,6 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 ---
 
 粘包与 TCP 流式传输机制详解见 → [Flow Control & Congestion Control (流量控制与拥塞控制)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md>) · [TCP State Machine (状态机全图)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md>)
-
-
 
 # 零基础阅读路径
 
