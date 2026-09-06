@@ -4,9 +4,11 @@ tags:
 status: 🌱
 ---
 
+# Socket API Lifecycle — 核心 API
+
 > [!important] **核心考点**：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
-# 函数调用链
+## 函数调用链
 
 **TCP serve**
 
@@ -78,7 +80,7 @@ if (fd < 0) perror("socket failed");
 	- `SOCK_DGRAM`：不可靠、无序、有数据边界的数据报（UDP）
 	- `SOCK_RAW`：原始套接字（直接操作 IP 层）
 
-- `protoal`：具体协议（同意协议族下，进一步指定协议）
+- `protocol`：具体协议（同一协议族下，进一步指定协议）
 	- `0`：自动匹配协议（通常填 0）
 	- `IPPROTO_TCP`：TCP 协议
 	- `IPPROTO_UDP`：UDP 协议
@@ -113,9 +115,7 @@ bind(fd, (struct sockaddr*)&addr, sizeof(addr));
 
 套接字 “被动” 监听，开始接受连接请求。
 
-- 内核为每个监听套接字维护两个队列
-- `SYN` 已接收的但 `SYN+ACK` 未发出的请求进入半连接队列
-- 完成三次握手的请求进入全连接队列
+- Linux 的半连接/accept 队列行为与溢出处理受内核版本和 sysctl 配置影响；可将其理解为“握手中请求”和“已建立但尚未被应用 accept 的连接”两类积压状态
 
 ```cpp
 // 函数原型
@@ -142,7 +142,7 @@ int listen(int sockfd, int backlog);
         应用程序
 ```
 
-> 全连接队列满了，默认丢弃新的 SYN 或 ACK，客户端连接超时。后续让服务器直接发送 RST。
+> 队列满时的丢弃、重传或 RST 等行为依内核配置与状态而变；排查时应同时看 `backlog`、`somaxconn`、SYN 相关参数和应用是否及时 `accept`。
 
 ## accept
 
@@ -174,7 +174,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 ## read / write / recv / send
 
 - `read/write` 是通用文件操作，`recv/send` 是 socket 专用，支持额外 flags
-- **返回值 = 0**：对端关闭连接（收到 FIN）
+- `read` / `recv` **返回 0**：对端已对该方向 orderly shutdown（通常收到 FIN）；`write` / `send` 的 0 语义不同，仍须按调用与 errno 处理
 - **返回值 = -1**：出错，检查 `errno`
 
 ```cpp
@@ -204,7 +204,11 @@ int shutdown(int sockfd, int how);
 ```
 
 - 多进程 / 多线程环境下，需要确保所有进程都 close 后，套接字才会真正释放
-- 主动 close 会触发四次挥手流程
+- 最后一个引用关闭且未提前 `shutdown` 时通常开始该 socket 的关闭流程；具体报文交换取决于连接状态
+
+## 30 秒回答
+
+服务端的监听 fd 只负责接入，`accept` 返回的连接 fd 才负责读写；客户端通过 `connect` 完成建连。非阻塞 I/O 下每个系统调用都要区分成功、`EAGAIN/EWOULDBLOCK`、`EINTR`、EOF 和致命错误。`close` 管理 fd 引用，`shutdown` 管理连接方向，不能混为一谈。
 
 |          | close()               | shutdown( )     |
 | -------- | --------------------- | --------------- |
