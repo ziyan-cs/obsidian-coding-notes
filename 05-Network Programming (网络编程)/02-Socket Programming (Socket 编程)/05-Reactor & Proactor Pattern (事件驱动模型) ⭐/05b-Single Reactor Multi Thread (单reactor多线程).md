@@ -84,8 +84,10 @@ void Handler::on_readable() {
     // 将业务处理提交到线程池，不阻塞主线程
     thread_pool_.submit([this, data = std::string(buf, n)] {
         std::string resp = process(data);  // 业务处理（在 worker 线程）
-        // 注意：write 需要回到主线程或加锁保护 fd
-        write(fd_, resp.data(), resp.size());
+        // 将响应投递回所属 Reactor；由 I/O 线程写入连接的 write buffer。
+        reactor_.queue_in_loop([this, resp = std::move(resp)] {
+            append_and_enable_write(resp);
+        });
     });
 }
 ```
@@ -95,7 +97,7 @@ void Handler::on_readable() {
 1. 主线程 Reactor 监听事件，Acceptor 接受新连接
 2. 读事件到来，Handler 在**主线程**完成 `read()`，将数据投递给线程池
 3. 工作线程处理业务逻辑
-4. 处理完成后写回响应
+4. 工作线程将结果投递回 Reactor；所属 I/O 线程更新 write buffer 与 `EPOLLOUT`
 
 ## 优点
 
@@ -107,7 +109,11 @@ void Handler::on_readable() {
 - **单 Reactor 仍是瓶颈**：所有 I/O 事件都在一个线程处理
 - 工作线程写回时需要注意线程安全（共享的 fd → 加锁或排队写）
 
-> **与 05a 的区别：** 05a 所有工作在单线程串行；05b 将业务逻辑卸载到工作线程，I/O 读写仍在主线程。高并发下主线程仍可能成为瓶颈——进一步优化见 05c 主从 Reactor 模型。
+> **与 05a 的区别：** 05a 所有工作在单线程串行；05b 将业务逻辑卸载到工作线程，I/O 读写与连接状态仍归 Reactor 线程所有。高并发下主线程仍可能成为瓶颈——进一步优化见 05c 主从 Reactor 模型。
+
+## 30 秒回答
+
+单 Reactor 多线程把连接 I/O 与业务计算拆开，但不把一个连接的状态随意交给多个线程。Reactor 线程读请求并拥有 fd/read-write buffer；worker 只处理独立业务数据，完成后通过线程安全队列投递结果回 Reactor。关键风险是任务积压、连接已关闭和响应乱序。
 
 ---
 

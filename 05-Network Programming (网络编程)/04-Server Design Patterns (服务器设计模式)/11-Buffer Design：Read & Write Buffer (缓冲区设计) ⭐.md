@@ -164,9 +164,11 @@ void handle_write(connection *conn) {
         return;
     }
 
-    ssize_t n = write(conn->fd, conn->data + conn->read_pos, pending);
+    ssize_t n = write(conn->fd,
+                      conn->write_buf.data + conn->write_buf.read_pos,
+                      pending);
     if (n > 0) {
-        conn->read_pos += n;  // 标记已发送
+        conn->write_buf.read_pos += n;  // 标记已发送
     }
     // 如果 n < pending，下次 EPOLLOUT 继续发送
 }
@@ -215,7 +217,7 @@ ssize_t n = writev(fd, iov, iovcnt);
 - **muduo**：`Buffer` 类，用 `std::vector<char>` 实现，prependable 空间支持
 - **Redis**：`sds`（简单动态字符串），用空间预分配消除 realloc 热点
 
-> [!tip]- **工程要点**：Buffer 设计的核心是**减少数据拷贝**和**避免缓冲区溢出**。Compact + 翻倍扩容是最常用的组合——每次读操作前先 compact（将未读数据移到头部），空间不够时翻倍扩容。对于高性能场景，使用 `readv`/`writev` 实现零拷贝发送，避免用户空间的数据拼接。
+> [!tip]- **工程要点**：Buffer 设计首先要保证边界、部分读写与背压正确，再考虑减少 copy。Compact 不是“每次读事件都必须做”，应在需要连续空闲空间时再做；`readv`/`writev` 减少用户态拼接，但不自动消除所有 copy 或内核开销。
 
 ## 30 秒回答 / 自测
 
