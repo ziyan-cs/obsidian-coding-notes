@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 06-Container Adapters (容器适配器)
+## Container Adapters (容器适配器)
 
 > [!abstract] 核心考点：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
@@ -106,7 +106,7 @@ STL 容器全览详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%20Backend
 
 ---
 
-## 07-Iterators and Categories (迭代器分类)
+## Iterators and Categories (迭代器分类)
 
 > [!abstract] 核心考点：迭代器分类是 STL 算法与容器的桥梁，决定了算法可以用于哪些容器
 
@@ -224,7 +224,7 @@ std::vector<int> data(in, end);
 
 ---
 
-## 08-Algorithm Library (算法库速查)
+## Algorithm Library (算法库速查)
 
 > [!abstract] 核心考点：STL 算法的分类、迭代器要求、Lambda 配合使用
 
@@ -368,7 +368,7 @@ STL 容器与算法速查详见 → [STL Cheat Sheet (STL速查总览)](/02-C++%
 
 ---
 
-## 09-STL Reference (STL 速查总览)
+## STL Reference (STL 速查总览)
 
 > [!abstract] 核心考点：容器选择决策、复杂度一览、面试前快速复习用
 
@@ -438,3 +438,38 @@ unordered 哈希表  飞一般的查找
 ---
 
 容器适配器与算法详见 → [Container Adapters (容器适配器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/03-Container%20Adapters%20(容器适配器).md) · [Algorithm Library (算法库速查)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/05-Algorithm%20Library%20(算法库速查).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-Iterators Algorithms and Adapters (迭代器算法与适配器) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

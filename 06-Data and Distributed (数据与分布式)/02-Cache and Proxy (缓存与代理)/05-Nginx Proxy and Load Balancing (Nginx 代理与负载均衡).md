@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 13-Nginx Architecture (Nginx 架构)
+## 30 秒回答
+
+**05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Nginx Architecture (Nginx 架构)
 
 > [!abstract] 核心考点：> Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
@@ -142,7 +147,7 @@ Nginx 配置与实践详解见 → [Reverse Proxy & Load Balancing Config (反�
 
 ---
 
-## 14-Reverse Proxy and Load Balancing (反向代理与负载均衡)
+## Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
 > [!abstract] 核心考点：> 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
@@ -270,7 +275,7 @@ server {
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 2）
 
 | 题型 | 要点 |
 |------|------|
@@ -289,7 +294,7 @@ Nginx 架构与实践详解见 → [Nginx Architecture：Master & Worker Process
 
 ---
 
-## 15-Nginx and Application Server (Nginx 与应用服务器)
+## Nginx and Application Server (Nginx 与应用服务器)
 
 > [!abstract] 核心考点：> Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
@@ -375,7 +380,7 @@ Nginx（路由）
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 3）
 
 | 题型 | 要点 |
 |------|------|
@@ -391,3 +396,38 @@ Nginx（路由）
 ---
 
 Nginx 架构与配置详解见 → [Nginx Architecture：Master & Worker Process (架构模型)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02a-Nginx%20Architecture：Master%20&%20Worker%20Process%20(架构模型).md) · [Reverse Proxy & Load Balancing Config (反向代理配置)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

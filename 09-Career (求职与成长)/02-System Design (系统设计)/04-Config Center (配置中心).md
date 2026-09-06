@@ -8,7 +8,10 @@ status: 🌱
 
 > [!abstract] 核心考点：> etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/05-Config Center (配置中心)|Config Center 项目]]。
+## 30 秒回答
+
+**04-Config Center (配置中心)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
 
 ## 需求分析
 
@@ -316,3 +319,38 @@ int timeout = cfg->rpc_timeout_ms;
 | **推拉结合的实现细节？** | 先推（Push Server 通知客户端版本变化），后拉（客户端主动拉取新值）。推不可靠时靠拉兜底。客户端定时在后台拉取全量版本号对比（类似于 DNS 的 SOA 查询），发现不一致时拉取增量 |
 
 配置中心依赖的分布式共识协议详解见 → [Leader Election (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [Log Replication (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Config Center (配置中心) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

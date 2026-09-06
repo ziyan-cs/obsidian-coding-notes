@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 01-Shell and Basic Commands (命令行与 Shell)
+## 30 秒回答
+
+**01-Shell Files and Administration (Shell 文件与系统管理)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Shell and Basic Commands (命令行与 Shell)
 
 > [!abstract] 核心考点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
 
@@ -416,7 +421,7 @@ Shell 命令与脚本详解见 → [File System & Permissions (文件系统与�
 
 ---
 
-## 02-File System and Permissions (文件系统与权限)
+## File System and Permissions (文件系统与权限)
 
 > [!abstract] 核心考点：Linux 文件系统层次结构、文件权限 rwx 与 chmod/chown、inode 与硬软链接
 
@@ -636,7 +641,7 @@ ln <src> <dst>       # 创建硬链接
 
 ---
 
-## 03-System Administration Basics (系统管理基础)
+## System Administration Basics (系统管理基础)
 
 > [!abstract] 核心考点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
 
@@ -891,3 +896,38 @@ grep "error" /var/log/auth.log  # 过滤错误信息
 ```
 
 系统管理基础见 → [Shell & Basic Commands (命令行与Shell编程)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/01-Shell%20&%20Basic%20Commands%20(命令行与Shell编程).md) · [File System & Permissions (文件系统与权限)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/02-File%20System%20&%20Permissions%20(文件系统与权限).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Shell Files and Administration (Shell 文件与系统管理) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

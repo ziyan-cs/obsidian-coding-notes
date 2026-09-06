@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 04-Monotonic Stack (单调栈)
+## Monotonic Stack (单调栈)
 
 > [!abstract] 核心考点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
 
@@ -97,7 +97,7 @@ int largestRectangleArea(vector<int>& heights) {
 
 ---
 
-## 05-Queue and Breadth First Search (队列与广度优先搜索)
+## Queue and Breadth First Search (队列与广度优先搜索)
 
 > [!abstract] 核心考点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
 
@@ -179,7 +179,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 ---
 
-## 关联笔记
+## 关联笔记（补充 2）
 
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
@@ -189,7 +189,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 ---
 
-## 06-Hash Table (哈希表)
+## Hash Table (哈希表)
 
 > [!abstract] 核心考点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
 
@@ -270,16 +270,45 @@ unordered_map<pair<int,int>, int, PairHash> mp;
 
 ---
 
-## 30 秒回答
-
-**哈希表为什么快、又为什么不保证绝对快？** 哈希函数把键分散到桶或槽位，查找平均只需常数次探测；冲突会拉长探测链路，极端输入可能退化。使用 `unordered_map` 时，迭代顺序无保证；插入导致 rehash 后，迭代器可能失效。
-
-**自测：** 链地址法与开放寻址法分别怎样处理冲突？什么时候应先 `reserve()`？
-
-## 关联笔记
+## 关联笔记（补充 3）
 
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
 - [Monotonic Stack (单调栈)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03a-Monotonic%20Stack%20(单调栈).md)
 - [BFS with Queue (队列BFS)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Stack Queue and Hashing (栈队列与哈希) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

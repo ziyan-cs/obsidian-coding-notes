@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 15-Write Ahead Logging (预写日志)
+## Write Ahead Logging (预写日志)
 
 > [!abstract] 核心考点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 
@@ -116,7 +116,7 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 ---
 
-## 16-Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
+## Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 
 > [!abstract] 核心考点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
@@ -257,19 +257,7 @@ LSN 的作用：
 
 > [!tip]- **工程要点**：redo log 太小可能增加 checkpoint 压力并造成写入抖动；过大又会拉长恢复扫描窗口。容量、checkpoint 进度与恢复时间受版本、写入模式、设备和恢复流程影响，不能套用固定“小时数、百分比或分钟数”公式。应采集日志生成速率、脏页与恢复演练数据后再调优。
 
-## 30 秒回答
-
-**Checkpoint 为什么重要？** 它记录了恢复时不必再从更早日志重放的位置。redo log 过小会更频繁推动脏页刷盘，过大则可能扩大恢复工作量；大小必须以写入负载、存储能力和可接受恢复时间共同决定。
-
----
-
-
-
-WAL机制详解见 → [WAL：Write-Ahead Logging (WAL机制)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07a-WAL：Write-Ahead%20Logging%20(WAL机制).md) · [Binlog vs Redo Log：Differences (两者区别)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07c-Binlog%20vs%20Redo%20Log：Differences%20(两者区别).md)
-
----
-
-## 17-Binlog and Redo Log (Binlog 与 Redo Log)
+## Binlog and Redo Log (Binlog 与 Redo Log)
 
 > [!abstract] 核心考点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
@@ -405,12 +393,37 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 > [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
 
-## 30 秒回答
+## 常见误区
 
-redo log 服务于 InnoDB 崩溃恢复，binlog 服务于复制与时间点恢复；二者作用层与写入方式不同。提交时的两阶段协调让重启后能根据 binlog 判断 prepare 事务的去向，避免主库页恢复与复制日志明显分叉。真正的数据保护还依赖刷盘策略、副本、备份与恢复演练。
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
 
----
+## 学习闭环
 
+### 复述
 
+- 不看正文，说明 04-Logging and Recovery (日志与恢复) 的问题、核心机制与边界。
 
-WAL机制详解见 → [WAL：Write-Ahead Logging (WAL机制)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07a-WAL：Write-Ahead%20Logging%20(WAL机制).md) · [Redo Log：Crash Recovery (崩溃恢复)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/07-Redo%20Log%20&%20Undo%20Log%20&%20Binlog%20(三大日志)%20⭐/07b-Redo%20Log：Crash%20Recovery%20(崩溃恢复).md)
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

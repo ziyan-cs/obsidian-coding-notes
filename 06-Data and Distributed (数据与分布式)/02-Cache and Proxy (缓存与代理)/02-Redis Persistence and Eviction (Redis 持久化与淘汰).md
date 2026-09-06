@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 05-RDB Persistence (RDB 持久化)
+## RDB Persistence (RDB 持久化)
 
 > [!abstract] 核心考点：> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
@@ -111,7 +111,7 @@ AOF 日志与 RDB 快照对比详解见 → [01b2-AOF：Write-Ahead Log & Rewrit
 
 ---
 
-## 06-AOF Persistence (AOF 持久化)
+## AOF Persistence (AOF 持久化)
 
 > [!abstract] 核心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
@@ -235,7 +235,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 2）
 
 | 题型 | 要点 |
 |------|------|
@@ -254,7 +254,7 @@ RDB 快照与 AOF 持久化对比详解见 → [01b1-RDB：Snapshot & BGSAVE (�
 
 ---
 
-## 07-Expiration and Eviction (过期与淘汰)
+## Expiration and Eviction (过期与淘汰)
 
 > [!abstract] 核心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 
@@ -377,7 +377,7 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 3）
 
 | 题型 | 要点 |
 |------|------|
@@ -403,3 +403,38 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 ---
 
 Redis 单线程模型与项目集成详解见 → [Redis Single Thread Model (单线程模型为何高性能)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01e-Redis%20Single%20Thread%20Model%20(单线程模型为何高性能)%20⭐.md) · [Redis Integration：C++ Client hiredis (项目集成)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01f-Redis%20Integration：C++%20Client%20hiredis%20(项目集成)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Redis Persistence and Eviction (Redis 持久化与淘汰) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

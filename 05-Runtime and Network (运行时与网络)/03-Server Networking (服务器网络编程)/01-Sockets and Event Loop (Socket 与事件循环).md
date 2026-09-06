@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 01-Socket API and Options (Socket API与选项)
+## Socket API and Options (Socket API与选项)
 
 > [!abstract] 核心考点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
@@ -228,7 +228,7 @@ Socket 编程进阶见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](
 
 ---
 
-## 02-Nonblocking IO and Event Loop (非阻塞IO与事件循环)
+## Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
 > [!abstract] 核心考点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
@@ -280,17 +280,7 @@ while (true) {
 - POSIX 允许两者相同；Linux 上通常相同，但可移植代码应同时处理两者
 - 语义：操作不能立即完成，但不是错误，稍后重试即可
 
-## 30 秒回答
-
-`O_NONBLOCK` 只改变系统调用在暂时不能推进时的返回方式，不会自动提供事件通知或解决部分读写。它通常配合 epoll 使用：读到 `EAGAIN` 表示当前内核缓冲区已读空，写到 `EAGAIN` 表示要等待可写事件；同时仍要处理 EOF、`EINTR` 和真正错误。
-
----
-
-Socket API 基础见 → [socket, bind, listen, accept, connect (核心API)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md>) · 套接字选项见 → [SO_REUSEADDR & SO_KEEPALIVE (套接字选项)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04c-SO_REUSEADDR%20&%20SO_KEEPALIVE%20(套接字选项).md>)
-
----
-
-## 03-Socket Options and Connection Health (套接字选项与连接健康)
+## Socket Options and Connection Health (套接字选项与连接健康)
 
 > [!abstract] 核心考点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
@@ -379,10 +369,37 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
 
-## 30 秒回答
+## 常见误区
 
-**`SO_REUSEADDR` 和 `SO_REUSEPORT` 有何区别？** 前者主要影响地址重用语义，后者在支持的平台上允许多个监听 socket 共享地址并参与内核分发；两者都不能脱离操作系统语义单独背结论。keepalive 是 TCP 层故障探测，不能替代业务心跳。
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
 
----
+## 学习闭环
 
-Socket API 基础见 → [socket, bind, listen, accept, connect (核心API)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04a-socket,%20bind,%20listen,%20accept,%20connect%20(核心API).md>) · 非阻塞模式见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04b-Non-blocking%20Socket%20&%20O_NONBLOCK%20(非阻塞Socket).md>)
+### 复述
+
+- 不看正文，说明 01-Sockets and Event Loop (Socket 与事件循环) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

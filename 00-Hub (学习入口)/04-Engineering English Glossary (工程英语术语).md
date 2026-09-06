@@ -12,25 +12,48 @@ verified: 2026-09-05
 >
 > 不背脱离语境的单词；每次在代码、报错、文档中遇到术语时，补一个自己能用的句子。
 
-| Term | 常用中文 | 一句话理解 | 例句 / 搭配 |
-| --- | --- | --- | --- |
-| ownership | 所有权 | 谁负责对象或资源最终释放 | `unique ownership` |
-| lifetime | 生命周期 | 一个对象从有效到失效的时间范围 | `object lifetime` |
-| concurrency | 并发 | 多个任务交错推进，不等于一定并行 | `concurrency control` |
-| parallelism | 并行 | 多个任务同时占用多个计算资源 | `data parallelism` |
-| race condition | 竞态条件 | 结果取决于不可控的执行先后顺序 | `data race` |
-| deadlock | 死锁 | 多方相互等待，系统无法继续 | `avoid deadlock` |
-| throughput | 吞吐量 | 单位时间完成的工作量 | `increase throughput` |
-| latency | 延迟 | 单个请求从开始到结束的时间 | `p99 latency` |
-| idempotent | 幂等的 | 重复执行与执行一次效果相同 | `idempotent request` |
-| rollback | 回滚 | 撤销未完成或失败操作的影响 | `transaction rollback` |
-| middleware | 中间件 | 请求处理链中通用的横切逻辑 | `HTTP middleware` |
-| observability | 可观测性 | 从外部信号理解系统内部状态的能力 | `logs, metrics, traces` |
-| regression | 回归问题 | 修改后重新出现的旧问题或新破坏 | `regression test` |
-| trade-off | 权衡 | 得到一项收益同时付出代价 | `performance trade-off` |
+## 30 秒回答
+
+**04-Engineering English Glossary (工程英语术语)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
 
 ## 维护规则
 
 - 新词优先记录在对应主题笔记，只有跨主题高频词才加入这里。
 - 每个术语至少写一个来自代码、日志或文档的真实搭配。
 - 每周复习 5 个，不追求一次背完。
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Engineering English Glossary (工程英语术语) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

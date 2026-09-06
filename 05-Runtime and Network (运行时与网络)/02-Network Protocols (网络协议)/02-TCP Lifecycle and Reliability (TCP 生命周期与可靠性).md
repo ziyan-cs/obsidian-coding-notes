@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 02-TCP Handshake and Teardown (TCP 建连与挥手)
+## TCP Handshake and Teardown (TCP 建连与挥手)
 
 > [!abstract] 核心考点：> 为什么是三次/四次、每步状态变化、异常场景
 
@@ -108,7 +108,7 @@ Active Closer             Passive Closer
 
 ---
 
-## 03-TCP State Machine (TCP 状态机)
+## TCP State Machine (TCP 状态机)
 
 > [!abstract] 核心考点：每个状态的含义、转换条件、服务端/客户端各自的状态路径
 
@@ -179,7 +179,7 @@ Notes on TIME_WAIT:
 
 ---
 
-## 04-TIME WAIT (TIME WAIT 原因与处理)
+## TIME WAIT (TIME WAIT 原因与处理)
 
 > [!abstract] 核心考点：为什么存在、带来什么问题、如何正确处理
 
@@ -280,7 +280,7 @@ TIME_WAIT 在 TCP 状态机中的位置见 → [TCP State Machine (状态机全�
 
 ---
 
-## 05-Flow and Congestion Control (流量与拥塞控制)
+## Flow and Congestion Control (流量与拥塞控制)
 
 > [!abstract] 核心考点：两者的区别、滑动窗口、拥塞控制四个阶段
 
@@ -409,7 +409,7 @@ TCP 传输相关延伸见 → [Sticky Packet Problem & Solutions (粘包问题�
 
 ---
 
-## 06-Stream Framing (流式协议分帧)
+## Stream Framing (流式协议分帧)
 
 > [!abstract] 核心考点：什么是粘包、根本原因、四种解决方案
 
@@ -590,14 +590,6 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 
 > **关键点：** 阻塞 `read()` 不保证一次读满；非阻塞 socket 还要正确处理 `EAGAIN/EWOULDBLOCK`、`EINTR` 与缓冲区状态。`writev` 也可能部分写入，生产代码必须保存未写完的 iovec 后续续写。网络字节序用 `htonl`/`ntohl` 转换，保证跨平台兼容。
 
-## 30 秒回答
-
-**“粘包”怎么解决？** TCP 只有字节流，`send` 次数和 `read` 次数没有一一对应关系。应用层必须定义帧边界：固定长度、分隔符转义、长度字段或 TLV；接收端维护累积缓冲区，只有拿到完整帧才交给业务层，并限制最大帧长度。
-
-**自测：** 为什么 `writev` 不能保证一次写完？HTTP/1.1 的头部与消息体分别如何确定边界？
-
----
-
 ## 总结对比
 
 |方案|适用场景|优点|缺点|
@@ -610,3 +602,38 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 ---
 
 粘包与 TCP 流式传输机制详解见 → [Flow Control & Congestion Control (流量控制与拥塞控制)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02d-Flow%20Control%20&%20Congestion%20Control%20(流量控制与拥塞控制).md>) · [TCP State Machine (状态机全图)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02b-TCP%20State%20Machine%20(状态机全图).md>)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-TCP Lifecycle and Reliability (TCP 生命周期与可靠性) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

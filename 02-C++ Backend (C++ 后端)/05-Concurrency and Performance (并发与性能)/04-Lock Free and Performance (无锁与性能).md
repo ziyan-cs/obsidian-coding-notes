@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 06-Lock-free Structures Overview (无锁结构概念)
+## 30 秒回答
+
+**04-Lock Free and Performance (无锁与性能)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Lock-free Structures Overview (无锁结构概念)
 
 > [!abstract] 核心考点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
@@ -142,7 +147,7 @@ std::atomic<TaggedPointer> head_;
 
 ---
 
-## 07-C++ Concurrency and Performance Optimization (C++ 并发性能优化)
+## C++ Concurrency and Performance Optimization (C++ 并发性能优化)
 
 > [!abstract] 核心考点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
 
@@ -400,3 +405,38 @@ for (int i = 0; i < numThreads; i++) {
 ---
 
 原子操作与内存序选择详见 → [Atomic & Memory Order (原子操作与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20Programming%20(并发编程)/04-Atomic%20&%20Memory%20Order%20(原子操作与内存序)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Lock Free and Performance (无锁与性能) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

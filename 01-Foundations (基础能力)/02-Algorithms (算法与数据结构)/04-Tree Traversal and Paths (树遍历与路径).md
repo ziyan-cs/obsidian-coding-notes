@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 08-Tree Depth First Traversal (树的深度优先遍历)
+## 30 秒回答
+
+**04-Tree Traversal and Paths (树遍历与路径)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Tree Depth First Traversal (树的深度优先遍历)
 
 > [!abstract] 核心考点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
 > [!abstract] 核心考点：二叉树 DFS 前序/中序/后序三种遍历方式、递归与迭代实现、遍历序列还原树结构
@@ -134,7 +139,7 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 
 ---
 
-## 09-Tree Breadth First Traversal (树的层序遍历)
+## Tree Breadth First Traversal (树的层序遍历)
 
 > [!abstract] 核心考点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
 >见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
@@ -188,7 +193,7 @@ vector<int> rightSideView(TreeNode* root) {
 
 ---
 
-## 关联笔记
+## 关联笔记（补充 2）
 
 - [DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06a-DFS：%20Preorder%20⧸%20Inorder%20⧸%20Postorder%20(前中后序).md)
 - [LCA & Path Problems (公共祖先与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06c-LCA%20&%20Path%20Problems%20(公共祖先与路径).md)
@@ -198,7 +203,7 @@ vector<int> rightSideView(TreeNode* root) {
 
 ---
 
-## 10-LCA and Tree Paths (最近公共祖先与路径)
+## LCA and Tree Paths (最近公共祖先与路径)
 
 > [!abstract] 核心考点：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
 > [!abstract] 核心考点：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
@@ -250,10 +255,45 @@ int pathSum(TreeNode* root, int target) {
 
 ---
 
-## 关联笔记
+## 关联笔记（补充 3）
 
 - [DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06a-DFS：%20Preorder%20⧸%20Inorder%20⧸%20Postorder%20(前中后序).md)
 - [BFS： Level Order Traversal (层序遍历)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/06-Binary%20Tree%20(二叉树)%20⭐/06b-BFS：%20Level%20Order%20Traversal%20(层序遍历).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Tree Traversal and Paths (树遍历与路径) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 04-Process Lifecycle (进程生命周期)
+## 30 秒回答
+
+**02-Processes and IPC (进程与进程间通信)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Process Lifecycle (进程生命周期)
 
 > [!abstract] 核心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
 
@@ -218,11 +223,11 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 
 ---
 
-## 05-Process States and Scheduling (进程状态与调度)
+## Process States and Scheduling (进程状态与调度)
 
 > [!abstract] 核心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
 
-## 进程状态
+## 进程状态（补充 2）
 
 ```
               fork()
@@ -268,7 +273,7 @@ renice 5 -p 1234       # 修改运行中进程的 nice 值
 
 ---
 
-## 06-Zombie and Orphan Processes (僵尸进程与孤儿进程)
+## Zombie and Orphan Processes (僵尸进程与孤儿进程)
 
 > [!abstract] 核心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 
@@ -338,7 +343,7 @@ close(STDERR_FILENO);
 
 ---
 
-## 07-Interprocess Communication (进程间通信)
+## Interprocess Communication (进程间通信)
 
 > [!abstract] 核心考点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
 > 核心考点：各 IPC 机制的特点、适用场景、使用方式
@@ -436,3 +441,38 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
 IPC 机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Processes and IPC (进程与进程间通信) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

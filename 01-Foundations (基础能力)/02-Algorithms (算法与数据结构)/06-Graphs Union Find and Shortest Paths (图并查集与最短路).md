@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 12-Graph Traversal (图的遍历)
+## Graph Traversal (图的遍历)
 
 > [!abstract] 核心考点：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 
@@ -108,7 +108,7 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 
 ---
 
-## 13-Union Find (并查集)
+## Union Find (并查集)
 
 > [!abstract] 核心考点：并查集的 find/union 操作、路径压缩与按秩合并优化、连通性检测与环检测
 
@@ -161,11 +161,7 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 
 ---
 
-## 30 秒回答
-
-并查集只擅长两类动态集合问题：两个元素是否连通、以及把两个集合合并。路径压缩缩短 `find` 路径，按秩/按大小合并避免树退化；两者结合后单次操作均摊为近似常数 `O(α(n))`。它不保存具体路径，也不直接求最短路。
-
-## 关联笔记
+## 关联笔记（补充 2）
 
 - [DFS & BFS on Graph (图的搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08a-DFS%20&%20BFS%20on%20Graph%20(图的搜索).md)
 - [Shortest Path：Dijkstra & Bellman-Ford (最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08c-Shortest%20Path：Dijkstra%20&%20Bellman-Ford%20(最短路).md)
@@ -175,7 +171,7 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 
 ---
 
-## 14-Shortest Path (最短路径)
+## Shortest Path (最短路径)
 
 > [!abstract] 核心考点：Dijkstra 非负权最短路（堆优化）、Bellman-Ford 负权最短路与检测、Floyd 多源最短路
 
@@ -254,16 +250,45 @@ void floydWarshall(vector<vector<int>>& dist) {
 
 ---
 
-## 30 秒回答
-
-**如何选最短路算法？** 单源、边权非负时优先 Dijkstra + 最小堆；允许负权且需要检测从源点可达的负环时用 Bellman-Ford；节点数较少、要一次得到任意两点距离时用 Floyd-Warshall。任何实现都先明确“不可达”和“负环”在返回值里的表示，并防止距离相加溢出。
-
-**自测：** 为什么 Dijkstra 不能处理负权边？Bellman-Ford 只需做 `V-1` 轮松弛的原因是什么？
-
-## 关联笔记
+## 关联笔记（补充 3）
 
 - [DFS & BFS on Graph (图的搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08a-DFS%20&%20BFS%20on%20Graph%20(图的搜索).md)
 - [Union-Find (并查集)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Trees%20&%20Graphs%20(树与图)/08-Graph%20Algorithms%20(图算法)%20⭐/08b-Union-Find%20(并查集).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
 - [Fast & Slow Pointers (快慢指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02b-Fast%20&%20Slow%20Pointers%20(快慢指针).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 06-Graphs Union Find and Shortest Paths (图并查集与最短路) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

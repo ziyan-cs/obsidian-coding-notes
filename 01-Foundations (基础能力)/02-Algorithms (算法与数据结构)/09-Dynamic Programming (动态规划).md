@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-## 20-One Dimensional Dynamic Programming (一维动态规划)
+## One Dimensional Dynamic Programming (一维动态规划)
 
 > [!abstract] 核心考点：一维 DP 状态定义、斐波那契类递推、打家劫舍系列、爬楼梯变体、滚动数组优化
 
@@ -205,7 +205,7 @@ int numDecodings(string s) {
 
 ---
 
-## 21-Knapsack Dynamic Programming (背包动态规划)
+## Knapsack Dynamic Programming (背包动态规划)
 
 > [!abstract] 核心考点：0-1 背包逆序遍历容量、完全背包正序遍历、多重背包二进制优化、恰好装满初始化
 
@@ -220,7 +220,7 @@ int numDecodings(string s) {
 
 ---
 
-## 0-1 背包（每种物品最多选一次）
+## 1 背包（每种物品最多选一次）
 
 ```cpp
 int knapsack01(vector<int>& w, vector<int>& v, int cap) {
@@ -351,15 +351,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 > [!tip]- **工程要点**：背包问题的核心就两点——**物品在外还是容量在外**决定是组合还是排列，**容量正序还是逆序**决定是完全还是 0-1。面试时先写出暴力二维版本再优化为一维，不易出错。
 
-## 30 秒回答
-
-**背包循环方向为什么重要？** 0-1 背包倒序更新容量，读取的是“还没使用当前物品”的旧状态；完全背包正序更新，允许本轮刚更新的状态再次被使用。求方案数时，外层是物品通常统计组合，外层是容量通常统计排列；前提是状态定义也按该语义建立。
-
-**自测：** “恰好装满且价值最大”为什么不能把所有 `dp[j]` 初始化为 0？多重背包二进制拆分解决了什么复杂度问题？
-
----
-
-## 关联笔记
+## 关联笔记（补充 2）
 
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Interval DP (区间DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
@@ -369,7 +361,7 @@ int knapsackMultipleOpt(vector<int>& w, vector<int>& v, vector<int>& cnt, int ca
 
 ---
 
-## 22-Interval Dynamic Programming (区间动态规划)
+## Interval Dynamic Programming (区间动态规划)
 
 > [!abstract] 核心考点：区间 DP 的状态定义 `dp[i][j]` 表示区间 [i,j] 的最优解、长度递增枚举、石子合并/矩阵链乘、四边形不等式优化
 
@@ -508,15 +500,7 @@ for (int len = 2; len <= n; len++) {
 
 > [!tip]- **工程要点**：区间 DP 常为 O(n³)，能否通过取决于语言、常数、内存和题目时限；先估算 `n³` 的量级，再考虑优化。核心是理解“大区间由小区间推导”的依赖方向。
 
-## 30 秒回答
-
-**区间 DP 的遍历顺序为什么按长度递增？** `dp[i][j]` 往往要读取更短的 `dp[i][k]` 和 `dp[k+1][j]`，因此必须先算短区间。写题时先统一下标语义（闭区间还是开区间）、确定空区间/单点区间的初值，再枚举长度和分割点。
-
-**自测：** 石子合并的区间和为什么与分割点无关？什么时候不能贸然使用 Knuth 优化？
-
----
-
-## 关联笔记
+## 关联笔记（补充 3）
 
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Knapsack： 0-1, Complete, Multiple (背包三种)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
@@ -526,7 +510,7 @@ for (int len = 2; len <= n; len++) {
 
 ---
 
-## 23-Longest Common Subsequence and LIS (最长子序列)
+## Longest Common Subsequence and LIS (最长子序列)
 
 > [!abstract] 核心考点：LCS 二维 DP 模板、LIS O(n log n) 贪心 + 二分、编辑距离、最长回文子序列
 
@@ -674,18 +658,45 @@ int longestPalindromeSubseq(string s) {
 
 > [!tip]- **工程要点**：子序列问题（不连续）通常用 DP；子数组/子串问题（连续）通常用滑动窗口或 Kadane。LIS 的 O(n log n) 解法是面试高频，核心是 tails 数组的**二分替换**思路，类比"耐心排序"。
 
-## 30 秒回答
-
-**LIS 的 `tails` 为什么正确？** `tails[len - 1]` 只保存长度为 `len` 的递增子序列所能取得的最小结尾；它不保证自身是一条真实 LIS，却为后续元素留下最多延长空间，因此其长度等于 LIS 长度。LCS、编辑距离则必须保留两个序列前缀的关系，基础解法是二维 DP。
-
-**自测：** 严格递增 LIS 为什么用 `lower_bound`？“最长公共子序列”和“最长公共子串”的不匹配转移为何不同？
-
----
-
-## 关联笔记
+## 关联笔记（补充 4）
 
 - [1D DP： Climbing Stairs, House Robber (线性DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11a-1D%20DP：%20Climbing%20Stairs,%20House%20Robber%20(线性DP).md)
 - [Knapsack： 0-1, Complete, Multiple (背包三种)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11b-Knapsack：%200-1,%20Complete,%20Multiple%20(背包三种).md)
 - [Interval DP (区间DP)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Core%20Algorithms%20(核心算法)/11-Dynamic%20Programming%20(动态规划)%20⭐/11c-Interval%20DP%20(区间DP).md)
 - [Array & Two Pointers (数组与双指针)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/01-Array%20&%20Two%20Pointers%20(数组与双指针)%20⭐.md)
 - [Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/02-Linked%20List%20(链表)%20⭐/02a-Reversal,%20Cycle%20Detection,%20Merge%20(反转⧸判环⧸合并).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 09-Dynamic Programming (动态规划) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

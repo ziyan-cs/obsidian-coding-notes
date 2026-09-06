@@ -11,7 +11,30 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 14-Blocking and Nonblocking IO (阻塞与非阻塞 I O)
+## 30 秒回答
+
+阻塞/非阻塞描述一次系统调用是否等待；同步/异步描述完成通知与数据传递方式；I/O multiplexing 则让一个线程等待多个 fd 的就绪事件。epoll 是 Linux 的就绪通知接口，不是 mmap 零拷贝，也不替你读写业务数据。
+
+## 事件循环边界
+
+```text
+epoll_wait 返回就绪 fd → 非阻塞 read/write 尽量推进 → 处理 EAGAIN / EOF / error
+                         → 不在 I/O 线程执行长 CPU 或阻塞业务
+```
+
+## 选择与误区
+
+- LT 更易写对；ET 要求一次读/写到 `EAGAIN`，否则可能错过后续通知。
+- 一个 fd 就绪不代表完整业务报文已到达；字节流仍需 buffer 和 framing。
+- epoll 的优势与活跃 fd 数相关，不能脱离工作负载宣称固定倍数。
+
+## 自测
+
+1. 为什么 ET 模式下必须循环读取到 `EAGAIN`？
+2. select/poll/epoll 分别如何保存与遍历关注的 fd？
+3. 哪些工作不应放在 reactor I/O 线程？
+
+## Blocking and Nonblocking IO (阻塞与非阻塞 I O)
 
 > [!abstract] 核心考点：阻塞 IO 与非阻塞 IO 的核心区别、同步等待 vs 立即返回、系统调用行为差异
 
@@ -66,7 +89,7 @@ if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
 
 ---
 
-## 15-Synchronous and Asynchronous IO (同步与异步 I O)
+## Synchronous and Asynchronous IO (同步与异步 I O)
 
 > [!abstract] 核心考点：同步 IO 与异步 IO 的本质区别、异步 IO 的实现方式、IO 模型的分类维度
 
@@ -122,7 +145,7 @@ ssize_t ret = aio_return(&cb);
 
 ---
 
-## 16-IO Multiplexing (I O 多路复用)
+## IO Multiplexing (I O 多路复用)
 
 > [!abstract] 核心考点：> select/poll/epoll 多路复用技术对比、文件描述符上限、触发模式与性能差异
 
@@ -223,7 +246,7 @@ epoll 底层原理详解 → [epoll API详解](../08-epoll%20Internals%20(epoll�
 
 ---
 
-## 17-epoll API (epoll API)
+## epoll API (epoll API)
 
 > [!abstract] 核心考点：> epoll_create/epoll_ctl/epoll_wait 核心 API、红黑树管理、事件就绪队列
 
@@ -320,7 +343,7 @@ epoll API 详解见 → [Level Trigger vs Edge Trigger (触发模式)](/03-Backe
 
 ---
 
-## 18-Level and Edge Triggering (水平与边缘触发)
+## Level and Edge Triggering (水平与边缘触发)
 
 > [!abstract] 核心考点：水平触发 LT 与边缘触发 ET 的区别、ET 模式需循环读取、epoll 高效根源
 
@@ -405,7 +428,7 @@ epoll 触发模式见 → [epoll_create, epoll_ctl, epoll_wait (API详解)](/03-
 
 ---
 
-## 19-epoll Internals (epoll 底层实现)
+## epoll Internals (epoll 底层实现)
 
 > [!abstract] 核心考点：> epoll 红黑树+就绪队列 vs select 轮询、O(1) 事件通知 vs O(n) 扫描
 
@@ -529,3 +552,38 @@ epoll:       返回 50 → O(k)，k=50
 
 epoll 触发模式详解 → [LT vs ET](08b-Level%20Trigger%20vs%20Edge%20Trigger：%20LT⧸ET%20(触发模式).md)
 - [System Administration Basics (系统管理基础)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/01-Linux%20Fundamentals%20(Linux%20基础)/03-System%20Administration%20Basics%20(系统管理基础).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-IO Models and epoll (IO 模型与 epoll) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

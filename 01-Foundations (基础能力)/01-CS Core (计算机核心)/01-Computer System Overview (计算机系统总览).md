@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 01-Computer System Overview (计算机系统总览)
+## 30 秒回答
+
+**01-Computer System Overview (计算机系统总览)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Computer System Overview (计算机系统总览)
 
 > [!abstract] 核心考点：计算机的五大逻辑部件、冯·诺依曼架构、存储程序概念、指令与数据同存
 
@@ -90,7 +95,7 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-## 02-System Abstraction (系统抽象层次)
+## System Abstraction (系统抽象层次)
 
 > [!abstract] 核心考点：计算机系统的层次抽象模型、每层屏蔽下层细节、抽象是控制复杂度的核心手段
 
@@ -148,7 +153,7 @@ PC → Address → Fetch instruction → IR
 
 ---
 
-## 03-Hardware and Software (硬件与软件)
+## Hardware and Software (硬件与软件)
 
 > [!abstract] 核心考点：软硬件的逻辑等价性、分层抽象、固件的角色、ISA 作为软硬件分界
 
@@ -204,3 +209,38 @@ ISA 是软硬件的**契约**：
 
 
 计算机本质与系统抽象详见 → [What is a Computer（计算机本质）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/01-What%20is%20a%20Computer%20(计算机本质).md) · [System Abstraction（系统抽象层次）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/01-Computer%20Overview%20(计算机系统总览)/03-System%20Abstraction%20(系统抽象层次).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Computer System Overview (计算机系统总览) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

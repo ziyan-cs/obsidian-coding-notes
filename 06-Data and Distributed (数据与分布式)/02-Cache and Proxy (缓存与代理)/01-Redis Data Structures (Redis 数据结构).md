@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 01-SDS Strings (简单动态字符串)
+## 30 秒回答
+
+**01-Redis Data Structures (Redis 数据结构)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## SDS Strings (简单动态字符串)
 
 > [!abstract] 核心考点：> SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
@@ -101,7 +106,7 @@ sdsfree(s);                     // 释放
 
 ---
 
-## 02-ziplist and listpack (压缩列表)
+## ziplist and listpack (压缩列表)
 
 > [!abstract] 核心考点：> ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 
@@ -179,7 +184,7 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 2）
 
 | 题型 | 要点 |
 |------|------|
@@ -197,7 +202,7 @@ Redis 底层数据结构详解见 → [01a1-SDS：Simple Dynamic String (简单�
 
 ---
 
-## 03-skiplist (跳表)
+## skiplist (跳表)
 
 > [!abstract] 核心考点：> 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 
@@ -293,7 +298,7 @@ typedef struct zset {
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 3）
 
 | 题型 | 要点 |
 |------|------|
@@ -314,7 +319,7 @@ typedef struct zset {
 
 ---
 
-## 04-dict Hash Table (字典与渐进式 rehash)
+## dict Hash Table (字典与渐进式 rehash)
 
 > [!abstract] 核心考点：> dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
@@ -420,7 +425,7 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 4）
 
 | 题型 | 要点 |
 |------|------|
@@ -439,3 +444,38 @@ void dictRehash(dict *d, int n) {
 
 
 压缩列表实现见 → [01a2-ziplist & listpack (压缩列表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a2-ziplist%20&%20listpack%20(压缩列表).md) · [01a3-skiplist：Sorted Set Internals (跳表)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01a-Data%20Structures%20Internals%20(底层数据结构实现)%20⭐/01a3-skiplist：Sorted%20Set%20Internals%20(跳表)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Redis Data Structures (Redis 数据结构) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

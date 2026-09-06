@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 07-UDP Characteristics and Use Cases (UDP 特性与场景)
+## 30 秒回答
+
+**03-UDP (UDP)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## UDP Characteristics and Use Cases (UDP 特性与场景)
 
 > [!abstract] 核心考点：UDP 与 TCP 的本质差异、UDP 的特性细节、适用场景、以及基于 UDP 的可靠传输如何实现
 
@@ -213,3 +218,33 @@ sendto(fd, buf, len, 0,
 ---
 
 UDP 与 TCP 的对比背景见 → [TCP/IP Stack Overview (协议栈总览)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/01-TCP⧸IP%20Stack%20Overview%20(协议栈总览).md>) · 数据边界问题见 → [Sticky Packet Problem & Solutions (粘包问题与解决)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/01-Network%20Fundamentals%20(网络基础)/02-TCP%20Deep%20Dive%20(TCP深入)%20⭐/02e-Sticky%20Packet%20Problem%20&%20Solutions%20(粘包问题与解决).md>)
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-UDP (UDP) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

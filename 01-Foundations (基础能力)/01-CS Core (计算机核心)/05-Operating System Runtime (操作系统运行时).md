@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 16-Operating System Overview (操作系统总览)
+## 30 秒回答
+
+**05-Operating System Runtime (操作系统运行时)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Operating System Overview (操作系统总览)
 
 > [!abstract] 核心考点：OS 四大功能、内核态 vs 用户态、系统调用、操作系统类型与架构
 
@@ -136,7 +141,7 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 
 ---
 
-## 18-Processes and Threads (进程与线程)
+## Processes and Threads (进程与线程)
 
 > [!abstract] 核心考点：进程与线程的区别、PCB/TCB、进程状态转换、进程创建（fork）、协程
 
@@ -271,7 +276,7 @@ int main() {
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 2）
 
 | 题型 | 要点 |
 |------|------|
@@ -290,7 +295,7 @@ int main() {
 
 ---
 
-## 19-Context Switching (上下文切换)
+## Context Switching (上下文切换)
 
 > [!abstract] 核心考点：上下文切换的流程、切换代价、TLB 失效、切换 vs 模式切换的区别
 
@@ -438,7 +443,7 @@ switch_to:
 
 ---
 
-## 20-CPU Scheduling (CPU 调度)
+## CPU Scheduling (CPU 调度)
 
 > [!abstract] 核心考点：调度算法（FCFS/SJF/RR/MLFQ）、调度时机、CFS（完全公平调度）、优先级与时间片
 
@@ -588,7 +593,7 @@ static const int prio_to_weight[40] = {
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 3）
 
 | 题型 | 要点 |
 |------|------|
@@ -605,3 +610,38 @@ static const int prio_to_weight[40] = {
 
 
 进程线程与上下文切换详见 → [Process vs Thread（进程与线程）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/01-Process%20vs%20Thread%20(进程与线程)%20⭐.md) · [Context Switching（上下文切换）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Operating%20System%20(操作系统)/02-Context%20Switching%20(上下文切换).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 05-Operating System Runtime (操作系统运行时) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

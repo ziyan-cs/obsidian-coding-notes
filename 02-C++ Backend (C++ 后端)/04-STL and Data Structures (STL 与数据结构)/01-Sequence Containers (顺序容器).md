@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 01-vector Dynamic Array and Reallocation (动态扩容原理)
+## vector Dynamic Array and Reallocation (动态扩容原理)
 
 > [!abstract] 核心考点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
 
@@ -139,7 +139,7 @@ v.shrink_to_fit();
 
 ---
 
-## 02-deque Block Based Storage (分块存储)
+## deque Block Based Storage (分块存储)
 
 > [!abstract] 核心考点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
 
@@ -238,11 +238,11 @@ vector 的动态扩容机制对比详见 → [vector Dynamic Array & Reallocatio
 
 ---
 
-## 03-list Doubly Linked List (双向链表)
+## list Doubly Linked List (双向链表)
 
 > [!abstract] 核心考点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
 
-## 内存布局
+## 内存布局（补充 2）
 
 `list` 是一个**双向循环链表**（GCC 实现为带哨兵节点的循环链表）：
 
@@ -313,7 +313,7 @@ a.merge(b);  // O(N) 比较 + 指针操作
 a.unique();
 ```
 
-## 工程建议
+## 工程建议（补充 2）
 
 ```cpp
 // ✅ list 适合：需要维护指向元素的稳定指针/迭代器
@@ -335,3 +335,38 @@ auto iter = pending.insert(pending.end(), {42});
 ---
 
 vector 连续内存性能对比详见 → [vector Dynamic Array & Reallocation (动态扩容原理)](/02-C++%20Backend%20(C++%20后端)/04-STL%20(标准模板库)/01-Sequence%20Containers%20Internals%20(序列容器底层)/01a-vector%20Dynamic%20Array%20&%20Reallocation%20(动态扩容原理)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Sequence Containers (顺序容器) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

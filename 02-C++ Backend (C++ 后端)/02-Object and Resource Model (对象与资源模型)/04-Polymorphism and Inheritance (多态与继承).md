@@ -11,7 +11,32 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 11-Virtual Functions and VTable (虚函数与虚表)
+## 30 秒回答
+
+继承用于表达稳定的 is-a 抽象，运行时多态通过虚函数经由基类接口选择具体行为。它的代价是耦合、间接调用和对象布局复杂度；优先组合，只有确实需要以统一接口替换不同实现时再用继承。
+
+## 使用边界
+
+| 需求 | 更合适的方式 |
+| --- | --- |
+| 复用实现细节 | 组合成员，而非 public inheritance |
+| 运行时替换实现 | 纯虚接口 + 明确所有权 |
+| 编译期多态 | templates / concepts |
+| 异构对象集合 | 基类指针或 type erasure，并管理生命周期 |
+
+## 必须守住的规则
+
+1. 多态基类通常应有 virtual destructor，否则经由基类指针删除派生对象是未定义行为。
+2. 构造和析构期间虚调用不会分派到尚未构造或已经析构的派生层。
+3. 多继承与虚继承只用于明确的接口组合或菱形共享基类问题，不能作为复用捷径。
+
+## 自测
+
+1. 为什么有虚函数的类不等于应该被继承的类？
+2. 哪个场景应选择组合而非继承？
+3. virtual destructor 缺失会怎样造成资源问题？
+
+## Virtual Functions and VTable (虚函数与虚表)
 
 > [!abstract] 核心考点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
 
@@ -93,7 +118,7 @@ class Leaf final : public Derived { };  // 禁止继承 Leaf
 
 ---
 
-## 12-Polymorphism and Dynamic Dispatch (多态与动态分发)
+## Polymorphism and Dynamic Dispatch (多态与动态分发)
 
 > [!abstract] 核心考点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
@@ -152,7 +177,7 @@ public:
 
 ---
 
-## 13-Abstract Classes and Pure Virtual (抽象类与纯虚函数)
+## Abstract Classes and Pure Virtual (抽象类与纯虚函数)
 
 > [!abstract] 核心考点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
 
@@ -193,7 +218,7 @@ void Shape::draw() const { std::cout << "default draw\n"; }
 
 ---
 
-## 14-Multiple and Virtual Inheritance (多继承与虚继承)
+## Multiple and Virtual Inheritance (多继承与虚继承)
 
 > [!abstract] 核心考点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
 
@@ -267,3 +292,38 @@ Diamond Virtual Inheritance Layout:
 ---
 
 虚函数表在多继承中的布局详见 → [Virtual Function & VTable Layout (虚函数与虚表结构)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/07-Object%20Model%20&%20VTable%20(对象模型与虚表)%20⭐/07a-Virtual%20Function%20&%20VTable%20Layout%20(虚函数与虚表结构).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Polymorphism and Inheritance (多态与继承) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

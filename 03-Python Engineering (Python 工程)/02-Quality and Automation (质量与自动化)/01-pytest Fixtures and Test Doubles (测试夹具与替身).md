@@ -10,17 +10,10 @@ verified: 2026-09-05
 
 > [!abstract] 一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
 
-```python
-from pathlib import Path
+## 30 秒回答
 
-def count_nonempty(path: Path) -> int:
-    return sum(bool(line.strip()) for line in path.read_text(encoding="utf-8").splitlines())
+**01-pytest Fixtures and Test Doubles (测试夹具与替身)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
 
-def test_count_nonempty(tmp_path: Path):
-    path = tmp_path / "sample.txt"
-    path.write_text("a\n\n b \n", encoding="utf-8")
-    assert count_nonempty(path) == 2
-```
 
 ## 命令与规则
 
@@ -42,3 +35,38 @@ python -m pytest -q
 
 - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
 - 验证日期：2026-09-05
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-pytest Fixtures and Test Doubles (测试夹具与替身) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

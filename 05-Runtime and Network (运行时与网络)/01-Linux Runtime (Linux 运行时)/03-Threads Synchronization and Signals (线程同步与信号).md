@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 08-POSIX Thread Lifecycle (POSIX 线程生命周期)
+## POSIX Thread Lifecycle (POSIX 线程生命周期)
 
 > [!abstract] 核心考点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
@@ -108,7 +108,7 @@ POSIX 线程详解见 → [Mutex & Condition Variable (互斥锁与条件变量)
 
 ---
 
-## 09-Mutex and Condition Variable (互斥锁与条件变量)
+## Mutex and Condition Variable (互斥锁与条件变量)
 
 > [!abstract] 核心考点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
@@ -231,7 +231,7 @@ mutex 保护共享不变量；condition variable 不保存条件本身，只负�
 
 ---
 
-## 10-Deadlock Causes and Prevention (死锁原因与预防)
+## Deadlock Causes and Prevention (死锁原因与预防)
 
 > [!abstract] 核心考点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
@@ -313,7 +313,7 @@ valgrind --tool=helgrind ./myapp
 
 ---
 
-## 11-Threads and Processes (线程与进程)
+## Threads and Processes (线程与进程)
 
 > [!abstract] 核心考点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
@@ -352,7 +352,7 @@ valgrind --tool=helgrind ./myapp
 
 ---
 
-## 12-Semaphores (信号量)
+## Semaphores (信号量)
 
 > [!abstract] 核心考点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
 
@@ -427,7 +427,7 @@ sem_post(&empty);           // 通知生产者
 
 ---
 
-## 13-Signals and Signal Handling (信号与处理)
+## Signals and Signal Handling (信号与处理)
 
 > [!abstract] 核心考点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 
@@ -599,3 +599,38 @@ int main() {
 ```
 
 信号机制详解见 → [Process Lifecycle (生命周期)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04a-Process%20Lifecycle：%20fork,%20exec,%20wait%20(生命周期).md) · [Process States & Scheduling (状态与调度)](/03-Backend%20Systems%20(后端系统)/01-Linux%20(Linux%20系统)/02-Processes%20&%20Threads%20(进程与线程)/04-Process%20Fundamentals%20(进程基础)%20⭐/04b-Process%20States%20&%20Scheduling%20(状态与调度).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-Threads Synchronization and Signals (线程同步与信号) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

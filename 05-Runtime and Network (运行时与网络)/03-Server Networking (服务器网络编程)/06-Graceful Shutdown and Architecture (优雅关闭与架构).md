@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 12-Graceful Shutdown (优雅关闭)
+## 30 秒回答
+
+**06-Graceful Shutdown and Architecture (优雅关闭与架构)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Graceful Shutdown (优雅关闭)
 
 > [!abstract] 核心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
@@ -242,7 +247,7 @@ Kubernetes 删除 Pod 时：
 
 ---
 
-## 13-Backend Architecture Patterns (后端架构模式)
+## Backend Architecture Patterns (后端架构模式)
 
 > [!abstract] 核心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 
@@ -493,3 +498,38 @@ bus.publish(OrderCreated{1001, 42, 9900});
 ---
 
 生产环境实践见 → [Graceful Shutdown (优雅关闭)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 06-Graceful Shutdown and Architecture (优雅关闭与架构) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

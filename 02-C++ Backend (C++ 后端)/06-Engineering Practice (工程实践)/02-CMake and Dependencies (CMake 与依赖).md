@@ -11,7 +11,37 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 07-CMake Build System (CMake构建系统)
+## 30 秒回答
+
+**02-CMake and Dependencies (CMake 与依赖)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+## 工程结论
+
+CMake 的核心不是生成命令，而是声明 target 及其源文件、编译选项、包含路径和依赖。依赖应沿 target 边界传播；避免全局目录命令把配置偷偷影响到其他模块。
+
+## 依赖模型
+
+```text
+library target ── PUBLIC  ──> 使用者需要的接口依赖
+       │
+       └── PRIVATE ──> 仅本 target 编译或链接所需的实现依赖
+executable target ──> 链接 library target
+```
+
+## 选型边界
+
+- 优先 `target_link_libraries`、`target_include_directories`，少用全局 `include_directories`。
+- Debug/Release 差异由 target 属性与 toolchain 明确表达，不靠手改宏。
+- 第三方库优先使用导入 target；`find_package` 失败时记录版本、来源和可复现安装步骤。
+
+## 自测
+
+1. PUBLIC、PRIVATE、INTERFACE 依赖分别向谁传播？
+2. 为什么 target-based CMake 比全局 include path 更易维护？
+3. 一个可复现构建至少需要声明哪些输入？
+
+
+## CMake Build System (CMake构建系统)
 
 > [!abstract] 核心考点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 
@@ -151,3 +181,38 @@ ${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
 ---
 
 编译与链接流程详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-CMake and Dependencies (CMake 与依赖) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

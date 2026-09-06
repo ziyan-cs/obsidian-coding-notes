@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 04-RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
+## RabbitMQ and Kafka Selection (RabbitMQ与Kafka选型)
 
 > [!abstract] 核心考点：> RabbitMQ 与 Kafka 的设计差异、适用场景、技术选型
 
@@ -82,3 +82,38 @@ RabbitMQ 的核心是 broker 路由、queue 与确认语义；Kafka 的核心是
 ---
 
 消息队列基础概念详解见 → [Why MQ：Decoupling, Peak Shaving, Async (消息队列三大作用)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03a-Why%20MQ：Decoupling,%20Peak%20Shaving,%20Async%20(消息队列三大作用).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

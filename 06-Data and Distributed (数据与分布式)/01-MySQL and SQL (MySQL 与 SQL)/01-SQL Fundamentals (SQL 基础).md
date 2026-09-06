@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 01-SQL Basics (SQL 基础语法)
+## 30 秒回答
+
+**01-SQL Fundamentals (SQL 基础)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## SQL Basics (SQL 基础语法)
 
 > [!abstract] 核心考点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
 
@@ -424,7 +429,7 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ---
 
-## 02-Joins and Subqueries (多表查询与子查询)
+## Joins and Subqueries (多表查询与子查询)
 
 > [!abstract] 核心考点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
@@ -522,7 +527,7 @@ SELECT * FROM orders WHERE user_id IN (
 
 ---
 
-## 03-Aggregation and Grouping (聚合与分组)
+## Aggregation and Grouping (聚合与分组)
 
 > [!abstract] 核心考点：COUNT/SUM/AVG/MAX/MIN 聚合函数、GROUP BY 分组与 HAVING 过滤、SQL 执行顺序
 
@@ -689,7 +694,7 @@ INSERT INTO [新表名] SELECT * FROM [原表名];
 
 ---
 
-## 04-MySQL Overview (MySQL 基础)
+## MySQL Overview (MySQL 基础)
 
 > [!abstract] 核心考点：MySQL 安装配置与目录结构、系统数据库功能、连接管理与状态查询
 
@@ -788,3 +793,38 @@ show variables like 'datadir';
 
 
 SQL基础语法详解见 → [DDL, DML, DQL (SQL基础语法)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/01-SQL%20Fundamentals%20(SQL%20基础)/01-DDL,%20DML,%20DQL%20(SQL基础语法).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-SQL Fundamentals (SQL 基础) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

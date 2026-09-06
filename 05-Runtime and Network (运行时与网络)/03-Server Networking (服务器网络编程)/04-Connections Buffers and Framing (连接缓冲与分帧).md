@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 09-Connection Pool Design (连接池设计)
+## 30 秒回答
+
+**04-Connections Buffers and Framing (连接缓冲与分帧)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Connection Pool Design (连接池设计)
 
 > [!abstract] 核心考点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
 
@@ -233,7 +238,7 @@ void *health_check_thread(void *arg) {
 
 ---
 
-## 10-Protocol Framing and Buffering (协议分帧与缓冲区)
+## Protocol Framing and Buffering (协议分帧与缓冲区)
 
 > [!abstract] 核心考点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 
@@ -445,7 +450,7 @@ ssize_t n = writev(fd, iov, iovcnt);
 
 > [!tip]- **工程要点**：Buffer 设计首先要保证边界、部分读写与背压正确，再考虑减少 copy。Compact 不是“每次读事件都必须做”，应在需要连续空闲空间时再做；`readv`/`writev` 减少用户态拼接，但不自动消除所有 copy 或内核开销。
 
-## 30 秒回答 / 自测
+## 30 秒回答 / 自测（补充 2）
 
 - **30 秒回答**：读写 Buffer 用 `read_pos`/`write_pos` 两个游标区分"已读/待处理/可写"三段；写不下先 compact 再翻倍扩容；非阻塞 `write` 写不完的暂存写 Buffer 并注册 `EPOLLOUT`。
 - **常见误区**：`write()` 返回正数但 < len 时直接丢弃剩余数据；扩容后旧指针失效未更新。
@@ -454,3 +459,38 @@ ssize_t n = writev(fd, iov, iovcnt);
 ---
 
 服务器设计模式系列见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Connections Buffers and Framing (连接缓冲与分帧) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

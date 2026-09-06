@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 04-Binary and Encoding (二进制与编码)
+## 30 秒回答
+
+**02-Data Representation (数据表示)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Binary and Encoding (二进制与编码)
 
 > [!abstract] 核心考点：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
 
@@ -83,7 +88,7 @@ string fromDecimal(int val, int base) {
 
 ---
 
-## 05-Integer Representation (整数表示)
+## Integer Representation (整数表示)
 
 > [!abstract] 核心考点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
 
@@ -141,7 +146,7 @@ int16_t y = x;             // 0x5678（高位丢失）
 
 ---
 
-## 06-Floating Point (浮点数)
+## Floating Point (浮点数)
 
 > [!abstract] 核心考点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
 
@@ -205,7 +210,7 @@ float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16
 
 ---
 
-## 07-Bitwise Operations (位运算)
+## Bitwise Operations (位运算)
 
 > [!abstract] 核心考点：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果
 
@@ -275,3 +280,38 @@ int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
 
 
 二进制编码与整数表示详见 → [Binary & Encoding（二进制与编码）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/01-Binary%20&%20Encoding%20(二进制与编码).md) · [Integer Representation（整数表示）](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/02-Data%20Representation%20(数据表示)/02-Integer%20Representation%20(整数表示).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Data Representation (数据表示) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

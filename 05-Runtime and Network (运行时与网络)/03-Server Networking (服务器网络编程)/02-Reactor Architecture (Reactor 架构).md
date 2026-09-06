@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 04-Reactor Pattern (Reactor模式)
+## Reactor Pattern (Reactor模式)
 
 > [!abstract] 核心考点：> Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
 > 代表：Redis 6.0 之前的网络处理部分
@@ -101,12 +101,12 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 
 ---
 
-## 05-Reactor Threading Models (Reactor线程模型)
+## Reactor Threading Models (Reactor线程模型)
 
 > [!abstract] 核心考点：> 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题
 
-## 模型结构
+## 模型结构（补充 2）
 
 ```text
 ┌───────────────────────────────────────────┐
@@ -140,7 +140,7 @@ Reactor 模型进阶见 → [Single Reactor Multi Thread (单reactor多线程)](
 └──────────┴──────────┴─────────────────────┘
 ```
 
-## 核心代码结构
+## 核心代码结构（补充 2）
 
 ```cpp
 // 主线程 Reactor + 工作线程池（简化）
@@ -188,19 +188,19 @@ void Handler::on_readable() {
 }
 ```
 
-## 工作流程
+## 工作流程（补充 2）
 
 1. 主线程 Reactor 监听事件，Acceptor 接受新连接
 2. 读事件到来，Handler 在**主线程**完成 `read()`，将数据投递给线程池
 3. 工作线程处理业务逻辑
 4. 工作线程将结果投递回 Reactor；所属 I/O 线程更新 write buffer 与 `EPOLLOUT`
 
-## 优点
+## 优点（补充 2）
 
 - 业务处理与 I/O 解耦，业务耗时不影响 I/O 响应
 - 能利用多核 CPU
 
-## 缺点
+## 缺点（补充 2）
 
 - **单 Reactor 仍是瓶颈**：所有 I/O 事件都在一个线程处理
 - 工作线程写回时需要注意线程安全（共享的 fd → 加锁或排队写）
@@ -217,7 +217,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 ---
 
-## 06-Multi Reactor Architecture (多Reactor架构)
+## Multi Reactor Architecture (多Reactor架构)
 
 > [!abstract] 核心考点：> 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
 > 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
@@ -258,7 +258,7 @@ Reactor 模型演进见 → [Single Reactor Single Thread (单reactor单线程)]
 
 每个 Sub Reactor 是一个独立的 **event loop**，运行在自己的线程中，负责管理一批连接的所有 I/O 操作。线程之间的连接互不干扰，**天然无锁**。
 
-## 工作流程
+## 工作流程（补充 3）
 
 1. Main Reactor 只监听 listening fd，`accept()` 新连接
 2. 通过负载均衡策略（轮询、最少连接）将新连接的 fd 分配给某个 Sub Reactor
@@ -319,3 +319,38 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 >
 
 另两种变体见 → [Single Reactor Single Thread](05a-Single%20Reactor%20Single%20Thread%20(单reactor单线程).md) · [Single Reactor Multi Thread](05b-Single%20Reactor%20Multi%20Thread%20(单reactor多线程).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Reactor Architecture (Reactor 架构) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

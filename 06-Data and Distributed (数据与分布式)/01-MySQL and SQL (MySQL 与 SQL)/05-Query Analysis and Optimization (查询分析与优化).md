@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 18-EXPLAIN and Execution Plans (执行计划分析)
+## EXPLAIN and Execution Plans (执行计划分析)
 
 > [!abstract] 核心考点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
@@ -165,7 +165,7 @@ SELECT * FROM user WHERE age = 20;
 
 ---
 
-## 19-Index Design Principles (索引设计原则)
+## Index Design Principles (索引设计原则)
 
 > [!abstract] 核心考点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
 
@@ -333,7 +333,7 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ---
 
-## 20-Slow Query Optimization (慢查询优化)
+## Slow Query Optimization (慢查询优化)
 
 > [!abstract] 核心考点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
 
@@ -481,12 +481,37 @@ pt-query-digest /var/log/mysql/slow.log
 
 > [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
 
-## 30 秒回答
+## 常见误区
 
-**慢查询怎么优化？** 先从日志中按总影响排序，再复现真实参数，查看执行计划与扫描量，确认索引、数据分布和 SQL 语义。改完必须比较端到端延迟与写入成本；“看起来走索引”不是优化完成的证据。
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
 
----
+## 学习闭环
 
+### 复述
 
+- 不看正文，说明 05-Query Analysis and Optimization (查询分析与优化) 的问题、核心机制与边界。
 
-执行计划分析见 → [EXPLAIN & Execution Plan Analysis (执行计划分析)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08a-EXPLAIN%20&%20Execution%20Plan%20Analysis%20(执行计划分析).md) · [Index Design Principles (索引设计原则)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/03-Query%20Optimization%20(查询优化)/08-Query%20Optimization%20(查询优化)%20⭐/08b-Index%20Design%20Principles%20(索引设计原则).md)
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

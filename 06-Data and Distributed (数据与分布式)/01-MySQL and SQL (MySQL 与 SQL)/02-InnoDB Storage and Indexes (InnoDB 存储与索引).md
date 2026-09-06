@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 05-InnoDB Pages and Buffer Pool (页结构与缓冲池)
+## InnoDB Pages and Buffer Pool (页结构与缓冲池)
 
 > [!abstract] 核心考点：InnoDB 页结构（数据页/索引页/undo 页）、Buffer Pool 缓存机制与 LRU 管理
 
@@ -123,7 +123,7 @@ B+树索引结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03
 
 ---
 
-## 06-B Plus Tree Index (B Plus 树索引)
+## B Plus Tree Index (B Plus 树索引)
 
 > [!abstract] 核心考点：> B+ 树索引结构（非叶节点存储键+指针、叶节点存储记录+双向链表）、高度与 IO 次数
 
@@ -235,7 +235,7 @@ InnoDB 每页 16KB，假设：
 
 ---
 
-## 07-Clustered and Secondary Indexes (聚簇与二级索引)
+## Clustered and Secondary Indexes (聚簇与二级索引)
 
 > [!abstract] 核心考点：聚簇索引（主键索引即数据）与二级索引的结构差异、回表查询与覆盖索引
 
@@ -340,7 +340,7 @@ B+树结构详解见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backe
 
 ---
 
-## 08-Index Pushdown and Covering Indexes (索引下推与覆盖索引)
+## Index Pushdown and Covering Indexes (索引下推与覆盖索引)
 
 > [!abstract] 核心考点：索引条件下推 ICP 减少回表、覆盖索引避免回表、索引合并优化
 
@@ -377,7 +377,7 @@ SELECT * FROM user WHERE name LIKE 'Z%' AND address = 'CN';
 Extra: Using index condition    ← 表示 ICP 生效
 ```
 
-## 覆盖索引
+## 覆盖索引（补充 2）
 
 当二级索引包含查询所需的所有列时，MySQL 可以直接从索引获取数据，完全避免回表：
 
@@ -460,3 +460,38 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 
 B+树索引结构见 → [B+ Tree Index Structure (B+树索引结构)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04b-B+%20Tree%20Index%20Structure%20(B+树索引结构).md) · [Clustered vs Secondary Index (聚簇索引与二级索引)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/04-InnoDB%20Storage%20Engine%20(InnoDB存储引擎)%20⭐/04c-Clustered%20vs%20Secondary%20Index%20(聚簇索引与二级索引).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-InnoDB Storage and Indexes (InnoDB 存储与索引) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

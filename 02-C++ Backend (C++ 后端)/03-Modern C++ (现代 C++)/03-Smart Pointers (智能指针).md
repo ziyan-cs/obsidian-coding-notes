@@ -11,7 +11,31 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 07-unique ptr Ownership (unique ptr 独占所有权)
+## 30 秒回答
+
+智能指针不是自动 delete 的裸指针，而是所有权语义的类型化表达：`unique_ptr` 表示唯一拥有者，`shared_ptr` 表示共享拥有者，`weak_ptr` 观察共享对象且不延长其生命周期。能用值类型就不用指针；能唯一拥有就不用共享拥有。
+
+## 选择顺序
+
+1. **值对象**：没有动态所有权需求时最简单。
+2. **`unique_ptr`**：默认的动态所有权选择，明确 move-only 语义。
+3. **`shared_ptr`**：多个独立生命周期确实共同拥有同一对象时才使用。
+4. **`weak_ptr`**：不延长对象生命周期的观察者、缓存或反向引用。
+
+## 常见误区
+
+- 从同一个裸指针构造两个 `shared_ptr`，会形成两个控制块并 double delete。
+- 把 `shared_ptr` 当对象图的默认指针，会让所有权与循环引用难以排查。
+- `weak_ptr::lock()` 后不检查结果；对象可能已销毁。
+- 用智能指针管理不是 `new` 得到的地址；deleter 必须与资源获取方式匹配。
+
+## 自测
+
+1. 为什么工厂函数通常返回 `unique_ptr` 而不是裸指针？
+2. 双向关联怎样用 `weak_ptr` 避免循环引用？
+3. `make_shared` 与 `shared_ptr(new T)` 在分配和异常安全上有什么差别？
+
+## unique ptr Ownership (unique ptr 独占所有权)
 
 > [!abstract] 核心考点：> unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
 
@@ -60,7 +84,7 @@ shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals
 
 ---
 
-## 08-shared ptr Reference Counting (shared ptr 引用计数)
+## shared ptr Reference Counting (shared ptr 引用计数)
 
 > [!abstract] 核心考点：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
 
@@ -129,7 +153,7 @@ weak_ptr 与循环引用详见 → [weak_ptr & Circular Reference (弱引用与�
 
 ---
 
-## 09-weak ptr and Circular References (weak ptr 与循环引用)
+## weak ptr and Circular References (weak ptr 与循环引用)
 
 > [!abstract] 核心考点：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
 
@@ -202,7 +226,7 @@ public:
 |开销|零开销|控制块 + 原子操作|同 shared_ptr|
 |使用场景|默认首选|共享所有权|打破循环引用、缓存、观察者|
 
-## 30 秒回答 / 自测
+## 30 秒回答 / 自测（补充 2）
 
 - **30 秒回答**：`weak_ptr` 是 `shared_ptr` 的"非拥有观察者"，不增加强引用计数。用 `lock()` 临时提升为 `shared_ptr` 来安全访问，避免悬垂。
 - **常见误区**：直接用 `weak_ptr` 解引用（不可行，必须先 `lock()`）；把缓存/观察者设计成 `shared_ptr` 导致对象永远不释放。
@@ -211,3 +235,33 @@ public:
 ---
 
 shared_ptr 引用计数机制详见 → [shared ptr Reference Counting Internals (引用计数底层)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/04-Smart%20Pointers%20(智能指针)%20⭐/04b-shared%20ptr%20Reference%20Counting%20Internals%20(引用计数底层).md)
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-Smart Pointers (智能指针) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

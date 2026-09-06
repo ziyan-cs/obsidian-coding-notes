@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-## 08-CPU Execution Model (CPU 执行模型)
+## CPU Execution Model (CPU 执行模型)
 
 > [!abstract] 核心考点：CPU 核心组成（数据通路 + 控制单元）、寄存器、ALU、控制器实现方式
 
@@ -80,7 +80,7 @@ ALU 输出标志位：
 
 ---
 
-## 09-Instruction Cycle (指令执行周期)
+## Instruction Cycle (指令执行周期)
 
 > [!abstract] 核心考点：取指-译码-执行周期、CPU 流水线各阶段、流水线冒险与解决
 
@@ -160,7 +160,7 @@ for (int x : random_data)
 
 ---
 
-## 10-Program Execution Flow (程序执行流程)
+## Program Execution Flow (程序执行流程)
 
 > [!abstract] 核心考点：指令执行全流程、各阶段微操作、流水线深度对性能的影响
 
@@ -239,7 +239,7 @@ CPU执行模型详见 → [CPU Execution Model（CPU执行模型）](/01-Foundat
 
 ---
 
-## 17-Compilation Linking and Loading (编译链接与加载)
+## Compilation Linking and Loading (编译链接与加载)
 
 > [!abstract] 核心考点：编译四阶段（预处理/编译/汇编/链接）、静态链接 vs 动态链接、链接器符号解析与重定位
 
@@ -318,3 +318,38 @@ int main() {
 
 
 指令执行周期详见 → [Instruction Cycle (指令执行周期)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/01-Computer%20Fundamentals%20(计算机基础)/03-Program%20Execution%20(程序执行机制)/02-Instruction%20Cycle%20(指令执行周期).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-Program Build and Execution (程序构建与执行) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

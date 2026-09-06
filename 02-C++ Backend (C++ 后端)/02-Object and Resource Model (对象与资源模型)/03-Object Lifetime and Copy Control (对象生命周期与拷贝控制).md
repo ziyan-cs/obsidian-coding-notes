@@ -11,7 +11,39 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 07-Object Oriented Programming (面向对象编程)
+## 30 秒回答
+
+C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。类只要管理资源，就必须先写清所有权，再决定是否允许拷贝、如何移动以及析构时做什么。现代 C++ 优先使用 RAII 成员类型以遵循 Rule of Zero；只有直接管理资源时才需要 Rule of Five。
+
+## 生命周期模型
+
+```text
+构造成功 → 对象可用 → 拷贝或移动 → 赋值替换旧状态 → 析构释放资源
+     │                       │
+     └── 构造失败：已完成构造的成员自动析构  └── moved-from 对象仍可析构与赋值
+```
+
+## Rule of Zero 与 Rule of Five
+
+| 设计 | 适用情况 | 要点 |
+| --- | --- | --- |
+| Rule of Zero | 成员已用 `vector`、`string`、智能指针等 RAII 类型 | 不自己声明析构、拷贝、移动 |
+| Rule of Five | 类直接拥有裸资源、句柄或自定义分配 | 同时审视析构、拷贝构造/赋值、移动构造/赋值 |
+| 禁止拷贝、允许移动 | 独占 socket、文件、锁等资源 | 删除 copy，保证 move 后源对象仍有效 |
+
+## 常见误区
+
+- 只写析构函数，却忘记自定义拷贝，导致浅拷贝与 double free。
+- 认为 moved-from 对象不可再用；正确要求是它处于有效但未指定状态。
+- 为所有类手写五个函数；这通常比 Rule of Zero 更容易制造 bug。
+
+## 自测
+
+1. 一个独占 `FILE*` 的 wrapper 应该支持拷贝吗？移动后源对象必须满足什么条件？
+2. 为什么 `std::vector<T>` 会关心 `T` 的 move constructor 是否 `noexcept`？
+3. 哪些成员类型已经让你无需自己写析构函数？
+
+## Object Oriented Programming (面向对象编程)
 
 > [!abstract] 核心考点：封装、继承、多态三大面向对象特性在 C++ 中的实现
 
@@ -113,7 +145,7 @@ struct Circle : Shape<Circle> {
 
 ---
 
-## 08-Construction and Destruction (构造与析构)
+## Construction and Destruction (构造与析构)
 
 > [!abstract] 核心考点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
 
@@ -192,7 +224,7 @@ public:
 
 ---
 
-## 09-Copy Control and Rule of Five (拷贝控制与五法则)
+## Copy Control and Rule of Five (拷贝控制与五法则)
 
 > [!abstract] 核心考点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
 
@@ -269,7 +301,7 @@ public:
 
 ---
 
-## 10-Operator Overloading (运算符重载)
+## Operator Overloading (运算符重载)
 
 > [!abstract] 核心考点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
 
@@ -311,3 +343,18 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 ---
 
 拷贝控制与运算符重载常配合使用，详见 → [Copy Control & Rule of 5 (拷贝控制与五法则)](/02-C++%20Backend%20(C++%20后端)/02-Core%20Mechanisms%20(核心机制)/06-Class%20Internals%20(类的底层)%20⭐/06b-Copy%20Control%20&%20Rule%20of%205%20(拷贝控制与五法则).md)
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 03-Object Lifetime and Copy Control (对象生命周期与拷贝控制) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？

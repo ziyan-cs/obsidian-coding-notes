@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 08-Testing & Mocking (测试与模拟)
+## Testing & Mocking (测试与模拟)
 
 > [!abstract] 核心考点：单元测试框架、测试金字塔、Mock 对象、TDD 基础、CI 集成
 
@@ -208,7 +208,7 @@ genhtml -o report coverage.info
 
 ---
 
-## 09-Observability Logging Metrics and Tracing (可观测性)
+## Observability Logging Metrics and Tracing (可观测性)
 
 > [!abstract] 核心考点：spdlog 日志库、Prometheus metrics 暴露、OpenTelemetry 链路追踪、C++ 服务可观测性的三板斧
 
@@ -446,3 +446,38 @@ auto stub = UserService::NewStub(tracing_channel);
 ---
 
 可观测性与调试工具共同保障服务稳定性，详见 → [Debugging gdb & Sanitizers (调试工具)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/05-Debugging%20gdb%20&%20Sanitizers%20(调试工具)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-Testing and Observability (测试与可观测性) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

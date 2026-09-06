@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 01-Compilation & Linking (编译与链接)
+## Compilation & Linking (编译与链接)
 
 > [!abstract] 核心考点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
@@ -162,7 +162,7 @@ inline int square(int x) { return x * x; }
 
 ---
 
-## 02-Header & Source Organization (头文件与源文件组织)
+## Header & Source Organization (头文件与源文件组织)
 
 > [!abstract] 核心考点：头文件职责、源文件职责、include 顺序、模块化设计
 
@@ -289,7 +289,7 @@ project/
 
 ---
 
-## 03-Preprocessor & Macros (预处理与宏)
+## Preprocessor & Macros (预处理与宏)
 
 > [!abstract] 核心考点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
@@ -416,3 +416,38 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 ---
 
 编译过程中预处理阶段详见 → [Compilation & Linking (编译与链接)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/01-Compilation%20&%20Linking%20(编译与链接)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Build Organization and Preprocessing (构建组织与预处理) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 04-Lvalues and Rvalues (左值与右值)
+## 30 秒回答
+
+**02-Value Categories and Move (值类别与移动语义)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Lvalues and Rvalues (左值与右值)
 
 > [!abstract] 核心考点：左值/右值/将亡值的定义，右值引用的绑定规则
 
@@ -51,7 +56,7 @@ void foo(int&& r) {
 
 ---
 
-## 05-Move Construction and Assignment (移动构造与移动赋值)
+## Move Construction and Assignment (移动构造与移动赋值)
 
 > [!abstract] 核心考点：移动构造函数与移动赋值运算符的实现、noexcept 的重要性、资源窃取语义
 
@@ -137,7 +142,7 @@ v.push_back(MyString("hello"));
 
 ---
 
-## 06-std move and RVO (移动语义与返回值优化)
+## std move and RVO (移动语义与返回值优化)
 
 > [!abstract] 核心考点：std::move 的本质（右值引用转换）、RVO/NRVO 编译器优化、返回值优化触发条件
 
@@ -196,3 +201,38 @@ std::string bar() {
 ---
 
 移动构造与移动赋值详见 → [Move Constructor & Move Assignment (移动构造与移动赋值)](/02-C++%20Backend%20(C++%20后端)/03-Modern%20C++%20(现代%20C++)/03-Move%20Semantics%20&%20Rvalue%20Reference%20(移动语义)%20⭐/03b-Move%20Constructor%20&%20Move%20Assignment%20(移动构造与移动赋值).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Value Categories and Move (值类别与移动语义) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

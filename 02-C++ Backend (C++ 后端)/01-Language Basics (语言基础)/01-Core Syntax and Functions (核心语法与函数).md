@@ -11,7 +11,12 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 01-Variables, Types & Operators (变量、类型与运算符)
+## 30 秒回答
+
+**01-Core Syntax and Functions (核心语法与函数)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
+
+## Variables, Types & Operators (变量、类型与运算符)
 
 ****
 > [!abstract] 核心考点：C++ 基本类型的大小与范围、类型转换规则、const 与引用
@@ -110,7 +115,7 @@ u + i;   // i 被转换为 unsigned，结果是巨大的正数！
 
 ---
 
-## 02-Control Flow (流程控制)
+## Control Flow (流程控制)
 
 > [!abstract] 核心考点：条件分支（if/switch）、循环（for/while/do-while）、break/continue 控制流
 
@@ -152,7 +157,7 @@ do { ... } while (cond);
 
 ---
 
-## 03-Functions (函数)
+## Functions (函数)
 
 > [!abstract] 核心考点：函数重载、默认参数、值传递/引用传递、inline 函数
 
@@ -184,3 +189,23 @@ int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
 ---
 
 变量与类型系统是函数的基础，详见 → [Variables, Types & Operators (变量、类型与运算符)](/02-C++%20Backend%20(C++%20后端)/01-Basic%20Syntax%20(基础语法)/01-Variables,%20Types%20&%20Operators%20(变量、类型与运算符).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Core Syntax and Functions (核心语法与函数) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？

@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 02-Kafka Core Concepts (Kafka核心概念)
+## Kafka Core Concepts (Kafka核心概念)
 
 > [!abstract] 核心考点：> Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
@@ -118,7 +118,7 @@ max.poll.records=500        # 每次拉取条数
 
 ---
 
-## 03-Message Delivery and Idempotency (消息可靠性与幂等)
+## Message Delivery and Idempotency (消息可靠性与幂等)
 
 > [!abstract] 核心考点：> 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
@@ -209,7 +209,7 @@ Producer -> Broker -> Consumer
 
 ---
 
-## 经典题型速查
+## 经典题型速查（补充 2）
 
 | 题型 | 要点 |
 |------|------|
@@ -234,3 +234,38 @@ Kafka 的投递语义来自生产、复制与消费确认的组合：`acks=all` 
 ---
 
 Kafka 核心概念详解见 → [03b1-Topic, Partition, Consumer Group (核心概念)](/03-Backend%20Systems%20(后端系统)/04-Distributed%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b1-Topic,%20Partition,%20Consumer%20Group%20(核心概念).md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-Kafka Delivery and Idempotency (Kafka 投递与幂等) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

@@ -11,7 +11,30 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 09-Transaction Isolation Levels (事务隔离级别)
+## 30 秒回答
+
+事务保证一组读写以明确的隔离语义完成；MVCC 让读通常不阻塞写，但不消除锁和冲突。设计时先写出业务不变量，再选择隔离级别、索引和重试策略；不要把默认 RR 误认为所有并发问题都会自动解决。
+
+## 排查顺序
+
+1. 写出事务中的读写序列和必须保持的不变量。
+2. 检查访问路径是否命中合适索引；锁范围由索引与查询条件决定。
+3. 区分一致性快照读与当前读；后者可能加记录锁、gap lock 或 next-key lock。
+4. 对死锁保留日志并重试完整事务，而不是只重试其中一条 SQL。
+
+## 常见误区
+
+- MVCC 不是完全无锁；写操作与当前读仍需协调。
+- 长事务并不更安全；它会占用 undo、阻塞清理并扩大锁冲突。
+- 死锁不是数据库故障；并发系统中必须识别并有限重试。
+
+## 自测
+
+1. 快照读和当前读的可见性与加锁行为有什么不同？
+2. 为什么缺失合适索引会扩大锁冲突？
+3. 为什么事务重试必须从业务边界开始？
+
+## Transaction Isolation Levels (事务隔离级别)
 
 > [!abstract] 核心考点：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
 
@@ -151,19 +174,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 > [!tip]- **工程要点**：选择 RC 还是 RR 应从业务读语义、锁定读、死锁模式、复制配置和压测结果出发，不要把任一隔离级别当成通用最优解。RR 下的范围锁可能增加锁等待；RC 也不是“完全没有 gap lock”，外键/重复键检查等场景仍要以当前版本文档验证。
 
-## 30 秒回答
-
-隔离级别决定并发事务能观察到什么，以及为此付出的锁与并发代价。InnoDB 的 RC 通常每条一致性读建立视图，RR 通常让同一事务的快照读保持一致；但锁定读、索引范围和约束会改变实际锁行为。排查问题时先区分“快照读还是锁定读”，再看执行计划和锁信息。
-
----
-
-
-
-三大并发问题详解见 → [Dirty Read, Non-repeatable Read, Phantom Read (三大并发问题)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05b-Dirty%20Read,%20Non-repeatable%20Read,%20Phantom%20Read%20(三大并发问题).md) · [MVCC Internals：undo log & read view (MVCC底层实现)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/05-Transaction%20&%20ACID%20(事务与ACID)%20⭐/05c-MVCC%20Internals：undo%20log%20&%20read%20view%20(MVCC底层实现).md)
-
----
-
-## 10-Transaction Anomalies (事务并发异常)
+## Transaction Anomalies (事务并发异常)
 
 > [!abstract] 核心考点：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
 
@@ -289,7 +300,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-## 11-MVCC Internals (MVCC 底层实现)
+## MVCC Internals (MVCC 底层实现)
 
 > [!abstract] 核心考点：> MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
@@ -464,7 +475,7 @@ RR 级别下 MVCC 搭配 Next-Key Lock 解决幻读 → [隔离级别](05a-Isola
 
 ---
 
-## 12-Table and Row Locks (表锁与行锁)
+## Table and Row Locks (表锁与行锁)
 
 > [!abstract] 核心考点：表锁与行锁的开销与并发粒度对比、InnoDB 行锁基于索引实现、意向锁的作用
 
@@ -587,7 +598,7 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-## 13-Gap and Next Key Locks (间隙锁与临键锁)
+## Gap and Next Key Locks (间隙锁与临键锁)
 
 > [!abstract] 核心考点：间隙锁解决幻读、Next-Key Lock 行锁+间隙锁组合、临键锁对 RR 级别的保障
 
@@ -710,7 +721,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 > [!tip]- **工程要点**：范围条件可能锁住比业务直觉更大的索引区间。排查时用 `performance_schema.data_locks`、事务信息和执行计划确认实际锁范围；切换 RC 可能减少部分 gap locking，但并不保证所有场景都没有 gap lock，须结合当前版本与约束验证。
 
-## 30 秒回答 / 自测
+## 30 秒回答 / 自测（补充 2）
 
 - **30 秒回答**：Next-Key Lock = Record Lock + Gap Lock，左开右闭；普通索引/范围查询用它锁住行与行前间隙防止幻读；命中唯一索引等值查询退化为 Record Lock；Gap Lock 只在 RR/Serializable 生效，间隙锁之间可共存。
 - **常见误区**：以为唯一索引查询一定会退化（范围查询不退化）；以为 Gap Lock 锁的是记录本身（实际锁间隙，所以同间隙可共存）；忽略"无索引"导致全表逐行加锁。
@@ -724,7 +735,7 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 ---
 
-## 14-Deadlock Detection and Avoidance (死锁检测与避免)
+## Deadlock Detection and Avoidance (死锁检测与避免)
 
 > [!abstract] 核心考点：死锁检测机制（等待图）、InnoDB 死锁处理策略（回滚代价较小的事务）、预防死锁方法
 
@@ -873,12 +884,32 @@ SELECT * FROM sys.innodb_lock_waits\G
 
 > [!tip]- **工程要点**：死锁是并发写入中需要设计处理的正常失败路径，但重试次数、退避策略和是否可安全重试必须由业务幂等性决定。统一锁顺序、缩短事务、优化索引能降低概率；检测代价和响应时间取决于负载与锁图，不能承诺“毫秒级”。
 
-## 30 秒回答
+## 学习闭环
 
-**死锁怎么处理？** 数据库发现等待环后会回滚一个事务；应用应捕获可重试错误、先回滚，再对幂等操作做带退避的有限重试。根治方向是统一加锁顺序、缩短事务并减少无谓的锁扫描，而不是盲目提高超时。
+### 复述
 
----
+- 不看正文，说明 03-Transactions MVCC and Locks (事务 MVCC 与锁) 的问题、核心机制与边界。
 
+### 验证
 
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
 
-表锁与行锁基础见 → [Table Lock vs Row Lock (表锁与行锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06a-Table%20Lock%20vs%20Row%20Lock%20(表锁与行锁).md) · [Gap Lock & Next-Key Lock (间隙锁与临键锁)](/03-Backend%20Systems%20(后端系统)/03-Database%20(数据库)/02-InnoDB%20Storage%20Engine%20(InnoDB%20存储引擎)/06-Locks%20In%20MySQL%20(MySQL锁机制)%20⭐/06b-Gap%20Lock%20&%20Next-Key%20Lock%20(间隙锁与临键锁).md)
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

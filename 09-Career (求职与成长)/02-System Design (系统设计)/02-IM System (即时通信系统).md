@@ -8,7 +8,10 @@ status: 🌱
 
 > [!abstract] 核心考点：> WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
-> 本文为面试/系统设计参考；动手实现与证据见 [[12-Backend Projects (后端项目)/03-IM & Notification (即时通讯与通知)|IM / Notification 项目]]。
+## 30 秒回答
+
+**02-IM System (即时通信系统)**：先说明它解决的问题，再解释一个关键机制、一个边界条件，并用最小示例或真实项目验证。
+
 
 ## 需求分析
 
@@ -289,3 +292,38 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 | **消息表分片键怎么选？** | 按 `conversation_id` 哈希分片，保证同一会话所有消息落入同一分片，天然支持范围查询（会话内翻页）。查询用户历史消息时需广播到所有分片 |
 
 IM 系统网络编程基础详解见 → [WebSocket Protocol](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/10-WebSocket%20Protocol%20(WebSocket协议).md) · [Reactor & Proactor Pattern](05-Network%20Programming%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐.md)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 02-IM System (即时通信系统) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

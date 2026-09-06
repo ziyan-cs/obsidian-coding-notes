@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题整合同类机制、边界与实践内容，作为一次完整学习单元。
 
-## 08-HTTP Request and Response (HTTP 请求与响应)
+## HTTP Request and Response (HTTP 请求与响应)
 
 > [!abstract] 核心考点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
@@ -114,7 +114,7 @@ HTTP 协议深入见 → [HTTP Methods & Status Codes (方法与状态码)](</03
 
 ---
 
-## 09-HTTP Methods and Status Codes (HTTP 方法与状态码)
+## HTTP Methods and Status Codes (HTTP 方法与状态码)
 
 > [!abstract] 核心考点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
@@ -212,7 +212,7 @@ HTTP 协议结构见 → [Request & Response Structure (请求响应结构)](</0
 
 ---
 
-## 10-HTTP Connection Management (HTTP 连接管理)
+## HTTP Connection Management (HTTP 连接管理)
 
 > [!abstract] 核心考点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
@@ -308,17 +308,7 @@ Keep-Alive 时间过长：
 
 > [!tip]- **工程要点**：HTTP/1.1 长连接减少建连成本，但管道化的响应有序性会导致应用层 HOL。HTTP/2 用流多路复用消除了这类请求级 HOL，却仍受 TCP 丢包的传输层 HOL 影响；是否升级应结合客户端覆盖、代理链路和实际压测决定。
 
-## 30 秒回答
-
-**Keep-Alive 与 Pipeline 是一回事吗？** 不是。Keep-Alive 只表示复用 TCP 连接；Pipeline 允许在未收到前一响应时继续发请求，但响应仍必须按请求顺序返回，因此实践中使用有限。HTTP/2 的多路复用允许不同流的帧交错传输。
-
----
-
-HTTP 协议详解见 → [Request & Response Structure (请求响应结构)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06a-Request%20&%20Response%20Structure%20(请求响应结构).md>) · [State Machine Parser Implementation (状态机解析实现)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06d-State%20Machine%20Parser%20Implementation%20(状态机解析实现).md>)
-
----
-
-## 11-HTTP Parser State Machine (HTTP 解析状态机)
+## HTTP Parser State Machine (HTTP 解析状态机)
 
 > [!abstract] 核心考点：> HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 
@@ -486,3 +476,38 @@ TCP 数据到达 → buffer 写入 → parse() 逐字节消费
 ---
 
 HTTP 协议基础见 → [Request & Response Structure (请求响应结构)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06a-Request%20&%20Response%20Structure%20(请求响应结构).md>) · [Keep-Alive & Connection Management (长连接)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/06-HTTP⧸1.1%20Protocol%20(HTTP协议详解)%20⭐/06c-Keep-Alive%20&%20Connection%20Management%20(长连接).md>)
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 04-HTTP Protocol (HTTP 协议) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说清本主题的问题、核心机制和适用边界。
+
+### 验证
+
+- 通过代码、测试、压测或项目现象验证一个关键结论。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下需要替代方案？

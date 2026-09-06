@@ -11,7 +11,7 @@ verified: 2026-09-06
 >
 > 本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-## 01-Type System Basics (类型系统基础)
+## Type System Basics (类型系统基础)
 
 > [!abstract] 核心考点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
 
@@ -77,7 +77,7 @@ switch (d) {
 
 ---
 
-## 02-Type Conversion and Casting (类型转换)
+## Type Conversion and Casting (类型转换)
 
 > [!abstract] 核心考点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
 
@@ -162,7 +162,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ---
 
-## 03-Pointers and References (指针与引用)
+## Pointers and References (指针与引用)
 
 > [!abstract] 核心考点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
 
@@ -258,3 +258,23 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 1. 为什么 `int* p = arr; ++p` 与对任意对象地址做 `++p` 的安全性不同？
 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
+
+## 常见误区
+
+- 只记结论或 API 名称，却没有说明前提、失败模式和替代方案。
+- 在没有最小代码、测试、测量或项目现象的情况下，把理解误当成掌握。
+
+## 学习闭环
+
+### 复述
+
+- 不看正文，说明 01-Types Pointers and References (类型指针与引用) 的问题、核心机制与边界。
+
+### 验证
+
+- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+
+### 自测
+
+1. 这个主题解决什么问题？
+2. 它在什么条件下会失效、变慢或需要替代方案？
