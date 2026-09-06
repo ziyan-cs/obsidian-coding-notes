@@ -12,7 +12,9 @@ $today = (Get-Date).Date
 $items = [System.Collections.Generic.List[object]]::new()
 $invalid = [System.Collections.Generic.List[object]]::new()
 
-Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' |
+# Obsidian's .trash may contain entries whose original parent has already been
+# removed.  Ignore such read errors; only reachable Markdown notes are input.
+Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAction SilentlyContinue |
     Where-Object {
         $_.FullName -notmatch '\\(?:\.git|\.obsidian|\.trash)\\'
     } |
@@ -60,21 +62,18 @@ if ($All) {
     $displayItems = $items | Sort-Object Due, Name
 }
 else {
-    $dueNow = @($items | Where-Object { $_.Due -le $today } | Sort-Object Due, Name)
-    if ($dueNow.Count -gt 0) {
-        $displayItems = $dueNow
-    }
-    elseif ($items.Count -gt 0) {
-        $nextDate = ($items | Sort-Object Due | Select-Object -First 1).Due
-        $displayItems = $items | Where-Object { $_.Due -eq $nextDate } | Sort-Object Name
-    }
+    # Daily view: only overdue, today, and tomorrow.  Use -All for the full plan.
+    $tomorrow = $today.AddDays(1)
+    $displayItems = $items |
+        Where-Object { $_.Due -le $tomorrow } |
+        Sort-Object Due, Name
 }
 
 if ($displayItems.Count -eq 0) {
     Write-Output '没有到期或待复习的笔记。'
 }
 else {
-    $mode = if ($All) { 'ALL' } elseif (($displayItems | Select-Object -First 1).Due -gt $today) { 'NEXT' } else { 'DUE' }
+    $mode = if ($All) { 'ALL' } else { 'NEAR_TERM' }
     Write-Output ("[ REVIEW_DUE | MODE: {0} | TODAY: {1:yyyy-MM-dd} | COUNT: {2} ]" -f $mode, $today, $displayItems.Count)
 
     foreach ($item in $displayItems) {
@@ -87,7 +86,9 @@ else {
         else {
             'FUTURE'
         }
-        Write-Output ("- [{0}] {1:yyyy-MM-dd} | {2}" -f $label, $item.Due, $item.Name)
+        # Keep the label itself compact; pad only after the closing bracket.
+        $outsidePadding = ' ' * (7 - $label.Length)
+        Write-Output ("- [{0}]{1} {2:yyyy-MM-dd} | {3}" -f $label, $outsidePadding, $item.Due, $item.Name)
     }
 }
 
