@@ -77,16 +77,12 @@ void Node::startElection() {
     role_ = CANDIDATE;
     votedFor_ = id_;  // 投自己
     
-    int votes = 1;
+    std::atomic<int> votes{1};
     for (auto& peer : peers_) {
-        go func() {
-            if requestVote(peer, n.currentTerm) {
-                votes += 1
-                if votes > len(peers)/2 {
-                    n.becomeLeader()  // 过半数 -> 成为 Leader
-                }
-            }
-        }()
+        std::thread([this, peer, term = currentTerm_, &votes] {
+            if (requestVote(peer, term) && votes.fetch_add(1) + 1 > peers_.size() / 2)
+                becomeLeaderIfCurrentTerm(term);
+        }).detach(); // 教学示意：生产实现需托管线程、取消与 RPC 超时
     }
 }
 ```
@@ -131,14 +127,14 @@ Follower 投票前比较：
 
 | 题型 | 要点 |
 |------|------|
-| 选举超时时间 | 150-300ms 随机（防 split vote） |
+| 选举超时时间 | 随机区间以降低 split vote；具体数值由网络与实现配置决定 |
 | 成为 Leader 条件 | 获得半数以上投票 |
 | 任期作用 | 逻辑时钟，防止过期 Leader 发出指令 |
 | 日志完整性限制 | 只有日志最新的节点才能当选 Leader |
 | 新 Leader 第一件事 | 发送心跳（空 AppendEntries）确立权威 |
 
 > [!tip]- **工程要点**
-> Raft 选举超时的设置需权衡——太短容易频繁选举，太长导致 Leader 故障后恢复慢。etcd 默认 election timeout 为 1000ms。网络不稳定时可通过调整心跳间隔（heartbeat interval = 1/10 election timeout）减少不必要选举。
+> 选举 timeout 应显著大于稳定网络中的心跳与调度抖动，同时满足故障恢复目标；具体比例和 etcd 默认值都应以当前版本文档/部署测量验证。实现中还要防止过期 RPC、并发状态迁移和没有取消的后台线程。
 
 ---
 
