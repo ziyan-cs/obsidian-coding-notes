@@ -16,7 +16,7 @@ status: 🌱
 - **贪心选择性质**：全局最优可以通过一系列局部最优得到
 - **最优子结构**：子问题的最优解可以推导出原问题的最优解
 
-**与 DP 的关系：** 贪心是 DP 的特例——每个子问题只做一个选择（无需考虑多种可能性）。能用贪心解决的问题一定可以用 DP 解决，但反之不一定。
+**与 DP 的关系：** DP 会比较并保留多个状态；贪心只保留当前选择。两者都利用子问题结构，但贪心必须额外证明局部选择不会排除全局最优，不能仅凭“看起来更省事”替代 DP。
 
 ---
 
@@ -28,6 +28,7 @@ status: 🌱
 
 ```cpp
 int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+    if (intervals.empty()) return 0;
     sort(intervals.begin(), intervals.end(),
          [](auto& a, auto& b) { return a[1] < b[1]; });
     int count = 1, end = intervals[0][1];
@@ -109,7 +110,7 @@ int jump(vector<int>& nums) {
             curEnd = farthest;
         }
     }
-    return jumps;
+    return curEnd >= (int)nums.size() - 1 ? jumps : -1;  // 输入可能不可达时显式返回
 }
 ```
 
@@ -162,6 +163,12 @@ int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 | 最少箭矢戳气球 | 按结束位置射箭 | 按 end 升序 |
 
 > [!tip]- **工程要点**：面试中的贪心题通常需要先尝试**排序**或**堆**来辅助决策。证明贪心正确性常用**交换论证法**——假设最优解与贪心解不同，交换后不会使解变差。如果不确定能否贪心，先想 DP 再找贪心特征。
+
+## 30 秒回答
+
+**怎样判断能不能贪心？** 先写出每一步的局部选择，再用交换论证或不变式证明：任一最优解都能替换成该选择而不变差。区间调度按最早结束时间就是典型；若无法证明，保留多个可能状态的 DP 往往更可靠。
+
+**自测：** 为什么区间调度按开始时间早并不保证最优？跳跃游戏 II 的线性写法为什么需要题目保证可达，或显式处理不可达？
 
 ---
 

@@ -55,15 +55,16 @@ int trap(vector<int>& height) {
 
 ```cpp
 int largestRectangleArea(vector<int>& heights) {
-    heights.push_back(0);       // 哨兵，触发清空
+    vector<int> h = heights;
+    h.push_back(0);             // 副本上的哨兵，避免修改调用者输入
     stack<int> st;
     st.push(-1);
     int res = 0;
-    for (int i = 0; i < (int)heights.size(); i++) {
-        while (st.top() != -1 && heights[i] < heights[st.top()]) {
-            int h = heights[st.top()]; st.pop();
+    for (int i = 0; i < (int)h.size(); i++) {
+        while (st.top() != -1 && h[i] < h[st.top()]) {
+            int height = h[st.top()]; st.pop();
             int w = i - st.top() - 1;
-            res = max(res, h * w);
+            res = max(res, height * w);
         }
         st.push(i);
     }
@@ -72,6 +73,12 @@ int largestRectangleArea(vector<int>& heights) {
 ```
 
 ---
+
+## 30 秒回答
+
+**单调栈为什么是 O(n)？** 每个下标最多入栈一次、弹栈一次，虽然有嵌套 `while`，总弹栈次数仍不超过 `n`。先决定栈内维持递增还是递减，再明确“当前元素到来时，谁的答案被确定”。
+
+**自测：** 下一个更大元素为何在弹栈时确定答案？柱状图题为什么要在末尾放哨兵？
 
 ## 关联笔记
 

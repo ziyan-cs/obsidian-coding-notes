@@ -18,6 +18,8 @@ status: 🌱
 双向迭代器 (Bidirectional)
     |
 随机访问迭代器 (Random Access)
+    |
+连续迭代器 (Contiguous, C++20)
 ```
 
 | 类别 | 能力 | 示例容器 |
@@ -27,6 +29,7 @@ status: 🌱
 | **前向迭代器** | 读+写、**多遍扫描** | `forward_list`、`unordered_map` |
 | **双向迭代器** | 前向 + `--it` | `list`、`map`、`set` |
 | **随机访问** | 双向 + `it+n`、`it-n`、`it[n]`、`it1-it2`、`<`/`>` | `vector`、`deque`、`array` |
+| **连续迭代器** | 随机访问 + 元素在内存中连续 | `vector`、`array`、`string` |
 
 ## 迭代器标签与算法分发
 
@@ -62,11 +65,11 @@ void advance(Iter& it, Dist n) {
 
 | 容器 | insert | erase | push_back | resize | rehash |
 |------|--------|-------|-----------|--------|--------|
-| `vector` | pos 后全失效 | pos 后全失效 | 全失效（扩容时）| 全失效 | — |
-| `deque` | 全失效 | 全失效 | 仅尾端操作不影响 | — | — |
+| `vector` | 扩容则全失效；否则 `pos` 及之后失效 | 被删位置及之后失效 | 扩容则全失效；否则已有迭代器仍有效 | 可能因扩容全失效 | — |
+| `deque` | 规则较复杂，保守视为可能失效 | 被删位置外的失效规则也与位置相关 | `push_front/back` 可能使迭代器失效；不要跨操作长期保存 | — | — |
 | `list` | ❌ 不影响 | ❌ 仅被删元素 | ❌ 不影响 | — | — |
 | `map`/`set` | ❌ 不影响 | ❌ 仅被删元素 | — | — | — |
-| `unordered_map` | ❌ 不影响 | ❌ 仅被删元素 | — | — | **全失效** |
+| `unordered_map` | 不 rehash 时通常不影响；rehash 时全失效 | 仅被删元素失效 | — | — | **全失效** |
 
 ## 反向迭代器
 
@@ -106,6 +109,12 @@ std::vector<int> data(in, end);
 ```
 
 > **面试重点**：为什么 `list::sort` 不使用标准 `std::sort`？因为 `std::sort` 需要**随机访问迭代器**（它使用快速排序/内省排序），而 `list` 只提供双向迭代器，所以 `list` 自带了基于归并排序的 `list::sort()`。
+
+## 30 秒回答
+
+**迭代器失效如何避免？** 先看操作会不会重分配或 `rehash`；对 `vector`，插入/扩容后不要继续使用旧迭代器；遍历删除时使用 `it = container.erase(it)` 接住返回值。容器的精确规则随操作和位置不同，拿不准时查对应容器文档，不要套用“某容器永不失效”的口诀。
+
+**自测：** 为什么 `std::sort(list.begin(), list.end())` 不可行？`vector::push_back` 在什么条件下会使所有迭代器失效？
 
 ---
 

@@ -89,7 +89,7 @@ TCP **不保留消息边界**，只保证字节的顺序和可靠性。发送的
 接收：按 \n 分割，还原两条消息
 ```
 
-- ✅ 实现简单，适合文本协议（HTTP/1.x、Redis RESP）
+- ✅ 实现简单，适合以行/分隔符组织的文本协议（例如 Redis RESP 的部分帧）
 - ❌ 消息内容中不能含有分隔符（或需转义）
 
 ### 方案三：消息头 + 长度字段（最常用）
@@ -110,6 +110,8 @@ TCP **不保留消息边界**，只保证字节的顺序和可靠性。发送的
 - ✅ 灵活、高效，适合二进制协议
 - ✅ 工业界主流方案（Dubbo、gRPC、Kafka 等都用这种）
 - ❌ 需要处理拆包逻辑（一次 read() 可能只读到部分头部）
+
+> [!tip] HTTP/1.1 的“消息边界”不能简单归为分隔符：请求/响应头以空行结束，但消息体由 `Content-Length`、`Transfer-Encoding: chunked` 或连接关闭等规则界定。
 
 ### 方案四：应用层自定义完整协议（TLV）
 
@@ -158,6 +160,8 @@ int readMessage(int fd, vector<char>& out) {
         remain -= (size_t)n;
     }
     uint32_t bodyLen = ntohl(netLen);              // 网络字节序转主机字节序
+    constexpr uint32_t kMaxBodyLen = 16 * 1024 * 1024;
+    if (bodyLen > kMaxBodyLen) return -1;          // 防止恶意长度字段导致过度分配
 
     // 2. 按长度读取消息体
     out.resize(bodyLen);
@@ -182,7 +186,13 @@ void sendMessage(int fd, const char* data, uint32_t len) {
 }
 ```
 
-> **关键点：** C++ 中 `read()` 不保证一次读满指定字节数（拆包），必须循环读取直到收满。`writev` 聚集写避免多次 syscall。网络字节序用 `htonl`/`ntohl` 转换，保证跨平台兼容。
+> **关键点：** 阻塞 `read()` 不保证一次读满；非阻塞 socket 还要正确处理 `EAGAIN/EWOULDBLOCK`、`EINTR` 与缓冲区状态。`writev` 也可能部分写入，生产代码必须保存未写完的 iovec 后续续写。网络字节序用 `htonl`/`ntohl` 转换，保证跨平台兼容。
+
+## 30 秒回答
+
+**“粘包”怎么解决？** TCP 只有字节流，`send` 次数和 `read` 次数没有一一对应关系。应用层必须定义帧边界：固定长度、分隔符转义、长度字段或 TLV；接收端维护累积缓冲区，只有拿到完整帧才交给业务层，并限制最大帧长度。
+
+**自测：** 为什么 `writev` 不能保证一次写完？HTTP/1.1 的头部与消息体分别如何确定边界？
 
 ---
 

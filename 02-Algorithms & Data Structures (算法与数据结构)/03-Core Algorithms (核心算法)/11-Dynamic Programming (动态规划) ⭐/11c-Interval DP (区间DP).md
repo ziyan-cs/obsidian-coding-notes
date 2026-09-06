@@ -39,6 +39,7 @@ for (int len = 2; len <= n; len++) {                // 枚举区间长度
 ```cpp
 int mergeStones(vector<int>& stones) {
     int n = stones.size();
+    if (n == 0) return 0;
     vector<int> prefix(n + 1, 0);
     for (int i = 1; i <= n; i++)
         prefix[i] = prefix[i-1] + stones[i-1];
@@ -67,6 +68,7 @@ int mergeStones(vector<int>& stones) {
 
 ```cpp
 int matrixChain(vector<int>& dims) {
+    if (dims.size() < 2) return 0;
     int n = dims.size() - 1;  // 矩阵个数
     vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
     
@@ -91,6 +93,7 @@ int matrixChain(vector<int>& dims) {
 ```cpp
 int minCut(string s) {
     int n = s.size();
+    if (n == 0) return 0;
     vector<vector<bool>> isPal(n, vector<bool>(n, false));
     vector<int> dp(n, INT_MAX);
     
@@ -110,7 +113,7 @@ int minCut(string s) {
 
 ## 四边形不等式优化
 
-当 cost 满足四边形不等式时，最优决策点 `s[i][j]` 具有单调性：
+Knuth 优化要求问题满足特定的四边形不等式/决策单调性等条件，才能把分割点搜索范围缩为 `opt[i][j-1]..opt[i+1][j]`；**不能只因看到区间 DP 就套用**。应先证明条件，并妥善初始化边界与 `opt`。
 
 ```cpp
 for (int len = 2; len <= n; len++) {
@@ -138,7 +141,13 @@ for (int len = 2; len <= n; len++) {
 | 戳气球 | `dp[i][j]` (i,j) 内最大收益 | `+ nums[i]*nums[k]*nums[j]` | O(n³) |
 | 括号匹配 | `dp[i][j]` 最长合法子串 | `+ 2` (if 匹配) | O(n³) |
 
-> [!tip]- **工程要点**：区间 DP 的 O(n³) 在 n ≤ 500 时可行。大于 500 需四边形不等式优化或换思路。核心是理解"大区间由小区间推导"的本质。
+> [!tip]- **工程要点**：区间 DP 常为 O(n³)，能否通过取决于语言、常数、内存和题目时限；先估算 `n³` 的量级，再考虑优化。核心是理解“大区间由小区间推导”的依赖方向。
+
+## 30 秒回答
+
+**区间 DP 的遍历顺序为什么按长度递增？** `dp[i][j]` 往往要读取更短的 `dp[i][k]` 和 `dp[k+1][j]`，因此必须先算短区间。写题时先统一下标语义（闭区间还是开区间）、确定空区间/单点区间的初值，再枚举长度和分割点。
+
+**自测：** 石子合并的区间和为什么与分割点无关？什么时候不能贸然使用 Knuth 优化？
 
 ---
 

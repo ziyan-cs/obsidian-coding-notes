@@ -33,7 +33,7 @@ verified: 2026-09-05
 ```text
 CS Core ──┐
 Linux ────┼──> C++：资源 / 并发 / 网络 / 性能 ──> 后端项目
-Network ──┤                 │                         │
+Network ──┤                 │                       │
 Database ─┘                 ├──> Go：服务端工程 ──────┤
                             └──> Python：测试与自动化 ┘
 ```
