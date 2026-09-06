@@ -73,7 +73,7 @@ UPDATE user SET balance=balance-100 WHERE id=1;
 --   AFTER:  {id=1, name='Bob', balance=400}
 ```
 
-**优点：** 精确的记录每一行变化，没有任何不一致风险
+**优点：** 相比 statement 格式更能准确表达行变更，减少许多语义差异；仍要考虑版本、复制配置、DDL 与故障恢复边界
 **缺点：** 批量操作会产生大量 binlog 数据
 
 ### MIXED 格式
@@ -141,7 +141,11 @@ SHOW MASTER STATUS;                             -- 当前正在写的 binlog
 SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 ```
 
-> [!tip]- **工程要点**：生产环境推荐 `binlog_format=ROW`（保证主从一致性）+ `sync_binlog=1`（每次事务提交刷盘）。两阶段提交是 MySQL 数据一致性的基石——理解了它，才能真正理解为什么主从复制不会丢数据。**面试核心问题：** "MySQL 如何保证 binlog 和 redo log 的一致性？" → 答案就是两阶段提交。
+> [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
+
+## 30 秒回答
+
+redo log 服务于 InnoDB 崩溃恢复，binlog 服务于复制与时间点恢复；二者作用层与写入方式不同。提交时的两阶段协调让重启后能根据 binlog 判断 prepare 事务的去向，避免主库页恢复与复制日志明显分叉。真正的数据保护还依赖刷盘策略、副本、备份与恢复演练。
 
 ---
 
