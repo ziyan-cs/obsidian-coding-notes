@@ -8,11 +8,11 @@ verified: 2026-09-06
 
 # 30 秒回答
 
-**核心结论**：学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # Code Quality and Build Optimization (代码质量与构建优化)
 
-> [!note] 本节重点：核心考点：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
+> [!note] 本节重点：clang-tidy 静态分析、clang-format 格式化、ccache 编译缓存、Ninja 构建系统、Google Benchmark
 
 # 代码质量工具
 

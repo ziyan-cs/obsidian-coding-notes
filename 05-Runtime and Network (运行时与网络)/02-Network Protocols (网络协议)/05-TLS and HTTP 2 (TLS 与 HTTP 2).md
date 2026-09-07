@@ -8,7 +8,7 @@ verified: 2026-09-06
 
 # HTTPS and TLS (HTTPS 与 TLS)
 
-> [!note] 本节重点：核心考点：HTTPS 的 TLS/SSL 握手流程、证书验证与数字签名、对称+非对称加密混合方案
+> [!note] 本节重点：HTTPS 的 TLS/SSL 握手流程、证书验证与数字签名、对称+非对称加密混合方案
 
 # 为什么需要 HTTPS
 
@@ -132,7 +132,7 @@ TLS 用证书链验证服务器身份，再协商对称会话密钥保护后续 
 
 # HTTP 2 Features (HTTP 2 核心特性)
 
-> [!note] 本节重点：核心考点：HTTP/2 多路复用、头部压缩 HPACK、二进制分帧、服务器推送等核心特性
+> [!note] 本节重点：HTTP/2 多路复用、头部压缩 HPACK、二进制分帧、服务器推送等核心特性
 
 # HTTP/2 要解决的问题
 

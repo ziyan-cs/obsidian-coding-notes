@@ -8,11 +8,11 @@ verified: 2026-09-06
 
 # 30 秒回答
 
-**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # Process Lifecycle (进程生命周期)
 
-> [!note] 本节重点：核心考点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
+> [!note] 本节重点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
 
 # 进程的本质
 
@@ -219,7 +219,7 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 
 # Process States and Scheduling (进程状态与调度)
 
-> [!note] 本节重点：核心考点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
+> [!note] 本节重点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
 
 # 进程状态 · 延伸要点 2
 ```
@@ -268,7 +268,7 @@ renice 5 -p 1234       # 修改运行中进程的 nice 值
 
 # Zombie and Orphan Processes (僵尸进程与孤儿进程)
 
-> [!note] 本节重点：核心考点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
+> [!note] 本节重点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 
 # 僵尸进程（Zombie）
 
@@ -338,7 +338,7 @@ close(STDERR_FILENO);
 
 # Interprocess Communication (进程间通信)
 
-> [!note] 本节重点：核心考点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
+> [!note] 本节重点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
 > 核心考点：各 IPC 机制的特点、适用场景、使用方式
 
 # IPC 机制对比

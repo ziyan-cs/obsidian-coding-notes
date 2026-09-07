@@ -8,7 +8,7 @@ verified: 2026-09-06
 
 # RDB Persistence (RDB 持久化)
 
-> [!note] 本节重点：核心考点：> RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
+> [!note] 本节重点： RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
 
 # RDB 快照
 
@@ -108,7 +108,7 @@ AOF 日志与 RDB 快照对比详解见 → 01b2-AOF：Write-Ahead Log & Rewrite
 
 # AOF Persistence (AOF 持久化)
 
-> [!note] 本节重点：核心考点：> AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
+> [!note] 本节重点： AOF 写回策略（always/everysec/no）、AOF 重写机制、AOF 文件格式、混合持久化
 
 # AOF 日志
 
@@ -250,7 +250,7 @@ RDB 快照与 AOF 持久化对比详解见 → 01b1-RDB：Snapshot & BGSAVE (快
 
 # Expiration and Eviction (过期与淘汰)
 
-> [!note] 本节重点：核心考点：> 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
+> [!note] 本节重点： 过期策略（定期删除 + 惰性删除）、内存淘汰的 8 种策略、LRU 近似实现、LFU
 
 > [!warning] Redis 配置与实现细节随版本变化
 > `hz`、采样数、时间预算、可用淘汰策略以及对象内部位布局都应以当前 Redis 官方文档和实际配置为准。这里保留机制心智模型，不把示意常量当作稳定面试答案。

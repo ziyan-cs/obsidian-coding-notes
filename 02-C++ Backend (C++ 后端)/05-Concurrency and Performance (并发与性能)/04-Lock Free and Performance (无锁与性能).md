@@ -4,15 +4,15 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # 30 秒回答
 
-**核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+**核心结论**：lock-free 表示系统级进展保证，不等于单次操作更快；CAS 仍要处理 ABA、内存序、回收与高竞争，普通业务优先选更易证明正确的锁方案。
 
 # Lock-free Structures Overview (无锁结构概念)
 
-> [!note] 本节重点：核心考点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
+> [!note] 本节重点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
 # 什么是无锁（Lock-Free）
 
@@ -143,7 +143,7 @@ std::atomic<TaggedPointer> head_;
 
 # C++ Concurrency and Performance Optimization (C++ 并发性能优化)
 
-> [!note] 本节重点：核心考点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
+> [!note] 本节重点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
 
 # 锁竞争优化
 

@@ -4,11 +4,11 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
 # Graph Traversal (图的遍历)
 
-> [!note] 本节重点：核心考点：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
+> [!note] 本节重点：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 
 # 图的表示
 
@@ -105,7 +105,7 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 
 # Union Find (并查集)
 
-> [!note] 本节重点：核心考点：并查集的 find/union 操作、路径压缩与按秩合并优化、连通性检测与环检测
+> [!note] 本节重点：并查集的 find/union 操作、路径压缩与按秩合并优化、连通性检测与环检测
 
 并查集用于高效处理**集合合并与连通性查询**，支持：
 
@@ -167,7 +167,7 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 
 # Shortest Path (最短路径)
 
-> [!note] 本节重点：核心考点：Dijkstra 非负权最短路（堆优化）、Bellman-Ford 负权最短路与检测、Floyd 多源最短路
+> [!note] 本节重点：Dijkstra 非负权最短路（堆优化）、Bellman-Ford 负权最短路与检测、Floyd 多源最短路
 
 > [!warning] Dijkstra 一旦把节点从最小堆取出，就依赖“后续边不会让路径变短”的前提；**任意负权边都会破坏这个前提**。距离与边权可能很大时，使用 `long long`，并避免把 `INF + w` 当作普通整数相加。
 

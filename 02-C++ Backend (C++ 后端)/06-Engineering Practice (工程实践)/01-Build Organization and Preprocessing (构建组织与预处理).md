@@ -4,11 +4,11 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # Compilation & Linking (编译与链接)
 
-> [!note] 本节重点：核心考点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
+> [!note] 本节重点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
 # 编译的四个阶段
 
@@ -159,7 +159,7 @@ inline int square(int x) { return x * x; }
 
 # Header & Source Organization (头文件与源文件组织)
 
-> [!note] 本节重点：核心考点：头文件职责、源文件职责、include 顺序、模块化设计
+> [!note] 本节重点：头文件职责、源文件职责、include 顺序、模块化设计
 
 # 头文件职责
 
@@ -286,7 +286,7 @@ project/
 
 # Preprocessor & Macros (预处理与宏)
 
-> [!note] 本节重点：核心考点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
+> [!note] 本节重点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
 # 预处理指令概览
 

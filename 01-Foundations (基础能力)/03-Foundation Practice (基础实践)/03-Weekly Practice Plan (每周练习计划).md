@@ -9,7 +9,7 @@ tags: - cs/algorithm
 
 # 30 秒回答
 
-**核心结论**：Profile: 蓝桥杯省二 (2026-04) / LeetCode 91 solved (16 medium)
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # 1. Key Dates
 

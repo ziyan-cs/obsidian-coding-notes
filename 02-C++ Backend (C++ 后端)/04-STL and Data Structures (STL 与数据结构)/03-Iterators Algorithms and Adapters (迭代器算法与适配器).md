@@ -4,11 +4,11 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # Container Adapters (容器适配器)
 
-> [!note] 本节重点：核心考点：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
+> [!note] 本节重点：stack/queue/priority_queue 都是适配器而非独立容器，底层容器可替换
 
 # 适配器模式
 
@@ -103,7 +103,7 @@ STL 容器全览详见 → STL Cheat Sheet (STL速查总览)
 
 # Iterators and Categories (迭代器分类)
 
-> [!note] 本节重点：核心考点：迭代器分类是 STL 算法与容器的桥梁，决定了算法可以用于哪些容器
+> [!note] 本节重点：迭代器分类是 STL 算法与容器的桥梁，决定了算法可以用于哪些容器
 
 # 迭代器分类体系
 
@@ -221,7 +221,7 @@ std::vector<int> data(in, end);
 
 # Algorithm Library (算法库速查)
 
-> [!note] 本节重点：核心考点：STL 算法的分类、迭代器要求、Lambda 配合使用
+> [!note] 本节重点：STL 算法的分类、迭代器要求、Lambda 配合使用
 
 # 分类速查
 
@@ -365,7 +365,7 @@ STL 容器与算法速查详见 → STL Cheat Sheet (STL速查总览)
 
 # STL Reference (STL 速查总览)
 
-> [!note] 本节重点：核心考点：容器选择决策、复杂度一览、面试前快速复习用
+> [!note] 本节重点：容器选择决策、复杂度一览、面试前快速复习用
 
 # 容器选择树
 

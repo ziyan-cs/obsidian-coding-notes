@@ -8,11 +8,11 @@ verified: 2026-09-06
 
 # 30 秒回答
 
-**核心结论**：学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # Graceful Shutdown (优雅关闭)
 
-> [!note] 本节重点：核心考点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
+> [!note] 本节重点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 # 为什么需要优雅关闭
 
@@ -243,7 +243,7 @@ Kubernetes 删除 Pod 时：
 
 # Backend Architecture Patterns (后端架构模式)
 
-> [!note] 本节重点：核心考点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
+> [!note] 本节重点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 
 # 分层架构（Layered Architecture）
 

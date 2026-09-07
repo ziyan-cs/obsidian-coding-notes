@@ -8,11 +8,11 @@ verified: 2026-09-06
 
 # 30 秒回答
 
-**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # Paxos Overview (Paxos概览)
 
-> [!note] 本节重点：核心考点：> Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
+> [!note] 本节重点： Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 # Paxos 简介
 

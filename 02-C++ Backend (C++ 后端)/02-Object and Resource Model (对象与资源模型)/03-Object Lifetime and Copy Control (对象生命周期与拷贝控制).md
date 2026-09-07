@@ -5,7 +5,7 @@ verified: 2026-09-06
 review_due: 2026-09-11
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # 30 秒回答
 
@@ -46,7 +46,7 @@ moved-from object -> valid for destruction and assignment
 
 # Object Oriented Programming (面向对象编程)
 
-> [!note] 本节重点：核心考点：封装、继承、多态三大面向对象特性在 C++ 中的实现
+> [!note] 本节重点：封装、继承、多态三大面向对象特性在 C++ 中的实现
 
 # 封装（Encapsulation）
 
@@ -148,7 +148,7 @@ struct Circle : Shape<Circle> {
 
 # Construction and Destruction (构造与析构)
 
-> [!note] 本节重点：核心考点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
+> [!note] 本节重点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
 
 ## 构造顺序
 
@@ -227,7 +227,7 @@ public:
 
 # Copy Control and Rule of Five (拷贝控制与五法则)
 
-> [!note] 本节重点：核心考点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
+> [!note] 本节重点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
 
 ```cpp
     int*   data_;
@@ -304,7 +304,7 @@ public:
 
 # Operator Overloading (运算符重载)
 
-> [!note] 本节重点：核心考点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
+> [!note] 本节重点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
 
 ```cpp
 public:

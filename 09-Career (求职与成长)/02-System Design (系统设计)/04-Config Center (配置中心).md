@@ -5,11 +5,11 @@ verified: 2026-09-06
 tags: - distributed/system
 ---
 
-> [!abstract] 核心考点：> etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
+> [!abstract] 核心考点： etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
 
 # 30 秒回答
 
-**核心结论**：核心考点：> etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # 需求分析
 

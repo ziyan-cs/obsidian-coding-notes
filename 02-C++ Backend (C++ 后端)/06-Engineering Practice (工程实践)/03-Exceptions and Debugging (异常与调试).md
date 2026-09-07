@@ -4,15 +4,15 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # 30 秒回答
 
-**核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+**核心结论**：RAII 让资源释放沿作用域自动发生，异常安全则要求失败后仍维持不变量；调试先复现、缩小范围、验证假设，再依据证据定位根因。
 
 # Exception Handling (异常处理)
 
-> [!note] 本节重点：核心考点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
+> [!note] 本节重点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
 # 三种异常安全保证
 
@@ -157,7 +157,7 @@ if (ec) { /* 处理不存在等预期情况 */ }
 
 # Debugging gdb & Sanitizers (调试工具)
 
-> [!note] 本节重点：核心考点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
+> [!note] 本节重点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
 # GDB 核心命令
 

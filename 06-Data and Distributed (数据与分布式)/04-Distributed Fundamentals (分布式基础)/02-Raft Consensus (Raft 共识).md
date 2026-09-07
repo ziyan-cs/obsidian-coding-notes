@@ -8,11 +8,11 @@ verified: 2026-09-06
 
 # 30 秒回答
 
-**核心结论**：学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
+**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
 
 # Raft Leader Election (Raft领导者选举)
 
-> [!note] 本节重点：核心考点：> Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
+> [!note] 本节重点： Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 
 # Raft 角色与任期
 
@@ -149,7 +149,7 @@ Raft 日志复制与安全性详解见 → 04c2-Log Replication (日志复制) �
 
 # Raft Log Replication (Raft日志复制)
 
-> [!note] 本节重点：核心考点：> 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
+> [!note] 本节重点： 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
 
 # Raft 日志结构
 
@@ -285,7 +285,7 @@ Raft 完整流程详解见 → 04c1-Leader Election (领导者选举) · 04c3-Sa
 
 # Raft Safety and Membership (Raft安全性与成员变更)
 
-> [!note] 本节重点：核心考点：> Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
+> [!note] 本节重点： Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 
 # Raft 安全性保证
 

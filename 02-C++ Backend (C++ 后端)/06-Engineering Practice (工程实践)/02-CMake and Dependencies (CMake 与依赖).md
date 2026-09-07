@@ -4,11 +4,11 @@ confidence: high
 verified: 2026-09-06
 ---
 
-> [!abstract] 学习定位：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # 30 秒回答
 
-**核心结论**：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+**核心结论**：CMake 应围绕 target 声明源文件、编译选项和依赖；让 PUBLIC、PRIVATE、INTERFACE 的传播关系表达真实接口边界，才能得到可复现且可维护的构建。
 
 # 工程结论
 
@@ -37,7 +37,7 @@ executable target -> links the library target
 
 # CMake Build System (CMake构建系统)
 
-> [!note] 本节重点：核心考点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
+> [!note] 本节重点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
 
 # 最小 CMake 项目
 
