@@ -1,7 +1,7 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-24
 tags: [language/python, python/cli]
 ---
@@ -40,15 +40,14 @@ if __name__ == "__main__":
 - `main()` 返回整数退出码，方便 shell/CI 判断成功失败。
 - 逻辑放到可测试函数，`argparse` 仅是边界层。
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> 一个可维护 CLI 由参数解析、可测试业务函数和退出码组成。`argparse` 只负责把 shell 输入变成结构化参数；`main()` 编排流程并返回状态，`SystemExit` 把状态交给 shell 或 CI。这样同一逻辑既能被测试，也能被人和自动化调用。
 
-一个可维护 CLI 由参数解析、可测试业务函数和退出码组成。`argparse` 只负责把 shell 输入变成结构化参数；`main()` 编排流程并返回状态，`SystemExit` 把状态交给 shell 或 CI。这样同一逻辑既能被测试，也能被人和自动化调用。
-
-# 自测
-
-1. 哪些参数应做位置参数，哪些应使用 `--option`？
-2. 为什么业务函数不应直接读取 `sys.argv` 或调用 `sys.exit()`？
-3. 为会覆盖文件的命令设计 `--dry-run` 时，输出中应包含哪些信息？
+> [!question]- 自测：先回答再展开
+> 1. 哪些参数应做位置参数，哪些应使用 `--option`？
+> 2. 为什么业务函数不应直接读取 `sys.argv` 或调用 `sys.exit()`？
+> 3. 为会覆盖文件的命令设计 `--dry-run` 时，输出中应包含哪些信息？
 
 # 练习
 
@@ -59,40 +58,5 @@ if __name__ == "__main__":
 - [argparse 官方文档](https://docs.python.org/3/library/argparse.html)
 - 验证日期：2026-09-05
 
-# 从零建立模型
-
-本页主题是 **04-CLI and Configuration (命令行与配置)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。
-
-# 最小实践
-
-把本页概念做成一个可运行函数或 CLI：准备正常、空值和错误输入各一份；打印或断言结果。若涉及文件和网络，使用临时目录或 test double，不能依赖本机隐式状态。
-
-# 工程检查点
-
-Python 的动态性不等于不需要契约。公共函数应写类型标注、异常语义和示例；密钥、绝对路径、真实生产数据都不应写死在示例里。
-
-# 常见误区
-
-- 把脚本一次跑通当成工程正确，忽略环境隔离、输入校验、错误分类和可重复运行。
-- 只读 API 名称而不为文件、网络、时间等外部边界写一个可控测试。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-CLI and Configuration (命令行与配置)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Python Map (Python导航)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md)
-- 下一步：[05-Exceptions Context Managers and Typing (异常上下文与类型)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/05-Exceptions%20Context%20Managers%20and%20Typing%20(异常上下文与类型).md)
+> [!info]- 延伸阅读
+> - 下一步：[05-Exceptions Context Managers and Typing (异常上下文与类型)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/05-Exceptions%20Context%20Managers%20and%20Typing%20(异常上下文与类型).md)

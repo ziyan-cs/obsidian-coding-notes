@@ -1,15 +1,15 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-11
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。类只要管理资源，就必须先写清所有权，再决定是否允许拷贝、如何移动以及析构时做什么。现代 C++ 优先使用 RAII 成员类型以遵循 Rule of Zero；只有直接管理资源时才需要 Rule of Five。
+> [!summary]- 复述检查：学完后再展开
+>
+> C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。类只要管理资源，就必须先写清所有权，再决定是否允许拷贝、如何移动以及析构时做什么。现代 C++ 优先使用 RAII 成员类型以遵循 Rule of Zero；只有直接管理资源时才需要 Rule of Five。
 
 # 生命周期模型
 
@@ -20,7 +20,7 @@ construction failure -> completed members are destroyed
 moved-from object -> valid for destruction and assignment
 ```
 
-# Rule of Zero 与 Rule of Five
+## Rule of Zero 与 Rule of Five
 
 | 设计 | 适用情况 | 要点 |
 | --- | --- | --- |
@@ -28,27 +28,21 @@ moved-from object -> valid for destruction and assignment
 | Rule of Five | 类直接拥有裸资源、句柄或自定义分配 | 同时审视析构、拷贝构造/赋值、移动构造/赋值 |
 | 禁止拷贝、允许移动 | 独占 socket、文件、锁等资源 | 删除 copy，保证 move 后源对象仍有效 |
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 只写析构函数，却忘记自定义拷贝，导致浅拷贝与 double free。
+> - 认为 moved-from 对象不可再用；正确要求是它处于有效但未指定状态。
+> - 为所有类手写五个函数；这通常比 Rule of Zero 更容易制造 bug。
 
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只写析构函数，却忘记自定义拷贝，导致浅拷贝与 double free。
-- 认为 moved-from 对象不可再用；正确要求是它处于有效但未指定状态。
-- 为所有类手写五个函数；这通常比 Rule of Zero 更容易制造 bug。
-
-# 自测
-
-1. 一个独占 `FILE*` 的 wrapper 应该支持拷贝吗？移动后源对象必须满足什么条件？
-2. 为什么 `std::vector<T>` 会关心 `T` 的 move constructor 是否 `noexcept`？
-3. 哪些成员类型已经让你无需自己写析构函数？
+> [!question]- 自测：先回答再展开
+> 1. 一个独占 `FILE*` 的 wrapper 应该支持拷贝吗？移动后源对象必须满足什么条件？
+> 2. 为什么 `std::vector<T>` 会关心 `T` 的 move constructor 是否 `noexcept`？
+> 3. 哪些成员类型已经让你无需自己写析构函数？
 
 # Object Oriented Programming (面向对象编程)
 
 > [!note] 本节重点：封装、继承、多态三大面向对象特性在 C++ 中的实现
 
-# 封装（Encapsulation）
+## 封装（Encapsulation）
 
 ```cpp
 class BankAccount {
@@ -84,7 +78,7 @@ public:
 
 ---
 
-# 继承（Inheritance）
+## 继承（Inheritance）
 
 ```cpp
 class Animal {
@@ -118,7 +112,7 @@ public:
 
 ---
 
-# 多态（Polymorphism）
+## 多态（Polymorphism）
 
 ```cpp
 // 运行时多态（虚函数）
@@ -139,10 +133,6 @@ struct Circle : Shape<Circle> {
     double areaImpl() const { return 3.14159 * r * r; }
 };
 ```
-
----
-
-多态与对象模型详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -221,10 +211,6 @@ public:
 
 ---
 
-拷贝控制与五法则详见 → Copy Control & Rule of 5 (拷贝控制与五法则)
-
----
-
 # Copy Control and Rule of Five (拷贝控制与五法则)
 
 > [!note] 本节重点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
@@ -298,10 +284,6 @@ public:
 
 ---
 
-构造析构顺序详见 → Constructor & Destructor Order (构造析构顺序)
-
----
-
 # Operator Overloading (运算符重载)
 
 > [!note] 本节重点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
@@ -343,24 +325,20 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 ---
 
-拷贝控制与运算符重载常配合使用，详见 → Copy Control & Rule of 5 (拷贝控制与五法则)
 
-# 学习闭环
+> [!check]- 学完后检查
+> ### 复述
+>
+> - 不看正文，说明 03-Object Lifetime and Copy Control (对象生命周期与拷贝控制) 的问题、核心机制与边界。
+>
+> ### 验证
+>
+> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+>
+> ### 自测
+>
+> 1. 这个主题解决什么问题？
+> 2. 它在什么条件下会失效、变慢或需要替代方案？
 
-## 复述
-
-- 不看正文，说明 03-Object Lifetime and Copy Control (对象生命周期与拷贝控制) 的问题、核心机制与边界。
-
-## 验证
-
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-## 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-# 关联学习
-
-- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
-- 下一步：[04-Polymorphism and Inheritance (多态与继承)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)
+> [!info]- 延伸阅读
+> - 下一步：[04-Polymorphism and Inheritance (多态与继承)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)

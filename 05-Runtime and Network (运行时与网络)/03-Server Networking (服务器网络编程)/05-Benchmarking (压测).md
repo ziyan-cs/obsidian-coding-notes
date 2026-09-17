@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：压测必须固定机器、连接数、请求模型、持续时间和数据集，同时观察吞吐、p50/p99、错误率、CPU、内存与队列。结果只能解释测试条件内的系统行为，不能脱离环境比较。
 
 # Server Benchmarking (服务器压测)
 
 > [!note] 本节重点：wrk/ab 压测工具使用、QPS/TPS/延迟指标分析、性能瓶颈定位方法
 
-# 压测指标
+## 压测指标
 
 **QPS（Queries Per Second）：** 每秒请求数，衡量吞吐量
 **延迟（Latency）：** 请求从发起到响应的耗时
@@ -24,7 +24,7 @@ verified: 2026-09-06
   - Max：最大延迟
 **并发连接数：** 同时维持的连接数量
 
-# wrk 使用
+## wrk 使用
 
 wrk 是轻量级 HTTP 压测工具，利用多线程 + epoll 生成高并发负载。
 
@@ -46,11 +46,11 @@ wrk -t2 -c50 -d10s --latency http://localhost:8080
 wrk -t2 -c50 -d10s -s pipeline.lua http://localhost:8080
 ```
 
-# 吞吐量与延迟的关系
+## 吞吐量与延迟的关系
 
 <img src="assets/file-20260620143339758.png" alt="吞吐量与延迟的性能拐点模型" width="800">
 
-# 性能瓶颈定位流程
+## 性能瓶颈定位流程
 
 ```
 1. wrk 压测得到 QPS 和延迟
@@ -79,7 +79,7 @@ ab -n 100000 -c 100 http://localhost:8080/
 
 ```
 
-# 常见问题与分析方法
+## 常见问题与分析方法
 
 | 现象 | 可能原因 | 验证方法 | 解决方向 |
 |------|---------|---------|---------|
@@ -89,7 +89,7 @@ ab -n 100000 -c 100 http://localhost:8080/
 | QPS 波动大 | 定时任务/批处理 | strace 跟踪 | 均匀化调度/限制批处理量 |
 | 上下文切换超高 | 线程太多 | `vmstat 1` 看 cs | 协程/线程池 |
 
-# 压测注意事项
+## 压测注意事项
 
 1. **压测客户端不能成为瓶颈**：wrk 客户端本身需要足够资源
 2. **预热阶段**：前几秒数据不计（JIT 预热、缓存填充）
@@ -102,34 +102,5 @@ ab -n 100000 -c 100 http://localhost:8080/
 
 ---
 
-性能优化相关见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Buffer Design：Read & Write Buffer (缓冲区设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>)
-
-# 零基础阅读路径
-
-先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
-
-# 常见误区
-
-- 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
-- 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Benchmarking (压测)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
-- 下一步：[06-Graceful Shutdown and Architecture (优雅关闭与架构)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/06-Graceful%20Shutdown%20and%20Architecture%20(优雅关闭与架构).md)
+> [!info]- 延伸阅读
+> - 下一步：[06-Graceful Shutdown and Architecture (优雅关闭与架构)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/06-Graceful%20Shutdown%20and%20Architecture%20(优雅关闭与架构).md)

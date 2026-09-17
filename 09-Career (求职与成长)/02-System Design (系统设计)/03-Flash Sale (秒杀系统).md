@@ -1,15 +1,14 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - distributed/system
 ---
 
 > [!abstract] 核心考点： 流量层层削峰 + Redis 原子扣减库存 + 异步订单处理，核心是"保护数据库不被打穿"
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+> **回答**：秒杀系统先在接入层限流和校验，再用原子库存预扣与异步订单削峰。核心不只是 Redis，而是防超卖、幂等下单、失败补偿和数据库最终落账。
 
 # 需求分析
 
@@ -282,32 +281,5 @@ Token 用完即废，防止囤积
 
 秒杀系统缓存与消息队列详解见 → [Cache Penetration / Breakdown / Avalanche](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md) · [Kafka Message Delivery Guarantees](07-Distributed%20&%20Middleware%20(分布式与中间件)/03-Message%20Queues%20(消息队列)/03b-Kafka%20Architecture%20Overview%20(Kafka架构概览)/03b2-Message%20Delivery%20Guarantees%20(消息可靠性).md)
 
-# 零基础阅读路径
-
-先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
-
-# 常见误区
-
-- 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
-- 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Flash Sale (秒杀系统)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
-- 下一步：[04-Config Center (配置中心)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20(配置中心).md)
+> [!info]- 延伸阅读
+> - 下一步：[04-Config Center (配置中心)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20(配置中心).md)

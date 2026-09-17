@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-# 30 秒回答
-
-**核心结论**：树题先明确访问顺序与递归状态；DFS 用调用栈或显式栈维护路径，BFS 用队列维护层次，正确性依赖于进入、离开节点时状态的对称恢复。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：树题先明确访问顺序与递归状态；DFS 用调用栈或显式栈维护路径，BFS 用队列维护层次，正确性依赖于进入、离开节点时状态的对称恢复。
 
 # Tree Depth First Traversal (树的深度优先遍历)
 
@@ -123,15 +123,14 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 
 ---
 
-# 关联笔记
-
-- BFS： Level Order Traversal (层序遍历)
-- LCA & Path Problems (公共祖先与路径)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-
----
+> [!info]- 延伸阅读
+> - BFS： Level Order Traversal (层序遍历)
+> - LCA & Path Problems (公共祖先与路径)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+>
+> ---
 
 # Tree Breadth First Traversal (树的层序遍历)
 
@@ -187,14 +186,14 @@ vector<int> rightSideView(TreeNode* root) {
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
-- LCA & Path Problems (公共祖先与路径)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-
----
+> [!info]- 延伸阅读
+> - DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
+> - LCA & Path Problems (公共祖先与路径)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+>
+> ---
 
 # LCA and Tree Paths (最近公共祖先与路径)
 
@@ -248,38 +247,15 @@ int pathSum(TreeNode* root, int target) {
 
 ---
 
-# 关联笔记 · 延伸要点 3
-- DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
-- BFS： Level Order Traversal (层序遍历)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
+> [!info]- 延伸阅读
+> - DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
+> - BFS： Level Order Traversal (层序遍历)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
-
-# 常见误区
-
-- 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Tree Traversal and Paths (树遍历与路径)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
-- 下一步：[05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md)
+> [!info]- 延伸阅读
+> - 下一步：[05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md)

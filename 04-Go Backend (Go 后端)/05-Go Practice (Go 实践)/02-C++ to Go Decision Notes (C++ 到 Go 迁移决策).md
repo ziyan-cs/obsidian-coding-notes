@@ -1,7 +1,7 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 tags: [language/go, language/cpp, comparison]
 ---
 
@@ -27,50 +27,14 @@ tags: [language/go, language/cpp, comparison]
 > [!warning] 翻译语法不是迁移设计
 > 把 C++ 的类层次、手写线程管理或“零成本抽象”原样搬进 Go，通常会失去 Go 的可读性。迁移前先写清服务边界、错误策略、取消传播和性能预算。
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> C++ 与 Go 的共同点是都要求理解资源、并发和成本；差别是控制方式。C++ 适合细粒度资源与性能控制，Go 适合以标准工具链和小 interface 交付服务。迁移时不逐行翻译，而是重新选择包边界、错误返回、`context` 取消和测量方法。
 
-C++ 与 Go 的共同点是都要求理解资源、并发和成本；差别是控制方式。C++ 适合细粒度资源与性能控制，Go 适合以标准工具链和小 interface 交付服务。迁移时不逐行翻译，而是重新选择包边界、错误返回、`context` 取消和测量方法。
+> [!question]- 自测：先回答再展开
+> 1. 为什么 `defer` 不能替代 C++ 析构函数的全部语义？
+> 2. 一个接口只有一个调用者时，什么时候不该急着抽 Go interface？
+> 3. 你会拿什么 profile 或压测证据支持一次语言/架构调整？
 
-# 自测
-
-1. 为什么 `defer` 不能替代 C++ 析构函数的全部语义？
-2. 一个接口只有一个调用者时，什么时候不该急着抽 Go interface？
-3. 你会拿什么 profile 或压测证据支持一次语言/架构调整？
-
-# 从零建立模型
-
-本页主题是 **02-C++ to Go Decision Notes (C++ 到 Go 迁移决策)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
-
-# 最小实践
-
-写一个十到三十行的最小程序或测试：覆盖正常输入、边界输入和取消/错误路径之一。运行 `go test`；涉及并发时再运行 `go test -race`，把工具输出作为结论证据。
-
-# 工程检查点
-
-channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-# 常见误区
-
-- 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
-- 不以测试、race detector、profile 或一次可复现请求来验证服务行为。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-C++ to Go Decision Notes (C++ 到 Go 迁移决策)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Go Practice Map (Go 实践导航)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/00-Go%20Practice%20Map%20(Go%20实践导航).md)
-- 下一步：[03-First Service Delivery (首个服务交付)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/03-First%20Service%20Delivery%20(首个服务交付).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-First Service Delivery (首个服务交付)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/03-First%20Service%20Delivery%20(首个服务交付).md)

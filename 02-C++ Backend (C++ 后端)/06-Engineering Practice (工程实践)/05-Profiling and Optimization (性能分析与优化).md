@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-**核心结论**：优化的起点是可复现测量：用 profiler 找到热点，提出单一假设并验证收益与回归；没有测量证据的“优化”通常只是复杂度转移。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：优化的起点是可复现测量：用 profiler 找到热点，提出单一假设并验证收益与回归；没有测量证据的“优化”通常只是复杂度转移。
 
 # Performance Profiling perf & valgrind (性能分析)
 
 > [!note] 本节重点：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
 
-# 性能分析的原则
+## 性能分析的原则
 
 ```text
 1. 先测量，再优化（不要猜测瓶颈）
@@ -62,7 +62,7 @@ Overhead  Command  Shared Object     Symbol
 
 → **瓶颈明确**：`process_request` 占 45%，优先优化它。
 
-# perf 热点分析实战
+## perf 热点分析实战
 
 ```bash
 perf record -F 99 -ag -- ./main   # 99Hz 采样
@@ -78,7 +78,7 @@ perf script | ./FlameGraph/stackcollapse-perf.pl > out.folded
 - 关注 **宽顶** → 函数本身消耗大
 - 关注 **宽塔** → 调用链消耗大
 
-# 常见性能瓶颈与优化
+## 常见性能瓶颈与优化
 
 ```cpp
 // 1. 不必要的拷贝
@@ -136,7 +136,7 @@ pprof --text ./main main.prof
 HEAPPROFILE=main.heap ./main
 ```
 
-# 性能优化清单
+## 性能优化清单
 
 | 检查项 | 工具 |
 |--------|------|
@@ -150,35 +150,3 @@ HEAPPROFILE=main.heap ./main
 > [!tip]- **工程要点**：永远不要凭直觉优化。**先用 perf 测量**，找到真正的热点。常见的"优化"（如手写循环展开、改用移位代替乘法）现代编译器已经做了。真正的瓶颈通常是：不必要的拷贝、缓存不友好、过多的动态分配。
 
 ---
-
-调试工具与分析搭配使用，详见 → Debugging gdb & Sanitizers (调试工具)
-
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Profiling and Optimization (性能分析与优化)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
-- 下一步：[04-Testing and Observability (测试与可观测性)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/04-Testing%20and%20Observability%20(测试与可观测性).md)

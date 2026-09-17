@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：图的邻接表/邻接矩阵表示、DFS 递归与 BFS 队列模板、visited 标记防环
 
-# 图的表示
+## 图的表示
 
 ```cpp
 // 邻接表（稀疏图，最常用）
@@ -25,7 +25,7 @@ vector<vector<int>> matrix(n, vector<int>(n, 0));
 matrix[u][v] = weight;
 ```
 
-# 图 DFS 模板
+## 图 DFS 模板
 
 ```cpp
 // 图用邻接表
@@ -48,7 +48,7 @@ int numIslands(vector<vector<char>>& grid) {
 }
 ```
 
-# 拓扑排序（有向无环图 DAG）
+## 拓扑排序（有向无环图 DAG）
 
 **Kahn 算法（BFS）：**
 
@@ -87,21 +87,20 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 
 ---
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> **DFS 和 BFS 怎么选？** 只要遍历连通性，两者都是 `O(V+E)`；DFS 的递归结构适合回溯、连通块和后序处理，深图要防递归栈溢出；无权图求最少边数时用 BFS，并在节点首次入队时标记已访问，避免重复入队。
+>
+> **自测：** Kahn 拓扑排序最终输出不足 `n` 个节点说明什么？为什么图搜索必须维护 `visited`？
 
-**DFS 和 BFS 怎么选？** 只要遍历连通性，两者都是 `O(V+E)`；DFS 的递归结构适合回溯、连通块和后序处理，深图要防递归栈溢出；无权图求最少边数时用 BFS，并在节点首次入队时标记已访问，避免重复入队。
-
-**自测：** Kahn 拓扑排序最终输出不足 `n` 个节点说明什么？为什么图搜索必须维护 `visited`？
-
-# 关联笔记
-
-- Union-Find (并查集)
-- Shortest Path：Dijkstra & Bellman-Ford (最短路)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-
----
+> [!info]- 延伸阅读
+> - Union-Find (并查集)
+> - Shortest Path：Dijkstra & Bellman-Ford (最短路)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+>
+> ---
 
 # Union Find (并查集)
 
@@ -156,14 +155,14 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges) {
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- DFS & BFS on Graph (图的搜索)
-- Shortest Path：Dijkstra & Bellman-Ford (最短路)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-
----
+> [!info]- 延伸阅读
+> - DFS & BFS on Graph (图的搜索)
+> - Shortest Path：Dijkstra & Bellman-Ford (最短路)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+>
+> ---
 
 # Shortest Path (最短路径)
 
@@ -234,7 +233,7 @@ void floydWarshall(vector<vector<int>>& dist) {
 // 时间复杂度：O(V³)，适合节点数较少的稠密图
 ```
 
-# 最短路算法对比
+## 最短路算法对比
 
 |算法|时间复杂度|负权边|负权环检测|适用场景|
 |---|---|---|---|---|
@@ -244,38 +243,15 @@ void floydWarshall(vector<vector<int>>& dist) {
 
 ---
 
-# 关联笔记 · 延伸要点 3
-- DFS & BFS on Graph (图的搜索)
-- Union-Find (并查集)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
+> [!info]- 延伸阅读
+> - DFS & BFS on Graph (图的搜索)
+> - Union-Find (并查集)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 把 **06-Graphs Union Find and Shortest Paths (图并查集与最短路)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
-
-# 常见误区
-
-- 把 **06-Graphs Union Find and Shortest Paths (图并查集与最短路)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-Graphs Union Find and Shortest Paths (图并查集与最短路)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
-- 下一步：[07-Binary Search (二分查找)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/07-Binary%20Search%20(二分查找).md)
+> [!info]- 延伸阅读
+> - 下一步：[07-Binary Search (二分查找)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/07-Binary%20Search%20(二分查找).md)

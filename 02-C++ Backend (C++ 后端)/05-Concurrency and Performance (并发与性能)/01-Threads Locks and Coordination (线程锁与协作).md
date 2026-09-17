@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-线程用于并行或并发执行任务，但线程本身不解决共享数据正确性。先划分数据所有权；只有确实共享的状态才使用 mutex、condition variable 或 semaphore 协调。正确性优先于并发度：每个共享变量都要能说明谁写、谁读、由什么同步原语建立 happens-before。
+> [!summary]- 复述检查：学完后再展开
+>
+> 线程用于并行或并发执行任务，但线程本身不解决共享数据正确性。先划分数据所有权；只有确实共享的状态才使用 mutex、condition variable 或 semaphore 协调。正确性优先于并发度：每个共享变量都要能说明谁写、谁读、由什么同步原语建立 happens-before。
 
 # 选择模型
 
@@ -19,35 +19,29 @@ verified: 2026-09-06
 | 控制有限资源数量 | semaphore | 明确 acquire/release 的所有权 |
 | 大量独立任务 | thread pool + queue | 需要停止、背压、异常与任务生命周期 |
 
-# 关键不变量
+## 关键不变量
 
 1. 锁保护的是**数据不变量**，不是“某一行代码”。
 2. 等待条件必须与锁关联；被唤醒后仍要重新检查条件。
 3. 多把锁必须有固定顺序，或使用统一的加锁策略，避免死锁。
 4. 线程退出、任务取消与队列关闭都要有明确协议，不能依赖进程结束回收。
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 用 `volatile` 修复数据竞争；它不提供线程同步。
+> - `if (condition) wait()`；虚假唤醒和竞争会让一次判断失效。
+> - 创建无限线程或无限队列；资源耗尽只会被延后，而不会消失。
+> - 把锁范围扩大到整个函数；这常让吞吐下降并放大死锁面。
 
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 用 `volatile` 修复数据竞争；它不提供线程同步。
-- `if (condition) wait()`；虚假唤醒和竞争会让一次判断失效。
-- 创建无限线程或无限队列；资源耗尽只会被延后，而不会消失。
-- 把锁范围扩大到整个函数；这常让吞吐下降并放大死锁面。
-
-# 自测
-
-1. 为什么 condition variable 的等待必须写成带谓词的循环？
-2. 一个线程池怎样通知 worker “不再接受新任务但处理完存量任务后退出”？
-3. 如何从共享数据与锁顺序，而非“感觉”，证明一段代码不会死锁？
+> [!question]- 自测：先回答再展开
+> 1. 为什么 condition variable 的等待必须写成带谓词的循环？
+> 2. 一个线程池怎样通知 worker “不再接受新任务但处理完存量任务后退出”？
+> 3. 如何从共享数据与锁顺序，而非“感觉”，证明一段代码不会死锁？
 
 # Thread Basics POSIX & std thread (线程基础)
 
 > [!note] 本节重点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 
-# std::thread 基础
+## std::thread 基础
 
 ```cpp
 #include <thread>
@@ -70,7 +64,7 @@ public:
 };
 ```
 
-# 线程生命周期管理
+## 线程生命周期管理
 
 ```cpp
 std::thread t(worker, 42);
@@ -88,7 +82,7 @@ t.detach(); // 分离，线程在后台运行，t 不再关联线程
 - `joinable()` 检查线程是否可被 join
 - `detach` 后的线程无法再获取其状态
 
-# 参数传递陷阱
+## 参数传递陷阱
 
 ```cpp
 // ❌ 危险：传递引用时忘记用 std::ref
@@ -103,7 +97,7 @@ Data d;
 std::thread t(process, std::cref(d));  // ✅ 确保 d 在线程执行期间存活
 ```
 
-# 线程与 POSIX pthread 的关系
+## 线程与 POSIX pthread 的关系
 
 ```cpp
 // std::thread 底层封装了 pthread（Linux/macOS）或 Windows Threads
@@ -133,7 +127,7 @@ std::jthread jt([](std::stop_token st) {
 jt.request_stop();
 ```
 
-# 线程 ID 与异常安全
+## 线程 ID 与异常安全
 
 ```cpp
 // 获取当前线程 ID
@@ -158,15 +152,11 @@ try {
 
 ---
 
-互斥锁与锁管理详见 → Mutex & Lock (互斥锁与锁管理)
-
----
-
 # Mutex & Lock (互斥锁与锁管理)
 
 > [!note] 本节重点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
 
-# std::mutex 与 RAII 锁
+## std::mutex 与 RAII 锁
 
 ```cpp
 #include <mutex>
@@ -188,7 +178,7 @@ shared_data++;
 ulock.unlock();  // 提前解锁
 ```
 
-# 锁类型对比
+## 锁类型对比
 
 | 锁 | 用途 | 特点 |
 |----|------|------|
@@ -213,7 +203,7 @@ void writer() {
 }
 ```
 
-# 死锁与预防
+## 死锁与预防
 
 **死锁四条件**：
 1. 互斥（资源不可共享）
@@ -255,7 +245,7 @@ void safe_lock() {
 }
 ```
 
-# 锁的粒度
+## 锁的粒度
 
 ```cpp
 // ❌ 粗粒度：整个操作期间持有锁（性能差）
@@ -277,7 +267,7 @@ void process_better() {
 }
 ```
 
-# std::call_once
+## std::call_once
 
 ```cpp
 // 线程安全的单次初始化
@@ -291,41 +281,39 @@ void worker() {
 }
 ```
 
-# 常见陷阱
-
-```cpp
-// 1. 返回受保护数据的引用（锁失效！）
-std::vector<int>& unsafe_get() {
-    std::lock_guard lock(mtx);
-    return data;  // ❌ 返回引用后，调用者可能不用锁就访问
-}
-
-// 2. 锁的传递
-void bad() {
-    std::unique_lock lock(mtx);
-    // 把 lock 传递给下层函数
-    helper(lock);  // 函数内可能 unlock/lock，破坏封装
-}
-
-// 3. 忘记锁
-void unchecked() {  // ❌ 忘记加锁
-    shared_data++;
-}
-```
-
-> **面试重点**：`lock_guard` vs `unique_lock` vs `scoped_lock`（C++17）。`scoped_lock` 等价于 `lock_guard` 但支持多锁且用 `std::lock` 避免死锁。在需要锁多个 mutex 时首选 `scoped_lock`。
-
----
-
-条件变量与互斥锁配合使用，详见 → Condition Variable & Semaphore (条件变量与信号量)
-
----
+> [!warning]- 易错点
+> ```cpp
+> // 1. 返回受保护数据的引用（锁失效！）
+> std::vector<int>& unsafe_get() {
+>     std::lock_guard lock(mtx);
+>     return data;  // ❌ 返回引用后，调用者可能不用锁就访问
+> }
+>
+> // 2. 锁的传递
+> void bad() {
+>     std::unique_lock lock(mtx);
+>     // 把 lock 传递给下层函数
+>     helper(lock);  // 函数内可能 unlock/lock，破坏封装
+> }
+>
+> // 3. 忘记锁
+> void unchecked() {  // ❌ 忘记加锁
+>     shared_data++;
+> }
+> ```
+>
+> > **面试重点**：`lock_guard` vs `unique_lock` vs `scoped_lock`（C++17）。`scoped_lock` 等价于 `lock_guard` 但支持多锁且用 `std::lock` 避免死锁。在需要锁多个 mutex 时首选 `scoped_lock`。
+>
+> ---
+>
+>
+> ---
 
 # Condition Variable & Semaphore (条件变量与信号量)
 
 > [!note] 本节重点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
-# 条件变量（condition_variable）
+## 条件变量（condition_variable）
 
 ```cpp
 #include <condition_variable>
@@ -357,7 +345,7 @@ void consumer() {
 }
 ```
 
-# 虚假唤醒（Spurious Wakeup）
+## 虚假唤醒（Spurious Wakeup）
 
 ```cpp
 // wait 的第二种形式是 while 循环 + wait 的语法糖：
@@ -374,7 +362,7 @@ cv.wait(lock, [] { return ready; });
 - 操作系统层面：线程可能从 `wait` 返回但条件并未满足
 - 必须**始终在循环中检查条件**，不能假设被唤醒就是条件满足了
 
-# notify_one vs notify_all
+## notify_one vs notify_all
 
 | | `notify_one` | `notify_all` |
 |--|-------------|--------------|
@@ -382,7 +370,7 @@ cv.wait(lock, [] { return ready; });
 | 适用场景 | 单生产者-单消费者 | 多生产者-多消费者 / barrier 模式 |
 | 性能 | 更好（只唤醒一个） | 较差的惊群效应 |
 
-# 信号量（Semaphore, C++20）
+## 信号量（Semaphore, C++20）
 
 ```cpp
 #include <semaphore>
@@ -399,7 +387,7 @@ void worker(int id) {
 }
 ```
 
-# 条件变量 vs 信号量
+## 条件变量 vs 信号量
 
 | | 条件变量 | 信号量（C++20） |
 |--|---------|----------------|
@@ -417,7 +405,7 @@ void worker(int id) {
 // C++20 提供了 std::counting_semaphore
 ```
 
-# 工程陷阱
+## 工程陷阱
 
 ```cpp
 // ❌ 在持有锁时 notify
@@ -444,25 +432,6 @@ cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 
 ---
 
-互斥锁与锁管理详见 → Mutex & Lock (互斥锁与锁管理)
 
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Threads Locks and Coordination (线程锁与协作)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
-- 下一步：[02-Atomics and Memory Order (原子与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/02-Atomics%20and%20Memory%20Order%20(原子与内存序).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Atomics and Memory Order (原子与内存序)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/02-Atomics%20and%20Memory%20Order%20(原子与内存序).md)

@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：Redis 的 key 映射到带编码实现的数据结构；选型不只看命令，还要看元素规模、访问模式和内存放大。原子命令只保证单次操作，跨 key 业务不变量仍需事务、Lua 或上层协议。
 
 # SDS Strings (简单动态字符串)
 
 > [!note] 本节重点： SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
-# SDS 结构
+## SDS 结构
 
 Redis 自定义的字符串类型，替代 C 字符串（`char*`）：
 
@@ -33,7 +33,7 @@ struct sdshdr8 {
 
 ---
 
-# SDS 相比 C 字符串的优势
+## SDS 相比 C 字符串的优势
 
 | 问题 | C 字符串 | SDS |
 |------|---------|-----|
@@ -45,7 +45,7 @@ struct sdshdr8 {
 
 ---
 
-# 内存预分配策略
+## 内存预分配策略
 
 ```c
 // SDS 扩容策略（sds.c 中的 sdsMakeRoomFor）
@@ -63,7 +63,7 @@ else
 
 ---
 
-# SDS API 速查
+## SDS API 速查
 
 ```c
 sds s = sdsnew("hello");        // 创建，O(len)
@@ -80,23 +80,22 @@ sdsfree(s);                     // 释放
 
 ---
 
-# 经典题型速查
-
-| 题型 | 要点 |
-|------|------|
-| SDS 如何 O(1) 获取长度 | header 中存 len 字段 |
-| 二进制安全含义 | 可存 `\0`、图片等非文本数据 |
-| 预分配阈值 1MB | 小字符串加倍，大字符串线性增长 |
-| SDS 相比 std::string | Redis C 实现，内存紧凑；std::string SSO 且有 RAII |
-
-> [!tip]- **工程要点**
-> SDS 的预分配策略是"空间换时间"的典型——大多数 append 操作无需重新分配。`SDS_MAX_PREALLOC` 设为 1MB 避免大字符串翻倍浪费。
-
----
-
-压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
-
----
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | SDS 如何 O(1) 获取长度 | header 中存 len 字段 |
+> | 二进制安全含义 | 可存 `\0`、图片等非文本数据 |
+> | 预分配阈值 1MB | 小字符串加倍，大字符串线性增长 |
+> | SDS 相比 std::string | Redis C 实现，内存紧凑；std::string SSO 且有 RAII |
+>
+> > [!tip]- **工程要点**
+> > SDS 的预分配策略是"空间换时间"的典型——大多数 append 操作无需重新分配。`SDS_MAX_PREALLOC` 设为 1MB 避免大字符串翻倍浪费。
+>
+> ---
+>
+> 压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
+>
+> ---
 
 # ziplist and listpack (压缩列表)
 
@@ -163,7 +162,7 @@ listpack: [encoding] [content]  [backlen]
 
 ---
 
-# 使用条件
+## 使用条件
 
 ```c
 // Redis 配置
@@ -176,28 +175,28 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 
 ---
 
-# 经典题型速查 · 延伸要点 2
-| 题型 | 要点 |
-|------|------|
-| ziplist 连锁更新 | 修改一个 entry 导致后续 entry 的 prev_len 扩张，概率极低 |
-| listpack 解决了什么 | 去掉 prev_len 字段，消除连锁更新 |
-| ziplist 优点 | 内存连续，CPU 缓存友好，小数据时比 hashtable 省内存 |
-| 什么时候升级 | 元素超限或某元素超 64B → 升级为 hashtable/quicklist |
-
-> [!tip]- **工程要点**
-> ziplist/listpack 的关键价值是内存紧凑性——一个小 hash 用 ziplist 比 hashtable 省数十倍内存。`DEBUG OBJECT key` 可查看内部编码（`encoding:ziplist`）。
-
----
-
-Redis 底层数据结构详解见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a3-skiplist：Sorted Set Internals (跳表)
-
----
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | ziplist 连锁更新 | 修改一个 entry 导致后续 entry 的 prev_len 扩张，概率极低 |
+> | listpack 解决了什么 | 去掉 prev_len 字段，消除连锁更新 |
+> | ziplist 优点 | 内存连续，CPU 缓存友好，小数据时比 hashtable 省内存 |
+> | 什么时候升级 | 元素超限或某元素超 64B → 升级为 hashtable/quicklist |
+>
+> > [!tip]- **工程要点**
+> > ziplist/listpack 的关键价值是内存紧凑性——一个小 hash 用 ziplist 比 hashtable 省数十倍内存。`DEBUG OBJECT key` 可查看内部编码（`encoding:ziplist`）。
+>
+> ---
+>
+> Redis 底层数据结构详解见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a3-skiplist：Sorted Set Internals (跳表)
+>
+> ---
 
 # skiplist (跳表)
 
 > [!note] 本节重点： 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 
-# 跳表（Skiplist）
+## 跳表（Skiplist）
 
 Redis Sorted Set 的有序结构核心，基于多级索引的链表：
 
@@ -214,7 +213,7 @@ Level 2: HEAD ────→ 12 ─→ 17 ──────→ 25 ────
 Level 1: HEAD ────→ 12 ─→ 17 → 19 ─→ 25 ─→ 31 ───────→ 55 ─────→ 67 ───→ ∞
 ```
 
-## 节点结构
+### 节点结构
 
 ```c
 #define ZSKIPLIST_MAXLEVEL 32  // 最大层数（2^32 个元素足够）
@@ -237,7 +236,7 @@ typedef struct zskiplist {
 } zskiplist;
 ```
 
-## 层高生成算法
+### 层高生成算法
 
 ```c
 // 每次创建节点时随机生成层高
@@ -254,7 +253,7 @@ int zslRandomLevel(void) {
 
 ---
 
-# 操作复杂度
+## 操作复杂度
 
 | 操作 | 跳表 | 平衡树 | B+ 树 |
 |------|------|--------|-------|
@@ -272,7 +271,7 @@ int zslRandomLevel(void) {
 
 ---
 
-# ZSet 使用的两种结构
+## ZSet 使用的两种结构
 
 ```c
 // ZSet 底层 = ziplist (小数据) + dict + skiplist (大数据)
@@ -289,29 +288,29 @@ typedef struct zset {
 
 ---
 
-# 经典题型速查 · 延伸要点 3
-| 题型 | 要点 |
-|------|------|
-| 跳表查找流程 | 从最高层向右&向下，类似"二分查找的链表版" |
-| 层高概率 P=1/4 | 经验值的分时，指针数约 1.33n，查询性能好 |
-| 跳表 vs B+ 树 | B+ 树磁盘 I/O 少（页式存储），跳表内存友好 |
-| ZRANGE 实现 | 沿第一层 forward 指针遍历（已排序的双向链表） |
-| dict 的作用 | 需要 O(1) 查某个元素的 score（ZSCORE） |
-
-> [!tip]- **工程要点**
-> 跳表是典型的"以空间换时间"结构，每层索引是概率性平衡而非确定性平衡。Redis 中跳表主要用于 ZSet，此外还在集群中用做内部数据结构。
-
----
-
-动态字符串实现见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a4-dict：Hash Table Rehashing (字典与渐进式rehash)
-
----
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | 跳表查找流程 | 从最高层向右&向下，类似"二分查找的链表版" |
+> | 层高概率 P=1/4 | 经验值的分时，指针数约 1.33n，查询性能好 |
+> | 跳表 vs B+ 树 | B+ 树磁盘 I/O 少（页式存储），跳表内存友好 |
+> | ZRANGE 实现 | 沿第一层 forward 指针遍历（已排序的双向链表） |
+> | dict 的作用 | 需要 O(1) 查某个元素的 score（ZSCORE） |
+>
+> > [!tip]- **工程要点**
+> > 跳表是典型的"以空间换时间"结构，每层索引是概率性平衡而非确定性平衡。Redis 中跳表主要用于 ZSet，此外还在集群中用做内部数据结构。
+>
+> ---
+>
+> 动态字符串实现见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a4-dict：Hash Table Rehashing (字典与渐进式rehash)
+>
+> ---
 
 # dict Hash Table (字典与渐进式 rehash)
 
 > [!note] 本节重点： dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
-# Redis dict 结构
+## Redis dict 结构
 
 ```c
 // Redis 字典核心结构
@@ -343,9 +342,9 @@ typedef struct dictEntry {
 
 ---
 
-# Rehash 机制
+## Rehash 机制
 
-## 触发条件
+### 触发条件
 
 ```c
 // 扩容条件（负载因子）
@@ -357,7 +356,7 @@ typedef struct dictEntry {
 // 扩容后新 size = 第一个 >= ht[0].used * 2 的 2^n
 ```
 
-## 渐进式 Rehash
+### 渐进式 Rehash
 
 ```c
 // 核心思想：分批迁移，避免一次 rehash 阻塞服务
@@ -401,7 +400,7 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-# 对比 Java HashMap
+## 对比 Java HashMap
 
 | 特性 | Redis dict | Java HashMap |
 |------|-----------|-------------|
@@ -413,49 +412,22 @@ void dictRehash(dict *d, int n) {
 
 ---
 
-# 经典题型速查 · 延伸要点 4
-| 题型 | 要点 |
-|------|------|
-| 渐进式 rehash 如何不阻塞 | 每次操作只迁移 1 个 bucket，穿插在正常请求中 |
-| rehash 期间查询流程 | 先查 ht[0]，没找到再查 ht[1] |
-| 新数据写入 | rehash 期间新增到 ht[1] |
-| 扩容后容量 | `>= used * 2` 的最小 2^n |
-| 缩容条件 | 负载因子 < 0.1 |
-| 为什么用链地址 | 不支持 O(1) 内存分配（节点独立分配），比开放地址更灵活 |
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | 渐进式 rehash 如何不阻塞 | 每次操作只迁移 1 个 bucket，穿插在正常请求中 |
+> | rehash 期间查询流程 | 先查 ht[0]，没找到再查 ht[1] |
+> | 新数据写入 | rehash 期间新增到 ht[1] |
+> | 扩容后容量 | `>= used * 2` 的最小 2^n |
+> | 缩容条件 | 负载因子 < 0.1 |
+> | 为什么用链地址 | 不支持 O(1) 内存分配（节点独立分配），比开放地址更灵活 |
+>
+> > [!tip]- **工程要点**
+> > dict 是 Redis 全局键空间的基础——`redisDb->dict` 存所有 key-value。渐进式 rehash 的设计思想（分批迁移、读写查两张表、新增只进新表）被许多需要在线扩容的系统借鉴。
+>
+> ---
+>
+> 压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
 
-> [!tip]- **工程要点**
-> dict 是 Redis 全局键空间的基础——`redisDb->dict` 存所有 key-value。渐进式 rehash 的设计思想（分批迁移、读写查两张表、新增只进新表）被许多需要在线扩容的系统借鉴。
-
----
-
-压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
-
-# 零基础阅读路径
-
-先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
-
-# 常见误区
-
-- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
-- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Redis Data Structures (Redis 数据结构)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
-- 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/02-Redis%20Persistence%20and%20Eviction%20(Redis%20持久化与淘汰).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/02-Redis%20Persistence%20and%20Eviction%20(Redis%20持久化与淘汰).md)

@@ -1,13 +1,15 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 tags: [vault/navigation, backend-learning]
 ---
 
-> **用途**：Vault Map (知识库地图) 的学习入口。先按顺序建立主线，再按需要回看专题。
+> [!abstract] 使用方式
+> 本页只负责全库入口。每个学习模块的 `00` 文件用于开学前确认目标、学完后逐项验收；具体学习顺序由目录编号表达，不再维护重复导航页。
 
-# 学习入口
+# 学习系统
+
 - [01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
 - [02-Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)
 - [03-Note Standard (笔记规范)](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md)
@@ -18,8 +20,21 @@ tags: [vault/navigation, backend-learning]
 - [08-Vault Design System (知识库设计系统)](/00-Hub%20(学习入口)/08-Vault%20Design%20System%20(知识库设计系统).md)
 - [09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)
 
-# 使用方式
+# 模块能力标准
 
-1. 从上到下阅读，完成每篇的最小练习和自测。
-2. 遇到卡点时回到本页，不跨越基础直接记结论。
-3. 到期复习以 review_due 和学习周期页为准。
+- [01 · 基础能力标准与自测](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)
+- [02 · C++ 后端标准与自测](/02-C%2B%2B%20Backend%20(C%2B%2B%20后端)/00-C%2B%2B%20Backend%20Standard%20(C%2B%2B%20后端标准与自测).md)
+- [03 · Python 工程标准与自测](/03-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md)
+- [04 · Go 后端标准与自测](/04-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md)
+- [05 · 运行时与网络标准与自测](/05-Runtime%20and%20Network%20(运行时与网络)/00-Runtime%20and%20Network%20Standard%20(运行时与网络标准与自测).md)
+- [06 · 数据与分布式标准与自测](/06-Data%20and%20Distributed%20(数据与分布式)/00-Data%20and%20Distributed%20Standard%20(数据与分布式标准与自测).md)
+- [07 · 工程工具标准与自测](/07-Engineering%20Tools%20(工程工具)/00-Engineering%20Tools%20Standard%20(工程工具标准与自测).md)
+- [08 · 项目标准与自测](/08-Projects%20(项目实践)/00-Project%20Standard%20(项目标准与自测).md)
+- [09 · 求职能力标准与自测](/09-Career%20(求职与成长)/00-Career%20Standard%20(求职能力标准与自测).md)
+
+# 每次学习的闭环
+
+1. 开始模块前浏览能力标准，明确本轮要获得的可观察能力。
+2. 按目录与文件编号学习，运行示例并记录无法解释的现象。
+3. 学完后不看正文完成勾选和综合自测；答不出时回到具体笔记补证据。
+4. 仅为真正需要再次回忆的笔记设置 `review_due`，按实际表现调整日期。

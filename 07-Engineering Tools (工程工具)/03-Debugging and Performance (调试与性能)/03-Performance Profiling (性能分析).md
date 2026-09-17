@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：性能分析先定义指标和负载，再用 CPU、内存、锁和 I/O profile 找热点。每次只验证一个假设，并比较修改前后的相同条件；采样器看到相关性，不自动证明因果。
 
 # perf and Flamegraphs (perf 与火焰图)
 
@@ -95,40 +95,9 @@ perf script | ./FlameGraph/stackcollapse-perf.pl | \
 
 ---
 
-# 关联笔记
-
-- GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
-- Core Dump Analysis (核心转储分析)
-- Valgrind：Memory Leak Detection (内存泄漏检测)
-- AddressSanitizer & UBSan (编译期检测工具)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Performance Profiling (性能分析)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Debugging and Performance Map (调试与性能导航)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/00-Debugging%20and%20Performance%20Map%20(调试与性能导航).md)
-- 下一步：[02-Memory Safety Tools (内存安全工具)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/02-Memory%20Safety%20Tools%20(内存安全工具).md)
+> [!info]- 延伸阅读
+> - GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
+> - Core Dump Analysis (核心转储分析)
+> - Valgrind：Memory Leak Detection (内存泄漏检测)
+> - AddressSanitizer & UBSan (编译期检测工具)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)

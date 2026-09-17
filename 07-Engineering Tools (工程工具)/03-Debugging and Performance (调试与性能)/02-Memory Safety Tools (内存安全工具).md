@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：Memcheck 的错误类型、如何读报告、抑制误报
 
-# Valgrind 是什么
+## Valgrind 是什么
 
 Valgrind 是一个动态分析框架，其最常用工具 **Memcheck** 能在程序运行时检测：
 
@@ -24,7 +24,7 @@ Valgrind 是一个动态分析框架，其最常用工具 **Memcheck** 能在程
 
 ---
 
-# 基本用法
+## 基本用法
 
 ```bash
 g++ -g -O0 -o myapp main.cpp
@@ -46,9 +46,9 @@ valgrind --leak-check=full \
 
 ---
 
-# 报告解读
+## 报告解读
 
-## 内存泄漏
+### 内存泄漏
 
 ```
 ==1234== LEAK SUMMARY:
@@ -63,7 +63,7 @@ valgrind --leak-check=full \
 ==1234==    by 0x108812: main (main.cpp:15)            ← main 调用了 createNode
 ```
 
-## 使用未初始化内存
+### 使用未初始化内存
 
 ```
 ==1234== Conditional jump or move depends on uninitialised value(s)
@@ -72,7 +72,7 @@ valgrind --leak-check=full \
 ==1234==    at 0x108700: main (main.cpp:10)
 ```
 
-## Use-After-Free
+### Use-After-Free
 
 ```
 ==1234== Invalid read of size 4
@@ -84,7 +84,7 @@ valgrind --leak-check=full \
 
 ---
 
-# 抑制误报（Suppression）
+## 抑制误报（Suppression）
 
 某些第三方库或系统库会触发 Valgrind 警告，可通过抑制文件忽略：
 
@@ -97,7 +97,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ---
 
-# Valgrind 其他工具
+## Valgrind 其他工具
 
 |工具|用途|启动方式|
 |---|---|---|
@@ -109,15 +109,14 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 ---
 
-# 关联笔记
-
-- GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
-- Core Dump Analysis (核心转储分析)
-- AddressSanitizer & UBSan (编译期检测工具)
-- perf：CPU Profiling & Flamegraph (性能火焰图)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-
----
+> [!info]- 延伸阅读
+> - GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
+> - Core Dump Analysis (核心转储分析)
+> - AddressSanitizer & UBSan (编译期检测工具)
+> - perf：CPU Profiling & Flamegraph (性能火焰图)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+>
+> ---
 
 # AddressSanitizer and UBSan (Sanitizer 工具)
 
@@ -193,7 +192,7 @@ main.cpp:15:5: runtime error: signed integer overflow: 2147483647 + 1
 
 ---
 
-# 组合使用（推荐）
+## 组合使用（推荐）
 
 ```bash
 g++ -fsanitize=address,undefined \
@@ -204,7 +203,7 @@ g++ -fsanitize=address,undefined \
 
 ---
 
-# ASan vs Valgrind
+## ASan vs Valgrind
 
 | |ASan|Valgrind Memcheck|
 |---|---|---|
@@ -238,17 +237,16 @@ WARNING: ThreadSanitizer: data race (pid=1234)
 
 > ASan 和 TSan **不能同时使用**（会冲突），需要分开跑。
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未定义行为，TSan 发现数据竞争。它们通过不同的插桩和运行时工作，通常应拆成独立测试配置；报告是否出现取决于测试是否真正走到问题路径，不能代替单元测试、代码审查或性能测量。
 
-ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未定义行为，TSan 发现数据竞争。它们通过不同的插桩和运行时工作，通常应拆成独立测试配置；报告是否出现取决于测试是否真正走到问题路径，不能代替单元测试、代码审查或性能测量。
+> [!question]- 自测：先回答再展开
+> 1. 为什么 ASan 与 TSan 通常要分开构建和运行？
+> 2. “Sanitizer 没报错”为什么不能证明程序没有内存或并发问题？
+> 3. 遇到 sanitizer report 时，为什么应先做最小复现而不是关掉检查？
 
-# 自测
-
-1. 为什么 ASan 与 TSan 通常要分开构建和运行？
-2. “Sanitizer 没报错”为什么不能证明程序没有内存或并发问题？
-3. 遇到 sanitizer report 时，为什么应先做最小复现而不是关掉检查？
-
-# Sources
+## Sources
 
 - [Clang Sanitizers documentation](https://clang.llvm.org/docs/index.html)
 - [GCC instrumentation options](https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html)
@@ -256,39 +254,12 @@ ASan 主要发现越界、use-after-free 等内存错误，UBSan 发现部分未
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
-- Core Dump Analysis (核心转储分析)
-- Valgrind：Memory Leak Detection (内存泄漏检测)
-- perf：CPU Profiling & Flamegraph (性能火焰图)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
+> [!info]- 延伸阅读
+> - GDB Essentials：breakpoint, watch, backtrace (GDB核心用法)
+> - Core Dump Analysis (核心转储分析)
+> - Valgrind：Memory Leak Detection (内存泄漏检测)
+> - perf：CPU Profiling & Flamegraph (性能火焰图)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
 
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Memory Safety Tools (内存安全工具)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Debugging and Performance Map (调试与性能导航)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/00-Debugging%20and%20Performance%20Map%20(调试与性能导航).md)
-- 下一步：[03-Performance Profiling (性能分析)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/03-Performance%20Profiling%20(性能分析).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-Performance Profiling (性能分析)](/07-Engineering%20Tools%20(工程工具)/03-Debugging%20and%20Performance%20(调试与性能)/03-Performance%20Profiling%20(性能分析).md)

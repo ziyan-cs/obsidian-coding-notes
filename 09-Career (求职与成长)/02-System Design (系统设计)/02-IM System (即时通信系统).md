@@ -1,15 +1,14 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - distributed/system
 ---
 
 > [!abstract] 核心考点： WebSocket 长连接管理 + 消息可靠投递（推拉模式）+ 消息序号的全局一致性
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+> **回答**：IM 系统用长连接网关维护在线会话，用消息序号和持久化保证可追赶投递。设计要区分单聊群聊、在线离线、多端同步，并明确重复、乱序和断线重连语义。
 
 # 需求分析
 
@@ -291,32 +290,5 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 
 IM 系统网络编程基础详解见 → [WebSocket Protocol](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/10-WebSocket%20Protocol%20(WebSocket协议).md) · [Reactor & Proactor Pattern](05-Network%20Programming%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/05-Reactor%20&%20Proactor%20Pattern%20(事件驱动模型)%20⭐.md)
 
-# 零基础阅读路径
-
-先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
-
-# 常见误区
-
-- 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
-- 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-IM System (即时通信系统)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+[!info]- 延伸阅读
 - 下一步：[03-Flash Sale (秒杀系统)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/03-Flash%20Sale%20(秒杀系统).md)

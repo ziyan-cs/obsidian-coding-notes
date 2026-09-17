@@ -1,7 +1,7 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 tags: [language/go, go/http]
 ---
 
@@ -43,12 +43,11 @@ HTTP response ← error mapping ← result  ← data access
 - **repository**：数据库/缓存/外部服务访问。
 - **middleware**：日志、request ID、认证、恢复、超时等横切逻辑。
 
-# 常见坑
-
-- 先写响应头再写 body；写 body 后 status 通常已默认成 200。
-- JSON decode 后检查多余字段、大小限制和必填项；不要把用户输入直接信任为结构正确。
-- `http.Error` 是纯文本；JSON API 应统一自己的错误响应格式。
-- `log.Fatal` 会调用 `os.Exit`，不应出现在可测试的 handler/service 中。
+> [!warning]- 易错点
+> - 先写响应头再写 body；写 body 后 status 通常已默认成 200。
+> - JSON decode 后检查多余字段、大小限制和必填项；不要把用户输入直接信任为结构正确。
+> - `http.Error` 是纯文本；JSON API 应统一自己的错误响应格式。
+> - `log.Fatal` 会调用 `os.Exit`，不应出现在可测试的 handler/service 中。
 
 # 统一错误响应
 
@@ -68,46 +67,18 @@ func writeJSONError(w http.ResponseWriter, status int, code, message string) {
 > [!note] 先写 `WriteHeader`
 > HTTP 状态码必须在写入响应 body 前确定；`Encode` 可能立刻写入 body，晚设置状态会得到默认的 `200 OK`。
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> Go 的 HTTP 分层中，handler 只处理协议边界：路由、输入校验、鉴权上下文与 JSON/状态码转换；service 保存业务规则和事务边界；repository 隔离存储细节。中间件放日志、超时、恢复和认证等横切关注点。这样既便于 `httptest` 覆盖边界，也便于替换实现。
 
-Go 的 HTTP 分层中，handler 只处理协议边界：路由、输入校验、鉴权上下文与 JSON/状态码转换；service 保存业务规则和事务边界；repository 隔离存储细节。中间件放日志、超时、恢复和认证等横切关注点。这样既便于 `httptest` 覆盖边界，也便于替换实现。
-
-# 自测
-
-1. `POST /todos` 中，哪些错误应该映射为 400、401、404、409、500？
-2. 为什么不应让 repository 直接返回 HTTP 状态码？
-3. 怎样用 `httptest` 验证响应的状态码、`Content-Type` 和 JSON body？
+> [!question]- 自测：先回答再展开
+> 1. `POST /todos` 中，哪些错误应该映射为 400、401、404、409、500？
+> 2. 为什么不应让 repository 直接返回 HTTP 状态码？
+> 3. 怎样用 `httptest` 验证响应的状态码、`Content-Type` 和 JSON body？
 
 # 练习
 
 写 `GET /healthz` 与 `POST /todos`，并用 `httptest.NewRecorder` 覆盖 200、400、405。
 
-# 零基础阅读路径
-
-先理解普通函数、显式错误和 package 边界；接着跟一条请求经过 handler、service、repository；最后阅读 goroutine、context 与运行时部分。并发章节必须配最小程序。
-
-# 常见误区
-
-- 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
-- 不以测试、race detector、profile 或一次可复现请求来验证服务行为。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-HTTP JSON and Middleware (HTTP JSON与中间件)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Web Services Map (Web 服务导航)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/00-Web%20Services%20Map%20(Web%20服务导航).md)
-- 下一步：[02-Routing Validation and Errors (路由校验与错误)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/02-Routing%20Validation%20and%20Errors%20(路由校验与错误).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Routing Validation and Errors (路由校验与错误)](/04-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/02-Routing%20Validation%20and%20Errors%20(路由校验与错误).md)

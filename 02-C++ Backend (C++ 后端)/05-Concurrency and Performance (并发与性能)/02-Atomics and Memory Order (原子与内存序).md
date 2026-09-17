@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-atomic 保证单个原子对象的读改写不发生 data race，但不自动让多个变量组成的业务状态保持一致。memory order 描述跨线程可见性与重排约束：默认 `seq_cst` 最容易推理；只有先证明同步关系并测到瓶颈，才考虑 acquire/release 或 relaxed。
+> [!summary]- 复述检查：学完后再展开
+>
+> atomic 保证单个原子对象的读改写不发生 data race，但不自动让多个变量组成的业务状态保持一致。memory order 描述跨线程可见性与重排约束：默认 `seq_cst` 最容易推理；只有先证明同步关系并测到瓶颈，才考虑 acquire/release 或 relaxed。
 
 # 选择原则
 
@@ -19,27 +19,21 @@ atomic 保证单个原子对象的读改写不发生 data race，但不自动让
 | 发布数据给读线程 | release store + acquire load |
 | 纯统计且不参与同步 | relaxed，仍需确认不会依赖顺序 |
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - atomic 不等于 lock-free；用 `is_lock_free()` 查询，不把实现特性当保证。
+> - `memory_order_relaxed` 不建立跨变量的同步关系。
+> - 把 memory order 当性能开关；错的同步比慢的锁危险得多。
 
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- atomic 不等于 lock-free；用 `is_lock_free()` 查询，不把实现特性当保证。
-- `memory_order_relaxed` 不建立跨变量的同步关系。
-- 把 memory order 当性能开关；错的同步比慢的锁危险得多。
-
-# 自测
-
-1. 为什么两个 atomic 变量仍可能无法表达一个一致的业务状态？
-2. release/acquire 如何发布一段已初始化的数据？
-3. 何时宁可使用 mutex？
+> [!question]- 自测：先回答再展开
+> 1. 为什么两个 atomic 变量仍可能无法表达一个一致的业务状态？
+> 2. release/acquire 如何发布一段已初始化的数据？
+> 3. 何时宁可使用 mutex？
 
 # Atomic & Memory Order (原子操作与内存序)
 
 > [!note] 本节重点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
 
-# std::atomic 基础
+## std::atomic 基础
 
 ```cpp
 #include <atomic>
@@ -61,7 +55,7 @@ counter++;                 // 等价于 fetch_add(1)
 counter += 5;
 ```
 
-# 为什么 atomic 比 mutex 快？
+## 为什么 atomic 比 mutex 快？
 
 ```cpp
 // mutex 保护
@@ -83,7 +77,7 @@ void inc_atomic() {
 - mutex：无竞争时，常见实现通常在用户态完成；发生竞争时才可能通过 futex 等机制等待或唤醒。实际成本受平台、实现、竞争和缓存状态影响，必须测量。
 - atomic：通常在用户态完成，具体开销需以本机测量为准。
 
-# 内存序（Memory Order）— 核心难点
+## 内存序（Memory Order）— 核心难点
 
 ```cpp
 // 默认是 std::memory_order_seq_cst（最严格，最慢）
@@ -99,7 +93,7 @@ std::memory_order_acq_rel;   // acquire + release（用于 read-modify-write）
 std::memory_order_seq_cst;   // 顺序一致性（默认，最严格）
 ```
 
-## 常见场景
+### 常见场景
 
 ```cpp
 // 场景 1：只要求原子性，不要求顺序 → relaxed（计数器）
@@ -123,7 +117,7 @@ process(data);
 flag.store(true);  // 等价于 seq_cst
 ```
 
-## Acquire-Release 语义图
+### Acquire-Release 语义图
 
 ```text
 线程 A（Release）:
@@ -166,7 +160,7 @@ void atomic_push(Node* new_head) {
 }
 ```
 
-# atomic 的局限性
+## atomic 的局限性
 
 ```cpp
 // ❌ atomic 类型不一定是 lock-free
@@ -186,26 +180,3 @@ if (big.is_lock_free()) {
 > **面试重点**：为什么需要内存序？现代 CPU 和编译器会重排指令。`release` 保证之前的写不会被重排到该操作之后；`acquire` 保证之后的读不会被重排到该操作之前。两者配合形成 **happens-before** 关系。
 
 ---
-
-无锁结构基于原子操作实现，详见 → Lock-free Structures Overview (无锁结构概念)
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Atomics and Memory Order (原子与内存序)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
-- 下一步：[03-Thread Pool (线程池)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/03-Thread%20Pool%20(线程池).md)

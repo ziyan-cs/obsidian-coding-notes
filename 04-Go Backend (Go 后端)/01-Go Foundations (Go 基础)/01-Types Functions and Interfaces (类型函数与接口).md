@@ -1,15 +1,15 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 tags: [language/go, go/basics]
 ---
 
 > [!abstract] 一句话结论：Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
 
-# 30 秒回答
-
-**回答展开**：先用 struct 表达数据，用函数表达操作；当调用方只依赖少数行为时，在消费者一侧定义小 interface，让具体类型隐式满足。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答展开**：先用 struct 表达数据，用函数表达操作；当调用方只依赖少数行为时，在消费者一侧定义小 interface，让具体类型隐式满足。
 
 # 核心语法
 
@@ -36,11 +36,10 @@ func printGreeting(g Greeter) { fmt.Println(g.Greeting()) }
 type UserStore interface { Find(context.Context, int64) (User, error) }
 ```
 
-# 常见坑
-
-- 将 `interface{}` / `any` 当作“泛型”；优先具体类型或真正的 generics。
-- 混用值 receiver 和指针 receiver，导致某个类型不满足预期接口。
-- 用 interface 模拟多层 OOP 继承；Go 更常用 struct 嵌入与函数组合。
+> [!warning]- 易错点
+> - 将 `interface{}` / `any` 当作“泛型”；优先具体类型或真正的 generics。
+> - 混用值 receiver 和指针 receiver，导致某个类型不满足预期接口。
+> - 用 interface 模拟多层 OOP 继承；Go 更常用 struct 嵌入与函数组合。
 
 # C++ 对照
 
@@ -51,45 +50,6 @@ type UserStore interface { Find(context.Context, int64) (User, error) }
 | 泛型 | template | type parameter（仅需要时） |
 | 可见性 | `public/private` | 首字母大小写 + package |
 
-# 自测
-
-1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
-2. 哪种情况下该先写 interface，哪种情况下不该？
-
-# 从零建立模型
-
-本页主题是 **01-Types Functions and Interfaces (类型函数与接口)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
-
-# 最小实践
-
-写一个十到三十行的最小程序或测试：覆盖正常输入、边界输入和取消/错误路径之一。运行 `go test`；涉及并发时再运行 `go test -race`，把工具输出作为结论证据。
-
-# 工程检查点
-
-channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-# 常见误区
-
-- 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
-- 不以测试、race detector、profile 或一次可复现请求来验证服务行为。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Types Functions and Interfaces (类型函数与接口)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Go Map (Go导航)](/04-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/00-Go%20Map%20(Go导航).md)
-- 下一步：[02-Modules Packages and Tooling (模块包与工具链)](/04-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/02-Modules%20Packages%20and%20Tooling%20(模块包与工具链).md)
+> [!question]- 自测：先回答再展开
+> 1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
+> 2. 哪种情况下该先写 interface，哪种情况下不该？

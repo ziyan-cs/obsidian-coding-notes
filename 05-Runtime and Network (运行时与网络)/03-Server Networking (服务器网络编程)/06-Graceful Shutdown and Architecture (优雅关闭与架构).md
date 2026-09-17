@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：优雅关闭先停止接收新请求，再通知后台任务取消、等待在途请求、刷新必要状态并设置最终超时。架构设计必须让连接、任务和资源的所有权明确，否则关闭阶段最容易产生悬空访问和数据丢失。
 
 # Graceful Shutdown (优雅关闭)
 
 > [!note] 本节重点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
-# 为什么需要优雅关闭
+## 为什么需要优雅关闭
 
 线上服务直接 `kill -9` 会导致：
 - 正在处理的请求被中断，客户端收到连接重置
@@ -26,9 +26,9 @@ verified: 2026-09-06
 
 ---
 
-# 信号驱动的关闭流程
+## 信号驱动的关闭流程
 
-## 信号选择
+### 信号选择
 
 | 信号 | 来源 | 建议行为 |
 |------|------|---------|
@@ -43,9 +43,9 @@ verified: 2026-09-06
 
 ---
 
-# C++ 优雅关闭的实现
+## C++ 优雅关闭的实现
 
-## 基本模式：事件循环 + 退出标志
+### 基本模式：事件循环 + 退出标志
 
 ```cpp
 #include <csignal>
@@ -109,7 +109,7 @@ int main() {
 }
 ```
 
-## 带 graceful timeout 的 RAII 封装
+### 带 graceful timeout 的 RAII 封装
 
 ```cpp
 class GracefulShutdown {
@@ -169,7 +169,7 @@ int main() {
 
 ---
 
-# 服务注册中心的优雅摘除
+## 服务注册中心的优雅摘除
 
 gRPC/微服务场景下，关闭前需要先从注册中心摘除本节点：
 
@@ -206,7 +206,7 @@ void shutdownWithDiscovery() {
 
 ---
 
-# k8s 环境中的优雅关闭
+## k8s 环境中的优雅关闭
 
 Kubernetes 删除 Pod 时：
 
@@ -218,34 +218,30 @@ Kubernetes 删除 Pod 时：
 
 ---
 
-# 常见陷阱
-
-| 陷阱 | 原因 | 解决 |
-|------|------|------|
-| `write()` 到已关闭连接 | 客户端在对端关闭后继续写 | 检查 `EPIPE`/`SIGPIPE`，忽略 SIGPIPE |
-| 信号处理中调用非可重入函数 | `printf`、`malloc` 在信号上下文中不安全 | handler 只设 `volatile sig_atomic_t`，其余在主循环处理 |
-| 关闭顺序错误 | 先释放资源再等待请求完成 | 先 stop accept → drain → cleanup |
-| 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
-
-> [!tip]- **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）给存量请求一个 deadline（通常 10-30s）；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
-
-# 30 秒回答 / 自测
-
-- **30 秒回答**：信号 handler 只置 `volatile sig_atomic_t`，主循环观察到后依次：停 listen → 关闭空闲连接 → 给存量请求 deadline drain → 超时强制关闭 → 清理资源退出。
-- **常见误区**：在信号 handler 里做重活（`printf`/`malloc` 等非可重入操作）；先关资源再等请求完成（顺序颠倒）。
-- **自测**：1) 为什么信号 handler 里只允许置一个 `volatile sig_atomic_t` 或 `atomic<bool>`？ 2) k8s 里 `SIGTERM` 后最多多久不退出会被强杀？
-
----
-
-服务器设计实践见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Backend Architecture Patterns：分层架构, CQRS, 事件驱动 (后端架构模式)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/14-Backend%20Architecture%20Patterns：分层架构,%20CQRS,%20事件驱动%20(后端架构模式)%20⭐.md>)
-
----
+> [!warning]- 易错点
+> | 陷阱 | 原因 | 解决 |
+> |------|------|------|
+> | `write()` 到已关闭连接 | 客户端在对端关闭后继续写 | 检查 `EPIPE`/`SIGPIPE`，忽略 SIGPIPE |
+> | 信号处理中调用非可重入函数 | `printf`、`malloc` 在信号上下文中不安全 | handler 只设 `volatile sig_atomic_t`，其余在主循环处理 |
+> | 关闭顺序错误 | 先释放资源再等待请求完成 | 先 stop accept → drain → cleanup |
+> | 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
+>
+> > [!tip]- **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）给存量请求一个 deadline（通常 10-30s）；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
+>
+> > [!summary]- 复述与自测：学完后再展开
+> >
+> > - **常见误区**：在信号 handler 里做重活（`printf`/`malloc` 等非可重入操作）；先关资源再等请求完成（顺序颠倒）。
+> > - **自测**：1) 为什么信号 handler 里只允许置一个 `volatile sig_atomic_t` 或 `atomic<bool>`？ 2) k8s 里 `SIGTERM` 后最多多久不退出会被强杀？
+> >
+> > ---
+> >
+> > ---
 
 # Backend Architecture Patterns (后端架构模式)
 
 > [!note] 本节重点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
 
-# 分层架构（Layered Architecture）
+## 分层架构（Layered Architecture）
 
 C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层：
 
@@ -282,7 +278,7 @@ C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层�
 └───────────────────────────────────────────┘     └───────────────────────────────────────────┘
 ```
 
-## C++ 项目目录结构
+### C++ 项目目录结构
 
 ```
 server/
@@ -426,7 +422,7 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ---
 
-# 微服务划分原则
+## 微服务划分原则
 
 | 原则 | 说明 | 反面案例 |
 |------|------|---------|
@@ -438,7 +434,7 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ---
 
-# 经典 C++ 后端项目架构参考
+## 经典 C++ 后端项目架构参考
 
 ```
                     ┌───────────────────┐
@@ -476,49 +472,16 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ---
 
-# 经典题型速查
-
-| 题型 | 要点 |
-|------|------|
-| 分层架构优缺点 | 优点：职责清晰、可测试；缺点：层数多时性能损耗 |
-| CQRS 适用场景 | 读写不对等、复杂查询、需要独立优化读模型 |
-| event-driven vs 同步调用 | event-driven解耦更彻底但最终一致，同步调用更简单但耦合 |
-| 微服务如何拆分 | 按业务域、dedicated DB、团队自治、接口契约 |
-| C++ 微服务通信 | 首选 gRPC（强类型、流支持），次选 HTTP + JSON |
-| 分布式事务方案 | 单体：2PC；微服务：Saga（编排/编排） |
-
-> [!tip]- **工程要点**：C++ 后端服务不要过度设计——先分层架构，大了再拆微服务。gRPC 是 C++ 微服务间通信最佳选择。Message Queue不只是做async，更是服务的"防洪堤"（削峰填谷）。**不要为了微服务而微服务**，3 个以下服务用单体 + 分层就行。
-
----
-
-生产环境实践见 → [Graceful Shutdown (优雅关闭)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
-
-# 零基础阅读路径
-
-先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
-
-# 常见误区
-
-- 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
-- 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **06-Graceful Shutdown and Architecture (优雅关闭与架构)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
-- 下一步：[05-Benchmarking (压测)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/05-Benchmarking%20(压测).md)
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | 分层架构优缺点 | 优点：职责清晰、可测试；缺点：层数多时性能损耗 |
+> | CQRS 适用场景 | 读写不对等、复杂查询、需要独立优化读模型 |
+> | event-driven vs 同步调用 | event-driven解耦更彻底但最终一致，同步调用更简单但耦合 |
+> | 微服务如何拆分 | 按业务域、dedicated DB、团队自治、接口契约 |
+> | C++ 微服务通信 | 首选 gRPC（强类型、流支持），次选 HTTP + JSON |
+> | 分布式事务方案 | 单体：2PC；微服务：Saga（编排/编排） |
+>
+> > [!tip]- **工程要点**：C++ 后端服务不要过度设计——先分层架构，大了再拆微服务。gRPC 是 C++ 微服务间通信最佳选择。Message Queue不只是做async，更是服务的"防洪堤"（削峰填谷）。**不要为了微服务而微服务**，3 个以下服务用单体 + 分层就行。
+>
+> ---

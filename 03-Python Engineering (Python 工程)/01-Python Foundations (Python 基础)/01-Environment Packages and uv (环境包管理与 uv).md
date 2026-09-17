@@ -1,15 +1,15 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-21
 ---
 
 > [!abstract] 一句话结论：项目依赖必须隔离、可复现、可声明；不要把“电脑上能跑”误当成项目环境正确。
 
-# 30 秒回答
-
-**回答展开**：用项目级虚拟环境隔离解释器与依赖；用 `pyproject.toml` 声明需求、锁文件固定解析结果；在新机器或 CI 中从零安装验证复现。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答展开**：用项目级虚拟环境隔离解释器与依赖；用 `pyproject.toml` 声明需求、锁文件固定解析结果；在新机器或 CI 中从零安装验证复现。
 
 # 最小工作流
 
@@ -55,46 +55,14 @@ project metadata -> resolve dependencies -> lockfile
 
 在干净目录克隆项目后，只使用项目文档提供的命令创建环境、同步依赖并运行测试。若必须先在本机手工安装某个包，说明依赖声明或 lockfile 还不完整。不要把 `.venv` 提交到版本库。
 
-# 从零建立模型
+> [!warning]- 易错点
+> - 把 `pip install` 过的全局环境当作项目依赖清单。
+> - 只提交源码，不提交依赖声明或锁文件。
+> - 将 `.venv` 作为源码提交；环境应可重建，而非复制。
 
-本页主题是 **01-Environment Packages and uv (环境包管理与 uv)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。
+> [!question]- 自测：先回答再展开
+> 1. 为什么需要 lockfile，而只写依赖范围不够？
+> 2. 新同学拿到项目后，怎样验证环境可复现？
 
-# 最小实践
-
-把本页概念做成一个可运行函数或 CLI：准备正常、空值和错误输入各一份；打印或断言结果。若涉及文件和网络，使用临时目录或 test double，不能依赖本机隐式状态。
-
-# 工程检查点
-
-Python 的动态性不等于不需要契约。公共函数应写类型标注、异常语义和示例；密钥、绝对路径、真实生产数据都不应写死在示例里。
-
-# 常见误区
-
-- 把 `pip install` 过的全局环境当作项目依赖清单。
-- 只提交源码，不提交依赖声明或锁文件。
-- 将 `.venv` 作为源码提交；环境应可重建，而非复制。
-
-# 自测
-
-1. 为什么需要 lockfile，而只写依赖范围不够？
-2. 新同学拿到项目后，怎样验证环境可复现？
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Environment Packages and uv (环境包管理与 uv)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Python Map (Python导航)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/00-Python%20Map%20(Python导航).md)
-- 下一步：[02-Objects Types and Functions (对象类型与函数)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Types%20and%20Functions%20(对象类型与函数).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Objects Types and Functions (对象类型与函数)](/03-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Types%20and%20Functions%20(对象类型与函数).md)

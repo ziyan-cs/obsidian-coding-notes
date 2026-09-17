@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-**核心结论**：RAII 让资源释放沿作用域自动发生，异常安全则要求失败后仍维持不变量；调试先复现、缩小范围、验证假设，再依据证据定位根因。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：RAII 让资源释放沿作用域自动发生，异常安全则要求失败后仍维持不变量；调试先复现、缩小范围、验证假设，再依据证据定位根因。
 
 # Exception Handling (异常处理)
 
 > [!note] 本节重点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
-# 三种异常安全保证
+## 三种异常安全保证
 
 ```cpp
 // 1. 基本保证：抛出异常后，对象处于合法状态
@@ -37,7 +37,7 @@ public:
 };
 ```
 
-# noexcept
+## noexcept
 
 ```cpp
 // noexcept 有两种作用：
@@ -70,7 +70,7 @@ std::vector<Good> v2;
 // 所以：移动构造函数必须标记 noexcept！
 ```
 
-# 栈展开（Stack Unwinding）
+## 栈展开（Stack Unwinding）
 
 ```cpp
 struct Cleanup {
@@ -97,7 +97,7 @@ int main() {
 2. 每退出一层，该层栈上所有对象的析构函数被调用
 3. 找到匹配的 `catch` 后，进入异常处理
 
-# 异常安全编程指南
+## 异常安全编程指南
 
 ```cpp
 // ✅ 使用 RAII 管理资源（异常安全的核心）
@@ -124,7 +124,7 @@ void wrapper() {
 void swap(Foo&) noexcept;
 ```
 
-# 异常 vs 错误码
+## 异常 vs 错误码
 
 | | 异常 | 错误码 |
 |--|------|--------|
@@ -151,15 +151,11 @@ if (ec) { /* 处理不存在等预期情况 */ }
 
 ---
 
-调试与异常定位详见 → Debugging gdb & Sanitizers (调试工具)
-
----
-
 # Debugging gdb & Sanitizers (调试工具)
 
 > [!note] 本节重点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
-# GDB 核心命令
+## GDB 核心命令
 
 ```bash
 g++ -g -O0 main.cpp -o main
@@ -169,7 +165,7 @@ gdb ./main core        # 分析 core dump
 gdb ./main 1234        # 附加到进程 1234
 ```
 
-## 常用命令速查
+### 常用命令速查
 
 | 命令 | 缩写 | 作用 |
 |------|------|------|
@@ -223,7 +219,7 @@ int* r = &a;
 delete r;       // ✅ ASan 检测：delete on stack variable
 ```
 
-# 其他 Sanitizers
+## 其他 Sanitizers
 
 ```bash
 g++ -fsanitize=undefined -g main.cpp -o main
@@ -245,7 +241,7 @@ int a = 0;
 int b = 1 / a;    // division by zero
 ```
 
-# Core Dump 分析
+## Core Dump 分析
 
 ```bash
 ulimit -c unlimited
@@ -255,7 +251,7 @@ gdb ./main core.1234
 
 ```
 
-# Valgrind 基础
+## Valgrind 基础
 
 ```bash
 valgrind --tool=memcheck ./main
@@ -276,35 +272,3 @@ valgrind --tool=callgrind ./main
 > [!tip]- **工程要点**：把 Sanitizer 作为可重复的测试配置，而不是“跑过一次就安全”。ASan/UBSan 常适合日常 CI；TSan 通常独立运行；GDB 用于观察真实崩溃现场。具体组合以项目平台、依赖与测试时长为准。
 
 ---
-
-性能分析工具详见 → Performance Profiling perf & valgrind (性能分析)
-
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Exceptions and Debugging (异常与调试)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
-- 下一步：[04-Testing and Observability (测试与可观测性)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/04-Testing%20and%20Observability%20(测试与可观测性).md)

@@ -1,19 +1,19 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 tags: [language/go, learning/checklist]
 ---
 
 > [!abstract] 学习定位：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
 
-# 30 秒回答
-
-**核心结论**：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：完成标准：不是“看完 Go 教程”，而是交付一个有测试、能优雅关闭的 todo HTTP API。
 
 # Week 1：命令、类型和 module
 
-- [ ] 完成 00-Go Map & Setup (学习地图与环境)、01-Types, Functions & Interfaces (类型、函数与接口)、02-Modules, Packages & Tooling (模块、包与工具链)。
+- [ ] 完成类型函数与接口、模块包与工具链两篇基础笔记，并建立可测试的 Go module。
 - [ ] 建立一个独立 Go module，能执行 format/test/vet。
 - [ ] 写一个 struct、一个方法、一个小 interface，并解释它们的可见性。
 
@@ -37,48 +37,4 @@ tags: [language/go, learning/checklist]
 
 # 每周复盘
 
-写入 [Mistake Log](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)：本周最难概念、一次真实错误、下周唯一改进点。
-
-# 从零建立模型
-
-本页主题是 **01-First Month Plan (首月计划)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
-
-# 最小实践
-
-写一个十到三十行的最小程序或测试：覆盖正常输入、边界输入和取消/错误路径之一。运行 `go test`；涉及并发时再运行 `go test -race`，把工具输出作为结论证据。
-
-# 工程检查点
-
-channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-# 渐进练习
-
-1. **第一步 · 理解**：读：标出本页代码中错误向上返回、资源释放和 goroutine 退出的位置。
-2. **第二步 · 实现**：写：为一个纯业务函数补 table-driven test；若有并发，写一个取消或关闭案例。
-3. **第三步 · 验证**：测：运行 `go test`，并在适用时运行 `go test -race` 或 benchmark，记录结论与环境。
-
-# 常见误区
-
-- 把语法或并发原语当万能解法，忽略取消、资源归属、背压和下游失败。
-- 不以测试、race detector、profile 或一次可复现请求来验证服务行为。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-First Month Plan (首月计划)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Go Practice Map (Go 实践导航)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/00-Go%20Practice%20Map%20(Go%20实践导航).md)
-- 下一步：[02-C++ to Go Decision Notes (C++ 到 Go 迁移决策)](/04-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/02-C++%20to%20Go%20Decision%20Notes%20(C++%20到%20Go%20迁移决策).md)
+写入 [05-Mistake Log (错误记录)](/00-Hub%20(学习入口)/05-Mistake%20Log%20(错误记录).md)：本周最难概念、一次真实错误、下周唯一改进点。

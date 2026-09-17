@@ -1,15 +1,14 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - distributed/system
 ---
 
 > [!abstract] 核心考点： 发号器 + 哈希映射 + HTTP 重定向，重点在唯一 ID 生成策略和缓存加速
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+> **回答**：先估算读写量和存储，再设计唯一短码、映射表与重定向缓存；随后讨论冲突、过期、热点、统计和多地域一致性。容量假设不同，合理方案也会不同。
 
 # 需求分析
 
@@ -216,32 +215,5 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 
 短 URL 系统分布式与缓存基础详解见 → [CAP Theorem & BASE Theory](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04a-CAP%20Theorem%20&%20BASE%20Theory%20(CAP理论)%20⭐.md) · [Redis Cache Patterns](07-Distributed%20&%20Middleware%20(分布式与中间件)/01-Redis%20(缓存与数据结构)/01d-Cache%20Patterns%20&%20Problems%20(缓存三大问题)%20⭐.md)
 
-# 零基础阅读路径
-
-先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
-
-# 常见误区
-
-- 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
-- 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-URL Shortener (短链接系统)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
-- 下一步：[02-IM System (即时通信系统)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/02-IM%20System%20(即时通信系统).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-IM System (即时通信系统)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/02-IM%20System%20(即时通信系统).md)

@@ -1,15 +1,15 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-14
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-继承用于表达稳定的 is-a 抽象，运行时多态通过虚函数经由基类接口选择具体行为。它的代价是耦合、间接调用和对象布局复杂度；优先组合，只有确实需要以统一接口替换不同实现时再用继承。
+> [!summary]- 复述检查：学完后再展开
+>
+> 继承用于表达稳定的 is-a 抽象，运行时多态通过虚函数经由基类接口选择具体行为。它的代价是耦合、间接调用和对象布局复杂度；优先组合，只有确实需要以统一接口替换不同实现时再用继承。
 
 # 使用边界
 
@@ -20,23 +20,22 @@ review_due: 2026-09-14
 | 编译期多态 | templates / concepts |
 | 异构对象集合 | 基类指针或 type erasure，并管理生命周期 |
 
-# 必须守住的规则
+## 必须守住的规则
 
 1. 多态基类通常应有 virtual destructor，否则经由基类指针删除派生对象是未定义行为。
 2. 构造和析构期间虚调用不会分派到尚未构造或已经析构的派生层。
 3. 多继承与虚继承只用于明确的接口组合或菱形共享基类问题，不能作为复用捷径。
 
-# 自测
-
-1. 为什么有虚函数的类不等于应该被继承的类？
-2. 哪个场景应选择组合而非继承？
-3. virtual destructor 缺失会怎样造成资源问题？
+> [!question]- 自测：先回答再展开
+> 1. 为什么有虚函数的类不等于应该被继承的类？
+> 2. 哪个场景应选择组合而非继承？
+> 3. virtual destructor 缺失会怎样造成资源问题？
 
 # Virtual Functions and VTable (虚函数与虚表)
 
 > [!note] 本节重点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
 
-# 虚函数表（VTable）
+## 虚函数表（VTable）
 
 每个含虚函数的**类**有一个 VTable（虚函数表），表中存放虚函数指针。每个**对象**有一个隐藏的 `vptr`（虚指针），指向其类的 VTable。
 
@@ -73,7 +72,7 @@ sizeof(Base);     // 8（只有 vptr）
 sizeof(Derived);  // 8（继承 vptr，无额外数据成员）
 ```
 
-# 虚函数调用流程
+## 虚函数调用流程
 
 ```
 Base* p = new Derived();
@@ -102,17 +101,15 @@ class Derived : public Base {
 class Leaf final : public Derived { };  // 禁止继承 Leaf
 ```
 
-# 30 秒回答 / 自测
-
-- **30 秒回答**：每个含虚函数的类有一张 VTable（存虚函数地址），每个对象开头藏一个 vptr 指向它；虚调用 = 读 vptr → 查表 → 间接跳转，代价是一次额外内存访问 + 不可内联；对象大小多 8 字节（64 位），类多一张静态表。
-- **常见误区**：以为 vptr 存在类里（实际每个对象各一个）；在构造函数/析构函数里调虚函数并期望动态分发（此时 vptr 已指向本类，不会派发到派生类）；多态基类忘记声明 `virtual` 析构。
-- **自测**：1) `sizeof(Base)`（只有一个虚函数）在 64 位下是多少？ 2) 为什么构造函数里调虚函数不会动态派发到派生类？
-
----
-
-多态与动态分发详见 → Polymorphism & Dynamic Dispatch (多态与动态分发) · Abstract Class & Pure Virtual (抽象类)
-
----
+> [!summary]- 复述与自测：学完后再展开
+>
+> - **常见误区**：把 VTable/vptr 的常见 ABI 实现误当成 C++ 标准保证。对象中是否存在一个或多个 vptr、位于何处以及占用多少空间均取决于实现与继承结构；可以用编译器布局输出或 `sizeof` 实测，但业务代码不应依赖该布局。构造和析构期间的虚调用只分派到当前构造/析构层级；需要经基类指针销毁派生对象时，基类析构函数必须为 `virtual`。
+> - **自测**：1) 在 GCC/Clang/MSVC 上分别观察简单继承与多重继承的对象布局，哪些现象只是 ABI 选择？2) 为什么构造函数中的虚调用不会分派到尚未完成构造的派生层？
+>
+> ---
+>
+>
+> ---
 
 # Polymorphism and Dynamic Dispatch (多态与动态分发)
 
@@ -130,7 +127,7 @@ makeSpeak(&d);   // Derived::speak via VTable
 makeSpeak(&c);   // Derived::speak via VTable
 ```
 
-# 切片问题（Object Slicing）
+## 切片问题（Object Slicing）
 
 ```cpp
 // 按值传递/赋值时，派生类部分被"切掉"
@@ -143,7 +140,7 @@ Animal& ref = dog;
 ref.speak();       // 正确，Dog::speak
 ```
 
-# 虚析构函数的必要性
+## 虚析构函数的必要性
 
 ```cpp
 class Base {
@@ -166,10 +163,6 @@ public:
     virtual ~Base() = default;   // 有继承关系的基类析构必须是 virtual
 };
 ```
-
----
-
-虚函数表机制详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -207,10 +200,6 @@ public:
 void Shape::draw() const { std::cout << "default draw\n"; }
 // 子类可通过 Shape::draw() 显式调用
 ```
-
----
-
-虚函数表与多态机制详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
 
 ---
 
@@ -286,35 +275,3 @@ Diamond Virtual Inheritance Layout:
 ```
 
 ---
-
-虚函数表在多继承中的布局详见 → Virtual Function & VTable Layout (虚函数与虚表结构)
-
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Polymorphism and Inheritance (多态与继承)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
-- 下一步：[05-Templates (模板)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/05-Templates%20(模板).md)

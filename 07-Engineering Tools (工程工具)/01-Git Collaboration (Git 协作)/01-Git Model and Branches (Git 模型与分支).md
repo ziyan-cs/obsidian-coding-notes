@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：三个区域的定义、文件在三区之间的流转、HEAD 的本质
 
-# 三区模型
+## 三区模型
 
 ```text
 Three Areas of Git:
@@ -40,7 +40,7 @@ Three Areas of Git:
 |Index|暂存区、Stage|`.git/index`|下次 commit 将要提交的内容快照|
 |Repository|本地仓库|`.git/objects/`|已提交的历史记录，永久保存|
 
-## 为什么需要暂存区？
+### 为什么需要暂存区？
 
 暂存区允许你**精确控制每次提交的内容**，而不是把所有改动一股脑提交：
 
@@ -54,7 +54,7 @@ git commit -m "feat(core): add Epoll class"   # 只提交暂存的内容
 
 ---
 
-# HEAD 是什么
+## HEAD 是什么
 
 HEAD 是一个指针，**指向当前所在的提交**，通常通过分支间接指向：
 
@@ -69,7 +69,7 @@ cat .git/HEAD          # 输出: ref: refs/heads/main
 cat .git/refs/heads/main   # 输出: abc1234（commit hash）
 ```
 
-## Detached HEAD（分离头指针）
+### Detached HEAD（分离头指针）
 
 当 HEAD 直接指向某个 commit（而不是分支）时，就是 detached HEAD：
 
@@ -84,7 +84,7 @@ git checkout abc1234   # HEAD 直接指向 commit，而非分支
 
 ---
 
-# 文件状态流转
+## 文件状态流转
 
 ```
 Untracked → (git add) → Staged → (git commit) → Unmodified
@@ -103,15 +103,14 @@ Untracked → (git add) → Staged → (git commit) → Unmodified
 
 ---
 
-# 关联笔记
-
-- Conflict Resolution (冲突解决实操)
-- reset vs revert vs restore (撤销三兄弟)
-- stash, tag, reflog (实用命令)
-- CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-
----
+> [!info]- 延伸阅读
+> - Conflict Resolution (冲突解决实操)
+> - reset vs revert vs restore (撤销三兄弟)
+> - stash, tag, reflog (实用命令)
+> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+>
+> ---
 
 # merge rebase and cherry pick (合并策略)
 
@@ -204,7 +203,7 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-# 三者对比
+## 三者对比
 
 | |merge|rebase|cherry-pick|
 |---|---|---|---|
@@ -216,14 +215,14 @@ git cherry-pick A..C              # 摘取范围（不含 A，含 C）
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- 01b2-Git Flow & Feature Branch Workflow (团队协作流)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- Conflict Resolution (冲突解决实操)
-- reset vs revert vs restore (撤销三兄弟)
-- stash, tag, reflog (实用命令)
-
----
+> [!info]- 延伸阅读
+> - 01b2-Git Flow & Feature Branch Workflow (团队协作流)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - Conflict Resolution (冲突解决实操)
+> - reset vs revert vs restore (撤销三兄弟)
+> - stash, tag, reflog (实用命令)
+>
+> ---
 
 # Branch Workflow (分支协作流)
 
@@ -287,51 +286,20 @@ release/1.0:               └─ test/fix ───────>┘     (预发
 - 配合完善的 CI/CD 保证主干质量
 - 适合：高频发布、DevOps 成熟的团队
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> 分支策略的目的不是制造流程，而是让主干始终可集成、变更可审查、发布可追溯。个人项目可用短 feature branch；有固定发版节奏时 Git Flow 可能更清晰；高频交付团队可采用 trunk-based。选择依据是发布节奏、CI 可靠度和团队协作成本。
 
-分支策略的目的不是制造流程，而是让主干始终可集成、变更可审查、发布可追溯。个人项目可用短 feature branch；有固定发版节奏时 Git Flow 可能更清晰；高频交付团队可采用 trunk-based。选择依据是发布节奏、CI 可靠度和团队协作成本。
+> [!question]- 自测：先回答再展开
+> 1. Git Flow 为什么可能不适合一个快速迭代的小项目？
+> 2. feature branch 合并前，最少要有哪些质量信号？
+> 3. 什么时候 feature flag 比长期分支更合适？
+>
+> ---
 
-# 自测
-
-1. Git Flow 为什么可能不适合一个快速迭代的小项目？
-2. feature branch 合并前，最少要有哪些质量信号？
-3. 什么时候 feature flag 比长期分支更合适？
-
----
-
-# 关联笔记 · 延伸要点 3
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- Conflict Resolution (冲突解决实操)
-- reset vs revert vs restore (撤销三兄弟)
-- stash, tag, reflog (实用命令)
-
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Git Model and Branches (Git 模型与分支)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Git Collaboration Map (Git 协作导航)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/00-Git%20Collaboration%20Map%20(Git%20协作导航).md)
-- 下一步：[02-Conflicts and Recovery (冲突与恢复)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/02-Conflicts%20and%20Recovery%20(冲突与恢复).md)
+> [!info]- 延伸阅读
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - Conflict Resolution (冲突解决实操)
+> - reset vs revert vs restore (撤销三兄弟)
+> - stash, tag, reflog (实用命令)

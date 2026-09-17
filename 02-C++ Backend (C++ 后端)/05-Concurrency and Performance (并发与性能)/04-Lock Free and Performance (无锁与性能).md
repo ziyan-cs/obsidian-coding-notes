@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-**核心结论**：lock-free 表示系统级进展保证，不等于单次操作更快；CAS 仍要处理 ABA、内存序、回收与高竞争，普通业务优先选更易证明正确的锁方案。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：lock-free 表示系统级进展保证，不等于单次操作更快；CAS 仍要处理 ABA、内存序、回收与高竞争，普通业务优先选更易证明正确的锁方案。
 
 # Lock-free Structures Overview (无锁结构概念)
 
 > [!note] 本节重点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
 
-# 什么是无锁（Lock-Free）
+## 什么是无锁（Lock-Free）
 
 ```cpp
 // 有锁版本
@@ -39,7 +39,7 @@ void push(int val) {
 - 任意线程挂起不会阻塞其他线程的进度
 - 系统中至少有一个线程能在有限步内完成操作
 
-# 无锁栈（Lock-Free Stack）
+## 无锁栈（Lock-Free Stack）
 
 ```cpp
 template<typename T>
@@ -71,7 +71,7 @@ public:
 };
 ```
 
-# ABA 问题
+## ABA 问题
 
 ```cpp
 // ABA 问题场景：
@@ -92,7 +92,7 @@ std::atomic<TaggedPointer> head_;
 // - 或用 std::atomic<std::shared_ptr<T>> (C++20)
 ```
 
-# 内存管理难题
+## 内存管理难题
 
 ```cpp
 // 无锁结构的最大问题：何时释放内存？
@@ -108,7 +108,7 @@ std::atomic<TaggedPointer> head_;
 // 4. Epoch-Based Reclamation (EBR)
 ```
 
-# 何时用无锁？
+## 何时用无锁？
 
 | 适合无锁 | 不适合无锁 |
 |---------|-----------|
@@ -123,7 +123,7 @@ std::atomic<TaggedPointer> head_;
 // "Lock-free programming is like a sharp knife — useful but easy to cut yourself"
 ```
 
-# C++ 中的无锁设施
+## C++ 中的无锁设施
 
 | 设施 | 说明 |
 |------|------|
@@ -137,19 +137,15 @@ std::atomic<TaggedPointer> head_;
 
 ---
 
-原子操作与内存序是无锁编程的基础，详见 → Atomic & Memory Order (原子操作与内存序)
-
----
-
 # C++ Concurrency and Performance Optimization (C++ 并发性能优化)
 
 > [!note] 本节重点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
 
-# 锁竞争优化
+## 锁竞争优化
 
 高并发场景下锁竞争是最大的性能杀手。下面是优化思路，按性价比排序。
 
-## 1. 缩小临界区
+### 1. 缩小临界区
 
 ```cpp
 // ❌ 差：整个函数加锁
@@ -173,7 +169,7 @@ void processOrder(Order& order) {
 }
 ```
 
-## 2. 读写锁（shared_mutex）
+### 2. 读写锁（shared_mutex）
 
 读多写少的场景用 `shared_mutex`，读不互斥：
 
@@ -198,7 +194,7 @@ public:
 };
 ```
 
-## 3. 无锁数据结构
+### 3. 无锁数据结构
 
 只在确实成为瓶颈时使用。参考 `folly::ConcurrentHashMap`。
 
@@ -255,7 +251,7 @@ struct Data {
 
 ---
 
-# 内存序选择
+## 内存序选择
 
 C++ 内存序不是"越强越安全"，越强意味着越多的 CPU 屏障：
 
@@ -291,7 +287,7 @@ void consumer() {
 
 ---
 
-# 线程池与 task 窃取（Work Stealing）
+## 线程池与 task 窃取（Work Stealing）
 
 均匀分配任务可能导致负载不均——某个线程空闲而其他线程繁忙。Work Stealing 允许空闲线程"偷取"其他线程队列尾部的任务。
 
@@ -325,7 +321,7 @@ class WorkStealingPool {
 
 ---
 
-# NUMA 感知
+## NUMA 感知
 
 现代多路服务器（如 Intel 双路/四路）中，访问本地内存 vs 远端内存延迟差异可达 **1.5-2 倍**。
 
@@ -367,7 +363,7 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-# 性能分析清单
+## 性能分析清单
 
 当你的 C++ 后端服务性能不达标，按这个顺序排查：
 
@@ -383,49 +379,17 @@ for (int i = 0; i < numThreads; i++) {
 
 ---
 
-# 经典题型速查
-
-| 题型 | 要点 |
-|------|------|
-| 伪共享是什么 | 多线程修改同一 cache line 的不同变量 → 缓存颠簸 |
-| 如何避免伪共享 | `alignas(64)` 对齐到 cache line |
-| 内存序如何选择 | 95% 场景 `acq_rel` 够用，只有队列/计数器才用 `relaxed` |
-| Work Stealing 好处 | 解决线程间负载不均，提高 CPU 利用率 |
-| NUMA 对性能的影响 | 跨 socket 内存访问慢 1.5x，亲和性绑定可缓解 |
-| 性能优化的第一原则 | **先测量，再优化。** 不要凭感觉优化。 |
-
-> [!tip]- **工程要点**：大多数性能问题出在锁竞争和 IO 上，不是 CPU。用 `perf` 找到真正的瓶颈再动手。伪共享在 C++ 后端的高并发场景中常见，排查方法：性能计数器下降明显但 CPU 没跑满 → `perf c2c` 检查 cache 冲突。
-
----
-
-原子操作与内存序选择详见 → Atomic & Memory Order (原子操作与内存序)
-
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Lock Free and Performance (无锁与性能)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Concurrency Map (并发与性能导航)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/00-Concurrency%20Map%20(并发与性能导航).md)
-- 下一步：[03-Thread Pool (线程池)](/02-C++%20Backend%20(C++%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/03-Thread%20Pool%20(线程池).md)
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | 伪共享是什么 | 多线程修改同一 cache line 的不同变量 → 缓存颠簸 |
+> | 如何避免伪共享 | `alignas(64)` 对齐到 cache line |
+> | 内存序如何选择 | 95% 场景 `acq_rel` 够用，只有队列/计数器才用 `relaxed` |
+> | Work Stealing 好处 | 解决线程间负载不均，提高 CPU 利用率 |
+> | NUMA 对性能的影响 | 跨 socket 内存访问慢 1.5x，亲和性绑定可缓解 |
+> | 性能优化的第一原则 | **先测量，再优化。** 不要凭感觉优化。 |
+>
+> > [!tip]- **工程要点**：大多数性能问题出在锁竞争和 IO 上，不是 CPU。用 `perf` 找到真正的瓶颈再动手。伪共享在 C++ 后端的高并发场景中常见，排查方法：性能计数器下降明显但 CPU 没跑满 → `perf c2c` 检查 cache 冲突。
+>
+> ---
+>

@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：连接对象同时管理 fd、读写缓冲、协议解析状态和生命周期。TCP 是字节流，必须用长度、分隔符或固定格式恢复消息边界，并处理半包、粘包、背压和关闭竞态。
 
 # Connection Pool Design (连接池设计)
 
 > [!note] 本节重点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
 
-# 为什么需要连接池
+## 为什么需要连接池
 
 建立 TCP 连接的成本：
 - 三次握手：1.5 RTT
@@ -23,7 +23,7 @@ verified: 2026-09-06
 
 对于频繁的短时请求，每次新建连接的开销巨大。连接池通过**复用已有连接**消除这些开销。
 
-# 连接池的核心职责
+## 连接池的核心职责
 
 ```text
 ┌───────────────────────────────────────────┐
@@ -60,7 +60,7 @@ verified: 2026-09-06
 - `max_total`：最大总连接数（防止打垮后端）
 - `max_wait`：获取连接的最大等待时间
 
-# 基本接口
+## 基本接口
 
 ```c
 typedef struct connection_pool {
@@ -161,7 +161,7 @@ void pool_release(connection_pool *pool, connection *conn) {
 }
 ```
 
-# 连接保活与健康检查
+## 连接保活与健康检查
 
 ```c
 // 后台线程定期检查
@@ -197,7 +197,7 @@ void *health_check_thread(void *arg) {
 }
 ```
 
-# 连接池大小调优
+## 连接池大小调优
 
 **误区：连接池越大越好**
 
@@ -220,23 +220,20 @@ void *health_check_thread(void *arg) {
 
 > [!tip]- **工程要点**：连接池的正确实现涉及超时、取消、健康检查、关闭、总连接上限与监控。不要在池锁内执行可能阻塞的建连或健康检查；连接数先由后端容量和等待指标约束，再用压测调整。不存在通用“最快连接池”实现。
 
-# 30 秒回答 / 自测
-
-- **30 秒回答**：连接池维护空闲/活跃两套连接集合，`acquire` 优先取空闲、未达上限则新建、达上限则阻塞等待；`release` 校验存活后放回或关闭，配合健康检查剔除坏连接。
-- **常见误区**：连接池越大越好（实际受核心数与等待/处理时间比值约束，过大反而增加上下文切换）；归还前不校验存活，把坏连接放回池中。
-- **自测**：1) `min_idle` / `max_idle` / `max_total` 分别控制什么？ 2) 如何避免"取到已被服务端关闭的连接"？
-
----
-
-服务器设计模式系列见 → [Buffer Design：Read & Write Buffer (缓冲区设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/11-Buffer%20Design：Read%20&%20Write%20Buffer%20(缓冲区设计)%20⭐.md>) · [Graceful Shutdown (优雅关闭)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/13-Graceful%20Shutdown%20(优雅关闭)%20⭐.md>)
-
----
+> [!summary]- 复述与自测：学完后再展开
+>
+> - **常见误区**：连接池越大越好（实际受核心数与等待/处理时间比值约束，过大反而增加上下文切换）；归还前不校验存活，把坏连接放回池中。
+> - **自测**：1) `min_idle` / `max_idle` / `max_total` 分别控制什么？ 2) 如何避免"取到已被服务端关闭的连接"？
+>
+> ---
+>
+> ---
 
 # Protocol Framing and Buffering (协议分帧与缓冲区)
 
 > [!note] 本节重点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
 
-# 为什么需要 Buffer
+## 为什么需要 Buffer
 
 网络编程中，数据以流的形式到达，无法预知每次 `read()` 会收到多少数据：
 
@@ -259,7 +256,7 @@ void *health_check_thread(void *arg) {
 └──────────────────────────────────────────────────────────┘
 ```
 
-# Buffer 核心结构
+## Buffer 核心结构
 
 ```c
 typedef struct buffer {
@@ -346,7 +343,7 @@ void buffer_expand(buffer *b, size_t new_capacity) {
 }
 ```
 
-# 写 Buffer 与事件管理
+## 写 Buffer 与事件管理
 
 对于非阻塞 socket，`write()` 可能无法一次性发送所有数据：
 
@@ -399,7 +396,7 @@ void handle_write(connection *conn) {
 }
 ```
 
-# 扩容策略对比
+## 扩容策略对比
 
 | 策略 | 空间浪费 | 扩容次数 | 适用场景 |
 |------|---------|---------|---------|
@@ -412,7 +409,7 @@ void handle_write(connection *conn) {
 - 翻倍扩容：每次扩容大小翻倍，均摊 O(1)，但可能浪费内存
 - 1.5 倍扩容：增长更平缓，内存利用率更高（翻倍可能导致下一块分配失败）
 
-# 零拷贝 Buffer
+## 零拷贝 Buffer
 
 高级 Buffer 设计使用**指针/偏移量**而非 memcpy 来避免数据拷贝：
 
@@ -436,7 +433,7 @@ for (buffer_chain *c = head; c && iovcnt < MAX_IOV; c = c->next) {
 ssize_t n = writev(fd, iov, iovcnt);
 ```
 
-# 实际项目中的 Buffer
+## 实际项目中的 Buffer
 
 - **libevent**：`struct evbuffer`，支持链式存储、零拷贝、回调通知
 - **muduo**：`Buffer` 类，用 `std::vector<char>` 实现，prependable 空间支持
@@ -444,41 +441,8 @@ ssize_t n = writev(fd, iov, iovcnt);
 
 > [!tip]- **工程要点**：Buffer 设计首先要保证边界、部分读写与背压正确，再考虑减少 copy。Compact 不是“每次读事件都必须做”，应在需要连续空闲空间时再做；`readv`/`writev` 减少用户态拼接，但不自动消除所有 copy 或内核开销。
 
-# 30 秒回答 / 自测 · 延伸要点 2
-- **30 秒回答**：读写 Buffer 用 `read_pos`/`write_pos` 两个游标区分"已读/待处理/可写"三段；写不下先 compact 再翻倍扩容；非阻塞 `write` 写不完的暂存写 Buffer 并注册 `EPOLLOUT`。
-- **常见误区**：`write()` 返回正数但 < len 时直接丢弃剩余数据；扩容后旧指针失效未更新。
-- **自测**：1) 为什么每次读事件要先 `buffer_compact`？ 2) `EPOLLOUT` 何时注册、何时撤销？
-
----
-
-服务器设计模式系列见 → [Connection Pool Design (连接池设计)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/10-Connection%20Pool%20Design%20(连接池设计)%20⭐.md>) · [Server Performance：Benchmarking with wrk (压测)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/04-Server%20Design%20Patterns%20(服务器设计模式)/12-Server%20Performance：Benchmarking%20with%20wrk%20(压测)%20⭐.md>)
-
-# 零基础阅读路径
-
-先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
-
-# 常见误区
-
-- 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
-- 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Connections Buffers and Framing (连接缓冲与分帧)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
-- 下一步：[05-Benchmarking (压测)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/05-Benchmarking%20(压测).md)
+> [!summary]- 复述与自测：学完后再展开
+> - **常见误区**：`write()` 返回正数但 < len 时直接丢弃剩余数据；扩容后旧指针失效未更新。
+> - **自测**：1) 为什么每次读事件要先 `buffer_compact`？ 2) `EPOLLOUT` 何时注册、何时撤销？
+>
+> ---

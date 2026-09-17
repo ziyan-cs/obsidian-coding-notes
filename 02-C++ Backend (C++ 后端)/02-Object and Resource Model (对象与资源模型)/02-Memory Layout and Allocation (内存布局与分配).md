@@ -1,15 +1,15 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-10
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-内存布局回答对象和程序的字节在哪里；分配策略回答谁申请、谁释放以及分配成本是否值得优化。先用值类型、容器和 RAII 管理资源；对齐、placement new、内存池只在 profile 或明确约束证明必要时使用。
+> [!summary]- 复述检查：学完后再展开
+>
+> 内存布局回答对象和程序的字节在哪里；分配策略回答谁申请、谁释放以及分配成本是否值得优化。先用值类型、容器和 RAII 管理资源；对齐、placement new、内存池只在 profile 或明确约束证明必要时使用。
 
 # 心智模型
 
@@ -26,11 +26,10 @@ review_due: 2026-09-10
 - 内存池必须定义对象构造、析构、归还与泄漏诊断；只复用字节块不是完整设计。
 - 不要为了几个字节随意改变公开结构体布局；协议、持久化格式和 ABI 需要版本策略。
 
-# 自测
-
-1. 为什么成员顺序会改变 `sizeof(T)`？
-2. 什么证据足以支持引入内存池？
-3. placement new 后为什么仍需显式析构？
+> [!question]- 自测：先回答再展开
+> 1. 为什么成员顺序会改变 `sizeof(T)`？
+> 2. 什么证据足以支持引入内存池？
+> 3. placement new 后为什么仍需显式析构？
 
 # Memory Layout (内存布局)
 
@@ -85,10 +84,6 @@ void foo() {
 |大小|有限（默认 8MB）|受虚拟内存限制|
 |生命周期|作用域结束自动释放|手动管理（或智能指针）|
 |碎片|无|有（长时间运行后）|
-
----
-
-内存布局相关概念详见 → Memory Alignment (内存对齐) · Memory Pool Implementation (内存池实现)
 
 ---
 
@@ -152,10 +147,6 @@ static_assert(offsetof(Example, b) == 2);
 static_assert(offsetof(Example, d) == 8);
 static_assert(sizeof(Example) == 24);
 ```
-
----
-
-内存布局与内存池实现详见 → Stack, Heap, BSS, Text Segments (四区详解) · Memory Pool Implementation (内存池实现)
 
 ---
 
@@ -238,33 +229,20 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 
 ---
 
-内存对齐对内存池实现至关重要，详见 → Memory Alignment (内存对齐)
 
-# 零基础阅读路径
+> [!check]- 学完后检查
+> ## 复述
+>
+> - 不看正文，说明 02-Memory Layout and Allocation (内存布局与分配) 的问题、核心机制与边界。
+>
+> ## 验证
+>
+> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+>
+> ## 自测
+>
+> 1. 这个主题解决什么问题？
+> 2. 它在什么条件下会失效、变慢或需要替代方案？
 
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 复述
-
-- 不看正文，说明 02-Memory Layout and Allocation (内存布局与分配) 的问题、核心机制与边界。
-
-## 验证
-
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-## 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-# 关联学习
-
-- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
-- 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)

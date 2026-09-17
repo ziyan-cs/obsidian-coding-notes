@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-09
 ---
 
@@ -11,7 +11,7 @@ review_due: 2026-09-09
 
 > [!note] 本节重点：const 的多种用法、typedef/using 类型别名、enum 与 enum class 区别
 
-# const
+## const
 
 ```cpp
 const int x = 42;        // 不可修改
@@ -28,7 +28,7 @@ int getValue() const;              // 成员函数 const：不修改对象状态
 mutable int cache_;                // mutable：在 const 函数中也可修改
 ```
 
-# typedef & using
+## typedef & using
 
 ```cpp
 typedef unsigned long long ull;   // C 风格
@@ -44,7 +44,7 @@ using Vec = std::vector<T>;
 Vec<int> v;   // = std::vector<int>
 ```
 
-# enum & enum class
+## enum & enum class
 
 ```cpp
 // 传统 enum：值会污染外围作用域，隐式转换为 int
@@ -69,17 +69,13 @@ switch (d) {
 
 ---
 
-类型转换规则详见 → Type Conversion & Casting (类型转换)
-
----
-
 # Type Conversion and Casting (类型转换)
 
 > [!note] 本节重点：四种命名的 C++ 类型转换（static/dynamic/const/reinterpret）、隐式转换规则
 
-# 四种命名转换（Named Casts）
+## 四种命名转换（Named Casts）
 
-## static_cast
+### static_cast
 
 编译期类型转换，用于相关类型之间的安全转换：
 
@@ -95,7 +91,7 @@ Derived* d = static_cast<Derived*>(b);  // 需确保 b 确实指向 Derived
 int n = static_cast<int>(Direction::NORTH);
 ```
 
-## dynamic_cast
+### dynamic_cast
 
 运行时类型检查（RTTI），用于多态类的安全下行转换：
 
@@ -112,7 +108,7 @@ try {
 // 要求：基类必须有至少一个虚函数（才有 RTTI 信息）
 ```
 
-## const_cast
+### const_cast
 
 添加或移除 `const`，是唯一能移除 const 的转换：
 
@@ -127,7 +123,7 @@ void wrapper(const char* p) {
 }
 ```
 
-## reinterpret_cast
+### reinterpret_cast
 
 重新解释内存，最危险，几乎不带任何转换：
 
@@ -142,7 +138,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 // 函数指针转换（某些插件/JIT 场景）
 ```
 
-# 转换选择原则
+## 转换选择原则
 
 ```
 需要运行时安全检查（多态向下转型）  → dynamic_cast
@@ -154,10 +150,6 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 
 ---
 
-指针与引用的转换操作详见 → Pointers & References In Depth (指针与引用深入)
-
----
-
 # Pointers and References (指针与引用)
 
 > [!note] 本节重点：指针与引用的本质区别、函数指针、智能指针底层原理的关系
@@ -165,7 +157,7 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 > [!warning] 地址运算必须受对象边界约束
 > 指针算术只在同一数组对象（含末尾后一位置）范围内才有定义；“指针就是整数地址”是有用的直觉，但不是可以随意加减、转换和解引用的许可证。
 
-# 指针详解
+## 指针详解
 
 ```cpp
 int  x = 42;
@@ -189,7 +181,7 @@ void (*fp)(int) = &myFunc;
 (*fp)(42);   // 或直接 fp(42)
 ```
 
-# 引用详解
+## 引用详解
 
 ```cpp
 int x = 42;
@@ -207,7 +199,7 @@ const int& cr = 42;   // 临时 int 对象生命周期延长至 cr 的作用域
 int&& rr = std::move(x);
 ```
 
-# 指针 vs 引用
+## 指针 vs 引用
 
 | |指针|引用|
 |---|---|---|
@@ -217,7 +209,7 @@ int&& rr = std::move(x);
 |可做算术|✅|❌|
 |传参惯用法|可为 null 或需要算术|不为 null 且不需要重新绑定|
 
-# 常见内存错误
+## 常见内存错误
 
 ```cpp
 // 1. 悬空指针（Dangling Pointer）
@@ -243,43 +235,29 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 
 ---
 
-指针类型转换详见 → Type Conversion & Casting (类型转换)
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> 指针是可为空、可重新指向的对象，适合表达可选对象、数组遍历或低层接口；引用是已绑定对象的别名，适合表达“这里必须有一个有效对象”的参数契约。两者都不管理生命周期：裸指针/引用指向的对象是否还活着，仍由所有权模型决定。优先用值、RAII 容器和智能指针表达所有权。
 
-指针是可为空、可重新指向的对象，适合表达可选对象、数组遍历或低层接口；引用是已绑定对象的别名，适合表达“这里必须有一个有效对象”的参数契约。两者都不管理生命周期：裸指针/引用指向的对象是否还活着，仍由所有权模型决定。优先用值、RAII 容器和智能指针表达所有权。
+> [!question]- 自测：先回答再展开
+> 1. 为什么 `int* p = arr; ++p` 与对任意对象地址做 `++p` 的安全性不同？
+> 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
+> 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
 
-# 自测
+> [!check]- 学完后检查
+> ### 复述
+>
+> - 不看正文，说明 01-Types Pointers and References (类型指针与引用) 的问题、核心机制与边界。
+>
+> ### 验证
+>
+> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
+>
+> ### 自测
+>
+> 1. 这个主题解决什么问题？
+> 2. 它在什么条件下会失效、变慢或需要替代方案？
 
-1. 为什么 `int* p = arr; ++p` 与对任意对象地址做 `++p` 的安全性不同？
-2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
-3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
-
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 复述
-
-- 不看正文，说明 01-Types Pointers and References (类型指针与引用) 的问题、核心机制与边界。
-
-## 验证
-
-- 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
-
-## 自测
-
-1. 这个主题解决什么问题？
-2. 它在什么条件下会失效、变慢或需要替代方案？
-
-# 关联学习
-
-- 导航：[00-Object and Resource Map (对象与资源导航)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/00-Object%20and%20Resource%20Map%20(对象与资源导航).md)
-- 下一步：[02-Memory Layout and Allocation (内存布局与分配)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/02-Memory%20Layout%20and%20Allocation%20(内存布局与分配).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Memory Layout and Allocation (内存布局与分配)](/02-C++%20Backend%20(C++%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/02-Memory%20Layout%20and%20Allocation%20(内存布局与分配).md)

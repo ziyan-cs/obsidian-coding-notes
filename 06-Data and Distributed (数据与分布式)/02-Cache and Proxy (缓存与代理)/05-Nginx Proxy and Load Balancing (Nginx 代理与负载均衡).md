@@ -1,20 +1,20 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：Nginx 在客户端与上游之间完成反向代理、连接复用、负载均衡和流量治理。配置时要明确超时、缓冲、重试和真实源地址边界，错误重试不能破坏非幂等请求。
 
 # Nginx Architecture (Nginx 架构)
 
 > [!note] 本节重点： Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
-# Nginx 进程模型
+## Nginx 进程模型
 
 ```text
 	              ┌───────────────────────────────────────┐
@@ -45,7 +45,7 @@ verified: 2026-09-06
     └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 各进程职责
+### 各进程职责
 
 | 进程 | 职责 | 权限 |
 |------|------|------|
@@ -56,9 +56,9 @@ verified: 2026-09-06
 
 ---
 
-# 为什么 Nginx 性能好
+## 为什么 Nginx 性能好
 
-## 1. 事件驱动 + 非阻塞
+### 1. 事件驱动 + 非阻塞
 
 Nginx 事件循环（与 Redis 类似），每个 worker 独立的事件循环，使用 epoll（Linux）收集就绪事件：
 
@@ -71,13 +71,13 @@ for (;;) {
 }
 ```
 
-## 2. Worker 进程数量 = CPU 核数
+### 2. Worker 进程数量 = CPU 核数
 
 ```nginx
 worker_processes auto;  # = CPU 核心数
 ```
 
-## 3. 无阻塞调用
+### 3. 无阻塞调用
 
 ```
 - 文件读取 → 异步 I/O（aio）
@@ -87,7 +87,7 @@ worker_processes auto;  # = CPU 核心数
 
 ---
 
-# 惊群问题（Thundering Herd）
+## 惊群问题（Thundering Herd）
 
 多进程同时 accept 同一个 socket，内核唤醒所有等待的 worker，但只有一个能成功。
 
@@ -102,7 +102,7 @@ accept_mutex_delay 500ms;    # 拿锁失败后等待时间
 
 ---
 
-# 热加载（Hot Reload）
+## 热加载（Hot Reload）
 
 ```bash
 nginx -s reload
@@ -110,7 +110,7 @@ nginx -s reload
 
 ---
 
-# 架构对比
+## 架构对比
 
 | 特性 | Nginx | Apache |
 |------|-------|--------|
@@ -122,30 +122,29 @@ nginx -s reload
 
 ---
 
-# 经典题型速查
-
-| 题型 | 要点 |
-|------|------|
-| worker 数量设置 | 通常 = CPU 核数 |
-| 惊群问题 | accept_mutex 或 EPOLLEXCLUSIVE 解决 |
-| 热加载原理 | 旧进程优雅退出，新进程逐步接管 |
-| sendfile 优化 | 零拷贝：文件 → 网卡，不经用户态 |
-| 一个 worker 能处理多少连接 | 理论无上限，取决于内存 |
-
-> [!tip]- **工程要点**
-> `worker_connections 10240` + `worker_processes auto` 是常见配置。大并发时注意修改 `ulimit -n`。Nginx 架构是"少量进程 + 异步非阻塞"的典范。
-
----
-
-Nginx 配置与实践详解见 → Reverse Proxy & Load Balancing Config (反向代理配置) · Nginx vs webserver：Why Use Both (与自写server的关系)
-
----
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | worker 数量设置 | 通常 = CPU 核数 |
+> | 惊群问题 | accept_mutex 或 EPOLLEXCLUSIVE 解决 |
+> | 热加载原理 | 旧进程优雅退出，新进程逐步接管 |
+> | sendfile 优化 | 零拷贝：文件 → 网卡，不经用户态 |
+> | 一个 worker 能处理多少连接 | 理论无上限，取决于内存 |
+>
+> > [!tip]- **工程要点**
+> > `worker_connections 10240` + `worker_processes auto` 是常见配置。大并发时注意修改 `ulimit -n`。Nginx 架构是"少量进程 + 异步非阻塞"的典范。
+>
+> ---
+>
+> Nginx 配置与实践详解见 → Reverse Proxy & Load Balancing Config (反向代理配置) · Nginx vs webserver：Why Use Both (与自写server的关系)
+>
+> ---
 
 # Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
 > [!note] 本节重点： 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
-# 反向代理配置
+## 反向代理配置
 
 ```nginx
 server {
@@ -168,7 +167,7 @@ server {
 
 ---
 
-# 负载均衡策略
+## 负载均衡策略
 
 ```nginx
 upstream backend_server {
@@ -197,7 +196,7 @@ upstream backend_server {
 
 ---
 
-# location 匹配规则
+## location 匹配规则
 
 ```
 优先级从高到低：
@@ -216,7 +215,7 @@ upstream backend_server {
 
 ---
 
-# 动静分离
+## 动静分离
 
 ```nginx
 server {
@@ -244,7 +243,7 @@ server {
 
 ---
 
-# HTTPS 配置
+## HTTPS 配置
 
 ```nginx
 server {
@@ -269,33 +268,33 @@ server {
 
 ---
 
-# 经典题型速查 · 延伸要点 2
-| 题型 | 要点 |
-|------|------|
-| location 匹配顺序 | 精确 > ^~ 前缀 > 正则 > 普通前缀 > / |
-| proxy_pass 有无斜杠的区别 | 有斜杠去掉匹配路径，无斜杠全路径传递 |
-| upstream 健康检查 | max_fails=3 fail_timeout=30s 自动踢出故障节点 |
-| 反向代理 vs 正向代理 | 正向代理代理客户端，反向代理代理服务端 |
-| X-Forwarded-For | 传递客户端真实 IP |
-
-> [!tip]- **工程要点**
-> 动静分离可显著提升性能。HTTPS 建议 Let's Encrypt 自动续期。调试用 `nginx -T` 查看合并配置。
-
----
-
-Nginx 架构与实践详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Nginx vs webserver：Why Use Both (与自写server的关系)
-
----
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | location 匹配顺序 | 精确 > ^~ 前缀 > 正则 > 普通前缀 > / |
+> | proxy_pass 有无斜杠的区别 | 有斜杠去掉匹配路径，无斜杠全路径传递 |
+> | upstream 健康检查 | max_fails=3 fail_timeout=30s 自动踢出故障节点 |
+> | 反向代理 vs 正向代理 | 正向代理代理客户端，反向代理代理服务端 |
+> | X-Forwarded-For | 传递客户端真实 IP |
+>
+> > [!tip]- **工程要点**
+> > 动静分离可显著提升性能。HTTPS 建议 Let's Encrypt 自动续期。调试用 `nginx -T` 查看合并配置。
+>
+> ---
+>
+> Nginx 架构与实践详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Nginx vs webserver：Why Use Both (与自写server的关系)
+>
+> ---
 
 # Nginx and Application Server (Nginx 与应用服务器)
 
 > [!note] 本节重点： Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
-# 为什么用 Nginx + 自写 Server
+## 为什么用 Nginx + 自写 Server
 
 纯自写 Web Server（Go/Java/C++）也可以处理 HTTP，但生产环境通常在前面放一层 Nginx。
 
-## 各自职责
+### 各自职责
 
 ```
 客户端 → Nginx（基础设施）→ 自写 Server（业务逻辑）
@@ -314,21 +313,21 @@ Nginx 架构与实践详解见 → Nginx Architecture：Master & Worker Process 
 
 ---
 
-# Nginx 的优势
+## Nginx 的优势
 
-## 零拷贝静态文件
+### 连接管理
 
 ```nginx
 ```
 
-## 连接管理
+### 连接管理
 
 ```
 Nginx：单一进程处理数万并发（epoll 事件驱动）
 自写 Server：连接越多开销越大
 ```
 
-## 安全隔离
+### 安全隔离
 
 ```
 Nginx 做限流、IP 黑名单、过滤恶意请求
@@ -337,14 +336,14 @@ Nginx 做限流、IP 黑名单、过滤恶意请求
 
 ---
 
-# 常见部署架构
+## 常见部署架构
 
-## 单层
+### 单层
 ```
 Nginx → App Server → Database
 ```
 
-## 多层（高并发）
+### 多层（高并发）
 ```
 负载均衡器（LVS）
     ↓
@@ -355,7 +354,7 @@ App Server 集群（业务）
 Redis → MySQL
 ```
 
-## 微服务
+### 微服务
 ```
 Nginx（路由）
  ├── /api/user → User Service
@@ -365,7 +364,7 @@ Nginx（路由）
 
 ---
 
-# 什么时候不需要 Nginx
+## 什么时候不需要 Nginx
 
 - 纯内网微服务（gRPC 直连）
 - 非 HTTP 协议服务（TCP/UDP）
@@ -373,48 +372,18 @@ Nginx（路由）
 
 ---
 
-# 经典题型速查 · 延伸要点 3
-| 题型 | 要点 |
-|------|------|
-| 为什么用 Nginx 而不是全用自写 Server | Nginx 处理静态/TLS/限流/负载均衡更擅长 |
-| 自写 Server 的优势 | 完全掌控业务逻辑 |
-| 什么时候不需要 Nginx | 纯内网 gRPC、非 HTTP 协议 |
-| sendfile 零拷贝 | 避免用户态参与，直接 DMA 到网卡 |
-| Nginx + 自写 Server 是职责分离 | 各司其职，不互相替代 |
-
-> [!tip]- **工程要点**
-> Nginx 在前面做限流、SSL、静态文件，自写 Server 专注业务——这是后端最佳实践。即使 Go 自带 net/http，生产环境也建议前面挂 Nginx。
-
----
-
-Nginx 架构与配置详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Reverse Proxy & Load Balancing Config (反向代理配置)
-
-# 零基础阅读路径
-
-先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
-
-# 常见误区
-
-- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
-- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Cache and Proxy Map (缓存与代理导航)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/00-Cache%20and%20Proxy%20Map%20(缓存与代理导航).md)
-- 下一步：[04-Redis Runtime and Client (Redis 运行时与客户端)](/06-Data%20and%20Distributed%20(数据与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/04-Redis%20Runtime%20and%20Client%20(Redis%20运行时与客户端).md)
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | 为什么用 Nginx 而不是全用自写 Server | Nginx 处理静态/TLS/限流/负载均衡更擅长 |
+> | 自写 Server 的优势 | 完全掌控业务逻辑 |
+> | 什么时候不需要 Nginx | 纯内网 gRPC、非 HTTP 协议 |
+> | sendfile 零拷贝 | 避免用户态参与，直接 DMA 到网卡 |
+> | Nginx + 自写 Server 是职责分离 | 各司其职，不互相替代 |
+>
+> > [!tip]- **工程要点**
+> > Nginx 在前面做限流、SSL、静态文件，自写 Server 专注业务——这是后端最佳实践。即使 Go 自带 net/http，生产环境也建议前面挂 Nginx。
+>
+> ---
+>
+> Nginx 架构与配置详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Reverse Proxy & Load Balancing Config (反向代理配置)

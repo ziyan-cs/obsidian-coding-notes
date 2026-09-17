@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：CI 用可重复流水线验证构建、测试和静态检查，CD 将通过验证的同一产物逐级发布。可靠流水线需要缓存与并行，也需要制品追踪、权限、回滚和失败可诊断性。
 
 # CI CD for C Plus Plus (C Plus Plus 持续集成)
 
@@ -149,40 +149,9 @@ CMakeLists.txt   @tech-lead
 
 ---
 
-# 关联笔记
-
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- Conflict Resolution (冲突解决实操)
-- reset vs revert vs restore (撤销三兄弟)
-- stash, tag, reflog (实用命令)
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-CI CD (持续集成与交付)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Git Collaboration Map (Git 协作导航)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/00-Git%20Collaboration%20Map%20(Git%20协作导航).md)
-- 下一步：[02-Conflicts and Recovery (冲突与恢复)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/02-Conflicts%20and%20Recovery%20(冲突与恢复).md)
+> [!info]- 延伸阅读
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - Conflict Resolution (冲突解决实操)
+> - reset vs revert vs restore (撤销三兄弟)
+> - stash, tag, reflog (实用命令)
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)

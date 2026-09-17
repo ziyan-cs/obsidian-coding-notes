@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-08
 ---
 
@@ -13,7 +13,7 @@ review_due: 2026-09-08
 
 单调栈维护一个**严格单调递增或递减**的栈，用于解决"下一个更大/更小元素"类问题，时间复杂度 O(n)（每个元素最多入栈出栈一次）。
 
-# 模板：下一个更大元素
+## 模板：下一个更大元素
 
 ```cpp
 vector<int> nextGreaterElement(vector<int>& nums) {
@@ -31,9 +31,9 @@ vector<int> nextGreaterElement(vector<int>& nums) {
 }
 ```
 
-# 典型应用
+## 典型应用
 
-## 接雨水
+### 接雨水
 
 ```cpp
 int trap(vector<int>& height) {
@@ -53,7 +53,7 @@ int trap(vector<int>& height) {
 }
 ```
 
-## 柱状图中最大矩形（单调递增栈）
+### 柱状图中最大矩形（单调递增栈）
 
 ```cpp
 int largestRectangleArea(vector<int>& heights) {
@@ -76,21 +76,20 @@ int largestRectangleArea(vector<int>& heights) {
 
 ---
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> **单调栈为什么是 O(n)？** 每个下标最多入栈一次、弹栈一次，虽然有嵌套 `while`，总弹栈次数仍不超过 `n`。先决定栈内维持递增还是递减，再明确“当前元素到来时，谁的答案被确定”。
+>
+> **自测：** 下一个更大元素为何在弹栈时确定答案？柱状图题为什么要在末尾放哨兵？
 
-**单调栈为什么是 O(n)？** 每个下标最多入栈一次、弹栈一次，虽然有嵌套 `while`，总弹栈次数仍不超过 `n`。先决定栈内维持递增还是递减，再明确“当前元素到来时，谁的答案被确定”。
-
-**自测：** 下一个更大元素为何在弹栈时确定答案？柱状图题为什么要在末尾放哨兵？
-
-# 关联笔记
-
-- BFS with Queue (队列BFS)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-- Hash Table (哈希表)
-
----
+> [!info]- 延伸阅读
+> - BFS with Queue (队列BFS)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+> - Hash Table (哈希表)
+>
+> ---
 
 # Queue and Breadth First Search (队列与广度优先搜索)
 
@@ -173,20 +172,20 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- Monotonic Stack (单调栈)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-- Hash Table (哈希表)
-
----
+> [!info]- 延伸阅读
+> - Monotonic Stack (单调栈)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+> - Hash Table (哈希表)
+>
+> ---
 
 # Hash Table (哈希表)
 
 > [!note] 本节重点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
 
-# 哈希表原理
+## 哈希表原理
 
 将 key 通过哈希函数映射到数组下标，实现 O(1) 平均查找。
 
@@ -199,7 +198,7 @@ vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
 
 > [!warning] 哈希表是平均 `O(1)`，不是严格保证 `O(1)`：冲突严重或遭遇恶意键时会退化。对外部可控的键和性能敏感路径，要考虑哈希质量、容量预留或抗攻击策略。
 
-# 常见使用模式
+## 常见使用模式
 
 ```cpp
 #include <unordered_map>
@@ -240,7 +239,7 @@ struct PairHash {
 unordered_map<pair<int,int>, int, PairHash> mp;
 ```
 
-# C++ unordered_map
+## C++ unordered_map
 
 ```cpp
 #include <unordered_map>
@@ -263,38 +262,9 @@ unordered_map<pair<int,int>, int, PairHash> mp;
 
 ---
 
-# 关联笔记 · 延伸要点 3
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-- Monotonic Stack (单调栈)
-- BFS with Queue (队列BFS)
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 把 **02-Stack Queue and Hashing (栈队列与哈希)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
-
-# 常见误区
-
-- 把 **02-Stack Queue and Hashing (栈队列与哈希)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Stack Queue and Hashing (栈队列与哈希)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
-- 下一步：[03-Heap and Top K (堆与 Top K)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Heap%20and%20Top%20K%20(堆与%20Top%20K).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-Heap and Top K (堆与 Top K)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Heap%20and%20Top%20K%20(堆与%20Top%20K).md)

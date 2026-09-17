@@ -1,15 +1,14 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - distributed/system
 ---
 
 > [!abstract] 核心考点： 路由转发 + 过滤器链（鉴权/限流/熔断/日志）+ 高性能代理设计，核心是看你对"网关层职责边界"的理解
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+> **回答**：网关承担路由、认证、限流、观测和协议适配等横切能力，但不应承载核心业务。设计要处理配置一致性、插件隔离、重试幂等、故障旁路和自身高可用。
 
 # 需求分析
 
@@ -369,32 +368,5 @@ func handleRequest(ctx *Context) {
 
 API Gateway 路由与网络安全详解见 → [Reverse Proxy & Load Balancing](07-Distributed%20&%20Middleware%20(分布式与中间件)/02-Nginx%20(反向代理与负载均衡)/02b-Reverse%20Proxy%20&%20Load%20Balancing%20Config%20(反向代理配置).md) · [HTTPS & TLS Overview](05-Network%20Programming%20(网络编程)/03-HTTP%20&%20Application%20Layer%20(HTTP%20与应用层)/07-HTTPS%20&%20TLS%20Overview%20(HTTPS原理概览).md)
 
-# 零基础阅读路径
-
-先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
-
-# 常见误区
-
-- 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
-- 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **05-API Gateway (API 网关)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+[!info]- 延伸阅读
 - 下一步：[04-Config Center (配置中心)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20(配置中心).md)

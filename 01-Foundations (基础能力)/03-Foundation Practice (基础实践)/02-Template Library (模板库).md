@@ -1,15 +1,15 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - cs/algorithm
 ---
 
 > [!abstract] 核心考点： 常用算法模板汇总、各数据结构的操作接口速查、面试速记
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：模板库保存经过验证的最小骨架、适用条件和复杂度，不保存脱离语义的大段答案。调用模板前必须能解释不变量、边界以及为什么它适合当前问题。
 
 # 二分查找
 
@@ -262,39 +262,15 @@ vector<int> buildNext(string& p) {
 
 ---
 
-# 关联笔记
+> [!info]- 延伸阅读
+> - Mistake Journal (错题与易错点记录)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> - Fast & Slow Pointers (快慢指针)
+> - Monotonic Stack (单调栈)
 
-- Mistake Journal (错题与易错点记录)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-- Monotonic Stack (单调栈)
+> [!warning]- 易错点
+> - 把 **02-Template Library (模板库)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-# 零基础阅读路径
-
-先阅读问题与最小例子，再理解机制与边界，最后做验证或练习。无法复述因果关系时，先回到输入、状态和输出。
-
-# 常见误区
-
-- 把 **02-Template Library (模板库)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Template Library (模板库)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Foundation Practice Map (基础实践导航)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/00-Foundation%20Practice%20Map%20(基础实践导航).md)
-- 下一步：[03-Weekly Practice Plan (每周练习计划)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/03-Weekly%20Practice%20Plan%20(每周练习计划).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-Weekly Practice Plan (每周练习计划)](/01-Foundations%20(基础能力)/03-Foundation%20Practice%20(基础实践)/03-Weekly%20Practice%20Plan%20(每周练习计划).md)

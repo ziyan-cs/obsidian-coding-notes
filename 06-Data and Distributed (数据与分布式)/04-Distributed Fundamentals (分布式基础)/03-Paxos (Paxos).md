@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答**：Paxos 通过 proposal number 和多数派交集保证不会选择两个不同值；Prepare/Promise 与 Accept/Accepted 分别建立提案优先级和接受规则。工程实现通常使用 Multi-Paxos 降低重复协商成本。
 
 # Paxos Overview (Paxos概览)
 
@@ -101,49 +101,21 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 
 ---
 
-# 经典题型速查
+> [!example]- 题型索引
+> | 题型 | 要点 |
+> |------|------|
+> | Paxos 两阶段 | Prepare（承诺）-> Accept（接受） |
+> | Paxos 活锁 | 多个 Proposer 相互覆盖，导致无法达成一致 |
+> | Multi-Paxos 优化 | 选主后省略 Prepare 阶段，一轮 Accept 决定 |
+> | Raft vs Paxos | Raft 是可理解的 Paxos 实现 |
+> | Paxos 的应用 | Google Chubby（分布式锁），ZooKeeper 的 ZAB 受 Paxos 启发 |
+>
+> > [!tip]- **工程要点**
+> > Paxos 理论价值极高但实现困难。实际操作中，新系统应优先选择 Raft（etcd/Consul/TiKV 已验证），而非从头实现 Paxos。了解 Paxos 有助于理解分布式一致性的本质。
+>
+> ---
+>
+> Paxos 与分布式理论基础详解见 → CAP Theorem & BASE Theory (CAP理论) · Consistency Models：Strong, Eventual (一致性模型)
 
-| 题型 | 要点 |
-|------|------|
-| Paxos 两阶段 | Prepare（承诺）-> Accept（接受） |
-| Paxos 活锁 | 多个 Proposer 相互覆盖，导致无法达成一致 |
-| Multi-Paxos 优化 | 选主后省略 Prepare 阶段，一轮 Accept 决定 |
-| Raft vs Paxos | Raft 是可理解的 Paxos 实现 |
-| Paxos 的应用 | Google Chubby（分布式锁），ZooKeeper 的 ZAB 受 Paxos 启发 |
-
-> [!tip]- **工程要点**
-> Paxos 理论价值极高但实现困难。实际操作中，新系统应优先选择 Raft（etcd/Consul/TiKV 已验证），而非从头实现 Paxos。了解 Paxos 有助于理解分布式一致性的本质。
-
----
-
-Paxos 与分布式理论基础详解见 → CAP Theorem & BASE Theory (CAP理论) · Consistency Models：Strong, Eventual (一致性模型)
-
-# 零基础阅读路径
-
-先写出业务不变量和“数据真相在哪里”；再读本地事务或缓存流程；最后处理副本、消息、故障和一致性。若没有失败场景，分布式结论没有意义。
-
-# 常见误区
-
-- 把存储或分布式结论脱离一致性、失败窗口和数据规模来背，容易在工程中套错。
-- 没有通过事务、并发读写、故障注入或指标观察验证关键假设。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Paxos (Paxos)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Distributed Fundamentals Map (分布式基础导航)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/00-Distributed%20Fundamentals%20Map%20(分布式基础导航).md)
-- 下一步：[04-Distributed Transactions (分布式事务)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/04-Distributed%20Transactions%20(分布式事务).md)
+> [!info]- 延伸阅读
+> - 下一步：[04-Distributed Transactions (分布式事务)](/06-Data%20and%20Distributed%20(数据与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/04-Distributed%20Transactions%20(分布式事务).md)

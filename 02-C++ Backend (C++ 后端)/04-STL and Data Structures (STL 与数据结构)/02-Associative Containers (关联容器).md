@@ -1,24 +1,24 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# 30 秒回答
-
-**核心结论**：`map`、`set` 等有序容器通常以红黑树实现，查找与更新为 O(log n) 并提供顺序遍历；是否改用哈希容器取决于是否需要顺序、范围查询与稳定复杂度。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：`map`、`set` 等有序容器通常以红黑树实现，查找与更新为 O(log n) 并提供顺序遍历；是否改用哈希容器取决于是否需要顺序、范围查询与稳定复杂度。
 
 # map and set (红黑树与有序容器)
 
 > [!note] 本节重点：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
 
-# 底层结构：红黑树
+## 底层结构：红黑树
 
 `map`、`set`、`multimap`、`multiset` 底层是**红黑树**（Red-Black Tree），一种近似平衡的 BST：
 
-## 红黑树的 5 条规则
+### 红黑树的 5 条规则
 
 ```text
 1. 每个节点是红色或黑色
@@ -28,7 +28,7 @@ verified: 2026-09-06
 5. 任一节点到其每个叶子路径上的黑节点数相同
 ```
 
-## 为什么用红黑树而不是 AVL？
+### 为什么用红黑树而不是 AVL？
 
 | 特性 | 红黑树 | AVL |
 |------|--------|-----|
@@ -39,7 +39,7 @@ verified: 2026-09-06
 
 > **STL 选择红黑树**的原因：map/set 是通用容器，需要同时兼顾查询和修改性能。红黑树的插入/删除重平衡代价更低（均摊 O(1) 次旋转）。
 
-# map/set vs unordered_map/unordered_set
+## map/set vs unordered_map/unordered_set
 
 | | `map` (红黑树) | `unordered_map` (哈希表) |
 |---|---|---|
@@ -66,7 +66,7 @@ auto it2 = scores.upper_bound(3); // 第一个 > 3 的元素
 std::unordered_map<int, std::string> fast;
 ```
 
-# 迭代器稳定性
+## 迭代器稳定性
 
 | 操作 | `map`/`set` | `unordered_map`/`unordered_set` |
 |------|-------------|----------------------------------|
@@ -74,7 +74,7 @@ std::unordered_map<int, std::string> fast;
 | 删除 | 仅被删节点 | 仅被删节点（rehash 除外） |
 | clear | 全部失效 | 全部失效 |
 
-# map 的 operator[] 陷阱
+## map 的 operator[] 陷阱
 
 ```cpp
 // operator[] 在 key 不存在时会 **插入默认构造的值**
@@ -88,7 +88,7 @@ if (it != m.end()) { /* 存在 */ }
 int val = m.at("key");  // 不存在则抛 out_of_range
 ```
 
-# 工程建议
+## 工程建议
 
 ```cpp
 // ✅ 需要有序遍历 → map/set
@@ -116,15 +116,11 @@ m.emplace(std::piecewise_construct,
 
 ---
 
-哈希表实现的关联容器对比详见 → unordered_map Hash Table & Collision (哈希表与冲突)
-
----
-
 # unordered map Hash Table (哈希表与冲突)
 
 > [!note] 本节重点：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
 
-# 底层结构：Separate Chaining（链地址法）
+## 底层结构：Separate Chaining（链地址法）
 
 ```text
 bucket array (vector of linked lists):
@@ -145,7 +141,7 @@ bucket array (vector of linked lists):
 - `hash(key) % bucket_count` 决定元素放入哪个 bucket
 - 当 `load_factor > max_load_factor`（默认 1.0）时触发 rehash
 
-# Load Factor & Rehash
+## Load Factor & Rehash
 
 ```cpp
 // load_factor = size / bucket_count
@@ -164,7 +160,7 @@ m.max_load_factor(0.75f);  // 自定义阈值
 - `insert` 后 `load_factor > max_load_factor` → 自动 rehash
 - `rehash(n)` / `reserve(n)` 显式调用
 
-# 哈希函数
+## 哈希函数
 
 ```cpp
 // 标准库已提供基础类型的哈希
@@ -198,7 +194,7 @@ struct PairHash {
 - **高效计算**：不要为了"完美"而使用复杂的哈希（如加密哈希）
 - 不要返回常量——所有元素都在同一 bucket 退化为链表（O(N)）
 
-# 性能关键操作
+## 性能关键操作
 
 | 操作 | 均摊复杂度 | 最坏情况 |
 |------|-----------|----------|
@@ -207,7 +203,7 @@ struct PairHash {
 | `erase` | O(1) | O(N) |
 | `rehash` | O(N) | — |
 
-# 工程建议 · 延伸要点 2
+## 工程建议 · 延伸要点 2
 ```cpp
 // ✅ 预分配减少 rehash
 std::unordered_map<int, int> m;
@@ -232,34 +228,6 @@ m.insert(batch.begin(), batch.end());
 
 ---
 
-红黑树实现的有序容器对比详见 → map & set Red-Black Tree (红黑树与有序容器)
 
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Associative Containers (关联容器)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-STL Map (STL 导航)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/00-STL%20Map%20(STL%20导航).md)
-- 下一步：[03-Iterators Algorithms and Adapters (迭代器算法与适配器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/03-Iterators%20Algorithms%20and%20Adapters%20(迭代器算法与适配器).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-Iterators Algorithms and Adapters (迭代器算法与适配器)](/02-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/03-Iterators%20Algorithms%20and%20Adapters%20(迭代器算法与适配器).md)

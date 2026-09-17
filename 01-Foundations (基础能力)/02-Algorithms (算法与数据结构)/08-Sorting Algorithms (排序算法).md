@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
 
-# 核心
+## 核心
 
 - 排序 4 要素：
     - 时间复杂度
@@ -23,7 +23,7 @@ verified: 2026-09-06
 - 目标：
 	- 先看数据规模、是否近乎有序、值域和稳定性要求，再决定是否值得手写排序。
 
-# 排序算法对比
+## 排序算法对比
 
 ---
 
@@ -40,9 +40,9 @@ verified: 2026-09-06
 
 ---
 
-# 经典排序实现
+## 经典排序实现
 
-## 2.1 冒泡排序（Bubble Sort）
+### 2.1 冒泡排序（Bubble Sort）
 
 ```cpp
 // 对外接口
@@ -61,7 +61,7 @@ void bubbleSort(vector<int>& arr) {
 }
 ```
 
-## 2.2 选择排序（Selection Sort）
+### 2.2 选择排序（Selection Sort）
 
 ```cpp
 // 对外接口
@@ -77,7 +77,7 @@ void selectionSort(vector<int>& arr) {
 }
 ```
 
-## 2.3 插入排序（Insertion Sort）⭐
+### 2.3 插入排序（Insertion Sort）⭐
 
 ```cpp
 // 对外接口
@@ -95,11 +95,11 @@ void insertSort(vector<int>& arr) {
 }
 ```
 
-## 2.5 快速排序（Quick Sort）⭐
+### 2.7 计数排序（Counting Sort）
 
-## 2.6 堆排序（Heap Sort）⭐
+### 2.7 计数排序（Counting Sort）
 
-## 2.7 计数排序（Counting Sort）
+### 2.7 计数排序（Counting Sort）
 
 ```cpp
 // 对外接口
@@ -116,7 +116,7 @@ void countingSort(vector<int>& arr) {
 }
 ```
 
-## 2.8 希尔排序（Shell Sort）
+### 2.8 希尔排序（Shell Sort）
 
 ```cpp
 // 对外接口
@@ -135,7 +135,7 @@ void shellSort(vector<int>& arr) {
 }
 ```
 
-## 2.9 桶排序（Bucket Sort）
+### 2.9 桶排序（Bucket Sort）
 
 ```cpp
 // 对外接口
@@ -155,7 +155,7 @@ void bucketSort(vector<float>& a) {
 }
 ```
 
-## 2.10 基数排序（Radix Sort）
+### 2.10 基数排序（Radix Sort）
 
 ```cpp
 // 对外接口
@@ -178,23 +178,22 @@ void radixSort(vector<int>& a) {
 
 > [!warning] 计数排序的空间随“值域”而不是元素个数增长；上例的基数排序只覆盖非负整数，`exp *= 10` 也要注意溢出。题目没有明确数据范围时，优先使用 `std::sort` / `std::stable_sort`，而不是把线性排序当作默认选项。
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> **排序如何选？** 通用场景优先标准库排序：`std::sort` 适合通常的就地不稳定排序需求，需保持等值元素相对顺序时用 `std::stable_sort`。近乎有序、小区间常用插入排序思想；值域小的整数才考虑计数排序；固定长度键且每位范围有限才考虑基数排序。
+>
+> **自测：** 为什么计数排序不能只看 `N`？快速排序为什么不能只写“`O(N log N)`”？
+>
+> ---
 
-**排序如何选？** 通用场景优先标准库排序：`std::sort` 适合通常的就地不稳定排序需求，需保持等值元素相对顺序时用 `std::stable_sort`。近乎有序、小区间常用插入排序思想；值域小的整数才考虑计数排序；固定长度键且每位范围有限才考虑基数排序。
-
-**自测：** 为什么计数排序不能只看 `N`？快速排序为什么不能只写“`O(N log N)`”？
-
----
-
-# 关联笔记
-
-- Quick Sort： Partition & Pivot (快排实现)
-- Merge Sort & Inversion Count (归并排序)
-- Heap Sort (堆排序)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-
----
+> [!info]- 延伸阅读
+> - Quick Sort： Partition & Pivot (快排实现)
+> - Merge Sort & Inversion Count (归并排序)
+> - Heap Sort (堆排序)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+>
+> ---
 
 # Quick Sort (快速排序)
 
@@ -218,7 +217,7 @@ void quickSortV1(vector<int>& arr, int L, int R) {
 }
 ```
 
-# 快排 2.0
+## 快排 2.0
 
 ```cpp
 void quickSortV2(vector<int>& arr, int L, int R) {
@@ -245,7 +244,7 @@ void quickSortV2(vector<int>& arr, int L, int R) {
 }
 ```
 
-# 快排 3.0
+## 快排 3.0
 
 ```cpp
 void quickSortV3(vector<int>& arr, int L, int R) {
@@ -275,14 +274,14 @@ void quickSortV3(vector<int>& arr, int L, int R) {
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- Merge Sort & Inversion Count (归并排序)
-- Heap Sort (堆排序)
-- Sorting Algorithms (排序)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-
----
+> [!info]- 延伸阅读
+> - Merge Sort & Inversion Count (归并排序)
+> - Heap Sort (堆排序)
+> - Sorting Algorithms (排序)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+>
+> ---
 
 # Merge Sort and Inversion Count (归并排序与逆序对)
 
@@ -317,14 +316,14 @@ void merge(vector<int>& arr, int L, int M, int R) {
 
 ---
 
-# 关联笔记 · 延伸要点 3
-- Quick Sort： Partition & Pivot (快排实现)
-- Heap Sort (堆排序)
-- Sorting Algorithms (排序)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-
----
+> [!info]- 延伸阅读
+> - Quick Sort： Partition & Pivot (快排实现)
+> - Heap Sort (堆排序)
+> - Sorting Algorithms (排序)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+>
+> ---
 
 # Heap Sort (堆排序)
 
@@ -367,38 +366,15 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 
 ---
 
-# 关联笔记 · 延伸要点 4
-- Quick Sort： Partition & Pivot (快排实现)
-- Merge Sort & Inversion Count (归并排序)
-- Sorting Algorithms (排序)
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
+> [!info]- 延伸阅读
+> - Quick Sort： Partition & Pivot (快排实现)
+> - Merge Sort & Inversion Count (归并排序)
+> - Sorting Algorithms (排序)
+> - Array & Two Pointers (数组与双指针)
+> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
 
-# 零基础阅读路径
+> [!warning]- 易错点
+> - 把 **08-Sorting Algorithms (排序算法)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
-
-# 常见误区
-
-- 把 **08-Sorting Algorithms (排序算法)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **08-Sorting Algorithms (排序算法)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
-- 下一步：[09-Dynamic Programming (动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-Dynamic%20Programming%20(动态规划).md)
+> [!info]- 延伸阅读
+> - 下一步：[09-One Dimensional Dynamic Programming (一维动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-One%20Dimensional%20Dynamic%20Programming%20(一维动态规划).md)

@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
@@ -10,11 +10,11 @@ verified: 2026-09-06
 
 > [!note] 本节重点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
 
-# 冲突何时产生
+## 冲突何时产生
 
 当两个分支对**同一文件的同一区域**做了不同修改，Git 无法自动决定取谁的，产生冲突。
 
-# 冲突标记
+## 冲突标记
 
 ```
 <<<<<<< HEAD
@@ -28,7 +28,7 @@ verified: 2026-09-06
 - `=======` 到 `>>>>>>>`：对方分支的版本
 - 解决：手动编辑，保留想要的内容，删除所有标记符
 
-# 解决流程
+## 解决流程
 
 ```bash
 git merge feature            # 触发冲突
@@ -36,9 +36,9 @@ git add conflicted_file.cpp  # 标记已解决
 git commit                   # 完成合并（message 自动生成）
 ```
 
-# 高级技巧
+## 高级技巧
 
-## 合并策略
+### 合并策略
 
 ```bash
 git merge -s recursive -X theirs feature   # 冲突全取对方版本
@@ -46,7 +46,7 @@ git merge -s recursive -X ours feature     # 冲突全取自己版本
 git merge -s ours feature                  # 完全忽略对方（仅记合并事实）
 ```
 
-## 快速选择
+### 快速选择
 
 ```bash
 git checkout --ours file      # 取当前分支版本
@@ -54,7 +54,7 @@ git checkout --theirs file    # 取对方分支版本
 git checkout --merge file     # 重新标记冲突
 ```
 
-## 合并工具
+### 合并工具
 
 ```bash
 git mergetool                    # 图形化合并工具
@@ -62,20 +62,20 @@ git config merge.tool vscode     # 设置默认工具
 git config merge.conflictstyle diff3  # 三方对比（显示共同祖先）
 ```
 
-## git rerere（复用解决方案）
+### git rerere（复用解决方案）
 
 ```bash
 git config --global rerere.enabled true
 ```
 
-## 中止合并
+### 中止合并
 
 ```bash
 git merge --abort     # 回到 merge 前
 git rebase --abort    # 回到 rebase 前
 ```
 
-# 避免冲突的实践
+## 避免冲突的实践
 
 | 实践 | 说明 |
 |------|------|
@@ -88,15 +88,14 @@ git rebase --abort    # 回到 rebase 前
 
 ---
 
-# 关联笔记
-
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- reset vs revert vs restore (撤销三兄弟)
-- stash, tag, reflog (实用命令)
-- CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-
----
+> [!info]- 延伸阅读
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - reset vs revert vs restore (撤销三兄弟)
+> - stash, tag, reflog (实用命令)
+> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+>
+> ---
 
 # reset revert and restore (撤销操作)
 
@@ -105,7 +104,7 @@ git rebase --abort    # 回到 rebase 前
 > [!warning] 先确认目标，再执行会丢数据的命令
 > `reset --hard` 与 `restore` 可能丢掉未提交内容。先用 `git status`、`git diff` 确认目标；重要改动先做 commit、stash 或文件级备份。公共分支默认优先考虑 `revert`。
 
-# 速查
+## 速查
 
 |命令|作用范围|改写历史|适用场景|
 |---|---|---|---|
@@ -115,7 +114,7 @@ git rebase --abort    # 回到 rebase 前
 
 ---
 
-# git reset
+## git reset
 
 将 HEAD（和分支指针）移动到指定 commit，根据模式决定暂存区和工作区的影响：
 
@@ -135,7 +134,7 @@ git reset --hard  HEAD~1   # 移动 HEAD + 清空暂存区 + 丢弃工作区改�
 
 ---
 
-# git revert
+## git revert
 
 创建一个新 commit，内容是指定 commit 的**逆操作**，历史不被改写：
 
@@ -155,7 +154,7 @@ After:   A ← B ← C ← D ← D'  （D' 是 D 的逆操作）
 
 ---
 
-# git restore
+## git restore
 
 专门用于撤销工作区和暂存区的改动（Git 2.23+ 引入，替代旧的 `git checkout -- file`）：
 
@@ -165,26 +164,25 @@ git restore --staged file.cpp     # 将文件从暂存区移出（不影响工�
 git restore --source=HEAD~2 file  # 将文件恢复到指定 commit 的版本
 ```
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> `reset` 移动当前分支指针，并按模式影响暂存区/工作区，适合重整尚未共享的本地历史；`revert` 新增一个反向 commit，保留公共历史；`restore` 只处理工作区或暂存区的文件内容。选择前先问：改动是否已共享？我是否需要保留历史？是否有未提交内容？
 
-`reset` 移动当前分支指针，并按模式影响暂存区/工作区，适合重整尚未共享的本地历史；`revert` 新增一个反向 commit，保留公共历史；`restore` 只处理工作区或暂存区的文件内容。选择前先问：改动是否已共享？我是否需要保留历史？是否有未提交内容？
+> [!question]- 自测：先回答再展开
+> 1. 已推送到团队共用分支的一次错误提交，为什么通常优先 `revert`？
+> 2. `git restore --staged file` 会如何影响工作区？
+> 3. 使用 `reset --hard` 前，你会做哪两项只读检查？
+>
+> ---
 
-# 自测
-
-1. 已推送到团队共用分支的一次错误提交，为什么通常优先 `revert`？
-2. `git restore --staged file` 会如何影响工作区？
-3. 使用 `reset --hard` 前，你会做哪两项只读检查？
-
----
-
-# 关联笔记 · 延伸要点 2
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- Conflict Resolution (冲突解决实操)
-- stash, tag, reflog (实用命令)
-- CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-
----
+> [!info]- 延伸阅读
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - Conflict Resolution (冲突解决实操)
+> - stash, tag, reflog (实用命令)
+> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+>
+> ---
 
 # stash tag and reflog (实用命令)
 
@@ -258,39 +256,12 @@ git checkout -b rescue ghi9012  # 从丢失的 commit 创建新分支
 
 ---
 
-# 关联笔记 · 延伸要点 3
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-- Conflict Resolution (冲突解决实操)
-- reset vs revert vs restore (撤销三兄弟)
-- CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-- 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+> [!info]- 延伸阅读
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+> - Conflict Resolution (冲突解决实操)
+> - reset vs revert vs restore (撤销三兄弟)
+> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
+> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
 
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-Conflicts and Recovery (冲突与恢复)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Git Collaboration Map (Git 协作导航)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/00-Git%20Collaboration%20Map%20(Git%20协作导航).md)
-- 下一步：[03-CI CD (持续集成与交付)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/03-CI%20CD%20(持续集成与交付).md)
+> [!info]- 延伸阅读
+> - 下一步：[03-CI CD (持续集成与交付)](/07-Engineering%20Tools%20(工程工具)/01-Git%20Collaboration%20(Git%20协作)/03-CI%20CD%20(持续集成与交付).md)

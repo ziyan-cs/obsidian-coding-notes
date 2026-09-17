@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
-# 编译的四个阶段
+## 编译的四个阶段
 
 ```text
 Compilation Pipeline:
@@ -34,7 +34,7 @@ g++ main.o -o main            # 链接
 g++ main.cpp -o main
 ```
 
-# 目标文件的节区（Section）
+## 目标文件的节区（Section）
 
 ```text
 ELF 目标文件结构：
@@ -57,7 +57,7 @@ ELF 目标文件结构：
 └──────────────┘
 ```
 
-# 符号解析与重定位
+## 符号解析与重定位
 
 ```cpp
 // a.cpp
@@ -94,7 +94,7 @@ multiple definition of `global'
 // ✅ common.cpp: int counter = 0;
 ```
 
-# 静态链接 vs 动态链接
+## 静态链接 vs 动态链接
 
 | | 静态链接 (.a) | 动态链接 (.so / .dll) |
 |--|-------------|-------------------|
@@ -115,7 +115,7 @@ g++ -fPIC -shared lib.cpp -o libfoo.so
 g++ main.cpp -L. -lfoo -o main
 ```
 
-# 动态链接的细节：PLT & GOT
+## 动态链接的细节：PLT & GOT
 
 ```text
 调用共享库函数时的跳转流程：
@@ -128,7 +128,7 @@ main() 调用 foo():
 
 **延迟绑定（Lazy Binding）**：函数地址只在第一次调用时才解析，提高启动速度。
 
-# 工程最佳实践
+## 工程最佳实践
 
 ```cpp
 // ✅ 头文件守卫
@@ -147,21 +147,20 @@ inline int square(int x) { return x * x; }
 
 > **面试重点**：**声明 vs 定义**的区别——声明引入名字，定义提供实体（对对象而言通常也提供存储）。头文件通常放声明；需要放在头文件的 inline 函数、模板、`inline` 变量等是例外。避免在普通头文件定义具有外部链接的全局变量。
 
-# 30 秒回答
-
-编译把源文件分别变成目标文件，链接器再解析跨文件符号并重定位地址。`undefined reference` 先查“声明有了但定义/库没有参与链接”，`multiple definition` 先查“同一外部符号被定义多次”。静态/动态链接是部署、更新、隔离与启动成本的权衡，不能只用“谁更快”概括。
-
----
-
-头文件与源文件组织详见 → Header & Source Organization (头文件与源文件组织)
-
----
+> [!summary]- 复述检查：学完后再展开
+>
+> 编译把源文件分别变成目标文件，链接器再解析跨文件符号并重定位地址。`undefined reference` 先查“声明有了但定义/库没有参与链接”，`multiple definition` 先查“同一外部符号被定义多次”。静态/动态链接是部署、更新、隔离与启动成本的权衡，不能只用“谁更快”概括。
+>
+> ---
+>
+>
+> ---
 
 # Header & Source Organization (头文件与源文件组织)
 
 > [!note] 本节重点：头文件职责、源文件职责、include 顺序、模块化设计
 
-# 头文件职责
+## 头文件职责
 
 ```cpp
 // foo.h — 接口声明
@@ -194,7 +193,7 @@ private:
 - const/constexpr 常量
 - extern 声明
 
-# 源文件职责
+## 源文件职责
 
 ```cpp
 // foo.cpp — 实现
@@ -213,7 +212,7 @@ Foo::Foo(std::string name) : pImpl_(std::make_unique<Impl>()) {
 Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 ```
 
-# Include 顺序规范
+## Include 顺序规范
 
 ```cpp
 // Google C++ Style Guide 推荐顺序：
@@ -226,7 +225,7 @@ Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 **为什么关联头文件放在第一个**：
 如果 `foo.h` 缺少某个 `#include`，编译 `foo.cpp` 时第一个报错，而不是在其他文件中报出难以定位的错误。
 
-# Forward Declaration vs Include
+## Forward Declaration vs Include
 
 ```cpp
 // ✅ 只需要前向声明：
@@ -242,7 +241,7 @@ bar.someMethod();       // 调用成员函数
 sizeof(Bar);            // 获取大小
 ```
 
-# 模块化组织
+## 模块化组织
 
 ```text
 project/
@@ -260,35 +259,33 @@ project/
         └── test_impl.cpp
 ```
 
-# 常见陷阱
-
-```cpp
-// ❌ 循环 include（A.h include B.h, B.h include A.h）
-// → 用前向声明打破循环
-
-// ❌ include 爆炸（间接包含大量头文件）
-// → 使用前向声明 / Pimpl 惯用法
-
-// ❌ 在头文件中写 using namespace std;
-// → 污染所有包含者的命名空间
-
-// ❌ 在头文件中定义非内联函数
-// → 多个 .cpp 包含该头文件 → multiple definition 错误
-```
-
-> [!tip]- **工程要点**：编译时间是大型 C++ 项目的重要成本。头文件之间的依赖关系直接影响增量编译速度。优先用 **前向声明**，其次用 **Pimpl 惯用法**（将实现细节对用户隐藏），最后才考虑重构成模块。
-
----
-
-编译与链接过程详见 → Compilation & Linking (编译与链接)
-
----
+> [!warning]- 易错点
+> ```cpp
+> // ❌ 循环 include（A.h include B.h, B.h include A.h）
+> // → 用前向声明打破循环
+>
+> // ❌ include 爆炸（间接包含大量头文件）
+> // → 使用前向声明 / Pimpl 惯用法
+>
+> // ❌ 在头文件中写 using namespace std;
+> // → 污染所有包含者的命名空间
+>
+> // ❌ 在头文件中定义非内联函数
+> // → 多个 .cpp 包含该头文件 → multiple definition 错误
+> ```
+>
+> > [!tip]- **工程要点**：编译时间是大型 C++ 项目的重要成本。头文件之间的依赖关系直接影响增量编译速度。优先用 **前向声明**，其次用 **Pimpl 惯用法**（将实现细节对用户隐藏），最后才考虑重构成模块。
+>
+> ---
+>
+>
+> ---
 
 # Preprocessor & Macros (预处理与宏)
 
 > [!note] 本节重点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
-# 预处理指令概览
+## 预处理指令概览
 
 ```cpp
 // 文件包含
@@ -317,7 +314,7 @@ project/
 #error "message"     // 编译错误
 ```
 
-# 宏的陷阱（务必注意）
+## 宏的陷阱（务必注意）
 
 ```cpp
 // ❌ 问题 1：运算符优先级
@@ -346,7 +343,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
 #define REQUIRE(cond) do { if (!(cond)) return false; } while(0)
 ```
 
-# 条件编译的典型用途
+## 条件编译的典型用途
 
 ```cpp
 // 调试日志
@@ -381,7 +378,7 @@ REQUIRE(x > 0);  // 展开：if (!(x>0)) return false;
     Class& operator=(const Class&) = delete;
 ```
 
-# 常用预定义宏
+## 常用预定义宏
 
 ```cpp
 __FILE__             // 当前文件名
@@ -396,7 +393,7 @@ assert(ptr != nullptr);         // 运行时断言（NDEBUG 时消除）
 static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 ```
 
-# 宏 vs C++ 特性
+## 宏 vs C++ 特性
 
 | 目的 | 宏 | C++ 替代 |
 |------|-----|---------|
@@ -410,34 +407,6 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 ---
 
-编译过程中预处理阶段详见 → Compilation & Linking (编译与链接)
 
-# 零基础阅读路径
-
-先阅读对象、内存或资源的“谁创建、谁拥有、何时销毁”部分；然后看语法和代码；最后才看性能、底层布局或面试延伸。任何代码先在编译器中跑最小版本。
-
-# 常见误区
-
-- 只背语言规则而不追问对象生命周期、所有权、异常路径或并发边界，容易在真实代码中误用。
-- 不用编译器警告、单元测试、sanitizer 或小型实验验证，就把经验结论当作 C++ 规则。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Build Organization and Preprocessing (构建组织与预处理)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Engineering Practice Map (工程实践导航)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/00-Engineering%20Practice%20Map%20(工程实践导航).md)
-- 下一步：[02-CMake and Dependencies (CMake 与依赖)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/02-CMake%20and%20Dependencies%20(CMake%20与依赖).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-CMake and Dependencies (CMake 与依赖)](/02-C++%20Backend%20(C++%20后端)/06-Engineering%20Practice%20(工程实践)/02-CMake%20and%20Dependencies%20(CMake%20与依赖).md)

@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -10,7 +10,7 @@ verified: 2026-09-06
 
 > [!note] 本节重点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
-# 函数调用链
+## 函数调用链
 
 **TCP serve**
 
@@ -48,7 +48,7 @@ Server                    OS Kernel                Client
 
 ---
 
-# 接口语义
+## 接口语义
 
 ```cpp
 #include <iostream>
@@ -60,7 +60,7 @@ Server                    OS Kernel                Client
 #include <arpa/inet.h>    // 转换：inet_ntoa, inet_addr...
 ```
 
-# socket
+## socket
 
 - 创建一个套接字，返回文件描述符（fd）。本质上是在内核中创建了一个网络通信的端点。
 
@@ -87,7 +87,7 @@ if (fd < 0) perror("socket failed");
 	- `IPPROTO_UDP`：UDP 协议
 	- `IPPROTO_IP`：IP 协议
 
-# bind
+## bind
 
 将套接字绑定到一个本地地址（IP + 端口）。
 
@@ -112,7 +112,7 @@ bind(fd, (struct sockaddr*)&addr, sizeof(addr));
 	- `sockaddr_in6`：IPv6 地址结构体
 	- `sockaddr_un`：Unix 域使用的结构体
 
-# listen
+## listen
 
 套接字 “被动” 监听，开始接受连接请求。
 
@@ -145,7 +145,7 @@ int listen(int sockfd, int backlog);
 
 > 队列满时的丢弃、重传或 RST 等行为依内核配置与状态而变；排查时应同时看 `backlog`、`somaxconn`、SYN 相关参数和应用是否及时 `accept`。
 
-# accept
+## accept
 
 从全连接队列中取出一个已完成三次握手的连接，返回一个**新的 fd**。
 
@@ -158,7 +158,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 
 - `addrlen`：输入输出参数，地址结构体长度（可传 `NULL` ）
 
-# connect
+## connect
 
 客户端发起连接，触发 TCP 三次握手。
 
@@ -172,7 +172,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 
 - `addr`：指向服务器地址的结构指针
 
-# read / write / recv / send
+## read / write / recv / send
 
 - `read/write` 是通用文件操作，`recv/send` 是 socket 专用，支持额外 flags
 - `read` / `recv` **返回 0**：对端已对该方向 orderly shutdown（通常收到 FIN）；`write` / `send` 的 0 语义不同，仍须按调用与 errno 处理
@@ -196,7 +196,7 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 - `flags`：标志位，常用 `0`（默认阻塞读写）
     - `MSG_NOSIGNAL`：发送失败时不触发 SIGPIPE 信号（常用）
 
-# close / shutdown
+## close / shutdown
 
 ```cpp
 int close(int fd); 
@@ -207,26 +207,24 @@ int shutdown(int sockfd, int how);
 - 多进程 / 多线程环境下，需要确保所有进程都 close 后，套接字才会真正释放
 - 最后一个引用关闭且未提前 `shutdown` 时通常开始该 socket 的关闭流程；具体报文交换取决于连接状态
 
-# 30 秒回答
-
-服务端的监听 fd 只负责接入，`accept` 返回的连接 fd 才负责读写；客户端通过 `connect` 完成建连。非阻塞 I/O 下每个系统调用都要区分成功、`EAGAIN/EWOULDBLOCK`、`EINTR`、EOF 和致命错误。`close` 管理 fd 引用，`shutdown` 管理连接方向，不能混为一谈。
-
-|          | close()               | shutdown( )     |
-| -------- | --------------------- | --------------- |
-| 作用       | 减少 fd 引用计数，为 0 时才真正关闭 | 立即关闭指定方向        |
-| 多进程 fork | close 只减引用计数          | shutdown 直接影响连接 |
-
----
-
-Socket 编程进阶见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04b-Non-blocking%20Socket%20&%20O_NONBLOCK%20(非阻塞Socket).md>) · [SO_REUSEADDR & SO_KEEPALIVE (套接字选项)](</03-Backend%20Systems%20(后端系统)/02-Network%20(网络编程)/02-Socket%20Programming%20(Socket%20编程)/04-Socket%20API%20(Socket编程接口)%20⭐/04c-SO_REUSEADDR%20&%20SO_KEEPALIVE%20(套接字选项).md>)
-
----
+> [!summary]- 复述检查：学完后再展开
+>
+> 服务端的监听 fd 只负责接入，`accept` 返回的连接 fd 才负责读写；客户端通过 `connect` 完成建连。非阻塞 I/O 下每个系统调用都要区分成功、`EAGAIN/EWOULDBLOCK`、`EINTR`、EOF 和致命错误。`close` 管理 fd 引用，`shutdown` 管理连接方向，不能混为一谈。
+>
+> |          | close()               | shutdown( )     |
+> | -------- | --------------------- | --------------- |
+> | 作用       | 减少 fd 引用计数，为 0 时才真正关闭 | 立即关闭指定方向        |
+> | 多进程 fork | close 只减引用计数          | shutdown 直接影响连接 |
+>
+> ---
+>
+> ---
 
 # Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
 > [!note] 本节重点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
-# 阻塞 vs 非阻塞
+## 阻塞 vs 非阻塞
 
 |               | 阻塞模式        | 非阻塞模式                       |
 | ------------- | ----------- | --------------------------- |
@@ -237,7 +235,7 @@ Socket 编程进阶见 → [Non-blocking Socket & O_NONBLOCK (非阻塞Socket)](
 
 ---
 
-# 设置非阻塞
+## 设置非阻塞
 
 ```cpp
 // 方法一：创建时直接设置（推荐）
@@ -250,7 +248,7 @@ fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 
 ---
 
-# 非阻塞的正确使用模式
+## 非阻塞的正确使用模式
 
 非阻塞 socket 配合 **I/O 多路复用**（select / poll / epoll）使用：
 
@@ -269,7 +267,7 @@ while (true) {
 
 ---
 
-# EAGAIN vs EWOULDBLOCK
+## EAGAIN vs EWOULDBLOCK
 
 - POSIX 允许两者相同；Linux 上通常相同，但可移植代码应同时处理两者
 - 语义：操作不能立即完成，但不是错误，稍后重试即可
@@ -278,7 +276,7 @@ while (true) {
 
 > [!note] 本节重点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
-# setsockopt
+## setsockopt
 
 ```cpp
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen); 
@@ -299,7 +297,7 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
     
 - **optval**: 选项值的指针（如 int、struct timeval 等）
 
-# SO_REUSEADDR
+## SO_REUSEADDR
 
 ```c
 int opt = 1;
@@ -307,11 +305,11 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 // 必须在 bind() 之前调用
 ```
 
-# 作用一：服务端重启后立即端口复用
+## 作用一：服务端重启后立即端口复用
 
 是否可重绑及冲突规则受操作系统、绑定地址和已有 socket 状态影响。`SO_REUSEADDR` 常用于降低服务重启时的地址占用影响，但它不是跨平台的“无条件端口复用”开关；部署前应按目标系统验证。
 
-# 作用二：允许多个 socket 绑定同一端口（配合 **SO_REUSEPORT**）
+## 作用二：允许多个 socket 绑定同一端口（配合 **SO_REUSEPORT**）
 
 > **SO_REUSEADDR vs SO_REUSEPORT**
 
@@ -323,7 +321,7 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 ---
 
-# SO_KEEPALIVE
+## SO_KEEPALIVE
 
 ```c
 int opt = 1;
@@ -332,7 +330,7 @@ setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &opt, sizeof(opt));
 
 TCP 保活机制：在连接空闲一段时间后，内核自动发送探测包，检测对端是否存活。
 
-# 默认参数（Linux）
+## 默认参数（Linux）
 
 ```txt
 tcp_keepalive_time    = 7200s   （空闲多久后开始探测）
@@ -342,7 +340,7 @@ tcp_keepalive_probes  = 9       （探测失败多少次后断开）
 
 默认参数太长（2 小时才开始探测），实际应用通常在**应用层实现心跳**，而不是依赖系统 keepalive。
 
-# 自定义 keepalive 参数
+## 自定义 keepalive 参数
 
 ```cpp
 int idle = 60, intvl = 10, cnt = 3;
@@ -351,7 +349,7 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &intvl, sizeof(intvl));
 setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 ```
 
-# SO_KEEPALIVE vs 应用层心跳
+## SO_KEEPALIVE vs 应用层心跳
 
 |      | SO_KEEPALIVE | 应用层心跳      |
 | ---- | ------------ | ---------- |
@@ -362,32 +360,5 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
 
-# 零基础阅读路径
-
-先沿一条请求或系统调用的时间顺序阅读，给每一步标出状态、队列和所有者；协议字段与内核实现细节放在第二遍。先能讲清路径，再谈调优。
-
-# 常见误区
-
-- 只记协议或系统调用名，忽略状态变化、阻塞位置、资源释放与异常网络条件。
-- 没有抓包、日志、压测或最小 client/server 实验就对性能和正确性下结论。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-Sockets and Event Loop (Socket 与事件循环)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Server Networking Map (服务器网络编程导航)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/00-Server%20Networking%20Map%20(服务器网络编程导航).md)
-- 下一步：[02-Reactor Architecture (Reactor 架构)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/02-Reactor%20Architecture%20(Reactor%20架构).md)
+> [!info]- 延伸阅读
+> - 下一步：[02-Reactor Architecture (Reactor 架构)](/05-Runtime%20and%20Network%20(运行时与网络)/03-Server%20Networking%20(服务器网络编程)/02-Reactor%20Architecture%20(Reactor%20架构).md)

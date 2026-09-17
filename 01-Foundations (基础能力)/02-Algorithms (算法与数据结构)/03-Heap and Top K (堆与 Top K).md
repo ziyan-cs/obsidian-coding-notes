@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-# 30 秒回答
-
-**核心结论**：堆只保证堆顶是全局最值，插入和弹出为 O(log n)；Top K 要根据 K 与数据规模选择大小为 K 的堆或快速选择，而不是把所有数据完整排序。
+> [!summary]- 复述检查：学完后再展开
+>
+> **核心结论**：堆只保证堆顶是全局最值，插入和弹出为 O(log n)；Top K 要根据 K 与数据规模选择大小为 K 的堆或快速选择，而不是把所有数据完整排序。
 
 # Heap and Top K (堆与 Top K)
 
@@ -143,39 +143,9 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
 
 ---
 
-# 关联笔记
 
-- Array & Two Pointers (数组与双指针)
-- Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-- Fast & Slow Pointers (快慢指针)
-- Monotonic Stack (单调栈)
-- BFS with Queue (队列BFS)
+> [!warning]- 易错点
+> - 把 **03-Heap and Top K (堆与 Top K)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
-# 零基础阅读路径
-
-先从一个可手算的小输入读起，找出每一步不变的事实；再看代码模板；最后才背复杂度与题型变体。若代码看不懂，先画状态变化，不要直接记循环。
-
-# 常见误区
-
-- 把 **03-Heap and Top K (堆与 Top K)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Heap and Top K (堆与 Top K)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Algorithms Map (算法导航)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/00-Algorithms%20Map%20(算法导航).md)
-- 下一步：[04-Tree Traversal and Paths (树遍历与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/04-Tree%20Traversal%20and%20Paths%20(树遍历与路径).md)
+> [!info]- 延伸阅读
+> - 下一步：[04-Tree Traversal and Paths (树遍历与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/04-Tree%20Traversal%20and%20Paths%20(树遍历与路径).md)

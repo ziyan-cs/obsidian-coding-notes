@@ -1,16 +1,16 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-06
+verified: 2026-09-17
 review_due: 2026-09-28
 tags: [language/python, python/testing]
 ---
 
 > [!abstract] 一句话结论：pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
 
-# 30 秒回答
-
-**回答展开**：fixture 负责可复用的准备与清理；临时目录隔离文件副作用；mock、fake 等 test double 替代不可控依赖，断言最终行为而非实现过程。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答展开**：fixture 负责可复用的准备与清理；临时目录隔离文件副作用；mock、fake 等 test double 替代不可控依赖，断言最终行为而非实现过程。
 
 # 命令与规则
 
@@ -40,49 +40,10 @@ def test_loader_rejects_bad_json(tmp_path):
 
 先列出空输入、非法格式、外部超时与重复执行，再写正常路径。自动化脚本最危险的往往不是报错，而是无声地生成错误结果；因此测试也要验证错误信息、输出文件和副作用是否符合预期。
 
-# 自测
-
-给 JSON config loader 写：正确对象、顶层数组、缺失文件、非法 JSON 四个测试。
+> [!question]- 自测：先回答再展开
+> 给 JSON config loader 写：正确对象、顶层数组、缺失文件、非法 JSON 四个测试。
 
 # Sources
 
 - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
 - 验证日期：2026-09-05
-
-# 从零建立模型
-
-本页主题是 **01-pytest Fixtures and Test Doubles (测试夹具与替身)**。Python 对初学者最重要的是区分“值、名称、对象”和“副作用”。函数拿到什么输入、返回什么值、会读写哪些文件/网络资源，应该从签名和小例子中一眼可见。先写可读的同步代码，再为真实 I/O 或批量任务引入并发。
-
-# 最小实践
-
-把本页概念做成一个可运行函数或 CLI：准备正常、空值和错误输入各一份；打印或断言结果。若涉及文件和网络，使用临时目录或 test double，不能依赖本机隐式状态。
-
-# 工程检查点
-
-Python 的动态性不等于不需要契约。公共函数应写类型标注、异常语义和示例；密钥、绝对路径、真实生产数据都不应写死在示例里。
-
-# 常见误区
-
-- 把脚本一次跑通当成工程正确，忽略环境隔离、输入校验、错误分类和可重复运行。
-- 只读 API 名称而不为文件、网络、时间等外部边界写一个可控测试。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **01-pytest Fixtures and Test Doubles (测试夹具与替身)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Quality and Automation Map (质量与自动化导航)](/03-Python%20Engineering%20(Python%20工程)/02-Quality%20and%20Automation%20(质量与自动化)/00-Quality%20and%20Automation%20Map%20(质量与自动化导航).md)
-- 下一步：[02-Type Hints Logging and Linting (类型日志与静态检查)](/03-Python%20Engineering%20(Python%20工程)/02-Quality%20and%20Automation%20(质量与自动化)/02-Type%20Hints%20Logging%20and%20Linting%20(类型日志与静态检查).md)

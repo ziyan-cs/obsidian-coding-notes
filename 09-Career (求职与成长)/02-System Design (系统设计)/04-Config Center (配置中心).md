@@ -1,15 +1,14 @@
 ---
 status: learning
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 tags: - distributed/system
 ---
 
 > [!abstract] 核心考点： etcd / ZooKeeper 的 Watch 机制 + 客户端长轮询 + 配置版本管理与灰度发布
 
-# 30 秒回答
-
-**回答重点**：摘要负责给出结论；30 秒回答时，依次说明本页的关键机制、一个使用场景，以及最容易忽略的边界。
+> [!summary]- 复述检查：学完后再展开
+> **回答**：配置中心保存带版本的配置，服务通过长轮询或 Watch 获得变更并本地缓存。设计重点是权限、灰度、回滚、推送失败和控制面不可用时的数据面行为。
 
 # 需求分析
 
@@ -318,32 +317,5 @@ int timeout = cfg->rpc_timeout_ms;
 
 配置中心依赖的分布式共识协议详解见 → [Leader Election (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c1-Leader%20Election%20(领导者选举)%20⭐.md) · [Log Replication (Raft)](07-Distributed%20&%20Middleware%20(分布式与中间件)/04-Distributed%20Protocols%20(分布式协议)/04c-Raft%20Consensus%20Algorithm%20(Raft共识算法)%20⭐/04c2-Log%20Replication%20(日志复制)%20⭐.md)
 
-# 零基础阅读路径
-
-先将本页结论转换成自己的 30 秒表达；再补一个具体约束和项目证据；最后练习反例与取舍，避免把速记当成理解。
-
-# 常见误区
-
-- 只背标准答案，不把结论放进真实约束、取舍和项目证据中，表达会显得空泛。
-- 不计时复述、不追问反例，也不通过项目日志或代码核对，就会形成虚假熟练。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **04-Config Center (配置中心)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-System Design Map (系统设计导航)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/00-System%20Design%20Map%20(系统设计导航).md)
+[!info]- 延伸阅读
 - 下一步：[05-API Gateway (API 网关)](/09-Career%20(求职与成长)/02-System%20Design%20(系统设计)/05-API%20Gateway%20(API%20网关).md)

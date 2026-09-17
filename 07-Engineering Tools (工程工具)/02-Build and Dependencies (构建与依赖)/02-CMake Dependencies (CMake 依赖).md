@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 一句话结论：CMake 依赖管理应围绕可传递 target、可固定版本和可复现安装展开；“本机能找到库”不是构建成功的标准。
@@ -13,7 +13,7 @@ verified: 2026-09-06
 > [!warning] 依赖“能找到”不代表配置可复现
 > 不要依赖某台机器碰巧安装了库。明确依赖版本、目标名和安装来源；CI 或全新环境能从零配置成功，才说明构建边界真正成立。
 
-# find_package 基础
+## find_package 基础
 
 ```cmake
 find_package(OpenSSL REQUIRED)        # REQUIRED：找不到就报错
@@ -32,7 +32,7 @@ CMake 会在以下位置搜索：
 - `CMAKE_PREFIX_PATH` 指定的路径
 - 各库自带的 `*Config.cmake` 或 `Find*.cmake` 文件
 
-# 两种 find_package 模式
+## 两种 find_package 模式
 
 |模式|触发条件|文件来源|
 |---|---|---|
@@ -56,33 +56,31 @@ FetchContent_MakeAvailable(googletest)   # 下载并添加到构建
 target_link_libraries(my_test PRIVATE GTest::gtest_main)
 ```
 
-# 30 秒回答
+> [!summary]- 复述检查：学完后再展开
+>
+> `find_package` 把已安装依赖暴露为可链接的 CMake target；优先使用库提供的 Config package 和 `Foo::Bar` 目标，让 include path、编译选项和传递依赖随 target 传播。`FetchContent` 能在配置期获取源码，但会引入网络、版本和供应链边界，需要固定版本并考虑离线/CI 场景。
 
-`find_package` 把已安装依赖暴露为可链接的 CMake target；优先使用库提供的 Config package 和 `Foo::Bar` 目标，让 include path、编译选项和传递依赖随 target 传播。`FetchContent` 能在配置期获取源码，但会引入网络、版本和供应链边界，需要固定版本并考虑离线/CI 场景。
+> [!question]- 自测：先回答再展开
+> 1. Config mode 与 Module mode 的来源分别是什么？
+> 2. 为什么 `target_link_libraries(myapp PRIVATE Foo::Foo)` 优于手写库文件路径？
+> 3. 使用 `FetchContent` 时，怎样避免构建结果随远端默认分支变化？
+>
+> ---
 
-# 自测
-
-1. Config mode 与 Module mode 的来源分别是什么？
-2. 为什么 `target_link_libraries(myapp PRIVATE Foo::Foo)` 优于手写库文件路径？
-3. 使用 `FetchContent` 时，怎样避免构建结果随远端默认分支变化？
-
----
-
-# 关联笔记
-
-- CMakeLists․txt Structure (项目结构模板)
-- target_link_libraries & include_directories (依赖管理)
-- Build Types：Debug, Release, RelWithDebInfo (构建类型)
-- CMake with vcpkg & Conan (包管理器集成)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
-
----
+> [!info]- 延伸阅读
+> - CMakeLists․txt Structure (项目结构模板)
+> - target_link_libraries & include_directories (依赖管理)
+> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
+> - CMake with vcpkg & Conan (包管理器集成)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+>
+> ---
 
 # CMake Package Managers (CMake 包管理器)
 
 > [!note] 本节重点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
 
-# 为什么需要包管理器
+## 为什么需要包管理器
 
 手动管理 C++ 依赖的痛点：
 
@@ -161,7 +159,7 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 
 ---
 
-# vcpkg vs Conan 对比
+## vcpkg vs Conan 对比
 
 | |vcpkg|Conan|
 |---|---|---|
@@ -174,39 +172,12 @@ target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
 
 ---
 
-# 关联笔记 · 延伸要点 2
-- CMakeLists․txt Structure (项目结构模板)
-- target_link_libraries & include_directories (依赖管理)
-- Build Types：Debug, Release, RelWithDebInfo (构建类型)
-- find_package & External Dependencies (第三方库引入)
-- Core Concepts：Working Tree, Index, HEAD (三区模型)
+> [!info]- 延伸阅读
+> - CMakeLists․txt Structure (项目结构模板)
+> - target_link_libraries & include_directories (依赖管理)
+> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
+> - find_package & External Dependencies (第三方库引入)
+> - Core Concepts：Working Tree, Index, HEAD (三区模型)
 
-# 零基础阅读路径
-
-先从最短命令路径跑通一次，再回来看配置字段与高级选项。每读一段命令，都要知道它读取什么、生成什么以及怎样撤销或诊断。
-
-# 常见误区
-
-- 只记命令，不理解它改变了哪些输入、产物或运行环境，发生故障时无法恢复。
-- 没有在临时项目中亲自执行并保留输出，就把工具流程当成已经掌握。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **02-CMake Dependencies (CMake 依赖)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Build and Dependencies Map (构建与依赖导航)](/07-Engineering%20Tools%20(工程工具)/02-Build%20and%20Dependencies%20(构建与依赖)/00-Build%20and%20Dependencies%20Map%20(构建与依赖导航).md)
-- 下一步：[01-CMake Project and Targets (CMake 项目与目标)](/07-Engineering%20Tools%20(工程工具)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
+> [!info]- 延伸阅读
+> - 下一步：[01-CMake Project and Targets (CMake 项目与目标)](/07-Engineering%20Tools%20(工程工具)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)

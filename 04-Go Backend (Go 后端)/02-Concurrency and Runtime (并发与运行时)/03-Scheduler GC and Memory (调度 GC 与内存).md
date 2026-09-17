@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: medium
-verified: 2026-09-06
+verified: 2026-09-17
 ---
 
 > [!abstract] 一句话结论：goroutine 很轻但并非免费；调度、栈增长、分配和 GC 都会影响尾延迟，性能优化先用 profile 证明问题存在。
 
-# 30 秒回答
-
-**回答展开**：goroutine 的阻塞、逃逸分配和堆增长都会影响调度与 GC；先用 CPU、heap、trace 等 profile 定位，再针对瓶颈降低分配或并发争用。
+> [!summary]- 复述检查：学完后再展开
+>
+> **回答展开**：goroutine 的阻塞、逃逸分配和堆增长都会影响调度与 GC；先用 CPU、heap、trace 等 profile 定位，再针对瓶颈降低分配或并发争用。
 
 # 心智模型
 
@@ -34,46 +34,6 @@ scheduler chooses next runnable goroutine
 
 用 `go test -bench=. -benchmem` 比较“循环中 `fmt.Sprintf`”与“复用 `strings.Builder`”的 `allocs/op`。随后用 `go tool pprof` 看 CPU 或 alloc profile。实验的结论应是某段代码在当前输入下的证据，而不是“所有分配都必须消除”。
 
-# 从零建立模型
-
-本页主题是 **03-Scheduler GC and Memory (调度 GC 与内存)**。Go 的入门主线是“值怎样流动、错误怎样返回、goroutine 怎样结束”。先用普通函数写清业务规则；再把 HTTP、数据库和并发放在边界层。每新建一个 goroutine，都要回答谁取消它、谁等待它、它失败后谁知道。
-
-# 最小实践
-
-写一个十到三十行的最小程序或测试：覆盖正常输入、边界输入和取消/错误路径之一。运行 `go test`；涉及并发时再运行 `go test -race`，把工具输出作为结论证据。
-
-# 工程检查点
-
-channel、context 与 goroutine 都不是性能装饰。没有 deadline、背压和退出协议的并发，会把一次下游慢请求放大成资源泄漏。
-
-# 渐进练习
-
-1. **第一步 · 理解**：读：标出本页代码中错误向上返回、资源释放和 goroutine 退出的位置。
-2. **第二步 · 实现**：写：为一个纯业务函数补 table-driven test；若有并发，写一个取消或关闭案例。
-3. **第三步 · 验证**：测：运行 `go test`，并在适用时运行 `go test -race` 或 benchmark，记录结论与环境。
-
-# 常见误区
-
-- 每个请求都永久启动后台 goroutine，却没有退出路径。
-- 用 channel 代替所有同步，而不考虑所有权、缓冲和关闭责任。
-
-# 学习闭环
-
-## 从零复述
-
-- 不看正文，用“问题 → 机制 → 边界”三句话讲清 **03-Scheduler GC and Memory (调度 GC 与内存)**。
-
-## 最小验证
-
-- 写一个最小代码、命令、测试或项目观察，亲自验证本页的一条关键结论。
-
-## 自测
-
-1. 它解决的工程问题是什么？
-2. 核心机制在哪个环节生效？
-3. 什么时候应当换用另一种方案？
-
-# 关联学习
-
-- 导航：[00-Concurrency and Runtime Map (并发与运行时导航)](/04-Go%20Backend%20(Go%20后端)/02-Concurrency%20and%20Runtime%20(并发与运行时)/00-Concurrency%20and%20Runtime%20Map%20(并发与运行时导航).md)
-- 下一步：[02-Context Cancellation and Errors (取消传播与错误)](/04-Go%20Backend%20(Go%20后端)/02-Concurrency%20and%20Runtime%20(并发与运行时)/02-Context%20Cancellation%20and%20Errors%20(取消传播与错误).md)
+> [!warning]- 易错点
+> - 每个请求都永久启动后台 goroutine，却没有退出路径。
+> - 用 channel 代替所有同步，而不考虑所有权、缓冲和关闭责任。
