@@ -127,7 +127,7 @@ valgrind --suppressions=my.supp ./myapp  # 使用抑制文件
 
 # AddressSanitizer（ASan）
 
-AddressSanitizer（ASan）通过编译器插桩检测常见内存错误，通常比 Valgrind Memcheck 更适合日常开发与 CI；具体性能开销取决于程序、平台和编译器，应以本机测量为准（NEEDS_VERIFY）。
+AddressSanitizer（ASan）通过编译器插桩检测常见内存错误，通常比 Valgrind Memcheck 更适合日常开发与 CI；具体性能开销取决于程序、平台和编译器，应以本机测量为准（MEASURE_LOCALLY）。
 
 ```bash
 g++ -fsanitize=address -fno-omit-frame-pointer -g -O1 -o myapp main.cpp

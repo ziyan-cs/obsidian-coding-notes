@@ -261,7 +261,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-# InnoDB 索引底层原理（B + 树）
+## InnoDB 索引底层原理（B+Tree）
 
 - 索引的底层数据结构为 **B + 树**，所有数据都存储在叶子节点
 - 聚簇索引：叶子节点直接存储完整的行数据，数据按主键顺序物理存储
@@ -270,7 +270,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-## 索引设计原则（面试高频）
+### 索引设计原则（面试高频）
 
 - 优先为 **WHERE、JOIN、ORDER BY、GROUP BY** 条件中的字段创建索引
 - 复合索引遵循**最左匹配原则**，将区分度高的字段放在前面
@@ -280,7 +280,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-## 索引失效场景（必背）
+### 索引失效场景（必背）
 
 - 使用 `OR` 连接条件，且非所有条件都包含索引字段
 - 索引列参与运算、使用函数（如 `DATE(create_time)`）
@@ -290,7 +290,7 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 
 ---
 
-## 索引相关 SQL 操作
+### 索引相关 SQL 操作
 
 ```sql
 -- 1. 创建索引（表已存在）
@@ -308,7 +308,7 @@ EXPLAIN SELECT * FROM [表名] WHERE [条件];
 
 ---
 
-## 索引优化实践
+### 索引优化实践
 
 ```sql
 -- 查看查询执行计划，判断索引是否生效

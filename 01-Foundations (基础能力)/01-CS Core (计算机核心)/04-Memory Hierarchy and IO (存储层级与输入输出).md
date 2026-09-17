@@ -388,4 +388,4 @@ DMA.interrupt_handler() {    // 传输完毕
 > - 把 **04-Memory Hierarchy and IO (存储层级与输入输出)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
 
 > [!info]- 延伸阅读
-> - 下一步：[05-Operating System Runtime (操作系统运行时)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Runtime%20(操作系统运行时).md)
+> - 下一步：[05-Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)

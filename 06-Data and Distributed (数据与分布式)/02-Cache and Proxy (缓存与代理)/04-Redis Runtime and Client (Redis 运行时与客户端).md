@@ -83,7 +83,7 @@ SSD 随机读:         ~10-50 μs  ← 100× slower
 Redis 瓶颈通常在网络 I/O，而非 CPU
 ```
 
-> 上表为**数量级参考**（经典 "Latency Numbers Every Programmer Should Know"），具体数值随硬件与网络环境变化，非精确测量值（NEEDS_VERIFY）。Redis 实际延迟应通过 `redis-benchmark` / `redis-cli --latency` 在本机测量。
+> 上表为**数量级参考**（经典 "Latency Numbers Every Programmer Should Know"），具体数值随硬件与网络环境变化，非精确测量值（MEASURE_LOCALLY）。Redis 实际延迟应通过 `redis-benchmark` / `redis-cli --latency` 在本机测量。
 
 ---
 

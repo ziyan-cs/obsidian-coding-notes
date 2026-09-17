@@ -66,7 +66,7 @@ message User {
 | **proto3 默认值省略** | 标量零值默认不序列化（隐式 presence，非 Go 的 omitempty） |
 | **前向兼容** | 新增字段不影响旧客户端（老代码忽略不识别的字段） |
 
-相比 JSON，Protobuf 通常体积更小、编解码更快（二进制 + 字段编号），但**具体倍数受消息结构、字段类型与运行时实现影响，无固定值**，应以本场景基准测试为准（NEEDS_VERIFY）。
+相比 JSON，Protobuf 通常体积更小、编解码更快（二进制 + 字段编号），但**具体倍数受消息结构、字段类型与运行时实现影响，无固定值**，应以本场景基准测试为准（MEASURE_LOCALLY）。
 
 ---
 
@@ -249,7 +249,7 @@ class LogInterceptor : public grpc::Interceptor {
 };
 ```
 
-> **版本/API 需验证（NEEDS_VERIFY）**：拦截器 C++ API 在不同 gRPC 版本间有变化（`grpc::Interceptor` 基类、`InterceptorBatchMethods`、工厂注册方式等），上例为示意，编译前以所用 gRPC 版本头文件为准。
+> **版本/API 核验（VERSION_CHECK）**：拦截器 C++ API 在不同 gRPC 版本间有变化（`grpc::Interceptor` 基类、`InterceptorBatchMethods`、工厂注册方式等），上例为示意，编译前以所用 gRPC 版本头文件为准。
 
 ---
 

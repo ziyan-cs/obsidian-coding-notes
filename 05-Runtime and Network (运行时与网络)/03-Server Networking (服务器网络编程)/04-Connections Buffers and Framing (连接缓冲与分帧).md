@@ -202,7 +202,7 @@ void *health_check_thread(void *arg) {
 **误区：连接池越大越好**
 
 ```
-连接池大小的启发式（仅用于提出初始假设，NEEDS_VERIFY）：
+连接池大小的启发式（仅用于提出初始假设，MEASURE_LOCALLY）：
   连接数 = 核心数 × (1 + 等待时间 / 处理时间)
 
   例如：CPU 8 核，请求处理时间 5ms，等待 DB 响应 20ms

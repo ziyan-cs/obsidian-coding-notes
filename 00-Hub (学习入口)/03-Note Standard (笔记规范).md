@@ -22,7 +22,7 @@ tags: [topic/example]  # 可选：确有检索价值时使用
 ---
 ```
 
-`verified` 不表示所有外部事实都在当天重新验证。涉及版本、API、性能数字和安全建议时，正文仍需注明来源、环境或 `NEEDS_VERIFY`。
+`verified` 不表示所有外部事实都在当天重新验证。涉及版本或 API 时标记 `VERSION_CHECK` 并写明核验入口；性能数字必须保留环境与方法，标记 `MEASURE_LOCALLY`。
 
 # 正文骨架
 

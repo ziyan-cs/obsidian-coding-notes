@@ -217,7 +217,7 @@ net.ipv4.tcp_timestamps = 1
 ```
 
 - 面向主动发起的出站连接；不应作为服务端监听端口重启的首选手段
-- 具体语义存在内核版本差异，标记为 **NEEDS_VERIFY**
+- 具体语义存在内核版本差异，标记为 **VERSION_CHECK**
 
 ### 不要混淆：`tcp_fin_timeout`
 
