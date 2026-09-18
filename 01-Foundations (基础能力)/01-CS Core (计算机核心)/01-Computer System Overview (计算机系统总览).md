@@ -2,6 +2,9 @@
 status: stable
 confidence: high
 content_verified: 2026-09-17
+verified: 2026-09-26
+review_stage: learn
+review_due: 2026-09-26
 ---
 
 > [!abstract] 阅读方式：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。

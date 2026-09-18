@@ -2,6 +2,9 @@
 status: learning
 confidence: high
 content_verified: 2026-09-18
+verified: 2026-09-27
+review_stage: learn
+review_due: 2026-09-27
 tags: [language/python, engineering/workflow]
 ---
 

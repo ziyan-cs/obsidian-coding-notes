@@ -2,6 +2,9 @@
 status: learning
 confidence: medium
 content_verified: 2026-09-17
+verified: 2026-10-04
+review_stage: learn
+review_due: 2026-10-04
 previous_review_due: 2026-09-26
 ---
 

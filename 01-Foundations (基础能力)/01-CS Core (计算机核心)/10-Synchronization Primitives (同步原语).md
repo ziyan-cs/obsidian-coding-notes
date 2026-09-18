@@ -1,9 +1,6 @@
 ---
 status: stable
 confidence: high
-verified: 2026-10-19
-review_stage: learn
-review_due: 2026-10-19
 
 tags: [cs/os, learning/foundation]
 ---

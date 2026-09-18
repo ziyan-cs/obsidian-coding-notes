@@ -1,9 +1,9 @@
 ---
 status: learning
 confidence: low
-verified: 2026-09-23
+verified: 2026-09-24
 review_stage: learn
-review_due: 2026-09-23
+review_due: 2026-09-24
 
 ---
 

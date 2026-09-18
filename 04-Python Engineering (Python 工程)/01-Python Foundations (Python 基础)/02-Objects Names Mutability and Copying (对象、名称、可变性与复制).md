@@ -2,6 +2,9 @@
 status: learning
 confidence: high
 content_verified: 2026-09-18
+verified: 2026-09-30
+review_stage: learn
+review_due: 2026-09-30
 previous_review_due: 2026-09-22
 tags: [language/python, python/object-model]
 ---

@@ -2,9 +2,9 @@
 status: stable
 confidence: high
 content_verified: 2026-09-17
-verified: 2026-10-05
+verified: 2026-10-08
 review_stage: learn
-review_due: 2026-10-05
+review_due: 2026-10-08
 previous_review_due: 2026-09-18
 ---
 

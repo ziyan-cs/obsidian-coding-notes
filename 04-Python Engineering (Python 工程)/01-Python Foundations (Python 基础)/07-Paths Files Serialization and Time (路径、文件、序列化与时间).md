@@ -2,6 +2,9 @@
 status: learning
 confidence: low
 content_verified: 2026-09-17
+verified: 2026-10-14
+review_stage: learn
+review_due: 2026-10-14
 previous_review_due: 2026-09-23
 tags: [language/python, python/files]
 ---
