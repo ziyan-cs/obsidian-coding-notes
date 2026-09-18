@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+content_verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
@@ -87,7 +87,7 @@ bool hasCycleDFS(int u, vector<vector<int>>& g) {
 
 ---
 
-> [!summary]- 复述检查：学完后再展开
+> [!summary] 核心摘要
 >
 > **DFS 和 BFS 怎么选？** 只要遍历连通性，两者都是 `O(V+E)`；DFS 的递归结构适合回溯、连通块和后序处理，深图要防递归栈溢出；无权图求最少边数时用 BFS，并在节点首次入队时标记已访问，避免重复入队。
 >

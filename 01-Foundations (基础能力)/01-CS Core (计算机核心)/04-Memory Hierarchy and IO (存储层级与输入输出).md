@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+content_verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
 
-> [!summary]- 复述检查：学完后再展开
+> [!summary] 核心摘要
 >
-> **核心结论**：存储层级用小而快的缓存覆盖大而慢的存储；程序应利用时间与空间局部性，减少随机访问和不必要的数据搬运。
+> 存储层级用小而快的缓存覆盖大而慢的存储；程序应利用时间与空间局部性，减少随机访问和不必要的数据搬运。
 
 # Memory Hierarchy (存储层级结构)
 
@@ -72,7 +72,7 @@ for (int i = 0; i < N; i++) total += a[i];
 
 ---
 
-Cache 的映射策略与替换算法详解 → [Cache 机制](../04-Cache%20Mechanism%20(缓存机制)%20⭐.md)
+
 - Basic Input & Output（基础输入输出）
 
 ---
@@ -166,7 +166,7 @@ struct alignas(64) Data { int a; int b; };  // 分属不同 cache line
 > 现代 CPU 的写回策略配合写缓冲兼顾了性能和一致性；伪共享是多线程编程中最隐蔽的性能陷阱之一，通过缓存行对齐即可解决。
 >
 
-存储层级全景图见 → [Memory Hierarchy](../03-Memory%20Hierarchy%20(存储层级结构)%20⭐.md)
+
 
 ---
 

@@ -1,7 +1,10 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+verified: 2026-10-22
+review_stage: learn
+review_due: 2026-10-22
+
 tags: [cs/os, learning/foundation]
 ---
 
@@ -171,7 +174,9 @@ int main() {
 > | 匿名页 vs 文件页 | 匿名页（堆/栈）换出到 swap；文件页回写磁盘即可 |
 > | 大页（HugePages） | 2MB/1GB 页，减少页表级数和 TLB miss |
 >
-> > [!tip]- **工程要点**：数据库、搜索引擎等内存敏感型应用通常启用 HugePages（2MB 页）以减少 TLB miss。`madvise(MADV_HUGEPAGE)` 可提示内核使用透明大页。监控 `/proc/meminfo` 的 `pgfault` / `pgmajfault` 判断是否过度缺页。
+
+> [!tip]- **工程要点**：数据库、搜索引擎等内存敏感型应用通常启用 HugePages（2MB 页）以减少 TLB miss。`madvise(MADV_HUGEPAGE)` 可提示内核使用透明大页。监控 `/proc/meminfo` 的 `pgfault` / `pgmajfault` 判断是否过度缺页。
+
 >
 > ---
 >
@@ -358,7 +363,9 @@ Linux 内核为小块对象分配优化的机制，预分配大小固定的缓�
 > | NX 位阻止代码执行 | 数据页标记为不可执行，缓解缓冲区溢出攻击 |
 > | 伙伴系统的外部碎片 | 虽为固定大小，但长期运行仍可能碎片化 |
 >
-> > [!tip]- **工程要点**：分配器选择——频繁分配小对象用 SLAB/kmalloc-cache；大块分配用伙伴系统（2^n 对齐）。了解 `cat /proc/buddyinfo` 可诊断内存碎片化程度。DMA 区域通常需要连续物理内存（`__GFP_DMA`）。
+
+> [!tip]- **工程要点**：分配器选择——频繁分配小对象用 SLAB/kmalloc-cache；大块分配用伙伴系统（2^n 对齐）。了解 `cat /proc/buddyinfo` 可诊断内存碎片化程度。DMA 区域通常需要连续物理内存（`__GFP_DMA`）。
+
 >
 > ---
 >

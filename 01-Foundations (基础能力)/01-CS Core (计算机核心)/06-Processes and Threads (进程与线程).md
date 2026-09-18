@@ -1,7 +1,10 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+verified: 2026-10-17
+review_stage: learn
+review_due: 2026-10-17
+
 tags: [cs/os, learning/foundation]
 ---
 
@@ -151,7 +154,9 @@ int main() {
 > | 线程安全 | 用互斥锁 / 原子操作 / TLS（线程本地存储）保证 |
 > | fork 后子进程获得的资源 | 文件描述符表复制（共享偏移量）、信号处理函数继承 |
 >
-> > [!tip]- **工程要点**：进程用于隔离，线程用于并行。现代高性能服务器常用**多进程 + 事件驱动**（Nginx）或**多线程 + 异步 I/O**（Redis）。创建线程/进程后必须 join/detach/wait，否则资源泄漏。
+
+> [!tip]- **工程要点**：进程用于隔离，线程用于并行。现代高性能服务器常用**多进程 + 事件驱动**（Nginx）或**多线程 + 异步 I/O**（Redis）。创建线程/进程后必须 join/detach/wait，否则资源泄漏。
+
 >
 > ---
 >

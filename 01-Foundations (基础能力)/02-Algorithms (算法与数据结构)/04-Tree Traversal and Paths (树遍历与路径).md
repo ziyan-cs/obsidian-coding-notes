@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+content_verified: 2026-09-17
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
 
-> [!summary]- 复述检查：学完后再展开
+> [!summary] 核心摘要
 >
-> **核心结论**：树题先明确访问顺序与递归状态；DFS 用调用栈或显式栈维护路径，BFS 用队列维护层次，正确性依赖于进入、离开节点时状态的对称恢复。
+> 树题先明确访问顺序与递归状态；DFS 用调用栈或显式栈维护路径，BFS 用队列维护层次，正确性依赖于进入、离开节点时状态的对称恢复。
 
 # Tree Depth First Traversal (树的深度优先遍历)
 
@@ -135,7 +135,7 @@ int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
 # Tree Breadth First Traversal (树的层序遍历)
 
 > [!note] 本节重点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
->见 [03b-BFS](02-Algorithms%20&%20Data%20Structures%20(算法与数据结构)/01-Fundamental%20Data%20Structures%20(基础数据结构)/03-Stack%20&%20Queue%20(栈与队列)%20⭐/03b-BFS%20with%20Queue%20(队列BFS).md) 模板，二叉树层序遍历已包含
+
 
 层序遍历的变体：
 

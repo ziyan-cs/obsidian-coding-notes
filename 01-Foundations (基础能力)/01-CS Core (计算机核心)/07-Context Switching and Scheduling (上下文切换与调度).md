@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+content_verified: 2026-09-17
 tags: [cs/os, learning/foundation]
 ---
 
@@ -311,7 +311,9 @@ static const int prio_to_weight[40] = {
 > | CFS vruntime | 权重越大，vruntime 增长越慢，获得更多 CPU |
 > | 实时调度 | Linux: SCHED_FIFO / SCHED_RR（优先级 1-99） |
 >
-> > [!tip]- **工程要点**：交互式任务（I/O 密集）优先级应高于 CPU 密集型——这是 MLFQ 的设计基础，CFS 通过 sleeper fairness 也实现了类似效果。生产环境可通过 `chrt` 设置实时优先级，但需谨慎避免 CPU 密集型实时任务锁死系统。
+
+> [!tip]- **工程要点**：交互式任务（I/O 密集）优先级应高于 CPU 密集型——这是 MLFQ 的设计基础，CFS 通过 sleeper fairness 也实现了类似效果。生产环境可通过 `chrt` 设置实时优先级，但需谨慎避免 CPU 密集型实时任务锁死系统。
+
 >
 > ---
 >

@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
+content_verified: 2026-09-17
 tags: [cs/os, learning/foundation]
 ---
 
@@ -122,7 +122,9 @@ BIOS/UEFI → 引导加载程序（GRUB）→ 内核解压 → start_kernel → 
 > | 中断与系统调用的区别 | 中断异步（硬件触发），系统调用同步（主动触发） |
 > | 操作系统的设计哲学 | 机制（mechanism）与策略（policy）分离 |
 >
-> > [!tip]- **工程要点**：系统调用是用户态与内核态的唯一入口，每次 syscall 涉及特权级切换（ring 3 → ring 0），是性能关键路径。批量系统调用（如 readv/writev）比多次单调用明显更快。
+
+> [!tip]- **工程要点**：系统调用是用户程序主动请求内核服务的主要接口；异常、中断等也会进入内核，但语义不同。syscall 涉及用户态与内核态切换，频繁调用可能成为性能成本；readv/writev 等批量接口可减少调用次数，实际收益应测量。
+
 >
 > ---
 >

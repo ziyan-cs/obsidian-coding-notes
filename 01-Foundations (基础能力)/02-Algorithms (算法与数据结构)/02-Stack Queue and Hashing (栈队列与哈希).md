@@ -1,8 +1,8 @@
 ---
 status: stable
 confidence: high
-verified: 2026-09-17
-review_due: 2026-09-08
+content_verified: 2026-09-17
+previous_review_due: 2026-09-08
 ---
 
 > [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
@@ -76,7 +76,7 @@ int largestRectangleArea(vector<int>& heights) {
 
 ---
 
-> [!summary]- 复述检查：学完后再展开
+> [!summary] 核心摘要
 >
 > **单调栈为什么是 O(n)？** 每个下标最多入栈一次、弹栈一次，虽然有嵌套 `while`，总弹栈次数仍不超过 `n`。先决定栈内维持递增还是递减，再明确“当前元素到来时，谁的答案被确定”。
 >
