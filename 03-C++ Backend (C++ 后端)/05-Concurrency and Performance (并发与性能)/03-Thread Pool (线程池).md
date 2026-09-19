@@ -1,180 +1,156 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标
+> 线程池不是“把任务塞进队列”这么简单。读完应能解释提交、唤醒、背压、异常传递和关闭协议，并用测试验证任务不丢失。以下示例以 C++17 为基线。
 
-> [!summary] 核心摘要
->
-> 线程池通过复用有限工作线程控制并发成本；关键是任务队列、唤醒条件、停止协议与背压，线程数量应由负载和测量决定而非盲目增大。
+# 先定义线程池的契约
 
-# Thread Pool Implementation (线程池手写)
+线程池用固定数量的 worker 复用线程，适合大量相对独立的短任务。队列解耦提交者与执行者，但也会引入排队延迟和积压。本篇采用以下可验证的契约：
 
-> [!note] 本节重点： 线程池的设计与实现、任务队列、动态扩缩容、C++ 后端面试手撕代码
+| 场景 | 行为 |
+|---|---|
+| `submit` 成功 | 返回 `future`；任务恰好从队列取出一次 |
+| 队列满 | 立即拒绝并抛异常，不无限积压 |
+| `shutdown` 开始后提交 | 拒绝新任务 |
+| `shutdown` | 处理完已接受任务，再 `join` worker |
+| 任务抛异常 | `packaged_task` 将异常传到对应 `future::get()` |
 
-# 基础线程池实现
+这是**排空式关闭**（drain），不是取消；执行中的任务若永久阻塞，关闭也会一直等待。调用者应在外部停止生产新任务，保证线程池对象活到所有并发调用结束。不要从此池的 worker 内调用 `shutdown()`，否则可能等待自身；本教学实现要求只有一个控制线程执行关闭。
+
+# 一个有界、可编译的教学实现
 
 ```cpp
-#include <vector>
-#include <queue>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
+#include <cstddef>
 #include <functional>
 #include <future>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <stdexcept>
+#include <thread>
+#include <tuple>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 class ThreadPool {
 public:
-    ThreadPool(size_t threads = std::thread::hardware_concurrency())
-        : stop_(false) {
-        for (size_t i = 0; i < threads; ++i) {
-            workers_.emplace_back([this] {
-                while (true) {
-                    std::function<void()> task;
-                    {
-                        std::unique_lock lock(queue_mtx_);
-                        cv_.wait(lock, [this] {
-                            return stop_ || !tasks_.empty();
-                        });
-                        if (stop_ && tasks_.empty())
-                            return;
-                        task = std::move(tasks_.front());
-                        tasks_.pop();
-                    }
-                    task();
-                }
-            });
+    explicit ThreadPool(std::size_t workers, std::size_t queue_capacity)
+        : capacity_(queue_capacity) {
+        if (workers == 0 || capacity_ == 0)
+            throw std::invalid_argument("workers and capacity must be positive");
+        threads_.reserve(workers);
+        try {
+            for (std::size_t i = 0; i < workers; ++i)
+                threads_.emplace_back([this] { run(); });
+        } catch (...) {
+            { std::lock_guard<std::mutex> lock(mutex_); stopping_ = true; }
+            ready_.notify_all();
+            for (auto& t : threads_) t.join();
+            throw;
         }
     }
 
+    ThreadPool(const ThreadPool&) = delete;
+    ThreadPool& operator=(const ThreadPool&) = delete;
+
     template<class F, class... Args>
-    auto enqueue(F&& f, Args&&... args)
-        -> std::future<decltype(f(args...))> {
-        using return_type = decltype(f(args...));
-        
-        auto task = std::make_shared<std::packaged_task<return_type()>>(
-            std::bind(std::forward<F>(f), std::forward<Args>(args)...)
-        );
-        
-        std::future<return_type> result = task->get_future();
+    auto submit(F&& f, Args&&... args)
+        -> std::future<std::invoke_result_t<std::decay_t<F>, std::decay_t<Args>...>> {
+        using R = std::invoke_result_t<std::decay_t<F>, std::decay_t<Args>...>;
+        auto bound = [fn = std::forward<F>(f),
+                      values = std::make_tuple(std::forward<Args>(args)...)]() mutable -> R {
+            return std::apply(std::move(fn), std::move(values));
+        };
+        auto task = std::make_shared<std::packaged_task<R()>>(std::move(bound));
+        auto result = task->get_future();
         {
-            std::lock_guard lock(queue_mtx_);
-            if (stop_)
-                throw std::runtime_error("enqueue on stopped ThreadPool");
+            std::lock_guard<std::mutex> lock(mutex_);
+            if (stopping_) throw std::runtime_error("pool is stopping");
+            if (tasks_.size() == capacity_) throw std::runtime_error("queue is full");
             tasks_.emplace([task] { (*task)(); });
         }
-        cv_.notify_one();
+        ready_.notify_one();
         return result;
     }
 
-    ~ThreadPool() {
+    void shutdown() {
         {
-            std::lock_guard lock(queue_mtx_);
-            stop_ = true;
+            std::lock_guard<std::mutex> lock(mutex_);
+            stopping_ = true;
         }
-        cv_.notify_all();
-        for (auto& worker : workers_)
-            worker.join();
+        ready_.notify_all();
+        for (auto& t : threads_)
+            if (t.joinable()) t.join();
     }
+
+    ~ThreadPool() { shutdown(); }
 
 private:
-    std::vector<std::thread> workers_;
+    void run() {
+        for (;;) {
+            std::function<void()> job;
+            {
+                std::unique_lock<std::mutex> lock(mutex_);
+                ready_.wait(lock, [this] { return stopping_ || !tasks_.empty(); });
+                if (stopping_ && tasks_.empty()) return;
+                job = std::move(tasks_.front());
+                tasks_.pop();
+            }
+            job(); // packaged_task 捕获任务异常并交给 future
+        }
+    }
+
+    const std::size_t capacity_;
+    std::vector<std::thread> threads_;
     std::queue<std::function<void()>> tasks_;
-    std::mutex queue_mtx_;
-    std::condition_variable cv_;
-    bool stop_;
+    std::mutex mutex_;
+    std::condition_variable ready_;
+    bool stopping_{false};
 };
 ```
 
-# 使用示例
+此实现的队列容量只限制**等待中**任务，不限制已运行任务；提交过快会收到拒绝。复制进入 `std::function` 的是可复制的 `shared_ptr` 包装器，因此封装的实际可调用对象可以是 move-only。传入参数在提交时按值保存；确实需要引用语义时显式用 `std::ref`，并确保被引用对象活到任务结束。`future::get()` 可取返回值或重新抛出任务异常；丢弃 `future` 就失去了该错误通道。
+
+构造函数的 `catch` 负责在线程创建失败时停止并回收已启动的线程。这也说明：构造失败清理不能依赖尚未构造完成的对象析构函数。
+
+# 使用与验证
 
 ```cpp
-ThreadPool pool(4);
+#include <cassert>
+#include <stdexcept>
 
-// 提交无返回值任务
-pool.enqueue([] { std::println("Task"); });
+int main() {
+    ThreadPool pool{2, 16};
+    auto answer = pool.submit([](int a, int b) { return a + b; }, 3, 4);
+    assert(answer.get() == 7);
 
-// 提交带返回值的任务
-auto future = pool.enqueue([](int a, int b) { return a + b; }, 3, 4);
-int result = future.get();  // 7
-
-// 批量任务
-std::vector<std::future<int>> futures;
-for (int i = 0; i < 100; ++i) {
-    futures.push_back(pool.enqueue([i] { return i * i; }));
+    auto failure = pool.submit([]() -> int {
+        throw std::runtime_error("task failed");
+    });
+    try {
+        (void)failure.get();
+        assert(false);
+    } catch (const std::runtime_error&) {
+        // 异常由 future 返回给提交者，worker 继续运行。
+    }
+    pool.shutdown(); // 排空已接受任务
 }
 ```
 
-# 线程数设计原则
+将两个代码块合并编译：`g++ -std=c++17 -pthread -Wall -Wextra pool.cpp`。还应写测试：零 worker／零容量必须拒绝；提交和关闭并发时，每个**成功提交**的任务最终完成；阻塞任务使队列填满时能观察拒绝。测试并发行为要重复运行并配合 ThreadSanitizer，不把单次通过当证明。
 
-| 应用类型 | 推荐线程数 | 原因 |
-|---------|-----------|------|
-| CPU 密集型 | `hardware_concurrency` | 避免过多线程竞争 CPU |
-| IO 密集型 | `hardware_concurrency * 2` 或更高 | IO 等待时让出 CPU |
-| 混合型 | 分离 CPU/IO 线程池 | 避免 IO 阻塞 CPU 任务 |
+# 线程数与进一步工程化
 
-```cpp
-// 获取 CPU 核心数（不仅仅是逻辑线程数，考虑超线程）
-unsigned int cpu_cores() {
-    unsigned int threads = std::thread::hardware_concurrency();
-    // 在 Linux 上可以读取 /proc/cpuinfo 获取物理核心数
-    return threads > 0 ? threads : 4;  // fallback
-}
-```
+`std::thread::hardware_concurrency()` 只是提示值，可能返回 0，也不等于容器 CPU 配额或“物理核心数”。线程数受任务 CPU/IO 比例、阻塞时间、队列长度、上下文切换和尾延迟影响；从可测基线开始调整。任务里再向同一个已满线程池同步提交并等待结果，可能发生饥饿或死锁。
 
-# 进阶设计：动态调整
-
-```cpp
-class DynamicThreadPool {
-    // ...
-    void adjust(size_t target) {
-        while (workers_.size() < target) {
-            workers_.emplace_back([this] { /* worker loop */ });
-        }
-        if (target < workers_.size()) {
-            resize_ = true;
-            cv_.notify_all();  // 让多余线程退出
-        }
-    }
-    // 需要在线程循环中检测 resize_ 标志并退出
-};
-```
-
-# 常见面试题：线程池核心要素
-
-| 要素 | 实现方式 |
-|------|---------|
-| 任务队列 | `std::queue` + `std::mutex` + `std::condition_variable` |
-| 线程创建 | `std::vector<std::thread>` |
-| 获取返回值 | `std::packaged_task` + `std::future` |
-| 优雅关闭 | 设置 stop 标志 → notify_all → join |
-| 异常安全 | task 内异常存储在 future 中，get 时重新抛出 |
-
-```cpp
-// 不使用 packaged_task 的简化版（无返回值）
-class SimplePool {
-    // 同上但 enqueue 返回 void
-    void enqueue(std::function<void()> task) {
-        // 直接 push 到队列
-    }
-};
-```
-
-> [!tip]- **工程要点**
-> 生产级线程池还需要：**工作窃取**（每条线程有自己的任务队列）、**优先级队列**（紧急任务插队）、**定时任务**、**监控接口**（当前队列深度、活跃线程数）。但面试手撕以上基础版本就够了。
-
-> [!summary] 核心摘要
->
-> - **常见误区**：`enqueue` 里先检查 `stop_` 再 push 存在竞态（应持锁检查）；worker 里 `stop_` 为 true 且队列非空时过早退出（丢任务）。
-> - **自测**：1) 为什么 `enqueue` 的 `stop_` 判断必须在锁内？ 2) 任务抛异常会怎样，如何拿回异常？
->
-> ---
->
-> 关联：[Thread Synchronization (线程同步)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/06-Thread%20Synchronization%20(线程同步).md)
-> - Lock-free Structures Overview (无锁结构概念)
+生产级实现还要明确：多提交者与关闭方的生命周期同步、超时和取消策略、队列公平性、指标、worker 崩溃策略、任务优先级是否真的需要，以及容量拒绝或阻塞的背压选择。工作窃取、动态扩缩容不是“必须有”，只有负载证据支持时再增加复杂度。
 
 > [!info]- 延伸阅读
-> - 下一步：[04-Lock Free and Performance (无锁与性能)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/04-Lock%20Free%20and%20Performance%20(无锁与性能).md)
-
+> - [01-Threads Locks and Coordination (线程锁与协作)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/01-Threads%20Locks%20and%20Coordination%20(线程锁与协作).md)
+> - [04-Lock Free and Performance (无锁与性能)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/04-Lock%20Free%20and%20Performance%20(无锁与性能).md)

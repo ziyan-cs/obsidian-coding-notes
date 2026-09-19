@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 previous_review_due: 2026-09-14
 ---
 
@@ -33,25 +33,20 @@ previous_review_due: 2026-09-14
 
 # Virtual Functions and VTable (虚函数与虚表)
 
-> [!note] 本节重点：虚函数表结构、vptr 指针、单继承下的 VTable 布局
+> [!note] 本节重点：标准规定动态分派语义；vtable/vptr 是常见 ABI 实现，不是语言要求。
 
 ## 虚函数表（VTable）
 
-每个含虚函数的**类**有一个 VTable（虚函数表），表中存放虚函数指针。每个**对象**有一个隐藏的 `vptr`（虚指针），指向其类的 VTable。
+C++ 规定虚函数调用的动态分派语义，却**不规定**必须使用 vtable/vptr，更不规定对象中指针的位置、大小或表项次序。下图仅是常见 ABI 的概念示意，不代表任意编译器的真实布局：
 
 ```text
-┌───────────────────────┐    ┌─────────────────────────┐    ┌─────────────────────┐
-│  Object Layout        │    │  VTable (one per class) │    │  Code Segment       │
-├───────────────────────┤    ├─────────────────────────┤    ├─────────────────────┤
-│  vptr (8 bytes) ──────│───→│  [0] virtual ~Base()    │    │  Base::foo()        │
-├───────────────────────┤    ├─────────────────────────┤    │    implementation   │
-│  int a                │    │  [1] virtual foo() ─────│───→│                     │
-│    (member variable)  │    ├─────────────────────────┤    ├─────────────────────┤
-├───────────────────────┤    │  [2] virtual bar() ─────│───→│  Base::bar()        │
-│  double b             │    └─────────────────────────┘    │    implementation   │
-│    (member variable)  │                                   └─────────────────────┘
-└───────────────────────┘
+base pointer --> dynamic object --> implementation metadata
+                                      |
+                                      +--> final overrider of foo()
+                                      +--> final overrider of bar()
 ```
+
+面试时先讲动态类型与 final overrider，再补充“很多实现借助虚表”。对象大小、反汇编和布局输出可用于观察本机实现，不能拿来推导语言保证。
 
 ```cpp
 class Base {
@@ -64,12 +59,11 @@ public:
 class Derived : public Base {
 public:
     void foo() override { std::cout << "Derived::foo\n"; }
-    // bar() 未覆盖，VTable 中 bar 项指向 Base::bar
+    // bar() 未覆盖，调用继承来的 Base::bar
 };
 
-// vptr 的开销：每个对象多 8 字节（64位），每个类多一个静态 VTable
-sizeof(Base);     // 8（只有 vptr）
-sizeof(Derived);  // 8（继承 vptr，无额外数据成员）
+// 观察本机实现：这里的 sizeof 结果由编译器、ABI 与目标平台决定。
+std::cout << sizeof(Base) << ' ' << sizeof(Derived) << '\n';
 ```
 
 ## 虚函数调用流程
@@ -77,11 +71,8 @@ sizeof(Derived);  // 8（继承 vptr，无额外数据成员）
 ```
 Base* p = new Derived();
 p->foo();
-// 汇编等价：
-// 1. 从 p 读出 vptr（p 的前 8 字节）
-// 2. 从 vptr[0] 读出 foo 的地址
-// 3. 间接调用
-// 代价：一次额外内存读取 + 不可内联
+// 语义：根据对象动态类型调用 foo 的最终覆盖者。
+// 实现可能使用虚表；优化器若证明动态类型，也可能去虚化并内联。
 ```
 
 # override & final（C++11）
@@ -155,12 +146,12 @@ public:
 };
 
 Base* p = new Derived();
-delete p;   // 若 ~Base() 非虚：只调用 ~Base()，~Derived() 不被调用 → 泄漏！
+delete p;   // 静态类型 Base* 删除 Derived 且析构非虚：未定义行为，不能只描述为泄漏
 
 // 修复：
 class Base {
 public:
-    virtual ~Base() = default;   // 有继承关系的基类析构必须是 virtual
+virtual ~Base() = default;   // 允许经 Base* 删除派生对象时需虚析构
 };
 ```
 
@@ -168,12 +159,12 @@ public:
 
 # Abstract Classes and Pure Virtual (抽象类与纯虚函数)
 
-> [!note] 本节重点：纯虚函数与抽象类、接口设计、无法实例化的原因（VTable 不完整）
+> [!note] 本节重点：若类中至少有一个纯虚函数的最终覆盖者仍为纯虚，该类就是抽象类，不能创建对象；这与“虚表不完整”无关。
 
 ```cpp
 class Shape {
 public:
-    // 纯虚函数：= 0，子类必须实现
+    // 纯虚函数：= 0；派生类若仍未提供非纯最终覆盖者，也保持抽象
     virtual double area()      const = 0;
     virtual double perimeter() const = 0;
     virtual void   draw()      const = 0;

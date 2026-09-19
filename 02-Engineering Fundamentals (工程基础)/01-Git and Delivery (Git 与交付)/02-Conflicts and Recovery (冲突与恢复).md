@@ -1,268 +1,148 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [engineering/git, engineering/recovery]
 ---
 
-> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
+> [!abstract] 学习目标
+> 能从三方合并理解冲突，安全选择 restore、reset、revert、reflog 与 stash，并在执行破坏性操作前明确会改变哪一层状态。
 
-# Conflict Resolution (冲突解决)
+# 冲突是语义决策，不是删除标记
 
-> [!note] 本节重点：冲突何时产生、冲突标记含义、解决流程、高级合并策略
+Git 三方合并比较共同祖先 base、当前侧 ours 与另一侧 theirs。两侧对同一区域做了无法自动组合的修改时产生冲突；即使 Git 自动合并成功，语义仍可能错误，因此必须构建和测试。
 
-## 冲突何时产生
-
-当两个分支对**同一文件的同一区域**做了不同修改，Git 无法自动决定取谁的，产生冲突。
-
-## 冲突标记
-
-```
+```text
 <<<<<<< HEAD
-这是当前分支（HEAD）的内容
+当前分支内容
 =======
-这是被合并分支的内容
->>>>>>> feature/login
+另一侧内容
+>>>>>>> topic
 ```
 
-- `<<<<<<< HEAD` 到 `=======`：当前分支的版本
-- `=======` 到 `>>>>>>>`：对方分支的版本
-- 解决：手动编辑，保留想要的内容，删除所有标记符
+不要机械保留 ours/theirs。先回答两侧分别试图维持什么行为，再写出同时满足新契约的结果。
 
-## 解决流程
+# 可靠冲突处理流程
 
 ```bash
-git merge feature            # 触发冲突
-git add conflicted_file.cpp  # 标记已解决
-git commit                   # 完成合并（message 自动生成）
+git status
+git diff --name-only --diff-filter=U
+git diff
+
+# 编辑并验证每个冲突文件
+git add path/to/resolved-file
+git status
+
+# 根据当前操作继续
+git merge --continue
+git rebase --continue
+git cherry-pick --continue
 ```
 
-## 高级技巧
-
-### 合并策略
+中止应使用与当前操作对应的命令：
 
 ```bash
-git merge -s recursive -X theirs feature   # 冲突全取对方版本
-git merge -s recursive -X ours feature     # 冲突全取自己版本
-git merge -s ours feature                  # 完全忽略对方（仅记合并事实）
+git merge --abort
+git rebase --abort
+git cherry-pick --abort
+git revert --abort
 ```
 
-### 快速选择
+处理前先确认未提交修改是否属于自己；不清楚时保存补丁或建立临时提交，不要直接用 `reset --hard` 清场。
+
+`git rerere` 可记录冲突形状与解决结果，在后续重复冲突时复用，但仍需检查上下文并运行验证。
+
+# restore、reset 与 revert
+
+三个命令针对的层次不同：
+
+| 目标 | 命令 | 是否改写分支历史 |
+|---|---|---:|
+| 恢复工作区/暂存区文件 | `git restore` | 否 |
+| 移动当前分支引用，按模式同步 index/工作区 | `git reset` | 是 |
+| 新建一个反向提交 | `git revert` | 否 |
+
+## Restore
 
 ```bash
-git checkout --ours file      # 取当前分支版本
-git checkout --theirs file    # 取对方分支版本
-git checkout --merge file     # 重新标记冲突
+git restore file                 # index → 工作区，丢弃未暂存修改
+git restore --staged file        # HEAD → index，仅取消暂存
+git restore --source=<commit> file
 ```
 
-### 合并工具
+第一条会覆盖工作区内容，执行前先查看 `git diff -- file`。
+
+## Reset
+
+```text
+--soft ：移动 HEAD；保留 index 与工作区
+--mixed：移动 HEAD；重置 index；保留工作区（默认）
+--hard ：移动 HEAD；重置 index 与工作区
+```
+
+`reset --hard` 会丢弃被覆盖的已跟踪修改，并可能影响未跟踪路径，属于最后手段。对已推送且他人使用的提交，不应仅为“历史好看”执行 reset 后强推。
+
+## Revert
+
+`git revert <commit>` 生成新提交来反向应用目标改动，适合共享历史。revert 合并提交需要用 `-m` 指定主线父提交；它还会影响未来合并语义，执行前要理解原拓扑并验证结果。
+
+# Reflog 与对象恢复
+
+reflog 记录本地引用曾指向的位置：
 
 ```bash
-git mergetool                    # 图形化合并工具
-git config merge.tool vscode     # 设置默认工具
-git config merge.conflictstyle diff3  # 三方对比（显示共同祖先）
+git reflog
+git show HEAD@{2}
+git branch rescue HEAD@{2}
 ```
 
-### git rerere（复用解决方案）
+安全恢复习惯是先创建 `rescue` 分支，再检查内容，而不是立刻再次 reset。reflog 是本地记录，受过期和清理策略影响，也不会自动存在于其他克隆中，因此不是备份系统。
+
+# Stash 的边界
 
 ```bash
-git config --global rerere.enabled true
+git stash push -u -m "wip parser experiment"
+git stash list
+git stash show -p stash@{0}
+git stash apply stash@{0}
 ```
 
-### 中止合并
+`apply` 保留 stash，验证无误后再 `drop`；`pop` 会尝试应用并在成功时删除记录。stash 适合短期切换上下文，不适合作为长期工作归档。默认行为、是否包含 untracked/ignored 文件需由参数明确。
+
+# Tag 与发布引用
+
+轻量 tag 只是引用；annotated tag 是对象，包含说明、作者和时间，并可签名。发布通常使用 annotated tag：
 
 ```bash
-git merge --abort     # 回到 merge 前
-git rebase --abort    # 回到 rebase 前
+git tag -a v1.2.0 -m "release v1.2.0"
+git push origin v1.2.0
 ```
 
-## 避免冲突的实践
+tag 指向源码版本，不等于制品已经经过同一构建、签名和发布流程；发布系统还需记录制品摘要与 provenance。
 
-| 实践 | 说明 |
-|------|------|
-| 频繁同步主干 | 经常 rebase/merge 最新代码，减少积压 |
-| 小粒度提交 | 每次改动范围小，冲突概率低 |
-| 职责划分清晰 | 不同人不同模块，减少同时改同一文件 |
-| 统一格式化 | 统一缩进风格，减少伪冲突 |
+# 破坏性操作前的检查
 
-> [!tip]- **工程要点**：冲突不可怕，关键是理解每段代码去留的业务逻辑。`git log --merge -p` 可查看冲突文件的双方提交历史辅助决策。不要盲目 ours/theirs。
-
----
-
-> [!info]- 延伸阅读
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
-> - reset vs revert vs restore (撤销三兄弟)
-> - stash, tag, reflog (实用命令)
-> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
->
-> ---
-
-# reset revert and restore (撤销操作)
-
-> [!note] 本节重点：三者的作用范围、是否改写历史、适用场景
-
-> [!warning] 先确认目标，再执行会丢数据的命令
-> `reset --hard` 与 `restore` 可能丢掉未提交内容。先用 `git status`、`git diff` 确认目标；重要改动先做 commit、stash 或文件级备份。公共分支默认优先考虑 `revert`。
-
-## 速查
-
-|命令|作用范围|改写历史|适用场景|
-|---|---|---|---|
-|`git reset`|commit 历史 + 可选影响暂存区/工作区|**是**|撤销本地未推送的提交|
-|`git revert`|创建新 commit 来抵消旧 commit|**否**|撤销已推送的提交|
-|`git restore`|工作区 / 暂存区|—|丢弃未提交的改动|
-
----
-
-## git reset
-
-将 HEAD（和分支指针）移动到指定 commit，根据模式决定暂存区和工作区的影响：
-
-```bash
-git reset --soft  HEAD~1   # 只移动 HEAD，改动保留在暂存区
-git reset --mixed HEAD~1   # 移动 HEAD + 清空暂存区，改动保留在工作区（默认）
-git reset --hard  HEAD~1   # 移动 HEAD + 清空暂存区 + 丢弃工作区改动（危险！）
+```text
+1. 当前分支、HEAD 和 upstream 是什么？
+2. 工作区、index 中有哪些未保存修改？
+3. 目标提交/路径是否精确？
+4. 操作会移动引用、覆盖工作区还是新增反向提交？
+5. 提交是否已共享？是否先建 rescue 分支？
 ```
 
-```
---soft:   [工作区: 不变] [暂存区: 不变] [HEAD: 移动]
---mixed:  [工作区: 不变] [暂存区: 清空] [HEAD: 移动]
---hard:   [工作区: 丢弃] [暂存区: 清空] [HEAD: 移动]
-```
+# 检查理解
 
-> `--hard` 丢弃的工作区改动无法通过 Git 恢复（未提交的内容真的丢了）。
+1. 自动合并成功为什么仍需测试？
+2. 如何分别“取消暂存”和“丢弃工作区修改”？
+3. 公共分支错误为何通常用 revert 而不是 reset？
+4. reflog 为什么能救回部分提交，却不能当远程备份？
 
----
+> [!summary] 本篇结论
+> 恢复操作必须先定位状态层：restore 面向文件，reset 移动分支并可同步 index/工作区，revert 在公共历史中追加反向提交。冲突解决的目标是恢复业务语义，而不是让标记消失。
 
-## git revert
+## 权威依据
 
-创建一个新 commit，内容是指定 commit 的**逆操作**，历史不被改写：
+- [Git: reset, restore and revert](https://git-scm.com/docs/git#_reset_restore_and_revert)
+- [git-reflog documentation](https://git-scm.com/docs/git-reflog)
 
-```bash
-git revert abc1234          # 撤销某个 commit，产生新的 revert commit
-git revert HEAD~3..HEAD     # 撤销最近 3 个 commit
-git revert -n abc1234       # 不自动 commit，只改动工作区（留给你手动调整）
-```
-
-```
-Before:  A ← B ← C ← D (HEAD)
-After:   A ← B ← C ← D ← D'  （D' 是 D 的逆操作）
-```
-
-- ✅ 安全，适合公共分支、已推送的 commit
-- ❌ 产生额外 commit，历史略显冗长
-
----
-
-## git restore
-
-专门用于撤销工作区和暂存区的改动（Git 2.23+ 引入，替代旧的 `git checkout -- file`）：
-
-```bash
-git restore file.cpp              # 丢弃工作区改动，恢复到暂存区版本
-git restore --staged file.cpp     # 将文件从暂存区移出（不影响工作区）
-git restore --source=HEAD~2 file  # 将文件恢复到指定 commit 的版本
-```
-
-> [!summary] 核心摘要
->
-> `reset` 移动当前分支指针，并按模式影响暂存区/工作区，适合重整尚未共享的本地历史；`revert` 新增一个反向 commit，保留公共历史；`restore` 只处理工作区或暂存区的文件内容。选择前先问：改动是否已共享？我是否需要保留历史？是否有未提交内容？
-
-> [!question]- 自测：先回答再展开
-> 1. 已推送到团队共用分支的一次错误提交，为什么通常优先 `revert`？
-> 2. `git restore --staged file` 会如何影响工作区？
-> 3. 使用 `reset --hard` 前，你会做哪两项只读检查？
->
-> ---
-
-> [!info]- 延伸阅读
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
-> - Conflict Resolution (冲突解决实操)
-> - stash, tag, reflog (实用命令)
-> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
->
-> ---
-
-# stash tag and reflog (实用命令)
-
-> [!note] 本节重点：stash 暂存与恢复、tag 标记与版本、reflog 恢复误删操作
-
-# git stash（临时搁置）
-
-将当前工作区和暂存区的改动临时保存，让工作区恢复干净：
-
-```bash
-git stash                    # 保存当前改动
-git stash push -m "wip: 登录功能"  # 附加描述
-git stash list               # 查看所有 stash
-git stash pop                # 恢复最近一次 stash（并删除）
-git stash apply stash@{1}    # 恢复指定 stash（不删除）
-git stash drop stash@{0}     # 删除指定 stash
-git stash branch feature/new # 从 stash 创建新分支
-```
-
-典型场景：正在开发功能，突然需要切换分支修 bug，先 stash 保存进度。
-
-> `git stash` 默认不保存 untracked 文件，需要 `git stash -u` 才包含。
-
----
-
-# git tag（标签）
-
-为特定 commit 打上永久标记，常用于标识版本发布：
-
-```bash
-git tag v1.0.0
-
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git tag -a v1.0.0 abc1234    # 为历史 commit 打标签
-
-git tag                      # 列出所有标签
-git show v1.0.0              # 查看标签详情
-git push origin v1.0.0       # 推送单个标签（tag 默认不随 push 上传）
-git push origin --tags       # 推送所有标签
-git tag -d v1.0.0            # 删除本地标签
-git push origin :refs/tags/v1.0.0  # 删除远端标签
-```
-
----
-
-# git reflog（操作日志 / 后悔药）
-
-记录本地所有 HEAD 的移动历史，即使 commit 被 reset 也能找回：
-
-```bash
-git reflog                   # 查看 HEAD 的所有历史移动记录
-git reflog show main         # 查看某个分支的移动记录
-```
-
-输出示例：
-
-```
-abc1234 HEAD@{0}: commit: feat: add login
-def5678 HEAD@{1}: reset: moving to HEAD~1
-ghi9012 HEAD@{2}: commit: wip: half-done feature
-```
-
-**找回误删的 commit：**
-
-```bash
-git reset --hard HEAD@{2}    # 回到 reset 之前的状态
-git checkout -b rescue ghi9012  # 从丢失的 commit 创建新分支
-```
-
-> reflog 是本地的，克隆新仓库没有 reflog。默认保留 90 天。
-
----
-
-> [!info]- 延伸阅读
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
-> - Conflict Resolution (冲突解决实操)
-> - reset vs revert vs restore (撤销三兄弟)
-> - CI⧸CD for C++：GitHub Actions, Static Analysis, Automation (CI⧸CD流水线)
-> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
-
-> [!info]- 延伸阅读
-> - 下一步：[03-CI CD (持续集成与交付)](/02-Engineering%20Fundamentals%20(工程基础)/01-Git%20and%20Delivery%20(Git%20与交付)/03-CI%20CD%20(持续集成与交付).md)
-
+下一步：[03-CI CD (持续集成与交付)](/02-Engineering%20Fundamentals%20(工程基础)/01-Git%20and%20Delivery%20(Git%20与交付)/03-CI%20CD%20(持续集成与交付).md)

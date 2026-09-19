@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-18
+content_verified: 2026-09-19
 tags: [engineering/verification]
 ---
 
@@ -21,16 +21,16 @@ tags: [engineering/verification]
 
 ## 统一上下文模型
 
-跨信号保持同一组低基数字段：
+跨信号关联应使用一致的服务与请求上下文，但**不能把所有关联字段直接放进指标标签**。区分适合聚合的低基数维度与仅适合逐请求事件的高基数标识：
 
 ```text
-service.name   environment   version/build_id
-region/zone    instance_id   operation
-trace_id       span_id       request_id
-error.type     dependency    tenant_tier
+指标维度示例：service.name   environment   region/zone
+              operation(路由模板)   error.type   tenant_tier(有限枚举)
+日志/trace 关联：trace_id   span_id   request_id   build_id
+              instance_id(按后端及查询方式决定是否聚合)
 ```
 
-不要把用户 ID、URL 原文、异常全文等高基数值放入指标标签；它们更适合进入日志或 trace attribute，并受隐私与访问控制约束。
+请求 ID、trace ID、用户 ID、URL 原文和异常全文等高基数值不能作为普通指标标签；前两者适合关联日志与 trace，用户标识与异常详情仍需遵守数据最小化、脱敏和访问控制。即使 `operation` 是指标标签，也应使用路由模板而非带动态 ID 的实际 URL。
 
 # 结构化日志
 

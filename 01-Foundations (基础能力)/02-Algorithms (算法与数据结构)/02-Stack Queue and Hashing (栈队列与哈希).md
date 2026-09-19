@@ -1,270 +1,130 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
-previous_review_due: 2026-09-08
+content_verified: 2026-09-19
+tags: [algorithm/data-structure, algorithm/bfs, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习目标
+> 理解栈、队列和哈希表分别保存怎样的历史信息，并能从不变量推导单调栈、BFS 和哈希计数方案。
 
-# Monotonic Stack (单调栈)
+# 栈与单调栈
 
-> [!note] 本节重点：单调递增/递减栈维护、下一个更大/更小元素 O(n) 模板、每日温度/接雨水等经典问题
+栈是后进先出（LIFO）结构，适合表达尚未闭合的调用、括号、区间或状态。函数调用栈、表达式求值和 DFS 的迭代实现都使用这一性质。
 
-单调栈维护一个**严格单调递增或递减**的栈，用于解决"下一个更大/更小元素"类问题，时间复杂度 O(n)（每个元素最多入栈出栈一次）。
+**单调栈（monotonic stack）**在栈内维护单调序列，用弹栈动作一次性确定某些元素的最近更大/更小边界。每个元素至多入栈、出栈一次，所以总复杂度为 `O(n)`，而不是把每次 `while` 误判为 `O(n²)`。
 
-## 模板：下一个更大元素
+## 下一个严格更大元素
 
 ```cpp
-vector<int> nextGreaterElement(vector<int>& nums) {
-    int n = nums.size();
-    vector<int> res(n, -1);
-    stack<int> st;  // 存下标
-    for (int i = 0; i < n; i++) {
-        while (!st.empty() && nums[i] > nums[st.top()]) {
-            res[st.top()] = nums[i];
-            st.pop();
+std::vector<int> next_greater(const std::vector<int>& a) {
+    std::vector<int> answer(a.size(), -1);
+    std::vector<std::size_t> stack; // 下标；对应值保持单调不增
+
+    for (std::size_t i = 0; i < a.size(); ++i) {
+        while (!stack.empty() && a[stack.back()] < a[i]) {
+            answer[stack.back()] = static_cast<int>(i);
+            stack.pop_back();
         }
-        st.push(i);
+        stack.push_back(i);
     }
-    return res;
+    return answer;
 }
 ```
 
-## 典型应用
+栈中保存“右侧答案尚未出现”的下标。严格/非严格比较必须按题意选择：重复值是否能成为边界，会直接改变 `<` 与 `<=`。
 
-### 接雨水
+## 柱状图与接雨水
 
-```cpp
-int trap(vector<int>& height) {
-    stack<int> st;
-    int water = 0;
-    for (int i = 0; i < (int)height.size(); i++) {
-        while (!st.empty() && height[i] > height[st.top()]) {
-            int top = st.top(); st.pop();
-            if (st.empty()) break;
-            int width   = i - st.top() - 1;
-            int bounded = min(height[i], height[st.top()]) - height[top];
-            water += width * bounded;
-        }
-        st.push(i);
-    }
-    return water;
-}
-```
+柱状图最大矩形使用单调递增栈；当较矮柱出现时，被弹柱子的右边界确定，弹栈后的新栈顶给出左边界。首尾哨兵可统一清空逻辑。接雨水既可用单调栈按“凹槽层”结算，也可用相向双指针维护左右最大值；选择前先写清每次结算的是面积、宽度还是高度。
 
-### 柱状图中最大矩形（单调递增栈）
+# 队列与 BFS
+
+队列先进先出（FIFO），适合按发现顺序处理状态。无权图 BFS 按边数逐层扩展，因此第一次到达节点时得到最短边数。
 
 ```cpp
-int largestRectangleArea(vector<int>& heights) {
-    vector<int> h = heights;
-    h.push_back(0);             // 副本上的哨兵，避免修改调用者输入
-    stack<int> st;
-    st.push(-1);
-    int res = 0;
-    for (int i = 0; i < (int)h.size(); i++) {
-        while (st.top() != -1 && h[i] < h[st.top()]) {
-            int height = h[st.top()]; st.pop();
-            int w = i - st.top() - 1;
-            res = max(res, height * w);
-        }
-        st.push(i);
-    }
-    return res;
-}
-```
+std::vector<int> bfs_distance(
+    const std::vector<std::vector<int>>& graph, int source) {
+    std::vector<int> dist(graph.size(), -1);
+    std::queue<int> q;
+    dist[source] = 0;      // 入队时标记，避免重复入队
+    q.push(source);
 
----
-
-> [!summary] 核心摘要
->
-> **单调栈为什么是 O(n)？** 每个下标最多入栈一次、弹栈一次，虽然有嵌套 `while`，总弹栈次数仍不超过 `n`。先决定栈内维持递增还是递减，再明确“当前元素到来时，谁的答案被确定”。
->
-> **自测：** 下一个更大元素为何在弹栈时确定答案？柱状图题为什么要在末尾放哨兵？
-
-> [!info]- 延伸阅读
-> - BFS with Queue (队列BFS)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
-> - Hash Table (哈希表)
->
-> ---
-
-# Queue and Breadth First Search (队列与广度优先搜索)
-
-> [!note] 本节重点：BFS 按层扩展、队列实现、无权图最短路径、visited 数组防重复
-
-BFS 用队列实现，**按层扩展**，保证找到的路径是最短路径（无权图）。
-
-## 模板
-
-```cpp
-int bfs(vector<vector<int>>& graph, int start, int target) {
-    queue<int> q;
-    unordered_set<int> visited;
-    q.push(start);
-    visited.insert(start);
-    int steps = 0;
     while (!q.empty()) {
-        int sz = q.size();
-        for (int i = 0; i < sz; i++) {
-            int node = q.front(); q.pop();
-            if (node == target) return steps;
-            for (int nb : graph[node])
-                if (!visited.count(nb)) { visited.insert(nb); q.push(nb); }
-        }
-        steps++;
-    }
-    return -1;
-}
-```
-
-## 二叉树层序遍历
-
-```cpp
-vector<vector<int>> levelOrder(TreeNode* root) {
-    if (!root) return {};
-    queue<TreeNode*> q;
-    q.push(root);
-    vector<vector<int>> res;
-    while (!q.empty()) {
-        int sz = q.size();
-        vector<int> level;
-        for (int i = 0; i < sz; i++) {
-            auto node = q.front(); q.pop();
-            level.push_back(node->val);
-            if (node->left)  q.push(node->left);
-            if (node->right) q.push(node->right);
-        }
-        res.push_back(level);
-    }
-    return res;
-}
-```
-
-## 多源 BFS
-
-从多个起点同时出发（如矩阵中所有 0 同时扩散），初始化时将所有起点入队：
-
-```cpp
-vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-    int m = mat.size(), n = mat[0].size();
-    vector<vector<int>> dist(m, vector<int>(n, INT_MAX));
-    queue<pair<int,int>> q;
-    for (int i = 0; i < m; i++)
-        for (int j = 0; j < n; j++)
-            if (mat[i][j] == 0) { dist[i][j] = 0; q.push({i, j}); }
-    int dirs[4][2] = {{0,1},{0,-1},{1,0},{-1,0}};
-    while (!q.empty()) {
-        auto [x, y] = q.front(); q.pop();
-        for (auto& d : dirs) {
-            int nx = x+d[0], ny = y+d[1];
-            if (nx>=0 && nx<m && ny>=0 && ny<n && dist[nx][ny] > dist[x][y]+1) {
-                dist[nx][ny] = dist[x][y] + 1;
-                q.push({nx, ny});
-            }
+        int u = q.front();
+        q.pop();
+        for (int v : graph[u]) {
+            if (dist[v] != -1) continue;
+            dist[v] = dist[u] + 1;
+            q.push(v);
         }
     }
     return dist;
 }
 ```
 
----
+复杂度为 `O(V + E)`，前提是邻接表表示；若使用邻接矩阵，扫描邻居会改变复杂度。
 
-> [!info]- 延伸阅读
-> - Monotonic Stack (单调栈)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
-> - Hash Table (哈希表)
->
-> ---
+## 多源 BFS
 
-# Hash Table (哈希表)
+把所有距离为 0 的源点同时入队，相当于增加一个连接所有源点的虚拟超级源。腐烂橘子、最近设施距离等题都可由此统一。层数可通过 `dist` 记录，也可按当前队列长度分层；不要混用导致多算一步。
 
-> [!note] 本节重点：哈希原理、冲突解决、Python dict / C++ unordered_map 的特性
+## 双端队列
 
-## 哈希表原理
+`deque` 支持两端操作。边权仅为 0/1 时可用 0-1 BFS：权 0 的转移压到队首，权 1 压到队尾，得到 `O(V + E)`；它不是普通 BFS 对任意权重的替代。
 
-将 key 通过哈希函数映射到数组下标，实现 O(1) 平均查找。
+# 哈希表
 
-**冲突解决：**
+哈希表用散列函数把键映射到桶，再通过链式结构或开放寻址解决冲突。平均查找/插入可接近 `O(1)`，但最坏情况可达 `O(n)`；性能还受负载因子、哈希质量、扩容、内存布局和攻击性输入影响。
 
-- **链地址法（Chaining）**：每个槽保存一组冲突元素；Java `HashMap` 属于这一类（桶内结构是实现细节）
-- **开放寻址法（Open Addressing）**：冲突时按探测序列寻找槽位；CPython 的 `dict` 采用开放寻址思路，具体探测与内存布局属于实现细节
+## 三种常用模式
 
-**负载因子（Load Factor）= 已存元素 / 总槽数**。过高会使冲突增多；扩容阈值和 rehash 策略由具体容器实现决定，不能把某一实现的 `0.75` 当作通用规则。
-
-> [!warning] 哈希表是平均 `O(1)`，不是严格保证 `O(1)`：冲突严重或遭遇恶意键时会退化。对外部可控的键和性能敏感路径，要考虑哈希质量、容量预留或抗攻击策略。
-
-## 常见使用模式
+1. **集合判重**：已见元素、访问状态。
+2. **计数映射**：频率统计、异位词、窗口计数。
+3. **值到位置/状态**：两数和、前缀和第一次出现位置。
 
 ```cpp
-#include <unordered_map>
-#include <unordered_set>
-
-// 两数之和
-vector<int> twoSum(vector<int>& nums, int target) {
-    unordered_map<int, int> seen;  // value → index
-    for (int i = 0; i < (int)nums.size(); i++) {
-        int need = target - nums[i];
-        if (seen.count(need)) return {seen[need], i};
-        seen[nums[i]] = i;
+std::optional<std::pair<std::size_t, std::size_t>> two_sum(
+    const std::vector<int>& a, int target) {
+    std::unordered_map<int, std::size_t> position;
+    for (std::size_t i = 0; i < a.size(); ++i) {
+        long long need64 = static_cast<long long>(target) - a[i];
+        if (need64 >= std::numeric_limits<int>::min() &&
+            need64 <= std::numeric_limits<int>::max()) {
+            auto it = position.find(static_cast<int>(need64));
+            if (it != position.end()) return std::pair{it->second, i};
+        }
+        position.try_emplace(a[i], i);
     }
-    return {};
+    return std::nullopt;
 }
-
-// 字母异位词分组
-vector<vector<string>> groupAnagrams(vector<string>& strs) {
-    unordered_map<string, vector<string>> groups;
-    for (auto& s : strs) {
-        string key = s;
-        sort(key.begin(), key.end());
-        groups[key].push_back(s);
-    }
-    vector<vector<string>> res;
-    for (auto& [k, v] : groups) res.push_back(v);
-    return res;
-}
-
-// 自定义哈希（pair 作 key）
-struct PairHash {
-    size_t operator()(const pair<int,int>& p) const {
-        size_t h1 = hash<int>{}(p.first);
-        size_t h2 = hash<int>{}(p.second);
-        return h1 ^ (h2 + 0x9e3779b9 + (h1 << 6) + (h1 >> 2));
-    }
-};
-unordered_map<pair<int,int>, int, PairHash> mp;
 ```
 
-## C++ unordered_map
+对 `unordered_map`：
 
-```cpp
-#include <unordered_map>
-unordered_map<string, int> freq;
-freq["hello"]++;
-freq.count("hello");      // 是否存在（0 或 1）
-freq.find("world");       // 返回迭代器
-freq.erase("hello");
+- `operator[]` 在键不存在时会插入默认值；只查询时用 `find`/`contains`。
+- `reserve` 可减少已知规模下的 rehash，但不保证迭代顺序。
+- rehash 会使迭代器失效；引用和指针的失效规则需查对应标准接口。
+- 自定义键需要一致的相等关系与哈希：相等的键必须产生相同哈希值。
 
-// 自定义哈希（对 pair 等非内置类型）
-struct PairHash {
-    size_t operator()(const pair<int,int>& p) const {
-        size_t h1 = hash<int>{}(p.first);
-        size_t h2 = hash<int>{}(p.second);
-        return h1 ^ (h2 + 0x9e3779b9 + (h1 << 6) + (h1 >> 2));
-    }
-};
-unordered_map<pair<int,int>, int, PairHash> mp;
-```
+# 如何选择
 
----
+| 需求 | 首选结构 | 判断依据 |
+|---|---|---|
+| 最近未匹配对象 | 栈 | LIFO |
+| 按层/发现顺序扩展 | 队列 | FIFO |
+| 两端优先级为 0/1 | 双端队列 | 0-1 BFS |
+| 近似常数时间判重/映射 | 哈希表 | 不需要有序遍历 |
+| 需要有序键与范围查询 | 平衡树/有序容器 | `O(log n)` 换顺序语义 |
 
+# 检查理解
 
-> [!warning]- 易错点
-> - 把 **02-Stack Queue and Hashing (栈队列与哈希)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
+1. 单调栈为什么总体是 `O(n)`？
+2. BFS 为什么必须在入队时标记，而不是出队时？
+3. 普通 BFS 为什么不能直接处理任意非负权图？
+4. 哈希表平均 `O(1)` 隐藏了哪些工程条件？
 
-> [!info]- 延伸阅读
-> - 下一步：[03-Heap and Top K (堆与 Top K)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Heap%20and%20Top%20K%20(堆与%20Top%20K).md)
+> [!summary] 本篇结论
+> 栈保存最近的未决状态，队列保存按发现顺序待处理的状态，哈希表用额外空间换快速定位。模板正确性的核心分别是单调性、最短层次和键映射语义。
+
+下一步：[03-Heap and Top K (堆与 Top K)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/03-Heap%20and%20Top%20K%20(堆与%20Top%20K).md)

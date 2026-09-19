@@ -1,214 +1,97 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [algorithm/search, algorithm/invariant, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
-
-> [!summary] 核心摘要
->
-> 二分搜索的前提是答案空间存在单调性；先写清区间定义和谓词，再用循环不变量收缩边界，避免只记模板却在临界条件出错。
-
-
-> [!note] 本节重点：边界条件、三种模板的使用场景、二分答案
+> [!abstract] 学习目标
+> 把二分理解为在单调谓词上寻找边界；通过统一半开区间不变量处理精确查找、lower/upper bound 和答案二分。
 
 # 二分的本质
 
-在**有序**（或具有单调性）的搜索空间中，每次排除一半，将 O(n) 降到 O(log n)。
+二分不要求元素一定是数字，真正要求是搜索空间上的谓词具有单调分界：
 
----
+```text
+false false false | true true true
+                  ↑ 第一个 true
+```
 
-# 三种模板
+每轮必须缩小搜索区间，并保持目标边界仍在其中。与其背多套 `+1/-1`，不如固定一种区间语义。
 
-## 模板一：精确查找（找到即返回）
+# 半开区间模板
+
+在升序数组中找第一个 `>= target` 的位置，即 `lower_bound`：
 
 ```cpp
-int binarySearch(vector<int>& nums, int target) {
-    int l = 0, r = (int)nums.size() - 1;
-    while (l <= r) {
-        int mid = l + (r - l) / 2;      // 防溢出写法
-        if      (nums[mid] == target) return mid;
-        else if (nums[mid] < target)  l = mid + 1;
-        else                          r = mid - 1;
+std::size_t lower_bound_index(const std::vector<int>& a, int target) {
+    std::size_t left = 0;
+    std::size_t right = a.size(); // 答案位于 [left, right]
+    while (left < right) {
+        const std::size_t mid = left + (right - left) / 2;
+        if (a[mid] < target) left = mid + 1;
+        else right = mid;
     }
-    return -1;
+    return left; // 可能等于 a.size()
 }
 ```
 
-循环条件 `l <= r`，退出时 `l > r`，搜索空间为空时停止。
+循环中待搜索区间是 `[left, right)`；结束时区间为空，`left` 是分界点。由它可以推导：
 
----
+- 第一个 `> target`：谓词改为 `a[mid] > target`（即 `upper_bound`）。
+- 最后一个 `<= target`：`upper_bound(target) - 1`，但先检查结果是否为 0，避免无符号下溢。
+- 精确查找：求 `lower_bound` 后检查位置未越界且值相等。
+- 目标出现次数：`upper_bound - lower_bound`。
 
-## 模板二：查找左边界（第一个 ≥ target 的位置）
+生产代码优先使用 `std::lower_bound`、`std::upper_bound` 和 ranges 版本；手写用于理解不变量或自定义搜索空间。
+
+# 二分答案
+
+当候选答案 `x` 可通过 `feasible(x)` 判断，并且可行性单调，就能二分第一个可行值：
 
 ```cpp
-// 第一个 >= target 的位置（lower_bound）
-int lowerBound(vector<int>& nums, int target) {
-    int l = 0, r = (int)nums.size();      // [l, r)
-    while (l < r) {
-        int mid = l + (r - l) / 2;
-        if (nums[mid] < target) l = mid + 1;
-        else                    r = mid;   // 保留 mid，向左收缩
+long long first_feasible(long long low, long long high) {
+    // 约定答案存在于 [low, high]，high 必须可行
+    while (low < high) {
+        long long mid = low + (high - low) / 2;
+        if (feasible(mid)) high = mid;
+        else low = mid + 1;
     }
-    return l;
+    return low;
 }
 ```
 
-## 模板三：查找右边界（最后一个 ≤ target 的位置）
+关键不是模板，而是证明：
 
-```cpp
-// 最后一个 <= target 的位置（upper_bound - 1）
-int upperBound(vector<int>& nums, int target) {
-    int l = 0, r = (int)nums.size();
-    while (l < r) {
-        int mid = l + (r - l) / 2;
-        if (nums[mid] <= target) l = mid + 1;  // target 在 mid 右边
-        else                     r = mid;
-    }
-    return l - 1;   // 最后一个 <= target 的下标
-}
-```
+1. 搜索上下界覆盖答案；
+2. `feasible` 单调；
+3. 每轮严格缩区间；
+4. 整数运算不会溢出；
+5. 不存在答案时接口如何表示。
 
-**C++ STL 对应：**
+最大化最小值通常搜索“最后一个可行”，最小化最大值搜索“第一个可行”。装载能力、加工速度、分割阈值等题都属于这一模型。
 
-```cpp
-#include <algorithm>
-auto it = lower_bound(nums.begin(), nums.end(), target);  // 第一个 >= target 的迭代器
-auto it = upper_bound(nums.begin(), nums.end(), target);  // 第一个 > target 的迭代器
-// 返回值：it - nums.begin() 即为下标
-// 若未找到，返回 nums.size()（越界下标）
-```
+# 旋转数组
 
-> `lower_bound`/`upper_bound` 要求序列**有序**，二分查找，O(log n)。
+无重复元素的旋转升序数组中，每轮至少有一半有序。先判断哪一半有序，再看目标是否位于其值域。存在大量重复值时，`a[left] == a[mid] == a[right]` 可能无法判断方向，只能收缩边界，最坏复杂度退化到 `O(n)`。
 
----
+# 常见失败模式
 
-# 二分答案（最重要的应用）
+- 混用闭区间与半开区间，导致越界或漏掉最后一个候选；
+- `mid = (left + right) / 2` 在有符号大整数上溢出；
+- 用无符号下标执行 `mid - 1`，在 0 处下溢；
+- 浮点二分只按固定轮数却不分析精度，或用 `==` 判断结果；
+- 谓词计算本身溢出，例如 `speed * time >= jobs`；应改写或使用更宽类型；
+- 没有证明单调性，只因“看起来可二分”就套模板。
 
-**适用场景：** 答案在某个范围内，且答案越大（或越小）越容易满足条件（单调性），可以二分答案，把"求最值"转化为"验证是否可行"。
+# 检查理解
 
-**套路：**
+1. `lower_bound` 返回 `size()` 表示什么？
+2. 为什么“最后一个 `<= x`”可由 `upper_bound(x) - 1` 推导？
+3. 答案二分中哪个函数必须单调，如何写出反例验证？
+4. 旋转数组含重复值时为什么可能退化为线性？
 
-1. 确定答案范围 `[lo, hi]`
-2. 定义 `check(mid)` 判断 mid 是否可行
-3. 二分找到满足/不满足条件的边界
+> [!summary] 本篇结论
+> 二分是对单调谓词分界的搜索。统一半开区间、明确循环不变量和不存在答案的语义，比记忆若干看似相似的模板可靠得多。
 
-```cpp
-// 二分答案通用框架（求最小值）
-int lo = minPossible, hi = maxPossible;
-while (lo < hi) {
-    int mid = lo + (hi - lo) / 2;
-    if (check(mid)) hi = mid;        // mid 可行，尝试更小
-    else            lo = mid + 1;    // mid 不可行，需要更大
-}
-return lo;
-```
-
-## 经典例题
-
-**木材切割（二分最大长度）：**
-
-```cpp
-// 木材切割（求最大值：mid 上取整防死循环）
-int maxPiece(vector<int>& lengths, int k) {
-    auto check = [&](int mid) {
-        int cnt = 0;
-        for (int l : lengths) cnt += l / mid;
-        return cnt >= k;
-    };
-    int lo = 1, hi = *max_element(lengths.begin(), lengths.end());
-    while (lo < hi) {
-        int mid = lo + (hi - lo + 1) / 2;  // 上取整
-        if (check(mid)) lo = mid;
-        else            hi = mid - 1;
-    }
-    return lo;
-}
-```
-
-**爱吃香蕉的珂珂（最小速度）：**
-
-```cpp
-// 爱吃香蕉的珂珂（求最小值）
-int minEatingSpeed(vector<int>& piles, int h) {
-    auto check = [&](int speed) {
-        long long cnt = 0;
-        for (int p : piles) cnt += (p + speed - 1) / speed;  // 上取整
-        return cnt <= h;
-    };
-    int lo = 1, hi = *max_element(piles.begin(), piles.end());
-    while (lo < hi) {
-        int mid = lo + (hi - lo) / 2;
-        if (check(mid)) hi = mid;        // 速度可以更小
-        else            lo = mid + 1;
-    }
-    return lo;
-}
-```
-
-**在 D 天内送达包裹的能力（最小运载能力）：**
-
-```cpp
-// 在 D 天内送达包裹的能力（求最小值）
-int shipWithinDays(vector<int>& weights, int days) {
-    auto check = [&](int cap) {
-        int d = 1, cur = 0;
-        for (int w : weights) {
-            if (cur + w > cap) { d++; cur = 0; }
-            cur += w;
-        }
-        return d <= days;
-    };
-    int lo = *max_element(weights.begin(), weights.end());
-    int hi = accumulate(weights.begin(), weights.end(), 0);
-    while (lo < hi) {
-        int mid = lo + (hi - lo) / 2;
-        if (check(mid)) hi = mid;
-        else            lo = mid + 1;
-    }
-    return lo;
-}
-```
-
----
-
-# 旋转数组中的二分
-
-```cpp
-// 搜索旋转排序数组（无重复）
-int searchRotated(vector<int>& nums, int target) {
-    int l = 0, r = (int)nums.size() - 1;
-    while (l <= r) {
-        int mid = l + (r - l) / 2;
-        if (nums[mid] == target) return mid;
-        if (nums[l] <= nums[mid]) {         // 左半段有序
-            if (nums[l] <= target && target < nums[mid]) r = mid - 1;
-            else                                         l = mid + 1;
-        } else {                            // 右半段有序
-            if (nums[mid] < target && target <= nums[r]) l = mid + 1;
-            else                                         r = mid - 1;
-        }
-    }
-    return -1;
-}
-```
-
----
-
-# 二分常见陷阱
-
-|陷阱|说明|解决|
-|---|---|---|
-|死循环|求最大值时 `mid=(lo+hi)//2`，`lo=mid` 可能不动|改为 `mid=(lo+hi+1)//2`|
-|溢出（C++）|`(l+r)/2` 在 l、r 很大时溢出|用 `l + (r-l)/2`|
-|边界判断|`<` 还是 `<=`，`+1` 还是不加|根据搜索空间开闭区间决定|
-
----
-
-
-> [!warning]- 易错点
-> - 把 **07-Binary Search (二分查找)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[08-Sorting Algorithms (排序算法)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/08-Sorting%20Algorithms%20(排序算法).md)
+下一步：[08-Sorting Algorithms (排序算法)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/08-Sorting%20Algorithms%20(排序算法).md)

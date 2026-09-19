@@ -1,394 +1,250 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-18
+tags: [cs/architecture, cs/io, learning/foundation]
 verified: 2026-10-17
 review_stage: learn
 review_due: 2026-10-17
 ---
 
-> [!abstract] 阅读方式：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
+> [!abstract] 阅读方式
+> 存储层级解决“容量、延迟、带宽和成本不能同时最优”，I/O 系统解决“速度和控制方式不同的设备如何安全搬运数据”。本文不背固定纳秒表，而是建立局部性、缓存、互连、中断、DMA 与 MMIO 的因果链，并要求用本机实验验证。
 
 > [!summary] 核心摘要
 >
-> 存储层级用小而快的缓存覆盖大而慢的存储；程序应利用时间与空间局部性，减少随机访问和不必要的数据搬运。
+> 缓存按块复制相邻层数据，命中依赖时间与空间局部性；性能由命中时间、缺失率、缺失代价、带宽和并行度共同决定。设备通过控制器与片上互连通信，CPU 可轮询或处理中断，设备可借助 DMA 搬运批量数据；MMIO、DMA、一致性与 IOMMU 决定数据何时对谁可见。
 
-# Memory Hierarchy (存储层级结构)
+# 存储层级与局部性
 
-> [!note] 本节重点： 存储金字塔结构、Cache 的位置与作用、局部性原理的硬件利用、不同层级的速度差异
+## 为什么必须分层
 
-## 存储金字塔
-
-```
-	Register         ← Fastest (~0.3ns), Small Capacity (~KB)
-	L1 Cache         ← ~1ns, ~32KB
-	L2 Cache         ← ~5ns, ~256KB
-	L3 Cache         ← ~15ns, ~MB
-	Main Memory(RAM) ← ~100ns, ~GB
-	SSD / NVMe       ← ~100μs, ~TB
-	HDD Hard Disk    ← ~10ms, ~TB+
-```
-
-**核心规律：** 每向下一层，速度慢约 10 倍、容量大约 10 倍、单位成本约 1/10。
-
-## 层级管理的核心思想
-
-- **缓存 (Caching)**：利用局部性原理，将频繁使用的数据放在更快的存储中
-- **预取 (Prefetching)**：预测程序的访问模式，提前将数据加载到缓存
-- **写缓冲 (Write Buffer)**：CPU 写入时不直接写内存，先写入缓存
-
-## 各级存储的关键属性
-
-| | 寄存器 | Cache | 主存 | 磁盘 |
-|--|--------|-------|------|------|
-| 访问时间 | 0.3-1 ns | 1-30 ns | 80-200 ns | 3-10 ms |
-| 容量 | 几十-几百 B | 几十 KB-MB | GB-TB | TB+ |
-| 易失性 | 易失 | 易失 | 易失 | 非易失 |
-| 制造技术 | 触发器 | SRAM | DRAM | 磁/闪存 |
-
-## 缓存为什么有效
-
-```
-访问模式         局部性类型    缓存效果
-顺序访问         空间局部性    ✅ 极佳
-循环访问同一数据  时间局部性    ✅ 极佳
-随机访问         空间/时间都差  ❌ 差
-```
-
-程序运行中 90% 的时间花在 10% 的代码上（**90/10 法则**），这是缓存有效的根本原因。
-
-## Cache Miss 的代价
-
-```cpp
-// 对 L1 Cache（32KB）友好：32KB 数据
-const int N = 8192;  // 32KB / 4B = 8192
-int a[N];
-for (int i = 0; i < N; i++) total += a[i];
-// 几乎全部 L1 hit，~1ns/次
-
-// L1 Cache miss：16MB 数据
-const int N = 4 * 1024 * 1024;
-int a[N];
-for (int i = 0; i < N; i++) total += a[i];
-// 大量 L3/主存访问，~100ns/次 → 慢约 100 倍
-```
-
----
-
-
-- Basic Input & Output（基础输入输出）
-
----
-
-# Cache Mechanism (缓存机制)
-
-> [!note] 本节重点： Cache 映射方式（直接/组相联/全相联）、替换策略（LRU/LFU/FIFO）、写策略（写直达/写回）
-
-## Cache 基本结构
-
-Cache 以**缓存行（Cache Line）** 为单位存储数据，通常 64 字节。
-
-```
-Cache = 若干组（Set），每组 = 若干路（Way，即缓存行）
-总大小 = 组数 × 路数 × 缓存行大小
-```
-
-## 映射方式
-
-| 方式 | 描述 | 组/路 | 特点 |
-|------|------|-------|------|
-| **直接映射** | 每个内存块只能映射到固定行 | 1 路/组 | 简单但冲突 miss 高 |
-| **全相联** | 任意块可映射到任意行 | 1 组，全路 | 灵活但比较慢 |
-| **组相联** | 每个块映射到固定组内的任意行 | N 路/组 | **最常用** |
+没有一种存储技术能同时提供寄存器级延迟、DRAM 容量、持久存储成本和断电保持能力。系统把不同层组合起来，让常用数据尽量靠近执行单元：
 
 ```text
-┌──────────────────────────────────────────────┐
-│  MEMORY ADDRESS                              │
-│  Tag │ Index │ Offset                        │
-└──────────────────────┬───────────────────────┘
-                       │
-               Index → locate Set i
-                       ▼
-┌───────────────────────────────────────────────┐
-│  4-WAY SET-ASSOCIATIVE CACHE - Set i          |
-├───────────────────────────────────────────────┤
-│  Way 0: Tag │ Data                            │
-│  Way 1: Tag │ Data                            │
-│  Way 2: Tag │ Data                            │
-│  Way 3: Tag │ Data                            |
-└─────┬─────┬─────┬─────────────────────────────┘
-      │     │     │
-      └─────┼─────┘
-            | Tag match on any way
-            │
-            ▼
-     ┌───────────────────┐
-     │    CACHE HIT      │
-     └───────────────────┘
+             smaller / lower latency / higher cost per byte
+        ┌──────────────────────────────────────────┐
+        │ registers                                │
+        │ L1 caches                                │
+        │ private/shared mid-level caches          │
+        │ last-level cache                         │
+        │ DRAM                                     │
+        │ persistent storage                       │
+        │ remote/object/archive storage            │
+        └──────────────────────────────────────────┘
+             larger / higher latency / lower cost per byte
 ```
 
-## 替换策略
+具体层数、容量、缓存行大小和延迟都取决于处理器、NUMA 拓扑、频率、负载与设备；固定的“L1 1ns、内存 100ns、每层慢十倍”只能作为过时印象，不能写成工程事实。
 
-当组内所有路都填满，且缓存 miss 时，需要选择一路淘汰：
+## 局部性为何有效
 
-| 策略 | 描述 | 复杂度 | 效果 |
-|------|------|--------|------|
-| **LRU** | 淘汰最久未访问的行 | 高 | 最好，接近最优 |
-| **伪 LRU** | 近似 LRU，用二叉树跟踪 | 中 | 很好，实用 |
-| **FIFO** | 淘汰最早进入的行 | 低 | 一般（可能淘汰热点） |
-| **随机** | 随机选择淘汰 | 最低 | 尚可，简单 |
+- **时间局部性（temporal locality）**：刚访问的数据近期可能再次访问。
+- **空间局部性（spatial locality）**：访问某地址后，邻近地址可能随后被访问。
+- **指令局部性**：顺序代码、循环和热点函数让 instruction cache 有效。
 
-## 写策略
+局部性不是“90% 时间一定执行 10% 代码”的定律。数据集、访问步长、哈希、图遍历和工作集切换都可能让局部性很差，应通过 profile 与硬件计数器判断。
 
-| 策略 | 写入时 | 优点 | 缺点 |
-|------|--------|------|------|
-| **写直达 (WT)** | 同时写 Cache 和主存 | 一致性简单 | 慢（每次写穿透到主存） |
-| **写回 (WB)** | 只写 Cache，标记脏位 | 快（减少写主存） | 一致性复杂 |
+## 延迟、带宽和并行度
 
-现代 CPU 使用**写回策略**，配合**写缓冲**（Write Buffer）暂存待写回的数据。
+三个概念不能混用：
 
-## 缓存相关的性能陷阱
+| 指标 | 问题 | 例子 |
+| --- | --- | --- |
+| Latency | 单次请求多久返回 | 指针追逐依赖前一次结果 |
+| Bandwidth | 单位时间最多搬多少数据 | 顺序扫描大数组 |
+| Memory-level parallelism | 能否同时保留多个未完成请求 | 多个独立数组访问 |
 
-### False Sharing（伪共享）
+顺序扫描可能有较高单次延迟，却借助预取和并发接近带宽上限；链表随机追逐即使数据量不大，也可能被依赖链限制。
 
-```cpp
-// 多线程写同一 cache line 的不同变量 → 性能暴跌！
-struct Data { int a; int b; };  // a 和 b 在同一 cache line
-Data data;
-Thread 1: data.a++;  // 使 Thread 2 的缓存行失效
-Thread 2: data.b++;  // 使 Thread 1 的缓存行失效
-// 持续缓存一致性流量，比单线程还慢！
+# Cache 的组织与缺失
 
-// 解决：缓存行对齐
-struct alignas(64) Data { int a; int b; };  // 分属不同 cache line
+## Cache line、set 与 way
+
+缓存以 **cache line** 为传输和一致性单位。64 byte 在许多当前桌面/服务器 CPU 上常见，但不是 ISA 保证，代码不应把它当成所有平台常量。
+
+```text
+memory address
+┌──────────────── tag ────────────────┬── set index ──┬─ block offset ─┐
+└─────────────────────────────────────┴───────────────┴────────────────┘
+                                      │
+                                      ▼
+                         select one cache set
+                                      │
+                    compare tags in all ways of the set
 ```
 
----
+若 cache size 为 `sets × ways × line_size`，地址的 offset 选择行内字节，index 选择 set，tag 判断目标内存块是否驻留。
 
-> [!tip]- **工程要点**
-> 现代 CPU 的写回策略配合写缓冲兼顾了性能和一致性；伪共享是多线程编程中最隐蔽的性能陷阱之一，通过缓存行对齐即可解决。
->
+| 组织 | 含义 | 主要取舍 |
+| --- | --- | --- |
+| Direct-mapped | 每个块只有一个候选位置 | 命中判断简单，冲突多 |
+| Set-associative | 固定 set 内可放多个 way | 当前通用缓存常见折中 |
+| Fully associative | 可放任意位置 | 比较和替换成本高，适合较小结构 |
 
+## Miss 不只有“数据太大”
 
+- **Compulsory miss**：第一次访问该块。
+- **Capacity miss**：活跃工作集超过可用容量。
+- **Conflict miss**：多个热点块竞争同一 set。
+- **Coherence miss**：其他核心写入导致本地副本失效。
 
----
+平均访问时间可用教学公式建立直觉：
 
-# Data Storage (数据存储)
-
-> [!note] 本节重点：字节序（大小端）、数据对齐、存储层次、数据持久化
-
-## 字节序（Endianness）
-
-多字节数据的字节存放顺序：
-
-| 类型 | 低位字节 | 高位字节 | 常见平台 |
-|------|---------|---------|---------|
-| **小端 (LE)** | 低地址 | 高地址 | x86, x64 |
-| **大端 (BE)** | 高地址 | 低地址 | 网络字节序,部分ARM |
-
-```cpp
-// 检测大小端
-bool isLittleEndian() {
-    int x = 1;
-    return *(char*)&x == 1;  // 1 在小端中存为 01 00 00 00
-}
-
-// 网络序（大端）↔ 主机序
-uint32_t htonl(uint32_t x);  // host to network long
-uint32_t ntohl(uint32_t x);  // network to host long
+```text
+AMAT = hit_time + miss_rate × miss_penalty
 ```
 
-**跨平台数据交换必须统一字节序，通常使用大端（网络字节序）。**
+多级缓存、乱序执行、重叠请求和预取会让真实测量更复杂，但公式提醒我们：只降低 miss rate 或只比较命中延迟都不够。
 
-## 数据对齐
+## 替换和预取
 
-CPU 访问对齐数据比非对齐快得多——现代 x86 能处理非对齐访问但需额外总线周期；ARM/RISC-V 可能直接触发异常。
+硬件通常使用 LRU 的近似策略、随机化或实现相关启发式，并非所有层都采用严格 LRU。预取器擅长顺序或规则步长，对指针追逐和不规则图访问效果有限；错误预取还会消耗带宽并污染缓存。
+
+# 写入、一致性与伪共享
+
+## 写回、写直达与 store buffer
+
+- **Write-through**：缓存写入同时向下一层传播，状态简单但流量更大。
+- **Write-back**：先更新缓存行并标 dirty，淘汰或协议要求时再写下层。
+- **Write-allocate / no-write-allocate**：写 miss 时是否先把目标行取入缓存。
+- **Store buffer**：让核心不必等待写入对缓存层级完全可见；它与“脏缓存行以后写回”不是同一结构。
+
+具体组合由实现和内存类型决定。普通 DRAM、持久内存与 MMIO 可能采用不同缓存和排序属性。
+
+## Cache coherence 不等于并发正确
+
+一致性协议让多个核心对**同一缓存行**的副本达成规则化可见性；语言内存模型决定数据竞争、原子操作和 happens-before。硬件有 coherence 不代表不加同步就能安全共享普通变量。
+
+## 正确理解 false sharing
+
+两个线程写不同变量，但变量位于同一一致性单元时，缓存行会在核心间反复转移。这叫 false sharing。
+
+错误修复：
 
 ```cpp
-// 自然对齐：数据地址是其大小的整数倍
-struct Aligned {
-    char c;      // 1 字节 → 偏移 0
-                 // 3 字节 padding
-    int i;       // 4 字节 → 偏移 4（对齐到 4）
-    short s;     // 2 字节 → 偏移 8
-};               // 总大小 12（对齐到最大成员 4 字节）
+struct alignas(64) BadFix {
+    std::atomic<std::uint64_t> a;
+    std::atomic<std::uint64_t> b;
+}; // 结构体对齐了，但 a 与 b 仍可能在同一行
+```
 
-// 改变对齐方式
-#pragma pack(push, 1)   // 取消对齐优化（节省空间，牺牲速度）
-struct Packed {
-    char c;      // 偏移 0
-    int i;       // 偏移 1（非对齐！）
-    short s;     // 偏移 5
+更可靠的表达是让每个独立热点拥有自己的对齐对象，并用实测确认：
+
+```cpp
+struct alignas(64) Counter {
+    std::atomic<std::uint64_t> value{0};
 };
-#pragma pack(pop)       // 总大小 7
+
+Counter counters[2];
 ```
 
-**对齐规则：**
-- 基础类型对齐到自身大小
-- 结构体对齐到最大成员的对齐值
-- 结构体总大小为最大成员对齐值的整数倍
+C++17 提供 `std::hardware_destructive_interference_size` 作为实现给出的参考值，但可移植代码仍要处理该常量不可用或平台拓扑更复杂的情况。
 
-## 存储层次
+# I/O 路径：轮询、中断与 DMA
 
-从快到慢、从贵到便宜、从小到大的金字塔结构：
+## 设备如何进入系统
 
-| 层次 | 速度 | 大小 | 管理方式 |
-|------|------|------|---------|
-| 寄存器 | ~0.3 ns | ~KB | 编译器分配 |
-| L1 Cache | ~1 ns | ~32KB | 硬件管理 |
-| L2 Cache | ~5 ns | ~256KB | 硬件管理 |
-| L3 Cache | ~15 ns | ~MB | 硬件管理 |
-| 主存 | ~100 ns | ~GB | 操作系统管理 |
-| SSD | ~100 μs | ~TB | 文件系统管理 |
-| 磁盘 | ~10 ms | ~TB+ | 文件系统管理 |
+现代系统不一定存在所有部件共享的一条物理“总线”。CPU、内存控制器、PCIe root complex、设备控制器和片上网络通过分层、点对点或交换式互连通信。地址、数据和控制仍是有用的逻辑分类，但不要把老式三总线图当成唯一物理实现。
 
-**时间差距约 10⁷ 倍**——这就是缓存至关重要的原因。
+吞吐上限可从“每次传输有效位数 × transfer rate × lanes/channels × 编码效率”推导；协议代际、通道数和方向必须明确。产品表中的 Gbit/s、GB/s、单向、双向和 aggregate 不可混写。
 
----
+## Polling 与 interrupt 是调度选择
 
-# Bus System (总线系统)
+**轮询（polling）**持续检查状态：延迟可控、实现简单，但空闲时浪费 CPU。**中断（interrupt）**让设备主动通知 CPU：低负载效率高，但每次通知涉及上下文、缓存和调度开销。
 
-> [!note] 本节重点：总线结构（数据/地址/控制）、总线仲裁、总线事务、常见总线标准
+高速网络与存储常使用混合策略：中断通知“有一批工作”，随后驱动在预算内轮询队列、批量处理并做 interrupt coalescing。不能简单写成“键盘用中断、磁盘用 DMA”两张互斥表。
 
-## 总线的基本概念
+## DMA 搬数据，CPU 仍负责控制
 
-总线是各部件之间传输信息的**共享通信通路**。
+DMA 表示设备或 DMA engine 能在设备与内存之间传输数据，而不让 CPU 逐字节复制。典型流程：
 
-```
-CPU ──┬── Bus ──┬── Main Memory
-      │         │
-      ├── Disk Controller
-      ├── NIC
-      └── GPU ...
+```text
+CPU/driver allocate and map buffers
+        │
+        ├─ build descriptors, program device queue
+        ▼
+device performs DMA reads/writes
+        │
+        ├─ completion entry / interrupt
+        ▼
+driver validates result, synchronizes ownership, unmaps or reuses buffer
 ```
 
-## 三组信号线
+重要边界：
 
-| 总线 | 方向 | 功能 |
-|------|------|------|
-| **数据总线** | 双向 | 传输数据（宽度决定一次传输位数） |
-| **地址总线** | 单向（CPU→外设） | 指定访问的内存地址或 I/O 端口 |
-| **控制总线** | 双向 | 传输控制信号（读/写/中断/时钟） |
+- 设备看到的是 DMA address，不保证等同于 CPU virtual/physical address。
+- IOMMU 可提供地址转换、隔离和 scatter/gather 支持。
+- 非 coherent 平台需要显式 cache maintenance；即使 coherent，也仍需遵守 ownership、ordering 和 DMA API。
+- DMA 不代表零 CPU 成本：队列管理、中断/轮询、映射、错误处理仍由软件承担。
 
-**地址线宽度决定最大寻址空间：** N 根地址线可寻址 2^N 字节。
+## MMIO 与顺序
 
-## 总线仲裁
+Memory-mapped I/O 把设备寄存器暴露在处理器地址空间的特殊窗口中，CPU 用 load/store 形式访问；这些区域通常具有不同于普通 RAM 的缓存和排序属性。
 
-多个设备可能同时请求总线，需要仲裁决定谁使用：
+驱动不能只靠普通 C++ 指针或 `volatile` 推导跨设备顺序。正确方式是使用操作系统提供的 MMIO accessor、DMA API 和 memory barrier；它们封装架构、编译器和设备要求。
 
-| 方式 | 描述 | 特点 |
-|------|------|------|
-| **链式查询** | 菊花链传递许可信号 | 简单，有优先级偏向 |
-| **计数器查询** | 轮询设备编号 | 灵活，可编程 |
-| **独立请求** | 每个设备独立请求线 | 最快，线数最多 |
+# 页面缓存与多层缓存叠加
 
-## 总线事务
+一次文件读取可能同时经过：
 
-一次完整的总线通信称为一个**总线事务**：
-
-```
-1. 申请总线（仲裁）
-2. 寻址（发送地址和命令）
-3. 数据传输（读或写）
-4. 释放总线
+```text
+application buffer
+    ↕ copy / mapping
+kernel page cache
+    ↕ block layer and device queues
+controller / device cache
+    ↕
+persistent media
 ```
 
-**突发传输 (Burst)：** 一次寻址后连续传输多个数据字，只需一次地址阶段，后续自动递增地址。
+CPU cache、TLB、page cache、数据库 buffer pool 和设备 cache 缓存的是不同对象，具有不同一致性和持久化边界。`write()` 返回、数据进入 page cache、设备确认写入以及介质真正持久化不是同一时刻；需要根据故障模型使用 `fsync`、barrier/FUA 或数据库 WAL 等机制。
 
-## 常见总线标准
+# 实验与掌握标准
 
-| 总线 | 用途 | 带宽 |
-|------|------|------|
-| **PCIe** | 内部高速设备（GPU, SSD, 网卡） | ～32 GB/s（x16 Gen5） |
-| **DDR** | 内存接口 | ～50 GB/s（DDR5-6400） |
-| **SATA** | 磁盘/光驱 | ～600 MB/s（SATA 3.0） |
-| **USB** | 外设通用接口 | ～40 Gbps（USB4） |
-| **NVLink** | GPU 间直连 | ～900 GB/s（H100） |
+## 顺序访问、跨步访问和指针追逐
 
----
+写三个 benchmark，并保证编译器不能删除结果：
 
-# Basic Input and Output (基础输入输出)
+1. 连续扫描大数组；
+2. 以不同 stride 扫描同一数组；
+3. 随机排列下标后做依赖式 pointer chasing。
 
-> [!note] 本节重点：I/O 三种方式（程序控制/中断/DMA）、中断处理流程、DMA 传输机制
-
-## I/O 的三种方式
-
-### 1. 程序控制 I/O（轮询）
-
-CPU 不断查询设备状态寄存器，直到设备就绪后传输数据。
-
-```c
-// 伪代码
-while ((status & READY) == 0) { /* 空转等待 */ }
-data = DEVICE_DATA_REGISTER;
+```bash
+g++ -O2 -march=native benchmark.cpp -o benchmark
+perf stat -r 5 -e cycles,instructions,cache-references,cache-misses ./benchmark
 ```
 
-- **优点**：简单，无需硬件支持
-- **缺点**：CPU 被占用，不能做其他事
+记录 CPU 型号、编译器、参数、数据规模、线程绑定和重复次数。不要把一次运行的纳秒数字抄成通用结论。
 
-### 2. 中断驱动 I/O
+## False sharing 对照
 
-设备准备就绪时通过中断信号通知 CPU。
+让两个固定在线程不同核心上的线程分别递增：
 
-```
-CPU 执行程序 → 设备发出中断 → CPU 保存现场
-    ↑                              ↓
-    └────── 恢复现场 ← 中断处理完成 ──┘
-```
+- 同一 cache line 内的两个 atomic；
+- 两个独立对齐的 `Counter`。
 
-**典型流程：**
-1. 设备就绪，向 CPU 发送中断信号
-2. CPU 执行完当前指令，检测到中断
-3. 保存 PC 和状态寄存器
-4. 根据中断号查询中断向量表，跳转到处理函数
-5. 处理数据
-6. 恢复现场，返回原程序
+比较吞吐并观察结果是否随核心位置、迭代次数和编译参数变化。
 
-- **优点**：CPU 和设备可以并行工作
-- **缺点**：每次传输数据量大时中断次数过多
+## I/O 观察
 
-### 3. DMA（直接存储器访问）
-
-DMA 控制器直接在设备和内存之间传输数据，不经过 CPU。
-
-```
-CPU 启动 DMA → DMA 控制器执行数据传输 → CPU 做其他事
-                                        ↓ 传输完成
-                                   DMA 发送中断通知 CPU
+```bash
+strace -c ./reader large-file
+iostat -xz 1
 ```
 
-```c
-// 伪代码：配置 DMA
-DMA.saddr = disk_buffer;     // 源地址
-DMA.daddr = memory_buf;     // 目标地址
-DMA.count = 4096;            // 传输字节数
-DMA.mode = READ;             // 读磁盘
-DMA.start();                 // 启动，CPU 返回执行其他任务
-// ... 传输在后台进行 ...
-DMA.interrupt_handler() {    // 传输完毕
-    // 数据已在 memory_buf 中
-}
-```
+区分应用发起的系统调用次数、page cache 命中与真实设备 I/O。需要绕过 page cache 的实验必须说明对齐、块大小与平台限制，不能把 `O_DIRECT` 当成默认更快。
 
-## 三种方式对比
+> [!warning] 常见误区
+> - 背固定延迟表，却不记录硬件、频率、NUMA、工作集和测量方法。
+> - 用结构体整体 `alignas(64)`，却让两个热点成员仍留在同一缓存行。
+> - 把 cache coherence 当作语言级线程安全。
+> - 认为 DMA 绕过 CPU 就同时绕过 IOMMU、缓存一致性和驱动管理。
+> - 把 `write()` 成功等同于数据已经持久化到介质。
 
-| 方式 | CPU 占用 | 传输速度 | 适用场景 |
-|------|---------|---------|---------|
-| 程序控制 I/O | 100%（轮询） | 慢 | 简单设备，轮询频率低 |
-| 中断驱动 | 仅处理中断时 | 中 | 低速设备（键盘、鼠标） |
-| DMA | 仅配置时 | 快 | 高速设备（磁盘、GPU） |
+# 资料与后续
 
-## 内存映射 I/O（MMIO）
-
-- 将设备寄存器映射到 CPU 的地址空间中
-- CPU 使用普通 load/store 指令访问设备寄存器
-- vs **端口映射 I/O（PMIO）**：使用专用 I/O 指令（x86 的 in/out）
-
----
-
-
-> [!warning]- 易错点
-> - 把 **04-Memory Hierarchy and IO (存储层级与输入输出)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[05-Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)
+- [Intel 64 and IA-32 Optimization Reference Manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel64-and-ia32-architectures-optimization.html)
+- [Linux kernel: Dynamic DMA mapping](https://kernel.org/doc/html/next/core-api/dma-api.html)
+- [Linux kernel memory barriers](https://kernel.org/doc/html/latest/core-api/wrappers/memory-barriers.html)
+- 下一步：[Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)

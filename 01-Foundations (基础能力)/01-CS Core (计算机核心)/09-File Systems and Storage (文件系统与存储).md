@@ -1,224 +1,111 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 tags: [cs/os, learning/foundation]
 ---
 
 > [!abstract] 学习目标
-> 理解文件名、目录项、inode、数据块、链接与磁盘调度之间的关系，能够沿路径解析定位一次文件访问。
+> 从文件描述符一路追踪到 VFS、目录项、inode、页缓存和持久介质，理解命名、打开、读写、同步与崩溃一致性的边界。
 
-# File System Fundamentals (文件系统基础)
+# 文件不是只有一个名字
 
-> [!note] 本节重点：文件系统结构、inode、目录结构、文件分配方式、磁盘调度、硬链接 vs 软链接
+应用看到路径和文件描述符，内核需要把它们解析成对象并连接具体文件系统：
 
-## 文件系统层次
-
-```
-应用程序（open/read/write）
-    ↓               系统调用接口
-虚拟文件系统（VFS）
-    ↓               抽象层（统一 inode/dentry/superblock）
-具体文件系统（ext4, NTFS, FAT32...）
-    ↓               布局与管理
-块设备层（Block Layer）
-    ↓               I/O 调度
-磁盘驱动（Disk Driver）
+```text
+路径字符串
+  → mount namespace + 路径遍历
+  → dentry（名称与目录关系，内存缓存）
+  → inode（文件身份、元数据与数据映射）
+  → page cache / filesystem implementation
+  → block layer → device
 ```
 
----
+Linux VFS（Virtual File System）给 ext4、XFS、tmpfs、procfs 等不同实现提供统一接口。以下对象要严格区分：
 
-# inode 与目录项（索引节点）
+| 对象 | 作用 | 共享关系 |
+|---|---|---|
+| 文件描述符 fd | 进程表中的小整数索引 | `dup` 后可指向同一打开实例 |
+| open file description | 当前偏移、状态标志等 | `dup`、`fork` 后可以共享 |
+| dentry | 某个目录中的名称到对象的关联 | 主要驻留内存，用于路径缓存 |
+| inode | 文件身份、权限、时间与数据映射 | 多个硬链接可指向同一 inode |
 
-Linux 文件系统中的核心元数据结构，每个文件/目录对应一个 inode：
+文件名存放在目录项中，不在 inode 里。一个打开的文件也不再依赖原路径字符串。
 
-```c
-// ext4 inode 结构（简化）
-struct ext4_inode {
-    uint16_t i_mode;       // 文件类型 + 权限（rwxr-xr-x）
-    uint16_t i_uid;        // 所有者 UID
-    uint32_t i_size;       // 文件大小（字节）
-    uint32_t i_atime;      // 最后访问时间
-    uint32_t i_ctime;      // 最后状态修改时间
-    uint32_t i_mtime;      // 最后内容修改时间
-    uint32_t i_dtime;      // 删除时间
-    uint16_t i_gid;        // 组 ID
-    uint16_t i_links_count;// 硬链接计数
-    uint32_t i_blocks;     // 数据块数
-    uint32_t i_flags;      // 标志
-    union {
-        uint32_t i_block[15]; // 数据块指针（EXT2_N_BLOCKS = 15）
-        // ext4: 支持 extents 树
-    };
-    uint32_t i_generation; // 文件版本
-    // ...
-};
+# 路径解析与链接
+
+绝对路径从进程根目录开始，相对路径从当前工作目录或 `openat` 指定目录开始。解析要处理挂载点、`.`、`..`、符号链接、权限和 namespace；“逐段查目录”只是概念入口。
+
+- **硬链接**：增加指向同一 inode 的目录项，通常不能跨文件系统，也通常不能给目录创建普通硬链接。
+- **符号链接**：自身是独立文件，内容是待解析路径；目标可不存在，也可跨文件系统。
+- `unlink` 删除目录项。只有链接计数归零且不再被打开/映射等引用时，数据才可回收。
+
+这解释了日志轮转中的经典现象：删除正在写入的文件名后，进程仍能通过旧 fd 写数据，磁盘空间也可能暂未释放。
+
+# 读写与页缓存
+
+普通 buffered I/O 常经过页缓存：
+
+```text
+read：命中页缓存 → 复制给用户
+      未命中 → 提交 I/O → 数据进入页缓存 → 返回
+
+write：修改页缓存并标脏 → 稍后 writeback
+       fsync/fdatasync → 请求把规定范围推进到持久层
 ```
 
-**inode 的 15 个块指针（ext2/3）：**
+`write()` 成功通常只说明数据被内核接受，不代表介质已持久化。`fsync()` 的语义还受文件系统、存储设备缓存和硬件错误处理影响；需要原子更新时，常采用“写临时文件 → fsync 文件 → rename → 必要时 fsync 目录”的协议，而不是只调用一次 `write`。
 
-```
-i_block[0-11] → 12 个直接块指针（指向数据块）
-i_block[12]   → 1 个间接块指针（指向块指针块）
-i_block[13]   → 1 个双重间接块指针
-i_block[14]   → 1 个三重间接块指针
+`mmap` 让文件页映射进地址空间，读写由缺页和脏页回写驱动；它不是“天然零拷贝”，也不自动提供事务或持久化顺序。
 
-假设块大小 = 4KB，块指针 = 4B：
-  直接：12 × 4KB = 48KB
-  间接：1 × (4KB/4B) × 4KB = 4096 × 4KB = 16MB
-  双重：4096 × 4096 × 4KB = 64GB
-  三重：4096 × 4096 × 4096 × 4KB = 256TB
-────────────────────────────────────
-  最大文件 ≈ 256TB（理论上）
-```
+# 文件系统如何定位数据
 
----
+早期教材常用直接块、一级/二级/三级间接块解释 inode 寻址。这对理解索引思想有用，但不能当成现代 ext4 的准确布局：ext4 通常使用 **extents** 表示连续逻辑块范围，并配合树结构扩展。不同文件系统可能使用 B/B+ 树、allocation group、copy-on-write tree 等组织方式。
 
-## 目录结构
+分配策略需要同时考虑顺序访问、随机访问、空间利用、碎片、并发与恢复。目录也可能从线性表升级为哈希树或其他索引，具体取决于文件系统和目录规模。
 
-目录是特殊的文件，内容为文件名到 inode 号的映射表：
+# 崩溃一致性与日志
 
-```
-目录文件内容（简化）：
-┌──────────┬─────────┐
-│ Filename │ inode # │
-├──────────┼─────────┤
-│ "."      │  101    │  ← 本目录
-│ ".."     │   50    │  ← 父目录
-│ "file1"  │  203    │
-│ "file2"  │  204    │
-│ "dir1"   │  305    │
-└──────────┴─────────┘
-```
+一次高层更新可能涉及数据块、inode、目录项和空闲空间元数据。突然掉电会让它们只完成一部分。常见方案包括：
 
-### 文件路径解析
+- **日志（journaling）**：先以可恢复顺序记录操作或元数据，再更新主结构；模式和保证因文件系统而异。
+- **写时复制（copy-on-write）**：写新块，再原子切换根/引用；仍需处理硬件与写入顺序。
+- **应用层日志/WAL**：数据库自行定义事务恢复，不把文件系统日志误当数据库事务。
 
-```
-/bin/ls 的查找过程：
-1. 读取根目录（inode 号为 2）→ 找到 "bin" → inode 100
-2. 读取 inode 100 → 找到 "ls" → inode 500
-3. 读取 inode 500 → 加载文件内容
-```
+`rename` 在满足接口条件时可提供命名层面的原子替换，但不等于所有数据已经稳定落盘。需要按故障模型设计并实际做断电/故障注入测试。
 
----
+# 从磁盘到 NVMe
 
-## 文件分配方式
+磁盘的寻道和旋转使相邻访问与调度顺序很重要；SSD/NVMe 没有机械寻道，却仍有闪存擦写、FTL、队列深度、写放大和尾延迟。Linux blk-mq 支持多队列块层。继续死背 SSTF/SCAN 可帮助理解机械盘历史，但生产分析必须先识别介质、文件系统、I/O scheduler 和工作负载。
 
-| 方式 | 优点 | 缺点 | 文件系统 |
-|------|------|------|---------|
-| **连续分配** | 顺序读取快，简单 | 外部碎片，需预知大小 | 磁带 |
-| **链式分配** | 无外部碎片，大小灵活 | 随机访问慢，链接指针占空间 | FAT32 |
-| **索引分配** | 直接/间接访问，大小灵活 | 小文件浪费（但 inode 直接块解决） | ext4, NTFS |
-
-### FAT 表（链式分配）
-
-```
-FAT 表：
-┌───────────┬──────────────┐
-│ Cluster # │ Next Cluster │
-├───────────┼──────────────┤
-│  100      │   101        │
-│  101      │   105        │
-│  105      │   EOF        │
-└───────────┴──────────────┘
-
-read(fd, buf, 4096):
-  → 读簇 100 → 查 FAT → 读簇 101 → 查 FAT → 读簇 105 → EOF
-```
-
----
-
-## 硬链接 vs 软链接
+# 动手验证
 
 ```bash
-ln file1.txt file2.txt       # file2 是 file1 的硬链接
-
-ln -s file1.txt link.txt     # link.txt → file1.txt
+stat file
+ls -li file
+ln file hard-link
+ln -s file soft-link
+strace -e openat,read,write,fsync,close ./program
+lsof +L1                 # 查看已删除但仍打开的文件
+cat /proc/filesystems
 ```
 
-| 特性 | 硬链接 | 软链接 |
-|------|--------|--------|
-| inode | 相同 | 不同 |
-| 跨文件系统 | 不行 | 可以 |
-| 指向目录 | 一般不行（有空闲的除外） | 可以 |
-| 原文件删除后 | 仍可访问 | 失效（dangling link） |
-| `ls -l` 显示大小 | 与目标文件相同的 inode 属性 | 通常是目标路径字符串的长度 |
+实验：打开文件后 `unlink`，继续通过 fd 读写，再关闭并观察链接数与空间何时变化。不要在重要数据上直接做故障实验。
 
-```cpp
-#include <filesystem>
-#include <iostream>
+# 检查理解
 
-int main() {
-    namespace fs = std::filesystem;
-    
-    // 创建硬链接
-    fs::create_hard_link("original.txt", "hardlink.txt");
-    
-    // 创建软链接
-    fs::create_symlink("original.txt", "symlink.txt");
-    
-    // 判断类型
-    std::cout << "is symlink: " << fs::is_symlink("symlink.txt") << "\n";
-    std::cout << "hard link count: " << fs::hard_link_count("original.txt") << "\n";
-    
-    // 读取软链接目标
-    if (fs::is_symlink("symlink.txt")) {
-        auto target = fs::read_symlink("symlink.txt");
-        std::cout << "symlink -> " << target << "\n";
-    }
-    return 0;
-}
-```
+1. fd、open file description、dentry 与 inode 分别保存什么？
+2. 为什么 `write` 成功不等于断电后仍存在？
+3. 删除文件名后，已打开 fd 为什么仍有效？
+4. 为什么 ext2/3 的间接块示意不能直接描述 ext4？
 
----
+> [!summary] 本篇结论
+> 路径是名字解析入口，fd 是进程句柄，inode 表示文件对象，页缓存连接内存与持久介质。可靠存储必须明确可见性、写回、顺序和崩溃模型，而不是把“调用成功”当作“已经持久化”。
 
-## 磁盘调度
+## 权威依据
 
-```cpp
-// 电梯算法（SCAN）：磁头单向移动，沿途服务请求
-// 假设磁盘请求：98, 183, 37, 122, 14, 124, 65, 67
-// 磁头当前位置：53，方向：向大号
-
-// SCAN（电梯算法）顺序：
-// 53 → 65 → 67 → 98 → 122 → 124 → 183 → (到末尾) → 37 → 14
-//
-// C-SCAN（循环扫描）：
-// 53 → 65 → 67 → 98 → 122 → 124 → 183 → (跳到开头) → 14 → 37
-```
-
-| 算法 | 策略 | 特点 |
-|------|------|------|
-| FCFS | 按请求顺序 | 简单但寻道时间长 |
-| SSTF | 选最近请求 | 可能饥饿 |
-| SCAN（电梯） | 单向到头再折返 | 无饥饿，中间区域等待时间短 |
-| C-SCAN | 单向到头后跳到另一头 | 更均匀的等待时间 |
-
----
-
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | inode 与文件名 | 文件名存在目录中，inode 存元数据，数据块存内容 |
-> | 软链接 vs 硬链接 | 硬链接共享 inode，删除原文件不影响；软链接记录路径 |
-> | 文件系统挂载 | `mount /dev/sda1 /mnt` → 将设备关联到目录树 |
-> | RAID 级别 | RAID0（条带）、RAID1（镜像）、RAID5（奇偶校验） |
-> | 日志（Journaling） | ext3/4 先写日志再写数据，崩溃恢复时可回放/回滚 |
-> | VFS 的作用 | 统一抽象（ext4/NTFS/FAT32 都能通过 open/read/write 访问） |
-> | df 与 du 的区别 | df 看超级块统计，du 遍历目录计算（不一致时可能 inode 泄漏） |
->
-
-> [!tip]- **工程要点**：大量小文件场景（如 Git、邮件服务器），inode 可能先于磁盘空间耗尽 ⇒ `df -i` 检查 inode 使用率。inode 密度与格式化选项相关，具体参数依文件系统和发行版验证；路径深度的影响也取决于 dentry cache 与负载，不应背固定层数阈值。
-
->
-
-> [!summary] 核心摘要
->
-> 目录本质上把文件名映射到 inode，inode 保存元数据并定位数据块；硬链接是多个目录项指向同一 inode，软链接则是保存目标路径的独立文件。删除文件名不等于立刻释放数据：只有链接计数归零且没有进程仍打开该文件，空间才会真正回收。
->
-> ---
->
-
-> [!warning]- 易错点
-> - 把 **08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
+- [Linux Virtual File System](https://docs.kernel.org/filesystems/vfs.html)
+- [Linux pathname lookup](https://docs.kernel.org/filesystems/path-lookup.html)
+- [Linux ext4 documentation](https://docs.kernel.org/filesystems/ext4/index.html)
 
 下一步：[10-Synchronization Primitives (同步原语)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/10-Synchronization%20Primitives%20(同步原语).md)

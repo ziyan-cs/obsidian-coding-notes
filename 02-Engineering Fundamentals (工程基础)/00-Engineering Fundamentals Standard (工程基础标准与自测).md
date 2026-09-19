@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-18
+content_verified: 2026-09-19
 tags: [learning/standard, engineering]
 ---
 

@@ -219,41 +219,37 @@ public:
 > [!note] 本节重点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
 
 ```cpp
-    int*   data_;
-    size_t size_;
+#include <algorithm>
+#include <cstddef>
+#include <utility>
 
+class Resource {
+    int* data_{nullptr};
+    std::size_t size_{0};
 public:
-    // 构造
-    Resource(size_t n) : data_(new int[n]()), size_(n) {}
-
-    // 析构
+    explicit Resource(std::size_t n)
+        : data_(n ? new int[n]{} : nullptr), size_(n) {}
     ~Resource() { delete[] data_; }
 
-    // 拷贝构造（深拷贝）
-    Resource(const Resource& other) : size_(other.size_) {
-        data_ = new int[size_];
-        std::copy(other.data_, other.data_ + size_, data_);
+    Resource(const Resource& other) : Resource(other.size_) {
+        if (size_ != 0) std::copy_n(other.data_, size_, data_);
     }
-
-    // 拷贝赋值（copy-and-swap 惯用法，异常安全）
-    Resource& operator=(Resource other) {   // 按值传入：触发拷贝或移动
-        swap(*this, other);                  // 交换资源
+    Resource& operator=(const Resource& other) {
+        if (this != &other) {
+            Resource copy{other}; // 复制失败则当前对象不变
+            swap(*this, copy);
+        }
         return *this;
-    }                                        // other 析构，释放旧资源
-
-    // 移动构造
-    Resource(Resource&& other) noexcept
-        : data_(other.data_), size_(other.size_) {
-        other.data_ = nullptr;
-        other.size_ = 0;
     }
 
-    // 移动赋值
+    Resource(Resource&& other) noexcept
+        : data_(std::exchange(other.data_, nullptr)),
+          size_(std::exchange(other.size_, 0)) {}
     Resource& operator=(Resource&& other) noexcept {
         if (this != &other) {
             delete[] data_;
-            data_ = other.data_;   size_ = other.size_;
-            other.data_ = nullptr; other.size_ = 0;
+            data_ = std::exchange(other.data_, nullptr);
+            size_ = std::exchange(other.size_, 0);
         }
         return *this;
     }
@@ -264,6 +260,12 @@ public:
         swap(a.size_, b.size_);
     }
 };
+
+void example() {
+    Resource a{3};
+    Resource b{a};       // 深拷贝
+    b = Resource{5};     // 移动赋值
+}
 ```
 
 ## 编译器自动生成的规则
@@ -345,4 +347,3 @@ double x = 2.0 * a;            // 友元支持左侧 scalar
 
 > [!info]- 延伸阅读
 > - 下一步：[04-Polymorphism and Inheritance (多态与继承)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)
-

@@ -1,10 +1,10 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标：辨别 CAS 示意代码与可用无锁结构，分别审查线性化点、ABA、回收和进展保证。
 
 > [!summary] 核心摘要
 >
@@ -24,7 +24,7 @@ void push(int val) {
     // 操作共享数据
 }
 
-// 无锁版本：用 CAS 原子操作，不依赖锁
+// 仅示意 CAS 更新头指针；分配器和整条操作的进展保证尚未证明。
 std::atomic<Node*> head{nullptr};
 void push(int val) {
     Node* new_node = new Node(val);
@@ -39,37 +39,18 @@ void push(int val) {
 - 任意线程挂起不会阻塞其他线程的进度
 - 系统中至少有一个线程能在有限步内完成操作
 
-## 无锁栈（Lock-Free Stack）
+## 无锁栈：先证明回收，再写 pop
 
-```cpp
-template<typename T>
-class LockFreeStack {
-    struct Node {
-        T data;
-        Node* next;
-    };
-    std::atomic<Node*> head_{nullptr};
+常见示意代码会先读取 `head`，再访问 `head->next`，CAS 成功后立刻 `delete head`。这**不是可用的并发栈**：另一个线程可能仍持有旧指针，甚至在 CAS 前就已访问释放后的 `next`。给示例加一句“这里不安全”不足以防止照抄，因此本笔记不提供假装完整的 `pop` 实现。
 
-public:
-    void push(const T& val) {
-        Node* node = new Node{val, nullptr};
-        node->next = head_.load();
-        while (!head_.compare_exchange_weak(node->next, node))
-            ;  // CAS 循环
-    }
+设计真正的无锁栈需要依次证明：
 
-    bool pop(T& result) {
-        Node* old_head = head_.load();
-        while (old_head && 
-               !head_.compare_exchange_weak(old_head, old_head->next))
-            ;
-        if (!old_head) return false;
-        result = old_head->data;
-        delete old_head;  // 注意：这里不安全（后面讲 ABA）
-        return true;
-    }
-};
-```
+1. **线性化点（linearization point）**：成功的 CAS 在逻辑上何时完成操作。
+2. **对象仍存活**：任何线程解引用节点期间，回收机制必须阻止其释放；可选 hazard pointers、epoch-based reclamation 等，且各有前提。
+3. **ABA**：即使地址重新变成旧值，CAS 的成功是否仍代表正确状态。
+4. **进展保证**：包含分配、回收、回调与使用的原子类型后，整个操作是否真的满足 lock-free。
+
+学习顺序是先写带互斥锁的正确版本，再对照成熟实现和证明材料；不要把仅有 CAS 的结构直接放进项目。
 
 ## ABA 问题
 
@@ -79,7 +60,7 @@ public:
 // 线程 2: pop A → push B → push A（内存地址相同，但内容不同）
 // 线程 1: CAS 比较 head == A → 成功！但此时 head 指向的是新的 A
 
-// 解决方案：带上版本号（Double-width CAS / tagged pointer）
+// 一种思路：比较时连版本号一起比较，但仍需单独解决安全回收。
 struct TaggedPointer {
     Node* ptr;
     uintptr_t tag;  // 递增版本号
@@ -87,9 +68,9 @@ struct TaggedPointer {
 
 std::atomic<TaggedPointer> head_;
 
-// 实际代码中常用：
-// - 在 x86_64 上利用指针的高 16 位存 tag（指针只有 48 位有效）
-// - 或用 std::atomic<std::shared_ptr<T>> (C++20)
+// 指针可用位数与地址规范会随架构和配置变化，不能假设“高 16 位空闲”。
+// std::atomic<std::shared_ptr<T>> 可管理对象生命周期，但不保证 lock-free，
+// 也不能代替整个数据结构的 ABA 和进展证明。
 ```
 
 ## 内存管理难题
@@ -114,8 +95,8 @@ std::atomic<TaggedPointer> head_;
 |---------|-----------|
 | 极高并发，锁成为瓶颈 | 实现复杂度低时 |
 | 细粒度操作（push/pop） | 复合操作（需要同时改多个变量）|
-| 实时系统（不能容忍等待） | T 的拷贝/移动开销大 |
-| 设计简单清晰 | 需要严格的内存序保证 |
+| 已有正确性证明与可验证实现 | 缺乏安全回收方案 |
+| 操作足够独立，进展要求明确 | 需要多对象原子更新 |
 
 ```cpp
 // 实际工程中：优先用锁
@@ -130,10 +111,10 @@ std::atomic<TaggedPointer> head_;
 | `std::atomic<T>` | 原子类型基础 |
 | `atomic<T*>::compare_exchange_*` | CAS 操作 |
 | `atomic_signal_fence` / `atomic_thread_fence` | 内存栅栏 |
-| `std::atomic<shared_ptr<T>>` (C++20) | 无锁引用计数（可能）|
+| `std::atomic<std::shared_ptr<T>>` (C++20) | 原子访问 shared_ptr；是否 lock-free 要查询实现 |
 | `std::atomic_ref<T>` (C++20) | 非原子对象的原子操作 |
 
-> **面试重点**：ABA 问题是必考题。说出 ABA 的含义 + 版本号方案 = 加分。不用深入 hazard pointer 细节，但要能说出"无锁编程最大的挑战是内存回收"。
+> [!warning] 面试与工程都要把 ABA 和安全回收分开回答：版本计数只能帮助识别状态变化，不能让悬空指针重新安全。先说明不变量和进展保证，再讨论具体实现。
 
 ---
 
@@ -247,24 +228,23 @@ struct Data {
 };
 ```
 
-> 实测：伪共享的代码在 8 核并发下比对齐版本慢 5-15 倍。排查工具：`perf c2c`（Linux 5.0+）。
+> 伪共享损耗取决于写入频率、CPU、缓存行布局与调度，不存在通用倍数。先用基准测试对照，再按平台可用性尝试 `perf c2c` 定位缓存行竞争。
 
 ---
 
 ## 内存序选择
 
-C++ 内存序不是"越强越安全"，越强意味着越多的 CPU 屏障：
+C++ 内存序规定可依赖的跨线程顺序；它不是“每种内存序固定对应几条 CPU 屏障”。成本取决于架构、编译器和操作类型。先证明正确性，再测量性能。
 
-| 内存序 | CPU 开销 | 保证 |
-|--------|---------|------|
-| `relaxed` | 0（无 barrier） | 只保证原子性，不保证顺序 |
-| `acquire`/`release` | 轻量 | 成对使用保证 happens-before |
-| `acq_rel` | 中等 | acquire + release |
-| `seq_cst`（默认） | 最重 | 全局顺序一致（x86 上 ≈ acq_rel） |
+| 内存序 | 主要保证 | 常见用途 |
+|--------|----------|----------|
+| `relaxed` | 原子性及同一对象的修改顺序；不建立跨线程同步 | 独立统计计数 |
+| `release`/`acquire` | 同一原子对象上，acquire 读到 release 的值或其 release sequence 时建立同步 | 发布数据 |
+| `acq_rel` | 在一次读改写操作中兼有两侧约束 | 需要双向同步的 RMW |
+| `seq_cst`（默认） | 额外参与所有 seq_cst 操作的单一总序 | 清晰的正确性基线 |
 
 ```cpp
-// 95% 场景：用 acquire/release 就够了
-// 不需要默认的 seq_cst
+// 先明确“发布数据”的协议，再决定是否需要比默认 seq_cst 更弱的内存序。
 
 std::atomic<bool> ready{false};
 std::string data;
@@ -283,7 +263,7 @@ void consumer() {
 }
 ```
 
-**经验法则：** 除非你是并发库作者，否则用 `acq_rel`/`seq_cst` 通常不会错，性能差异在高竞争下才明显。先跑对，再优化。
+**经验法则：** 非必要时使用默认 `seq_cst` 或锁；`acq_rel` 不是所有原子操作都合法或足够的万能选项。放宽内存序前，用 happens-before 证明和并发测试支撑，再测量收益。
 
 ---
 
@@ -323,7 +303,7 @@ class WorkStealingPool {
 
 ## NUMA 感知
 
-现代多路服务器（如 Intel 双路/四路）中，访问本地内存 vs 远端内存延迟差异可达 **1.5-2 倍**。
+在多路 NUMA 服务器中，远端内存访问成本可能高于本地；差异受机器拓扑、工作集与测量方式影响。先用 `numactl --hardware` 查看拓扑，再以实际负载测量，不套固定倍数。
 
 ```
 Socket 0            Socket 1

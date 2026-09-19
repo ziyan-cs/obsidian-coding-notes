@@ -1,268 +1,259 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-18
+tags: [cs/architecture, learning/foundation]
 verified: 2026-10-03
 review_stage: learn
 review_due: 2026-10-03
 ---
 
-> [!abstract] 阅读方式：本专题将同一条学习链上的基础概念整合为一篇：先建立整体模型，再阅读机制、边界和例子。
+> [!abstract] 阅读方式
+> 位模式本身没有业务含义；类型、编码和协议决定如何解释这些位。本文从整数、浮点、文本、字节序和位运算建立统一模型，并用 C++ 实验验证边界，而不是背若干孤立技巧。
 
 > [!summary] 核心摘要
 >
-> 比特本身没有意义，类型与编码赋予它解释：整数通常用补码，浮点有精度边界，文本以 Unicode/UTF-8 编码；跨语言和网络传输必须明确这些约定。
+> 固定位宽整数按模运算，有符号数采用补码但溢出规则由语言规定；IEEE 754 浮点表达范围与精度的折中，运算包含舍入和特殊值；Unicode 区分码点、编码单元与用户看到的字符。跨进程、跨语言和跨机器传输时，必须显式约定位宽、符号、字节序、文本编码和版本。
 
-# Binary and Encoding (二进制与编码)
+# 位模式、类型与解释
 
-> [!note] 本节重点：进制转换、原码/反码/补码、ASCII 与 Unicode、UTF-8 编码规则
+同一组比特可以被解释为无符号整数、有符号整数、浮点数、指令、像素或字符编码。硬件保存和搬运位模式，ISA、语言类型与序列化协议赋予它含义。
 
-## 进制转换
+例如 8 位模式 `11111111`：
+
+| 解释方式 | 结果 |
+| --- | --- |
+| `uint8_t` | 255 |
+| 8 位补码有符号整数 | -1 |
+| 位掩码 | 8 个标志全部置位 |
+| 单个 UTF-8 字节 | 不能独立构成合法字符 |
+
+进制只是**书写方式**：二进制适合观察位，十六进制每一位对应 4 bit，十进制适合人类数量表达。改变写法不会改变内存中的值。
 
 ```cpp
-// 任意进制转十进制：按权展开
-// 例如：0b1101 = 1*8 + 1*4 + 0*2 + 1*1 = 13
-int toDecimal(string_view num, int base) {
-    int val = 0;
-    for (char c : num) val = val * base + (isdigit(c) ? c - '0' : c - 'a' + 10);
-    return val;
+unsigned value = 0b1101;
+assert(value == 13);
+assert(value == 015);   // 八进制；业务代码通常不建议这样写
+assert(value == 0x0d);
+```
+
+# 整数表示与 C++ 运算规则
+
+## 补码和范围
+
+对 N 位整数：
+
+| 类型 | 数值范围 | 运算模型 |
+| --- | --- | --- |
+| 无符号 | `0 ... 2^N - 1` | 算术按模 `2^N` 回绕 |
+| 有符号 | `-2^(N-1) ... 2^(N-1)-1` | 表示采用补码；算术越界不能按回绕推理 |
+
+补码让加法器统一处理正负数，并只有一个零。以 8 位为例，`-5` 的位模式为 `11111011`；把它解释为无符号数则是 251。
+
+> [!important] 语言规则高于硬件直觉
+> 当前 C++ 规定有符号整数采用补码表示，但**有符号算术溢出仍是 undefined behavior**。编译器可利用“不会溢出”的前提优化代码，不能因为机器最终会截断低位就依赖回绕。
+
+## 转换不是简单“都变成 unsigned”
+
+混合整数运算先进行 integer promotions，再应用 usual arithmetic conversions；结果取决于双方的位宽、rank 和可表示范围。
+
+```cpp
+std::uint32_t u = 1;
+int i = -1;
+
+// 常见 32 位 int 平台上，i 转为 uint32_t，因此条件为 false。
+bool result = i < u;
+```
+
+工程上避免让符号承担两个含义：集合大小、下标和差值不要随意混用；转换前先检查范围，可使用 `std::in_range<T>`（C++20）。
+
+## 溢出、扩展与截断
+
+```cpp
+std::uint32_t u = UINT32_MAX;
+++u;                           // 明确定义：回到 0
+
+int x = INT_MAX;
+// ++x;                        // 未定义行为，不要执行
+
+std::int16_t small = -16;
+std::int32_t wide = small;     // 保持数值，典型实现做符号扩展
+
+std::uint32_t bits = 0x12345678u;
+std::uint16_t low = static_cast<std::uint16_t>(bits); // 低 16 位
+```
+
+对外部输入做加法、乘法和容量计算时，应在运算前验证边界，或使用编译器的 checked-overflow intrinsic。不要写 `a + b > MAX` 再检测，因为溢出可能已经发生。
+
+# 浮点数是近似数系统
+
+## IEEE 754 binary32 与 binary64
+
+| 格式 | 符号 | 指数字段 | fraction 字段 | 常见 C++ 类型 |
+| --- | ---: | ---: | ---: | --- |
+| binary32 | 1 bit | 8 bit | 23 bit | 通常为 `float` |
+| binary64 | 1 bit | 11 bit | 52 bit | 通常为 `double` |
+
+对**正规数**，数值可概括为：
+
+```text
+(-1)^sign × (1.fraction) × 2^(exponent - bias)
+```
+
+这个公式不覆盖全部编码。指数全零用于零和 subnormal，指数全一用于 infinity 与 NaN。subnormal 让数值靠近零时逐步丢失精度，而不是突然从最小正规数跳到零。
+
+## 精度、舍入和 ULP
+
+`0.1` 不能被有限二进制小数精确表示，存储的是邻近可表示值。误差大小与数值尺度、运算顺序和舍入模式有关。
+
+```cpp
+double a = 0.1 + 0.2;
+double b = 0.3;
+std::cout << std::setprecision(17) << a << '\n' << b << '\n';
+```
+
+“浮点永远不能用 `==`”同样是错误规则：比较同一赋值结果、离散哨兵或预期精确的整数范围值时可以相等比较；对计算结果则应按问题选择绝对误差、相对误差或 ULP 策略。
+
+```cpp
+bool nearly_equal(double a, double b,
+                  double rel = 1e-12,
+                  double abs = 1e-15) {
+    double diff = std::abs(a - b);
+    return diff <= std::max(abs, rel * std::max(std::abs(a), std::abs(b)));
 }
+```
 
-// 十进制转 n 进制：除基取余法
-string fromDecimal(int val, int base) {
-    string digits;
-    while (val > 0) {
-        int r = val % base;
-        digits.push_back(r < 10 ? '0' + r : 'a' + r - 10);
-        val /= base;
-    }
-    reverse(digits.begin(), digits.end());
-    return digits.empty() ? "0" : digits;
+需要额外处理：
+
+- `NaN` 与任何值（包括自身）比较都不相等，应使用 `std::isnan`。
+- `+0.0 == -0.0` 为真，但某些运算和 `std::signbit` 能观察符号。
+- 加法和乘法一般不满足结合律；并行归约可能改变末位结果。
+- 金额和精确小数规则通常应使用定点整数或十进制类型，而非裸 `double`。
+
+# 文本：码点不等于用户看到的字符
+
+## Unicode 与 UTF-8
+
+Unicode 为字符分配**码点（code point）**，UTF-8/UTF-16/UTF-32 是把码点编码成字节或编码单元的方式。UTF-8 使用 1～4 字节，ASCII 的 0～127 与 UTF-8 完全兼容。
+
+| 码点范围 | UTF-8 字节模式 |
+| --- | --- |
+| U+0000–U+007F | `0xxxxxxx` |
+| U+0080–U+07FF | `110xxxxx 10xxxxxx` |
+| U+0800–U+FFFF | `1110xxxx 10xxxxxx 10xxxxxx` |
+| U+10000–U+10FFFF | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` |
+
+但“一个字符”至少有三种含义：
+
+- byte：存储单位；
+- code point：Unicode 抽象字符编号；
+- grapheme cluster：用户感知的一个书写单元，可能由多个码点组成。
+
+因此 UTF-8 字符串的字节数、码点数和界面光标移动次数可能都不同。组合字符还会产生视觉相同但字节不同的字符串，搜索、用户名和安全比较要考虑 normalization。
+
+## 边界处理原则
+
+- 文件和协议明确声明 UTF-8，不依赖进程默认编码。
+- 解码时拒绝或显式替换非法序列，不能悄悄逐字节处理。
+- 截断文本要按 grapheme cluster 或至少按码点边界，不能截断到 UTF-8 连续字节中间。
+- 对标识符、路径和数据库键，先定义 normalization 与大小写策略。
+
+# 字节序、对齐与序列化
+
+## Endianness（字节序）
+
+字节序描述多字节标量的字节在内存中的排列，不影响单字节。以 `0x12345678` 为例：
+
+```text
+低地址 → 高地址
+little-endian: 78 56 34 12
+big-endian:    12 34 56 78
+```
+
+x86-64 使用 little-endian；Arm 和 RISC-V 的具体执行环境通常也采用 little-endian，但协议不能依赖“大家都一样”。传统 IP 网络字段使用 network byte order（big-endian）。
+
+C++20 可用 `std::endian` 检查本机端序；C++23 提供 `std::byteswap`。不要通过违反 strict aliasing 的指针强转读取对象表示，优先使用 `std::bit_cast`、`std::memcpy` 或明确的逐字节编码。
+
+## 对齐不是序列化格式
+
+对象布局可能包含 padding，且受 ABI、编译器选项和成员类型影响。把结构体内存直接写入网络或文件会泄漏 padding、绑定本机端序，并造成版本兼容问题。
+
+```cpp
+struct Header {
+    std::uint16_t version;
+    std::uint32_t length;
+};
+
+// sizeof(Header) 可能大于 6；不可直接 send(&header, sizeof header, ...)
+```
+
+正确做法是逐字段定义：位宽、端序、合法范围、缺省值和版本演进。对齐优化服务于内存访问；wire format 服务于跨边界兼容，两者目标不同。
+
+# 位运算：表达位集合而非炫技
+
+```cpp
+std::uint32_t mask = 0;
+mask |=  (1u << 5);          // set bit 5
+mask &= ~(1u << 5);          // clear bit 5
+mask ^=  (1u << 5);          // toggle bit 5
+bool set = (mask & (1u << 5)) != 0;
+```
+
+安全边界：
+
+- 移位数必须非负且小于左操作数提升后的位宽。
+- 对位模式优先使用无符号类型，避免符号位和溢出规则干扰。
+- C++20 规定有符号负数右移执行算术右移，但跨旧标准或跨语言代码仍应明确假设。
+- `x & -x` 若使用有符号最小值可能触发溢出；位技巧应在无符号类型上实现。
+- 不要手工把乘除改写成移位来“加速”；现代优化器会在语义允许时处理，手写转换容易破坏负数、溢出和可读性。
+
+C++20 `<bit>` 已提供 `std::popcount`、`std::has_single_bit`、`std::rotl` 等意图清晰的接口，应优先于难读的技巧。
+
+# 实验与掌握标准
+
+## 可运行观察
+
+```cpp
+#include <bit>
+#include <bitset>
+#include <cstdint>
+#include <cstring>
+#include <iomanip>
+#include <iostream>
+
+int main() {
+    float f = 0.1f;
+    auto raw = std::bit_cast<std::uint32_t>(f);
+    std::cout << std::bitset<32>(raw) << '\n';
+    std::cout << std::hex << raw << '\n';
+    std::cout << (std::endian::native == std::endian::little) << '\n';
 }
 ```
 
-| 进制 | 前缀 | 例子 |
-|------|------|------|
-| 二进制 | `0b` | `0b1101 = 13` |
-| 八进制 | `0` | `015 = 13` |
-| 十进制 | 无 | `13` |
-| 十六进制 | `0x` | `0xD = 13` |
+再用 sanitizer 验证有符号溢出：
 
-## 原码、反码、补码
-
-| 编码 | 正数 | 负数 |
-|------|------|------|
-| 原码 | 符号位 0 + 数值位 | 符号位 1 + 数值位 |
-| 反码 | 同原码 | 原码符号位不变，数值位取反 |
-| 补码 | 同原码 | 反码 + 1 |
-
-**补码设计的精妙之处：** 将减法转为加法，`x - y = x + (~y + 1)`，CPU 只需加法器。
-
-## ASCII 与 Unicode
-
-- **ASCII**：7 位编码（0-127），表示英文字母、数字、控制字符
-- **Unicode**：统一字符集，为世界上每种语言的每个字符分配唯一码点（U+xxxx）
-- **UTF-8**：Unicode 的可变长度编码（1-4 字节），向后兼容 ASCII
-
-### UTF-8 编码规则
-
-| 码点范围 | 字节数 | 编码格式 |
-|----------|--------|----------|
-| U+0000 ~ U+007F | 1 | `0xxxxxxx` |
-| U+0080 ~ U+07FF | 2 | `110xxxxx 10xxxxxx` |
-| U+0800 ~ U+FFFF | 3 | `1110xxxx 10xxxxxx 10xxxxxx` |
-| U+10000 ~ U+10FFFF | 4 | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` |
-
-**UTF-8 的优势：**
-- ASCII 文本也是合法的 UTF-8（兼容性）
-- 无字节序问题（BOM 可选）
-- 自同步：丢失一个字节不会影响后续字符
-
----
-
-# Integer Representation (整数表示)
-
-> [!note] 本节重点：有符号 vs 无符号、补码表示范围、整数溢出、符号扩展与截断
-
-## 有符号与无符号
-
-| 类型 | N 位范围 | 说明 |
-|------|---------|------|
-| 无符号 | 0 ~ 2^N - 1 | 直接二进制表示 |
-| 有符号（补码） | -2^(N-1) ~ 2^(N-1) - 1 | 最高位为符号位 |
-
-```cpp
-// C++ 中的陷阱
-unsigned int u = 0;
-u - 1;  // 4294967295（无符号溢出回绕）
-
-int a = -1;
-unsigned int b = 1;
-a < b;  // false！a 被隐式转为 unsigned → 4294967295 > 1
+```bash
+g++ -std=c++20 -O2 -Wall -Wextra -fsanitize=undefined demo.cpp
+./a.out
 ```
 
-**规则：** 有符号与无符号混合运算时，有符号隐式转为无符号。
+完成后应能回答：
 
-## 整数溢出
+1. 为什么相同位模式能表示完全不同的值？
+2. 为什么补码表示不等于“有符号溢出可以回绕”？
+3. 什么时候浮点 `==` 合理，什么时候需要相对误差？
+4. 为什么 UTF-8 的 `size()` 不能代表用户看到的字符数？
+5. 为什么内存中的 C++ 结构体不是稳定的网络协议？
 
-| 溢出类型 | 现象 | 例子 |
-|---------|------|------|
-| 无符号回绕 | UINT_MAX + 1 = 0 | `unsigned u = UINT_MAX; u++ → 0` |
-| 有符号溢出 | **未定义行为** | `INT_MAX + 1` 可能崩溃 |
-| 截断溢出 | 高位丢失 | `(short)0x10001 = 1` |
+> [!warning] 常见误区
+> - 把类型宽度、端序和 `char` 是否有符号当成所有平台固定事实。
+> - 把 epsilon 写死为一个绝对常数，用于所有数量级的浮点比较。
+> - 以为 Unicode 码点、UTF-8 字节和界面字符是一一对应。
+> - 为了“位运算更快”牺牲语义和可读性，却没有任何 benchmark。
 
-**防护：**
-- 用 `checked_add` / `__builtin_add_overflow` 检测溢出
-- 计算前做范围检查：`if (a > INT_MAX - b) { /* 溢出 */ }`
+# 资料与后续
 
-## 符号扩展与截断
-
-```cpp
-// 符号扩展：短类型→长类型，高位补符号位
-int16_t s = -16;           // 0xFFF0
-int32_t i = s;             // 0xFFFFFFF0（补 1）
-
-// 零扩展：无符号高位补 0
-uint16_t us = 0xFFF0;
-uint32_t ui = us;          // 0x0000FFF0（补 0）
-
-// 截断：长→短，直接截取低位
-int32_t x = 0x12345678;
-int16_t y = x;             // 0x5678（高位丢失）
-```
-
----
-
-# Floating Point (浮点数)
-
-> [!note] 本节重点：IEEE 754 标准、float/double 的位布局、精度问题、特殊值
-
-## IEEE 754 浮点数格式
-
-```
-float (32 位)：  [1 位符号][8 位指数][23 位尾数]
-double (64 位)： [1 位符号][11 位指数][52 位尾数]
-```
-
-**计算公式：** `(-1)^S × (1 + M) × 2^(E - bias)`
-
-- **S**：符号位（0 正 1 负）
-- **M**：尾数（隐含前导 1，即实际存储小数部分）
-- **E**：指数（偏移编码，float bias=127, double bias=1023）
-
-## 精度与范围
-
-| 类型 | 有效位数 | 最大值 | 精度 |
-|------|---------|--------|------|
-| float | ~7 位十进制 | ~3.4×10³⁸ | 1.2×10⁻⁷ |
-| double | ~15 位十进制 | ~1.8×10³⁰⁸ | 2.2×10⁻¹⁶ |
-
-```cpp
-// 精度问题演示
-float f = 0.1f;              // 实际存储 0.100000001490...
-double d = 0.1;              // 更精确但也不等于 0.1
-
-// 永远不要直接比较浮点数！
-if (a == b)   // ❌
-if (fabs(a - b) < 1e-9)  // ✅
-```
-
-## 特殊值
-
-| 值 | 指数 | 尾数 | 说明 |
-|----|------|------|------|
-| 0 | 全 0 | 全 0 | 有 +0 和 -0 |
-| 非规格化数 | 全 0 | 非 0 | 表示接近 0 的极小值 |
-| ∞ | 全 1 | 全 0 | 正/负无穷大 |
-| NaN | 全 1 | 非 0 | 非法运算结果（如 0/0） |
-
-## 常见问题
-
-```cpp
-// 大数吃小数
-float a = 1e8, b = 1e-8;
-a + b == a;     // true！b 太小，被舍去
-
-// 浮点运算不满足结合律
-(a + b) + c != a + (b + c);
-
-// 整型转浮点可能精度丢失
-float f = 16777217;  // 2^24 + 1，float 尾数只有 23 位，转回 int 变 16777216
-```
-
----
-
-# Bitwise Operations (位运算)
-
-> [!note] 本节重点：位运算基本操作、掩码与位设置、移位运算的行为、位运算的加速效果
-
-## 基本位运算
-
-| 操作 | 运算符 | 说明 |
-|------|--------|------|
-| 按位与 | `&` | 同 1 为 1，用于清零/取位 |
-| 按位或 | `\|` | 有 1 为 1，用于置位 |
-| 按位异或 | `^` | 不同为 1，用于翻转/比较 |
-| 按位取反 | `~` | 0↔1 |
-| 左移 | `<<` | 高位丢弃，低位补 0；相当于乘 2^k |
-| 右移 | `>>` | 逻辑右移补 0，算术右移补符号位（C++ 实现定义） |
-
-## 常用位操作技巧
-
-```cpp
-// 取第 k 位
-(x >> k) & 1;
-
-// 将第 k 位置 1
-x |= (1 << k);
-
-// 将第 k 位置 0
-x &= ~(1 << k);
-
-// 翻转第 k 位
-x ^= (1 << k);
-
-// 取最低位的 1
-int lowbit = x & -x;         // 树状数组核心
-
-// 将最低位的 1 置 0
-x &= x - 1;                  // Brian Kernighan
-
-// 判断 2 的幂
-(x > 0) && (x & (x - 1)) == 0;
-
-// 判断奇偶
-x & 1;
-```
-
-## 移位运算的行为
-
-```cpp
-// 左移：无符号与有符号行为不同
-unsigned u = 1u << 31;      // OK：0x80000000
-int i = 1 << 31;            // 未定义行为！C++11 起有符号溢出 UB
-
-// 移位位数 ≥ 类型宽度 → 未定义行为
-int a = 1 << 32;            // ❌ UB
-int b = 1 << (32 % 32);     // 实际行为，但不保证
-
-// 右移：有符号数的行为是实现定义的
-int x = -16 >> 2;           // 大多数编译器：算术右移 = -4
-```
-
-## 位运算加速
-
-- 位运算是一条 CPU 指令（通常 1 个时钟周期）
-- 乘/除法是数十个时钟周期
-- `x * 32` = `x << 5`（快 ~10 倍）
-- `x % 16` = `x & 15`（仅当除数为 2 的幂时）
-- 现代编译器会自动优化这些，手动优化的收益越来越小
-
----
-
-
-> [!warning]- 易错点
-> - 把 **02-Data Representation (数据表示)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[03-Program Build and Execution (程序构建与执行)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Program%20Build%20and%20Execution%20(程序构建与执行).md)
+- [C++ working draft: fundamental types](https://eel.is/c++draft/basic.fundamental)
+- [C++ working draft: shift operators](https://eel.is/c++draft/expr.shift)
+- [The Unicode Standard — latest version](https://www.unicode.org/versions/latest/)
+- 下一步：[Program Build and Execution (程序构建与执行)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Program%20Build%20and%20Execution%20(程序构建与执行).md)

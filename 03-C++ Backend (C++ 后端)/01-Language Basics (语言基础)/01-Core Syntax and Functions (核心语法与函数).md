@@ -1,194 +1,92 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 previous_review_due: 2026-09-07
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标
+> 用对象、类型、初始化、表达式、控制流与函数组成可运行的小程序，并解释每个边界。示例以 C++17 为基线。
 
-> [!summary] 核心摘要
->
-> C++ 类型决定对象的表示与可用操作；初始化、const、引用和函数参数共同表达所有权与修改权限，优先让接口在编译期暴露错误。
+# 对象、类型与初始化
 
-# Variables, Types & Operators (变量、类型与运算符)
-
-> [!note] 本节重点：C++ 基本类型的大小与范围、类型转换规则、const 与引用
-
-## 基本类型与大小
+声明引入名称；对象有类型、存储和生命周期。类型决定可表示的值及合法操作。不要把常见机器上的大小当成语言保证：`sizeof(char) == 1`，但一个 byte 有多少位由 `CHAR_BIT` 决定；`int`、`long`、`long double` 的宽度依实现而定。精确宽度需求可查看 `<cstdint>` 的 `std::int32_t` 等类型；容器大小与下标通常用 `std::size_t`。
 
 ```cpp
-// 整型（大小与平台相关的，以下为 64 位 Linux 典型值）
-bool        b  = true;          // 1 字节
-char        c  = 'A';           // 1 字节，有符号或无符号（实现定义）
-short       s  = 100;           // 2 字节
-int         i  = 42;            // 4 字节
-long        l  = 100L;          // 8 字节（Linux 64位）
-long long   ll = 100LL;         // 8 字节
+#include <iostream>
+#include <limits>
 
-// 浮点
-float       f  = 3.14f;         // 4 字节，约 7 位有效数字
-double      d  = 3.14;          // 8 字节，约 15 位有效数字
-long double ld = 3.14L;         // 16 字节（x86-64）
-
-// 固定宽度整型（推荐在跨平台代码中使用）
-#include <cstdint>
-int8_t  / uint8_t
-int32_t / uint32_t
-int64_t / uint64_t
-
-// 查询大小
-sizeof(int);      // 4
-sizeof(double);   // 8
-```
-
-## 字面量
-
-```cpp
-42        // int
-42u       // unsigned int
-42L       // long
-42LL      // long long
-42ULL     // unsigned long long
-0x2A      // 十六进制 = 42
-052       // 八进制  = 42
-0b101010  // 二进制  = 42（C++14）
-1'000'000 // 数字分隔符（C++14），等于 1000000
-3.14f     // float
-3.14      // double
-'A'       // char（ASCII 65）
-"hello"   // const char*
-u"hello"  // char16_t*（UTF-16）
-U"hello"  // char32_t*（UTF-32）
-R"(raw\nstring)"  // 原始字符串，\n 不转义
-```
-
-## 运算符优先级（易混淆部分）
-
-```cpp
-// 位运算优先级低于比较运算符！
-if (x & 0xFF == 0)     // 错误：等价于 x & (0xFF == 0) = x & 0
-if ((x & 0xFF) == 0)   // 正确
-
-// 前置 vs 后置 ++
-int a = 5;
-int b = a++;   // b=5, a=6（后置：先用再加）
-int c = ++a;   // c=7, a=7（前置：先加再用）
-
-// 短路求值
-false && foo();   // foo() 不会被调用
-true  || foo();   // foo() 不会被调用
-
-// 三目运算符
-int max = (a > b) ? a : b;
-
-// 逗号运算符（返回最后一个表达式的值）
-int x = (1, 2, 3);   // x = 3
-```
-
-## 整型提升与隐式转换
-
-```cpp
-char a = 200;
-char b = 100;
-int c = a + b;   // a、b 提升为 int 再运算，不溢出
-
-unsigned int u = 10;
-int          i = -1;
-u + i;   // i 被转换为 unsigned，结果是巨大的正数！
-
-// 算术转换层次（低 → 高自动转换）
-// char → short → int → long → long long
-//                          ↓
-//                       float → double → long double
-```
-
----
-
-# Control Flow (流程控制)
-
-> [!note] 本节重点：条件分支（if/switch）、循环（for/while/do-while）、break/continue 控制流
-
-```cpp
-// if-else
-if (x > 0) { ... }
-else if (x < 0) { ... }
-else { ... }
-
-// C++17：if 初始化语句
-if (auto it = map.find(key); it != map.end()) {
-    use(it->second);
+int main() {
+    int count{3};              // 列表初始化拒绝缩窄
+    double ratio{0.5};
+    const int limit{10};       // 不能通过此名称修改
+    std::cout << count << ' ' << ratio << ' ' << limit << '\n';
+    std::cout << sizeof(int) << ' ' << std::numeric_limits<int>::max() << '\n';
 }
-
-// switch（只能用整型/枚举，注意 fallthrough）
-switch (c) {
-    case 'a': case 'e': case 'i':
-        std::cout << "vowel\n"; break;
-    case 'b': case 'c':
-        std::cout << "consonant\n"; break;
-    default:
-        break;
-}
-
-// for
-for (int i = 0; i < n; i++) { ... }
-for (auto& x : container) { ... }   // 范围 for（C++11）
-
-// while / do-while
-while (cond) { ... }
-do { ... } while (cond);
-
-// break / continue / goto（goto 只在状态机或跳出多层循环时考虑）
 ```
 
----
+局部 `int n;` 可能未初始化；`int n{};` 值初始化为零。`int n{3.5};` 因缩窄而无法编译。字符串字面量 `"hello"` 是 `const char[6]`，只在很多表达式中转换为首元素指针，不是天生的 `const char*`。普通 `char` 的有符号性由实现决定，不能用 `char c = 200;` 推断统一结果。
 
-# Functions (函数)
+## 运算、转换与溢出
 
-> [!note] 本节重点：函数重载、默认参数、值传递/引用传递、inline 函数
+无符号整数运算按模数回绕；有符号溢出是未定义行为。混用有符号与无符号数时先明确转换规则，`-1 < 1u` 不能靠直觉判断。“char → short → int → long → float”不是通用转换链：整型提升和 usual arithmetic conversions 要分开理解。
 
 ```cpp
-// 函数重载（编译期，根据参数类型/数量区分）
-int    abs(int x)    { return x < 0 ? -x : x; }
-double abs(double x) { return x < 0 ? -x : x; }
+unsigned int quota{10};
+int delta{-1};
+if (delta >= 0) quota += static_cast<unsigned int>(delta);
 
-// 默认参数（只能在声明中写，且必须从右向左）
-void log(std::string msg, int level = 1, bool flush = false);
-
-// 内联函数（建议编译器内联展开，消除函数调用开销）
-inline int square(int x) { return x * x; }
-
-// 函数指针
-int (*fp)(int, int) = add;   // 指向 add 函数
-fp(1, 2);                    // 调用
-
-// 可变参数（C++11 variadic template，取代 C 的 va_list）
-template<typename... Args>
-void print(Args... args) {
-    (std::cout << ... << args) << '\n';  // 折叠表达式（C++17）
-}
-
-// 递归：注意栈溢出，深度过大改用迭代或尾递归
-int fib(int n) { return n <= 1 ? n : fib(n-1) + fib(n-2); }
+int flags{0x100};
+if ((flags & 0xFF) == 0) { /* 低八位全为零 */ }
 ```
 
----
+给混合位运算和比较加括号。`&&`、`||` 短路，`&`、`|` 不短路；不要在一个表达式中反复修改同一变量。
 
+# 控制流与循环不变量
 
-> [!check]- 学完后检查
-> ### 复述
->
-> - 不看正文，说明 01-Core Syntax and Functions (核心语法与函数) 的问题、核心机制与边界。
->
-> ### 验证
->
-> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
->
-> ### 自测
->
-> 1. 这个主题解决什么问题？
-> 2. 它在什么条件下会失效、变慢或需要替代方案？
+`if` 选择分支，`switch` 对整型或枚举多路选择，`for` 适合遍历，`while` 适合状态驱动。每个循环都要说明不变量和终止条件。
+
+```cpp
+#include <vector>
+
+int sum_positive(const std::vector<int>& values) {
+    int total{};
+    for (int value : values) {
+        if (value <= 0) continue;
+        // 真实业务还需检查 total + value 是否溢出。
+        total += value;
+    }
+    return total;
+}
+```
+
+范围 `for` 遍历大对象时可用 `const auto& item` 避免拷贝；修改元素用 `auto& item`。`break` 退出当前循环或 `switch`，`continue` 进入下一轮循环。刻意穿透 `switch` 分支时可用 C++17 的 `[[fallthrough]]`。
+
+# 函数把约束放在接口上
+
+函数不能只按返回类型重载。小标量通常按值传；只读大对象通常用 `const T&`；要修改调用者对象用 `T&`；可缺席且非拥有的参数可用指针。仍需结合生命周期、所有权判断，不能机械套字节阈值。
+
+```cpp
+#include <limits>
+#include <optional>
+
+std::optional<int> divide_exact(int numerator, int denominator) {
+    if (denominator == 0) return std::nullopt;
+    if (numerator == std::numeric_limits<int>::min() && denominator == -1)
+        return std::nullopt;  // 避免有符号溢出
+    if (numerator % denominator != 0) return std::nullopt;
+    return numerator / denominator;
+}
+```
+
+`std::optional` 明确表示可能没有整数结果。`inline` 允许符合 ODR 约束的定义出现在多个翻译单元，并不保证机器码内联展开。默认实参通常写在头文件声明处，调用点决定采用哪个默认值。递归要有基例并评估栈深；C++ 不保证尾调用优化。
+
+## 动手验证
+
+1. 用 `-std=c++17 -Wall -Wextra -Wconversion` 编译首段示例，改成 `int n{3.5};` 观察诊断。
+2. 测试 `sum_positive` 的空数组、全负数和大正数，指出溢出边界。
+3. 测试 `divide_exact` 的除零、不整除、精确整除和 `INT_MIN / -1`。
 
 > [!info]- 延伸阅读
-> - 下一步：[02-Arrays Strings and IO (数组字符串与输入输出)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)
-
+> - [02-Arrays Strings and IO (数组字符串与输入输出)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)
+> - 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)

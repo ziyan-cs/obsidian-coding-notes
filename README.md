@@ -20,20 +20,20 @@
 
 ## 知识模块
 
-| 顺序 | 模块 | 完成标准 |
-| --- | --- | --- |
-| 01 | 基础能力 | [基础能力标准](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md) |
-| 02 | 工程基础 | [工程基础标准](/02-Engineering%20Fundamentals%20(工程基础)/00-Engineering%20Fundamentals%20Standard%20(工程基础标准与自测).md) |
-| 03 | C++ 后端 | [C++ 后端标准](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/00-C%2B%2B%20Backend%20Standard%20(C%2B%2B%20后端标准与自测).md) |
-| 04 | Python 工程 | [Python 工程标准](/04-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md) |
-| 05 | Go 后端 | [Go 后端标准](/05-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md) |
-| 06 | 系统与网络 | [系统与网络标准](/06-Systems%20and%20Networking%20(系统与网络)/00-Systems%20and%20Networking%20Standard%20(系统与网络标准与自测).md) |
-| 07 | 数据系统与分布式 | [数据系统与分布式标准](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/00-Data%20Systems%20and%20Distributed%20Computing%20Standard%20(数据系统与分布式标准与自测).md) |
-| 08 | 云原生与可靠性 | [云原生与可靠性标准](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/00-Cloud%20Native%20and%20Reliability%20Standard%20(云原生与可靠性标准与自测).md) |
-| 09 | 安全工程 | [安全工程标准](/09-Security%20Engineering%20(安全工程)/00-Security%20Engineering%20Standard%20(安全工程标准与自测).md) |
-| 10 | AI 系统工程 | [AI 系统工程标准](/10-AI%20Systems%20Engineering%20(AI%20系统工程)/00-AI%20Systems%20Engineering%20Standard%20(AI%20系统工程标准与自测).md) |
-| 11 | 项目实践 | [项目标准](/11-Projects%20(项目实践)/00-Project%20Standard%20(项目标准与自测).md) |
-| 12 | 求职与成长 | [求职能力标准](/12-Career%20(求职与成长)/00-Career%20Standard%20(求职能力标准与自测).md) |
+| 顺序  | 模块        | 完成标准                                                                                                                                                            |
+| --- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 01  | 基础能力      | [基础能力标准](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)                                                                                   |
+| 02  | 工程基础      | [工程基础标准](/02-Engineering%20Fundamentals%20(工程基础)/00-Engineering%20Fundamentals%20Standard%20(工程基础标准与自测).md)                                                     |
+| 03  | C++ 后端    | [C++ 后端](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)                                                                       |
+| 04  | Python 工程 | [Python 工程标准](/04-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md)                                              |
+| 05  | Go 后端     | [Go 后端标准](/05-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md)                                                                          |
+| 06  | 系统与网络     | [系统与网络标准](/06-Systems%20and%20Networking%20(系统与网络)/00-Systems%20and%20Networking%20Standard%20(系统与网络标准与自测).md)                                                  |
+| 07  | 数据系统与分布式  | [数据系统与分布式标准](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/00-Data%20Systems%20and%20Distributed%20Computing%20Standard%20(数据系统与分布式标准与自测).md) |
+| 08  | 云原生与可靠性   | [云原生与可靠性标准](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/00-Cloud%20Native%20and%20Reliability%20Standard%20(云原生与可靠性标准与自测).md)                            |
+| 09  | 安全工程      | [安全工程标准](/09-Security%20Engineering%20(安全工程)/00-Security%20Engineering%20Standard%20(安全工程标准与自测).md)                                                             |
+| 10  | AI 系统工程   | [AI 系统工程标准](/10-AI%20Systems%20Engineering%20(AI%20系统工程)/00-AI%20Systems%20Engineering%20Standard%20(AI%20系统工程标准与自测).md)                                        |
+| 11  | 项目实践      | [项目标准](/11-Projects%20(项目实践)/00-Project%20Standard%20(项目标准与自测).md)                                                                                              |
+| 12  | 求职与成长     | [求职能力标准](/12-Career%20(求职与成长)/00-Career%20Standard%20(求职能力标准与自测).md)                                                                                            |
 
 目录编号表达知识依赖，不要求学完一整块才进入下一块。项目从基础阶段就应并行推进；AI、云原生与安全都不能替代语言、系统、网络和数据基础。
 

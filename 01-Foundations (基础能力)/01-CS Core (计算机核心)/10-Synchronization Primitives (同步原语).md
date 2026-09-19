@@ -1,386 +1,116 @@
 ---
 status: stable
 confidence: high
-
-tags: [cs/os, learning/foundation]
+content_verified: 2026-09-19
+tags: [cs/os, cpp/concurrency, learning/foundation]
 ---
 
 > [!abstract] 学习目标
-> 从竞态条件与临界区出发，理解原子操作、互斥锁、futex、信号量和条件变量分别建立什么同步关系。
+> 从不变量、数据竞争与 happens-before 选择原子、互斥锁、条件变量、信号量和阶段协调工具，并能写出可证明正确的等待代码。
 
-# Mutex (互斥锁)
+# 先定义要保护的不变量
 
-> [!note] 本节重点： 临界区与竞态条件、锁的实现（Peterson/硬件原子/自旋锁）、互斥锁 vs 自旋锁
+同步的目标不是“让线程慢一点”，而是保证共享状态满足不变量。例如队列要求 `0 <= size <= capacity`，入队必须同时更新元素、尾指针和大小，使其他线程不能观察到半完成状态。
 
-## 临界区与竞态条件
+在 C++ 中，两个线程对同一内存位置进行冲突访问，至少一个是写，且没有 happens-before 关系时会形成 **data race**；程序行为未定义。`volatile` 不提供线程同步，普通 `bool` 也不能安全实现 Peterson 算法。Peterson 算法可用于理论推导，但映射到 C++ 必须使用原子和恰当内存序。
 
-```cpp
-// 竞态条件示例：两个线程同时增加计数器
-int counter = 0;
+## happens-before 的作用
 
-void thread_func() {
-    for (int i = 0; i < 1000000; i++) {
-        counter++;  // 非原子操作！
-        // 实际是三条指令：
-        // LOAD counter → R1
-        // ADD  R1, #1
-        // STORE R1 → counter
-    }
-}
+happens-before 是“某次写对某次读可见且顺序受约束”的语言级关系。典型建立方式包括：
 
-// 预期结果：2000000
-// 实际结果：≈ 1074521（竞态条件导致更新丢失）
-```
+- 同一线程内的 sequenced-before；
+- mutex 的 unlock 与随后成功 lock；
+- release 原子操作与读取其值的 acquire 操作；
+- 线程创建、结束与 `join` 的规定同步关系。
 
-**临界区（Critical Section）：** 访问共享资源的代码段，同一时间只允许一个线程进入。
+原子只保证该原子对象操作不可撕裂并遵守所选内存序，不自动让一组业务字段成为事务。
 
-### 临界区三条件
-
-1. **互斥（Mutual Exclusion）**：同时最多一个线程在临界区
-2. **前进（Progress）**：无线程在临界区时，想进的线程应能进
-3. **有限等待（Bounded Waiting）**：线程不能无限等待
-
----
-
-# Peterson 算法（软件解）
+# 互斥锁与 RAII
 
 ```cpp
-// Peterson 算法（两个线程的互斥，无硬件原子指令）
-class PetersonMutex {
-    bool flag[2] = {false, false};
-    int turn = 0;
+std::mutex mu;
+Account account;
 
-public:
-    void lock(int id) {
-        int other = 1 - id;
-        flag[id] = true;           // 表示想进入
-        turn = other;              // 让对方优先
-        while (flag[other] && turn == other) {
-            // 忙等待
-        }
-    }
-
-    void unlock(int id) {
-        flag[id] = false;
-    }
-};
-```
-
-**正确性验证：** 满足互斥、前进、有限等待。但现代 CPU 的乱序执行可能破坏 Peterson 算法（需要 memory barrier）。
-
----
-
-## 硬件原子操作
-
-### 硬件锁（TSL / XCHG）
-
-```asm
-; x86 LOCK 前缀 + XCHG 指令实现互斥
-; lock = 0 表示空闲，1 表示占用
-
-acquire_lock:
-    mov    eax, 1           ; 设置 1
-    xchg   eax, [lock]      ; 原子交换：eax ↔ lock
-    test   eax, eax         ; 检查旧值
-    jnz    acquire_lock     ; 非 0 说明锁被占用，重试
-    ret                     ; 获得锁
-
-release_lock:
-    mov    [lock], 0        ; 释放
-    ret
-```
-
-### C++ 原子操作
-
-```cpp
-#include <atomic>
-#include <thread>
-#include <iostream>
-
-class SpinLock {
-    std::atomic_flag flag = ATOMIC_FLAG_INIT;
-public:
-    void lock() {
-        while (flag.test_and_set(std::memory_order_acquire)) {
-            // 忙等待
-        }
-    }
-    void unlock() {
-        flag.clear(std::memory_order_release);
-    }
-};
-
-int counter = 0;
-SpinLock lock;
-
-void safe_increment() {
-    for (int i = 0; i < 1000000; i++) {
-        std::lock_guard<SpinLock> guard(lock);
-        counter++;
-    }
+void deposit(int amount) {
+    std::lock_guard<std::mutex> lock(mu);
+    account.balance += amount;
+    ++account.version;
 }
 ```
 
----
+锁的粒度应覆盖完整不变量。C++ mutex 有所有权：成功加锁的执行代理负责解锁；优先使用 `lock_guard`、`unique_lock`、`scoped_lock` 让异常路径自动释放。
 
-## 互斥锁 vs 自旋锁
+`std::mutex` 的具体实现由标准库决定。Linux 实现常在无竞争路径使用用户态原子，竞争时借助 futex 睡眠/唤醒，但这不是 C++ 标准保证，也不能据此背固定耗时。
 
-| 特性 | 互斥锁（Mutex） | 自旋锁（Spinlock） |
-|------|----------------|-------------------|
-| 等待时 | 线程睡眠（上下文切换） | CPU 循环忙等 |
-| 适用场景 | 锁持有时间长 | 锁持有时间极短 |
-| 开销 | 切换重（≈μs级），但不占CPU | 无切换，但占 CPU |
-| 中断上下文 | 不可用（可能睡眠） | 可用（需关中断） |
-| 实现基础 | futex（Linux） | atomic_flag / TSL |
+## 自旋还是睡眠
 
-### Linux futex
+自旋锁等待时占用 CPU，适合临界区极短、不可睡眠且竞争可控的低层场景；互斥锁可让等待者阻塞，适合可能较长的等待。用户态业务代码通常先用标准 mutex，再根据 profiling 证据优化。持锁期间做阻塞 I/O 会显著扩大争用。
 
-```c
-// futex（Fast Userspace Mutex）—— Linux 互斥锁核心
-// 用户态先尝试原子减（无竞争时不进内核）
-// 有竞争时才系统调用睡眠
-
-// 简化实现：
-void mutex_lock(int *futex) {
-    // 尝试在用户态获取锁
-    if (atomic_dec_if_positive(futex) >= 0)
-        return;  // 获得锁，无需内核调用
-    
-    // 竞争发生：进入内核等待
-    syscall(SYS_futex, futex, FUTEX_WAIT, 0, ...);
-}
-
-// mutex 的 FUTEX_WAIT/FUTEX_WAKE 仅在有竞争时执行系统调用 —— 快速路径（无竞争）≈ 用户态原子操作
-```
-
----
-
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | 临界区三条件 | 互斥 + 前进 + 有限等待 |
-> | Peterson 算法的限制 | 不处理乱序执行，需要 memory barrier |
-> | 自旋锁何时用 | 锁持有时间 < 上下文切换代价（≈ 2 次） |
-> | 互斥锁的快速路径 | futex 无竞争时仅用户态原子操作，无系统调用 |
-> | 可重入锁 | 同一线程可多次获取同一锁（需计数） |
-> | 死锁与锁顺序 | 固定锁获取顺序可避免死锁 |
-> | `LOCK` 前缀作用 | 锁总线/缓存行，确保多核原子性 |
->
-
-> [!tip]- **工程要点**
-> 临界区应尽可能小——只保护共享数据，不要在锁内做 I/O。优先用标准库 `std::mutex`（内部已优化，快速路径 ≈ 用户态原子操作，无需自旋锁除非性能分析证明必要）。`lock_guard`/`unique_lock` 确保异常安全（RAII）。
-
->
-> ---
->
-> 关联：[Deadlock Analysis and Recovery (死锁分析与恢复)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/11-Deadlock%20Analysis%20and%20Recovery%20(死锁分析与恢复).md)
->
-> ---
-
-# Semaphores (信号量)
-
-> [!note] 本节重点：信号量概念、P/V 操作、计数信号量 vs 二进制信号量、生产者消费者、读写者问题
-
-## 信号量定义
-
-信号量是一个非负整数变量，支持两种原子操作：
-
-- **P（wait / down）**：如果值 > 0 则减 1，否则阻塞等待
-- **V（signal / up）**：值加 1，唤醒一个等待线程
+# 条件变量：等待状态而非通知
 
 ```cpp
-// 信号量抽象定义
-class Semaphore {
-    int count;
-    Queue waiting;  // 等待队列
+std::mutex mu;
+std::condition_variable cv;
+std::queue<Job> jobs;
+bool stopping = false;
 
-public:
-    Semaphore(int initial) : count(initial) {}
-
-    void wait() {   // P 操作
-        count--;
-        if (count < 0) {
-            // 将当前线程加入等待队列
-            // 阻塞线程
-        }
-    }
-
-    void signal() { // V 操作
-        count++;
-        if (count <= 0) {
-            // 从等待队列移除一个线程
-            // 唤醒该线程
-        }
-    }
-};
-```
-
-### 二进制 vs 计数信号量
-
-| 类型 | 初始值 | 用途 | 类比 |
-|------|--------|------|------|
-| 二进制（Mutex） | 1 | 互斥访问共享资源 | 一把钥匙 |
-| 计数信号量 | N | 控制多个资源访问 | N 把钥匙 |
-
----
-
-## 经典同步问题
-
-### 生产者-消费者（有界缓冲区）
-
-```cpp
-#include <queue>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-
-class BoundedBuffer {
-    std::queue<int> buf;
-    int capacity;
-    std::mutex mtx;
-    std::condition_variable not_full, not_empty;
-
-public:
-    BoundedBuffer(int cap) : capacity(cap) {}
-
-    void produce(int item) {
-        std::unique_lock<std::mutex> lock(mtx);
-        not_full.wait(lock, [this] { return buf.size() < capacity; });
-        buf.push(item);
-        not_empty.notify_one();
-    }
-
-    int consume() {
-        std::unique_lock<std::mutex> lock(mtx);
-        not_empty.wait(lock, [this] { return !buf.empty(); });
-        int item = buf.front(); buf.pop();
-        not_full.notify_one();
-        return item;
-    }
-};
-```
-
-**信号量版本 P/V 操作逻辑：**
-
-```cpp
-// sem_full = 0（已用空间），sem_empty = N（空闲空间）
-// sem_mutex = 1（互斥访问缓冲区）
-
-void producer() {
-    while (true) {
-        item = produce_item();
-        P(sem_empty);     // 申请空位
-        P(sem_mutex);     // 互斥访问
-        buf.push(item);
-        V(sem_mutex);     // 释放互斥
-        V(sem_full);      // 增加满位计数
-    }
-}
-
-void consumer() {
-    while (true) {
-        P(sem_full);      // 申请满位
-        P(sem_mutex);
-        item = buf.front(); buf.pop();
-        V(sem_mutex);
-        V(sem_empty);     // 增加空位计数
-        consume_item(item);
-    }
+Job take() {
+    std::unique_lock lock(mu);
+    cv.wait(lock, [] { return stopping || !jobs.empty(); });
+    if (jobs.empty()) throw Stopped{};
+    Job job = std::move(jobs.front());
+    jobs.pop();
+    return job;
 }
 ```
 
-**注意：** P 的顺序不能颠倒（先资源信号量再互斥），否则可能死锁。
+条件变量没有“保存通知”的资源计数。正确模型是：
 
----
+1. 用 mutex 保护条件涉及的共享状态；
+2. 在锁内检查谓词；
+3. `wait` 原子地释放锁并阻塞，醒来后重新持锁；
+4. 用循环/谓词重检，处理虚假唤醒和其他线程抢先改变状态。
 
-### 读者-写者问题
+通知通常放在状态变更后；是否解锁后再通知要依据生命周期和争用分析，不能死背单一写法。
 
-```
-允许多个读者同时读取，写者必须独占访问。
-```
+# 其他同步工具
 
-```cpp
-class ReadWriteLock {
-    int readers = 0;
-    std::mutex mtx;
-    std::condition_variable writer;
+| 工具 | 表达的关系 | 典型用途 | 常见误用 |
+|---|---|---|---|
+| `std::atomic<T>` | 单对象原子访问与内存序 | 计数、状态位、无锁协议组件 | 把多个字段误当成整体原子 |
+| `std::mutex` | 排他所有权 | 保护复合不变量 | 临界区过大、锁顺序混乱 |
+| `std::shared_mutex` | 多读者/单写者 | 读多写少且读区足够长 | 忽略公平性与升级问题 |
+| `counting_semaphore` | 可消费许可计数 | 容量限制、资源池 | 忘记归还许可、重复释放 |
+| `condition_variable` | 等待受锁保护的谓词 | 队列非空、状态改变 | 用 `if` 等待、状态不受同一锁保护 |
+| `latch` | 一次性倒计数关卡 | 等待一批任务完成 | 需要重复阶段却继续复用 |
+| `barrier` | 多阶段会合点 | 迭代式并行算法 | 参与者退出导致永久等待 |
 
-public:
-    void read_lock() {
-        std::unique_lock<std::mutex> lock(mtx);
-        while (readers == -1)  // 有写者
-            writer.wait(lock);
-        readers++;
-    }
+原子内存序先以 `seq_cst` 和锁建立正确性；只有在证明协议、建立基准并通过压力测试后，才考虑 acquire/release 或 relaxed。弱内存序错误通常无法靠代码直觉发现。
 
-    void read_unlock() {
-        std::unique_lock<std::mutex> lock(mtx);
-        if (--readers == 0)
-            writer.notify_one();
-    }
+# 诊断与验证
 
-    void write_lock() {
-        std::unique_lock<std::mutex> lock(mtx);
-        while (readers != 0)   // 等待所有读者完成
-            writer.wait(lock);
-        readers = -1;           // 标记写者占用
-    }
-
-    void write_unlock() {
-        readers = 0;
-        writer.notify_all();
-    }
-};
+```bash
+# Clang/GCC 示例；按项目构建方式调整
+c++ -fsanitize=thread -g -O1 race.cpp -pthread
+./a.out
 ```
 
-**读者优先 vs 写者优先：** 上述实现为读者优先（读者持续进入可能饿死写者）。真正的写者优先需要额外信号量。
+ThreadSanitizer 擅长发现数据竞争，不证明算法无死锁，也可能不支持某些自定义同步。并发测试还应覆盖高竞争、取消、超时、异常和进程退出。
 
----
+# 检查理解
 
-### 哲学家就餐问题
+1. 为什么 `volatile bool ready` 不能用于线程间发布对象？
+2. 条件变量为什么必须重检谓词？
+3. 一个 atomic size 为什么不能自动保护队列内部结构？
+4. semaphore 与 condition variable 在“状态由谁保存”上有什么区别？
 
-```
-五位哲学家围坐，每两人之间一根筷子。
-需要两根筷子才能吃饭。
-```
+> [!summary] 本篇结论
+> 同步从共享不变量和 happens-before 出发：原子适合清晰的单对象协议，mutex 保护复合状态，条件变量等待谓词，semaphore 管理许可。先证明正确，再用数据决定是否需要更低层优化。
 
-```cpp
-// 方案一：信号量解法（可能死锁——每人拿左边筷子）
-// 方案二：限制最多 4 人同时进食（破坏循环等待）
-// 方案三：奇数先左后右，偶数先右后左（破坏循环等待）
+## 权威依据
 
-const int N = 5;
-Semaphore chopsticks[N] = {1, 1, 1, 1, 1};
-Semaphore room(4);  // 方案二：最多 4 人同时吃饭
-
-void philosopher(int i) {
-    while (true) {
-        think();
-        room.wait();              // 占一个位
-        chopsticks[i].wait();     // 左筷
-        chopsticks[(i+1)%N].wait(); // 右筷
-        eat();
-        chopsticks[(i+1)%N].signal();
-        chopsticks[i].signal();
-        room.signal();
-    }
-}
-```
-
----
-
-## 条件变量 vs 信号量
-
-| | 条件变量（condition_variable） | 信号量 |
-|--|-------------------------------|--------|
-| 本质 | 等待某个条件成立 | 计数资源管理 |
-| 使用 | 必须配合 mutex | 独立使用 |
-| 唤醒 | notify_one / notify_all | V 操作 |
-| 虚假唤醒 | 需要 while 循环检查条件 | 无此问题 |
-| 语义 | 无资源计数 | 显式资源计数 |
-
-> [!tip]- **工程要点**：C++ 标准库没有信号量（C++20 才引入 `std::counting_semaphore`），多线程同步首选 `mutex + condition_variable`。信号量在生产者消费问题中自然表达资源计数，但信号量的 P/V 错序容易导致死锁——使用 `condition_variable` 时这类错误更少。
-
----
+- [C++ draft: data races and happens-before](https://eel.is/c++draft/intro.races)
+- [C++ draft: concurrency support](https://eel.is/c++draft/thread)
+- [Linux futex(2)](https://man7.org/linux/man-pages/man2/futex.2.html)
 
 下一步：[11-Deadlock Analysis and Recovery (死锁分析与恢复)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/11-Deadlock%20Analysis%20and%20Recovery%20(死锁分析与恢复).md)

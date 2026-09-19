@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
 > [!note] 方法论坐标
@@ -150,6 +150,6 @@ HEAPPROFILE=main.heap ./main
 | 数据竞争 | `ThreadSanitizer` |
 | 分支预测失败 | `perf stat -e branch-misses` |
 
-> [!tip]- **工程要点**：永远不要凭直觉优化。**先用 perf 测量**，找到真正的热点。常见的"优化"（如手写循环展开、改用移位代替乘法）现代编译器已经做了。真正的瓶颈通常是：不必要的拷贝、缓存不友好、过多的动态分配。
+> [!tip]- **工程要点**：先定义吞吐、延迟、CPU 或内存目标，再用适合平台的 profiler 定位瓶颈并建立基线。不要预设热点一定是拷贝、缓存或分配；优化后用相同负载复测，并检查正确性与可维护性。
 
 ---

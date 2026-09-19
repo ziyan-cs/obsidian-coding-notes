@@ -1,14 +1,14 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 verified: 2026-09-28
 review_stage: learn
 review_due: 2026-09-28
 previous_review_due: 2026-09-10
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标：分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。
 
 > [!summary] 核心摘要
 >
@@ -36,7 +36,7 @@ previous_review_due: 2026-09-10
 
 # Memory Layout (内存布局)
 
-> [!note] 本节重点： 进程内存四区的划分与作用、堆与栈的区别、BSS/data/text 各自存放什么
+> [!note] 下面是典型 Linux ELF 进程的教学示意，不是 C++ 规定的固定“四区”。ASLR、共享库、线程栈和 mmap 会让实际地址空间更复杂，栈/堆也不要求按图中方向相向增长。
 
 ```text
 ┌──────────────────────────────────────────────┐
@@ -66,27 +66,29 @@ previous_review_due: 2026-09-10
 ```
 
 ```cpp
-int   g_init   = 42;          // Data 段（已初始化全局变量）
-int   g_uninit;               // BSS 段（未初始化全局变量，自动清零）
-static int s_var = 10;        // Data 段
+#include <memory>
+
+int   g_init   = 42;          // 静态存储期；典型实现放在 data 段
+int   g_uninit;               // 静态存储期、零初始化；典型实现放在 BSS
+static int s_var = 10;        // 静态存储期
 
 void foo() {
-    int local = 1;            // 栈（函数返回时自动释放）
-    static int s = 0;         // Data/BSS 段（static 局部变量，只初始化一次）
-    int* p = new int(2);      // 堆（需要手动 delete，或用智能指针）
+    int local = 1;            // 自动存储期；实现可放寄存器或优化掉
+    static int s = 0;         // 静态存储期，首次经过声明时初始化
+    auto p = std::make_unique<int>(2); // 动态存储，由 RAII 管理
 }
-// 指令本身在 Text 段
+// 典型 ELF 文件中的指令映射来自 text 段；段位置不由 C++ 规定
 ```
 
 ## 栈 vs 堆
 
 | |栈|堆|
 |---|---|---|
-|分配方式|自动（移动 SP）|手动（new/malloc）|
-|速度|极快（O(1)）|较慢（需找空闲块）|
-|大小|有限（默认 8MB）|受虚拟内存限制|
-|生命周期|作用域结束自动释放|手动管理（或智能指针）|
-|碎片|无|有（长时间运行后）|
+|分配方式|自动存储期，具体可由编译器优化|动态分配接口/分配器；通常交给 RAII 管理|
+|成本|通常无需显式分配调用，但仍受对象构造成本影响|依实现、尺寸、缓存与竞争而变，需测量|
+|容量|线程栈限制依平台和配置，不能记固定值|受地址空间、限制和可用资源约束|
+|生命周期|离开作用域结束（例外见延长生命周期规则）|由所有者决定，常通过 RAII 结束|
+|碎片|不是这种分配方式的主要问题|可能产生，取决于分配模式和分配器|
 
 ---
 
@@ -96,7 +98,7 @@ void foo() {
 
 ## 对齐规则
 
-每种类型有**对齐要求（alignment requirement）**，通常等于其大小，结构体成员必须放在对齐地址上，编译器自动插入填充字节（padding）：
+每种对象类型都有**对齐要求（alignment requirement）**，但不能推断它通常等于 `sizeof(T)`。实现可为成员和对象增加 padding；下列偏移与大小是常见 ABI 下的观察值，不是跨平台公式：
 
 ```cpp
 struct Bad {
@@ -130,8 +132,8 @@ alignas(64) char cacheline_buf[64];  // 对齐到 cache line
 
 ## 结构体大小计算规则
 
-1. 每个成员放在自身对齐大小的整数倍偏移处
-2. 结构体总大小是**最大成员对齐大小**的整数倍
+1. 对象地址必须满足 `alignof(T)`；实现安排成员时还要遵守成员顺序和布局规则。
+2. `sizeof(T)` 是 `alignof(T)` 的整数倍，以便数组元素连续放置；显式 `alignas` 也可能提高整个结构体的对齐要求。
 
 ```cpp
 struct Example {
@@ -145,89 +147,55 @@ struct Example {
 };
 // sizeof = 24
 
-// 验证
-static_assert(offsetof(Example, b) == 2);
-static_assert(offsetof(Example, d) == 8);
-static_assert(sizeof(Example) == 24);
+// 在目标平台用 sizeof(Example)、alignof(Example) 和
+// offsetof(Example, b) 等观察实际布局；不要把示例数值做跨平台断言。
 ```
 
 ---
 
 # Memory Pool (内存池)
 
-> [!note] 本节重点：内存池解决 malloc 开销与碎片问题、固定大小分配器实现
+> [!note] 本节重点：先证明分配是瓶颈，再选择内存资源；池化必须守住对齐、生命周期和回收边界。
 
 ## 为什么需要内存池
 
 频繁 `new`/`delete` 的问题：
 
-- 系统调用开销（`malloc` 内部有锁）
+- 分配器本身可能有开销，但一次 `new`/`malloc` 不等于一次系统调用；不同实现的锁策略也不同。
 - 内存碎片（长时间运行后堆碎片化）
 - 缓存不友好（分配的内存分散）
 
-## 固定大小内存池
+## 先使用标准内存资源
+
+旧版固定大小池直接把 `char[]` 转成 `Chunk*` 使用，未证明 `T` 的对齐、块容量、节点对象生命周期和构造失败时的回收；照抄可能导致未定义行为。用 C++17 PMR 建立正确模型：
 
 ```cpp
-template<typename T, size_t BlockSize = 4096>
-class MemoryPool {
-    union Chunk {
-        char data[sizeof(T)];
-        Chunk* next;
-    };
-    Chunk* freeList_ = nullptr;
-    std::vector<std::unique_ptr<char[]>> blocks_;
+#include <array>
+#include <cstddef>
+#include <iostream>
+#include <memory_resource>
+#include <vector>
 
-    void allocBlock() {
-        auto block = std::make_unique<char[]>(BlockSize);
-        size_t count = BlockSize / sizeof(Chunk);
-        auto chunks = reinterpret_cast<Chunk*>(block.get());
-        for (size_t i = 0; i < count - 1; i++)
-            chunks[i].next = &chunks[i + 1];
-        chunks[count-1].next = freeList_;
-        freeList_ = chunks;
-        blocks_.push_back(std::move(block));
-    }
-
-public:
-    T* allocate() {
-        if (!freeList_) allocBlock();
-        Chunk* c = freeList_;
-        freeList_ = c->next;
-        return reinterpret_cast<T*>(c->data);
-    }
-
-    void deallocate(T* p) {
-        auto c = reinterpret_cast<Chunk*>(p);
-        c->next = freeList_;
-        freeList_ = c;
-    }
-
-    template<typename... Args>
-    T* construct(Args&&... args) {
-        T* p = allocate();
-        new (p) T(std::forward<Args>(args)...);  // placement new
-        return p;
-    }
-
-    void destroy(T* p) {
-        p->~T();          // 显式调用析构
-        deallocate(p);
-    }
-};
-
-// 使用
-MemoryPool<Node> pool;
-Node* n = pool.construct(42);
-pool.destroy(n);
+int main() {
+    std::array<std::byte, 4096> buffer{};
+    std::pmr::monotonic_buffer_resource arena{buffer.data(), buffer.size()};
+    std::pmr::vector<int> values{&arena};
+    for (int i = 0; i < 100; ++i) values.push_back(i);
+    std::cout << values.size() << '\n';
+} // values 先析构，arena 后析构，buffer 最后析构
 ```
+
+`monotonic_buffer_resource` 适合一批对象共享生命周期：单次 `deallocate` 不回收，资源析构或 `release()` 时整体释放；缓冲区耗尽可向上游资源申请。不能在仍有对象使用资源时调用 `release()`。需要频繁独立回收时再比较 pool resource，并按线程共享方式选择同步版本。
+
+---
 
 ## Placement New
 
 ```cpp
 // 在已分配的内存上构造对象（不分配内存）
-char buf[sizeof(MyClass)];
-MyClass* p = new (buf) MyClass(args);   // placement new
-p->~MyClass();                           // 必须显式调用析构（不能 delete p！）
+alignas(T) std::byte storage[sizeof(T)];
+T* p = new (storage) T(args);
+p->~T();  // 不可对 p 调用 delete；T 必须在此作用域中是完整类型
 ```
 
 ---
@@ -249,4 +217,3 @@ p->~MyClass();                           // 必须显式调用析构（不能 de
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)
-

@@ -1,131 +1,96 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 previous_review_due: 2026-09-08
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标
+> 能根据长度、所有权和读写需求选择数组、`vector`、`string` 或视图；能正确处理一行输入及文件打开失败。
 
-> [!summary] 核心摘要
->
-> C 风格数组和字符串容易丢失长度与边界信息；优先使用 `std::array`、`std::vector`、`std::string` 和流接口，把容量、生命周期与错误处理显式化。
+# 序列的长度、所有权与边界
 
-# Array & String (数组与字符串)
-
-> [!note] 本节重点：C 风格数组与指针的关系、std::string 的操作与性能、C 字符串函数
-
-# 数组
+C 数组 `int raw[3]{1, 2, 3};` 自带三个元素，但传给接收 `int*` 的函数时会转换为首元素指针，长度信息丢失。`std::array<T, N>` 固定大小且持有元素，`std::vector<T>` 动态扩容且持有元素；`std::span<T>`（C++20）是带长度的非拥有视图。视图不延长底层存储的生命周期。
 
 ```cpp
-int arr[5] = {1, 2, 3, 4, 5};
-int arr2[]  = {1, 2, 3};       // 大小自动推导 = 3
-int mat[3][4] = {};             // 二维数组，零初始化
-
-// 数组退化为指针（传参时丢失大小信息！）
-void foo(int* arr, int n);      // 必须额外传大小
-
-// 推荐：用 std::array（固定大小，不退化，有 size()）
 #include <array>
-std::array<int, 5> a = {1,2,3,4,5};
-a.size();    // 5
-a.at(2);     // 带越界检查
-a.data();    // 获取裸指针
-
-// std::vector（动态大小）
-std::vector<int> v = {1,2,3};
-v.push_back(4);
-v.size();  v.capacity();
-v.reserve(100);   // 预分配，避免多次扩容
-v.shrink_to_fit();
-```
-
-# C 字符串 vs std::string
-
-```cpp
-// C 风格字符串（以 '\0' 结尾的 char 数组，避免使用）
-char s[] = "hello";
-strlen(s);  strcpy(dst, src);  strcat(dst, src);  strcmp(a, b);
-
-// std::string（推荐）
-#include <string>
-std::string s = "hello";
-s.size();   s.length();
-s.empty();
-s += " world";            // 拼接
-s.substr(0, 5);           // 子串
-s.find("world");          // 查找，返回下标或 std::string::npos
-s.replace(6, 5, "C++");   // 替换
-s.c_str();                // 转 const char*（生命周期与 s 绑定）
-
-// 数值转换
-std::to_string(42);       // int → string
-std::stoi("42");          // string → int
-std::stod("3.14");        // string → double
-
-// string_view（C++17，零拷贝只读视图）
-std::string_view sv = s;
-```
-
----
-
-# IO Basics (标准输入输出)
-
-> [!note] 本节重点：iostream 格式化、文件读写、输入缓冲机制、性能注意事项
-
-```cpp
+#include <vector>
 #include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <fstream>
 
-// 标准 IO
-std::cout << "hello " << 42 << '\n';
-std::cerr << "error\n";           // 不缓冲，立即输出
-std::cin  >> x >> y;              // 以空白符分隔
-std::getline(std::cin, line);     // 读整行（含空格）
-
-// 格式化输出
-std::cout << std::fixed << std::setprecision(2) << 3.14159;  // 3.14
-std::cout << std::setw(10) << std::left << "hi";             // 左对齐宽度10
-std::cout << std::hex << 255;                                 // ff
-
-// stringstream（字符串 ↔ 数值转换）
-std::ostringstream oss;
-oss << "val=" << 42;
-std::string s = oss.str();
-
-std::istringstream iss("1 2 3");
-int a, b, c;
-iss >> a >> b >> c;
-
-// 文件 IO
-std::ifstream fin("input.txt");
-std::ofstream fout("output.txt");
-if (!fin) { std::cerr << "open failed\n"; }
-std::string line;
-while (std::getline(fin, line)) { ... }
-fout << "result: " << 42 << '\n';
-// RAII：fin/fout 析构时自动关闭
+int main() {
+    std::array<int, 3> fixed{1, 2, 3};
+    std::vector<int> dynamic{1, 2, 3};
+    dynamic.reserve(8);         // 预留容量，不增加 size()
+    dynamic.push_back(4);
+    std::cout << fixed.at(1) << ' ' << dynamic.size() << '\n';
+}
 ```
 
----
+`operator[]` 要求索引有效；`at()` 越界抛 `std::out_of_range`。`reserve` 可能使所有指向 `vector` 元素的迭代器、指针、引用失效；`shrink_to_fit` 只是请求，不能依赖它一定缩容。函数接口应优先保留长度信息，不要把裸指针和“可能不一致”的长度拆开传。
 
+# 字符串：文本不是字节缓冲区的同义词
 
-> [!check]- 学完后检查
-> ## 复述
->
-> - 不看正文，说明 02-Arrays Strings and IO (数组字符串与输入输出) 的问题、核心机制与边界。
->
-> ## 验证
->
-> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
->
-> ## 自测
->
-> 1. 这个主题解决什么问题？
-> 2. 它在什么条件下会失效、变慢或需要替代方案？
+C 风格字符串以 `'\0'` 终止，`strlen` 需要扫描至终止符；若目标缓冲区不足，`strcpy` 等函数可能越界。普通文本优先用 `std::string`，它管理长度和存储；但按字节计数的 `size()` 不等于 Unicode 字符数。
+
+```cpp
+#include <string>
+#include <string_view>
+#include <iostream>
+
+int main() {
+    std::string text{"alpha,beta"};
+    const auto comma = text.find(',');
+    if (comma != std::string::npos) {
+        std::string_view first{text.data(), comma}; // 借用 text 的存储
+        std::cout << first << '\n';
+    }
+}
+```
+
+`std::string_view` 不拥有数据，也不保证 `data()` 指向的片段以 NUL 结尾；不能把任意 `view.data()` 交给期待 C 字符串的接口。修改或销毁底层 `string` 后，先前保存的视图可能悬空。需要独立持有则复制成 `std::string`。调用 `c_str()` 获得的指针同样只在字符串未失效的期间有效。
+
+# 输入输出：把失败作为正常分支
+
+`operator>>` 读取 token，遇空白停止；`std::getline` 读取一行。先用 `>>` 再用 `getline` 时，残余换行符会让后者读取空行。下面直接按行读并解析，避免混用。
+
+```cpp
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+
+int main() {
+    std::ifstream in{"input.txt"};
+    if (!in) {
+        std::cerr << "cannot open input.txt\n";
+        return 1;
+    }
+    std::string line;
+    while (std::getline(in, line)) {
+        std::istringstream fields{line};
+        int id{};
+        std::string name;
+        if (!(fields >> id >> name)) {
+            std::cerr << "invalid row: " << line << '\n';
+            continue;
+        }
+        std::cout << id << ": " << name << '\n';
+    }
+    if (in.bad()) {
+        std::cerr << "read error\n";
+        return 1;
+    }
+}
+```
+
+文件流析构会关闭文件，但写入错误可能要到 `flush()` 或 `close()` 才暴露；关键输出应显式检查流状态。`std::cerr` 是与标准错误关联的流，不应宣称它在所有环境中“立即输出”或绝对不缓冲。`std::endl` 会写换行并刷新；只需换行时用 `'\n'`。
+
+## 动手验证
+
+1. 先 `reserve(8)` 后检查 `size()` 与 `capacity()`；再 `push_back`，说明二者差异。
+2. 构造 `std::string_view{text.data(), 5}` 并输出；解释为什么不能直接传给 `strlen`。
+3. 用正常行、空行、非法 ID、文件不存在四种输入运行文件示例，记录各分支行为。
 
 > [!info]- 延伸阅读
-> - 下一步：[01-Core Syntax and Functions (核心语法与函数)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/01-Language%20Basics%20(语言基础)/01-Core%20Syntax%20and%20Functions%20(核心语法与函数).md)
-
+> - [01-Sequence Containers (顺序容器)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/01-Sequence%20Containers%20(顺序容器).md)
+> - 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)

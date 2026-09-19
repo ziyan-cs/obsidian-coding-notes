@@ -1,179 +1,116 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标
+> 能从零构建一个库与可执行文件，并解释编译要求如何沿 target 传播。本文用 CMake 3.20+ 和 C++17；终端命令与 CMake 语法分开。
 
-> [!summary] 核心摘要
->
-> CMake 应围绕 target 声明源文件、编译选项和依赖；让 PUBLIC、PRIVATE、INTERFACE 的传播关系表达真实接口边界，才能得到可复现且可维护的构建。
+# 从一个可构建项目开始
 
-# 工程结论
-
-CMake 的核心不是生成命令，而是声明 target 及其源文件、编译选项、包含路径和依赖。依赖应沿 target 边界传播；避免全局目录命令把配置偷偷影响到其他模块。
-
-## 依赖模型
+目录中的头文件声明接口，源文件实现接口；`CMakeLists.txt` 描述构建关系：
 
 ```text
-library target
-  - PUBLIC: dependency required by consumers of its interface
-  - PRIVATE: dependency required only by its implementation
-executable target -> links the library target
+demo/
+├── CMakeLists.txt
+├── include/demo/greeter.hpp
+└── src/
+    ├── greeter.cpp
+    └── main.cpp
 ```
 
-## 选型边界
+`include/demo/greeter.hpp`：
 
-- 优先 `target_link_libraries`、`target_include_directories`，少用全局 `include_directories`。
-- Debug/Release 差异由 target 属性与 toolchain 明确表达，不靠手改宏。
-- 第三方库优先使用导入 target；`find_package` 失败时记录版本、来源和可复现安装步骤。
+```cpp
+#pragma once
+#include <string>
+#include <string_view>
+namespace demo { std::string greet(std::string_view name); }
+```
 
-> [!question]- 自测：先回答再展开
-> 1. PUBLIC、PRIVATE、INTERFACE 依赖分别向谁传播？
-> 2. 为什么 target-based CMake 比全局 include path 更易维护？
-> 3. 一个可复现构建至少需要声明哪些输入？
+`src/greeter.cpp`：
 
-# CMake Build System (CMake构建系统)
+```cpp
+#include "demo/greeter.hpp"
+namespace demo {
+std::string greet(std::string_view name) {
+    return "Hello, " + std::string{name};
+}
+}
+```
 
-> [!note] 本节重点：CMake 是现代 C++ 的标准构建工具、目标导向的声明式构建、库的创建与依赖管理
+`src/main.cpp`：
 
-## 最小 CMake 项目
+```cpp
+#include "demo/greeter.hpp"
+#include <iostream>
+int main() { std::cout << demo::greet("backend") << '\n'; }
+```
+
+`CMakeLists.txt`：
 
 ```cmake
-cmake_minimum_required(VERSION 3.16)
-project(MyProject VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(BackendDemo VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)  # 不使用编译器扩展
+add_library(greeter src/greeter.cpp)
+target_include_directories(greeter PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_compile_features(greeter PUBLIC cxx_std_17)
 
-add_executable(main main.cpp)
-```
+add_executable(app src/main.cpp)
+target_link_libraries(app PRIVATE greeter)
 
-```bash
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j$(nproc)
-```
-
-## 目标导向（Target-Based）设计
-
-```cmake
-
-add_library(mylib STATIC
-    src/mylib.cpp
-    src/helper.cpp
-)
-
-add_executable(main src/main.cpp)
-
-target_include_directories(mylib
-    PUBLIC  include      # 使用者也会获得此包含路径
-    PRIVATE src          # 仅 mylib 自己可见
-)
-
-target_link_libraries(main PRIVATE mylib)
-```
-
-**PUBLIC vs PRIVATE vs INTERFACE**：
-
-| 关键字 | 对目标自身 | 对链接者 |
-|--------|-----------|---------|
-| `PRIVATE` | ✅ 应用 | ❌ 不传递 |
-| `PUBLIC` | ✅ 应用 | ✅ 传递 |
-| `INTERFACE` | ❌ 不应用 | ✅ 仅传递（适合头文件库）|
-
-## 常用构建配置
-
-```cmake
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-
-cmake --install . --prefix /usr/local
-
-option(BUILD_TESTING "Build tests" ON)
+include(CTest)
 if(BUILD_TESTING)
-    enable_testing()
-    add_test(NAME unit_test COMMAND test_runner)
+    add_test(NAME smoke COMMAND app)
 endif()
 ```
 
-## 查找与使用外部库
+在项目根目录的**终端**运行：
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --config Debug
+ctest --test-dir build -C Debug --output-on-failure
+```
+
+`-S` 指源码目录，`-B` 指构建目录，避免把生成文件混进源码。`CMAKE_BUILD_TYPE` 对 Ninja、Unix Makefiles 等**单配置**生成器有意义；Visual Studio、Xcode、Ninja Multi-Config 等多配置生成器则在构建/测试时通过 `--config`、`-C` 选配置。上述命令同时写出两者，是为了说明差别，并非要求一个生成器同时采用两套机制。
+
+# 把依赖与接口写在 target 上
+
+| 作用域 | 目标自身使用 | 使用该目标的下游继承 |
+|---|---|---|
+| `PRIVATE` | 是 | 否 |
+| `PUBLIC` | 是 | 是 |
+| `INTERFACE` | 否 | 是 |
+
+`greeter` 的公共头文件在 `include/`，消费者也要能找到它，所以路径是 `PUBLIC`。`greeter` 的接口使用 C++17 的 `string_view`，语言要求也标为 `PUBLIC`。`app` 仅自己依赖 `greeter`，所以链接关系写 `PRIVATE`。静态库的私有链接依赖在最终链接时仍可能以 link-only 形式被传递，不能把上表误解为“下游绝对不会链接该库”。
+
+`target_compile_features(greeter PUBLIC cxx_std_17)` 表达目标的**最低**语言版本。项目希望彻底禁用编译器扩展时，还可针对目标设置 `CXX_EXTENSIONS OFF`；不要误以为仅写 `cxx_std_17` 就必然禁用扩展。若安装并导出库，公共 include 路径要区分 build/install interface，不能把源码目录绝对路径直接写进导出接口。
+
+# 测试与第三方依赖
+
+`include(CTest)` 提供 `BUILD_TESTING` 选项并启用测试；上面的 smoke test 只检查进程能否成功退出，不检查输出内容。真正的单元测试应验证断言、边界输入和失败路径。`add_test` 的 `COMMAND app` 会解析当前构建中的 executable target。
+
+第三方库优先使用其提供的 CMake package 和导入 target，而不是写死本机 `/usr/lib`：
 
 ```cmake
-find_package(Boost REQUIRED COMPONENTS filesystem system)
-target_link_libraries(main PRIVATE Boost::filesystem Boost::system)
-
-include(FetchContent)
-FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG v3.11.2
-)
-FetchContent_MakeAvailable(nlohmann_json)
-target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(app PRIVATE fmt::fmt)
 ```
 
-## 现代 CMake 最佳实践
+这段是**可选增量**，只有安装了提供 `fmtConfig.cmake` 的包后才能加入前述项目。若使用 `FetchContent`，应固定可审计的提交哈希或带校验的归档，并记录来源、许可证与离线构建策略；不要在长期维护的项目中跟随浮动分支。项目是否能重现还依赖编译器、生成器、系统库和包版本，CMake 文件本身不是完整 lockfile。
 
-```cmake
-set(CMAKE_CXX_FLAGS "-O2 -Wall")  # 全局修改，不模块化
-include_directories(include)       # 全局包含路径
-link_directories(/usr/lib)         # 全局链接路径
-add_definitions(-DDEBUG)           # 全局宏
+## 验证清单
 
-target_include_directories(mylib PUBLIC include)
-target_compile_options(mylib PRIVATE -Wall -Wextra)
-target_compile_definitions(mylib PRIVATE DEBUG)
-```
+1. 运行三条终端命令，确认 `app` 输出 `Hello, backend` 且 CTest 成功。
+2. 把 `target_include_directories(greeter PUBLIC ...)` 改成 `PRIVATE`，观察 `main.cpp` 的头文件查找错误，再解释传播链。
+3. 将公共头文件里的 `string_view` 换成只在实现中使用的特性，判断语言标准要求能否改成 `PRIVATE`。
+4. 故意让 `greet` 只有声明没有定义，区分编译阶段与链接阶段的报错。
 
-## 项目目录结构
-
-```text
-project/
-├── CMakeLists.txt          # 根构建文件
-├── cmake/                  # 自定义 CMake 模块
-│   └── FindMyLib.cmake
-├── include/project/        # 公共头文件
-│   └── module.h
-├── src/                    # 实现
-│   ├── CMakeLists.txt
-│   ├── main.cpp
-│   └── module.cpp
-├── tests/                  # 测试
-│   ├── CMakeLists.txt
-│   └── test_module.cpp
-├── third_party/            # 第三方依赖（git submodule）
-│   └── fmt
-└── examples/               # 示例代码
-    └── example.cpp
-```
-
-根 CMakeLists.txt 通过 `add_subdirectory` 组织子目录：
-
-```cmake
-add_subdirectory(src)
-add_subdirectory(tests)
-```
-
-## 常用 CMake 变量
-
-```cmake
-${PROJECT_NAME}          # 项目名
-${PROJECT_SOURCE_DIR}    # 源码根目录
-${PROJECT_BINARY_DIR}    # 构建目录
-
-${CMAKE_CXX_COMPILER}    # C++ 编译器路径
-${CMAKE_CXX_COMPILER_ID} # GNU / Clang / AppleClang / MSVC
-
-${CMAKE_SYSTEM_NAME}     # Linux / Windows / Darwin
-```
-
-> [!tip]- **工程要点**：现代 CMake 是"**声明式**"而非"脚本式"。核心思想：**描述你的目标及其依赖关系**，CMake 自行推导构建顺序和编译选项。避免全局函数（`include_directories`、`add_definitions` 等），改用目标属性（`target_*` 系列）。
-
----
-
+资料：[CMake 官方教程：目标命令](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)、[CMake 官方教程：链接作用域](https://cmake.org/cmake/help/latest/guide/tutorial/Getting%20Started%20with%20CMake.html)。
 
 > [!info]- 延伸阅读
-> - 下一步：[03-Exceptions and Debugging (异常与调试)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/06-Engineering%20Practice%20(工程实践)/03-Exceptions%20and%20Debugging%20(异常与调试).md)
-
+> - [03-Exceptions and Debugging (异常与调试)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/06-Engineering%20Practice%20(工程实践)/03-Exceptions%20and%20Debugging%20(异常与调试).md)

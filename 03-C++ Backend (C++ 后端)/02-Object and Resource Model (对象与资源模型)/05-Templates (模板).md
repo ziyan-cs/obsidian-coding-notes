@@ -1,6 +1,7 @@
 ---
 status: stable
 confidence: high
+content_verified: 2026-09-19
 verified: 2026-10-12
 review_stage: learn
 review_due: 2026-10-12
@@ -18,7 +19,7 @@ previous_review_due: 2026-09-15
 
 > [!note] 本节重点：函数模板、类模板、模板特化、SFINAE 初步
 
-# 函数模板
+## 函数模板
 
 ```cpp
 // 定义：T 是类型参数
@@ -43,7 +44,7 @@ struct Array {
 Array<int, 10> arr;
 ```
 
-# 类模板
+## 类模板
 
 ```cpp
 template<typename T>
@@ -62,7 +63,7 @@ Stack<int>         si;
 Stack<std::string> ss;
 ```
 
-# 模板特化
+## 模板特化
 
 ```cpp
 // 主模板
@@ -85,7 +86,7 @@ TypeName<float>::name();    // "unknown"
 TypeName<int*>::name();     // "pointer"
 ```
 
-# SFINAE 初步（Substitution Failure Is Not An Error）
+## SFINAE 初步（Substitution Failure Is Not An Error）
 
 ```cpp
 // 用 std::enable_if 约束模板（仅接受整型）
@@ -101,7 +102,7 @@ template<std::integral T>
 T double_val(T x) { return x * 2; }
 ```
 
-# 模板与编译
+## 模板与编译
 
 ```cpp
 // 模板定义必须在头文件中（编译器需要看到完整定义才能实例化）
@@ -114,7 +115,7 @@ template class Stack<int>;      // 显式实例化，只在此编译单元生成
 extern template class Stack<int>;  // 告知编译器不要重复实例化
 ```
 
-# std::type_traits 常用工具（C++11/17）
+## std::type_traits 常用工具（C++11/17）
 
 ```cpp
 #include <type_traits>
@@ -125,7 +126,7 @@ std::is_pointer_v<int*>        // true
 std::is_same_v<int, int>       // true
 std::is_base_of_v<Base, Derived> // true
 std::is_copy_constructible_v<T>
-std::is_trivially_copyable_v<T>  // 可安全 memcpy
+std::is_trivially_copyable_v<T>  // 可按规则复制对象表示；仍需有效对象、大小与生命周期条件
 
 // 类型变换
 std::remove_const_t<const int>   // int
@@ -138,9 +139,7 @@ std::conditional_t<true, int, double>  // int
 ---
 
 
-> [!info]- 延伸阅读
-> - 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/06-RAII%20and%20Custom%20Allocation%20(RAII%20与自定义分配).md)
-## 模板真正发生了什么
+# 模板真正发生了什么
 
 模板不是运行时的“万能函数”，而是编译器生成具体声明或定义的规则。阅读模板代码时，先区分三个阶段：
 
@@ -162,7 +161,7 @@ auto z = add<double>(1, 2.0); // 显式指定 T 后，1 可转换为 double
 > [!important]
 > 模板实参推导阶段通常不依靠普通隐式转换来“凑出”同一个 `T`；推导完成以后，才检查形参绑定和允许的转换。
 
-### 依赖名称与 `typename`
+## 依赖名称与 `typename`
 
 `T::value_type` 的含义依赖 `T`。解析模板时，编译器无法确定它是类型还是静态成员，因此需要 `typename` 明确告诉编译器“这是类型”。调用依赖对象上的成员模板时，类似地可能需要 `template` 消除歧义。
 
@@ -174,7 +173,7 @@ void print_first(const Container& c) {
 }
 ```
 
-### 实例化位置、ODR 与代码膨胀
+## 实例化位置、ODR 与代码膨胀
 
 - 把模板定义只写在 `.cpp` 中，其他翻译单元通常无法隐式实例化它。
 - `extern template` 可抑制某处的隐式实例化，再在一个 `.cpp` 中显式实例化常用类型，降低重复编译成本。
@@ -192,7 +191,7 @@ template int square<int>(int);  // 显式实例化定义
 
 工程上先用构建时间、目标文件大小和 profile 证明问题，再决定是否显式实例化、减少参数组合，或把非依赖模板参数的逻辑移到普通函数。
 
-## 设计模板接口
+# 设计模板接口
 
 模板的目标不是“接受所有类型”，而是表达一族具有明确语义要求的操作。设计时按以下顺序判断：
 
@@ -203,7 +202,7 @@ template int square<int>(int);  // 显式实例化定义
 
 错误信息也是接口质量的一部分。把约束放在靠近声明的位置，比让错误深入几十层实例化栈后才暴露更易维护。
 
-## 最小验证实验
+# 最小验证实验
 
 学习本篇后应能独立完成：
 
@@ -212,8 +211,11 @@ template int square<int>(int);  // 显式实例化定义
 3. 故意把模板定义移入 `.cpp`，解释为何另一个翻译单元调用时链接失败，再用显式实例化修复。
 4. 构造一次“推导冲突”和一次“约束不满足”，分辨两类诊断发生在哪个阶段。
 
-## 参考资料
+# 参考资料
 
 - [Templates - cppreference](https://en.cppreference.com/w/cpp/language/templates)
 - [Template parameters and arguments - cppreference](https://en.cppreference.com/w/cpp/language/template_parameters)
 - [Explicit instantiation - cppreference](https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation)
+
+> [!info]- 延伸阅读
+> - 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/06-RAII%20and%20Custom%20Allocation%20(RAII%20与自定义分配).md)

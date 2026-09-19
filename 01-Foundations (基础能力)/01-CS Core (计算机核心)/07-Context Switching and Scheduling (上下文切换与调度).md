@@ -1,324 +1,107 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 tags: [cs/os, learning/foundation]
 ---
 
 > [!abstract] 学习目标
-> 理解上下文切换保存了什么、为什么昂贵，以及调度算法如何在响应时间、吞吐、公平与开销之间权衡。
+> 分清模式转换、线程切换与地址空间切换，理解调度目标之间的冲突，并用当前 Linux 的调度类与 EEVDF 模型解释实际行为。
 
-# Context Switching (上下文切换)
+# 一次切换究竟换了什么
 
-> [!note] 本节重点：上下文切换的流程、切换代价、TLB 失效、切换 vs 模式切换的区别
+**上下文（context）**是任务继续执行所需的状态，包括程序计数器、栈指针、通用寄存器、部分控制状态以及内核维护的调度信息。切换时保存多少状态取决于架构、内核路径和是否使用了相关扩展状态。
 
-## 上下文切换
+| 场景 | 特权级变化 | 当前线程变化 | 地址空间变化 |
+|---|---:|---:|---:|
+| 普通系统调用后返回 | 是 | 通常否 | 通常否 |
+| 同进程线程 A → B | 不一定 | 是 | 通常否 |
+| 进程 A → B | 不一定 | 是 | 通常是 |
+| 中断处理后返回原任务 | 是 | 否 | 通常否 |
 
-CPU 从一个进程/线程切换到另一个进程/线程时，保存当前状态并恢复目标状态的过程。
+因此，“进入内核 = 上下文切换 = 刷新全部 TLB”是错误链条。地址空间切换可能改变页表根，但现代处理器可用 PCID/ASID 给 TLB 项打标签，内核也会尽量避免无条件全量失效。
 
-### 切换内容
+## 成本不只是保存寄存器
 
-```
-┌───────────── Running Process ──────────┐     ┌────────────── Ready Process ──────────┐
-│ Program Counter (PC)                   │     │ Program Counter (PC)                  │
-│ General Purpose Registers (EAX, EBX…)  │     │ General Purpose Registers             │
-│ Stack Pointer (SP)                     │     │ Stack Pointer (SP)                    │
-│ Page Table Base Register (CR3)         │     │ Page Table Base Register (CR3)        │
-│ FPU / Vector Registers                 │  →  │ FPU / Vector Registers                │
-│ Kernel Stack                           │     │ Kernel Stack                          │
-└────────────────────────────────────────┘     └───────────────────────────────────────┘
-              Save to PCB                                     Restore from PCB
-```
+直接成本包括内核调度路径和寄存器保存/恢复；间接成本常更大：
 
-**关键区别：**
-- **进程切换**：需要切换页表（CR3），TLB 全部失效
-- **线程切换**：同进程内切换不需要换页表
-- **模式切换（系统调用）**：不切换进程，仅切换 ring 级别
+- 新任务的指令与数据工作集不在缓存；
+- 分支预测、TLB 和预取状态与新任务不匹配；
+- 多核迁移带来缓存一致性与 NUMA 远端访问；
+- 任务过多造成运行队列竞争和尾延迟。
 
-### 触发场景
+不存在跨机器通用的“切换固定耗时”。测量必须说明 CPU、内核、频率策略、负载、是否跨核和统计分位数。
 
-1. **时间片耗尽**（时钟中断 → scheduler_tick → schedule）
-2. **阻塞操作**（I/O、sleep、锁等待 → 主动调用 schedule）
-3. **高优先级进程就绪**（抢占式调度）
-4. **系统调用返回时**检查 `need_resched` 标志
+# 调度要优化哪些目标
 
----
+调度器面对互相冲突的目标：
 
-## 切换代价
+- **吞吐量（throughput）**：单位时间完成更多工作；
+- **周转时间（turnaround time）**：提交到完成；
+- **响应时间（response time）**：提交到首次获得服务；
+- **公平性（fairness）**：长期 CPU 份额符合权重；
+- **截止期（deadline）**：在约束时间前完成；
+- **开销与局部性**：减少调度和迁核成本。
 
-```
-操作                    ≈ 延迟（现代 CPU）
-────────────────────────────────────────
-函数调用                   1-2 ns
-系统调用                   50-200 ns
-进程上下文切换              1-10 μs      ← ★
-TLB miss/latency          50-200 ns
-一次内存访问 ≈ L3 访问      10-20 ns
+经典算法帮助建立直觉：FCFS 简单但有护航效应；SJF/SRTF 能降低理想条件下的平均等待，却需要预测运行时间；Round Robin 用时间片换响应性；优先级调度可能饥饿，需老化等机制；MLFQ 用历史行为近似区分交互与 CPU 密集任务。
 
-进程切换 ≈ 10000-100000 条指令
-```
+# Linux 调度框架
 
-### 直接代价（显性）
+Linux 按调度类组织策略，常见顺序与语义如下：
 
-```cpp
-// 模拟上下文切换开销的测试
-#include <chrono>
-#include <iostream>
-#include <thread>
-#include <vector>
+| 类/策略 | 典型用途 | 核心约束 |
+|---|---|---|
+| Deadline：`SCHED_DEADLINE` | 有 runtime/deadline/period 模型的任务 | 需要准入与严格预算 |
+| 实时：`SCHED_FIFO`、`SCHED_RR` | 低延迟、明确优先级 | 高优先级任务可长期压制普通任务 |
+| 公平类：`SCHED_OTHER` | 普通进程 | 按权重分配 CPU，并兼顾响应性 |
+| Idle | 仅在没有其他任务时 | 最低优先级 |
 
-int main() {
-    auto start = std::chrono::high_resolution_clock::now();
-    const int N = 100000;
-    
-    for (int i = 0; i < N; i++) {
-        std::this_thread::yield();  // 主动让出 CPU
-    }
-    
-    auto end = std::chrono::high_resolution_clock::now();
-    auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-    std::cout << "Average yield cost: " << ns / N << " ns" << std::endl;
-    return 0;
-}
-```
+不要把 `nice` 值理解为毫秒时间片；它影响普通任务的相对权重。
 
-### 间接代价（隐性）
+## 从 CFS 到 EEVDF
 
-1. **TLB 失效**：切换页表后 TLB 需重新填充，导致后续内存访问变慢
-2. **Cache 污染**：当前缓存的热数据被目标进程的冷数据覆盖
-3. **分支预测器失效**：BTB（分支目标缓冲）中的历史记录失效
+旧资料常用 CFS 的虚拟运行时间与红黑树解释公平类。Linux 自 6.6 起开始向 **EEVDF（Earliest Eligible Virtual Deadline First）** 过渡，当前学习应保留历史背景，但以 EEVDF 为主：
 
----
+1. 根据任务应得 CPU 份额计算 **lag**；非负 lag 表示任务尚“欠着”CPU 时间。
+2. 在 eligible 的任务中比较虚拟截止期（virtual deadline）。
+3. 选择最早虚拟截止期任务，使权重公平与低延迟请求能统一表达。
 
-## 上下文切换流程（Linux）
+实现会随内核版本演进，不应背诵某个树节点字段作为永久接口。生产分析首先记录 `uname -r`，再对应版本文档和源码。
 
-```text
-Process A                 Kernel (Scheduler)          Process B
-    │                         │                          │
-    ├── User-mode execution   │                          │
-    │                         │                          │
-    ├── Interrupt / Syscall ─→│                          │
-    │                         │                          │
-    │                         ├── Save A's registers     │
-    │                         │   to PCB_A               │
-    │                         │                          │
-    │                         ├── Switch page table /    │
-    │                         │   address space          │
-    │                         │   (TLB flush)            │
-    │                         │                          │
-    │                         ├── Load B's registers     │
-    │                         │   from PCB_B             │
-    │                         │                          │
-    │                         ├── Return to user mode ──→│
-    │                         │                          │
-    │                         │                          ├── Resume B execution
-    │                         │                          │
-    │                         │                          │
-    │                       Context switch ≈ 1-10μs      │
-    │                  (cache pollution dominates cost)  │
+# 多核调度的额外问题
+
+- **CPU affinity** 限制任务可运行的 CPU；绑核能改善局部性，也可能造成负载不均。
+- 调度域需要在核心、共享缓存、NUMA 节点之间做负载均衡。
+- SMT 逻辑 CPU 共享执行资源，并不等于两个完整物理核心。
+- cgroup CPU 控制用于容器份额和上限；被 throttling 的任务不一定是代码变慢。
+
+# 观察与实验
+
+```bash
+uname -r
+ps -eo pid,tid,psr,stat,ni,cls,rtprio,comm | head
+pidstat -w 1
+vmstat 1
+perf sched record -- sleep 5
+perf sched latency
 ```
 
-**`switch_to` 汇编核心：**
+`pidstat -w` 区分自愿与非自愿切换；数量高不自动等于问题。把切换率与 CPU 利用率、运行队列、延迟分位数及业务吞吐一起解释。
 
-```asm
-; x86-64 上下文切换简化
-switch_to:
-    pushq   %rbp, %rbx, %r12-r15   ; 保存被调用者保存的寄存器
-    movq    %rsp, TASK_threadsp(%rdi) ; 保存当前 SP 到 prev PCB
-    movq    TASK_threadsp(%rsi), %rsp ; 加载 next SP
-    
-    ; 切换页表（如果需要）
-    movq    TASK_mm(%rsi), %rcx
-    movq    %rcx, CR3              ; TLB 全部失效！
-    
-    popq    %rbp, %rbx, %r12-r15  ; 恢复 next 的寄存器
-    ret
-```
+# 检查理解
 
----
+1. 系统调用为什么通常不是调度意义上的上下文切换？
+2. 同进程线程切换与跨进程切换，哪些缓存/地址状态可能不同？
+3. 公平、响应性和吞吐为什么无法同时无限提高？
+4. EEVDF 的 eligible、lag 和 virtual deadline 各解决什么问题？
 
-## 减少上下文切换的方法
+> [!summary] 本篇结论
+> 上下文切换的真正成本来自执行状态和工作集变化；调度则是在公平、响应、吞吐与实时约束间做策略选择。分析 Linux 时必须绑定内核版本，当前公平类应从 EEVDF 而非只从旧 CFS 叙述出发。
 
-| 方法 | 原理 | 适用场景 |
-|------|------|---------|
-| 减少线程数 | 避免过多线程竞争 CPU | CPU 密集型 |
-| 异步 I/O（epoll/io_uring） | 用一个线程处理大量事件 | 网络服务器 |
-| 协程 | 用户态调度，无需内核切换 | 高并发 I/O |
-| 大页（Huge Pages） | 减少 TLB miss | 内存密集型 |
-| CPU 亲和性 | 绑定进程到固定核，cache 更热 | 性能敏感路径 |
+## 权威依据
 
-> [!tip]- **工程要点**：Redis 单线程模型高吞吐的核心原因之一就是避免了上下文切换。Nginx 事件驱动 + 少量 worker 进程大幅降低了切换开销。检测 `vmstat 1` 的 `cs`（context switch）列可知是否切换过度。
-
----
-
-# CPU Scheduling (CPU 调度)
-
-> [!note] 本节重点：调度算法（FCFS/SJF/RR/MLFQ）、调度时机、CFS（完全公平调度）、优先级与时间片
-
-## 调度目标
-
-| 场景 | 目标 | 策略 |
-|------|------|------|
-| 批处理系统 | 高吞吐量、低周转时间 | FCFS, SJF |
-| 交互式系统 | 低响应时间 | RR, MLFQ |
-| 实时系统 | 可预测性、满足截止时间 | 优先级调度, EDF |
-
-### 评价指标
-
-- **周转时间** = 完成时间 − 到达时间（关注整体效率）
-- **响应时间** = 首次运行 − 到达时间（关注交互体验）
-- **等待时间** = 等待 CPU 总时间（关注公平性）
-- **吞吐量** = 单位时间完成进程数（关注系统能力）
-
----
-
-## 经典调度算法
-
-### FCFS（先来先服务）
-
-```cpp
-struct Process {
-    int pid, arrival, burst;
-};
-
-void fcfs(vector<Process>& procs) {
-    sort(procs.begin(), procs.end(),
-         [](auto& a, auto& b) { return a.arrival < b.arrival; });
-    int time = 0;
-    for (auto& p : procs) {
-        time = max(time, p.arrival);
-        cout << "P" << p.pid << " runs " << p.burst
-             << " [start=" << time << ", end=" << time + p.burst << "]\n";
-        time += p.burst;
-    }
-}
-```
-
-**问题：**  convoy effect（护航效应）— 长作业在前，短作业等待过久。
-
-### SJF（短作业优先）
-
-- 可证明最小平均周转时间（最优）
-- **问题：** 不公平，长作业可能饥饿；需要预估运行时间
-
-### RR（时间片轮转）
-
-```cpp
-void rr(vector<Process>& procs, int quantum) {
-    queue<Process> q;
-    int time = 0, idx = 0;
-    sort(procs.begin(), procs.end(),
-         [](auto& a, auto& b) { return a.arrival < b.arrival; });
-    q.push(procs[idx++]);
-    
-    while (!q.empty()) {
-        auto p = q.front(); q.pop();
-        int run = min(p.burst, quantum);
-        time += run;
-        p.burst -= run;
-        while (idx < procs.size() && procs[idx].arrival <= time)
-            q.push(procs[idx++]);
-        if (p.burst > 0) q.push(p);
-        else cout << "P" << p.pid << " done at " << time << "\n";
-    }
-}
-```
-
-**时间片选择：**
-- 太大 → 退化为 FCFS
-- 太小 → 上下文切换开销过大
-- 典型值：10-100ms（Linux 默认 100ms）
-
-### MLFQ（多级反馈队列）
-
-```text
-┌────────────────────────────────────────────┐
-│  READY QUEUE                               │
-├────────────────────────────────────────────┤
-│  Process P1 (Priority 5)                   │
-│  Process P2 (Priority 3)                   │
-│  Process P3 (Priority 5)                   │
-└──────────────┬─────────────────────────────┘
-               │ dequeue
-               ▼
-┌──────────────┴─────────────────────────────┐
-│  SCHEDULER (Scheduling Algorithm)          │
-└──────────────┬─────────────────────────────┘
-               │ dispatch
-               ▼
-┌──────────────┴─────────────────────────────┐
-│  CPU EXECUTION                             │
-└──┬──────────────────────────────────────┬──┘
-   │ timeslice expired                    │ wait I/O
-   ▼                                      ▼
-┌──────────────┐                ┌──────────────────┐
-│ RE-ENQUEUE   │                │ BLOCKED QUEUE    │
-└──────┬───────┘                └────────┬─────────┘
-       │ re-enqueue                      │ I/O complete
-       └───────────────┬─────────────────┘
-                       ▼
-              ┌────────┴────────┐
-              │  READY QUEUE    │
-              └─────────────────┘
-```
-
----
-
-# Linux CFS（完全公平调度）
-
-Linux 默认调度器（CFS, Completely Fair Scheduler）：
-
-```c
-// CFS 核心：红黑树维护进程，键值为 vruntime
-struct sched_entity {
-    struct rb_node run_node;    // 红黑树节点
-    u64 vruntime;               // 虚拟运行时间（核心指标）
-    u64 sum_exec_runtime;       // 总实际运行时间
-    unsigned int slice;         // 时间片
-};
-
-// vruntime 计算
-// vruntime += 实际运行时间 * (NICE_0_LOAD / 进程权重)
-// 实际选择：红黑树最左节点（vruntime 最小）
-
-// nice 值与权重的映射
-static const int prio_to_weight[40] = {
-    /* -20 */ 88761, 71755, 56483, 46273, 36291,
-    /* -15 */ 29154, 23254, 18705, 14949, 11916,
-    /* -10 */  9548,  7620,  6100,  4904,  3906,
-    /*  -5 */  3121,  2501,  1991,  1586,  1277,
-    /*   0 */  1024,   820,   655,   526,   423,
-    /*   5 */   335,   272,   215,   172,   137,
-    /*  10 */   110,    87,    70,    56,    45,
-    /*  15 */    36,    29,    23,    18,    15,
-};
-```
-
-**CFS 特点：**
-- 近似完美公平，保证每个进程获得 proportional 的 CPU 时间
-- 不是固定时间片，而是根据负载动态调整
-- O(log n) 选择（红黑树），现代 O(1) 通过 `min_vruntime` 缓存优化
-
----
-
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | FCFS convoy effect | 长作业先到导致短作业等待时间过长 |
-> | SJF 的预测 | 指数平均法：τₙ₊₁ = α·tₙ + (1−α)·τₙ |
-> | RR 时间片选择 | 兼顾响应时间和切换开销（≈ 上下文切换 < 5%） |
-> | MLFQ 防饥饿 | 优先级重置或老化（Aging）机制 |
-> | CFS vruntime | 权重越大，vruntime 增长越慢，获得更多 CPU |
-> | 实时调度 | Linux: SCHED_FIFO / SCHED_RR（优先级 1-99） |
->
-
-> [!tip]- **工程要点**：交互式任务（I/O 密集）优先级应高于 CPU 密集型——这是 MLFQ 的设计基础，CFS 通过 sleeper fairness 也实现了类似效果。生产环境可通过 `chrt` 设置实时优先级，但需谨慎避免 CPU 密集型实时任务锁死系统。
-
->
-> ---
->
-
-> [!warning]- 易错点
-> - 把 **05-Operating System Overview and Boot (操作系统总览与启动)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
+- [Linux EEVDF Scheduler](https://docs.kernel.org/scheduler/sched-eevdf.html)
+- [Linux Scheduler documentation](https://docs.kernel.org/scheduler/index.html)
+- [sched(7)](https://man7.org/linux/man-pages/man7/sched.7.html)
 
 下一步：[08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/08-Virtual%20Memory%20Paging%20and%20Allocation%20(虚拟内存、分页与分配).md)

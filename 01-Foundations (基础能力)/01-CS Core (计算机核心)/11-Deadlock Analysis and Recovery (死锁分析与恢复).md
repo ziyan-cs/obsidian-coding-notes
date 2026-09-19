@@ -1,209 +1,107 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
-tags: [cs/os, learning/foundation]
+content_verified: 2026-09-19
+tags: [cs/os, cpp/concurrency, learning/foundation]
 ---
 
 > [!abstract] 学习目标
-> 能够用资源等待关系识别死锁条件，并比较预防、避免、检测和恢复策略的适用边界。
+> 用等待关系诊断死锁，区分预防、避免、检测和恢复，并把方法应用到 C++、数据库与分布式系统，而不是只背四个条件。
 
+# 死锁与相邻故障
 
-> [!note] 本节重点：死锁四条件、死锁预防/避免/检测/恢复、银行家算法、资源分配图
+**死锁（deadlock）**是一组执行实体形成不可自行解除的循环等待，因而都无法继续。它必须与以下问题区分：
 
-# 死锁定义
+- **饥饿（starvation）**：任务一直得不到资源，但其他任务仍在推进；
+- **活锁（livelock）**：任务持续动作和重试，却没有有效进展；
+- **长等待**：最终可能完成，只是延迟超出预期。
 
-多个进程因竞争资源而互相等待，导致所有进程无法继续执行的状态。
+资源可以是 mutex、数据库行锁、线程池槽位、连接池连接，甚至“等待另一个任务完成”的依赖。
 
----
+# Coffman 四条件
 
-# 死锁四必要条件
+死锁成立需要四个条件同时存在：
 
-**四个条件必须同时满足才会死锁：**
+1. **互斥**：资源一次只能由有限任务占有；
+2. **持有并等待**：持有资源时继续等待其他资源；
+3. **不可抢占**：资源不能被系统安全强制收回；
+4. **循环等待**：等待图中存在环。
 
-| 条件 | 说明 | 破坏方法 |
-|------|------|---------|
-| 1. **互斥**（Mutual Exclusion） | 资源一次只能被一个进程使用 | 允许多个进程共享资源（不总是可行） |
-| 2. **持有并等待**（Hold and Wait） | 进程持有资源的同时等待其他资源 | 一次性申请所有资源 / 先释放再申请 |
-| 3. **不可剥夺**（No Preemption） | 已分配的资源不能强制剥夺 | 可剥夺资源（如 CPU） |
-| 4. **循环等待**（Circular Wait） | 存在进程-资源循环等待链 | 按固定顺序申请资源 |
+破坏任一条件可预防死锁，但通常有代价。例如一次申请全部资源降低利用率；允许抢占只适合可回滚资源；全局锁顺序最实用，却要求所有路径遵守同一规则。
 
-```cpp
-// 死锁示例：两个线程以不同顺序获取锁
-std::mutex lock1, lock2;
-
-void thread_a() {
-    lock1.lock();
-    std::this_thread::sleep_for(10ms);  // 增加死锁概率
-    lock2.lock();  // 可能死锁！
-    lock2.unlock();
-    lock1.unlock();
-}
-
-void thread_b() {
-    lock2.lock();
-    std::this_thread::sleep_for(10ms);
-    lock1.lock();  // 可能死锁！
-    lock1.unlock();
-    lock2.unlock();
-}
-
-// 修复：固定锁获取顺序（都先 lock1 再 lock2）
-```
-
----
-
-# 死锁处理策略
-
-## 1. 预防（Prevention）
-
-破坏四个条件之一。常用方法—**破坏循环等待**：
-
-```cpp
-// 按地址顺序获取锁（避免死锁的通用技巧）
-void safe_lock(std::mutex& a, std::mutex& b) {
-    if (&a < &b) {  // 按锁地址排序
-        a.lock(); b.lock();
-    } else {
-        b.lock(); a.lock();
-    }
-}
-```
-
-**其他预防方法：**
-- 破坏"持有并等待"：`std::lock(a, b)` 一次性锁多个
-
-## 2. 避免（Avoidance）
-
-动态判断，避免进入不安全状态。
-
-## 3. 检测（Detection）
-
-允许死锁发生，定期检测并恢复。
-
-## 4. 恢复（Recovery）
-
-- **终止进程**：杀掉死锁进程（或逐个终止直到环消失）
-- **资源抢占**：回滚检查点，剥夺资源
-
----
-
-# 银行家算法（Banker's Algorithm）
-
-判断系统分配资源后是否处于安全状态。
-
-```cpp
-// 银行家算法核心：判断是否存在安全序列
-#include <vector>
-#include <iostream>
-
-bool is_safe(const std::vector<int>& available,
-             const std::vector<std::vector<int>>& allocation,
-             const std::vector<std::vector<int>>& need) {
-    int n = allocation.size();  // 进程数
-    int m = available.size();   // 资源类型数
-    
-    std::vector<int> work = available;
-    std::vector<bool> finish(n, false);
-    
-    for (int k = 0; k < n; k++) {  // 最多尝试 n 轮
-        for (int i = 0; i < n; i++) {
-            if (finish[i]) continue;
-            
-            bool can_alloc = true;
-            for (int j = 0; j < m; j++) {
-                if (need[i][j] > work[j]) {
-                    can_alloc = false;
-                    break;
-                }
-            }
-            
-            if (can_alloc) {
-                // 假设分配并回收
-                for (int j = 0; j < m; j++)
-                    work[j] += allocation[i][j];
-                finish[i] = true;
-            }
-        }
-    }
-    
-    // 检查是否全部完成
-    for (bool f : finish)
-        if (!f) return false;
-    return true;
-}
-
-int main() {
-    // 示例：5 个进程，3 种资源
-    std::vector<int> available = {3, 3, 2};
-    std::vector<std::vector<int>> allocation = {
-        {0, 1, 0},  // P0
-        {2, 0, 0},  // P1
-        {3, 0, 2},  // P2
-        {2, 1, 1},  // P3
-        {0, 0, 2}   // P4
-    };
-    std::vector<std::vector<int>> need = {
-        {7, 4, 3},  // P0
-        {1, 2, 2},  // P1
-        {6, 0, 0},  // P2
-        {0, 1, 1},  // P3
-        {4, 3, 1}   // P4
-    };
-    
-    std::cout << (is_safe(available, allocation, need)
-                  ? "Safe" : "Unsafe") << std::endl;
-    return 0;
-}
-```
-
-**安全状态**：存在一个安全序列（进程按此顺序执行都能完成）。
-
----
-
-# 资源分配图
+# 用等待图定位问题
 
 ```text
-┌────────────────────────────────────────────────────┐
-│  RESOURCE ALLOCATION GRAPH (DEADLOCK CYCLE)        │
-├────────────────────────────────────────────────────┤
-│                                                    │
-│   Thread A ────(holds)────→ Resource 1 (Lock)      │
-│       ↑                               │            │
-│       │                               │            │
-│  (waited by)                    (waited by)        │
-│       │                               │            │
-│       │                               ▼            │
-│   Resource 2 (Lock) ←──(holds)──── Thread B        │
-│                                                    │
-│  Cycle detected: A waits for R2, B waits for R1    │
-│  → Deadlock                                        │
-└────────────────────────────────────────────────────┘
+线程 A ──等待──> 锁 Y ──持有者──> 线程 B
+线程 B ──等待──> 锁 X ──持有者──> 线程 A
 ```
 
-**检测死锁：** 资源分配图中有环 ⇔ 可能存在死锁（每种资源只有一个实例时，有环 = 死锁；多种实例时需进一步判断）。
+单实例资源中，wait-for graph 有环意味着死锁。多实例资源中，有环通常只是必要线索，还需结合可用数量与剩余需求。银行家算法展示了“只批准仍处于安全状态的申请”，但它依赖事先知道最大需求，通用服务中往往不现实。
 
----
+# C++ 中的可靠策略
 
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | 死锁四条件 | 互斥 + 持有等待 + 不可剥夺 + 循环等待 |
-> | 预防 vs 避免 | 预防静态破坏条件；避免动态判断安全性 |
-> | 银行家算法前提 | 需预先知道每个进程的最大需求量（实际中难以满足） |
-> | 死锁检测 | RAG 有环 + 环上资源均只有一个实例 = 死锁 |
-> | 活锁 vs 死锁 | 活锁：进程在运行但无进展（如 ELB 退避重试） |
-> | 饥饿 vs 死锁 | 饥饿：某个进程长时间得不到资源，但其他进程仍可运行 |
-> | 死锁恢复代价 | 终止进程可能丢失数据，资源抢占需回滚 |
->
+## 同时获取多个锁
 
-> [!tip]- **工程要点**：实际开发中最实用的死锁预防就是**固定锁顺序**和 `std::lock(a, b)` 批量获取。Linux 内核有 `lockdep` 检测潜在死锁。分布式系统中的死锁更难检测，常用超时 + 重试策略。C++ 中 RAII 包装的 `lock_guard` 在异常时自动解锁，可避免忘记释放导致的隐式死锁。
+```cpp
+void transfer(Account& from, Account& to, int amount) {
+    if (&from == &to) return;
+    std::scoped_lock lock(from.mu, to.mu);
+    from.balance -= amount;
+    to.balance += amount;
+}
+```
 
->
-> ---
->
+`std::scoped_lock` 对多个 mutex 使用避免死锁的锁定算法，并提供 RAII。不要通过比较两个无关对象的裸指针来建立可移植顺序；若采用锁层级，应给资源显式、稳定的 rank，并在调试版本断言只按单调顺序获取。
 
-> [!warning]- 易错点
-> - 把 **10-Synchronization Primitives (同步原语)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
+## 缩小依赖图
+
+- 不在持锁期间调用未知回调、阻塞 I/O 或等待 future；
+- 把数据复制/移动出临界区后再做昂贵工作；
+- 明确线程池任务能否同步等待同一线程池，避免 pool starvation deadlock；
+- 条件变量等待必须释放保护锁，并把停止条件纳入谓词；
+- 超时是故障边界，不是正确性证明。超时重试可能制造重复操作或活锁。
+
+# 四类治理方法
+
+| 方法 | 思路 | 适用场景 | 代价 |
+|---|---|---|---|
+| 预防 | 锁顺序、禁止持锁等待等 | 应用代码首选 | 限制设计自由度 |
+| 避免 | 只进入安全状态 | 最大需求可知的资源系统 | 需要先验信息、利用率下降 |
+| 检测 | 构建等待图/超时告警 | 数据库、运行期诊断 | 检测有延迟和开销 |
+| 恢复 | 选牺牲者回滚、终止或重启 | 支持事务/隔离的系统 | 丢工作，需幂等和补偿 |
+
+数据库通常能构建事务等待图并选择 victim 回滚；业务必须处理死锁错误并安全重试。Linux 内核 `lockdep` 通过观察锁类获取顺序发现潜在循环。用户态可结合线程 dump、mutex profiling 和日志中的请求/锁标识还原图。
+
+# 分布式系统边界
+
+跨进程的“锁”还面对网络分区、进程暂停和租约过期。仅靠超时释放不能阻止旧持有者恢复后继续写。需要时使用租约配合 **fencing token**，让存储端拒绝旧 token；重试必须有幂等键或事务语义。
+
+这类问题常不再是经典内存 mutex 死锁，而是失败检测、所有权和一致性协议问题。不要用一个 Redis `SETNX` 示例覆盖全部故障模型。
+
+# 演练与排查
+
+1. 在测试程序中让两个线程反向获取两把锁，使用超时监控捕获线程栈。
+2. 把代码改为 `std::scoped_lock` 或显式锁层级，再重复压力测试。
+3. 对服务记录“请求 ID、已持有资源、正在等待资源、等待时长”。
+4. 检查线程池、连接池、数据库池是否形成跨池环路，而不只搜索 mutex。
+
+> [!warning] 工具边界
+> ThreadSanitizer 主要查数据竞争，不保证发现所有死锁；一次压测没有挂住，也不能证明无环。证明依靠锁协议，观测用于验证和发现违例。
+
+# 检查理解
+
+1. 死锁、活锁、饥饿分别有没有线程在执行？
+2. 固定锁顺序破坏了哪个必要条件？
+3. 为什么 timeout + retry 可能把死锁变成活锁或重复写？
+4. 线程池中“任务等待同池任务”为什么也能死锁？
+
+> [!summary] 本篇结论
+> 死锁是依赖图问题。工程上优先让依赖无环并缩短持有范围，运行时再用等待图与超时发现异常；恢复策略必须结合事务、幂等与 fencing，而不能把重试当作通用解法。
+
+## 权威依据
+
+- [C++ draft: generic locking algorithms](https://eel.is/c++draft/thread.lock.algorithm)
+- [Linux lockdep design](https://docs.kernel.org/locking/lockdep-design.html)
+- [PostgreSQL explicit locking and deadlocks](https://www.postgresql.org/docs/current/explicit-locking.html)
 
 下一步：[12-Performance and System Thinking (性能与系统思维)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/12-Performance%20and%20System%20Thinking%20(性能与系统思维).md)

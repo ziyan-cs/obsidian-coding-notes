@@ -1,280 +1,148 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
-previous_review_due: 2026-09-07
+content_verified: 2026-09-19
+tags: [algorithm/data-structure, algorithm/two-pointers, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习目标
+> 从内存布局、操作代价和不变量理解数组与链表；能够识别双指针、前缀和、链表反转、判环和合并，而不是只背函数模板。
 
-> [!summary] 核心摘要
->
-> 数组擅长按下标随机访问，链表擅长已知位置的插删；双指针、滑动窗口与前缀和的共同核心是维护清晰不变量并在线性扫描中更新答案。
+# 数组：连续存储带来的能力与代价
 
-# Arrays and Two Pointers (数组与双指针)
+数组把同类型元素连续存放，因此可用 `base + i × sizeof(T)` 在 `O(1)` 时间定位第 `i` 个元素，并具有良好的空间局部性。代价是中间插入/删除通常要搬移后缀；动态数组扩容时还可能重新分配并移动全部元素。
 
-> [!note] 本节重点：双指针的四种模式、滑动窗口、前缀和
+| 操作 | 动态数组 `vector` | 单链表 |
+|---|---:|---:|
+| 按下标访问 | `O(1)` | `O(n)` |
+| 已知位置后插入 | 尾部均摊 `O(1)`；中间 `O(n)` | `O(1)` |
+| 查找某个值 | `O(n)` | `O(n)` |
+| 内存局部性 | 好 | 通常较差 |
+| 迭代器/指针稳定性 | 扩容或搬移可能失效 | 删除目标节点时失效 |
 
-## 双指针四种模式
+复杂度不能脱离前提：“链表删除是 `O(1)`”要求已经拿到待删节点的前驱；若先按值查找，整体仍是 `O(n)`。
 
-### 模式一：对撞指针（左右夹逼）
+# 双指针：维护区间不变量
 
-两指针从两端向中间移动，适合**有序数组**的搜索问题：
+双指针不是“放两个变量”，而是用两个边界压缩尚未确定的搜索空间。
 
-```cpp
-// 有序数组两数之和
-vector<int> twoSum(vector<int>& nums, int target) {
-    int l = 0, r = (int)nums.size() - 1;
-    while (l < r) {
-        int s = nums[l] + nums[r];
-        if      (s == target) return {l, r};
-        else if (s < target)  l++;
-        else                  r--;
-    }
-    return {};
-}
-```
+## 相向指针
 
-典型题：Two Sum II、三数之和、盛最多水的容器、回文判断。
-
-### 模式二：快慢指针
-
-两指针同向，速度不同，用于**链表环检测、找中点**（详见链表章节）。
-
-### 模式三：滑动窗口
-
-维护一个可变长度的窗口 `[l, r]`，右指针扩张，左指针收缩：
+适合有序数组两数和、回文判断、盛水容器等。以升序数组两数和为例：
 
 ```cpp
-// 长度最小的子数组（子数组和 >= target）
-int minSubArrayLen(int target, vector<int>& nums) {
-    int l = 0, total = 0, res = INT_MAX;
-    for (int r = 0; r < (int)nums.size(); r++) {
-        total += nums[r];
-        while (total >= target) {
-            res = min(res, r - l + 1);
-            total -= nums[l++];
+std::optional<std::pair<int, int>> two_sum_sorted(
+    const std::vector<int>& a, int target) {
+    std::size_t left = 0;
+    if (a.empty()) return std::nullopt;
+    std::size_t right = a.size() - 1;
+
+    while (left < right) {
+        const long long sum = static_cast<long long>(a[left]) + a[right];
+        if (sum == target) {
+            return std::pair{static_cast<int>(left), static_cast<int>(right)};
         }
+        if (sum < target) ++left;
+        else --right;
     }
-    return res == INT_MAX ? 0 : res;
+    return std::nullopt;
 }
 ```
 
-**无重复字符的最长子串（变长窗口 + 哈希）：**
+循环不变量是：若解存在，它仍位于闭区间 `[left, right]`。移动左端是因为当前和过小，而固定右端时更小的左值都不可能成功；右端同理。
+
+## 快慢指针与原地压缩
+
+快指针读取，慢指针指向下一写入位置：
 
 ```cpp
-// 无重复字符的最长子串
-int lengthOfLongestSubstring(string s) {
-    unordered_map<char, int> seen;
-    int l = 0, res = 0;
-    for (int r = 0; r < (int)s.size(); r++) {
-        if (seen.count(s[r]) && seen[s[r]] >= l)
-            l = seen[s[r]] + 1;
-        seen[s[r]] = r;
-        res = max(res, r - l + 1);
+std::size_t remove_value(std::vector<int>& a, int value) {
+    std::size_t write = 0;
+    for (int x : a) {
+        if (x != value) a[write++] = x;
     }
-    return res;
+    return write; // 有效区间是 [0, write)
 }
 ```
 
-### 模式四：快速分区（原地操作）
+关键不变量：`[0, write)` 始终是已经处理元素中过滤后的正确结果。函数返回逻辑长度；是否 `resize` 取决于接口约定。
+
+## 分区指针
+
+快速排序 partition、颜色分类等问题把区间划分为“已满足条件 / 未处理 / 另一类”。写代码前先写清每段的开闭边界，否则最容易发生漏元素或重复处理。
+
+# 前缀和：把区间求和变成边界相减
+
+定义 `prefix[0] = 0`，`prefix[i + 1] = a[0] + ... + a[i]`，则半开区间 `[l, r)` 的和为：
+
+```text
+sum(l, r) = prefix[r] - prefix[l]
+```
 
 ```cpp
-// 颜色分类 0/1/2，O(n) 时间 O(1) 空间
-void sortColors(vector<int>& nums) {
-    int lo = 0, mid = 0, hi = (int)nums.size() - 1;
-    while (mid <= hi) {
-        if      (nums[mid] == 0) swap(nums[lo++], nums[mid++]);
-        else if (nums[mid] == 1) mid++;
-        else                     swap(nums[mid], nums[hi--]);
+std::vector<long long> prefix_sum(const std::vector<int>& a) {
+    std::vector<long long> prefix(a.size() + 1, 0);
+    for (std::size_t i = 0; i < a.size(); ++i) {
+        prefix[i + 1] = prefix[i] + a[i];
     }
+    return prefix;
 }
 ```
 
-## 前缀和
+使用 `long long` 是为了降低累计溢出风险，但仍要根据输入上界证明类型足够。二维前缀和、差分数组和“前缀和 + 哈希表”都源于同一思想：缓存可组合的历史信息。
 
-```cpp
-// 构建前缀和，O(1) 区间查询
-vector<int> prefix(nums.size() + 1, 0);
-for (int i = 0; i < (int)nums.size(); i++)
-    prefix[i + 1] = prefix[i] + nums[i];
+# 链表：先画指针变化
 
-// 区间 [l, r] 的和
-int rangeSum = prefix[r + 1] - prefix[l];
-```
+链表题的核心是保持可达性。修改 `next` 前先保存仍需访问的节点。
 
-二维前缀和、差分数组是进阶变体，用于范围加减操作。
-
----
-
-> [!info]- 延伸阅读
-> - Hash Table (哈希表)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
-> - Monotonic Stack (单调栈)
-> - BFS with Queue (队列BFS)
->
-> ---
-
-# Linked List Patterns (链表反转判环与合并)
-
-> [!note] 本节重点：链表反转的迭代与递归实现、环检测 Floyd 算法、有序链表合并、链表归并排序
+## 反转单链表
 
 ```cpp
 struct ListNode {
-    int val;
+    int value;
     ListNode* next;
-    ListNode(int x) : val(x), next(nullptr) {}
 };
-```
 
-## 反转链表（迭代）
-
-```cpp
-ListNode* reverseList(ListNode* head) {
+ListNode* reverse(ListNode* head) {
     ListNode* prev = nullptr;
-    ListNode* curr = head;
-    while (curr) {
-        ListNode* nxt = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = nxt;
+    ListNode* cur = head;
+    while (cur != nullptr) {
+        ListNode* next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
     }
     return prev;
 }
 ```
 
-**反转区间 [left, right]（92题）：** 找到 left-1 位置的节点，断开后反转子链表，再拼接。
+不变量：`prev` 指向已经反转好的前缀，`cur` 指向尚未处理的后缀。结束时后缀为空，`prev` 就是新表头。
 
-## 环检测（Floyd 判圈）
+## Floyd 判环与入口
 
-```cpp
-bool hasCycle(ListNode* head) {
-    ListNode* slow = head;
-    ListNode* fast = head;
-    while (fast && fast->next) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) return true;
-    }
-    return false;
-}
+快指针每次走两步、慢指针走一步。若存在环，两者终会在环内相遇；若快指针到达空指针，则无环。相遇后把一个指针移回表头，二者都每次走一步，再次相遇处就是环入口。
 
-// 找环入口
-ListNode* detectCycle(ListNode* head) {
-    ListNode* slow = head;
-    ListNode* fast = head;
-    while (fast && fast->next) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) {
-            slow = head;
-            while (slow != fast) {
-                slow = slow->next;
-                fast = fast->next;
-            }
-            return slow;  // 入口节点
-        }
-    }
-    return nullptr;
-}
-```
+证明设表头到入口距离为 `μ`，环长为 `λ`。第一次相遇时快慢路程差是 `λ` 的整数倍，可推出从相遇点继续到入口的距离与 `μ` 在模 `λ` 意义下相同。
 
-**原理：** 设链表头到环入口距离为 a，环长为 b。相遇时 slow 走了 a+k，fast 走了 a+k+nb（n 圈），因 fast=2×slow，所以 nb=a+k，即从相遇点再走 a 步回到入口。
+## 合并有序链表
 
-## 合并两个有序链表
+使用哑节点统一首节点处理。每次把较小节点接到结果尾部，并推进对应链表；循环不变量是结果链表有序，且包含所有已消费节点。若节点所有权由智能指针管理，必须按实际所有权模型重写，不能机械照搬裸指针代码。
 
-```cpp
-ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-    ListNode dummy(0);
-    ListNode* curr = &dummy;
-    while (l1 && l2) {
-        if (l1->val <= l2->val) { curr->next = l1; l1 = l1->next; }
-        else                    { curr->next = l2; l2 = l2->next; }
-        curr = curr->next;
-    }
-    curr->next = l1 ? l1 : l2;
-    return dummy.next;
-}
+# 选择结构的方法
 
-// 合并 K 个有序链表（最小堆）
-ListNode* mergeKLists(vector<ListNode*>& lists) {
-    auto cmp = [](ListNode* a, ListNode* b){ return a->val > b->val; };
-    priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
-    for (auto node : lists)
-        if (node) pq.push(node);
+- 需要随机访问、遍历吞吐和紧凑存储：优先数组/`vector`。
+- 需要稳定节点地址、频繁在已知位置链接/摘除：考虑链式结构。
+- 需要频繁从中间查找后再插入：链表未必更快，因为查找和缓存未命中可能主导成本。
+- 实际工程优先使用标准容器，并根据 profiling 而非复杂度表猜测性能。
 
-    ListNode dummy(0);
-    ListNode* curr = &dummy;
-    while (!pq.empty()) {
-        curr->next = pq.top(); pq.pop();
-        curr = curr->next;
-        if (curr->next) pq.push(curr->next);
-    }
-    return dummy.next;
-}
-```
+# 检查理解
 
-**合并 K 个有序链表：** 用最小堆，初始将 K 个链表头入堆，每次取最小节点，将其 next 入堆，O(N log K)。
+1. 为什么 `vector::push_back` 是均摊 `O(1)`，却不是每次 `O(1)`？
+2. 相向双指针依赖数组的什么单调性？
+3. 为什么前缀和多开一个元素能统一空区间和边界？
+4. 反转链表时若先执行 `cur = cur->next` 再改指针，会丢失什么？
 
----
+> [!summary] 本篇结论
+> 数组依靠连续布局提供随机访问与局部性，链表依靠显式链接提供节点级重连。双指针、前缀和与链表模板真正需要记忆的是区间、状态和可达性不变量。
 
-> [!info]- 延伸阅读
-> - Fast & Slow Pointers (快慢指针)
-> - Array & Two Pointers (数组与双指针)
-> - Monotonic Stack (单调栈)
-> - BFS with Queue (队列BFS)
-> - Hash Table (哈希表)
->
-> ---
-
-# Fast and Slow Pointers (快慢指针)
-
-> [!note] 本节重点：快慢指针找中点/倒数第 K 个/环入口、回文链表判断、Floyd 判环算法
-
-|问题|技巧|
-|---|---|
-|链表中点|快慢指针，fast 到尾时 slow 在中间|
-|倒数第 K 个节点|fast 先走 K 步，然后同速，fast 到尾时 slow 即目标|
-|判断回文链表|找中点 + 反转后半段 + 比较|
-|环入口|Floyd 算法（见上）|
-
-```cpp
-// 找链表中点（slow 停在中间偏左）
-ListNode* findMiddle(ListNode* head) {
-    ListNode* slow = head;
-    ListNode* fast = head;
-    while (fast->next && fast->next->next) {
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    return slow;
-}
-
-// 倒数第 K 个节点
-ListNode* removeNthFromEnd(ListNode* head, int n) {
-    ListNode dummy(0);
-    dummy.next = head;
-    ListNode* fast = &dummy;
-    ListNode* slow = &dummy;
-    for (int i = 0; i <= n; i++) fast = fast->next;
-    while (fast) { slow = slow->next; fast = fast->next; }
-    slow->next = slow->next->next;
-    return dummy.next;
-}
-```
-
----
-
-> [!info]- 延伸阅读
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Array & Two Pointers (数组与双指针)
-> - Monotonic Stack (单调栈)
-> - BFS with Queue (队列BFS)
-> - Hash Table (哈希表)
-
-> [!warning]- 易错点
-> - 把 **01-Arrays and Linked Lists (数组与链表)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[02-Stack Queue and Hashing (栈队列与哈希)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Stack%20Queue%20and%20Hashing%20(栈队列与哈希).md)
+下一步：[02-Stack Queue and Hashing (栈队列与哈希)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/02-Stack%20Queue%20and%20Hashing%20(栈队列与哈希).md)

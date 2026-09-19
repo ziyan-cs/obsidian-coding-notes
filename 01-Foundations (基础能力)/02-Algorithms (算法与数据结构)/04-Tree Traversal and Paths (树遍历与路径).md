@@ -1,261 +1,124 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [algorithm/tree, algorithm/traversal, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习目标
+> 用“节点语义、递归返回值、进入/退出时机”统一二叉树 DFS、BFS、路径与最近公共祖先问题，并能把递归可靠地改写为迭代。
 
-> [!summary] 核心摘要
->
-> 树题先明确访问顺序与递归状态；DFS 用调用栈或显式栈维护路径，BFS 用队列维护层次，正确性依赖于进入、离开节点时状态的对称恢复。
-
-# Tree Depth First Traversal (树的深度优先遍历)
-
-> [!note] 本节重点：二叉树 DFS 前序/中序/后序遍历、递归与迭代栈实现、遍历序列还原
-> [!note] 本节重点：二叉树 DFS 前序/中序/后序三种遍历方式、递归与迭代实现、遍历序列还原树结构
-
-## 递归模板
+# 先定义节点与空树语义
 
 ```cpp
-void preorder(TreeNode* root, vector<int>& res) {
-    if (!root) return;
-    res.push_back(root->val);
-    preorder(root->left, res);
-    preorder(root->right, res);
+struct TreeNode {
+    int value;
+    TreeNode* left = nullptr;
+    TreeNode* right = nullptr;
+};
+```
+
+树算法首先约定：空树的高度、节点数、路径和、是否允许空路径分别是什么。边界定义不清会让递归基例与最终答案互相矛盾。
+
+# 深度优先遍历
+
+前序、中序、后序的区别是**处理当前节点的时机**：
+
+```text
+前序：节点 → 左 → 右    适合自顶向下传状态、序列化
+中序：左 → 节点 → 右    BST 中得到有序键
+后序：左 → 右 → 节点    适合汇总子树结果、释放节点
+```
+
+## 递归的两种设计
+
+1. **参数承载路径状态**：当前深度、前缀和、路径内容；进入节点时更新，返回时回溯。
+2. **返回值承载子树答案**：高度、节点数、是否平衡、可向父节点延伸的最佳路径。
+
+例如树高：
+
+```cpp
+int height(const TreeNode* node) {
+    if (node == nullptr) return 0;
+    return 1 + std::max(height(node->left), height(node->right));
 }
 ```
 
-## 迭代实现（必须掌握）
+时间 `O(n)`；递归空间是树高 `O(h)`，退化链上可达 `O(n)` 并触发栈溢出。
+
+## 迭代遍历
+
+前序可直接用栈，先压右再压左。中序需要一路压入左链，弹出后转向右子树。后序可使用“节点 + 是否展开”状态，避免依赖易错的上次访问指针技巧：
 
 ```cpp
-// 迭代中序（面试高频）
-vector<int> inorderIter(TreeNode* root) {
-    vector<int> res;
-    stack<TreeNode*> st;
-    TreeNode* curr = root;
-    while (curr || !st.empty()) {
-        while (curr) { st.push(curr); curr = curr->left; }  // 一路向左
-        curr = st.top(); st.pop();
-        res.push_back(curr->val);
-        curr = curr->right;
-    }
-    return res;
-}
+std::vector<int> postorder(TreeNode* root) {
+    std::vector<int> result;
+    if (root == nullptr) return result;
+    std::vector<std::pair<TreeNode*, bool>> stack{{root, false}};
 
-// 迭代前序
-vector<int> preorderIter(TreeNode* root) {
-    if (!root) return {};
-    vector<int> res;
-    stack<TreeNode*> st;
-    st.push(root);
-    while (!st.empty()) {
-        auto node = st.top(); st.pop();
-        res.push_back(node->val);
-        if (node->right) st.push(node->right);  // 先压右
-        if (node->left)  st.push(node->left);
-    }
-    return res;
-}
-
-// 迭代后序 = 前序（根右左）结果反转
-vector<int> postorderIter(TreeNode* root) {
-    if (!root) return {};
-    vector<int> res;
-    stack<TreeNode*> st;
-    st.push(root);
-    while (!st.empty()) {
-        auto node = st.top(); st.pop();
-        res.push_back(node->val);
-        if (node->left)  st.push(node->left);
-        if (node->right) st.push(node->right);
-    }
-    reverse(res.begin(), res.end());
-    return res;
-}
-```
-
-## 通用 DFS 解题思路
-
-解二叉树题时问自己两个问题：
-
-1. **这个函数需要返回什么值？**（高度、路径和、节点数、是否满足条件…）
-2. **当前节点需要做什么？** 利用左右子树的返回值怎么计算当前节点的答案？
-
-```cpp
-// 最大深度
-int maxDepth(TreeNode* root) {
-    if (!root) return 0;
-    return 1 + max(maxDepth(root->left), maxDepth(root->right));
-}
-
-// 判断平衡二叉树（-1 表示不平衡）
-int checkHeight(TreeNode* node) {
-    if (!node) return 0;
-    int l = checkHeight(node->left);
-    int r = checkHeight(node->right);
-    if (l == -1 || r == -1 || abs(l - r) > 1) return -1;
-    return 1 + max(l, r);
-}
-bool isBalanced(TreeNode* root) { return checkHeight(root) != -1; }
-
-// 二叉树直径
-int ans = 0;
-int depth(TreeNode* node) {
-    if (!node) return 0;
-    int l = depth(node->left), r = depth(node->right);
-    ans = max(ans, l + r);
-    return 1 + max(l, r);
-}
-int diameterOfBinaryTree(TreeNode* root) { ans = 0; depth(root); return ans; }
-
-// 二叉树中最大路径和
-int maxSum = INT_MIN;
-int gain(TreeNode* node) {
-    if (!node) return 0;
-    int l = max(gain(node->left),  0);
-    int r = max(gain(node->right), 0);
-    maxSum = max(maxSum, node->val + l + r);
-    return node->val + max(l, r);
-}
-int maxPathSum(TreeNode* root) { maxSum = INT_MIN; gain(root); return maxSum; }
-```
-
----
-
-> [!info]- 延伸阅读
-> - BFS： Level Order Traversal (层序遍历)
-> - LCA & Path Problems (公共祖先与路径)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
->
-> ---
-
-# Tree Breadth First Traversal (树的层序遍历)
-
-> [!note] 本节重点：二叉树 BFS 层序遍历模板、按层输出的变体、之字形/Zigzag 遍历
-
-
-层序遍历的变体：
-
-python
-
-```cpp
-// 锯齿形层序
-vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-    if (!root) return {};
-    queue<TreeNode*> q;
-    q.push(root);
-    vector<vector<int>> res;
-    bool l2r = true;
-    while (!q.empty()) {
-        int sz = q.size();
-        deque<int> level;
-        for (int i = 0; i < sz; i++) {
-            auto node = q.front(); q.pop();
-            if (l2r) level.push_back(node->val);
-            else     level.push_front(node->val);
-            if (node->left)  q.push(node->left);
-            if (node->right) q.push(node->right);
+    while (!stack.empty()) {
+        auto [node, expanded] = stack.back();
+        stack.pop_back();
+        if (expanded) {
+            result.push_back(node->value);
+            continue;
         }
-        res.push_back(vector<int>(level.begin(), level.end()));
-        l2r = !l2r;
+        stack.push_back({node, true});
+        if (node->right) stack.push_back({node->right, false});
+        if (node->left) stack.push_back({node->left, false});
     }
-    return res;
-}
-
-// 右视图
-vector<int> rightSideView(TreeNode* root) {
-    if (!root) return {};
-    queue<TreeNode*> q;
-    q.push(root);
-    vector<int> res;
-    while (!q.empty()) {
-        int sz = q.size();
-        for (int i = 0; i < sz; i++) {
-            auto node = q.front(); q.pop();
-            if (i == sz - 1) res.push_back(node->val);
-            if (node->left)  q.push(node->left);
-            if (node->right) q.push(node->right);
-        }
-    }
-    return res;
+    return result;
 }
 ```
 
----
+# 广度优先与层序
 
-> [!info]- 延伸阅读
-> - DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
-> - LCA & Path Problems (公共祖先与路径)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
->
-> ---
+BFS 用队列按层处理。若需要层边界，在每轮开始保存 `level_size = q.size()`，只处理这一批节点；循环过程中新增节点属于下一层。
 
-# LCA and Tree Paths (最近公共祖先与路径)
+层序适合最短层数、右视图、每层聚合和完全二叉树问题。普通树上若只做完整遍历，DFS/BFS 都是 `O(n)`；区别主要在访问顺序和辅助空间形态。
 
-> [!note] 本节重点：最近公共祖先 LCA 递归解法、二叉树路径问题模式、根到叶路径 DFS 求和
-> [!note] 本节重点：最近公共祖先 LCA 的递归解法、二叉树路径问题模式、根到叶路径的 DFS 求和
+# 路径问题
 
-## 最近公共祖先（LCA）
+“路径”必须先问清：
+
+- 起点/终点是否必须是根或叶子？
+- 能否从子节点回到父节点再向另一分支？
+- 求是否存在、条数、最大值，还是恢复具体路径？
+- 节点值是否可能为负？
+
+根到叶路径常用回溯；任意两点最大路径和通常用后序：返回“可向父节点延伸的单边最大贡献”，同时用全局/外部状态更新“经过当前节点的双边答案”。负贡献应按题意舍弃。
+
+# 最近公共祖先
+
+在普通二叉树中，若保证 `p`、`q` 都存在：
 
 ```cpp
-TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-    if (!root || root == p || root == q) return root;
-    auto left  = lowestCommonAncestor(root->left,  p, q);
-    auto right = lowestCommonAncestor(root->right, p, q);
-    if (left && right) return root;  // p q 分别在左右子树
+TreeNode* lca(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (root == nullptr || root == p || root == q) return root;
+    TreeNode* left = lca(root->left, p, q);
+    TreeNode* right = lca(root->right, p, q);
+    if (left && right) return root;
     return left ? left : right;
 }
 ```
 
-**原理：** 后序遍历，自底向上，当某节点的左右子树分别找到 p 和 q 时，该节点即 LCA。
+返回值表示“当前子树中找到的目标或其 LCA”。若目标可能不存在，需要同时返回找到目标的数量，不能把找到一个目标误报为 LCA。BST 可利用键的有序性缩小方向，但重复键会使按值定位失去唯一性。
 
-## 路径总和问题
+# 工程与测试
 
-```cpp
-// 路径总和（根到叶）
-bool hasPathSum(TreeNode* root, int target) {
-    if (!root) return false;
-    if (!root->left && !root->right) return root->val == target;
-    return hasPathSum(root->left,  target - root->val) ||
-           hasPathSum(root->right, target - root->val);
-}
+- 明确节点所有权。示例裸指针只表达算法结构，生产代码应由容器、arena 或智能指针管理生命周期。
+- 不要默认递归总安全；不受控深度的数据应考虑显式栈或深度限制。
+- 测试空树、单节点、只有左/右链、完全树、重复值、极深树和负权路径。
+- 恢复路径时保存父指针或在回溯中复制当前路径，注意复杂度差异。
 
-// 路径总和 III（前缀和 + 回溯）
-int res = 0;
-unordered_map<long long, int> prefix{{0, 1}};
+# 检查理解
 
-void dfs(TreeNode* node, long long curr, int target) {
-    if (!node) return;
-    curr += node->val;
-    res += prefix[curr - target];
-    prefix[curr]++;
-    dfs(node->left,  curr, target);
-    dfs(node->right, curr, target);
-    prefix[curr]--;  // 回溯
-}
-int pathSum(TreeNode* root, int target) {
-    res = 0; prefix = {{0, 1}};
-    dfs(root, 0, target);
-    return res;
-}
-```
+1. 为什么后序遍历适合计算高度和平衡性？
+2. 递归复杂度中的 `O(h)` 指什么，何时退化为 `O(n)`？
+3. LCA 在目标可能缺失时为何需要额外状态？
+4. 任意路径最大和为何不能直接把左右子树最优值都返回给父节点？
 
----
+> [!summary] 本篇结论
+> 树题的统一模型是：进入节点时获得自顶向下状态，退出节点时汇总子树返回值。先定义路径和空树语义，再选择 DFS 的处理时机或 BFS 的层次顺序。
 
-> [!info]- 延伸阅读
-> - DFS： Preorder ⧸ Inorder ⧸ Postorder (前中后序)
-> - BFS： Level Order Traversal (层序遍历)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-> - Fast & Slow Pointers (快慢指针)
-
-> [!warning]- 易错点
-> - 把 **04-Tree Traversal and Paths (树遍历与路径)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md)
+下一步：[05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md)

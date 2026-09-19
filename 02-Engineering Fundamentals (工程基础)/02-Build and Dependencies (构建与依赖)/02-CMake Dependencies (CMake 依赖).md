@@ -1,188 +1,122 @@
 ---
 status: stable
 confidence: high
+content_verified: 2026-09-19
+tags: [engineering/build, cpp/dependencies]
 verified: 2026-10-22
 review_stage: learn
 review_due: 2026-10-22
-
 ---
 
-> [!abstract] 学习定位
-> CMake 依赖管理应围绕可传递 target、可固定版本和可复现安装展开；“本机能找到库”不是构建成功的标准。
+> [!abstract] 学习目标
+> 区分“发现已有包”“配置时引入源码”和“解析安装包”，能安全地消费 imported target，并解释依赖版本、ABI 与网络边界。
 
-# CMake External Dependencies (CMake 外部依赖)
+# 先看依赖究竟从哪来
 
-> [!note] 本节重点：优先消费库提供的 Config package 与 imported target；只有缺少包配置时才考虑 Module mode 或自定义 Find 脚本。
-
-> [!warning] 依赖“能找到”不代表配置可复现
-> 不要依赖某台机器碰巧安装了库。明确依赖版本、目标名和安装来源；CI 或全新环境能从零配置成功，才说明构建边界真正成立。
-
-## find_package 基础
-
-```cmake
-find_package(OpenSSL REQUIRED)        # REQUIRED：找不到就报错
-find_package(Boost 1.70 COMPONENTS filesystem system)  # 指定版本和组件
-
-target_link_libraries(myapp PRIVATE
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    Boost::filesystem
-)
-```
-
-CMake 会在以下位置搜索：
-
-- 系统默认路径（`/usr/lib/cmake/`、`/usr/local/lib/cmake/`）
-- `CMAKE_PREFIX_PATH` 指定的路径
-- 各库自带的 `*Config.cmake` 或 `Find*.cmake` 文件
-
-## 两种 find_package 模式
-
-|模式|触发条件|文件来源|
+| 路径 | 做什么 | 负责固定依赖图的是谁 |
 |---|---|---|
-|Config 模式（现代）|库自带 `FooConfig.cmake`|库安装时提供|
-|Module 模式（兼容）|CMake 自带 `FindFoo.cmake`|CMake 内置或项目自定义|
+| `find_package` | 发现配置好的包并导入 target | 外部安装/包管理流程 |
+| `FetchContent` | 配置期获取源码并纳入当前构建 | 项目声明的来源与精确修订 |
+| vcpkg/Conan 等 | 解析、构建或安装依赖 | manifest、baseline、profile/lock 等 |
 
-# FetchContent（在线拉取依赖，CMake 3.11+）
+`find_package` 本身不从包仓库“安装指定版本”。它可能使用 package-provided Config 文件、CMake 自带或项目提供的 Find 模块，也可能被 dependency provider 拦截；搜索顺序随调用形式、变量和 CMake 版本变化。不能声称 Config 模式总是自动优先。
 
-无需手动安装第三方库，CMake 自动从网络下载并构建：
-
-```cmake
-include(FetchContent)
-
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        v1.14.0
-)
-FetchContent_MakeAvailable(googletest)   # 下载并添加到构建
-
-target_link_libraries(my_test PRIVATE GTest::gtest_main)
-```
-
-> [!summary] 核心摘要
->
-> `find_package` 把已安装依赖暴露为可链接的 CMake target；优先使用库提供的 Config package 和 `Foo::Bar` 目标，让 include path、编译选项和传递依赖随 target 传播。`FetchContent` 能在配置期获取源码，但会引入网络、版本和供应链边界，需要固定版本并考虑离线/CI 场景。
-
-> [!question]- 自测：先回答再展开
-> 1. Config mode 与 Module mode 的来源分别是什么？
-> 2. 为什么 `target_link_libraries(myapp PRIVATE Foo::Foo)` 优于手写库文件路径？
-> 3. 使用 `FetchContent` 时，怎样避免构建结果随远端默认分支变化？
->
-> ---
-
-> [!info]- 延伸阅读
-> - CMakeLists․txt Structure (项目结构模板)
-> - target_link_libraries & include_directories (依赖管理)
-> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
-> - CMake with vcpkg & Conan (包管理器集成)
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
->
-> ---
-
-# CMake Package Managers (CMake 包管理器)
-
-> [!note] 本节重点：包管理器解决什么问题、vcpkg 与 Conan 的使用流程对比
-
-## 为什么需要包管理器
-
-手动管理 C++ 依赖的痛点：
-
-- 不同平台安装路径不同
-- 版本冲突难以解决
-- 源码构建耗时且繁琐
-
----
-
-# vcpkg（Microsoft，与 CMake 深度集成）
-
-```bash
-git clone https://github.com/microsoft/vcpkg.git
-./vcpkg/bootstrap-vcpkg.sh
-
-./vcpkg/vcpkg install fmt spdlog openssl
-
-cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake ..
-```
-
-之后 CMakeLists.txt 中正常使用 `find_package`，vcpkg 自动接管：
+# 消费已经安装的包
 
 ```cmake
 find_package(fmt CONFIG REQUIRED)
+add_executable(myapp src/main.cpp)
 target_link_libraries(myapp PRIVATE fmt::fmt)
 ```
 
-**Manifest 模式**（推荐，版本锁定）：在项目根目录创建 `vcpkg.json`：
+`fmt::fmt` 是包导出的 imported target，可携带 include 目录、编译定义和链接要求；`find_package` 找到包不意味着它兼容当前 ABI 或一定定义想象中的目标名，须以包文档和实际配置为准。
+
+环境确定后可通过 `CMAKE_PREFIX_PATH` 或相应 toolchain 告诉 CMake 安装前缀。查找失败时先核对：包是否安装、Config 文件在哪、配置架构是否一致、当前使用哪个 CMake 与编译器；必要时启用 `cmake --debug-find`，不要盲目向源码写死 `/usr/local/lib`。
+
+对外发布库时，导出的 Config 应能带入传递依赖；消费端不应自行猜出上游库需要哪些 include 与 link flags。
+
+# FetchContent：在配置期引入源码
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(
+    SomeLib
+    GIT_REPOSITORY https://example.invalid/somelib.git
+    GIT_TAG        <audited-full-commit-id>
+)
+FetchContent_MakeAvailable(SomeLib)
+```
+
+以上地址和哈希是**结构示意**，不可原样执行。实际项目应使用经核实的上游来源和不可变完整修订，记录许可与安全审查。固定 tag 名称不等于固定内容；用分支名更会随时间漂移。
+
+FetchContent 的源码在配置期即可加入构建；它不是通用“包管理器”，不会自动提供完整版本解析、二进制包和 lock 机制。CI 应考虑网络失败、离线镜像和缓存可信性。较新 CMake 支持 `FIND_PACKAGE_ARGS`、dependency provider 等组合方式；具体行为应以项目最低支持版本对应文档验证。
+
+# vcpkg：项目 manifest 与 registry baseline
 
 ```json
 {
-  "name": "my-project",
-  "version": "1.0.0",
-  "dependencies": [
-    "fmt",
-    { "name": "boost-filesystem", "version>=": "1.83.0" }
-  ]
+  "name": "example-app",
+  "version-string": "0.1.0",
+  "builtin-baseline": "<pinned-registry-commit>",
+  "dependencies": ["fmt"]
 }
 ```
 
----
-
-# Conan（跨平台，配置灵活）
+`vcpkg.json` 描述直接依赖；baseline 约束 registry 视图，`version>=` 是版本下限，不是精确锁定。要重建还需保留 registry 来源/修订、triplet、features、工具链和必要构建选项。不要把“manifest 模式”直接写成“已经锁死全部二进制”。
 
 ```bash
-pip install conan
-conan profile detect   # 检测当前编译器环境
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=<vcpkg-root>/scripts/buildsystems/vcpkg.cmake
+cmake --build build
 ```
 
-创建 `conanfile.txt`：
+toolchain file 应在**首次配置**时提供；已配置目录中事后更换它可能继续使用旧缓存。示例路径由使用者替换，非真实命令行路径。
+
+# Conan 2：profile 与生成文件
+
+Conan 2 可用 `CMakeToolchain`、`CMakeDeps` 生成 CMake 可消费的工具链与 Config 文件，并用 host/build profile 表达目标与构建机器的环境差异。lockfile 用于约束依赖解析结果；仅写版本范围仍会变化。
 
 ```ini
 [requires]
-fmt/10.2.1
-spdlog/1.13.0
+fmt/<chosen-version>
 
 [generators]
 CMakeDeps
 CMakeToolchain
 ```
 
-```bash
-mkdir build && cd build
-conan install .. --output-folder=. --build=missing
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
-cmake --build .
-```
+上面的版本为占位符：实践时从包仓库确认版本及许可证，并按 Conan 2 当前文档执行 `conan install`；不同 generator、平台和配置的生成目录需核对。不要把 Conan 1 的命令或长期过时的包版本当作通用模板。
 
-CMakeLists.txt 中：
+# ABI 与冲突排查
 
-```cmake
-find_package(fmt REQUIRED)
-find_package(spdlog REQUIRED)
-target_link_libraries(myapp PRIVATE fmt::fmt spdlog::spdlog)
-```
+依赖“版本相同”也可能因编译器、标准库、Debug/Release、目标架构、C++ ABI 或静态/动态链接选项不同而不能混用。典型症状：头文件正常但 undefined reference、运行时找不到动态库、链接成功后崩溃。
 
----
+排查顺序：
 
-## vcpkg vs Conan 对比
+1. 画出直接与传递依赖图，确认版本是否真的解析为同一组；
+2. 记录目标平台、编译器、标准库、构建类型与包选项；
+3. 查 `find_package` 找到的 Config 来源与 imported target 属性；
+4. 全新 build 目录、清理可疑包缓存后重现；
+5. 若库暴露类型跨二进制边界，核对 ABI 和运行时依赖，而非盲目追加 `-L`。
 
-| |vcpkg|Conan|
-|---|---|---|
-|维护方|Microsoft|JFrog / 社区|
-|CMake 集成|极深（toolchain file 即可）|需要 generator 文件|
-|二进制缓存|支持（GitHub Actions 缓存）|支持（Conan Center）|
-|配置灵活性|一般|高（支持不同 ABI、编译选项）|
-|库数量|2000+|1800+|
-|适合场景|Windows/跨平台、CMake 项目|企业级、多平台、精细控制|
+# 最小实验
 
----
+为一个只有 fmt 依赖的程序分别使用系统安装的 Config 包与一个包管理器配置；记录 `fmt::fmt` 的头文件来源、最终链接命令和依赖版本。切换来源时使用独立 build 目录，并通过程序运行验证，不仅看“配置成功”。
 
-> [!info]- 延伸阅读
-> - CMakeLists․txt Structure (项目结构模板)
-> - target_link_libraries & include_directories (依赖管理)
-> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
-> - find_package & External Dependencies (第三方库引入)
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+# 检查理解
 
-> [!info]- 延伸阅读
-> - 下一步：[01-CMake Project and Targets (CMake 项目与目标)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
+1. `find_package`、FetchContent 和包管理器分别负责什么？
+2. `version>=` 与精确解析结果有什么区别？
+3. 为什么更换 toolchain 后应新建构建目录？
+4. 同版本库链接失败时，除了版本号还应检查哪些 ABI 输入？
 
+> [!summary] 本篇结论
+> 依赖管理有三个不同层次：解析来源与版本、把依赖安装/构建好、让 CMake 消费其 target。明确每层责任和工具链 ABI，比“我本机能 find 到”更重要。
+
+## 权威依据
+
+- [CMake find_package](https://cmake.org/cmake/help/latest/command/find_package.html)
+- [CMake FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+- [vcpkg versioning](https://learn.microsoft.com/en-us/vcpkg/users/versioning)
+- [Conan 2 lockfiles](https://docs.conan.io/2/tutorial/versioning/lockfiles.html)
+
+下一步：[03-Package Management and Reproducible Builds (包管理与可复现构建)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/03-Package%20Management%20and%20Reproducible%20Builds%20(包管理与可复现构建).md)

@@ -1,380 +1,84 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [algorithm/sorting, algorithm/invariant, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习目标
+> 从比较模型、稳定性、空间与输入分布选择排序；理解插入、归并、快速、堆排序和线性排序的核心不变量，并优先正确使用标准库。
 
-# Sorting Overview (排序总览)
+# 排序问题先定义什么
 
-> [!note] 本节重点：比较排序与非比较排序的边界、时间/空间/稳定性对比，以及按数据特征选型。
+- 按哪个 key 排序，升序还是降序？
+- 相等 key 是否必须保持原相对顺序，即**稳定（stable）**？
+- 数据是否能全部放入内存，是否近乎有序，键范围是否有限？
+- 需要完整排序，还是只要第 k 个、Top-K、分区？
 
-## 核心
+基于比较的通用排序在决策树模型下需要 `Ω(n log n)` 次比较；计数、基数等线性排序利用了键的额外结构，因此不违反该下界。
 
-- 排序 4 要素：
-    - 时间复杂度
-    - 空间复杂度
-    - 稳定性（相同元素间的次序不变）
-    - 原地性（不使用额外数组）
-- 必会：
-    - 归并排序
-    - 快速排序
-- 目标：
-	- 先看数据规模、是否近乎有序、值域和稳定性要求，再决定是否值得手写排序。
+# 算法对比
 
-## 排序算法对比
+| 算法 | 最好 | 平均 | 最坏 | 额外空间 | 稳定 |
+|---|---:|---:|---:|---:|---:|
+| 插入排序 | `O(n)` | `O(n²)` | `O(n²)` | `O(1)` | 是 |
+| 归并排序 | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(n)` | 可稳定 |
+| 快速排序 | `O(n log n)` | `O(n log n)` | `O(n²)` | 平均递归 `O(log n)` | 通常否 |
+| 堆排序 | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(1)` | 否 |
+| 计数排序 | `O(n+k)` | `O(n+k)` | `O(n+k)` | `O(n+k)` | 可稳定 |
 
----
+“原地”不代表完全零空间，递归栈也要计入；稳定性也取决于具体实现，而不只取决于算法名称。
 
-- 冒泡：$O(N^2)$  $O(1)$                          稳定，原地 简单易实现，适合教学 /小数据
-- 选择：$O(N^2)$  $O(1)$                      不稳定，原地 交换次数少，适合操作昂贵的场景
-- 插入：$O(N^2)$  $O(1)$                          稳定，原地    近乎有序时很强，适合小数据
-- 归并：$O(N·log N)$  $O(N)$                稳定，非原地   时间稳定，适合逆序对拓展
-- 快排：平均 $O(N·log N)$、最坏 $O(N^2)$；通常原地且不稳定。标准库一般以 introsort 等混合策略规避最坏情况
-- 堆排：$O(N·log N)$  $O(1)$              不稳定，原地   适合空间敏感的场景
-- 计数：$O(N+k)$  $O(k)$                     稳定，非原地   适合值域小的整数，线性时间
-- 希尔：复杂度取决于 gap 序列；原地、不稳定
-- 桶排：期望复杂度依赖近似均匀的输入分布及桶内排序策略
-- 基数：$O(d·(N+k))$，其中 `d` 为位数、`k` 为每位取值范围；适合固定长度键
+# 插入与归并
 
----
+插入排序的不变量是 `[0, i)` 已有序，把 `a[i]` 插入正确位置。近乎有序、小数组时移动少，常作为混合排序的底层组件。
 
-## 经典排序实现
+归并排序先分别排好两半，再线性合并。合并时若相等元素优先取左半，可保持稳定。它保证最坏 `O(n log n)`，适合链表排序和外部排序，但数组版本需要辅助缓冲并产生额外写入。
 
-### 2.1 冒泡排序（Bubble Sort）
+归并还可统计逆序对：合并时若右侧元素小于左侧当前元素，它与左侧剩余全部元素构成逆序对，贡献 `mid - i`。
 
-```cpp
-// 对外接口
-void bubbleSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 0; i < n - 1; ++i) {
-        bool swapped = false;
-        for (int j = 0; j < n - 1 - i; ++j) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-                swapped = true;
-            }
-        }
-        if (!swapped) break;
-    }
-}
+# 快速排序
+
+partition 把区间划为“小于枢轴 / 等于枢轴 / 大于枢轴”。三路分区能处理大量重复值：
+
+```text
+[ less ) [ equal ] ( unknown ) [ greater ]
 ```
 
-### 2.2 选择排序（Selection Sort）
+随机化枢轴或使用采样降低遇到恶意/有序输入退化的概率；总是选首元素可能产生 `O(n²)` 和线性递归深度。实践中应优先 `std::sort`：实现通常是混合算法，并不要求等同于教科书快速排序。
+
+# 堆排序与选择
+
+堆排序先 `O(n)` 建最大堆，再反复把根换到末尾并下沉，得到原地最坏 `O(n log n)`。它的访问局部性和稳定性通常不如库排序。只需第 k 个或分区时，使用 `std::nth_element`；只需部分有序前缀可考虑 `std::partial_sort`。
+
+# 非比较排序
+
+## 计数排序
+
+键必须能映射到可接受大小的整数范围 `k`。若 `max - min` 巨大，即使 `n` 很小也不适合。稳定实现对计数做前缀和，再按输入逆序放入输出数组。
+
+## 基数排序与桶排序
+
+基数排序逐位执行稳定排序；LSD 从低位到高位时，底层排序必须稳定。负数、变长字符串和字符编码需要单独定义。桶排序性能依赖分布均匀与桶内策略，最坏仍可能退化。
+
+# C++ 标准算法
 
 ```cpp
-// 对外接口
-void selectionSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 0; i < n; ++i) {
-        int minIdx = i;
-        for (int j = i + 1; j < n; ++j) {
-            if (arr[j] < arr[minIdx]) minIdx = j;
-        }
-        swap(arr[i], arr[minIdx]);
-    }
-}
+std::sort(values.begin(), values.end());
+std::stable_sort(records.begin(), records.end(), by_key);
+std::nth_element(values.begin(), values.begin() + k, values.end());
 ```
 
-### 2.3 插入排序（Insertion Sort）⭐
+比较器必须形成 strict weak ordering。不要写 `a <= b`；相等元素必须互不“小于”，否则标准算法行为不满足要求。排序复杂对象时考虑移动成本、projection 和间接排序。
 
-```cpp
-// 对外接口
-void insertSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 1; i < n; ++i) {
-        int key = arr[i];
-        int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            --j;
-        }
-        arr[j + 1] = key;
-    }
-}
-```
+# 检查理解
 
-### 2.7 计数排序（Counting Sort）
+1. 为什么稳定排序需要明确定义“相等 key”？
+2. 归并统计逆序对为何能一次贡献多个？
+3. 三路快排为何更适合大量重复值？
+4. 计数排序的 `O(n+k)` 在什么情况下比 `O(n log n)` 更差？
 
-### 2.7 计数排序（Counting Sort）
+> [!summary] 本篇结论
+> 排序的选择取决于稳定性、最坏界、空间、键结构和数据分布。工程上优先标准算法；手写排序的价值在于理解分区、归并、堆序和比较器不变量。
 
-### 2.7 计数排序（Counting Sort）
-
-```cpp
-// 对外接口
-void countingSort(vector<int>& arr) {
-    if (arr.empty()) return;
-    int minVal = *min_element(arr.begin(), arr.end());
-    int maxVal = *max_element(arr.begin(), arr.end());
-    vector<int> cnt(maxVal - minVal + 1, 0);  // 仅适用于值域可承受
-    for (int x : arr) ++cnt[x - minVal];
-    int pos = 0;
-    for (int offset = 0; offset < (int)cnt.size(); ++offset) {
-        while (cnt[offset]-- > 0) arr[pos++] = offset + minVal;
-    }
-}
-```
-
-### 2.8 希尔排序（Shell Sort）
-
-```cpp
-// 对外接口
-void shellSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int gap = n / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < n; ++i) {
-            int temp = arr[i], j = i;
-            while (j >= gap && arr[j - gap] > temp) {
-                arr[j] = arr[j - gap];
-                j -= gap;
-            }
-            arr[j] = temp;
-        }
-    }
-}
-```
-
-### 2.9 桶排序（Bucket Sort）
-
-```cpp
-// 对外接口
-void bucketSort(vector<float>& a) {
-    int n = a.size();
-    vector<vector<float>> buckets(n);
-    for (float x : a) {
-        int idx = x * n;
-        if (idx == n) idx = n - 1;
-        buckets[idx].push_back(x);
-    }
-    for (auto& bucket : buckets) sort(bucket.begin(), bucket.end());
-    int k = 0;
-    for (auto& bucket : buckets) {
-        for (float x : bucket) a[k++] = x;
-    }
-}
-```
-
-### 2.10 基数排序（Radix Sort）
-
-```cpp
-// 对外接口
-void radixSort(vector<int>& a) {
-    if (a.empty()) return;
-    int mx = *max_element(a.begin(), a.end());
-    for (int exp = 1; mx / exp > 0; exp *= 10) {
-        vector<int> output(a.size());
-        vector<int> cnt(10, 0);
-        for (int x : a) cnt[(x / exp) % 10]++;
-        for (int i = 1; i < 10; ++i) cnt[i] += cnt[i - 1];
-        for (int i = (int)a.size() - 1; i >= 0; --i) {
-            int d = (a[i] / exp) % 10;
-            output[--cnt[d]] = a[i];
-        }
-        a = output;
-    }
-}
-```
-
-> [!warning] 计数排序的空间随“值域”而不是元素个数增长；上例的基数排序只覆盖非负整数，`exp *= 10` 也要注意溢出。题目没有明确数据范围时，优先使用 `std::sort` / `std::stable_sort`，而不是把线性排序当作默认选项。
-
-> [!summary] 核心摘要
->
-> **排序如何选？** 通用场景优先标准库排序：`std::sort` 适合通常的就地不稳定排序需求，需保持等值元素相对顺序时用 `std::stable_sort`。近乎有序、小区间常用插入排序思想；值域小的整数才考虑计数排序；固定长度键且每位范围有限才考虑基数排序。
->
-> **自测：** 为什么计数排序不能只看 `N`？快速排序为什么不能只写“`O(N log N)`”？
->
-> ---
-
-> [!info]- 延伸阅读
-> - Quick Sort： Partition & Pivot (快排实现)
-> - Merge Sort & Inversion Count (归并排序)
-> - Heap Sort (堆排序)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
->
-> ---
-
-# Quick Sort (快速排序)
-
-> [!note] 本节重点：快排的 partition 函数实现（Lomuto/Hoare）、pivot 选择策略、递归与迭代栈实现
-
-```cpp
-void quickSortV1(vector<int>& arr, int L, int R) {
-    if (L >= R) return;
-    // partition
-    int p1 = L - 1;
-    int key = arr[R];
-    for (int i = L; i < R; ++i) {
-        if (arr[i] < key) {
-            swap(arr[++p1], arr[i]);
-        }
-    }
-    swap(arr[++p1], arr[R]);
-		
-    quickSortV1(arr, L, p1 - 1);
-    quickSortV1(arr, p1 + 1, R);
-}
-```
-
-## 快排 2.0
-
-```cpp
-void quickSortV2(vector<int>& arr, int L, int R) {
-    if (L >= R) return;
-    // partition
-    int p1 = L - 1;
-    int p2 = R;
-    int key = arr[R];
-    int i = L;
-    while (i < p2) {
-        if (arr[i] == key) {
-            ++i;
-        } else if (arr[i] < key) {
-            swap(arr[++p1], arr[i]);
-            ++i;
-        } else {
-            swap(arr[--p2], arr[i]);
-        }
-    }
-    swap(arr[p2], arr[R]);
-	    
-    quickSortV2(arr, L, p1);
-    quickSortV2(arr, p2 + 1, R);
-}
-```
-
-## 快排 3.0
-
-```cpp
-void quickSortV3(vector<int>& arr, int L, int R) {
-    if (L >= R) return;
-    swap(arr[L + rand() % (R - L + 1)], arr[R]);
-    // partition
-    int p1 = L - 1;
-    int p2 = R;
-    int key = arr[R];
-    int i = L;
-    while (i < p2) {
-        if (arr[i] == key) {
-            ++i;
-        } else if (arr[i] < key) {
-            swap(arr[++p1], arr[i]);
-            ++i;
-        } else {
-            swap(arr[--p2], arr[i]);
-        }
-    }
-    swap(arr[p2], arr[R]);
-	    
-    quickSortV3(arr, L, p1);
-    quickSortV3(arr, p2 + 1, R);
-}
-```
-
----
-
-> [!info]- 延伸阅读
-> - Merge Sort & Inversion Count (归并排序)
-> - Heap Sort (堆排序)
-> - Sorting Algorithms (排序)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
->
-> ---
-
-# Merge Sort and Inversion Count (归并排序与逆序对)
-
-> [!note] 本节重点：归并排序的分治思想、merge 操作、逆序对计数、归并排序的稳定性
-
-```cpp
-// 对外接口
-void mergeSort(vector<int>& arr, int L, int R) {
-    if (L == R) return;
-    int M = L + ((R - L) >> 1);
-    mergeSort(arr, L, M);
-    mergeSort(arr, M + 1, R);
-    merge(arr, L, M, R);
-}
-
-// 子函数：合并
-void merge(vector<int>& arr, int L, int M, int R) {
-    vector<int> help(R - L + 1);
-    int index = 0;
-    int p1 = L;
-    int p2 = M + 1;
-    while (p1 <= M && p2 <= R)
-	    help[index++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
-    while (p1 <= M) 
-	    help[index++] = arr[p1++];
-    while (p2 <= R) 
-	    help[index++] = arr[p2++];
-    for (int i = 0; i < (int)help.size(); ++i)
-        arr[L + i] = help[i];
-}
-```
-
----
-
-> [!info]- 延伸阅读
-> - Quick Sort： Partition & Pivot (快排实现)
-> - Heap Sort (堆排序)
-> - Sorting Algorithms (排序)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
->
-> ---
-
-# Heap Sort (堆排序)
-
-> [!note] 本节重点：堆排序的下滤建堆 O(n)、堆顶与末尾交换、不稳定排序特性
-
-```cpp
-// 大顶堆（默认）
-priority_queue<int> maxHeap;
-// 小顶堆
-priority_queue<int, vector<int>, greater<int>> minHeap;
-```
-
-```cpp
-// 对外接口
-void heapSort(vector<int>& arr) {
-	if (arr.empty() || arr.size() < 2) return;
-	int heapSize = arr.size();
-    for (int i = (int)arr.size() - 1; i > 0; --i) {
-        heapify(arr, i, arr.size());
-    }
-    swap(arr[0], arr[--heapSize]);
-    while (heapSize > 0) {
-        heapify(arr, 0, heapSize);
-        swap(arr[0], arr[--heapSize]);
-    }
-}
-// 子函数：堆化
-void heapify(vector<int>& arr, int index, int heapSize) {
-    int L = index * 2 + 1;
-    while (L < heapSize) {
-        int largest = L + 1 < heapSize && arr[L + 1] > arr[L] ? L + 1 : L;
-        largest = arr[index] > arr[largest] ? index : largest;
-        if (largest == index) return ;
-        swap(arr[index] ,arr[largest]);
-        index = largest;
-        L = index *2 + 1;
-    }
-}
-```
-
----
-
-> [!info]- 延伸阅读
-> - Quick Sort： Partition & Pivot (快排实现)
-> - Merge Sort & Inversion Count (归并排序)
-> - Sorting Algorithms (排序)
-> - Array & Two Pointers (数组与双指针)
-> - Reversal, Cycle Detection, Merge (反转⧸判环⧸合并)
-
-> [!warning]- 易错点
-> - 把 **08-Sorting Algorithms (排序算法)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
-
-> [!info]- 延伸阅读
-> - 下一步：[09-One Dimensional Dynamic Programming (一维动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-One%20Dimensional%20Dynamic%20Programming%20(一维动态规划).md)
+下一步：[09-Backtracking and State Space Search (回溯与状态空间搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-Backtracking%20and%20State%20Space%20Search%20(回溯与状态空间搜索).md)

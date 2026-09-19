@@ -1,95 +1,80 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [algorithm/tree, algorithm/search, learning/foundation]
 ---
 
-> [!abstract] 阅读方式：本专题把同类题型、数据结构与模板统一放在一个学习单元中，重点是识别模式、维护不变量与分析复杂度。
+> [!abstract] 学习目标
+> 理解二叉搜索树的顺序不变量、退化原因、插入删除与验证方法，并用 AVL 的高度约束和旋转理解“平衡如何换来最坏界”。
 
-# Binary Search Tree and AVL (二叉搜索树与 AVL)
+# BST 的顺序不变量
 
-> [!note] 本节重点：BST 中序遍历递增性质、查找/插入/删除的迭代与递归、AVL 旋转平衡机制
+二叉搜索树（BST）要求每个节点左子树的键都位于它之前，右子树的键都位于它之后；重复键放哪一侧、是否计数，必须由数据结构明确规定。仅检查“左孩子 < 当前 < 右孩子”不够，因为更深后代也必须满足祖先范围。
 
-# BST 性质
+在键唯一且采用严格顺序时，中序遍历得到严格递增序列。查找、插入、删除的时间都是 `O(h)`：平衡时 `h = O(log n)`，按已排序顺序插入普通 BST 时可退化为 `h = O(n)`。
 
-- 左子树键小于根、右子树键大于根；若允许重复键，必须在实现中规定“相等键放哪边”或额外计数
-- **中序遍历结果递增**；不允许重复键时才严格递增
-- 查找、插入、删除平均 O(log n)，最坏 O(n)（退化为链表）
+# 查找、插入与验证
 
 ```cpp
-// BST 查找
-TreeNode* searchBST(TreeNode* root, int val) {
-    if (!root || root->val == val) return root;
-    return val < root->val ? searchBST(root->left, val)
-                           : searchBST(root->right, val);
-}
-
-// BST 插入
-TreeNode* insertIntoBST(TreeNode* root, int val) {
-    if (!root) return new TreeNode(val);
-    if (val < root->val) root->left  = insertIntoBST(root->left,  val);
-    else                 root->right = insertIntoBST(root->right, val);
-    return root;
-}
-
-// BST 删除
-TreeNode* deleteNode(TreeNode* root, int key) {
-    if (!root) return nullptr;
-    if (key < root->val) {
-        root->left  = deleteNode(root->left,  key);
-    } else if (key > root->val) {
-        root->right = deleteNode(root->right, key);
-    } else {
-        if (!root->left)  return root->right;  // 教学简化：真实拥有节点时还需释放 root
-        if (!root->right) return root->left;
-        // 找右子树最小节点（中序后继）
-        TreeNode* succ = root->right;
-        while (succ->left) succ = succ->left;
-        root->val   = succ->val;
-        root->right = deleteNode(root->right, succ->val);
+bool contains(const TreeNode* root, int key) {
+    while (root != nullptr) {
+        if (key == root->value) return true;
+        root = key < root->value ? root->left : root->right;
     }
-    return root;
+    return false;
 }
 ```
 
-# AVL 树
+插入沿同一路径找到空位置，再链接新节点。验证可用上下界向下传递：左子树继承上界为当前键，右子树继承下界为当前键。边界类型要覆盖键的全部取值，或使用 `optional`，避免 `INT_MIN/INT_MAX` 哨兵与合法键冲突。
 
-AVL 树是**自平衡 BST**，任意节点的左右子树高度差（平衡因子）不超过 1。
+# 删除的三个情况
 
-**平衡因子 = height(left) - height(right)**，维持在 {-1, 0, 1}。
+1. 叶节点：直接摘除；
+2. 只有一个孩子：用孩子接替；
+3. 两个孩子：用中序后继（右子树最小值）或前驱替换，再删除原位置节点。
 
-## 旋转操作
+若节点保存的不只是键，复制单个键可能破坏对象身份或附属数据；更稳妥的实现会移动完整 payload 或调整节点链接。删除后还要维护高度、父指针、子树大小等增强字段。
 
-```
-LL 失衡（左左）→ 右旋：
-      z                y
-     / \              / \
-    y   T4    →      x   z
-   / \              / \ / \
-  x   T3           T1 T2T3 T4
+# AVL 树如何保持平衡
 
-RR 失衡（右右）→ 左旋（镜像）
+AVL 对每个节点维护高度，并要求平衡因子：
 
-LR 失衡（左右）→ 先左旋 y，再右旋 z
-
-RL 失衡（右左）→ 先右旋 y，再左旋 z
+```text
+balance = height(left) - height(right)
 ```
 
-AVL 树保证严格平衡，查找 O(log n)；代价是插入/删除可能需要多次旋转。
+绝对值不超过 1。插入/删除沿祖先链更新高度，首次失衡处根据“外侧还是内侧”选择旋转：
 
-**红黑树**：放松 AVL 的高度平衡条件，通常旋转更少。许多标准库实现会用红黑树实现有序关联容器，但 C++ 标准规定的是对数复杂度等行为，不规定必须使用哪一种树。
+| 失衡 | 修复 |
+|---|---|
+| LL | 右旋 |
+| RR | 左旋 |
+| LR | 先左旋左孩子，再右旋 |
+| RL | 先右旋右孩子，再左旋 |
 
----
+旋转只改变局部链接，不改变中序键顺序。正确实现顺序是：保存中间子树、重连节点、再自下而上更新高度。删除可能让多个祖先失衡，因此不能像插入那样修复一次就必然结束。
 
-> [!summary] 核心摘要
->
-> **BST 和 AVL 的差别？** 普通 BST 的高度可能退化到 `O(n)`；AVL 把每个节点的左右子树高度差限制在 1 内，从而保证查找、插入、删除为 `O(log n)`，代价是维护高度和旋转。删除节点有两个孩子时，常复制中序后继/前驱的键再递归删除它。
->
-> **自测：** 为什么中序遍历能验证 BST？允许重复键时，需要额外规定什么？
+# 与其他有序结构比较
 
+- AVL 平衡更严格，查找路径短，但更新可能需要更多维护。
+- 红黑树约束较松，仍保证 `O(log n)`；C++ 的有序关联容器通常以平衡树实现，但标准不规定必须是哪一种树。
+- B/B+ 树提高分支因子，减少外存或页级访问，适合数据库和文件系统索引。
+- 跳表用随机层级获得期望 `O(log n)`，实现和并发特性不同。
+- 若只需要一次静态查询，排序数组 + 二分往往比指针树更紧凑、更缓存友好。
 
-> [!warning]- 易错点
-> - 把 **05-Binary Search Trees (二叉搜索树)** 只当作定义或模板背诵，遇到输入规模、边界条件或复杂度变化就不会选方案。 - 只在纸上推导而不写最小样例、反例和复杂度检查，容易把“会看”误当成会用。
+# 增强 BST
 
-> [!info]- 延伸阅读
-> - 下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/06-Graphs%20Union%20Find%20and%20Shortest%20Paths%20(图并查集与最短路).md)
+给每个节点维护子树大小，可在 `O(h)` 内查询第 k 小和 rank；维护区间聚合值可支持范围查询。任何旋转和更新都必须同步维护增强字段，这正是数据结构不变量的一部分。
+
+# 检查理解
+
+1. 为什么只比较父节点和直接孩子不能验证 BST？
+2. 删除有两个孩子的节点时，为什么后继至多只有一个右孩子？
+3. AVL 旋转为何不会破坏中序顺序？
+4. 什么时候排序数组可能比平衡树更合适？
+
+> [!summary] 本篇结论
+> BST 用全局顺序不变量把查找缩到一条根到叶路径；复杂度取决于高度。AVL 通过局部旋转维护严格高度界，从而把最坏查找、插入和删除限制在 `O(log n)`。
+
+下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/06-Graphs%20Union%20Find%20and%20Shortest%20Paths%20(图并查集与最短路).md)

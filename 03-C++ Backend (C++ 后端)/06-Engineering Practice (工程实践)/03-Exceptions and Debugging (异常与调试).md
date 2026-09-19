@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
 > [!note] 方法论坐标
@@ -64,13 +64,14 @@ struct Bad { Bad(Bad&&) { /* 可能抛异常 */ } };
 struct Good { Good(Good&&) noexcept { /* ... */ } };
 
 std::vector<Bad> v1;
-// push_back 时，vector 扩容会用拷贝而非移动
-// （因为移动可能抛异常，无法保证强异常安全）
+// 若类型也可拷贝，扩容时实现可能选择拷贝来维持异常保证；
+// 本例只定义了移动构造，不能据此断言它一定会拷贝。
 
 std::vector<Good> v2;
-// push_back 时，vector 扩容会使用移动操作（快得多！）
+// 不抛异常的移动构造有利于容器在扩容时保持异常保证；
+// 是否更快仍需按类型和负载测量。
 
-// 所以：移动构造函数必须标记 noexcept！
+// 只有实现确实不会抛异常时才声明 noexcept；不能为了提速而误标。
 ```
 
 ## 栈展开（Stack Unwinding）
@@ -150,7 +151,7 @@ auto result = read_file("config.txt", ec);
 if (ec) { /* 处理不存在等预期情况 */ }
 ```
 
-> [!tip]- **工程要点**：编写异常安全代码的核心不是 try-catch，而是 **RAII**。资源在构造时获取，析构时释放——析构函数在栈展开时一定会被调用。现代 C++ 中极少需要写 try-catch，除非要做错误转换或日志记录。
+> [!tip]- **工程要点**：异常安全首先靠 RAII 管理资源，而非到处补 `try-catch`。正常的 C++ 异常栈展开会析构已构造的自动对象；但 `std::terminate`、进程异常退出或被跳过的析构路径不能据此保证清理。应在能恢复、转换错误或建立业务边界的层级捕获异常。
 
 ---
 

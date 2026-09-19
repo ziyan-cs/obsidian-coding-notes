@@ -1,10 +1,10 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标：能区分 data race、原子性和跨线程同步，并为 release/acquire 写出完整的读写配对条件。
 
 > [!summary] 核心摘要
 >
@@ -39,8 +39,8 @@ content_verified: 2026-09-17
 #include <atomic>
 
 std::atomic<int> counter{0};
-// 普通 int 的 read-modify-write 不是线程安全的：
-// ++counter 在多线程中会出错（load → inc → store 不是原子的）
+// 对共享的普通 int 做未同步的 ++ 会产生 data race；
+// 但这里的 counter 是 atomic，fetch_add 和 ++ 都是原子读改写。
 
 // ✅ atomic 的 ++ 是原子的
 counter.fetch_add(1);      // 原子自增
@@ -55,7 +55,7 @@ counter++;                 // 等价于 fetch_add(1)
 counter += 5;
 ```
 
-## 为什么 atomic 比 mutex 快？
+## atomic 与 mutex 的成本不能一概而论
 
 ```cpp
 // mutex 保护
@@ -69,23 +69,23 @@ void inc_mutex() {
 // atomic：std::atomic 不保证 lock-free，可用 is_lock_free() 查询
 std::atomic<int> atomic_shared{0};
 void inc_atomic() {
-    ++atomic_shared;  // 编译为 lock add 或 CAS 循环，纯用户态指令
+    ++atomic_shared;  // 具体实现依类型、平台和标准库而异
 }
 ```
 
-**性能量级**（粗略对比）：
+**测量时区分**：
 - mutex：无竞争时，常见实现通常在用户态完成；发生竞争时才可能通过 futex 等机制等待或唤醒。实际成本受平台、实现、竞争和缓存状态影响，必须测量。
-- atomic：通常在用户态完成，具体开销需以本机测量为准。
+- atomic：单个操作省去了显式临界区，但竞争同一缓存行也可能很贵，且某些类型不保证 lock-free。两者的正确性模型不同，不能只比较一次增量的耗时。
 
 ## 内存序（Memory Order）— 核心难点
 
 ```cpp
-// 默认是 std::memory_order_seq_cst（最严格，最慢）
+// 默认是 std::memory_order_seq_cst；先用它建立正确性基线。
 std::atomic<int> a{0}, b{0};
 int x = 0, y = 0;
 
 // 六种内存序：
-std::memory_order_relaxed;   // 无顺序约束
+std::memory_order_relaxed;   // 原子性与同一对象修改顺序，非跨线程同步
 std::memory_order_consume;   // 规范中的依赖序；主流编译器通常按 acquire 处理，一般不推荐使用
 std::memory_order_acquire;   // 保证之后的读取不会重排到此操作之前
 std::memory_order_release;   // 保证之前的写入不会重排到此操作之后
@@ -113,7 +113,7 @@ while (!ready.load(std::memory_order_acquire));  // 获取语义
 // ✅ 保证：线程 2 看到 data.prepare() 的所有副作用
 process(data);
 
-// 场景 3：全同步 → seq_cst（默认，最易理解但最慢）
+// 场景 3：默认 seq_cst 便于推理；不保证在所有平台都最慢
 flag.store(true);  // 等价于 seq_cst
 ```
 
@@ -148,10 +148,11 @@ if (value.compare_exchange_weak(expected, desired)) {
 
 // compare_exchange_weak vs strong：
 // weak: 可能虚假失败（硬件原因），需要循环重试
-// strong: 不会虚假失败，更贵
+// strong: 不会虚假失败；成本差异依平台与操作而定
 // 通常 CAS 循环中用 weak，单次用 strong
 
-// CAS 循环实现无锁栈
+// 以下仅示意 CAS 更新头指针，不构成完整无锁栈：
+// 真正的 pop 还需证明 ABA、节点生命周期与进展保证。
 void atomic_push(Node* new_head) {
     Node* old_head = head_.load();
     do {
@@ -167,9 +168,9 @@ void atomic_push(Node* new_head) {
 // 可以通过 is_lock_free() 检查
 std::atomic<LargeStruct> big;
 if (big.is_lock_free()) {
-    // 硬件级别原子操作
+    // 此 atomic 对象的操作满足该实现的 lock-free 条件
 } else {
-    // 内部用了 mutex！
+    // 不满足 lock-free；实现可能使用锁或其他机制，不能指定内部一定是 mutex
 }
 
 // ❌ atomic 不支持复合操作（除非用 CAS 循环）
@@ -177,6 +178,6 @@ if (big.is_lock_free()) {
 // atomic 不能用于 std::vector 等容器（不可拷贝/移动）
 ```
 
-> **面试重点**：为什么需要内存序？现代 CPU 和编译器会重排指令。`release` 保证之前的写不会被重排到该操作之后；`acquire` 保证之后的读不会被重排到该操作之前。两者配合形成 **happens-before** 关系。
+> **关键边界**：release 与 acquire 不是任意配对就能同步。acquire 必须在同一原子对象上读到相应 release（或其 release sequence）的值，才建立 `synchronizes-with`，进而让前序普通写对后续普通读可见。
 
 ---

@@ -1,23 +1,29 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
 > [!abstract] 学习目标：用 optional、variant、string_view 和结构化绑定表达状态、联合值与非拥有视图。
 
-> [!note] 本节重点：optional、variant、any 三种新型类型工具的适用场景
+> [!note] 先问值是否可缺席、是否有多种合法形态，再判断是否需要保留失败原因。`optional` 不保存错误原因，`variant` 能显式区分不同结果。
 
 # std::optional（C++17）
 
 表示"可能有值也可能没有值"，替代空指针、哨兵值、`bool` + 输出参数：
 
 ```cpp
+#include <charconv>
 #include <optional>
+#include <string_view>
 
-std::optional<int> parse(const std::string& s) {
-    try { return std::stoi(s); }
-    catch (...) { return std::nullopt; }  // 无值
+std::optional<int> parse(std::string_view s) {
+    if (s.empty()) return std::nullopt;
+    int value{};
+    const auto [next, error] = std::from_chars(s.data(), s.data() + s.size(), value);
+    if (error != std::errc{} || next != s.data() + s.size())
+        return std::nullopt; // 不允许溢出或尾随垃圾字符
+    return value;
 }
 
 auto result = parse("42");
@@ -93,11 +99,11 @@ std::visit([](auto&& v) {
 
 ---
 
-# string view and Structured Bindings (轻量视图)
+# 借用视图与结构化绑定
 
 > [!note] 本节重点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
 
-# std::string_view（C++17）
+## std::string_view（C++17）
 
 对字符串的**非拥有只读视图**，避免不必要的字符串拷贝：
 
@@ -144,7 +150,7 @@ void new_func(std::string_view sv);
 
 ---
 
-# Structured Bindings（结构化绑定，C++17）
+## Structured Bindings（结构化绑定，C++17）
 
 解包 pair、tuple、struct、数组到多个命名变量：
 

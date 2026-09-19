@@ -1,163 +1,115 @@
 ---
 status: stable
 confidence: high
-
+content_verified: 2026-09-19
 tags: [cs/os, learning/foundation]
 ---
 
 > [!abstract] 学习目标
-> 建立进程、线程、地址空间、内核调度实体与协程之间的边界，能够解释创建、切换和资源共享。
+> 建立进程、线程、Linux task 与协程的边界，理解创建、执行、退出、等待以及资源共享对隔离和并发的影响。
 
+# 两种基本抽象
 
-> [!note] 本节重点：进程与线程的区别、PCB/TCB、进程状态转换、进程创建（fork）、协程
+**进程（process）**首先是资源与保护边界：它拥有虚拟地址空间、凭据、文件描述符表、信号处置等执行环境。**线程（thread）**是进程内可被调度的执行流：同一进程的线程通常共享地址空间和打开的资源，但各有寄存器、栈、线程局部存储和调度状态。
 
-# 进程 vs 线程
+| 维度 | 不同进程 | 同一进程的线程 |
+|---|---|---|
+| 虚拟地址空间 | 通常不同 | 共享 |
+| 代码、全局变量、堆 | 隔离映射 | 共享 |
+| 用户栈与寄存器 | 各自拥有 | 各自拥有 |
+| 文件描述符表 | 各自一张；创建时可复制/共享引用 | 通常共享 |
+| 故障影响 | 隔离较强 | 越界写可能破坏整个进程 |
+| 通信方式 | IPC、共享内存、套接字等 | 可直接共享对象，但必须同步 |
 
-| 维度 | 进程（Process） | 线程（Thread） |
-|------|----------------|----------------|
-| 资源拥有 | 独立地址空间、文件描述符 | 共享进程资源 |
-| 切换代价 | 高（切换页表/TLB/地址空间） | 低（仅保存寄存器） |
-| 通信方式 | IPC（pipe, shm, socket） | 直接读写共享内存 |
-| 健壮性 | 进程间隔离，一个崩溃不影响其他 | 一个线程崩溃可能影响整个进程 |
-| 创建开销 | 高（fork 需要复制页表） | 低（pthread_create 轻量） |
+Linux 内核用 `task_struct` 表示可调度任务。进程与线程不是两套完全不同的内核对象；`clone()` 通过一组共享标志决定地址空间、文件表、信号处理等资源是否共享。“线程是轻量级进程”是入口，不是完整模型。
 
-## 进程控制块（PCB）
-
-内核为每个进程维护的 PCB（Linux 中为 `task_struct`）：
-
-```c
-// Linux task_struct 关键字段（简化）
-struct task_struct {
-    pid_t pid;                      // 进程 ID
-    long state;                     // 进程状态（TASK_RUNNING, TASK_INTERRUPTIBLE...）
-    struct mm_struct *mm;           // 地址空间（页表）
-    struct files_struct *files;     // 打开的文件描述符表
-    struct thread_info *thread;     // 线程信息（寄存器上下文）
-    struct list_head children;      // 子进程链表
-    unsigned int policy;            // 调度策略
-    int prio;                       // 动态优先级
-    // ...
-};
-```
-
----
-
-# 进程状态
+# 生命周期：创建、替换与回收
 
 ```text
-[*]
-  └── create → NEW
-
-NEW
-  └── admit/ready → READY
-
-READY
-  └── scheduler dispatch → RUNNING
-
-RUNNING
-  ├── timeslice expired / preempted → READY
-  ├── wait I/O / lock → BLOCKED
-  └── exit → TERMINATED
-
-BLOCKED
-  └── I/O complete / lock released → READY
-
-TERMINATED
-  └── → [*]
-
-Note for RUNNING:
-  PCB saves execution context
-  Each switch requires address space switch (high overhead)
+父进程 --fork/clone--> 子任务
+   │                      │
+   │                  exec：替换程序映像
+   │                      │
+   └------ wait <------ exit：留下退出状态
 ```
 
-**Linux 特有状态：**
-- `TASK_INTERRUPTIBLE`：可中断睡眠（收到信号可唤醒）
-- `TASK_UNINTERRUPTIBLE`：不可中断睡眠（如等待 I/O 完成）
-- `TASK_STOPPED`：收到 SIGSTOP 信号
-- `TASK_DEAD`：已退出（`exit()`），等待父进程 `wait()`
+## `fork`、`exec` 与 `wait`
 
----
+- `fork()` 创建新的进程上下文。现代系统通常通过**写时复制（copy-on-write）**避免立即复制所有物理页。
+- 子进程获得文件描述符表的副本，但对应描述符可指向同一个 **open file description**，因此文件偏移和部分状态可能共享。
+- `execve()` 不创建新进程；它在当前进程中替换地址空间和程序映像，PID 通常不变。
+- `_exit()` 结束执行后，内核暂存退出状态。父进程用 `wait/waitpid` 回收；未回收的已退出子进程称为**僵尸（zombie）**。
+- 父进程先退出时，子进程会被重新托管；**孤儿**与**僵尸**不是同一状态。
 
-# 进程创建
+在多线程进程中 `fork()` 后，子进程最初只保留调用线程。随后若不立即 `exec`，锁的继承状态会非常棘手，因此要遵守运行库对 fork handler 和 async-signal-safe 操作的约束。
 
-```cpp
-#include <unistd.h>
-#include <iostream>
+# 状态与阻塞
 
-int main() {
-    pid_t pid = fork();
+教材常用“新建、就绪、运行、阻塞、终止”描述状态机。Linux 的可观察状态更细，且不同工具会合并显示：
 
-    if (pid == 0) {
-        // 子进程
-        std::cout << "Child: PID=" << getpid()
-                  << ", Parent=" << getppid() << std::endl;
-        execlp("/bin/ls", "ls", "-l", nullptr);  // 替换进程映像
-    } else if (pid > 0) {
-        // 父进程
-        std::cout << "Parent: child PID=" << pid << std::endl;
-        wait(nullptr);  // 等待子进程结束
-    } else {
-        perror("fork failed");
-    }
-    return 0;
-}
+```text
+可运行 ──调度──> 运行 ──时间片/抢占──> 可运行
+  ▲                 │
+  └──事件完成──── 可中断或不可中断睡眠
+
+退出 ──等待父进程读取状态──> 完全回收
 ```
 
-**fork 的写时复制（COW）：** fork 时子进程共享父进程的页，仅置为只读。任一进程写入时触发缺页异常，内核复制该页。避免了 fork 时复制整个地址空间的开销。
+阻塞不是“线程消失”，而是它暂时不在可运行集合中。不可中断睡眠通常用于必须完成的内核等待，并不等于进程永远无法终止。
 
----
+# 线程的共享边界
 
-# 线程与协程
+共享内存让通信便宜，也引入数据竞争、可见性和生命周期问题：
 
-```cpp
-// POSIX 线程创建
-#include <pthread.h>
-#include <iostream>
+- 全局对象和堆对象可被多个线程访问；没有同步的冲突访问在 C++ 中可能构成未定义行为。
+- 每个线程有独立栈，但把栈对象地址交给其他线程后，对象生命周期仍需协调。
+- 信号既有进程级处置，也可能定向到特定线程；不能简单说“信号完全共享”。
+- `thread_local` 提供线程局部实例，不代表对象天然免于跨线程生命周期问题。
 
-void* thread_func(void* arg) {
-    int* id = (int*)arg;
-    std::cout << "Thread " << *id << " running" << std::endl;
-    return nullptr;
-}
+线程结束必须明确 `join` 或按接口约定 `detach`；进程对子进程则要 `wait`。二者解决的都是生命周期回收，但资源和语义不同。
 
-int main() {
-    pthread_t t1, t2;
-    int id1 = 1, id2 = 2;
-    pthread_create(&t1, nullptr, thread_func, &id1);
-    pthread_create(&t2, nullptr, thread_func, &id2);
-    pthread_join(t1, nullptr);
-    pthread_join(t2, nullptr);
-    return 0;
-}
+# 协程不是线程
+
+协程（coroutine）把一个逻辑任务拆成可暂停/恢复的状态机。C++20 协程是语言级、通常无栈（stackless）的机制，本身不创建线程，也不规定调度器和 I/O 运行时。
+
+| 概念 | 调度者 | 能否多核并行 | 阻塞调用的影响 |
+|---|---|---|---|
+| 进程/线程 | 内核 | 可以 | 阻塞当前线程 |
+| 用户态协程 | 运行库/应用 | 单线程内不行；可跨线程调度 | 若直接阻塞底层线程，会连带阻塞其上的协程 |
+
+“协程切换更轻”只说明通常不必进入内核保存完整线程上下文；实际成本取决于运行时、分配、调度和缓存行为。
+
+# 工程选择
+
+- 需要故障隔离、权限边界或独立部署：优先考虑进程。
+- 需要共享大量内存并利用多核：线程常更直接，但要控制同步复杂度。
+- 大量等待型任务需要结构化暂停：协程/异步运行时有优势，但必须配合非阻塞 I/O 和取消传播。
+- 真实服务器常混合使用多进程、线程池、事件循环和协程，没有单一“最高性能模型”。
+
+# 动手验证
+
+```bash
+ps -eLf | head
+ls /proc/$$/task
+cat /proc/$$/status
 ```
 
-**协程（Coroutine）：** 用户态轻量级线程，由程序员显式 yield/schedule，无需内核参与。C++20 引入 `co_await` / `co_yield` / `co_return`。
+再写一个最小程序：父进程 `fork` 后，父子分别打印 PID、地址和值；让子进程修改变量，并比较普通内存与共享内存的结果。不要用打印顺序推断调度保证。
 
-| 线程 | 协程 |
-|------|------|
-| 内核调度，抢占式 | 用户调度，协作式 |
-| 栈大小 ≈ 8MB（固定） | 栈大小 ≈ KB 级（可动态） |
-| 上下文切换 ≈ 1-3μs | 上下文切换 ≈ 0.1-0.3μs |
-| 适合 CPU 密集型 | 适合 I/O 密集型 |
+# 检查理解
 
----
+1. `fork` 为什么不等于立刻复制全部物理内存？
+2. 描述符表被复制后，为什么父子仍可能共享文件偏移？
+3. `exec` 与“创建新进程”有什么不同？
+4. C++20 协程为什么既不是线程，也不自带并发？
 
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | fork 返回值 | 父进程返回子 PID，子进程返回 0，错误返回 -1 |
-> | 孤儿进程 vs 僵尸进程 | 孤儿被 init 收养；僵尸已退出且未 wait，占用 PCB |
-> | 多线程共享什么 | 堆、全局变量、文件描述符；不共享栈、寄存器 |
-> | 线程安全 | 用互斥锁 / 原子操作 / TLS（线程本地存储）保证 |
-> | fork 后子进程获得的资源 | 文件描述符表复制（共享偏移量）、信号处理函数继承 |
->
+> [!summary] 本篇结论
+> 进程组织隔离和资源，线程承载可调度执行流，协程表达用户态可暂停任务。判断成本和安全性时，应具体追踪共享了什么、由谁调度、如何退出与回收。
 
-> [!tip]- **工程要点**：进程用于隔离，线程用于并行。现代高性能服务器常用**多进程 + 事件驱动**（Nginx）或**多线程 + 异步 I/O**（Redis）。创建线程/进程后必须 join/detach/wait，否则资源泄漏。
+## 权威依据
 
->
-> ---
->
->
-> ---
+- [Linux clone(2)](https://man7.org/linux/man-pages/man2/clone.2.html)
+- [Linux fork(2)](https://man7.org/linux/man-pages/man2/fork.2.html)
+- [Linux proc_pid_status(5)](https://man7.org/linux/man-pages/man5/proc_pid_status.5.html)
 
 下一步：[07-Context Switching and Scheduling (上下文切换与调度)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/07-Context%20Switching%20and%20Scheduling%20(上下文切换与调度).md)

@@ -1,112 +1,136 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [engineering/build, engineering/automation]
 ---
 
-> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
+> [!abstract] 学习目标
+> 把 GNU Make 看作按文件依赖执行的增量构建器，把 shell 看作独立解释层；能够维护正确的头文件依赖、并行构建和错误传播，而不靠手动删除 build 目录“修复”依赖图。
 
-# Makefile Basics (Makefile 基础)
+# Make 管理有向依赖图
 
-> [!note] 本节重点：规则语法、变量、自动变量、伪目标、增量构建原理
-
-## 基本语法
+规则由目标、先决条件和 recipe 组成：
 
 ```makefile
-目标: 依赖列表
-	命令（必须用 Tab 缩进，不能用空格）
+target: normal-prerequisites | order-only-prerequisites
+	recipe
 ```
 
-## 最小可用 Makefile
+普通依赖不仅决定执行顺序，也参与时间戳过期判断；仅顺序依赖保证先构建，却不因其时间戳改变而触发目标重建。目标不存在也会触发构建。
+
+Make 本身不解析 C++ 的 `#include`；如果头文件未纳入依赖图，增量构建可能错误地复用旧对象文件。
+
+# 一份可实践的 GNU Makefile
+
+项目有 `src/main.cpp`、`src/util.cpp` 和 `include/util.hpp`。以下 recipe 行**必须以 Tab 开头**；此例针对 GNU Make 与 GCC/Clang，Windows PowerShell 原生命令环境不保证能直接运行：
 
 ```makefile
-CXX      = g++
-CXXFLAGS = -std=c++17 -Wall -g
-TARGET   = myapp
-SRCS     = main.cpp utils.cpp
-OBJS     = $(SRCS:.cpp=.o)      # 字符串替换：.cpp → .o
-
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-clean:
-	rm -f $(OBJS) $(TARGET)
-
-.PHONY: clean    # 声明 clean 是伪目标，不是文件名
-```
-
-## 自动变量
-
-|变量|含义|
-|---|---|
-|`$@`|当前规则的目标文件名|
-|`$<`|第一个依赖文件|
-|`$^`|所有依赖文件（去重）|
-|`$*`|模式匹配的词干（如 `%.o: %.cpp` 中的文件名部分）|
-
-## 增量构建原理
-
-Make 通过比较**目标文件与依赖文件的时间戳**决定是否重新构建：
-
-- 若目标不存在 → 构建
-- 若依赖比目标新 → 重新构建
-- 否则 → 跳过
-
-## 常用变量约定
-
-```makefile
-CC       = gcc           # C 编译器
-CXX      = g++           # C++ 编译器
-CFLAGS   = -Wall -O2     # C 编译选项
-CXXFLAGS = -Wall -O2     # C++ 编译选项
-LDFLAGS  = -lpthread     # 链接选项
-```
-
-## 实用技巧
-
-```makefile
-DEPS = $(OBJS:.o=.d)
--include $(DEPS)
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -MMD -MP -c -o $@ $<
-
-clean:
-	@rm -f $(OBJS) $(TARGET)
-	@echo "Cleaned."
-
-all: myapp mylib
-
-make -n        # dry run，只打印不执行
-make -p        # 打印所有内置规则和变量
-```
-
----
-
-# 把 Make 看成依赖图执行器
-
-Make 读取规则构造有向依赖图，再从目标递归判断哪些节点过期。recipe 是否执行只依赖目标存在性和时间戳关系；Make 不理解 C++ `#include`，因此必须让编译器生成 `.d` 依赖文件，否则头文件变化可能不会触发重编译。
-
-```makefile
+CXX      ?= c++
 CPPFLAGS := -Iinclude
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -MMD -MP
-LDLIBS   := -pthread
+LDLIBS   :=
+OBJS     := build/main.o build/util.o
+DEPS     := $(OBJS:.o=.d)
 
-build/%.o: src/%.cpp
-	@mkdir -p $(@D)
+.PHONY: all clean test
+all: build/app
+
+build/app: $(OBJS)
+	$(CXX) $(OBJS) $(LDLIBS) -o $@
+
+build/%.o: src/%.cpp | build
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
--include $(OBJS:.o=.d)
+build:
+	mkdir -p $@
+
+-include $(DEPS)
+
+test: build/app
+	./build/app
+
+clean:
+	rm -f $(OBJS) $(DEPS) build/app
 ```
 
-变量展开和 shell 执行是两层语言：`$(VAR)` 由 Make 展开，`$$name` 才把 `$name` 交给 shell；默认每个 recipe 行可能在独立 shell 中执行，需要共享工作目录/变量时写成同一行或使用 `.ONESHELL` 并理解失败传播。
+`-MMD -MP` 让编译器生成用户头文件依赖文件；`-include` 允许首次构建时 `.d` 尚不存在。`build` 目录作为 order-only prerequisite 避免其 mtime 改变时强制重编对象。输出 `build/app` 的规则依赖于对象文件，从而保持并行构建安全。
 
-并行执行 `make -j` 要求规则正确声明真实依赖，多个 recipe 不能无协调地写同一文件。`.PHONY` 只用于不代表文件的动作；把真实产物声明为 phony 会失去增量构建。
+若目标名恰好为现存文件 `test` 或 `clean`，`.PHONY` 防止 Make 误以为任务已经完成；真实产物不能随意标为 phony，否则破坏增量构建。
 
-诊断顺序：`make -n` 查看将执行的命令，`make --debug=b` 解释为何重建，删除产物做干净构建，修改一个头文件验证影响范围。recipe 返回非零时 Make 默认停止；不要用前缀 `-` 或 `|| true` 隐藏关键失败。
+# 自动变量、变量展开与 shell
 
-实践：为两源文件项目生成 `.d`，先全量构建，再只改 `.cpp` 和公共头文件，记录哪些对象被重建；随后用 `make -j` 验证规则无竞争。
+| 表达式 | 含义 |
+|---|---|
+| `$@` | 当前目标 |
+| `$<` | 第一个普通依赖 |
+| `$^` | 所有普通依赖，去重 |
+| `$(@D)` | 目标所在目录 |
+| `$(VAR)` | Make 变量，在 recipe 执行前由 Make 展开 |
+| `$$name` | 传给 shell 的 `$name` |
 
-参考：[GNU Make Manual](https://www.gnu.org/software/make/manual/make.html)。
+`:=` 创建立即展开变量；`=` 创建递归展开变量；`?=` 仅在尚未定义时赋值。变量与 recipe 是两层语言，Make 的 `$(...)` 与 shell 的 `$...` 不可混淆。
+
+默认每行 recipe 在独立 shell 进程中执行：
+
+```makefile
+broken:
+	cd src
+	pwd          # 一般并不在 src
+```
+
+需共享工作目录时写成同一 recipe 行，例如 `cd src && command`；`.ONESHELL` 会改变每行 shell 规则，启用时要重新检查非零退出码的传播。
+
+# Shell 自动化的失败语义
+
+对 Bash 脚本可以使用：
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+source_dir=${1:?provide source directory}
+cmake -S "$source_dir" -B build -G Ninja
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+`pipefail` 是 Bash 等 shell 的能力，不属于所有 `/bin/sh`。即使使用 `set -e`，在条件测试、`if`、`&&` 等上下文中行为也有例外；关键外部操作应明确处理返回码，而不是把 `set -e` 当通用异常系统。所有路径变量都应正确引用，避免空格、通配符和意外分词。
+
+自动化脚本不应默认删除用户数据；若要清理，仅操作显式且已经检查的生成目录。不要用 `|| true` 隐藏真正的构建或测试失败。
+
+# 并行与增量正确性
+
+`make -j` 可加快独立任务执行，但要求每个生成文件有明确唯一的生产者、所有消费者声明真实依赖，不能由多个 recipe 同时写一个输出。
+
+诊断流程：
+
+```bash
+make -n           # 预览将执行的 recipe，仍可能展开某些 Make 功能
+make --debug=b    # 查看目标为什么被重建
+make -j           # 验证声明的并行关系
+```
+
+修改 `src/main.cpp` 应只重编 `main.o` 和最终程序；修改 `include/util.hpp` 应重编确实包含它的对象；单独修改 `util.cpp` 不应重编 `main.o`。用输出证据验证图，不要仅依据“运行成功”判断依赖正确。
+
+# 与 CMake 的分工
+
+CMake 更适合跨平台项目声明目标和配置依赖；其生成器可选择 Ninja、Make、Visual Studio 等。直接手写 GNU Makefile 有助于理解图和增量构建，也适合简单 Unix 项目；不应把 GNU Make 专用命令塞进所有平台的 CMake 项目。
+
+# 检查理解
+
+1. 为什么缺少头文件依赖会导致增量构建产生错误制品？
+2. `build` 目录为何适合作为 order-only prerequisite？
+3. recipe 中 `$(VAR)` 与 `$$VAR` 的求值者分别是谁？
+4. 为什么 `make -j` 能揭示串行构建时隐藏的依赖缺失？
+
+> [!summary] 本篇结论
+> Make 的正确性来自完整依赖图与唯一输出所有权；shell 的正确性来自清晰引用、退出状态与破坏性操作边界。速度只有建立在正确的增量和并行语义上才有意义。
+
+## 权威依据
+
+- [GNU Make Manual](https://www.gnu.org/software/make/manual/make.html)
+- [GNU Make prerequisites](https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html)
+- [Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
+
+下一步：[01-Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)

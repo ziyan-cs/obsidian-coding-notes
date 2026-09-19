@@ -30,7 +30,7 @@ tags: [vault/navigation, backend-learning]
 
 1. [基础能力](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)
 2. [工程基础](/02-Engineering%20Fundamentals%20(工程基础)/00-Engineering%20Fundamentals%20Standard%20(工程基础标准与自测).md)
-3. [C++ 后端](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/00-C%2B%2B%20Backend%20Standard%20(C%2B%2B%20后端标准与自测).md)
+3. [C++ 后端](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)
 4. [Python 工程](/04-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md)
 5. [Go 后端](/05-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md)
 6. [系统与网络](/06-Systems%20and%20Networking%20(系统与网络)/00-Systems%20and%20Networking%20Standard%20(系统与网络标准与自测).md)

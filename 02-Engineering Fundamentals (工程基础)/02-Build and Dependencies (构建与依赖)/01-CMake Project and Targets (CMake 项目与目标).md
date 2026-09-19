@@ -1,238 +1,158 @@
 ---
 status: stable
 confidence: high
+content_verified: 2026-09-19
+tags: [engineering/build, cpp/cmake]
 verified: 2026-10-22
 review_stage: learn
 review_due: 2026-10-22
-
 ---
 
-> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
+> [!abstract] 学习目标
+> 能从源码、目标和使用要求构建一个可移植的 C++ 工程，区分 CMake 的配置、生成、编译和测试阶段，并解释 Debug/Release 与单配置/多配置生成器。
 
-# CMakeLists Structure (CMake 项目结构)
+# CMake 描述的是构建图
 
-> [!note] 本节重点：最小可用结构、各指令的作用与顺序
+CMake 读取 `CMakeLists.txt`，在配置（configure）阶段检测工具链、解析依赖并定义目标，再在生成（generate）阶段生成 Ninja/Make/IDE 工程；实际编译、链接由构建工具在 build 阶段完成。CMake 自身不是 C++ 编译器。
 
-> [!tip] CMake 的核心单位是 target
-> 把可执行文件和库声明为明确的 target，并让 include path、编译选项和依赖跟随 target 传播。全局变量和全局 `include_directories()` 在小项目能工作，却会在工程变大后制造隐式耦合。
-
-## 最小工程模板
-
-```cmake
-cmake_minimum_required(VERSION 3.20)         # 声明最低 CMake 版本
-project(MyProject VERSION 1.0 LANGUAGES CXX) # 项目名、版本、语言
-
-set(CMAKE_CXX_STANDARD 17)                 # C++ 标准
-set(CMAKE_CXX_STANDARD_REQUIRED ON)        # 强制要求，找不到就报错
-set(CMAKE_CXX_EXTENSIONS OFF)              # 禁用 GNU 扩展，使用纯标准
-
-add_executable(myapp
-    src/main.cpp
-    src/utils.cpp
-)
-
-add_library(mylib STATIC
-    src/mylib.cpp
-)
+```text
+源码 + CMakeLists + 工具链 + 配置
+  → configure/generate → build graph
+  → 编译目标文件 → 链接产物
+  → ctest 验证 → install（如果声明）
 ```
 
-## 典型多目录项目结构
+构建图的节点是可执行文件、库和自定义目标；边表示依赖及其使用要求（usage requirements），而非“把库文件名附加到命令末尾”。
 
-```
-MyProject/
-├── CMakeLists.txt          ← 根 CMakeLists
-├── src/
-│   ├── CMakeLists.txt      ← 子目录
-│   └── main.cpp
-├── lib/
-│   ├── CMakeLists.txt
-│   └── mylib.cpp
-├── include/
-│   └── mylib.h
-└── tests/
-    ├── CMakeLists.txt
-    └── test_main.cpp
-```
+# 一个可运行的最小工程
 
-根 CMakeLists.txt：
+```text
+demo/
+├── CMakeLists.txt
+├── include/demo/math.hpp
+├── src/math.cpp
+├── src/main.cpp
+└── tests/math_test.cpp
+```
 
 ```cmake
 cmake_minimum_required(VERSION 3.20)
-project(MyProject)
+project(Demo VERSION 1.0 LANGUAGES CXX)
 
-add_subdirectory(lib)    # 处理 lib/CMakeLists.txt
-add_subdirectory(src)    # 处理 src/CMakeLists.txt
-add_subdirectory(tests)
-```
+add_library(demo_math src/math.cpp)
+target_compile_features(demo_math PUBLIC cxx_std_20)
+target_include_directories(demo_math PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
 
-## 常用变量
+add_executable(demo_app src/main.cpp)
+target_link_libraries(demo_app PRIVATE demo_math)
 
-```cmake
-${PROJECT_NAME}           # 项目名
-${PROJECT_SOURCE_DIR}     # 根 CMakeLists.txt 所在目录
-${CMAKE_CURRENT_SOURCE_DIR}  # 当前 CMakeLists.txt 所在目录
-${CMAKE_BINARY_DIR}       # 构建目录（通常是 build/）
-${CMAKE_INSTALL_PREFIX}   # 安装路径（默认 /usr/local）
-```
-
-## 构建流程
-
-```bash
-mkdir build && cd build
-cmake ..                  # 配置阶段：生成 Makefile / Ninja 文件
-cmake --build .           # 构建阶段：实际编译
-cmake --install .         # 安装（可选）
-```
-
-> [!summary] 核心摘要
->
-> CMake 的配置阶段读取 `CMakeLists.txt` 并生成构建系统，构建阶段再实际编译。一个可维护项目从 `add_executable` / `add_library` 定义 target 开始，子目录用 `add_subdirectory` 组织；依赖与编译属性应尽量挂在具体 target 上，而不是散落在全局变量里。
-
-> [!question]- 自测：先回答再展开
-> 1. `cmake -S . -B build` 与在 `build/` 中运行 `cmake ..` 有什么关系？为什么前者更明确？
-> 2. 什么信息应属于一个 library target，而不应写成全局设置？
-> 3. `add_subdirectory` 为什么比在根文件里堆所有源文件更利于维护？
->
-> ---
-
-> [!info]- 延伸阅读
-> - target_link_libraries & include_directories (依赖管理)
-> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
-> - find_package & External Dependencies (第三方库引入)
-> - CMake with vcpkg & Conan (包管理器集成)
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
->
-> ---
-
-# CMake Target Dependencies (CMake 目标依赖)
-
-> [!note] 本节重点：PRIVATE / PUBLIC / INTERFACE 的区别、现代 CMake 的 target-based 思想
-
-## 现代 CMake 的核心思想
-
-**以 target 为中心，而非以目录为中心。** 每个 target（可执行文件或库）管理自己的属性，依赖关系通过 target 之间传递。
-
-```cmake
-include_directories(include/)
-link_libraries(mylib)
-
-target_include_directories(myapp PRIVATE include/)
-target_link_libraries(myapp PRIVATE mylib)
-```
-
----
-
-## PRIVATE / PUBLIC / INTERFACE
-
-这是现代 CMake 中最重要的概念，控制属性的**传播范围**：
-
-|关键字|对当前 target 生效|传播给依赖当前 target 的 target|
-|---|---|---|
-|PRIVATE|✅|❌|
-|PUBLIC|✅|✅|
-|INTERFACE|❌|✅|
-
-### 示例场景
-
-```cmake
-target_include_directories(mylib
-    PUBLIC  include/        # mylib 自己用，链接 mylib 的 target 也自动获得
-    PRIVATE src/internal/   # 只有 mylib 自己的编译单元能看到
-)
-
-target_link_libraries(mylib
-    PUBLIC  fmt::fmt         # mylib 和所有链接 mylib 的 target 都链接 fmt
-    PRIVATE spdlog::spdlog  # 只有 mylib 自己链接 spdlog
-)
-
-target_link_libraries(myapp PRIVATE mylib)
-```
-
-**判断用哪个的经验法则：**
-
-- 头文件在 `include/`（对外暴露）→ `PUBLIC`
-- 头文件在 `src/`（内部实现）→ `PRIVATE`
-- 纯头文件库（header-only）→ `INTERFACE`
-
----
-
-## target_compile_options & target_compile_definitions
-
-```cmake
-target_compile_options(myapp PRIVATE
-    -Wall -Wextra -Wpedantic   # 开启警告
-    $<$<CONFIG:Debug>:-g -O0>  # Debug 模式额外选项（生成器表达式）
-)
-
-target_compile_definitions(myapp PRIVATE
-    VERSION_MAJOR=1
-    $<$<CONFIG:Debug>:DEBUG_MODE>   # Debug 模式下定义 DEBUG_MODE 宏
-)
-```
-
----
-
-> [!info]- 延伸阅读
-> - CMakeLists․txt Structure (项目结构模板)
-> - Build Types：Debug, Release, RelWithDebInfo (构建类型)
-> - find_package & External Dependencies (第三方库引入)
-> - CMake with vcpkg & Conan (包管理器集成)
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
->
-> ---
-
-# CMake Build Types (CMake 构建类型)
-
-> [!note] 本节重点：四种构建类型的使用场景、优化级别、常用配置
-
-## 四种标准构建类型
-
-```bash
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-cmake -DCMAKE_BUILD_TYPE=MinSizeRel ..
-```
-
-|类型|编译器标志（GCC/Clang）|用途|
-|---|---|---|
-|Debug|`-g -O0`|开发调试，包含符号表，不优化|
-|Release|`-O3 -DNDEBUG`|生产发布，最大优化，禁用 assert|
-|RelWithDebInfo|`-O2 -g -DNDEBUG`|生产环境调试，有符号表但也优化|
-|MinSizeRel|`-Os -DNDEBUG`|嵌入式/资源受限，最小体积|
-
-> `NDEBUG` 宏会禁用 `assert()`，Release 模式下断言失效，需注意。
-
-## 在 CMake 中按构建类型设置行为
-
-```cmake
-target_compile_options(myapp PRIVATE
-    $<$<CONFIG:Debug>:-fsanitize=address>       # Debug 下开 ASan
-    $<$<CONFIG:Release>:-march=native>          # Release 下针对本机 CPU 优化
-)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(myapp PRIVATE ENABLE_LOGGING)
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(math_test tests/math_test.cpp)
+    target_link_libraries(math_test PRIVATE demo_math)
+    add_test(NAME math_test COMMAND math_test)
 endif()
 ```
 
-## 多配置生成器（Visual Studio / Xcode / Ninja Multi-Config）
+`src/main.cpp` 包含公共头文件 `<demo/math.hpp>`，`demo_app` 通过链接 `demo_math` 继承它的公共 include 路径与 C++20 要求。上例中 `INSTALL_INTERFACE` 只描述安装后路径；若真要对外安装，还需正确的 `install(TARGETS ... EXPORT ...)`、头文件和包配置，不能仅凭这一行宣布库可被 `find_package` 使用。
 
 ```bash
-cmake -G "Ninja Multi-Config" ..
-cmake --build . --config Release
-cmake --build . --config Debug
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 ```
 
----
+源目录和构建目录分离，构建产物不污染源码；不同工具链、配置和依赖图宜使用不同 build 目录，避免旧缓存混入。
 
-> [!info]- 延伸阅读
-> - CMakeLists․txt Structure (项目结构模板)
-> - target_link_libraries & include_directories (依赖管理)
-> - find_package & External Dependencies (第三方库引入)
-> - CMake with vcpkg & Conan (包管理器集成)
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
+# PUBLIC、PRIVATE、INTERFACE
 
-> [!info]- 延伸阅读
-> - 下一步：[02-CMake Dependencies (CMake 依赖)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/02-CMake%20Dependencies%20(CMake%20依赖).md)
+| 作用域 | 当前目标需要 | 消费者需要 |
+|---|---:|---:|
+| `PRIVATE` | 是 | 通常不作为编译使用要求传播 |
+| `PUBLIC` | 是 | 是 |
+| `INTERFACE` | 否 | 是 |
 
+判断依据是**消费者构建时是否需要这项使用要求**，而不是“头文件在哪个目录”。公共头文件若暴露依赖库类型，消费者可能也需要该库的头文件与链接要求；仅在 `.cpp` 内使用的编译定义通常为 `PRIVATE`。
+
+> [!warning] 静态库的传播细节
+> 静态库没有最终链接步骤；即使其依赖在源代码层面为 `PRIVATE`，最终消费者仍可能需要该库的链接项。CMake 对静态库的 link-only 传递有专门规则。不要把表格中的“PRIVATE 不传播”误解为“链接期绝不会出现”。
+
+header-only 库通常用 `add_library(name INTERFACE)`，并以 `INTERFACE` 声明 include 目录与编译特性。优先使用目标 API，不在根文件滥用 `include_directories()`、`link_libraries()` 和全局编译参数。
+
+# 源码目录、生成文件与安装边界
+
+项目拆目录时用 `add_subdirectory(lib)` 等组织局部目标，但拆分本身不提升正确性。生成文件（protobuf、版本头）应输出到 binary dir，并显式声明产物及依赖，避免多人并行构建时共享写同一文件。
+
+`CMAKE_CURRENT_SOURCE_DIR` 与 `CMAKE_CURRENT_BINARY_DIR` 分别表示当前 CMake 文件对应的源/构建目录；`CMAKE_SOURCE_DIR` 指顶层源目录，作为子项目时通常不等于当前项目根。
+
+生成可安装库时还需区分 build-tree 与 install-tree 的路径，避免把开发者本机绝对路径写入导出的 target。
+
+# 构建配置与工具链
+
+单配置生成器（如 Ninja、Unix Makefiles）通常在配置时选 `CMAKE_BUILD_TYPE`；多配置生成器（Visual Studio、Ninja Multi-Config 等）在构建时用 `--config`：
+
+```bash
+cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build-release
+
+cmake -S . -B build-multi -G "Ninja Multi-Config"
+cmake --build build-multi --config Debug
+ctest --test-dir build-multi -C Debug --output-on-failure
+```
+
+`Debug`、`Release`、`RelWithDebInfo` 和 `MinSizeRel` 的实际编译选项随编译器、平台、工具链文件与项目配置变化，不能背成固定的 `-O0/-O3/-g` 表。部分 Release 配置定义 `NDEBUG`，会关闭标准 `assert`；生产输入验证不能只靠 `assert`。
+
+交叉编译的目标平台、sysroot 与编译器一般通过 toolchain file 在首次配置前确定；改变工具链后应使用独立构建目录。不要把 `-march=native` 硬塞进通用 Release 制品：它可能在其他 CPU 上无法运行。
+
+# 可共享的配置
+
+`CMakePresets.json` 可把生成器、binaryDir、cacheVariables 等项目配置纳入版本管理；个人本机专用选项适合 `CMakeUserPresets.json`，不要把个人路径提交给团队。
+
+```json
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "dev",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/dev",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    }
+  ]
+}
+```
+
+```bash
+cmake --preset dev
+cmake --build build/dev
+ctest --test-dir build/dev --output-on-failure
+```
+
+预设文件的 schema version 要与项目声明的最低 CMake 版本兼容；本例版本 2 可由 CMake 3.20 读取，版本 3 需要至少 3.21。团队采用预设前先在最低版本上实际运行。
+
+# 排查与实践
+
+1. 空 build 目录配置，观察 `CMakeCache.txt` 中工具链和包路径。
+2. 修改 `math.hpp`，确认库及消费者按依赖关系重编；只改 `main.cpp` 不应触发库重编。
+3. 用 `cmake --build build --verbose` 检查实际命令；若头文件找不到，追踪它应由哪个 target 的 usage requirement 提供。
+4. 用单配置与多配置生成器分别构建并运行测试，记录差异。
+
+# 检查理解
+
+1. 为什么 `target_link_libraries(app PRIVATE lib)` 可能同时带来 include 路径？
+2. 公共头文件若暴露依赖库类型，应怎样决定 PUBLIC/PRIVATE？
+3. 多配置生成器为什么不能仅靠 `CMAKE_BUILD_TYPE` 切换配置？
+4. 为什么切换编译器或 toolchain 后建议使用新的 build 目录？
+
+> [!summary] 本篇结论
+> CMake 的核心是目标与使用要求构成的构建图。把属性挂到正确目标、分离源码与构建、区分配置模式和安装边界，才能让项目在另一台机器上正确生成并构建。
+
+## 权威依据
+
+- [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
+- [CMake target commands](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)
+- [CMake Presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
+
+下一步：[02-CMake Dependencies (CMake 依赖)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/02-CMake%20Dependencies%20(CMake%20依赖).md)

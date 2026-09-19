@@ -1,7 +1,7 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
 ---
 
 > [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
@@ -221,7 +221,7 @@ std::deque<std::function<void()>> tasks;
 // ❌ 不适合频繁随机访问——两次间接开销高于 vector
 ```
 
-> **必知**：`deque` 的 `operator[]` 虽然也是 O(1)，但常数比 `vector` 大得多（多一次指针跳转）。实测在连续随机访问场景 `deque` 比 `vector` 慢 2-5 倍。如果只做**双端操作**，`deque` 是正确选择；如果需要随机访问 + 双端操作，考虑 `vector + ring buffer` 或 `boost::circular_buffer`。
+> **选择依据**：`deque` 和 `vector` 均支持常数时间随机访问，但 `deque` 是分段存储，局部性与常数成本可能不同；不存在通用的“慢几倍”结论。需要连续内存或与 C API 互操作时选 `vector`；频繁在两端增删且不要求连续内存时考虑 `deque`，再按真实负载基准测试。
 
 ---
 

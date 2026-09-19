@@ -1,157 +1,145 @@
 ---
 status: stable
 confidence: high
-content_verified: 2026-09-17
+content_verified: 2026-09-19
+tags: [engineering/ci-cd, engineering/delivery, security/supply-chain]
 ---
 
-> [!abstract] 学习定位：把工具当成可重现的工程流程，理解配置、输入、产物、失败诊断与自动化，而不是背命令。
+> [!abstract] 学习目标
+> 把 CI/CD 设计为从源码提交到可验证制品与受控发布的证据链；理解触发器、权限、缓存、制品、环境门禁和回滚，而不是只会复制 YAML。
 
-> [!summary] 核心摘要
->
-> CI 用可重复流水线验证构建、测试和静态检查，CD 将通过验证的同一产物逐级发布。可靠流水线需要缓存与并行，也需要制品追踪、权限、回滚和失败可诊断性。
+# CI、Delivery 与 Deployment
 
-# CI CD for C Plus Plus (C Plus Plus 持续集成)
+- **Continuous Integration**：小批量频繁集成，通过自动构建和验证尽早发现问题。
+- **Continuous Delivery**：主干始终具备可发布状态，部署生产仍可人工批准。
+- **Continuous Deployment**：所有通过门禁的变更自动进入生产。
 
-> [!note] 本节重点：GitHub Actions / GitLab CI 配置、C++ 项目 CI 流水线、自动化测试与部署
+三者不是工具品牌。流水线的核心产物是“某个源码版本在明确环境中生成并验证过的不可变制品”。
 
-# C++ CI/CD 流水线
+```text
+commit/PR
+  → 静态检查与快速测试
+  → 多配置构建与测试
+  → 安全/依赖检查
+  → 生成一次制品 + digest/SBOM/provenance
+  → 环境审批与渐进发布
+  → 运行期验证
+```
 
-## GitHub Actions 配置
+# 触发器与事件边界
+
+PR 流水线处理不可信贡献时，应避免让代码获得仓库写权限和 secrets。特别要理解 `pull_request` 与 `pull_request_target` 的信任边界：后者在目标仓库上下文运行，若检出并执行攻击者代码可能泄露凭据。
+
+同一分支的新提交可取消旧运行，减少浪费：
 
 ```yaml
-name: C++ CI
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+触发条件要覆盖默认分支、PR、tag 和手工发布等实际流程，避免只在 feature branch 验证、合并后组合却从未测试。
+
+# 最小权限与依赖固定
+
+GitHub Actions 的 `GITHUB_TOKEN` 权限应显式最小化：
+
+```yaml
+permissions:
+  contents: read
+```
+
+只有需要发布安全报告、包或 provenance 的 job 才增加对应写权限。云部署优先使用 OIDC 短期身份，避免长期云密钥。
+
+第三方 action 也是供应链依赖。高风险环境应固定到完整 commit SHA，并由自动化工具跟踪升级；仅使用可变 tag 会让同一工作流在未来执行不同代码。
+
+# 一份可解释的 C++ CI
+
+```yaml
+name: ci
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
+  push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build-and-test:
+  build-test:
     strategy:
+      fail-fast: false
       matrix:
-        compiler: [gcc-12, clang-16]
-        build_type: [Debug, Release]
-      fail-fast: false  # 一个挂了不中断其他的
-
-    runs-on: ubuntu-latest
-
+        os: [ubuntu-latest]
+        compiler: [gcc, clang]
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          cmake ninja-build ccache clang-16 \
-          libgtest-dev libbenchmark-dev \
-          libspdlog-dev libfmt-dev
-
-    - name: Configure CMake
-      run: |
-        cmake -B build \
-          -G Ninja \
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
-          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-
-    - name: Build
-      run: cmake --build build --parallel $(nproc)
-
-    - name: Run tests
-      run: cd build && ctest --output-on-failure -j$(nproc)
-
-    - name: Upload test results
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-output-${{ matrix.compiler }}-${{ matrix.build_type }}
-        path: build/Testing/
+      - uses: actions/checkout@<full-commit-sha>
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
 ```
 
-## 关键配置说明
+示例中的 SHA 是有意占位：应从官方 action 发布信息选择实际版本并固定，而不是把笔记里的哈希长期复制到项目。
 
-| 配置 | 用途 |
-|------|------|
-| `strategy.matrix` | 多编译器 + 多构建类型并行测试 |
-| `ninja-build` | 比 make 快 2-3 倍，增量编译更智能 |
-| `ccache` | 缓存编译结果，CI 重复构建提速 5-10 倍 |
-| `ctest` | CMake 原生测试框架，直接输出测试报告 |
-| `fail-fast: false` | Debug 失败后继续跑 Release，拿到全部结果 |
+矩阵只覆盖有价值差异：编译器、操作系统、构建类型或关键依赖版本。组合爆炸时设置一个快速必过集合，再把昂贵覆盖放到夜间/发布流程，但不要让非必过任务永久失败无人处理。
 
-## 流水线阶段
+# 缓存不是制品
 
-```
-Commit/Push → Build → Unit Tests → Lint → Integration Tests → Deploy(可选)
-  ↓            ↓         ↓           ↓           ↓               ↓
- trigger   编译成功   单测通过    clang-tidy   API 测试      Docker push
-                              clang-format 压测            k8s apply
-```
+- **cache**：可删除的性能优化，命中错误不得改变构建语义；key 必须包含锁文件、工具链和相关配置。
+- **artifact**：本次运行需要保存、下载或交付的结果，具有明确保留期和摘要。
+- **release artifact**：应由受控流程生成一次，随后在环境间提升同一制品，避免每个环境重新构建。
 
----
+缓存投毒和跨信任边界恢复必须纳入威胁模型。排查疑似缓存错误时，先做无缓存干净构建。
 
-# 静态分析集成（clang-tidy）
+# 门禁、环境与发布
 
-```yaml
-- name: Static analysis
-  run: |
-    cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    run-clang-tidy -p build -checks='*,-fuchsia-*,-google-*' \
-      -header-filter='src/.*' src/
-```
+GitHub environment 可绑定生产等目标，并设置审批、分支限制和 secrets。保护规则通过后，job 才能访问对应环境凭据。
 
-本地开发集成到 CMake：
+可靠发布还需要：
 
-```cmake
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--checks=*,-fuchsia-*,-google-*")
-endif()
-```
+- 数据库迁移的向前/向后兼容计划；
+- canary、blue-green 或分批发布策略；
+- 健康指标与自动停止条件；
+- 回滚/roll-forward 路径和操作者权限；
+- 将 commit、workflow run、制品 digest 与部署记录关联。
 
-> 团队 C++ 项目常见标准用 `.clang-tidy` 文件统一配置，`git commit` 前自动检查。
+回滚应用版本不一定能回滚数据变更。破坏性 schema 修改应分阶段：先兼容读写，再迁移数据，最后删除旧结构。
 
----
+# 制品完整性与 provenance
 
-# Code Review 自动化
+保存依赖清单/SBOM、构建参数、工具链或 runner 镜像、制品哈希。Artifact attestation 可声明制品由哪个仓库、commit 和 workflow 构建；只有消费端验证 attestation 时才产生安全价值。
 
-使用 GitHub 的 CODEOWNERS + 自动标注：
+# 失败诊断顺序
 
-```gitignore
-src/handler/     @backend-team
-src/service/     @backend-team
-src/repository/  @backend-team
-proto/           @api-team
-CMakeLists.txt   @tech-lead
-```
+1. 确认失败 job、step 和首个根因，而非最后一串级联错误；
+2. 对比本地与 CI 的工具链、环境变量、工作目录、权限和网络；
+3. 检查锁文件、缓存 key、并行与测试隔离；
+4. 使用相同容器/命令本地复现；
+5. 修复后保留最小回归证据，禁止用无界重试掩盖 flaky test。
 
-```yaml
-- name: Lint check
-  run: |
-    git diff --name-only origin/main | xargs clang-format --dry-run --Werror
-    echo "::error file=$file::Code style violation"
-```
+# 检查理解
 
----
+1. Continuous Delivery 与 Deployment 的差别在哪里？
+2. 为什么 cache 命中不能成为构建正确性的前提？
+3. PR 中执行不可信代码时，为什么权限与 secrets 必须最小化？
+4. 为什么应该“一次构建，多环境提升同一制品”？
 
-# C++ 项目典型 CI 技巧
+> [!summary] 本篇结论
+> CI/CD 是可追溯的变更证据链：最小权限验证源码，生成并标识不可变制品，通过环境门禁逐步发布，再由运行期指标验收。YAML 只是这一设计的实现。
 
-| 场景 | 做法 |
-|------|------|
-| 增量编译 | `ccache --max-size=5G` + `G Ninja` |
-| 依赖缓存 | GitHub Actions 的 `cache` action 缓存 `vcpkg`/`Conan` 包 |
-| 并行测试 | `ctest -j$(nproc)` 多核并行 |
-| 测试超时 | `ctest --timeout 60` 防止死循环卡住 CI |
-| 代码覆盖率 | `gcovr` + `codecov` 自动上传报告 |
-| Sanitizer CI | 单独跑一个 `-DCMAKE_BUILD_TYPE=Debug -DSANITIZER=ON` 的 job |
+## 权威依据
 
-> [!tip]- **工程要点**：C++ CI 核心是**快**——用 ccache + ninja + 并行把 15 分钟的编译压到 2-3 分钟。CI 跑的检查越多越好，但不要让它成为开发的阻力。建议：PR CI < 10 分钟，超过这个时间团队就开始绕 CI 了。
+- [GitHub Actions workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)
+- [GitHub Actions security](https://docs.github.com/en/actions/how-tos/secure-your-work)
+- [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
----
-
-> [!info]- 延伸阅读
-> - Core Concepts：Working Tree, Index, HEAD (三区模型)
-> - Conflict Resolution (冲突解决实操)
-> - reset vs revert vs restore (撤销三兄弟)
-> - stash, tag, reflog (实用命令)
-> - 01b1-merge vs rebase vs cherry-pick (三种合并对比)
+下一步：[01-CMake Project and Targets (CMake 项目与目标)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
