@@ -25,7 +25,7 @@ tags: [learning/mistakes, vault/system]
 - 最小复现或反例：
 - 下次触发器：看到 ___ 时先检查 ___。
 - 关联：填写已存在笔记的根路径 Markdown 链接（见《笔记规范》）。
-- 复习日：YYYY-MM-DD
+- 复查安排：调整关联笔记的 `review_due`，本页不另存一套日期。
 ```
 
 # 高频触发器

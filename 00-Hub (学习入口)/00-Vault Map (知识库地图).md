@@ -10,7 +10,7 @@ tags: [vault/navigation, backend-learning]
 
 | 需要解决的问题     | 唯一入口                                                                                                               | 不在这里做什么     |
 | ----------- | ------------------------------------------------------------------------------------------------------------------ | ----------- |
-| 今天和本周做什么    | [Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)                                                | 不把任务散落进知识模块 |
+| 今天到期哪篇、这周怎么分配时段 | `List-ReviewDue.ps1` + [Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md) | 不在 Hub 复制逐篇日期 |
 | 长期先学什么、何时升级 | [Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)                | 不绑定具体日期     |
 | 哪些笔记需要复习    | `List-ReviewDue.ps1` 与 [Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md) | 不预先为未学习内容排期 |
 | 一个模块学到什么程度  | 各模块 `00-... Standard`                                                                                              | 不记录每日进度     |
@@ -43,5 +43,5 @@ tags: [vault/navigation, backend-learning]
 
 1. 从 Study Cycle 只选择一个当前主线和一个可验证产物。
 2. 学习前查看模块标准，学习后完成最小实验或代码。
-3. 需要长期记忆时才写 `review_due`，由脚本统一汇总。
+3. 首次排期或进入复习时写 `review_due`，由脚本统一汇总；未排期的内容保持 `backlog`。
 4. 错误进入 Mistake Log，知识库结构问题进入 Audit Queue；两者都不混入学习日程。
