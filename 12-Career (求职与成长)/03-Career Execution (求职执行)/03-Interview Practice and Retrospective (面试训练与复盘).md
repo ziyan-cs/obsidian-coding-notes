@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [career/interview, learning/retrospective]
 ---
 
@@ -39,4 +37,3 @@ tags: [career/interview, learning/retrospective]
 # 统一调度
 
 何时模拟、目标岗位和本轮改进项属于 Study Cycle；本篇只保存方法。作品集证据见 [Resume Evidence and Portfolio (简历证据与作品集)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/02-Resume%20Evidence%20and%20Portfolio%20(简历证据与作品集).md)。
-

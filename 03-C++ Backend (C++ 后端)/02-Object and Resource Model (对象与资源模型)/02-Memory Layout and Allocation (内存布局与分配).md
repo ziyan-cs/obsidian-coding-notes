@@ -1,11 +1,6 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-verified: 2026-09-28
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-28
-previous_review_due: 2026-09-10
 ---
 
 > [!abstract] 学习目标：分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。
@@ -201,19 +196,6 @@ p->~T();  // 不可对 p 调用 delete；T 必须在此作用域中是完整类�
 ---
 
 
-> [!check]- 学完后检查
-> ## 复述
->
-> - 不看正文，说明 02-Memory Layout and Allocation (内存布局与分配) 的问题、核心机制与边界。
->
-> ## 验证
->
-> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
->
-> ## 自测
->
-> 1. 这个主题解决什么问题？
-> 2. 它在什么条件下会失效、变慢或需要替代方案？
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)

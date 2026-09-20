@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [project/config-center, distributed/configuration]
 ---
 
@@ -51,6 +49,8 @@ release: revision 18 -> target group canary-a
 
 客户端启动时先拉当前版本，再建立 watch。收到通知后只获得 namespace/version，随后拉取完整配置、验证 checksum/schema，并构造新对象原子替换。watch 断线后携带 last seen version 重连；服务端无法补齐历史时要求客户端重新拉当前快照。
 
+这里有一个易漏的窗口：客户端拉到 revision 17，尚未建立 watch 时服务端发布 18。如果 watch 只监听“连接建立后的新事件”，18 会永久错过。协议必须支持从已读 revision 17 开始补发后续版本；若历史已被裁剪，服务端明确要求全量重新拉取。周期性对账是额外保险，不是掩盖这个竞态的主要设计。
+
 ```text
 start -> fetch current -> validate -> activate
      -> watch(version changed)
@@ -58,6 +58,8 @@ start -> fetch current -> validate -> activate
 ```
 
 通知可能重复、延迟或丢失，因此客户端按版本幂等处理，并周期性对账。若新配置无法解析，继续使用 last-known-good，报告失败并告警；不能把坏配置激活一半。
+
+客户端只接受比当前激活版本新的 revision；但“回滚”本身应是一个更高编号的新发布，内容可以等于历史安全版本。这样既避免乱序通知把客户端带回旧状态，又保留可审计的回滚动作。服务端记录目标集合与各客户端激活回执，不能只靠 watch 发送成功判断发布完成。
 
 # 灰度、权限与故障边界
 
@@ -82,6 +84,9 @@ RBAC 至少区分读取、编辑、发布和管理权限；敏感配置不应以
 - [ ] 配置版本不可变，回滚创建新版本而非改历史。
 - [ ] Python 校验器验证 schema 和危险配置。
 - [ ] 模拟 watch 断连、漏通知和服务重启。
+- [ ] 专门注入“拉取 revision 17 与建立 watch 之间发布 18”的竞态，并验证历史裁剪后的全量重同步。
+
+版本化订阅可参考 [Kubernetes list-then-watch 与 resourceVersion 语义](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes)；本项目不必照搬 Kubernetes API，但必须解决相同的读后订阅窗口。
 
 > [!summary]- 项目表达检查：学完后再展开
 >

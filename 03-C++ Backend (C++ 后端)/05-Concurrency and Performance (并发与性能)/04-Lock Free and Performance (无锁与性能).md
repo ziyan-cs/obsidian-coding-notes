@@ -1,377 +1,99 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
-> [!abstract] 学习目标：辨别 CAS 示意代码与可用无锁结构，分别审查线性化点、ABA、回收和进展保证。
+> [!abstract] 学习目标
+> 能区分数据竞争、锁竞争和伪共享；能解释 lock-free 的进展保证、CAS 线性化点与内存回收；能用测量证据选择优化方式。
 
-> [!summary] 核心摘要
->
-> lock-free 表示系统级进展保证，不等于单次操作更快；CAS 仍要处理 ABA、内存序、回收与高竞争，普通业务优先选更易证明正确的锁方案。
+# 先定位瓶颈，再选并发结构
 
-# Lock-free Structures Overview (无锁结构概念)
+并发性能不是“锁越少越快”。一次请求可能受 I/O、队列排队、串行临界区、内存分配、缓存一致性或 NUMA 远端访存限制。先固定代表性负载，记录吞吐量、p95/p99 延迟、CPU 利用率与错误率，再做单变量对照实验。低 CPU 利用率也不能直接推断为锁竞争：线程可能在等 I/O。
 
-> [!note] 本节重点：无锁编程的基本思想、ABA 问题、CAS 实现、适用与不适用场景
+| 现象 | 优先核查 | 可能的下一步 |
+| --- | --- | --- |
+| 多线程下吞吐不升、线程阻塞多 | 临界区时长、锁等待与持锁栈 | 缩短临界区、分片、减少共享状态 |
+| CPU 忙而有效工作少 | 热点函数、CAS 失败、上下文切换 | 降低争用，必要时重新设计数据布局 |
+| 不同线程频繁写相邻字段 | 缓存行争用、对象布局 | 分离写热点并复测 |
+| 多路机器出现不稳定尾延迟 | CPU/内存所在 NUMA 节点 | 测量亲和性与内存策略 |
 
-## 什么是无锁（Lock-Free）
+`std::shared_mutex` 允许并发读取，但不保证读多写少就一定更快，也不承诺公平；读锁、写锁的成本和饥饿表现需按实现与负载测试。将计算移出临界区时，必须先确认该计算不依赖正在变化的共享数据。移动对象入队后，不应再把移后对象当作原始通知内容使用。
+
+# CAS 是原子步骤，不是完整算法
+
+`compare_exchange_weak(expected, desired)` 比较原子对象与 `expected`；失败时把当前值写回 `expected`。弱版本允许伪失败，通常放进重试循环。成功的 CAS 可作为某次栈头更新的**线性化点**，但并不自动证明整个 `push`/`pop` 都是正确或 lock-free 的。
 
 ```cpp
-// 有锁版本
-std::mutex mtx;
-void push(int val) {
-    std::lock_guard lock(mtx);
-    // 操作共享数据
-}
+#include <atomic>
 
-// 仅示意 CAS 更新头指针；分配器和整条操作的进展保证尚未证明。
+struct Node {
+    int value;
+    Node* next;
+};
+
 std::atomic<Node*> head{nullptr};
-void push(int val) {
-    Node* new_node = new Node(val);
-    Node* old_head = head.load();
+
+// 只展示头指针发布；new 可能阻塞，且没有实现安全的并发 pop。
+void illustrative_push(int value) {
+    Node* node = new Node{value, nullptr};
+    Node* observed = head.load(std::memory_order_relaxed);
     do {
-        new_node->next = old_head;
-    } while (!head.compare_exchange_weak(old_head, new_node));
+        node->next = observed;
+    } while (!head.compare_exchange_weak(
+        observed, node,
+        std::memory_order_release,
+        std::memory_order_relaxed));
 }
 ```
 
-**Lock-Free 的定义**：
-- 任意线程挂起不会阻塞其他线程的进度
-- 系统中至少有一个线程能在有限步内完成操作
+这里的 release 让成功发布前写入的 `node->value` 和 `node->next` 可被匹配的 acquire 读取观察到；但它没有解决并发删除。**不要把这段示意当成可部署的栈**：缺少销毁、回收、异常与进展保证。消费者一旦要解引用旧 `head`，另一个线程就可能已经移除并释放它。
 
-## 无锁栈：先证明回收，再写 pop
+## ABA 与安全回收是两道不同的关
 
-常见示意代码会先读取 `head`，再访问 `head->next`，CAS 成功后立刻 `delete head`。这**不是可用的并发栈**：另一个线程可能仍持有旧指针，甚至在 CAS 前就已访问释放后的 `next`。给示例加一句“这里不安全”不足以防止照抄，因此本笔记不提供假装完整的 `pop` 实现。
+假设线程 A 读到头地址 `P`，线程 B 移走该节点，又让头地址重新变成 `P`。A 的 CAS 可在“值仍等于 `P`”时成功，但中间状态已变化，这就是 ABA。给指针加版本计数可帮助识别某些状态变化，**不**会令悬空指针恢复有效；计数也可能回绕，且双字原子操作是否 lock-free 取决于平台。
 
-设计真正的无锁栈需要依次证明：
+即使没有 ABA，只要线程 A 在检查 `head` 后读取节点字段，线程 B 便不能提前 `delete` 该节点。Hazard pointer、epoch-based reclamation（EBR）或适用场景下的引用计数可以推迟回收，但每种方案都需证明线程退出、延迟回收、内存上界及进展性质。`std::atomic<std::shared_ptr<T>>` 能使智能指针的访问原子化，却不保证整个数据结构 lock-free；通过 `is_lock_free()` 查询具体实现。
 
-1. **线性化点（linearization point）**：成功的 CAS 在逻辑上何时完成操作。
-2. **对象仍存活**：任何线程解引用节点期间，回收机制必须阻止其释放；可选 hazard pointers、epoch-based reclamation 等，且各有前提。
-3. **ABA**：即使地址重新变成旧值，CAS 的成功是否仍代表正确状态。
-4. **进展保证**：包含分配、回收、回调与使用的原子类型后，整个操作是否真的满足 lock-free。
+**工程顺序**：先实现和压测有锁的正确基线，再明确线性化点、回收策略和内存序证明。缺少这三项时，“用了 atomic”不是采用无锁结构的理由。
 
-学习顺序是先写带互斥锁的正确版本，再对照成熟实现和证明材料；不要把仅有 CAS 的结构直接放进项目。
+## 进展保证与内存序
 
-## ABA 问题
+- **Wait-free**：每个操作都在有限的自身步骤内结束。
+- **Lock-free**：整体系统保证至少有操作持续完成；单个线程仍可能一直重试。
+- **Obstruction-free**：某操作独占执行足够久时才保证完成。
 
-```cpp
-// ABA 问题场景：
-// 线程 1: 读取 head → Node A
-// 线程 2: pop A → push B → push A（内存地址相同，但内容不同）
-// 线程 1: CAS 比较 head == A → 成功！但此时 head 指向的是新的 A
+这些是算法性质，不等于 `atomic<T>::is_lock_free()` 的单个对象性质。实际路径若包含可能阻塞的分配、回调或回收步骤，不能只凭一次 CAS 宣称整个操作 lock-free。
 
-// 一种思路：比较时连版本号一起比较，但仍需单独解决安全回收。
-struct TaggedPointer {
-    Node* ptr;
-    uintptr_t tag;  // 递增版本号
-};
+`memory_order_relaxed` 保留原子性与该对象的修改顺序，却不发布普通数据；release/acquire 用于建立特定发布—读取同步；默认 `seq_cst` 还对 seq_cst 操作提供一致总序。先写出 happens-before 关系，再考虑弱化内存序。`acq_rel` 只适用于读改写操作，绝不是“多数场景通用”的口诀。
 
-std::atomic<TaggedPointer> head_;
+# 缓存行争用：伪共享
 
-// 指针可用位数与地址规范会随架构和配置变化，不能假设“高 16 位空闲”。
-// std::atomic<std::shared_ptr<T>> 可管理对象生命周期，但不保证 lock-free，
-// 也不能代替整个数据结构的 ABA 和进展证明。
-```
-
-## 内存管理难题
+两个线程各写不同原子变量仍可能争用同一缓存行；这不是 data race，而是缓存一致性层面的性能问题。缓存行大小、相邻对象布局、调度方式都可能改变结果，不能固定写“慢十倍”。
 
 ```cpp
-// 无锁结构的最大问题：何时释放内存？
+#include <atomic>
+#include <new>
 
-// 线程 A 准备删除 Node
-// 线程 B 正持有指向同一个 Node 的指针
-// 线程 A delete → 线程 B 访问已释放内存 → 未定义行为
-
-// 解决方案：
-// 1. 风险指针（Hazard Pointer）：线程声明正在使用的指针
-// 2. RCU（Read-Copy-Update）：延迟回收
-// 3. 引用计数 std::shared_ptr 的原子版本
-// 4. Epoch-Based Reclamation (EBR)
-```
-
-## 何时用无锁？
-
-| 适合无锁 | 不适合无锁 |
-|---------|-----------|
-| 极高并发，锁成为瓶颈 | 实现复杂度低时 |
-| 细粒度操作（push/pop） | 复合操作（需要同时改多个变量）|
-| 已有正确性证明与可验证实现 | 缺乏安全回收方案 |
-| 操作足够独立，进展要求明确 | 需要多对象原子更新 |
-
-```cpp
-// 实际工程中：优先用锁
-// 基准测试证实锁是瓶颈后，再考虑无锁
-// "Lock-free programming is like a sharp knife — useful but easy to cut yourself"
-```
-
-## C++ 中的无锁设施
-
-| 设施 | 说明 |
-|------|------|
-| `std::atomic<T>` | 原子类型基础 |
-| `atomic<T*>::compare_exchange_*` | CAS 操作 |
-| `atomic_signal_fence` / `atomic_thread_fence` | 内存栅栏 |
-| `std::atomic<std::shared_ptr<T>>` (C++20) | 原子访问 shared_ptr；是否 lock-free 要查询实现 |
-| `std::atomic_ref<T>` (C++20) | 非原子对象的原子操作 |
-
-> [!warning] 面试与工程都要把 ABA 和安全回收分开回答：版本计数只能帮助识别状态变化，不能让悬空指针重新安全。先说明不变量和进展保证，再讨论具体实现。
-
----
-
-# C++ Concurrency and Performance Optimization (C++ 并发性能优化)
-
-> [!note] 本节重点：锁竞争优化、cache line 伪共享、内存序选择、NUMA 感知、perf 性能分析
-
-## 锁竞争优化
-
-高并发场景下锁竞争是最大的性能杀手。下面是优化思路，按性价比排序。
-
-### 1. 缩小临界区
-
-```cpp
-// ❌ 差：整个函数加锁
-void processOrder(Order& order) {
-    lock_guard lock(mtx_);
-    order.validate();           // 纯计算，不需锁
-    order.calculatePrice();     // 纯计算，不需锁
-    orders_.push_back(order);   // 只有这个需要锁
-    notifyWatchers(order);      // 通知可能加锁，别嵌套
-}
-
-// ✅ 好：只锁必要操作
-void processOrder(Order& order) {
-    order.validate();
-    order.calculatePrice();
-    {
-        lock_guard lock(mtx_);
-        orders_.push_back(std::move(order));
-    }
-    notifyWatchers(order);
-}
-```
-
-### 2. 读写锁（shared_mutex）
-
-读多写少的场景用 `shared_mutex`，读不互斥：
-
-```cpp
-#include <shared_mutex>
-
-class Cache {
-    std::map<int, string> data_;
-    mutable std::shared_mutex mtx_;
-
-public:
-    string get(int key) const {
-        std::shared_lock lock(mtx_);  // 共享锁：多个读可同时进入
-        auto it = data_.find(key);
-        return it != data_.end() ? it->second : "";
-    }
-
-    void set(int key, string val) {
-        std::unique_lock lock(mtx_);  // 独占锁：写时阻塞所有读
-        data_[key] = std::move(val);
-    }
+struct Counters {
+    alignas(std::hardware_destructive_interference_size)
+        std::atomic<unsigned long long> left{0};
+    alignas(std::hardware_destructive_interference_size)
+        std::atomic<unsigned long long> right{0};
 };
 ```
 
-### 3. 无锁数据结构
+C++17 提供 `std::hardware_destructive_interference_size`，但具体编译器/标准库对它的支持和取值需要在目标平台确认。对 ABI 或二进制布局敏感的类型不要盲目使用可变的编译器常量；可改用显式平台配置。先用同负载基准与采样工具（如 Linux 上可用时的 `perf c2c`）验证“字段分离确有收益”。
 
-只在确实成为瓶颈时使用。参考 `folly::ConcurrentHashMap`。
+# 工作窃取与 NUMA：先知道代价
 
-```cpp
-// std::atomic_flag 自旋锁（轻量，适合极短临界区）
-class SpinLock {
-    std::atomic_flag flag_ = ATOMIC_FLAG_INIT;
-public:
-    void lock() {
-        while (flag_.test_and_set(std::memory_order_acquire))
-            ;  // 自旋等待
-    }
-    void unlock() {
-        flag_.clear(std::memory_order_release);
-    }
-};
-```
+工作窃取（work stealing）让空闲 worker 从其他 worker 的队列取得任务，主要解决负载不均。设计时要定义本地取任务与远程窃取的方向、队列同步、停止协议、异常边界和任务所有权。所谓“随机窃取”不能用固定轮询代码冒充。对当前学习项目，先完成本模块的有界线程池，再以真实任务时长分布判断是否值得增加窃取。
 
----
+NUMA 机器上，线程访问其他节点的内存可能付出额外成本；但绑核也可能降低调度灵活性或产生负载倾斜。Linux 下先查看 `numactl --hardware` 与 `numastat`，再对比默认策略、亲和性及内存绑定下的尾延迟和吞吐量。不要套用固定的“远端内存慢几倍”。
 
-# Cache Line 与伪共享（False Sharing）
+# 可复现的优化实验
 
-## 问题
+1. 写明假设：例如“锁等待而非业务计算限制吞吐”。
+2. 固定输入分布、并发度、编译选项和机器拓扑；先做正确性测试。
+3. 采集基线与变更后的多次数据，保留方差和 p95/p99；记录 CPU、等待和分配证据。
+4. 若收益不稳定，回到指标与热点，勿为了“无锁”牺牲可维护性或安全性。
 
-CPU 缓存以 cache line（通常 64 字节）为单位加载。两个线程修改同一 cache line 中的不同变量 → 各自的缓存行反复失效 → 性能骤降。
-
-```cpp
-// ❌ 伪共享：a 和 b 很可能在同一 cache line
-struct Data {
-    int a;        // 线程 1 频繁写
-    int b;        // 线程 2 频繁写
-    // ... padding
-};
-// 线程 1 写 a → 线程 2 的缓存行失效 → 重新加载 → 性能下降 10 倍+
-```
-
-## 解决方案：对齐填充
-
-```cpp
-// ✅ 对齐到 cache line
-struct alignas(64) Data {
-    int a;        // 线程 1 写
-    char pad[60]; // 填充到 64 字节
-};
-
-// 或使用 C++17 的硬编码填充
-struct Data {
-    alignas(64) std::atomic<int> a;
-    alignas(64) std::atomic<int> b;
-};
-```
-
-> 伪共享损耗取决于写入频率、CPU、缓存行布局与调度，不存在通用倍数。先用基准测试对照，再按平台可用性尝试 `perf c2c` 定位缓存行竞争。
-
----
-
-## 内存序选择
-
-C++ 内存序规定可依赖的跨线程顺序；它不是“每种内存序固定对应几条 CPU 屏障”。成本取决于架构、编译器和操作类型。先证明正确性，再测量性能。
-
-| 内存序 | 主要保证 | 常见用途 |
-|--------|----------|----------|
-| `relaxed` | 原子性及同一对象的修改顺序；不建立跨线程同步 | 独立统计计数 |
-| `release`/`acquire` | 同一原子对象上，acquire 读到 release 的值或其 release sequence 时建立同步 | 发布数据 |
-| `acq_rel` | 在一次读改写操作中兼有两侧约束 | 需要双向同步的 RMW |
-| `seq_cst`（默认） | 额外参与所有 seq_cst 操作的单一总序 | 清晰的正确性基线 |
-
-```cpp
-// 先明确“发布数据”的协议，再决定是否需要比默认 seq_cst 更弱的内存序。
-
-std::atomic<bool> ready{false};
-std::string data;
-
-// 生产者线程
-void producer() {
-    data = "hello";                   // 普通写
-    ready.store(true, std::memory_order_release);  // release：保证之前的写对其他线程可见
-}
-
-// 消费者线程
-void consumer() {
-    while (!ready.load(std::memory_order_acquire)) // acquire：保证看到 release 前的所有写
-        ;
-    print(data);  // 安全：data 一定已被写入
-}
-```
-
-**经验法则：** 非必要时使用默认 `seq_cst` 或锁；`acq_rel` 不是所有原子操作都合法或足够的万能选项。放宽内存序前，用 happens-before 证明和并发测试支撑，再测量收益。
-
----
-
-## 线程池与 task 窃取（Work Stealing）
-
-均匀分配任务可能导致负载不均——某个线程空闲而其他线程繁忙。Work Stealing 允许空闲线程"偷取"其他线程队列尾部的任务。
-
-```cpp
-// Work Stealing 线程池核心思想（简化）
-class WorkStealingPool {
-    struct ThreadQueue {
-        std::deque<Task> tasks;
-        std::mutex mtx;
-    };
-    std::vector<ThreadQueue> queues_;
-    std::vector<std::thread> threads_;
-
-    bool steal(int tid, Task& t) {
-        for (size_t i = 0; i < queues_.size(); i++) {
-            int target = (tid + 1 + i) % queues_.size();  // 随机选目标
-            std::lock_guard lk(queues_[target].mtx);
-            auto& q = queues_[target].tasks;
-            if (!q.empty()) {
-                t = std::move(q.front());
-                q.pop_front();  // 从队列头部偷
-                return true;
-            }
-        }
-        return false;
-    }
-};
-```
-
-> C++ 后端项目直接用 `folly::ThreadPoolExecutor`（Meta 出品，生产验证）或 `boost::asio::thread_pool`，不自己造。
-
----
-
-## NUMA 感知
-
-在多路 NUMA 服务器中，远端内存访问成本可能高于本地；差异受机器拓扑、工作集与测量方式影响。先用 `numactl --hardware` 查看拓扑，再以实际负载测量，不套固定倍数。
-
-```
-Socket 0            Socket 1
-┌──────────────────────────────────┐        ┌──────────┐
-│ Core 0-7 │        │ Core 8-15    │
-│ 本地内存   │        │ 本地内存   │
-└────┬─────┘        └────┬─────┘
-     │                   │
-     └───────互联总线─────┘
-    访问远端内存 ≈ 1.5x 延迟
-```
-
-**C++ NUMA 优化：**
-- **线程绑定**：`pthread_setaffinity_np` 绑定线程到特定核心
-- **内存分配**：`libnuma` 的 `numa_alloc_local` 分配本地内存
-- **分配策略**：`numactl --membind=0 ./server` 只使用 socket 0 内存
-
-```cpp
-#include <sched.h>
-
-// 绑定线程到指定 CPU 核心
-void bindToCore(int coreId) {
-    cpu_set_t cpuset;
-    CPU_ZERO(&cpuset);
-    CPU_SET(coreId, &cpuset);
-    pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-}
-
-// 每个线程绑定到不同核心
-for (int i = 0; i < numThreads; i++) {
-    threads_.emplace_back([i] {
-        bindToCore(i);  // 线程 i 绑定到核心 i
-        // ... 运行
-    });
-}
-```
-
----
-
-## 性能分析清单
-
-当你的 C++ 后端服务性能不达标，按这个顺序排查：
-
-| 步骤 | 工具 | 做什么 |
-|------|------|--------|
-| 1. 系统级 | `top`/`htop` | CPU 是否跑满？哪个进程？ |
-| 2. CPU 热点 | `perf top` / `perf record` | 哪些函数最耗 CPU？ |
-| 3. 锁竞争 | `perf lock` / `heaptrack` | 锁等待时间占比？ |
-| 4. 内存 | `valgrind` / `asan` | 有无内存泄漏？ |
-| 5. 上下文切换 | `/proc/stat` / `vmstat` | 上下文切换频繁？可能锁竞争 |
-| 6. 网络 | `ss -s` / `netstat` | 连接数、重传率 |
-| 7. 磁盘 IO | `iostat -x 1` | await 是否过高？ |
-
----
-
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | 伪共享是什么 | 多线程修改同一 cache line 的不同变量 → 缓存颠簸 |
-> | 如何避免伪共享 | `alignas(64)` 对齐到 cache line |
-> | 内存序如何选择 | 95% 场景 `acq_rel` 够用，只有队列/计数器才用 `relaxed` |
-> | Work Stealing 好处 | 解决线程间负载不均，提高 CPU 利用率 |
-> | NUMA 对性能的影响 | 跨 socket 内存访问慢 1.5x，亲和性绑定可缓解 |
-> | 性能优化的第一原则 | **先测量，再优化。** 不要凭感觉优化。 |
->
-
-> [!tip]- **工程要点**：大多数性能问题出在锁竞争和 IO 上，不是 CPU。用 `perf` 找到真正的瓶颈再动手。伪共享在 C++ 后端的高并发场景中常见，排查方法：性能计数器下降明显但 CPU 没跑满 → `perf c2c` 检查 cache 冲突。
-
->
-> ---
->
+规范核对：[原子智能指针的 lock-free 查询](https://eel.is/c++draft/util.smartptr.atomic)、[进展保证](https://eel.is/c++draft/intro.progress)、[缓存干扰常量](https://eel.is/c++draft/hardware.interference)。

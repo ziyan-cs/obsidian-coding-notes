@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [cloud-native/kubernetes, kubernetes/scheduling, kubernetes/storage]
 ---
 
@@ -64,6 +62,24 @@ Pod -> PVC -> PV -> CSI driver -> storage backend
 - CSI driver 将 Kubernetes 操作映射到底层云盘、块存储或文件系统。
 - StatefulSet 提供稳定 Pod 身份和卷声明模板，不替数据库完成复制、选主、备份或一致性恢复。
 
+最小 PVC 示例（实验集群需有默认 StorageClass，否则要填可用的 `storageClassName`）：
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: demo-data
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+创建后先看 `kubectl get pvc demo-data` 是否 Bound，再用 `kubectl describe pvc demo-data` 查 provisioner 与事件。`ReadWriteOnce` 是卷可由**一个节点**读写挂载的访问模式，不等于“同一时间只有一个 Pod 能写”；数据库仍要自己保证文件/事务并发安全。删除 PVC 前先查 PV 的 `persistentVolumeReclaimPolicy`，避免把实验删除步骤误用于重要数据。
+
+若需要 Kubernetes 层面的单 Pod 挂载约束，了解 `ReadWriteOncePod` 及其 CSI/版本前提；它也不替代应用级数据一致性。[Kubernetes PV 访问模式](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+
 访问模式是调度与挂载能力声明，不等于应用并发写入一定安全。卷快照也不必然具备应用一致性；数据库需要协调 flush、锁、日志或使用原生备份机制。
 
 # 故障定位
@@ -87,4 +103,3 @@ Pod -> PVC -> PV -> CSI driver -> storage backend
 - [Kubernetes Scheduling, Preemption and Eviction](https://kubernetes.io/docs/concepts/scheduling-eviction/)
 - [Kubernetes Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 - [Kubernetes Storage](https://kubernetes.io/docs/concepts/storage/)
-

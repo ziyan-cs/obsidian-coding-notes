@@ -1,14 +1,8 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-10-19
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-19
-previous_review_due: 2026-09-19
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -30,33 +24,33 @@ previous_review_due: 2026-09-19
 > [!question]- 自测：先回答再展开
 > 1. 为什么工厂函数通常返回 `unique_ptr` 而不是裸指针？
 > 2. 双向关联怎样用 `weak_ptr` 避免循环引用？
-> 3. `make_shared` 与 `shared_ptr(new T)` 在分配和异常安全上有什么差别？
+> 3. `make_shared` 的合并分配有什么优势？长期 `weak_ptr` 与自定义删除器会怎样影响选择？
 
-# unique ptr Ownership (unique ptr 独占所有权)
+# 独占所有权：`unique_ptr`
 
 > [!note] 本节重点： unique_ptr 的独占所有权语义、移动语义支持、自定义删除器、与原始指针的转换
 
 `unique_ptr` 独占资源，不可拷贝，只能移动。超出作用域时自动释放。
 
 ```cpp
-// 创建（C++14 推荐用 make_unique，避免裸 new）
-auto p = std::make_unique<int>(42);
-auto arr = std::make_unique<int[]>(10);
+#include <memory>
+#include <utility>
 
-// 访问
-*p;          // 解引用
-p.get();     // 获取裸指针（不转移所有权）
-p.reset();   // 释放并置空
-p.release(); // 释放所有权，返回裸指针（需手动 delete！）
+void take(std::unique_ptr<int> owned); // 接管所有权
+void use(const int& borrowed);          // 只借用一个非空对象
 
-// 转移所有权（只能 move，不能拷贝）
-auto p2 = std::move(p);   // p 变为 nullptr，p2 接管
+void example() {
+    auto p = std::make_unique<int>(42);
+    use(*p);                  // 借用，不转移所有权
+    int* observer = p.get();  // 只观察；p 释放后 observer 失效
+    (void)observer;
 
-// 作为函数参数
-void take(std::unique_ptr<int> p);     // 转移所有权
-void use(const std::unique_ptr<int>& p); // 不转移，只使用
-void use(int* p);                       // 更通用：直接传裸指针 p.get()
+    auto next = std::move(p); // 所有权转移；p 现在为空
+    next.reset();             // 释放所拥有的 int
+}
 ```
+
+`get()` 不交出所有权；`release()` 则交出原始指针，必须由调用方用**匹配的删除策略**接管。普通 `new int` 得到的对象可 `delete`，自定义 deleter 或 C 资源不能机械套用 `delete`。
 
 ## 自定义删除器
 
@@ -69,17 +63,8 @@ std::unique_ptr<FILE, decltype(fileDeleter)> fp(fopen("a.txt","r"), fileDeleter)
 std::unique_ptr<void, decltype(&free)> buf(malloc(1024), free);
 ```
 
-> [!summary] 核心摘要
->
-> - **常见误区**：把 `p.get()` 返回的裸指针交给另一个 `unique_ptr` 管理 → 双重释放；`p.release()` 后忘记手动 `delete`。
-> - **自测**：1) 为什么 `unique_ptr` 能放进 `std::vector` 却不能被拷贝？ 2) 函数参数何时传 `unique_ptr`（按值）、`const unique_ptr&`、还是裸指针？
->
-> ---
->
->
-> ---
 
-# shared ptr Reference Counting (shared ptr 引用计数)
+# 共享所有权：`shared_ptr`
 
 > [!note] 本节重点：shared_ptr 引用计数原理、控制块结构、make_shared 的优势与限制
 
@@ -94,57 +79,41 @@ sp2.reset();                            // 计数 = 2
 // sp1 离开作用域 → 计数 = 0 → delete
 ```
 
-## 控制块（Control Block）
+## 控制块与两种生命周期
+
+`shared_ptr` 通过共享的所有权状态协调多个拥有者；多数实现将强/弱计数、删除器等信息放在控制块中，但指针个数、字段布局与具体计数表示不是标准规定的 ABI。还要区分 `shared_ptr` **存储的指针**与它**拥有的对象**：别名构造可让二者不同。
 
 ```text
-shared_ptr Internal Structure:
-
-  shared_ptr A                shared_ptr B
-  ┌──────────────────┐       ┌──────────────────┐
-  │ raw ptr: &T ─────│───────│── raw ptr: &T    │
-  │                   │       │                  │
-  │ ctrl blk ptr ────│───────│── ctrl blk ptr   │
-  └──────────────────┘       └──────────────────┘
-           │                        │
-           │  ┌─────────────────────┘
-           │  │
-           ↓  ↓       ┌──────────────────────────┐
-           └──┼──────→│  T (managed object)      │
-              │       │  (heap allocated)        │
-              │       └──────────────────────────┘
-              │
-              │       ┌──────────────────────────┐
-              └──────→│  Control Block (heap)    │
-                      │  ref_count    = 2        │
-                      │  weak_count   = 0        │
-                      │  deleter                 │
-                      │  allocator               │
-                      └──────────────────────────┘
-
-Lifecycle:
-  ref_count == 0               → T is destroyed
-  ref_count + weak_count == 0  → Control Block is destroyed
+shared_ptr A ----+
+                 +---- shared ownership state ---- managed object
+shared_ptr B ----+                ^
+                                  | weak observation
+weak_ptr W -----------------------+
 ```
 
-- **make_shared**：一次分配，对象和控制块在同一块内存（更高效，缓存友好）
-- **shared_ptr(new T)**：两次分配（对象一次，控制块一次），不推荐
+最后一个强拥有者消失时，被管理对象被销毁；只要弱观察者仍需区分“对象已销毁”，相关所有权状态还需要留存。若对象和控制块同块分配，弱引用存续期间可能延迟**整块存储**的归还，虽然对象已析构。不要把图中的字段、地址或计数相加公式当标准保证。
+
+
+- **make_shared**：实现通常将对象与所有权状态合并分配；标准建议不超过一次分配，但不应把具体布局写死。弱引用长期存续可能让合并块延迟归还。
+- **shared_ptr(new T)**：通常分别分配对象与控制块；在需要自定义删除器或其他特殊所有权边界时仍可能有用，不是一律禁用。
 
 ```cpp
-// 推荐：一次分配
-auto sp = std::make_shared<MyClass>(args...);
+// 一般优先：实现通常合并分配对象和控制块
+auto coallocated = std::make_shared<int>(42);
 
-// 不推荐：两次分配
-auto sp = std::shared_ptr<MyClass>(new MyClass(args...));
+// 需要独立分配或特定删除器等场景可选此形式
+auto separate = std::shared_ptr<int>(new int(42));
 ```
 
 ## shared_ptr 的线程安全
 
-- **引用计数的增减**是原子操作，线程安全
-- **指针指向的对象**本身不是线程安全的，并发读写需要额外同步
+- 不同 `shared_ptr` 对象即使共享所有权，也可以由不同线程各自复制或销毁；控制块会协调所有权计数。
+- **同一个 `shared_ptr` 实例**若被多线程同时读写，仍需要外部同步或 C++20 的 `std::atomic<std::shared_ptr<T>>`。
+- **所指对象**的并发读写也须按自身规则同步；引用计数安全不等于对象安全。
 
 ---
 
-# weak ptr and Circular References (weak ptr 与循环引用)
+# 弱观察与循环引用：`weak_ptr`
 
 > [!note] 本节重点：weak_ptr 打破循环引用、expired/lock 使用模式、weak count 与 shared count 关系
 
@@ -186,14 +155,15 @@ if (auto locked = wp.lock()) {       // lock() 返回 shared_ptr，若对象已�
     std::cout << "object destroyed";
 }
 
-wp.expired();   // 快速检查：强引用计数是否为 0（对象已销毁）
+wp.expired();   // 仅观察瞬时状态；随后可能变化，真正使用应调用 lock()
 wp.use_count(); // 强引用计数
 ```
 
 ## 典型应用：Observer 模式 / 缓存
 
 ```cpp
-// 缓存：用 weak_ptr 存缓存，对象被外部释放后自动失效
+// 单线程示意：weak_ptr 不延长对象寿命；并发访问 cache_ 还需要锁
+struct Object { explicit Object(int value) : id(value) {} int id; };
 class Cache {
     std::unordered_map<int, std::weak_ptr<Object>> cache_;
 public:
@@ -212,14 +182,7 @@ public:
 | |unique_ptr|shared_ptr|weak_ptr|
 |---|---|---|---|
 |所有权|独占|共享|无|
-|引用计数|无|有（原子）|只增弱计数|
+|所有权状态|无共享计数|共享强所有权状态|共享观察状态，不增加强拥有者|
 |拷贝|❌|✅|✅|
 |典型开销|接近裸指针；自定义 deleter 可能影响对象大小|控制块 + 引用计数操作|共享控制块，不增加强计数|
 |使用场景|默认首选|共享所有权|打破循环引用、缓存、观察者|
-
-> [!summary] 核心摘要
-> - **常见误区**：直接用 `weak_ptr` 解引用（不可行，必须先 `lock()`）；把缓存/观察者设计成 `shared_ptr` 导致对象永远不释放。
-> - **自测**：1) `expired()` 返回 true 与 `lock()` 返回空，两者何时结果不一致（竞态）？ 2) 为什么 `weak_ptr` 需要在控制块里额外记录 weak count？
->
-> ---
->

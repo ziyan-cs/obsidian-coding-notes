@@ -1,11 +1,6 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-09-23
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-23
-previous_review_due: 2026-09-21
 ---
 
 > [!abstract] 学习定位
@@ -30,7 +25,8 @@ previous_review_due: 2026-09-21
 uv init my-service
 cd my-service
 uv add httpx
-uv run pytest
+uv add --dev pytest
+uv run --locked pytest
 uv lock --check
 uv sync --locked
 ```
@@ -59,7 +55,7 @@ src/example_app/
 └─ service.py
 ```
 
-从项目根目录运行 `python -m example_app.cli`，让解释器按模块语义定位入口。直接运行包内部文件会改变 import 上下文，容易出现“脚本能跑，安装后不能跑”的问题。模块间优先使用明确的绝对导入；循环导入通常说明职责或共享类型放错层。
+配置并安装 `src/` 包后，从项目根目录运行 `python -m example_app.cli`，让解释器按模块语义定位入口。直接运行包内部文件会改变 import 上下文，容易出现“脚本能跑，安装后不能跑”的问题。模块间优先使用明确的绝对导入；循环导入通常说明职责或共享类型放错层。
 
 # 依赖声明与解析
 
@@ -69,46 +65,18 @@ src/example_app/
 
 升级依赖时阅读 release notes，并在锁文件变化后运行测试和构建。安全更新仍可能改变行为；“最新”不是跳过验证的理由。
 
-# 可复现实验
-
-1. 创建空目录与独立环境，打印 `sys.executable`。
-2. 建立 `src` 包和 `python -m` 入口，确认从非源码工作目录安装后仍能运行。
-3. 加入一个运行依赖和一个开发依赖，观察 `pyproject.toml` 与 lockfile 各自变化。
-4. 删除环境后仅凭仓库文件重建，运行测试并比较结果。
-# 官方资料
-
-- [uv：项目结构与 lockfile](https://docs.astral.sh/uv/concepts/projects/layout/)
-- [uv：locking 与 syncing](https://docs.astral.sh/uv/concepts/projects/sync/)
-- 核验日期：2026-09-06
-
 # 从空目录到可复现项目
 
-```text
-project metadata -> resolve dependencies -> lockfile
-       |                                      |
-       +----------> isolated .venv <----------+
-                              |
-                           run tests
-```
+1. 创建项目与独立环境，打印 `sys.executable`，确认运行的是项目解释器。
+2. 将运行依赖与开发依赖分别声明，检查 `pyproject.toml` 和 `uv.lock` 的变化。
+3. 配置可安装的 `src/` 包，再用 `python -m package.module` 运行；仅有目录结构而未安装包时，不能假设模块可导入。
+4. 删除虚拟环境，在干净环境运行 `uv sync --locked`、测试和 CLI；若还需手工安装隐藏依赖，说明项目尚不可复现。
 
-元数据表达“我直接依赖什么、支持哪个 Python”；lockfile 表达“本次解析后实际安装哪一组精确版本”；虚拟环境隔离项目解释器与包。三者各解决一个问题，缺任何一个都会让“换电脑能否重现”变得不确定。
+`uv sync` 默认精确同步，可能移除 lockfile 之外的包；`uv run` 默认保持必要依赖同步，但不是同一种清理模式。检查锁文件是否过期用 `uv lock --check`。不要提交 `.venv`，它应能由仓库文件重建。
 
-# 验收动作
-
-在干净目录克隆项目后，只使用项目文档提供的命令创建环境、同步依赖并运行测试。若必须先在本机手工安装某个包，说明依赖声明或 lockfile 还不完整。不要把 `.venv` 提交到版本库。
-
-> [!warning]- 易错点
-> - 把 `pip install` 过的全局环境当作项目依赖清单。
-> - 只提交源码，不提交依赖声明或锁文件。
-> - 将 `.venv` 作为源码提交；环境应可重建，而非复制。
-
-> [!question]- 自测：先回答再展开
-> 1. 为什么需要 lockfile，而只写依赖范围不够？
-> 2. 新同学拿到项目后，怎样验证环境可复现？
+官方资料：[uv 项目布局](https://docs.astral.sh/uv/concepts/projects/layout/) · [锁定与同步](https://docs.astral.sh/uv/concepts/projects/sync/)
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](/04-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Names%20Mutability%20and%20Copying%20(对象、名称、可变性与复制).md)
-
-
 
 

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -194,15 +192,15 @@ TIME_WAIT 是主动关闭方在发送最后一个 ACK 后进入的等待状态�
 
 ### 原因二：让旧连接的所有报文消亡
 
-若立即用相同的四元组（src IP, src port, dst IP, dst port）建立新连接，网络中残留的旧报文可能被新连接误收，造成数据混乱。2MSL 足以让所有旧报文过期消失。
+若过早复用同一四元组（源/目的 IP 与端口），旧连接的延迟报文可能干扰新连接。TIME_WAIT 是 TCP 对旧报文和最终 ACK 重传建立的安全窗口；RFC 9293 将主动关闭后的等待规定为 2×MSL，但 MSL 取值和实现细节不能从某个 Linux sysctl 机械推算。
 
 ---
 
 ## TIME_WAIT 带来的问题
 
-在**高并发短连接**场景下（如 HTTP/1.0、频繁建连的微服务），TIME_WAIT 会大量堆积：
+在频繁主动关闭出站连接时，TIME_WAIT 可能大量出现：
 
-- 每个 TIME_WAIT 状态的连接占用一个本地端口
+- 每个连接由四元组标识；大量指向同一目标的短连接可能使可用本地临时端口成为瓶颈，不能仅按 TIME_WAIT 总数直接判断端口耗尽
 - 可用临时端口范围受系统配置限制（Linux 可查看 `/proc/sys/net/ipv4/ip_local_port_range`）
 - 端口耗尽 → 新连接无法建立 → 服务不可用
 
@@ -210,42 +208,29 @@ TIME_WAIT 是主动关闭方在发送最后一个 ACK 后进入的等待状态�
 
 ## 处理方案
 
-### 方案一：评估 `tcp_tw_reuse`（仅在明确的 Linux 出站连接场景）
+### 方案一：先确认是谁主动关闭与哪个四元组受限
 
-bash
-
-```bash
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_timestamps = 1
-```
-
-- 面向主动发起的出站连接；不应作为服务端监听端口重启的首选手段
-- 具体语义存在内核版本差异，标记为 **VERSION_CHECK**
+用 `ss -tan state time-wait` 观察端点分布，结合临时端口范围和连接复用率判断瓶颈。`tcp_tw_reuse` 等内核参数语义随版本和网络条件变化，不能为“清理 TIME_WAIT”直接复制 sysctl；只有测得出站端口复用问题且理解风险后才按目标内核文档评估。
 
 ### 不要混淆：`tcp_fin_timeout`
-
-bash
 
 ```bash
 net.ipv4.tcp_fin_timeout = 30   # 影响 FIN-WAIT-2 相关超时，不是 TIME_WAIT 时长开关
 ```
 
-### 方案三：使用长连接 / 连接池（根本方案）
+### 方案二：使用长连接 / 连接池（优先方案）
 
 - HTTP/1.1 Keep-Alive、HTTP/2 多路复用
 - 数据库连接池、Redis 连接池
 - 减少连接建立/断开频率，从根本上避免大量 TIME_WAIT
 
-### 方案四：SO_REUSEADDR（服务端重启用）
-
-c
+### 方案三：SO_REUSEADDR（服务端绑定语义）
 
 ```c
 setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 ```
 
-- 允许服务端在 TIME_WAIT 期间重新绑定同一端口
-- 主要用于服务重启后快速恢复监听，不用等 2MSL
+- 常用于使重启后的监听 socket 能按平台规则重新绑定地址；行为受地址、既有 socket 的选项和操作系统约束，并不是清除 TIME_WAIT 或任意复用相同四元组的开关
 
 ### ❌ 不推荐：tcp_tw_recycle
 

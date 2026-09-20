@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
@@ -46,41 +44,19 @@ service 返回领域错误，不返回 HTTP status。handler 使用 `errors.Is/A
 # 协议测试
 
 用 `httptest` 覆盖：错误 method、body 超限、未知字段、尾随 JSON、缺失字段、对象越权、领域冲突、依赖 timeout 与未知内部错误。断言 status、Content-Type、稳定 code、request ID 和敏感信息未泄漏。
-# 请求路径
+# 一张可执行的错误映射表
 
-1. 路由匹配与认证。
-2. 解码并校验路径、查询和 body。
-3. 调用 application/service 层。
-4. 把领域结果或错误映射为稳定的 HTTP status 和错误 body。
-5. 记录 request ID、延迟和必要上下文。
+| 来源 | 建议状态 | 客户端可见内容 |
+| --- | --- | --- |
+| JSON 语法、字段类型、未知字段 | 400 | 稳定 `invalid_argument`，指出可修正字段 |
+| 请求体超过上限 | 413 | 不回显原始 body |
+| 未认证 / 无权限 | 401 / 403 | 不泄漏对象是否存在等敏感事实 |
+| 资源不存在 / 唯一键冲突 | 404 / 409 | 稳定业务 code |
+| 内部错误 | 500 | 固定泛化信息，细节只进日志 |
+| 依赖超时 | 由服务角色和 API 契约决定 | 作为网关时可用 504；不要机械把所有数据库 timeout 都标 504 |
 
-# 错误边界
-
-- 客户端输入错误：4xx，给调用者可修正的信息。
-- 资源不存在或冲突：使用稳定语义，不暴露内部实现。
-- 下游超时、数据库失败：5xx，日志保留根因与 request ID。
-
-# 一个可测试的分层
-
-```text
-HTTP request
-    -> handler: decode and validate transport input
-    -> service: enforce business rules
-    -> repository: read or write storage
-    -> handler: map known errors to response
-```
-
-例如“标题不能为空”是业务或输入规则；`json.Decoder` 失败是协议输入错误；数据库连接断开是基础设施错误。三者不能都返回同一段模糊的 `internal error`，也不能把数据库错误原文直接交给客户端。
-
-# 最小响应约定
-
-```json
-{"code":"invalid_argument","message":"title is required","request_id":"..."}
-```
-
-错误 `code` 应稳定、可枚举；`message` 面向调用方；日志记录根因和堆栈或错误链。先为一条成功路径、一个校验失败和一个依赖超时写 `httptest`，再接真实 router。
+在 handler 中按 `errors.Is/As` 判断已定义领域错误；对 `*http.MaxBytesError` 单独映射 413。错误 body 至少包含稳定 `code`、可安全展示的 `message` 和 `request_id`，例如 `{"code":"invalid_argument","message":"title is required","request_id":"..."}`。日志保留完整错误链，但过滤凭据和原始敏感输入。
 
 > [!info]- 延伸阅读
 > - 下一步：[03-API Lifecycle and Graceful Shutdown (服务生命周期)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/03-API%20Lifecycle%20and%20Graceful%20Shutdown%20(服务生命周期).md)
-
 

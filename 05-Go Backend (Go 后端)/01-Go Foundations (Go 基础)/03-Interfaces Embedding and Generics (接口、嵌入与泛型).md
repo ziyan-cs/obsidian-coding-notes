@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/basics]
 ---
 
@@ -84,6 +82,8 @@ func Contains[T comparable](items []T, target T) bool {
 
 若不同类型需要不同业务行为，小 interface 或普通函数更合适。不要用泛型隐藏反射、序列化和数据库字段差异；也不要为了消除两三行重复制造难懂 constraint。
 
+Go 1.27 新增**具体类型的泛型方法**，但 interface 的方法仍不能自己声明类型参数，泛型方法也不能据此实现 interface 方法。初学时先掌握普通泛型函数与方法集，再读 [Go 1.27 发布说明](https://go.dev/doc/go1.27)；不要把旧资料中的“Go 方法绝不能有类型参数”当成现行规则。
+
 # 实验
 
 分别让 `User` 和 `*User` 赋值给一个小接口，观察编译结果；构造 typed nil error 并解释输出；最后写泛型 `Map` 或 `Contains`，比较它与 `[]any` 在类型安全和装箱语义上的差别。
@@ -99,4 +99,3 @@ func Contains[T comparable](items []T, target T) bool {
 > [!question]- 自测：先回答再展开
 > 1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
 > 2. 哪种情况下该先写 interface，哪种情况下不该？
-

@@ -1,8 +1,5 @@
 ---
-status: stable
-confidence: medium
-content_verified: 2026-09-18
-previous_review_due: 2026-10-03
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
@@ -39,14 +36,16 @@ async def fetch_one(client, url, limit):
         async with asyncio.timeout(3):
             return await client.get(url)
 
-async def run_all(client, urls):
+async def run_batch(client, urls: list[str]):
+    if len(urls) > 100:
+        raise ValueError("one batch may contain at most 100 URLs")
     limit = asyncio.Semaphore(20)
     async with asyncio.TaskGroup() as group:
         tasks = [group.create_task(fetch_one(client, u, limit)) for u in urls]
     return [task.result() for task in tasks]
 ```
 
-示例表达结构，不规定生产参数。并发数和 timeout 应根据下游容量、连接池、延迟基线与资源限制测量。输入可能无限到来时，不应先为全部输入创建 task；使用有界 queue，让生产速度受消费者容量约束。
+示例只处理大小受限的一批输入，不规定生产参数。Semaphore 限制同时进入网络操作的数量，**不限制已创建 task 的数量**，所以示例先限制批大小。并发数和 timeout 应根据下游容量、连接池、延迟基线与资源限制测量。输入可能无限到来时，应使用有界 queue 和固定 worker 数，让生产速度受消费者容量约束。
 
 # timeout、取消与失败
 
@@ -59,7 +58,7 @@ timeout 触发后要让取消继续传播，并在 `finally` 或异步 context m
 - 幂等请求或幂等键；
 - 对永久错误、限流和取消的单独处理。
 
-`TaskGroup` 提供结构化并发：子任务的生命周期受同一作用域管理，一个任务失败时会协调取消其余任务，并以异常组报告。使用前以项目支持的 Python 版本文档为准。
+`TaskGroup` 和 `asyncio.timeout` 从 Python 3.11 提供。TaskGroup 将子任务生命周期约束在同一作用域；一个任务以非取消异常失败时，会协调取消其余任务并以异常组报告。消费者应明确选择“整批失败”还是“逐项收集失败”，不要假定 TaskGroup 会自动返回部分成功结果。
 
 # 阻塞与 CPU 工作
 
@@ -68,8 +67,10 @@ timeout 触发后要让取消继续传播，并在 `finally` 或异步 context m
 | 少量顺序 I/O | 同步代码 | 最容易阅读与调试 |
 | 支持异步 API 的大量网络 I/O | `asyncio` | 需要有界并发与取消 |
 | 暂无异步接口的短阻塞 I/O | `asyncio.to_thread` | 不用于逃避 CPU 瓶颈 |
-| 纯 Python CPU 密集计算 | 进程池 | 参数复制、启动与回收有成本 |
+| 默认 CPython 构建中的纯 Python CPU 密集计算 | 进程池 | 绕开通常启用的 GIL；参数复制、启动与回收有成本 |
 | 已有高性能算法 | 原生扩展或独立服务 | 明确内存、ABI 或网络边界 |
+
+CPython 从 3.13 起另有可选的 free-threaded 构建，可让线程并行执行 Python 代码，但它不是默认构建，第三方扩展兼容性和性能仍需验证。即便运行在这种构建上，也要为共享状态显式同步，不能依赖内置容器的当前实现细节。见 [Python free-threading 指南](https://docs.python.org/3/howto/free-threading-python.html) 与 [threading 官方文档](https://docs.python.org/3/library/threading.html)。
 
 # 排查顺序
 

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -196,73 +194,20 @@ CREATED ───────────────────> READY
 
 # Linux 调度（调度器概念）
 
-Linux 的公平调度实现会随内核版本演进（例如 CFS/EEVDF 等），这里保留“按权重分配 CPU 时间”的心智模型；当前系统行为需结合内核版本查文档（VERSION_CHECK）：
+普通任务的公平调度以权重分配 CPU 时间为基本心智模型；具体挑选下一任务的实现随内核版本演进。旧版 CFS 偏重 `vruntime` 最小者，Linux 6.6 起逐步转向 EEVDF 的“符合资格的最早虚拟截止时间”选择，不能把红黑树最左节点当成所有版本的规则。
 
-- 以**虚拟运行时间（vruntime）** 为核心指标，vruntime 最小的进程优先运行
-- 旧版 CFS 以红黑树和虚拟运行时间组织可运行任务；不要把这一实现细节当作所有内核版本的固定事实
-- **nice 值**（-20 ~ 19）影响 vruntime 增长速度：nice 越低，获得更多 CPU 时间
+- `nice` 值（-20 到 19）改变普通任务的调度权重；值更低通常分得更多 CPU，但不保证立刻运行。
+- CFS 的 `vruntime` 与红黑树是理解旧实现的模型；EEVDF 同时考虑 lag、资格和虚拟 deadline。
+- 实时调度策略、CPU affinity、cgroup 配额和系统负载也影响观测结果；不要把 `nice` 等同于内核所有调度类的统一优先级。
 
 ```bash
 nice -n -10 ./myapp     # 以高优先级启动
 renice 5 -p 1234        # 修改运行中进程的 nice 值
 ```
 
-| 概念 | 范围 | 说明 |
-|------|------|------|
-| PR（Priority） | 0~39 | 内核实际调度优先级（值越低优先级越高） |
-| NI（Nice） | -20~19 | 用户设置的优先级偏移量 |
-| 最终优先级 | PR = NI + 20 | CFS 将其映射到 vruntime 权重 |
+查看 `ps -o pid,stat,ni,pri,comm -p <PID>` 时，`NI` 是 nice 值；`PRI`/`PR` 的显示和解释依工具及调度策略而异，不能用 `PR = NI + 20` 当作通用公式。调高优先级（负 nice）通常需要相应权限。
 
-进程生命周期详解见 → Process States & Scheduling (状态与调度) · Zombie & Orphan Process (僵尸进程与孤儿进程)
-
----
-
-# Process States and Scheduling (进程状态与调度)
-
-> [!note] 本节重点：进程三态/五态模型、就绪/运行/阻塞状态切换、Linux 调度策略与优先级
-
-## 进程状态 · 延伸要点 2
-```
-              fork()
-CREATED ───────────────────> READY
-                               │
-  Scheduler selects process    │ Wait for I/O / Signal
-              ↓                ↓
-           RUNNING ─────────> BLOCKED
-              │                    │
-              │ Time slice expires | Condition satisfied
-              ↓                    ↓
-            READY <────────────────┘
-              │
-              │ exit()
-              ↓
-           ZOMBIE ── wait() ──> Terminated
-```
-
-|状态|ps 显示|含义|
-|---|---|---|
-|Running|R|正在 CPU 上执行，或在运行队列中|
-|Sleeping（可中断）|S|等待事件（I/O、信号），可被信号唤醒|
-|Sleeping（不可中断）|D|等待内核 I/O（如磁盘），**不能被信号中断**|
-|Stopped|T|被 SIGSTOP / SIGTSTP 暂停|
-|Zombie|Z|已退出但父进程未 wait|
-
-> **D 状态（不可中断睡眠）** 很危险：进程无法被 kill，通常意味着磁盘 I/O 卡住或 NFS 挂载问题，只能等待或重启。
-
-# Linux 调度器（CFS）
-
-Linux 默认使用 **CFS（Completely Fair Scheduler，完全公平调度器）**：
-
-- 以**虚拟运行时间（vruntime）** 为核心指标，vruntime 最小的进程优先运行
-- 用**红黑树**组织所有就绪进程，最左节点（vruntime 最小）即下一个运行的进程
-- nice 值（-20 ~ 19）影响 vruntime 增长速度：nice 越低（优先级越高），vruntime 增长越慢，获得更多 CPU 时间
-
-```bash
-nice -n -10 ./myapp    # 以高优先级启动
-renice 5 -p 1234       # 修改运行中进程的 nice 值
-```
-
-进程状态与调度详解见 → Process Lifecycle (生命周期) · Zombie & Orphan Process (僵尸进程与孤儿进程)
+[Linux EEVDF scheduler](https://docs.kernel.org/scheduler/sched-eevdf.html) · [CFS scheduler history](https://docs.kernel.org/scheduler/sched-design-CFS.html)
 
 ---
 
@@ -332,7 +277,6 @@ close(STDOUT_FILENO);
 close(STDERR_FILENO);
 ```
 
-僵尸与孤儿进程详解见 → Process Lifecycle (生命周期) · Process States & Scheduling (状态与调度)
 
 ---
 
@@ -404,7 +348,7 @@ read(fd, buf, sizeof(buf));
 
 ## 共享内存（mmap）
 
-最高效的 IPC 方式，零拷贝，多个进程直接读写同一块物理内存：
+共享映射让多个进程访问同一组物理页，避免为了共享数据反复在进程间复制；但同步、缓存一致性可见性、页错误和安全边界仍需自行设计。它不意味着“任何 IPC 工作负载里绝对最快”或没有内存复制成本：
 
 ```c
 // 创建共享内存（基于文件）
@@ -433,8 +377,6 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
-IPC 机制详解见 → Process Lifecycle (生命周期) · Process States & Scheduling (状态与调度)
 
 > [!info]- 延伸阅读
 > - 下一步：[05-POSIX Thread Lifecycle (POSIX 线程生命周期)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/05-POSIX%20Thread%20Lifecycle%20(POSIX%20线程生命周期).md)
-

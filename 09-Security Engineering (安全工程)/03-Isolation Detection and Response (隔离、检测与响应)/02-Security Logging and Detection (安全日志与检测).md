@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [security/detection, operations/incident]
 ---
 
@@ -27,6 +25,8 @@ tags: [security/detection, operations/incident]
 # 事件模型与检测
 
 结构化字段至少包含时间、actor、action、resource、result、source、request/trace ID 与稳定错误码。服务之间同步时间并统一身份标识，才能还原调用链。
+
+一条“跨租户订单读取被拒绝”事件可以记录 `actor_id`、`tenant_id`、`action=order.read`、资源类型与脱敏 ID、`result=deny`、策略版本、request ID 和 UTC 时间。不要记录订单全文或完整 bearer token。检测规则再把“同一主体短时间内反复访问不同租户资源”作为可调查线索，而非仅凭一次拒绝就判定入侵。
 
 检测规则应对应威胁：异常失败、高频权限拒绝、服务身份访问新资源、容器异常启动 shell。阈值以基线和风险调整，避免告警风暴。
 

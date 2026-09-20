@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [sre/incident, sre/resilience]
 ---
 
@@ -68,8 +66,6 @@ evidence: dashboard, trace, logs and timeline
 时间线区分事实与推断。根因不是“某人执行错误命令”，而要继续问为何权限、评审、默认值、验证和恢复没有阻止或限制影响。行动项优先修复检测、隔离、自动化和恢复能力，并附负责人、期限与验收实验。
 
 官方参考：[Google SRE Incident Response](https://sre.google/sre-book/managing-incidents/)、[Google SRE Workbook: Postmortem Culture](https://sre.google/workbook/postmortem-culture/)。
-
-# 无责复盘
 
 复盘不等于无人负责，而是不以惩罚个人替代系统改进。记录影响、时间线、触发事件、促成条件、有效和无效响应，并给行动项设负责人、期限和验证标准。
 

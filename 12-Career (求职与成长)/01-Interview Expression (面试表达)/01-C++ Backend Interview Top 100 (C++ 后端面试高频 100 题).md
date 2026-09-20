@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [career/interview]
 ---
 
@@ -33,14 +31,14 @@ tags: [career/interview]
 
 ## OOP
 
-| #   | 题目                  | 难度  | 笔记位置                                                                                                                                                                                           |
-| --- | ------------------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #   | 题目                  | 难度  | 笔记位置                             |
+| --- | ------------------- | --- | -------------------------------- |
 | 9   | 虚函数表（vtable）的内存布局   | ★★★ | Virtual Function & VTable Layout |
-| 10  | 多继承的菱形问题与虚继承        | ★★★ | Multiple & Virtual Inheritance        |
-| 11  | 构造函数和析构函数中调用虚函数会怎样  | ★★  | Multiple & Virtual Inheritance        |
-| 12  | 为什么析构函数要用 virtual   | ★   | Abstract Class & Pure Virtual            |
-| 13  | Rule of Five（三/五法则） | ★★  | Copy Control & Rule of 5                            |
-| 14  | 拷贝构造函数参数为什么必须是引用    | ★   | Pointers & References                                                           |
+| 10  | 多继承的菱形问题与虚继承        | ★★★ | Multiple & Virtual Inheritance   |
+| 11  | 构造函数和析构函数中调用虚函数会怎样  | ★★  | Multiple & Virtual Inheritance   |
+| 12  | 为什么析构函数要用 virtual   | ★   | Abstract Class & Pure Virtual    |
+| 13  | Rule of Five（三/五法则） | ★★  | Copy Control & Rule of 5         |
+| 14  | 拷贝构造函数参数为什么必须是引用    | ★   | Pointers & References            |
 
 ## 内存
 

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -125,20 +123,19 @@ nginx -s reload
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
-> | worker 数量设置 | 通常 = CPU 核数 |
-> | 惊群问题 | accept_mutex 或 EPOLLEXCLUSIVE 解决 |
+> | worker 数量设置 | `auto` 可作为起点，按 CPU、阻塞负载和实测调整 |
+> | 惊群问题 | 受内核、监听 socket 与 `accept_mutex`/`EPOLLEXCLUSIVE`/`reuseport` 配置影响 |
 > | 热加载原理 | 旧进程优雅退出，新进程逐步接管 |
-> | sendfile 优化 | 零拷贝：文件 → 网卡，不经用户态 |
-> | 一个 worker 能处理多少连接 | 理论无上限，取决于内存 |
+> | sendfile 优化 | 文件数据不必先拷入 Nginx 用户态缓冲区；仍有内核与设备路径开销 |
+> | 一个 worker 能处理多少连接 | 受 `worker_connections`、fd 限额、上游连接、内存和超时策略限制 |
 >
 
 > [!tip]- **工程要点**
-> `worker_connections 10240` + `worker_processes auto` 是常见配置。大并发时注意修改 `ulimit -n`。Nginx 架构是"少量进程 + 异步非阻塞"的典范。
+> `worker_connections` 限制单 worker 可打开的连接数，反向代理通常同时占用客户端与上游连接；不能把配置值直接乘 worker 数当成可承受客户端数。还应核查进程 fd 限额、上游容量及真实负载。
 
 >
 > ---
 >
-> Nginx 配置与实践详解见 → Reverse Proxy & Load Balancing Config (反向代理配置) · Nginx vs webserver：Why Use Both (与自写server的关系)
 >
 > ---
 
@@ -286,7 +283,6 @@ server {
 >
 > ---
 >
-> Nginx 架构与实践详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Nginx vs webserver：Why Use Both (与自写server的关系)
 >
 > ---
 
@@ -382,14 +378,13 @@ Nginx（路由）
 > | 为什么用 Nginx 而不是全用自写 Server | Nginx 处理静态/TLS/限流/负载均衡更擅长 |
 > | 自写 Server 的优势 | 完全掌控业务逻辑 |
 > | 什么时候不需要 Nginx | 纯内网 gRPC、非 HTTP 协议 |
-> | sendfile 零拷贝 | 避免用户态参与，直接 DMA 到网卡 |
+> | sendfile 路径 | 避免文件数据先经过用户态；是否采用页缓存、DMA 和额外复制依赖内核、文件系统和设备 |
 > | Nginx + 自写 Server 是职责分离 | 各司其职，不互相替代 |
 >
 
 > [!tip]- **工程要点**
-> Nginx 在前面做限流、SSL、静态文件，自写 Server 专注业务——这是后端最佳实践。即使 Go 自带 net/http，生产环境也建议前面挂 Nginx。
+> 反向代理可以承担 TLS、路由、静态文件与流量治理，但不是每个 Go/C++ 服务都必须部署 Nginx。已有网关、Ingress、云负载均衡或直接暴露服务时，应比较功能、额外跳数、运维与故障域。
 
 >
 > ---
 >
-> Nginx 架构与配置详解见 → Nginx Architecture：Master & Worker Process (架构模型) · Reverse Proxy & Load Balancing Config (反向代理配置)

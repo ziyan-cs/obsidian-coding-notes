@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -163,7 +161,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 客户端发起连接，触发 TCP 三次握手。
 
 - 阻塞模式下：握手完成（或失败）后才返回
-- 非阻塞模式下：立即返回 `EINPROGRESS`，通过 epoll/select 检测连接完成
+- 非阻塞模式下：可能立即成功返回 0，也可能返回 `-1` 且 `errno=EINPROGRESS`；等可写后还须用 `getsockopt(SOL_SOCKET, SO_ERROR)` 判定最终连接结果，不能把“可写”直接当成功
 
 ```cpp
 // 函数原型
@@ -193,7 +191,7 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 
 - `len`：要发送 / 接收的数据长度
 
-- `flags`：标志位，常用 `0`（默认阻塞读写）
+- `flags`：本次操作的标志位；传 `0` 不会覆盖 fd 的 `O_NONBLOCK` 属性，是否等待还取决于套接字模式
     - `MSG_NOSIGNAL`：发送失败时不触发 SIGPIPE 信号（常用）
 
 ## close / shutdown
@@ -288,10 +286,10 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
     - `IPPROTO_IP`: IP 协议
     
 - **optname**: 要设置的选项名
-    - `SO_REUSEADDR`: 允许端口复用
-    - `SO_REUSEPORT`: 允许多个进程绑定同一个端口（Linux 3.9+）
+    - `SO_REUSEADDR`: 调整地址重用规则，具体绑定冲突语义依平台
+    - `SO_REUSEPORT`: 在支持的平台上允许一组符合条件的监听 socket 绑定同一地址/端口
     - `SO_KEEPALIVE`: 开启 TCP 保活机制
-    - `TCP_NODELAY`: 禁用 Nagle 算法，降低延迟
+    - `TCP_NODELAY`: 禁用 Nagle 算法；是否降低业务延迟要结合发送模式与测量
     - `SO_RCVBUF`/`SO_SNDBUF`: 设置接收 / 发送缓冲区大小
     - `SO_RCVTIMEO`/`SO_SNDTIMEO`: 设置接收 / 发送超时时间
     
@@ -315,8 +313,8 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 | |SO_REUSEADDR|SO_REUSEPORT|
 |---|---|---|
-|主要用途|忽略 TIME_WAIT，快速重启|多进程/线程监听同一端口，内核负载均衡|
-|内核分发|否|是（按四元组哈希分发到不同 socket）|
+|主要用途|按平台规则调整重绑行为，常见于服务重启|多监听 socket 共享绑定地址，内核分发连接|
+|内核分发|不提供此分发能力|分发算法依协议、内核版本与附加配置而异，不保证固定四元组哈希|
 |典型场景|服务重启|Nginx worker 进程、多线程 accept|
 
 ---
@@ -330,7 +328,7 @@ setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &opt, sizeof(opt));
 
 TCP 保活机制：在连接空闲一段时间后，内核自动发送探测包，检测对端是否存活。
 
-## 默认参数（Linux）
+## 常见默认值示例（以本机 sysctl 为准）
 
 ```txt
 tcp_keepalive_time    = 7200s   （空闲多久后开始探测）
@@ -338,7 +336,7 @@ tcp_keepalive_intvl   = 75s     （每次探测间隔）
 tcp_keepalive_probes  = 9       （探测失败多少次后断开）
 ```
 
-默认参数太长（2 小时才开始探测），实际应用通常在**应用层实现心跳**，而不是依赖系统 keepalive。
+默认值与运行环境可能不同，可用 `sysctl net.ipv4.tcp_keepalive_time net.ipv4.tcp_keepalive_intvl net.ipv4.tcp_keepalive_probes` 核对。内核 keepalive 检测连接可达性；应用层心跳还可验证协议与业务进度，两者不是互相排斥的替代品。
 
 ## 自定义 keepalive 参数
 
@@ -362,4 +360,3 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Reactor Architecture (Reactor 架构)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/02-Reactor%20Architecture%20(Reactor%20架构).md)
-

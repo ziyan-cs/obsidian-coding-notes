@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-verified: 2026-09-17
+study_stage: reference
 tags: [learning/mistakes, vault/system]
 ---
 

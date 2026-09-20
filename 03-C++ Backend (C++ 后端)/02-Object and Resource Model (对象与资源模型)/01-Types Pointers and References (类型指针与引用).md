@@ -1,14 +1,8 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-09-24
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-24
-previous_review_due: 2026-09-09
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # Type System Basics (类型系统基础)
 
@@ -21,7 +15,8 @@ const int x = 42;        // 不可修改
 int const y = 42;         // 同上，等价写法
 
 // 指针与 const（从右往左读）
-int* const p1 = &x;       // 常量指针：指针本身不可改，指向的值可改
+int z = 7;
+int* const p1 = &z;       // 常量指针：指针本身不可改，可经 p1 修改 z
 const int* p2 = &x;       // 指向常量的指针：指针可改，指向的值不可改
 const int* const p3 = &x; // 双 const：指针和值都不可改
 
@@ -80,15 +75,16 @@ switch (d) {
 
 ### static_cast
 
-编译期类型转换，用于相关类型之间的安全转换：
+静态检查转换形式，但不保证运行时值域或对象动态类型安全：
 
 ```cpp
 double d = 3.14;
 int i = static_cast<int>(d);         // 截断小数
 
 // 父子类指针转换（下行转换不安全，没有运行时检查）
-Base* b = new Derived();
-Derived* d = static_cast<Derived*>(b);  // 需确保 b 确实指向 Derived
+Derived owned;
+Base* base = &owned;
+Derived* downcast = static_cast<Derived*>(base); // 需证明动态对象确为 Derived
 
 // 枚举 ↔ 整型
 int n = static_cast<int>(Direction::NORTH);
@@ -99,13 +95,14 @@ int n = static_cast<int>(Direction::NORTH);
 运行时类型检查（RTTI），用于多态类的安全下行转换：
 
 ```cpp
-Base* b = new Derived();
-Derived* d = dynamic_cast<Derived*>(b);   // 成功返回指针，失败返回 nullptr
-if (d) { d->derivedMethod(); }
+Derived owned;
+Base* base = &owned;
+Derived* checked = dynamic_cast<Derived*>(base); // 失败返回 nullptr
+if (checked) { checked->derivedMethod(); }
 
 // 引用版本：失败抛 std::bad_cast
 try {
-    Derived& dr = dynamic_cast<Derived&>(*b);
+Derived& dr = dynamic_cast<Derived&>(*base);
 } catch (const std::bad_cast&) { ... }
 
 // 要求：基类必须有至少一个虚函数（才有 RTTI 信息）
@@ -119,11 +116,11 @@ try {
 const char* cs = "hello";
 char* s = const_cast<char*>(cs);   // 危险！修改字符串字面量是未定义行为
 
-// 合法场景：函数参数是 const，但确知底层对象非 const
-void legacyFunc(char* p);
-void wrapper(const char* p) {
-    legacyFunc(const_cast<char*>(p));  // 若 p 指向非 const 对象则安全
-}
+// 只有原对象本身可修改时，才可能安全地去 const 并写入。
+int value = 3;
+const int& read_only_view = value;
+int& writable = const_cast<int&>(read_only_view);
+writable = 4; // 修改的是原本非 const 的 value；不要据此设计普通接口
 ```
 
 ### reinterpret_cast
@@ -135,8 +132,8 @@ int x = 42;
 int* p = &x;
 char* cp = reinterpret_cast<char*>(p);  // 按字节访问 int 的内存
 
-// 序列化/反序列化、与硬件寄存器交互时使用
-uint64_t addr = reinterpret_cast<uint64_t>(p);
+// 观察对象表示时仍须遵守别名、对齐和生命周期规则。
+// 不要假定指针总能无损装入 uint64_t 或转换后即可任意解引用。
 
 // 函数指针转换（某些插件/JIT 场景）
 ```
@@ -166,18 +163,18 @@ uint64_t addr = reinterpret_cast<uint64_t>(p);
 int  x = 42;
 int* p = &x;      // p 存储 x 的地址
 *p = 100;         // 解引用，修改 x
-p++;              // 仅在同一数组范围内才可安全移动到下一个元素
+// 对单个 int，p + 1 只能表示尾后一位置，不可解引用。
 
 // 空指针
 int* null1 = nullptr;   // C++11 推荐（类型安全）
-// int* null2 = NULL;   // C 风格，NULL = 0，可能与 int 重载混淆
+// int* null2 = NULL;   // C 风格宏，具体展开由实现决定；重载决议可能混淆
 // int* null3 = 0;      // 同上
 
 // 指针 vs 数组
 int arr[] = {1,2,3};
-int* p = arr;     // 数组名退化为首元素指针
-*(p + 1) == arr[1];      // true，等价
-p[2]     == *(p + 2);    // true
+int* first = arr; // 此表达式中数组转为首元素指针
+*(first + 1) == arr[1];   // true
+first[2] == *(first + 2); // true
 
 // 函数指针
 void (*fp)(int) = &myFunc;
@@ -206,7 +203,7 @@ int&& rr = std::move(x);
 
 | |指针|引用|
 |---|---|---|
-|可为空|✅（nullptr）|❌（必须绑定有效对象）|
+|可为空|✅（nullptr）|语言层面没有空引用；但绑定对象仍可能先于引用销毁，形成悬空引用|
 |可重新指向|✅|❌（一旦绑定不可改）|
 |需要解引用|`*p`|直接用|
 |可做算术|✅|❌|
@@ -248,20 +245,5 @@ auto p = std::make_unique<int>(42);   // 自动管理生命周期
 > 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
 > 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
 
-> [!check]- 学完后检查
-> ### 复述
->
-> - 不看正文，说明 01-Types Pointers and References (类型指针与引用) 的问题、核心机制与边界。
->
-> ### 验证
->
-> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
->
-> ### 自测
->
-> 1. 这个主题解决什么问题？
-> 2. 它在什么条件下会失效、变慢或需要替代方案？
-
 > [!info]- 延伸阅读
 > - 下一步：[02-Memory Layout and Allocation (内存布局与分配)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/02-Memory%20Layout%20and%20Allocation%20(内存布局与分配).md)
-

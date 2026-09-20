@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/inference, backend/performance]
 ---
 
@@ -56,6 +54,10 @@ KV bytes ≈ 2 × layers × tokens × kv_heads × head_dim × bytes_per_element
 
 取消必须贯穿网关、调度器和模型执行层。客户端断开后仍继续 decode 会浪费最昂贵的资源。若底层无法立即抢占，也要停止后续排队和流式发送，并记录被浪费的 token。
 
+一个入门容量实验：固定模型与硬件，用短问短答、长输入短答、短输入长答三组请求分别测单并发与高并发。记录排队时间、TTFT、每输出 token 间隔、完成率与显存峰值；逐步提高 batch 上限，找出吞吐改善而 P95 仍满足交互目标的区间。若只记录总 tokens/s，容易把长输入与长输出的瓶颈混为一谈。
+
+一个入门容量实验：固定模型与硬件，用短问短答、长输入短答、短输入长答三组请求分别测单并发与高并发。记录排队时间、TTFT、每输出 token 间隔、完成率与显存峰值；逐步提高 batch 上限，找出吞吐改善而 P95 仍满足交互目标的区间。若只记录总 tokens/s，容易把长输入与长输出的瓶颈混为一谈。
+
 # 容量实验
 
 使用接近真实流量的 prompt 长度、输出长度和到达间隔分布，而不是只压固定短请求。实验至少扫描并发、batch 上限、队列延迟和上下文长度，并分别记录：
@@ -70,6 +72,6 @@ KV bytes ≈ 2 × layers × tokens × kv_heads × head_dim × bytes_per_element
 
 > [!info]- 官方参考
 > - [NVIDIA Triton: Dynamic Batching and Concurrent Model Execution](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/tutorials/Conceptual_Guide/Part_2-improving_resource_utilization/README.html)
+
 > [!question]- 理解检查
 > 为什么扩大 batch 可能提高总吞吐却恶化交互用户体验？应该同时观察哪些指标？
-

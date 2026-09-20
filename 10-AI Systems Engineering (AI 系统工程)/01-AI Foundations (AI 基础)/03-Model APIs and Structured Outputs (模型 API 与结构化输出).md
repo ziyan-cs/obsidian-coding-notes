@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/foundation, backend/api]
 ---
 
@@ -23,6 +21,8 @@ tags: [ai/foundation, backend/api]
 区分限流、暂时不可用、请求非法、内容策略拒绝和调用方取消。只对瞬态错误退避重试，并受总 deadline 与费用预算约束。
 
 模型可能已完成推理但响应丢失；若会创建工单、付款或发送消息，副作用必须由业务幂等键保护。
+
+这里需要区分“重试模型推理”和“重试业务动作”。前者可能返回不同建议，后者可能重复执行。对创建工单等操作，服务端以用户意图 ID 建立幂等记录，记录 `pending/succeeded/unknown` 与外部工单 ID；响应丢失时先查询记录和外部状态，不直接再次执行。若外部系统没有幂等接口，则需要对账或人工接管。
 
 # 结构化输出
 
@@ -63,6 +63,6 @@ syntax/schema -> semantic constraints -> authorization/state -> execute idempote
 > [!info]- 权威参考
 > - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
 > - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
+
 > [!question]- 理解检查
 > 模型返回符合 schema 的“删除用户”工具调用时，后端还必须检查哪些条件？
-

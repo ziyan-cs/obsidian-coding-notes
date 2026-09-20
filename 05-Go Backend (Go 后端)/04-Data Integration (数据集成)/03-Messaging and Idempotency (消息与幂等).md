@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
@@ -34,12 +32,15 @@ Outbox 将业务状态与待发送事件写入同一数据库事务，再由发�
 
 稳定的 message ID 适合去重，业务唯一键适合约束“同一业务只能发生一次”。幂等记录与业务变更必须在同一本地事务中提交：
 
-```sql
-BEGIN;
-INSERT INTO consumed_message(message_id) VALUES (?) ON CONFLICT ...;
--- 仅首次插入成功时执行状态变更
-COMMIT;
+```text
+BEGIN transaction
+  INSERT message_id into a table with UNIQUE(message_id)
+  if duplicate-key: skip business mutation, then acknowledge according to contract
+  else: apply business mutation in this same transaction
+COMMIT transaction
 ```
+
+这是事务步骤，不是可直接执行的 SQL。MySQL、PostgreSQL 与 SQLite 的冲突语法和返回语义不同；实现时用当前数据库的唯一约束与驱动错误分类验证“只让首次消息改变业务状态”，不要直接照搬另一种方言的 `ON CONFLICT`。
 
 仅在内存 set 中去重，进程重启后会失效；先写幂等表、再单独改业务，仍存在中间崩溃窗口。对于支付、库存等状态机，还要验证当前状态是否允许转换，不能只依靠 message ID。
 

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!note] 方法论坐标

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [learning/standard, database, distributed-systems]
 ---
 
@@ -42,4 +40,3 @@ tags: [learning/standard, database, distributed-systems]
 2. 缓存更新失败时，怎样界定允许的不一致窗口并完成修复？
 3. 消费者处理成功但提交 offset 失败，会发生什么，业务如何兜底？
 4. 一个“分布式锁”需要哪些假设，服务暂停或租约过期时怎样防止旧 owner 写入？
-

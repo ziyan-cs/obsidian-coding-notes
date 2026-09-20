@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-verified: 2026-10-18
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-18
-previous_review_due: 2026-09-28
 tags: [language/python, python/testing]
 ---
 
@@ -34,10 +29,24 @@ python -m pytest -q
 # Fixture 只负责准备条件
 
 ```python
-def test_loader_rejects_bad_json(tmp_path):
+import json
+from pathlib import Path
+
+import pytest
+
+def load_config(path: Path) -> dict[str, object]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError("invalid JSON") from exc
+    if not isinstance(value, dict):
+        raise ValueError("config root must be an object")
+    return value
+
+def test_loader_rejects_bad_json(tmp_path: Path) -> None:
     config = tmp_path / "config.json"
     config.write_text("{bad", encoding="utf-8")
-    with pytest.raises(ValueError, match="invalid"):
+    with pytest.raises(ValueError, match="invalid JSON"):
         load_config(config)
 ```
 
@@ -52,11 +61,17 @@ def test_loader_rejects_bad_json(tmp_path):
 ```python
 import pytest
 
+def parse_port(text: str) -> int:
+    value = int(text)
+    if not 1 <= value <= 65535:
+        raise ValueError("port out of range")
+    return value
+
 @pytest.mark.parametrize(
     ("text", "expected"),
     [("1", 1), ("65535", 65535)],
 )
-def test_parse_port_accepts_valid_range(text, expected):
+def test_parse_port_accepts_valid_range(text: str, expected: int) -> None:
     assert parse_port(text) == expected
 ```
 
@@ -93,4 +108,3 @@ fixture 不应隐藏断言或创建与当前测试无关的大量对象。若读
 
 - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
 - 验证日期：2026-09-05
-

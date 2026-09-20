@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [security/cloud, security/container, security/iam]
 ---
 
@@ -33,6 +31,8 @@ RBAC 权限按 namespace、资源和动词拆分，避免通配符。人类管�
 NetworkPolicy 控制允许流量，但能否生效取决于网络插件。Secret 对象不是机密管理终点；还需关注 etcd 加密、访问权限、外部密钥系统和日志泄漏。
 
 Admission policy 可阻止特权容器、未签名镜像和危险挂载。Pod Security、seccomp、AppArmor/SELinux 与沙箱运行时提供不同层次限制，应按威胁模型组合。
+
+Kubernetes 的 ServiceAccount token 不等于云角色；若需要云 API，应通过受信任的工作负载身份联合，将集群身份映射到权限受限的云身份。该映射必须约束发行方、audience、namespace 与具体 ServiceAccount，并在云侧限制资源动作。部署前做反向测试：换一个 ServiceAccount 或 namespace 后，是否仍能取得同一权限？
 
 # Pod 到云资源的身份链
 

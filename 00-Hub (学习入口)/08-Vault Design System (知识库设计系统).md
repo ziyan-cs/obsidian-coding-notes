@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-verified: 2026-09-18
+study_stage: reference
 tags: [vault/architecture, vault/style]
 ---
 

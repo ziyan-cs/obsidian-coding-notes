@@ -1,114 +1,99 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
-> [!abstract] 学习目标：区分 constexpr、consteval、constinit 与 if constexpr 的生效阶段和使用边界。
+> [!abstract] 学习目标
+> 能判断一次调用是否**必须**在常量求值中完成，并区分 `constexpr`、`consteval`、`constinit` 和 `if constexpr` 的职责；不用“编译期更快”代替真实成本分析。
 
-> [!note] 本节重点：constexpr 函数、if constexpr、编译期 vs 运行期的边界
+# `constexpr`：允许常量求值，不等于每次都在编译期执行
 
-## constexpr 变量
-
-```cpp
-constexpr int N = 100;           // 编译期常量
-constexpr double PI = 3.14159;
-constexpr int arr[N] = {};       // 数组大小可用 constexpr
-
-// const vs constexpr
-const int x = rand();            // OK：运行期 const
-constexpr int y = rand();        // 错误：constexpr 必须编译期可知
-```
-
-# constexpr 函数（C++11/14/17 逐步放宽限制）
+`const` 只限制对象在该接口上的修改；`constexpr` 变量的初始化必须是常量表达式。`constexpr` 函数可用于常量表达式，也可接受运行期实参而在运行期求值。
 
 ```cpp
-// C++11：函数体只能有 return 语句
-constexpr int factorial(int n) {
-    return n <= 1 ? 1 : n * factorial(n - 1);
-}
+#include <cassert>
 
-// C++14+：可以有局部变量、循环、if
 constexpr int fibonacci(int n) {
     if (n <= 1) return n;
     int a = 0, b = 1;
-    for (int i = 2; i <= n; i++) {
-        int tmp = a + b; a = b; b = tmp;
+    for (int i = 2; i <= n; ++i) {
+        int next = a + b;
+        a = b;
+        b = next;
     }
     return b;
 }
 
-constexpr int f10 = fibonacci(10);   // 编译期计算
-int arr[fibonacci(8)] = {};          // 数组大小，编译期确定
+static_assert(fibonacci(10) == 55); // 这里必须常量求值
 
-// 若参数是运行期值，constexpr 函数退化为普通函数
-int n;
-std::cin >> n;
-int runtime_fib = fibonacci(n);      // 运行期计算，完全合法
-```
-
-## constexpr 类
-
-```cpp
-struct Point {
-    double x, y;
-    constexpr Point(double x, double y) : x(x), y(y) {}
-    constexpr double dist2() const { return x*x + y*y; }
-};
-
-constexpr Point p{3.0, 4.0};
-constexpr double d = p.dist2();   // 25.0，编译期计算
-static_assert(d == 25.0);         // 编译期断言
-```
-
-# if constexpr（C++17，编译期条件分支）
-
-```cpp
-template<typename T>
-void print(T val) {
-    if constexpr (std::is_integral_v<T>) {
-        std::cout << "int: " << val << '\n';
-    } else if constexpr (std::is_floating_point_v<T>) {
-        std::cout << "float: " << val << '\n';
-    } else {
-        std::cout << "other: " << val << '\n';
-    }
-    // 未选中的分支不参与编译，避免类型不兼容的编译错误
+int main(int argc, char**) {
+    const int runtime_n = argc;      // 运行期值
+    assert(fibonacci(runtime_n) >= 0); // 普通运行期调用
 }
 ```
 
-# consteval & constinit（C++20）
+示例仅用于小的非负输入；大 `n` 可能让 `int` 溢出。`constexpr` 函数能否在某个常量上下文求值，还取决于该次执行是否满足常量表达式规则；不能仅看函数声明。C++11 到 C++20 持续放宽可写的函数体与类型，项目需按最低语言标准编译验证。
+
+## `const`、`constexpr` 与对象
 
 ```cpp
-// consteval：必须在编译期求值，不能作为运行期函数
-consteval int square(int n) { return n * n; }
-// square(rand());   // 编译错误：rand() 是运行期值
+#include <array>
 
-// constinit：变量必须静态初始化（编译期初始化），但可以运行期修改
-constinit int g = 42;      // 全局变量，保证静态初始化
-g = 100;                    // 运行期可修改
-```
+constexpr int capacity = 16;
+std::array<int, capacity> values{}; // 模板实参需要常量表达式
 
----
-
-# 常量求值不是“另一种函数”
-
-`constexpr` 函数可以在常量求值或运行期求值，取决于调用上下文和参数。需要常量表达式的地方（`static_assert`、非类型模板参数等）若无法求值会编译失败；普通初始化则可以退回运行期。
-
-```cpp
-constexpr int checked_square(int x) {
-    if (x > 46340 || x < -46340) throw "overflow";
-    return x * x;
+int runtime_source();
+void example() {
+    const int snapshot = runtime_source(); // 运行期初始化的 const 对象
+    (void)snapshot;
 }
-static_assert(checked_square(12) == 144);
-int n = read();
-int value = checked_square(n); // 运行期执行，越界时抛出
 ```
 
-`consteval` 声明 immediate function，每次潜在求值调用都必须产生常量；适合编译期校验和生成。`constinit` 只适用于静态或线程存储期变量，保证静态初始化，避免动态初始化顺序问题；它不让变量成为 `const`，也不表示所有后续访问发生在编译期。
+上例的 `runtime_source()` 仅声明，用于说明 `const` 与常量求值区别；若要运行 `example()`，必须提供该函数定义。静态数组界、非类型模板参数和 `static_assert` 等上下文要求常量表达式，无法在运行期“退回”求值。
 
-`if constexpr` 只丢弃未选中的从属分支；分支外的语法错误以及与模板参数无关的非法代码仍可能报错。`std::is_constant_evaluated()` 可以区分求值环境，但不应让同一 API 的业务语义悄悄分叉。
+# `if constexpr`：模板实例化时选择实现分支
 
-编译期计算会增加编译时间、诊断复杂度和二进制实例化成本。适合不变量、查表和类型约束，不要为展示技巧把普通运行期逻辑搬进模板。用 `static_assert` 验证边界，并分别编译常量与运行期调用。
+`if constexpr` 根据编译期条件选分支，常用于模板实现差异；未选中分支仍要满足一般语法和非依赖的检查，不能藏任意非法代码。
 
-参考：[cppreference constant expressions](https://en.cppreference.com/w/cpp/language/constant_expression.html)。
+```cpp
+#include <type_traits>
+
+template<class T>
+constexpr const char* group() {
+    if constexpr (std::is_integral_v<T>)
+        return "integral";
+    else if constexpr (std::is_floating_point_v<T>)
+        return "floating";
+    else
+        return "other";
+}
+
+static_assert(group<int>()[0] == 'i');
+static_assert(group<double>()[0] == 'f');
+```
+
+这个分支用于**选定模板之后**的实现；对调用方能否实例化 API 的限制，优先在 C++20 使用 `concept` / `requires`，或按旧标准使用 traits、SFINAE。
+
+# `consteval` 与 `constinit`（C++20）
+
+`consteval` 声明立即函数，其受常量求值约束的调用必须产生常量表达式；不能像一般 `constexpr` 函数那样把运行期实参直接交给它。`constinit` 则用于静态或线程存储期变量，要求**静态初始化**，但不使变量成为只读常量。
+
+```cpp
+consteval int square(int x) { return x * x; }
+constexpr int table_size = square(8);
+
+constinit int startup_counter = table_size; // 静态初始化
+int main() {
+    startup_counter += 1; // 运行期可修改
+    return startup_counter == 65 ? 0 : 1;
+}
+
+// square(startup_counter); // 故意编译失败：实参不是常量表达式
+```
+
+`constinit` 有助于避免动态初始化顺序问题，但**不解决并发访问**：若多个线程写 `startup_counter`，仍需同步。`std::is_constant_evaluated()` 可查询当前是否处于常量求值上下文，使用前应明确两条路径是否保持相同业务语义。
+
+# 何时值得放到编译期
+
+把不变量、固定小表或类型约束放在编译期，能更早发现错误；代价是编译时间、诊断复杂度与可能的代码膨胀。先用 `static_assert` 固定边界，再分别编译运行期和常量求值调用；对性能收益也要像运行时代码一样测量。不要为展示模板技巧而搬移普通业务流程。
+
+参考：[C++ 标准草案：常量表达式](https://eel.is/c++draft/expr.const)、[立即函数](https://eel.is/c++draft/dcl.constexpr)。

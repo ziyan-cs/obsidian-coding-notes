@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -91,9 +89,8 @@ content_verified: 2026-09-17
 | `setitimer(which, new, old)` | 更精确的定时器 |
 | `nanosleep(req, rem)` | 高精度睡眠 |
 
-> [!tip]- **工程要点**：频繁系统调用是性能瓶颈之一。减少系统调用的技术包括：用户态缓冲区（stdio 的 fread/fwrite）、批量处理（readv/writev 聚集 IO）、mmap 减少 read/write、epoll 替代 select/poll。
+> [!tip]- **工程要点**：系统调用次数只是成本之一。`readv/writev` 可减少用户态拼接和调用数，`mmap` 改变文件访问路径，`epoll` 改变大量 fd 的就绪等待方式；这些不是彼此可直接替代的“加速开关”。先测瓶颈，再决定是否优化。
 
-系统调用速查见 → Dynamic Library & Shared Object (动态库原理) · Debugging & Tracing (调试追踪)
 
 ---
 
@@ -105,12 +102,11 @@ content_verified: 2026-09-17
 
 | 特性 | 静态库 (.a) | 动态库 (.so) |
 |------|------------|-------------|
-| 链接时机 | 编译期 | 加载期或运行期 |
-| 可执行文件大小 | 大（包含库代码） | 小（仅引用） |
-| 部署 | 独立运行 | 依赖目标机器有 .so |
-| 更新 | 需要重新链接 | 替换 .so 即可 |
-| 内存共享 | 不行（每个进程有副本） | 可以（物理内存共享一份代码） |
-| 加载速度 | 快（已包含） | 略慢（需动态链接） |
+| 链接与装载 | 构建时把所需目标代码纳入可执行文件 | 构建时记录依赖，装载器在运行时查找并重定位 `.so` |
+| 部署 | 减少外部 `.so` 依赖，但仍受内核/运行环境约束 | 需管理库路径、SONAME 与 ABI 兼容 |
+| 更新 | 通常重新链接并重新发布可执行文件 | 可单独更新兼容的库；ABI 不兼容时仍需重建/协调发布 |
+| 内存共享 | 同一可执行文件的只读映射仍可在进程间共享 | 同一 `.so` 的只读代码页也可共享 |
+| 性能 | 大小与启动/运行开销取决于链接选项、重定位和访问模式 | 不能仅凭静态/动态形式断言谁更快 |
 
 **静态库创建：**
 ```bash
@@ -128,10 +124,10 @@ LD_LIBRARY_PATH=. ./prog            # 运行时指定路径
 
 ## 位置无关代码（PIC）
 
-动态库加载时基地址不确定（ASLR），因此代码中的地址引用不能是绝对地址。`-fPIC` 编译的代码使用**相对寻址**：
+动态库可能装入不同虚拟地址；`-fPIC` 生成适合共享对象重定位的代码，尽量减少对只读代码页的运行时修改。具体寻址方式与 GOT/PLT 使用取决于架构、编译器和链接选项，不是“所有绝对地址都不允许”：
 
 - **全局偏移表（GOT）**：存放全局变量和函数指针的表，加载时填入实际地址
-- **过程链接表（PLT）**：延迟绑定，函数首次调用时才解析地址
+- **过程链接表（PLT）**：某些外部函数调用路径会经过它；是否延迟绑定取决于 `BIND_NOW` 等配置
 
 ```
 程序调用函数时：
@@ -153,12 +149,9 @@ LD_LIBRARY_PATH=. ./prog            # 运行时指定路径
 7. 跳转到程序入口
 ```
 
-**查看依赖：** `ldd ./prog` | `readelf -d ./prog`
+**查看依赖：** 可信程序可用 `ldd ./prog` 观察实际解析到的库；未知来源二进制不要运行 `ldd`，先用 `readelf -d ./prog` 或 `objdump -p` 看静态 `NEEDED` 条目（不展示完整传递依赖）。
 
-**加载路径搜索顺序：**
-1. `LD_LIBRARY_PATH` 环境变量
-2. `/etc/ld.so.cache`（由 ldconfig 更新）
-3. `/lib`、`/usr/lib` 等系统目录
+**加载路径搜索：** GNU/Linux 动态加载器还考虑 ELF 的 `DT_RPATH` / `DT_RUNPATH`、`LD_LIBRARY_PATH`、`/etc/ld.so.cache` 与默认目录；它们的优先级及传递依赖行为不同，安全执行模式还会忽略某些环境变量。排查时按 [ld.so(8)](https://man7.org/linux/man-pages/man8/ld.so.8.html) 核对目标系统，不背上面三项的固定顺序。
 
 ## 运行时加载（dlopen）
 
@@ -191,9 +184,10 @@ dlclose(handle);
   func@plt → jmp *GOT[func]         // 直接跳转到 func
 ```
 
-> [!tip]- **工程要点**：`-fPIC` 对性能有轻微影响（多一次间接寻址），但这是动态库和 ASLR 的必要代价。如果不需要共享，静态库性能更优。`LD_PRELOAD` 环境变量可以劫持系统库函数——这是很多调试/监控工具的底层原理。
+> [!tip]- **工程要点**：`-fPIC`、懒绑定、`LD_PRELOAD` 与库搜索路径都可能影响性能、安全或可复现性，但不能笼统断言静态库总是更快。部署时固定 ABI 与库版本，避免生产进程从可写的未知目录加载 `.so`。
 
-动态库原理见 → System Calls Overview (常用系统调用速查) · Debugging & Tracing (调试追踪)
+
+[ld.so(8) Linux manual](https://man7.org/linux/man-pages/man8/ld.so.8.html) · [ldd(1) security note](https://man7.org/linux/man-pages/man1/ldd.1.html)
 
 > [!info]- 延伸阅读
 > - 下一步：[13-Debugging and Tracing (调试与追踪)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/13-Debugging%20and%20Tracing%20(调试与追踪).md)

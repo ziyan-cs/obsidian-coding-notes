@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-verified: 2026-10-14
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-14
-previous_review_due: 2026-09-23
 tags: [language/python, python/files]
 ---
 
@@ -27,7 +22,7 @@ def load_config(path: Path) -> dict:
     return data
 ```
 
-# 规则
+# 路径与文件规则
 
 - 路径使用 `Path` 和 `/` 拼接，不手写 `\\` 或 `/`。
 - `with path.open(...)` 确保异常时也关闭文件。
@@ -50,7 +45,7 @@ JSON 只有 object、array、string、number、boolean 和 null 等数据类型�
 
 # 原子写入与并发边界
 
-重要文件不要直接覆盖。先在同一文件系统的临时文件写入、flush，按需要同步到磁盘，验证后使用 `Path.replace()` 原子替换目标。原子 rename 只保证读者不会看到半个文件，不自动保证断电持久性，也不能协调多个 writer 的业务冲突。
+重要文件不要直接覆盖。先在目标目录的临时文件写入、flush，按需要同步到磁盘，验证后使用 `Path.replace()` 替换目标。是否具备原子替换语义取决于文件系统与平台；即使原子，也不保证断电持久性，更不能协调多个 writer 的业务冲突。
 
 ```python
 from pathlib import Path
@@ -58,12 +53,18 @@ from tempfile import NamedTemporaryFile
 
 def replace_text(target: Path, content: str) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    with NamedTemporaryFile(
-        "w", encoding="utf-8", dir=target.parent, delete=False
-    ) as stream:
-        stream.write(content)
-        temporary = Path(stream.name)
-    temporary.replace(target)
+    temporary: Path | None = None
+    try:
+        with NamedTemporaryFile(
+            "w", encoding="utf-8", dir=target.parent, delete=False
+        ) as stream:
+            temporary = Path(stream.name)
+            stream.write(content)
+            stream.flush()  # 让写入错误尽量在替换前暴露
+        temporary.replace(target)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)  # 替换成功后路径已不存在
 ```
 
 真实工具还要在异常时清理临时文件，并按风险决定备份、权限继承和 fsync。批量修改先生成变更计划，检测重名和越界，再执行；中途失败时报告已完成和未完成项目，使重跑保持幂等。
@@ -73,22 +74,6 @@ def replace_text(target: Path, content: str) -> None:
 `read_text()` 会把完整文件放入内存。大日志按行迭代，二进制大对象按块读取。流式只限制输入缓冲；若把每个唯一用户都放入 dict，聚合状态仍可能耗尽内存。此时需要限制维度、分区、外部排序或数据库。
 
 练习：实现配置文件更新器。它校验 JSON schema，`--dry-run` 展示差异，写临时文件后替换，并通过故意制造非法 JSON、目标目录不存在和写入中断验证失败路径。
-> [!warning]- 易错点
-> - 当前工作目录（CWD）不等于脚本所在目录；CLI 应接收明确路径。
-> - JSON 可解析不代表业务数据有效；仍需检查键、类型和范围。
-> - 一次 `read_text()` 读取大日志可能耗尽内存；大文件按行迭代。
->
+# 动手验证
 
-> [!summary] 核心摘要
->
-> 文件脚本的边界包括：明确的输入路径、显式编码、资源关闭、数据校验和可控的输出副作用。`Path` 让路径操作跨平台且可读，`with` 确保文件在异常时关闭；JSON 或 CSV 的“能解析”不等于符合业务 schema，仍要检查字段与范围。
-
-> [!question]- 自测：先回答再展开
-> 1. 为什么 CLI 不能假设当前工作目录就是脚本目录？
-> 2. 处理 10 GB 日志时，`read_text()` 与逐行迭代有什么本质差别？
-> 3. 怎样设计一个“写前预览、写后可验证”的批量重命名工具？
-
-# 练习
-
-写 `summarize_logs.py <directory>`：递归读取 `.log`，统计每级日志数量，输出 JSON。先实现 `--dry-run`，再实现写文件。
-
+实现 `summarize_logs.py <directory>`：逐行读取日志、校验输入目录、统计级别并输出 JSON。先在临时目录运行，加入 `--dry-run` 展示目标与预计变更；测试非法 JSON、无权限目标和替换失败，确认旧文件仍可读取、临时文件被清理。

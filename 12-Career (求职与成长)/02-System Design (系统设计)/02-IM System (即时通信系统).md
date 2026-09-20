@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [distributed/system]
 ---
 
@@ -292,4 +290,3 @@ Sender           Connection Gateway    Router Service     Receiver GW      Messa
 
 [!info]- 延伸阅读
 - 下一步：[03-Flash Sale (秒杀系统)](/12-Career%20(求职与成长)/02-System%20Design%20(系统设计)/03-Flash%20Sale%20System%20Design%20(秒杀系统设计).md)
-

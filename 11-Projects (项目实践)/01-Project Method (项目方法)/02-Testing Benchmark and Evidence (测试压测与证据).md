@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [career/portfolio, project/evidence]
 ---
 
@@ -29,6 +27,10 @@ tags: [career/portfolio, project/evidence]
 
 不要使用没有证据的“高并发”“百万 QPS”“分布式架构”等措辞。
 
+压测报告至少分开记录**施加的负载**与**服务实际完成的工作**：客户端请求速率、成功率、超时/拒绝、P50/P95/P99、资源使用和下游瓶颈。固定并发客户端若服务变慢，其实际到达率也可能下降；仅看平均延迟或峰值 QPS 容易误判。测试前说明预热、持续时间、数据集、网络位置和是否包含 TLS、日志与依赖服务。
+
+一次可复现记录可写为：`目标路径 + 环境/版本 + 数据规模 + 负载脚本与参数 + 原始输出 + 指标截图或导出 + 结论及局限`。先保存原始证据，再写“因为缓存命中提高而变快”等解释；若没有命中率和剖析数据，最多只能说观察到延迟变化，不能断言原因。
+
 # 审核前的证据包
 
 把每一个简历项目整理为可复查的最小证据包：
@@ -47,4 +49,3 @@ tags: [career/portfolio, project/evidence]
 
 > [!info]- 延伸阅读
 > - 下一步：[01-Project Design Template (项目设计模板)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)
-

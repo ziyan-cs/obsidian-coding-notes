@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -12,7 +10,7 @@ content_verified: 2026-09-17
 
 ## RDB 快照
 
-RDB 是 Redis 的全量快照持久化方式，将内存数据全部写入磁盘文件（`dump.rdb`）。
+RDB 是某一时点的数据集快照。常见单实例文件名是 `dump.rdb`，具体目录、文件名和触发规则以当前配置为准；快照间的写入是否可恢复取决于是否还启用 AOF/复制等机制。
 
 ### 触发方式
 
@@ -50,7 +48,7 @@ Client              Redis Main Process        Forked Child           Disk
   │◄──── BGSAVE OK ────────┤                      │                  │
 ```
 
-**COW 代价：** fork 后如果有大量写入，每个写操作的页（默认 4KB）都会触发复制，增加内存和延迟。`info persistence` 可监控 `rdb_changes_since_last_save`。
+**COW 代价：** fork 后，父进程对尚与子进程共享的内存页进行写入时会触发该页复制；页大小依操作系统与内存配置而变，不能假定每个命令只复制一个固定 4KB 页。需观察 fork 耗时、写入负载、内存余量和持久化任务状态；`rdb_changes_since_last_save` 仅表示快照后的写入计数，不是 COW 内存测量值。
 
 ### RDB 文件结构
 
@@ -75,7 +73,7 @@ Client              Redis Main Process        Forked Child           Disk
 | 优点 | 缺点 |
 |------|------|
 | 文件紧凑，适合备份和灾难恢复 | 丢数据风险大（两次快照间写入全丢） |
-| 恢复速度远快于 AOF（直接加载） | BGSAVE fork 可能阻塞主进程 |
+| 可用于备份与迁移；加载时无需逐条重放历史命令 | BGSAVE 的 fork、COW 与磁盘写入仍有成本 |
 | 子进程写，主进程性能影响小（除 fork） | 大数据量时 fork 耗时可能达秒级 |
 | 单个文件，数据迁移方便 | 频繁执行影响磁盘 I/O |
 
@@ -92,7 +90,7 @@ Client              Redis Main Process        Forked Child           Disk
 >
 
 > [!tip]- **工程要点**
-> RDB + AOF 混合使用是最佳实践（Redis 4.0+ 支持混合持久化 = AOF rewrite 时生成 RDB 段 + AOF 增量段）。`latency-monitor-threshold` 可用于监控 fork 阻塞。
+> 是否同时启用 RDB 与 AOF 取决于恢复点目标、备份与写入开销。混合持久化是 AOF 重写时以 RDB 格式生成基底，不等于自动提供独立异地备份。用延迟监控和内存指标观察 fork/COW 成本。
 
 >
 
@@ -103,7 +101,6 @@ Client              Redis Main Process        Forked Child           Disk
 >
 > ---
 >
-> AOF 日志与 RDB 快照对比详解见 → 01b2-AOF：Write-Ahead Log & Rewrite (日志重写)
 >
 > ---
 
@@ -119,21 +116,20 @@ AOF（Append Only File）记录每个写命令，重启时重放恢复数据。
 
 ```ini
 appendfsync always     # 每条命令都 fsync 到磁盘（最安全，最慢）
-appendfsync everysec   # 每秒 fsync 一次（默认，推荐）
+appendfsync everysec   # 周期性 fsync；不是严格每秒一次的丢失上界
 appendfsync no         # 交给 OS 决定刷盘（最快，丢最多）
 ```
 
-| 策略 | 数据丢失 | 性能（TPS） |
-|------|---------|------------|
-| always | 最多丢 1 条命令 | ≈ 数百（每次写都 fsync） |
-| everysec | 最多丢 1 秒数据 | ≈ 数万 |
-| no | 最多丢若干秒数据 | ≈ 十数万 |
+| 策略 | 典型刷盘行为 | 故障边界 |
+|------|--------------|----------|
+| `always` | 每次写入后请求 fsync | 耐久性较强，但仍取决于存储设备及故障模型 |
+| `everysec` | 后台大致按秒 fsync | 宕机可能丢最近已确认写入；阻塞/故障时不保证严格 1 秒上界 |
+| `no` | 由操作系统决定何时刷盘 | 丢失窗口取决于 OS 与设备，不能写成固定秒数 |
 
 ### AOF 文件格式
 
 ```
 *3\r\n$3\r\nSET\r\n$3\r\nkey\r\n$5\r\nvalue\r\n
-*2\r\n$3\r\nGET\r\n$3\r\nkey\r\n
 
 解释：
 *3          → 3 个参数
@@ -196,7 +192,7 @@ auto-aof-rewrite-min-size 64mb     # 文件至少 64MB
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-**重写优化：** 将多次命令合并为最少命令。例如 `RPUSH list A` `RPUSH list B` 合并为 `RPUSH list A B`。
+**重写优化：** 从当前内存状态生成足以恢复该状态的命令/基底表示，而非机械地读取旧 AOF 并逐行压缩。上面是概念流程；Redis 7+ 的 AOF 可由基底文件、增量文件及 manifest 共同管理，不能按“单个新 AOF 原子替换单个旧文件”解释所有版本。[Redis 持久化文档](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)
 
 ---
 
@@ -215,7 +211,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 └──────────────────┴──────────────────────────┘
 ```
 
-**优势：** 加载时先加载 RDB（快）再重放 AOF（增量），既快又只丢少量数据。
+**优势：** RDB 基底加增量日志通常有利于缩短加载时间；实际可恢复写入范围仍取决于 fsync、文件完整性、故障与备份策略。
 
 ---
 
@@ -225,7 +221,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 |------|-----|-----|------|
 | 文件大小 | 小 | 大 | 中等 |
 | 恢复速度 | 快 | 慢（重放所有命令） | 快 |
-| 数据安全性 | 丢多 | 丢少（everysec 丢 1 秒） | 丢少 |
+| 数据安全性 | 两次快照间的写入有风险 | 受 fsync 策略与设备语义影响 | 同样受增量 AOF 刷盘与文件完整性影响 |
 | 对性能影响 | fork 阻塞 + COW | 写回策略影响写延迟 | 折中 |
 | 可读性 | 二进制 | 文本协议（可读） | 二进制开头 |
 
@@ -234,7 +230,7 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
-> | AOF everysec 最推荐 | 丢 1 秒数据 vs always 的性能代价权衡 |
+> | AOF everysec 的取舍 | 延迟与耐久性折中；不承诺严格 1 秒丢失上界 |
 > | AOF 重写为什么用子进程 | 避免阻塞主进程 + fork 后的 COW 保证数据一致性 |
 > | AOF 文件损坏怎么办 | `redis-check-aof --fix` 修复 |
 > | 混合持久化加载流程 | 读文件头判断是否为 RDB → 加载 RDB → 重放剩余 AOF |
@@ -242,12 +238,11 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 >
 
 > [!tip]- **工程要点**
-> 生产环境推荐 `appendfsync everysec` + `aof-use-rdb-preamble yes`。RDB 仍建议开启作为备份补充（灾难恢复场景）。`info persistence` 监控 `aof_pending_bio_fsync` 判断 AOF 是否堆积。
+> 生产配置应由恢复点目标、恢复时间目标、备份演练和目标 Redis 版本决定。AOF 不替代备份，RDB 也不自动成为异地备份；`INFO persistence` 与延迟指标用于定位问题，但不能单凭一个计数器证明数据安全。
 
 >
 > ---
 >
-> RDB 快照与 AOF 持久化对比详解见 → 01b1-RDB：Snapshot & BGSAVE (快照原理)
 >
 > ---
 
@@ -400,8 +395,6 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 >
 > ---
 >
-> Redis 单线程模型与项目集成详解见 → Redis Single Thread Model (单线程模型为何高性能) · Redis Integration：C++ Client hiredis (项目集成)
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Cache Consistency Problems (缓存一致性问题)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/03-Cache%20Consistency%20Problems%20(缓存一致性问题).md)
-

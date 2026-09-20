@@ -1,10 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 # Compilation & Linking (编译与链接)
 
@@ -17,17 +14,17 @@ Compilation Pipeline:
 
 source.cpp  ──→  source.ii  ──→  source.s  ──→  source.o  ──→  a.out
 (preprocessing)  (compilation)  (assembly)    (linking)    (executable)
-    │                                                                  ▲
+    │                                                                 ▲
     │ g++ -E                        g++ -S      g++ -c       ld       │
-    ↓                                                                  │
-(expand macros,                                                  ┌─────┴──────┐
- include headers)                                                │  libfoo.a  │
-                                                                 │  libbar.so │
-                                                                 └────────────┘
+    ↓                                                                 │
+(expand macros,                                                 ┌─────┴──────┐
+ include headers)                                               │  libfoo.a  │
+                                                                │  libbar.so │
+                                                                └────────────┘
 ```
 
 ```bash
-g++ -E main.cpp -o main.i    # 预处理
+g++ -E main.cpp -o main.i     # 预处理
 g++ -S main.i -o main.s       # 编译到汇编
 g++ -c main.s -o main.o       # 汇编到目标文件
 g++ main.o -o main            # 链接
@@ -100,9 +97,9 @@ multiple definition of `global'
 |--|-------------|-------------------|
 | 链接时机 | 编译时 | 运行时（加载时链接）|
 | 可执行文件大小 | 大（包含库代码） | 小（只记录依赖）|
-| 内存占用 | 不同进程各自一份 | **共享**同一份 .so |
+| 内存占用 | 库代码进入最终目标文件；实际物理页是否共享取决于 OS | 共享库代码页通常可由多个进程共享 |
 | 更新库 | 需重新链接 | 替换 .so 即可 |
-| 部署 | 无外部依赖 | 需确保 .so 存在 |
+| 部署 | 不依赖该静态库的运行时文件；仍可能依赖其他动态库 | 需提供兼容的运行时共享库 |
 | 启动速度 | 取决于二进制大小、加载器与系统缓存 | 取决于依赖数量、加载器与系统缓存 |
 | 性能 | 取决于编译优化、调用边界与实际工作负载 | 取决于符号解析、调用边界与实际工作负载 |
 
@@ -126,7 +123,7 @@ main() 调用 foo():
       → 之后: 直接跳转到 foo
 ```
 
-**延迟绑定（Lazy Binding）**：函数地址只在第一次调用时才解析，提高启动速度。
+**延迟绑定（Lazy Binding）** 是 ELF 平台上的一种可选策略；构建/运行配置、安全加固和平台实现可改为启动时绑定。PLT/GOT 图只表示典型路径，并非所有函数调用都必经此流程。
 
 ## 工程最佳实践
 
@@ -228,9 +225,9 @@ Foo::~Foo() = default;  // 必须在此处定义（Impl 完整类型）
 ## Forward Declaration vs Include
 
 ```cpp
-// ✅ 只需要前向声明：
+// 仅做接口声明时，前向声明通常足够：
 class Bar;              // 声明但不定义
-void func(Bar bar);     // 传值？需要完整类型！（调用拷贝构造）
+void func(Bar bar);     // 仅声明可使用不完整类型；定义函数/按值调用时需要完整类型
 void func(Bar* bar);    // 指针：前向声明就够
 void func(Bar& bar);    // 引用：前向声明就够
 Bar* createBar();       // 返回指针：前向声明就够
@@ -276,12 +273,6 @@ project/
 >
 
 > [!tip]- **工程要点**：编译时间是大型 C++ 项目的重要成本。头文件之间的依赖关系直接影响增量编译速度。优先用 **前向声明**，其次用 **Pimpl 惯用法**（将实现细节对用户隐藏），最后才考虑重构成模块。
-
->
-> ---
->
->
-> ---
 
 # Preprocessor & Macros (预处理与宏)
 
@@ -329,12 +320,12 @@ int result = DOUBLE(2) * 3;  // 期望 12，实际 2+2*3 = 8
 // ❌ 问题 2：多次求值
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 int x = 1, y = 2;
-int m = MAX(++x, y);  // → ((++x) > (y) ? (++x) : (y))
-                       // → x 被递增了两次！
+int m = MAX(++x, y);  // 若第一次 ++x 后 x > y，++x 会再次求值；
+                       // 若条件为假则只递增一次。副作用依赖分支，难以推理。
 
 // ✅ C++ 中用模板或 std::max 替代
-template<typename T>
-const T& max(const T& a, const T& b) { return a > b ? a : b; }
+// 优先使用 <algorithm> 的 std::max；注意引用返回值不能超过实参寿命。
+// 比较有副作用的表达式前，先求值到局部变量。
 
 // ❌ 问题 3：分号
 #define REQUIRE(cond) if (!(cond)) return false
@@ -412,4 +403,3 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // 编译期断言
 
 > [!info]- 延伸阅读
 > - 下一步：[02-CMake and Dependencies (CMake 与依赖)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/06-Engineering%20Practice%20(工程实践)/02-CMake%20and%20Dependencies%20(CMake%20与依赖).md)
-

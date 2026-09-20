@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
-verified: 2026-10-04
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-04
-previous_review_due: 2026-09-26
 ---
 
 > [!abstract] 学习定位
@@ -66,36 +61,12 @@ CLI -> application service -> domain functions
 在一个干净环境按 README 执行安装、示例、测试和构建。让另一个人只看帮助与错误信息完成一次任务；记录他在哪里需要询问，这些位置就是接口或文档缺口。
 
 性能报告包含机器、软件版本、输入规模、并发、预热和原始结果。项目结束后回答：最大风险是什么、哪条测试真正阻止过回归、哪个设计是过度的、下一版先删什么而不是先加什么。
-# 推荐题目
+# 三个可做的题目
 
-- API health checker：并发检查接口状态与延迟，输出 JSON/Markdown 报告。
-- Log summarizer：解析服务日志，统计错误类型与时间窗口。
-- Data migration verifier：比对源端和目标端的行数、主键覆盖与校验和。
+| 项目 | 最小可演示路径 | 必测失败 |
+| --- | --- | --- |
+| API health checker | 配置 URL → 检查协议和业务字段 → 输出报告 | 超时、非 2xx、非法 JSON |
+| Log summarizer | 读日志 → 校验字段 → 按窗口聚合 → 输出表格 | 坏行、空输入、维度超限 |
+| Data migration verifier | 读取两端摘要 → 比对主键与数量 → 输出差异 | 重复主键、部分读取、数据版本不一致 |
 
-## 每个项目必须有
-
-1. 可配置的输入与输出目录。
-2. dry-run 模式，先展示将执行什么。
-3. 可重试的瞬态失败与明确的失败报告。
-4. 最少三条测试：正常、空输入、异常输入。
-
-## 推荐目录与执行路径
-
-```text
-src/       command and domain code
-tests/     behavior-focused tests
-README.md  setup, examples, failure handling
-
-input -> validate -> dry-run preview -> execute -> report
-```
-
-先让 `dry-run` 输出“将处理多少条、将写入哪里、哪些项会跳过”，确认后才执行真实副作用。每次运行输出结构化摘要：成功数、失败数、重试数和失败样本；这比只说“完成”更适合复盘与定位。
-
-## 交付证据
-
-为一个真实重复任务保留：一份匿名输入样例、一条正常运行记录、一条失败处理记录和一组自动化测试。项目规模可以小，但证据链要完整。
-
-> [!info]- 延伸阅读
-> - 下一步：[01-Python Project Practice Workflow (Python 项目实践流程)](/04-Python%20Engineering%20(Python%20工程)/04-Python%20Practice%20(Python%20实践)/01-Python%20Project%20Practice%20Workflow%20(Python%20项目实践流程).md)
-
-
+每个项目都需有至少一条正常路径、一条边界路径和一条失败路径的自动化证据；`dry-run` 只在操作可能产生副作用时要求，不必机械加给纯只读工具。项目完成标准以本模块的《Python 工程标准与自测》为准，当前进度统一由 Hub 管理。

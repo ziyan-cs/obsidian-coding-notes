@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-verified: 2026-10-21
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-21
-previous_review_due: 2026-09-24
 tags: [language/python, python/cli]
 ---
 
@@ -16,21 +11,32 @@ tags: [language/python, python/cli]
 > 命令、输入、输出与失败方式都应能从 `--help` 和错误信息中看懂；把路径、阈值等配置暴露为参数，而不是埋在源码常量里。
 
 ```python
-from argparse import ArgumentParser
+import argparse
+import json
+import sys
 from pathlib import Path
 
-def parse_args():
-    parser = ArgumentParser(description="Count lines in a text file")
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Count lines in a text file")
     parser.add_argument("path", type=Path)
     parser.add_argument("--json", action="store_true", help="emit JSON")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
-def main() -> int:
-    args = parse_args()
-    if not args.path.is_file():
-        print(f"not a file: {args.path}")
-        return 2
-    print(sum(1 for _ in args.path.open(encoding="utf-8")))
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    try:
+        with args.path.open(encoding="utf-8") as stream:
+            count = sum(1 for _ in stream)
+    except OSError as exc:
+        print(f"cannot read {args.path}: {exc.strerror}", file=sys.stderr)
+        return 1
+    except UnicodeError:
+        print(f"not valid UTF-8: {args.path}", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps({"lines": count}))
+    else:
+        print(count)
     return 0
 
 if __name__ == "__main__":
@@ -98,34 +104,9 @@ def probe(repository: Path) -> str:
 对部分成功的批处理，输出成功、跳过、失败与可重试清单；重复执行不应再次破坏已经完成的项目。危险操作增加明确确认或 `--force`，但自动化环境不能依赖交互式提示。
 
 练习：实现批量文件转换 CLI。配置来自文件、环境与参数；dry-run 输出计划；真实运行使用临时文件原子替换；非法输入返回 2，运行失败返回 1，并为 subprocess timeout 写测试。
-# 设计清单
+# 动手验证
 
-- 位置参数放必要输入；可选参数使用 `--long-name`。
-- `--help` 必须说明输入、输出、示例和危险副作用。
-- `main()` 返回整数退出码，方便 shell/CI 判断成功失败。
-- 逻辑放到可测试函数，`argparse` 仅是边界层。
+给日志汇总工具加入 `--output`、`--min-level` 和 `--dry-run`，测试以下契约：正常输出只写 stdout；非法参数由 argparse 返回非零；不可读文件写 stderr 且不输出半成品；`--dry-run` 不修改目标。若输出将覆盖现有文件，还要复用文件专题中的临时文件与清理策略。
 
-> [!summary] 核心摘要
->
-> 一个可维护 CLI 由参数解析、可测试业务函数和退出码组成。`argparse` 只负责把 shell 输入变成结构化参数；`main()` 编排流程并返回状态，`SystemExit` 把状态交给 shell 或 CI。这样同一逻辑既能被测试，也能被人和自动化调用。
-
-> [!question]- 自测：先回答再展开
-> 1. 哪些参数应做位置参数，哪些应使用 `--option`？
-> 2. 为什么业务函数不应直接读取 `sys.argv` 或调用 `sys.exit()`？
-> 3. 为会覆盖文件的命令设计 `--dry-run` 时，输出中应包含哪些信息？
-
-# 练习
-
-给日志汇总工具加入 `--output`、`--min-level`、`--dry-run`，并测试非法路径返回非零状态。
-
-# 官方参考
-
-- [argparse 官方文档](https://docs.python.org/3/library/argparse.html)
-- 验证日期：2026-09-05
-
-> [!info]- 延伸阅读
-> - 下一步：[08-Exceptions Context Managers and Typing (异常、上下文与类型)](/04-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/08-Exceptions%20Context%20Managers%20and%20Typing%20(异常、上下文与类型).md)
-
-
-
+官方参考：[argparse](https://docs.python.org/3/library/argparse.html) · [subprocess](https://docs.python.org/3/library/subprocess.html)。
 

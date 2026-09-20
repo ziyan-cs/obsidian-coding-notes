@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/concurrency]
 ---
 
@@ -50,27 +48,81 @@ mutex 适合保护一个状态不变量。临界区内避免网络、磁盘和�
 
 RWMutex 只有在读临界区足够长、读多写少且测量证明有益时才使用；它更复杂且不保证自然更快。atomic 适合独立计数器、标志或经过严格设计的数据结构，不适合维护多个字段的一致性。
 
-# 生命周期与退出
+# 一个会收口的 worker 批处理
 
-为 worker pool 编写测试：输入关闭时全部退出；context 取消时阻塞在收任务和发结果的 worker 都能退出；队列满时行为符合契约。测试前后比较 goroutine 数只能作为线索，最好让每个 goroutine 都有显式 done 信号并在测试中等待。
-## 有取消的 worker 示例
+输入由 producer 唯一关闭，worker 只读 `jobs`；所有 worker 退出后，由单一 closer 关闭 `results`。调用者一直消费结果直到通道关闭，所以慢消费端形成背压，而不是让任务悄悄堆满内存。
 
 ```go
-func worker(ctx context.Context, jobs <-chan int, out chan<- int) {
-    for {
-        select {
-        case <-ctx.Done():
-            return
-        case n, ok := <-jobs:
-            if !ok { return }
+package lesson
+
+import (
+    "context"
+    "errors"
+    "sync"
+)
+
+type squareResult struct {
+    index int
+    value int
+}
+
+func squareBatch(ctx context.Context, input []int, workers int) ([]int, error) {
+    if workers < 1 {
+        return nil, errors.New("workers must be positive")
+    }
+    jobs := make(chan int)
+    results := make(chan squareResult)
+    var wg sync.WaitGroup
+
+    for range workers {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            for {
+                select {
+                case <-ctx.Done():
+                    return
+                case index, ok := <-jobs:
+                    if !ok {
+                        return
+                    }
+                    item := squareResult{index, input[index] * input[index]}
+                    select {
+                    case results <- item:
+                    case <-ctx.Done():
+                        return
+                    }
+                }
+            }
+        }()
+    }
+    go func() {
+        defer close(jobs)
+        for index := range input {
             select {
-            case out <- n * n:
-            case <-ctx.Done(): return
+            case jobs <- index:
+            case <-ctx.Done():
+                return
             }
         }
+    }()
+    go func() {
+        wg.Wait()
+        close(results)
+    }()
+
+    output := make([]int, len(input))
+    for item := range results {
+        output[item.index] = item.value
     }
+    if err := ctx.Err(); err != nil {
+        return nil, err
+    }
+    return output, nil
 }
 ```
+
+这段示例以 Go 1.22+ 的整数 `range` 语法为基线，内存仍随输入和输出大小增长；它只限定同时工作的 goroutine 数与通道缓冲。真正的无限输入需要有界队列与流式结果消费。注意整数平方可能溢出，业务代码必须按数值范围另行校验。
 
 # 选择工具
 
@@ -81,29 +133,10 @@ func worker(ctx context.Context, jobs <-chan int, out chan<- int) {
 | 一次性初始化 | `sync.Once` | 明确表达意图 |
 | 等待一批 goroutine | `sync.WaitGroup` | 只负责等待，不传结果 |
 
-## 核心检查
+# 动手验证
 
-1. 谁关闭 channel？通常是发送方；接收方不应猜测关闭时机。
-2. goroutine 如何退出？必须有输入关闭、context 取消或明确完成条件。
-3. 接收方变慢时会怎样？无缓冲 channel 会阻塞发送方；缓冲不是无限队列。
-
-> [!warning]- 易错点
-> - “用 channel 就线程安全”：共享变量仍可能 race；运行 `go test -race ./...`。
-> - 多个发送者都 `close(ch)`：会 panic。
-> - 启动 goroutine 却从未等待、取消或消费其输出：泄漏。
-> - 用 `time.Sleep` 同步测试：改用 channel、WaitGroup 或 context。
->
-
-> [!summary] 核心摘要
->
-> goroutine 是 Go 调度器管理的轻量执行单元；channel 适合表达任务交接、顺序与背压，`Mutex` 适合直接保护共享状态。二者不是互斥的架构阵营，关键是明确数据所有权和退出路径。每个 goroutine 都要能因 `context` 取消、输入关闭或任务完成而退出。
-
-> [!question]- 自测：先回答再展开
-> 1. 为什么通常只能由发送方关闭 channel？多个发送方如何安全地收口？
-> 2. 给一个 worker pool 设计取消路径：阻塞在收任务和发结果时各如何响应 `ctx.Done()`？
-> 3. 一个缓存 map 同时读写，为什么“改成 channel”未必比 `Mutex` 更好？
+测试四条路径：正常输入按原顺序得到平方；`workers=0` 返回错误；开始处理后取消 context 能返回且所有 goroutine 退出；消费者变慢时 producer 被阻塞而不是无限创建任务。用 `go test -race` 检查实际跑到的路径，并用显式完成信号验证退出，不靠 `time.Sleep` 猜测。
 
 ## C++ 对照
 
 Go channel 类似“带同步语义的消息通道”，不是 `std::queue`；mutex 与 C++ mutex 同样需要保护不变量。Go 不让你免于理解并发，只减少线程创建和调度细节。
-

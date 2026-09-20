@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [language/cpp, language/go, language/python, comparison]
 ---
 
@@ -71,4 +69,3 @@ Go API service ---- database
 
 > [!info]- 关联
 > - 并发工具：[04-Async IO and Concurrency (异步 I-O 与并发)](/04-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/04-Async%20IO%20and%20Concurrency%20(异步%20I-O%20与并发).md)
-

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -125,7 +123,6 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-间隙锁与临键锁详解见 → Gap Lock & Next-Key Lock (间隙锁与临键锁) · Deadlock Detection & avoidance (死锁检测)
 
 ---
 
@@ -260,7 +257,6 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 >
 > ---
 >
-> 表锁与行锁基础见 → Table Lock vs Row Lock (表锁与行锁) · Deadlock Detection & avoidance (死锁检测)
 >
 > ---
 

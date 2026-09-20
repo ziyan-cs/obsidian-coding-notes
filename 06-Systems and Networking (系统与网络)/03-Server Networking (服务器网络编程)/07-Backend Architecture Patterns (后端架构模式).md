@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [backend/server, architecture]
 ---
 
@@ -9,11 +7,9 @@ tags: [backend/server, architecture]
 > 比较分层、CQRS、事件驱动和微服务拆分的责任边界；模式用于解决约束，不是项目必须收集的名词。
 
 
-> [!note] 本节重点：分层架构、CQRS、event-driven架构、微服务划分原则、C++ 后端项目结构
-
 # 分层架构（Layered Architecture）
 
-C++ 后端服务最经典的结构，从上到下分层，每层只依赖下层：
+分层先解决“协议、业务规则、持久化谁负责”的问题。下面的图是职责示意，不意味着 API Gateway 必须与进程内 handler 同层，也不意味着每个服务必须照图拆成三个部署单元：
 
 ```text
 ┌───────────────────────────────────────────┐
@@ -75,15 +71,15 @@ server/
 ```
 
 **分层原则：**
-- **依赖方向**：外层向内层依赖，内层不依赖外层
-- **数据流**：Handler → Service(入参校验) → Repository(数据访问) → DB
-- **返回类型**：每一层返回结果/错误，不跨层抛异常（用 `Result<T, Error>` 模式）
+- **依赖方向**：协议 handler 调用业务 service，数据访问由 repository 隔离；若业务层定义所需接口，基础设施实现反向依赖该接口。
+- **数据流**：handler 处理协议校验，service 维护业务不变量，repository 执行持久化。不要让数据库异常原文直接成为 HTTP/gRPC 响应。
+- **错误策略**：返回 `Result`、`expected` 或异常都可以，但须统一约定边界转换、回滚与日志；`Result<T, Error>` 是示意类型，不是标准库现成 API。
 
 ---
 
 # CQRS（命令查询职责分离）
 
-将写操作（Command）和读操作（Query）分离到不同的模型：
+CQRS 把修改状态的 command 与读取状态的 query 分成不同模型或接口。**最小形式可以仍使用同一个数据库**；只有当读写扩容、独立查询模型等需求足够强时才拆成不同存储。下面的图代表较复杂的双存储变体，不是 CQRS 的定义：
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -99,41 +95,20 @@ server/
 └─────────────────────────────────────────────────────────┘
 ```
 
-## C++ 实现示例
+## 从单库读写分离开始
 
-```cpp
-// Command（写）
-class CreateOrderCommand {
-public:
-    Result<OrderId> execute(const CreateOrderReq& req) {
-        // 1. 校验
-        if (!validate(req)) return Error("invalid request");
-        // 2. 写主库
-        auto order = orderRepo_.save(req);
-        // 3. async同步到读模型
-        eventBus_.publish(OrderCreated{order});
-        return order.id();
-    }
-};
+先在同一数据库中让 command 负责验证与修改，query 返回面向读取的 DTO；这已经是 CQRS 的一种实现，无需立刻引入消息队列或读库。若把读模型异步投影到另一个存储，就必须定义延迟可见性：写成功后立即查询是否允许读到旧值？订单支付后的确认页面若要求强一致，应读主库、返回版本/状态，或设计明确的等待机制。
 
-// Query（读）
-class GetOrderQuery {
-public:
-    Result<OrderView> execute(OrderId id) {
-        // 从缓存/只读副本读取
-        auto cached = cacheRepo_.get(id);
-        if (cached) return *cached;
-        auto order = readRepo_.findById(id);  // 从库
-        if (!order) return Error("not found");
-        cacheRepo_.set(id, *order, 300s);
-        return *order;
-    }
-};
+```text
+command: validate -> transaction(write model + outbox event) -> commit
+relay:   publish outbox event -> retry on failure
+projector: consume event idempotently -> update read model
+query:   read projection; expose version/staleness policy when needed
 ```
 
-**适用场景：** 读写负载差异大、需要为读优化独立 schema、团队规模大需要职责分离。
+“先提交数据库，再直接 publish”存在提交后进程崩溃导致事件丢失的窗口；“先 publish 再提交”则可能让消费者看到未提交或回滚的状态。Outbox 是一种把业务变更与待发布事件放进**同一数据库事务**的做法，但转发可能重复，消费者仍要幂等。不要把 CQRS 与 Event Sourcing 画等号，前者不要求保存事件作为唯一事实。
 
----
+适用场景是读写模型确实不同、查询优化压力明显，且团队能承担投影延迟、重放与监控成本。普通 CRUD 先用单模型和索引往往更清楚。
 
 # event-driven架构（Event-Driven）
 
@@ -147,64 +122,30 @@ public:
                            └────consume────> 服务C
 ```
 
-## C++ 事件总线实现（简化）
+## 进程内回调与持久消息的区别
 
-```cpp
-// 事件基类
-struct Event { virtual ~Event() = default; };
-struct OrderCreated : Event { OrderId id; UserId uid; int64_t amount; };
-struct OrderPaid   : Event { OrderId id; };
+| 机制 | 能解决什么 | 不能承诺什么 |
+| --- | --- | --- |
+| 进程内事件总线/回调 | 同一进程内的模块通知 | 进程崩溃后不保证保留；回调异常、线程安全与对象生命周期需自管 |
+| 持久消息代理 | 跨进程异步交付、削峰、重试 | 不自动提供数据库写入与发消息的原子性，也不保证消费者只执行一次 |
 
-// 事件总线（单机版）
-class EventBus {
-    using Handler = std::function<void(const Event&)>;
-    std::unordered_map<size_t, std::vector<Handler>> handlers_;
-
-public:
-    template<typename E>
-    void subscribe(std::function<void(const E&)> handler) {
-        size_t type = typeid(E).hash_code();
-        handlers_[type].push_back([handler](const Event& e) {
-            handler(static_cast<const E&>(e));
-        });
-    }
-
-    void publish(const Event& e) {
-        size_t type = typeid(e).hash_code();
-        if (auto it = handlers_.find(type); it != handlers_.end()) {
-            for (auto& h : it->second) h(e);
-        }
-    }
-};
-
-// 使用
-EventBus bus;
-bus.subscribe<OrderCreated>([](const OrderCreated& e) {
-    spdlog::info("Order {} created, amount={}", e.id, e.amount);
-});
-bus.subscribe<OrderCreated>([](const OrderCreated& e) {
-    notificationService.send(e.uid, "订单创建成功");
-});
-bus.publish(OrderCreated{1001, 42, 9900});
-```
-
-**生产级选择：** 单机用 EventBus + 线程池，分布式用 Kafka/RabbitMQ。
-
----
+假设订单写库成功后要发通知：先确定“通知丢失可否接受”。不可丢时，用 outbox 或其他经过验证的协调机制；消费端按业务键幂等，并监控积压、死信与重放。若业务要求请求中立即知道下游结果，同步 RPC 反而更符合契约，不应为了“解耦”强行异步化。
 
 ## 微服务划分原则
 
 | 原则 | 说明 | 反面案例 |
 |------|------|---------|
-| **按业务边界拆分** | 一个服务负责一个完整业务域 | 一个服务做所有事（大泥球） |
-| **dedicated DB** | 每个服务拥有自己的数据库 | 多个服务共享一个库 |
-| **接口优先** | 先定 proto/API 再实现 | 实现完发现接口不满足调用方 |
-| **无同步依赖** | 服务间尽量async解耦 | A -> B -> C 同步链调用 |
-| **独立部署** | 每个服务可单独发布 | 修改一个功能需要同时部署 5 个服务 |
+| **按业务能力划边界** | 先保证高内聚与稳定契约，必要时再拆进程 | 按数据库表机械拆成大量小服务 |
+| **数据所有权** | 一项数据的写入规则由明确的服务负责；物理上可共享集群/实例 | 多服务直接改同一张业务表且无所有者 |
+| **接口协商** | 契约与调用方共同演进，提供兼容窗口 | 只由提供方单方面定 proto/API |
+| **同步调用有预算** | 需要立即结果时可同步，但限定超时、重试和降级 | A → B → C 无界同步链、失败放大 |
+| **独立部署是目标** | 版本兼容、数据迁移和可观测性支持错峰发布 | 每次改动必须同时部署所有服务 |
 
 ---
 
-## 经典 C++ 后端项目架构参考
+## 一种可选的多服务部署图
+
+下图只帮助辨认网关、各服务数据所有权和异步消费者；初学项目不必从三个服务、三个数据库和 Kafka 起步。先做模块边界清楚的单体，只有独立扩缩容、团队职责或故障隔离确有收益时再拆。
 
 ```
                     ┌───────────────────┐
@@ -242,18 +183,11 @@ bus.publish(OrderCreated{1001, 42, 9900});
 
 ---
 
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | 分层架构优缺点 | 优点：职责清晰、可测试；缺点：层数多时性能损耗 |
-> | CQRS 适用场景 | 读写不对等、复杂查询、需要独立优化读模型 |
-> | event-driven vs 同步调用 | event-driven解耦更彻底但最终一致，同步调用更简单但耦合 |
-> | 微服务如何拆分 | 按业务域、dedicated DB、团队自治、接口契约 |
-> | C++ 微服务通信 | 首选 gRPC（强类型、流支持），次选 HTTP + JSON |
-> | 分布式事务方案 | 单体：2PC；微服务：Saga（编排/编排） |
->
+# 如何判断是否需要升级架构
 
-> [!tip]- **工程要点**：C++ 后端服务应先明确模块边界，再根据独立扩缩容、故障隔离和团队边界决定是否拆分。gRPC 适合强类型内部 RPC，但仍要与 HTTP、消息队列等按兼容性、延迟和运维成本比较。消息队列可解耦和削峰，也会引入重复、乱序、积压与一致性成本；不能用服务数量作为单体或微服务的唯一判据。
+1. 先写出当前失败模式：是查询模型难维护、跨模块变更频繁、发布互相牵制，还是仅仅代码目录多？
+2. 用单体分层和明确数据所有权解决局部问题；只有可量化的读写差异或团队边界，才引入 CQRS/服务拆分。
+3. 若引入异步消息，补上写库与发布原子性、幂等、积压监控、重放和读模型延迟契约。
+4. 若引入跨服务同步调用，画出最长调用链并分配总体 deadline；按故障注入验证下游变慢时是否级联失败。
 
->
-> ---
+把“模式名称”转换成这些可测试的不变量，才算真正理解架构。[CQRS pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) · [Event-driven architecture](https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven)

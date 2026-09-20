@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [security/authorization, security/api]
 ---
 
@@ -38,6 +36,8 @@ Authorization: Bearer <user-A-token>
 - Business flow：抢购、注册、验证码、评论等流程是否能被自动化滥用。
 
 更新接口使用 allowlist 映射允许字段，不把请求 JSON 无条件绑定到数据库模型。响应 DTO 也应显式选择字段，避免过度暴露。
+
+一个可执行的订单读取路径是：从可信认证上下文取得 `tenant_id` → 查询时限定 `WHERE id = ? AND tenant_id = ?` → 对操作类型再检查角色或资源关系 → 返回显式 DTO。跨租户 ID 应得到与不存在 ID 一致的对外响应，但内部审计可区分原因。缓存键也必须包含租户和权限相关维度；否则数据库查询正确，缓存仍会串租户。
 
 # 输入与资源边界
 

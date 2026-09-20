@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-verified: 2026-09-17
+study_stage: reference
 tags: [learning/review, vault/system]
 ---
 
@@ -56,12 +54,11 @@ learn → D1 → D3 → D7 → D14 → D30 → D60 → solid
                     答不出则回到 D1
 ```
 
-- `verified`：首次有效学习日期。排期时可以先写计划日；若延期，完成后必须改为真实日期。
-- `review_stage`：当前所处的 `learn / D1 / D3 / D7 / D14 / D30 / D60 / solid`。
+- `study_stage`：`backlog / learn / D1 / D3 / D7 / D14 / D30 / D60 / solid / reference`；只有 `learn` 及复习阶段应有到期日。
 - `review_due`：下一次需要实际行动的日期，也是 `List-ReviewDue.ps1` 的唯一任务数据源。
-- `status` 与 `confidence` 描述笔记内容本身，不用来表示个人掌握度。
+- `studied_on`：首次有效学习的真实日期（D0）；排期时不填写，Hub 参考页也不填写。
 
-首次学习完成后，把 `review_stage: learn` 改为 `D1`，并将 `review_due` 设为次日。后续通过时按 D0 的间隔推进；失败则回到 `D1` 并设为次日。达到 `solid` 后删除 `review_due`，避免脚本继续列出已结项任务。
+首次学习完成后，写入当天的 `studied_on`，把 `study_stage: learn` 改为 `D1`，并将 `review_due` 设为次日。后续通过时按 D0 的间隔推进；如果实际复习晚于计划日，下一次到期日不得落在今天之前。失败则回到 `D1` 并设为次日。达到 `solid` 后删除 `review_due`，避免脚本继续列出已结项任务。
 
 # 关联
 

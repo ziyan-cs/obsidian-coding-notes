@@ -1,11 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-previous_review_due: 2026-09-14
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -85,22 +81,13 @@ class Base {
 
 class Derived : public Base {
     void foo(int) override;   // 编译器检查：基类确实有此虚函数签名
-    void foo(double) override; // 编译错误！基类没有 foo(double)，防止笔误
+    // void foo(double) override; // 故意注释：签名不匹配，取消注释会编译失败
     void bar() final;          // 禁止子类再覆盖 bar
 };
 
 class Leaf final : public Derived { };  // 禁止继承 Leaf
 ```
 
-> [!summary] 核心摘要
->
-> - **常见误区**：把 VTable/vptr 的常见 ABI 实现误当成 C++ 标准保证。对象中是否存在一个或多个 vptr、位于何处以及占用多少空间均取决于实现与继承结构；可以用编译器布局输出或 `sizeof` 实测，但业务代码不应依赖该布局。构造和析构期间的虚调用只分派到当前构造/析构层级；需要经基类指针销毁派生对象时，基类析构函数必须为 `virtual`。
-> - **自测**：1) 在 GCC/Clang/MSVC 上分别观察简单继承与多重继承的对象布局，哪些现象只是 ABI 选择？2) 为什么构造函数中的虚调用不会分派到尚未完成构造的派生层？
->
-> ---
->
->
-> ---
 
 # Polymorphism and Dynamic Dispatch (多态与动态分发)
 
@@ -244,8 +231,10 @@ d.x = 42;    // 不再歧义，只有一个 A::x
 
 **虚继承的代价：**
 
-- 每个虚基类子对象通过**虚基类指针（vbptr）** 间接访问，额外内存和性能开销
+- 虚基类定位可能需要额外布局元数据或地址调整；`vbptr` 只是某些 ABI 的实现方式，标准不保证它存在，也不能预设固定开销
 - 对象布局更复杂，构造顺序也有变化（最终派生类负责虚基类的构造）
+
+规范核对：[虚基类子对象](https://eel.is/c++draft/class.derived) 规定共享一份基类子对象，并未规定 `vbptr` 等具体布局。
 
 ## 布局示意
 
@@ -262,7 +251,7 @@ Diamond Virtual Inheritance Layout:
               DerivedFinal (+ int dd_data)
               ─────────────────────────────────
               Only one copy of Base sub-object
-              (accessed via vbptr offset pointer)
+              (location depends on implementation)
 ```
 
 ---

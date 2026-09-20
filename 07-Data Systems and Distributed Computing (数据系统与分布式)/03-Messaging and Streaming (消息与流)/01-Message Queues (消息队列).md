@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -89,7 +87,6 @@ asynchronous path
 >
 > ---
 >
-> 消息队列选型对比详解见 → RabbitMQ vs Kafka：Comparison (两者对比)
 # 投递、顺序与背压
 
 消息系统把生产者和消费者的时间解耦，但引入了重复、延迟、乱序、积压和结果未知。所谓 at-most-once、at-least-once、exactly-once 必须说明边界：broker 的投递保证不等于数据库和外部 API 的业务效果恰好一次。

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [cloud/platform-engineering, engineering/developer-experience]
 ---
 
@@ -67,13 +65,11 @@ service specification
 
 衡量首次成功部署时间、变更 lead time、失败部署率、恢复时间、支持工单和开发者满意度。采用率低时先访谈摩擦点；强制接入可能掩盖平台不可靠、文档不足或抽象不适合。
 
-最小实践应让第二个团队不修改平台内部代码即可创建 Go 服务，完成构建、部署、观测和回滚；随后故意制造失败，验证错误信息能指向用户可执行的下一步。
-
 官方参考：[CNCF Platform Engineering Technical Community Group](https://tag-app-delivery.cncf.io/whitepapers/platforms/)。
 
 # 最小实践
 
-为 Go 服务定义一个模板：健康检查、Dockerfile、CI、Kubernetes workload、资源限制、结构化日志和回滚说明。再用第二个服务验证模板是否真正可复用。
+为 Go 服务定义一个模板：健康检查、Dockerfile、CI、Kubernetes workload、资源限制、结构化日志和回滚说明。让第二个服务团队**不修改平台内部代码**完成创建、构建、部署、观测和回滚；再故意制造一次配置错误，检查平台错误信息是否指向可执行的修复动作。
 
 > [!question]- 理解检查
 > “隐藏所有 Kubernetes 细节”为什么可能让故障排查更困难？平台应暴露哪些运行证据？

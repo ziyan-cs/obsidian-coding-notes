@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -158,7 +156,6 @@ thread_cache_size = 64          # 线程缓存
 >
 > ---
 >
-> MySQL基础连接配置见 → MySQL Basics (MySQL 基础)
 
 > [!info]- 延伸阅读
 > - 下一步：[11-Replication (复制)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/11-Replication%20(复制).md)

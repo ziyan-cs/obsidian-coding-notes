@@ -1,108 +1,86 @@
 ---
-status: stable
-confidence: high
-
+study_stage: backlog
 ---
 
-> [!abstract] 学习目标：理解引用折叠、转发引用与 std::forward 如何共同保持实参值类别。
+> [!abstract] 学习目标
+> 能区分转发引用与普通右值引用，按推导结果解释引用折叠，并在包装函数中保持调用方的值类别和返回类型。
 
-> [!note] 本节重点：万能引用、引用折叠、std::forward 的作用
+# 为什么 `T&&` 有时能接收左值
 
-> [!warning] `std::forward` 只用于保留原始值类别
-> 它不是“更快的 `std::move`”。转发同一个对象后仍继续依赖其状态会让调用者难以判断所有权；只有下游确实需要按原值类别重载时才使用。
+只有 `T` 在该位置**由实参推导**时，`T&&` 才是转发引用（forwarding reference，也常叫 universal reference）。`std::vector<int>&&` 中类型已确定，是普通右值引用；类模板成员里固定的 `T&&` 也未必是转发引用。
 
-## 万能引用（Universal Reference）
+| 调用实参 | `T` 推导为 | 折叠后参数类型 |
+| --- | --- | --- |
+| `int x; f(x)` | `int&` | `int& && → int&` |
+| `f(42)` | `int` | `int&&` |
+| `const int cx; f(cx)` | `const int&` | `const int&` |
 
-`T&&` 出现在**类型推导上下文**中是万能引用，可以绑定左值也可以绑定右值：
+折叠规则可记成：只要参与折叠的一方是 `&`，结果就是 `&`。`auto&&` 在推导上下文中也有类似行为，但 `auto&&` 与花括号初始化等场景还需单独判断，不应把所有 `&&` 都叫万能引用。
+
+## `std::forward` 只恢复实参原来的值类别
+
+参数即使声明为 `T&&`，在函数体内有名字的 `value` 表达式仍是左值。直接传 `value` 会丢掉右值信息；无条件 `std::move(value)` 又会把调用方的左值也转换成右值。
 
 ```cpp
-template<typename T>
-void foo(T&& arg);    // T&& 是万能引用，T 由调用方推导
+#include <utility>
 
-auto&& x = expr;     // auto&& 也是万能引用
+constexpr int category(const int&) { return 1; }
+constexpr int category(int&&) { return 2; }
+
+template<class T>
+constexpr int relay(T&& value) {
+    return category(std::forward<T>(value));
+}
+
+static_assert(relay(42) == 2);
+constexpr int input = 7;
+static_assert(relay(input) == 1);
 ```
 
-注意区分：`std::vector<int>&&` 是右值引用（类型已确定，无推导）。
+`std::forward` 自身不移动资源，只按 `T` 做条件化转换。被调函数若选择移动构造，转发后的对象可能被取走资源；是否还能依赖其原值要看下游契约。
 
-## 引用折叠规则
+# 包装构造与调用
 
-T 被推导为引用类型时，`T&&` 按以下规则折叠：
-
-|T 推导为|T&& 结果|
-|---|---|
-|`int`|`int&&`（右值引用）|
-|`int&`|`int& &&` → `int&`（左值引用）|
-|`int&&`|`int&& &&` → `int&&`（右值引用）|
-
-**记忆：有左值引用就折叠为左值引用（& 优先）。**
+转发参数包常用于工厂。以下封装仅用来说明机制，实际代码应直接调用 `std::make_unique`：
 
 ```cpp
-// 传入左值 → T 推导为 int& → T&& = int& （左值引用）
-// 传入右值 → T 推导为 int  → T&& = int&&（右值引用）
-int x = 10;
-foo(x);           // T = int&,  arg 类型 int&
-foo(42);          // T = int,   arg 类型 int&&
-foo(std::move(x));// T = int,   arg 类型 int&&
-```
+#include <memory>
+#include <utility>
 
-# std::forward（完美转发）
+template<class T, class... Args>
+std::unique_ptr<T> make_owned(Args&&... args) {
+    return std::make_unique<T>(std::forward<Args>(args)...);
+}
 
-在函数内部，参数 `arg` 无论如何都是**左值**（有名字）。`std::forward<T>(arg)` 根据 T 的推导结果，将 arg 恢复为原来的值类别：
-
-```cpp
-template<typename T>
-void wrapper(T&& arg) {
-    // arg 在这里是左值（有名字）
-    foo(arg);                      // 永远传左值 ❌
-    foo(std::move(arg));           // 永远传右值 ❌
-    foo(std::forward<T>(arg));     // 保持原值类别 ✅
-    // T=int&  → forward<int&>(arg)  → static_cast<int&>(arg)  → 左值
-    // T=int   → forward<int>(arg)   → static_cast<int&&>(arg) → 右值
+int main() {
+    auto value = make_owned<int>(42);
+    return *value == 42 ? 0 : 1;
 }
 ```
 
-## 完美转发的实际应用
+通用可调用对象建议用 `std::invoke`，它还支持成员函数指针。若包装器要保留“返回值还是引用”，可直接返回调用表达式：
 
 ```cpp
-// make_unique 的简化实现
-template<typename T, typename... Args>
-std::unique_ptr<T> my_make_unique(Args&&... args) {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+#include <functional>
+#include <type_traits>
+#include <utility>
+
+template<class F, class... Args>
+decltype(auto) forward_call(F&& f, Args&&... args) {
+    return std::invoke(std::forward<F>(f),
+                       std::forward<Args>(args)...);
 }
 
-// emplace 系列函数底层原理
-template<typename T>
-class MyVector {
-    template<typename... Args>
-    void emplace_back(Args&&... args) {
-        new (end_) T(std::forward<decltype(args)>(args)...);
-    }
-};
+int by_value() { return 7; }
+int& by_ref() { static int value = 8; return value; }
 
-// 通用包装函数（日志、计时、缓存装饰器）
-template<typename F, typename... Args>
-decltype(auto) timed_call(F&& f, Args&&... args) {
-    auto t0 = std::chrono::steady_clock::now();
-    // 为简洁起见，此版本只示意返回非 void 的调用；void 需单独分支处理。
-    decltype(auto) result = std::forward<F>(f)(std::forward<Args>(args)...);
-    auto t1 = std::chrono::steady_clock::now();
-    std::cout << "elapsed: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count()
-              << "us\n";
-    return result;
-}
+static_assert(std::is_same_v<decltype(forward_call(by_value)), int>);
+static_assert(std::is_same_v<decltype(forward_call(by_ref)), int&>);
 ```
 
----
+`decltype(auto)` 的细节不能靠“局部变量是左值”一句话判断：`return result;` 中未加括号的名字按 **`decltype(result)`** 推导，而 `return (result);` 按表达式值类别推导，后者若引用了局部值对象就可能悬垂。对 `void` 返回、移动独占对象、引用返回与异常路径都要分别测试；因此计时包装器不应随手在返回前插入一个局部 `result`。
 
+> [!note] 使用边界
+> 只有下游 API 真正区分左值/右值时，才需要转发引用。普通只读借用优先用 `const T&` 或合适的视图；需要转移所有权时把参数契约写明确。转发不是性能咒语。
 
-> [!summary] 核心摘要
->
-> 转发引用（常称 universal reference）只在 `T&&` 且 `T` 发生推导时成立。传入左值会让 `T` 推导为左值引用，传入右值会让 `T` 推导为非引用类型；函数参数本身有名字，表达式永远是左值，因此用 `std::forward<T>(arg)` 才能把原始值类别交给下游。
-
-> [!question]- 自测：先回答再展开
-> 1. 为什么 `foo(arg)` 与 `foo(std::move(arg))` 都不是通用 wrapper 的正确默认写法？
-> 2. `std::vector<int>&&` 为什么不是转发引用？
-> 3. `std::forward` 后为什么不能假设对象仍保留原来的值？
->
-> ---
+参考：[标准草案：`std::forward`](https://eel.is/c++draft/forward)、[`decltype` 规则](https://eel.is/c++draft/dcl.type.decltype)。

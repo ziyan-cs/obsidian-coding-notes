@@ -1,14 +1,10 @@
 ---
-status: learning
-confidence: low
-verified: 2026-09-24
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-24
-
 ---
 
 > [!abstract] 学习定位
-> > 头文件声明接口，源文件提供定义，命名空间隔离名称；编译器分别生成目标文件，链接器再解析跨文件符号。
+头文件声明接口，源文件提供定义，命名空间隔离名称；编译器分别生成目标文件，链接器再解析跨文件符号。
 
 > [!summary] 核心摘要
 >
@@ -90,8 +86,6 @@ void connect(storage::Client& client);
 > 3. 前置声明为什么不能支持按值成员？
 
 > [!info]- 延伸阅读
-> - 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/00-C%2B%2B%20Backend%20Standard%20(C%2B%2B%20后端标准与自测).md)
-> - 前置：[01-Core Syntax and Functions (核心语法与函数)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/01-Language%20Basics%20(语言基础)/01-Core%20Syntax%20and%20Functions%20(核心语法与函数).md)
+> - 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)
+> - 前置：[01-Core Syntax and Functions (核心语法与函数)](/03-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/01-Core%20Syntax%20and%20Functions%20(核心语法与函数).md)
 > - 延伸：[01-CMake Project and Targets (CMake 项目与目标)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
-
-

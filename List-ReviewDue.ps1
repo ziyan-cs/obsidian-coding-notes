@@ -59,14 +59,14 @@ Write-Output ''
 
 $displayItems = @()
 if ($All) {
-    $displayItems = $items | Sort-Object Due, Name
+    $displayItems = @($items | Sort-Object Due, Name)
 }
 else {
     # Daily view: only overdue, today, and tomorrow.  Use -All for the full plan.
     $tomorrow = $today.AddDays(1)
-    $displayItems = $items |
+    $displayItems = @($items |
         Where-Object { $_.Due -le $tomorrow } |
-        Sort-Object Due, Name
+        Sort-Object Due, Name)
 }
 
 if ($displayItems.Count -eq 0) {

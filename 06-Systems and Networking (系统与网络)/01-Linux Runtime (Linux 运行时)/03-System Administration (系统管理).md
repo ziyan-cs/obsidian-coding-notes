@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -67,8 +65,8 @@ id                        # 查看当前 UID/GID/组
 ## 设备命名
 
 ```bash
-sdX~       # SCSI/SATA 硬盘（主流）
-hdX~       # IDE 硬盘（旧）
+/dev/sdX   # 某些 SATA/SCSI/USB 块设备，字母会变化
+/dev/nvme0n1 # NVMe 设备示例；实际名称以 lsblk 输出为准
 
 ```
 
@@ -83,14 +81,16 @@ du -h --max-depth=1       # 查看一级子目录大小
 
 ## 分区与格式化
 
+> [!danger] 下列命令会改分区表或覆盖文件系统。`/dev/sdb` 只是示意，**不要照抄执行**。先用 `lsblk -f`、`findmnt`、`blkid` 确认设备、挂载关系和备份/恢复方案，并在可丢弃的虚拟磁盘中练习。
+
 ```bash
-fdisk /dev/sdb            # 分区工具
+fdisk /dev/sdb            # 仅示意：实际目标必须先核实
   # n → p → [size]  创建主分区
   # w               保存并退出
   # d               删除分区
   # q               不保存退出
 
-mkfs -t ext4 /dev/sdb1    # 格式化为 ext4
+mkfs -t ext4 /dev/sdb1    # 仅示意：将覆盖目标分区的文件系统
 ```
 
 ## 挂载
@@ -98,7 +98,7 @@ mkfs -t ext4 /dev/sdb1    # 格式化为 ext4
 ```bash
 mount /dev/sdb1 /mnt/data     # 挂载分区
 umount /dev/sdb1              # 卸载分区
-mount -a                      # 验证挂载
+findmnt --verify --verbose     # 检查 fstab 配置；仍需在测试环境验证实际挂载
 ```
 
 ## 开机自动挂载
@@ -204,12 +204,11 @@ systemctl disable nginx   # 取消自启
 ### crontab 定时任务 🔥
 
 ```bash
-systemctl start crond     # 启动 cron 守护进程
-systemctl enable cron     # 设置开机自启
+systemctl status cron     # Debian/Ubuntu 常见服务名；其他发行版可能为 crond
 
 crontab -e                # 编辑定时任务
 crontab -l                # 查看
-crontab -r                # 清空
+crontab -r                # 删除当前用户的整张 crontab，勿作日常清理
 ```
 
 **格式：** `分 时 日 月 周 命令`
@@ -263,7 +262,6 @@ tail -f /var/log/syslog       # 实时监控日志
 grep "error" /var/log/auth.log  # 过滤错误信息
 ```
 
-系统管理基础见 → Shell & Basic Commands (命令行与Shell编程) · File System & Permissions (文件系统与权限)
 ## 系统管理的诊断主线
 
 系统管理不是命令记忆比赛。面对“服务不可用、机器变慢、磁盘告警”时，先构造证据链：

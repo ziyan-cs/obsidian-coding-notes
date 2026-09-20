@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：掌握表结构定义、约束以及 INSERT、UPDATE、DELETE 的数据变更语义。

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-verified: 2026-09-17
+study_stage: reference
 tags: [vault/audit, vault/migration]
 ---
 
@@ -30,7 +28,7 @@ tags: [vault/audit, vault/migration]
 
 - [ ] 开始 Go 服务时：完成一个带 `context`、配置、日志、单元测试与 HTTP API 的最小服务。
 - [ ] 开始 Python 辅助时：完成一个可重复运行的测试/数据/自动化脚本，并记录环境与依赖。
-- [ ] 遇到 CMake、gRPC、hiredis、MySQL 配置或 Linux 内核参数时：查一手来源，更新该笔记的 `verified` 日期与最小实验结果。
+- [ ] 遇到 CMake、gRPC、hiredis、MySQL 配置或 Linux 内核参数时：查一手来源，在相关段落记录版本、核验日期与最小实验结果；不要改动学习进度字段。
 
 ## P2 — 每月择一完成
 

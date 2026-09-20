@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [security/appsec, security/verification, owasp/asvs]
 ---
 
@@ -41,6 +39,8 @@ OWASP ASVS 提供 Web 应用安全控制的验证要求。项目应先根据数�
 
 引用具体要求时记录 ASVS 版本，因为章节和编号会演进。不要声称“通过 Top 10”就代表应用安全；风险优先级仍取决于业务和威胁模型。
 
+当前可从 ASVS 5.0.0 选取项目适用的要求，记录形如 `v5.0.0-章节.小节.条目` 的稳定引用；不要把版本无关的编号写死在模板里。对每条要求附上适用性判断、实现位置、正向与负向测试、证据链接及例外负责人。标准是验证基线，不能替代项目自己的滥用场景分析。
+
 # 验证手段的边界
 
 - SAST 擅长发现部分危险数据流和 API 用法，但难以理解完整业务授权。
@@ -73,4 +73,3 @@ OWASP ASVS 提供 Web 应用安全控制的验证要求。项目应先根据数�
 - [OWASP Application Security Verification Standard](https://owasp.org/projects/asvs)
 - [OWASP API Security Top 10](https://api-security.owasp.org/)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
-

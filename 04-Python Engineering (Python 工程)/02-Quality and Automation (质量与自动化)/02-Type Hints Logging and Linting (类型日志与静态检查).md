@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-verified: 2026-10-11
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-11
-previous_review_due: 2026-09-29
 tags: [language/python, python/quality]
 ---
 
@@ -56,29 +51,8 @@ union 通过真实判断收窄：`if value is None`、`isinstance`、枚举分�
 本地与 CI 使用同一配置和命令。逐步启用严格规则：先消除真实错误，再提高覆盖范围；大量无理由 `# noqa`、`type: ignore` 会把门禁变成装饰。每个忽略都应尽量指定规则并说明边界。
 
 练习：给 API checker 定义响应 TypedDict 或 dataclass，在解析边界验证 JSON；日志只记录 URL host、status、耗时和 request ID；构造带 token 的错误，验证日志中没有秘密。
-# 规则
+# 动手验证
 
-- 为 public function、复杂容器和边界输入写 annotation。
-- log 使用参数化：`log.info("id=%s", user_id)`，不靠字符串拼接。
-- 不记录密码、token、完整个人数据；错误日志保留上下文但要脱敏。
-- `print` 适合 CLI 最终输出；诊断信息进入 logging。
+给 API checker 的响应建立 `TypedDict` 或 dataclass：解析网络 JSON 时先检查字段，再进入带类型的业务层。用测试构造含 token 的错误，验证日志只包含 host、status、耗时和 request ID，不包含凭据。最后分别运行格式检查、静态检查和 pytest，说明三者发现的问题为何不同。
 
-> [!warning]- 易错点
-> - 标注 `list` 而不说明元素类型，失去大部分价值。
-> - 捕获裸 `Exception` 后吞掉错误，导致工具“成功”但结果错误。
-> - 一开始引入太多 lint/type 工具；先让 pytest 和清晰函数跑通。
->
-
-> [!summary] 核心摘要
->
-> 类型标注是给人和静态检查工具的契约，不是运行时自动校验。日志记录诊断上下文，`print` 留给 CLI 的正常输出；两者都要避免敏感数据。小脚本一旦被重复使用，就应把输入、输出、错误与可观察性写成稳定边界。
-
-> [!question]- 自测：先回答再展开
-> 1. `Iterable[float]` 为什么比裸 `list` 更贴近 `mean` 的真实输入要求？
-> 2. 为什么 `log.info("id=%s", user_id)` 优于 f-string 日志？
-> 3. 遇到无法恢复的配置错误时，怎样既保留异常上下文又让 CLI 明确失败？
-
-> [!info]- 延伸阅读
-> - 下一步：[03-Project Quality Baseline (项目质量基线)](/04-Python%20Engineering%20(Python%20工程)/02-Quality%20and%20Automation%20(质量与自动化)/03-Project%20Quality%20Baseline%20(项目质量基线).md)
-
-
+官方资料：[typing](https://docs.python.org/3/library/typing.html) · [logging](https://docs.python.org/3/library/logging.html)。

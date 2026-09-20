@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/observability, ai/security, ai/cost]
 ---
 
@@ -37,6 +35,14 @@ span 记录稳定 ID、版本、耗时、错误分类和用量，不默认保存
 # 成本归因
 
 费用按租户、功能、模型、token、检索和工具调用归因。重试、过长上下文、无效检索和 Agent 循环会隐藏成本。预算控制可限制请求、切换模型或要求审批，但必须向调用方明确降级。
+
+用“每成功任务成本”比“每次模型调用成本”更接近业务：
+
+~~~text
+unit cost = (model tokens + retrieval + tools + retries + allocated infrastructure) / successful tasks
+~~~
+
+若廉价模型需要多次重试和人工接管，总成本可能更高。分母必须定义清楚：被拒答但符合策略的任务是否算成功，应按业务目标决定；报告成本时同时报告任务成功率和安全护栏。
 
 # 版本维度与质量告警
 

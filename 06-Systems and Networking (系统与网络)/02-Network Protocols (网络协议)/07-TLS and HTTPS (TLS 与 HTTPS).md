@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：理解 HTTPS 的安全目标、TLS 密钥建立、证书信任链及部署边界。
@@ -52,7 +50,7 @@ TLS 1.3 has a different, shorter handshake; do not use this diagram as its wire 
 
 ## TLS 1.3 与 0-RTT
 
-TLS 1.3 将握手从 2-RTT 减少到 1-RTT（首次）或 0-RTT（恢复）：
+TLS 1.3 完整握手通常可在 1 RTT 建立应用数据密钥；0-RTT 指符合条件的**恢复连接可提前发送应用数据**，不是整个握手在零往返内完成，也不保证服务端一定接受早期数据：
 
 ```
 TLS 1.3 首次握手（1-RTT）：
@@ -60,15 +58,15 @@ TLS 1.3 首次握手（1-RTT）：
   服务端 ← ServerHello + Certificate + Finished（含密钥共享 material）
   双方立即计算出会话密钥
 
-TLS 1.3 恢复握手（0-RTT）：
-  客户端 → 立即发送加密数据（含前次会话的 PSK）
-  服务端 ← 响应加密数据
+TLS 1.3 允许 0-RTT 早期数据的恢复：
+  客户端 → ClientHello + 受前次会话 PSK 保护的 early data
+  服务端 ← 接受或拒绝 early data，继续完成握手
 ```
 
 **主要变化：**
 - 移除不安全的加密算法（RC4、DES、静态 RSA）
 - 首次握手通常减少一个往返；实际收益取决于网络 RTT、恢复与部署配置
-- 0-RTT 模式允许恢复会话时立即发送数据
+- 0-RTT 早期数据可能被重放，只在应用协议明确允许且具备抗重放设计时使用
 - 前向安全性（Forward Secrecy）成为标配
 
 # 证书与身份认证

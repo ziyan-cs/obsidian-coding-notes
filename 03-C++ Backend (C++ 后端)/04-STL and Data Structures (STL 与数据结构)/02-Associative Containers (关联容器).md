@@ -1,234 +1,100 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
+> [!abstract] 学习目标
+> 根据顺序与范围查询需求选择容器；解释复杂度前提、键等价关系，以及 `rehash` 后迭代器和引用为何不同。
 
-> [!summary] 核心摘要
->
-> `map`、`set` 等有序容器通常以红黑树实现，查找与更新为 O(log n) 并提供顺序遍历；是否改用哈希容器取决于是否需要顺序、范围查询与稳定复杂度。
+# 有序与无序：先按接口语义选择
 
-# map and set (红黑树与有序容器)
+| 类型 | 关键语义 | 查找、插入、删除 |
+| --- | --- | --- |
+| `map` / `set` | 按比较器顺序遍历，可做键范围查询 | O(log N) |
+| `unordered_map` / `unordered_set` | 不保证遍历顺序，按哈希与相等关系找键 | 平均 O(1)，碰撞时可能退化 |
+| `multi...` 版本 | 允许一个等价键出现多次 | 按所属有序/无序家族的规则 |
 
-> [!note] 本节重点：红黑树的平衡规则、有序关联容器的底层实现、与哈希容器的选择
+`map` 常以红黑树实现，但标准**没有指定树种或旋转次数**。`unordered_map` 常用桶加节点，但标准也不规定“桶一定是链表”或取模公式。先看需求是否需要有序遍历、`lower_bound`/`upper_bound`，再比较实际负载中的性能与内存成本。
 
-## 底层结构：红黑树
+## 常见实现直觉：红黑树为何能保持对数高度
 
-`map`、`set`、`multimap`、`multiset` 底层是**红黑树**（Red-Black Tree），一种近似平衡的 BST：
+红黑树是一种在 BST 顺序不变量之外加入颜色约束的平衡树。常见表述为：节点非红即黑；根与空叶（NIL）为黑；红节点不能有红孩子；从任一节点到其下方 NIL 的路径具有相同黑节点数。根为黑也可在更新结束时统一恢复。
 
-### 红黑树的 5 条规则
+这些约束允许局部不完全平衡，但禁止连续红节点；最长根叶路径不会超过最短路径的两倍，树高因而为 `O(log N)`。插入通常先把新节点设为红：若父节点为黑则结束；若父节点为红，再按叔节点颜色选择变色或旋转并向上修复。删除修复更复杂，应先掌握 BST 删除与黑高度为何可能改变，再研究具体 case，不必把某个库的旋转次数当标准保证。
 
-```text
-1. 每个节点是红色或黑色
-2. 根节点是黑色
-3. 叶子（NIL）是黑色
-4. 红色节点的子节点必须是黑色（不能有连续红节点）
-5. 任一节点到其每个叶子路径上的黑节点数相同
-```
+这解释了**常见实现**怎样满足有序容器的对数复杂度；代码不能依赖其节点布局。先修 [05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md) 中的 BST/AVL 高度概念，再回来对比红黑树更宽松的平衡约束。
 
-### 为什么用红黑树而不是 AVL？
+## 有序容器：比较器同时定义等价
 
-| 特性 | 红黑树 | AVL |
-|------|--------|-----|
-| 平衡标准 | 最长路径 ≤ 2 倍最短路径 | 左右子树高度差 ≤ 1 |
-| 查询性能 | O(log N)，常数比 AVL 略大 | O(log N)，更严格 |
-| **插入/删除** | **O(log N) 且重平衡更快**（最多 3 次旋转） | O(log N) 但可能需要多次旋转 |
-| 适用场景 | **插入删除频繁**（STL 的选择） | 查询远多于修改 |
-
-> **STL 选择红黑树**的原因：map/set 是通用容器，需要同时兼顾查询和修改性能。红黑树的插入/删除重平衡代价更低（均摊 O(1) 次旋转）。
-
-## map/set vs unordered_map/unordered_set
-
-| | `map` (红黑树) | `unordered_map` (哈希表) |
-|---|---|---|
-| 元素顺序 | ✅ **有序**（按 key 升序） | ❌ 无序 |
-| 插入/查找/删除 | O(log N) | O(1) 均摊，O(N) 最坏 |
-| 需要 | `operator<` | `std::hash<T>` + `operator==` |
-| 范围查询 | ✅ `lower_bound`/`upper_bound` | ❌ 不支持 |
-| 遍历顺序稳定 | ✅ **始终有序遍历** | ❌ 扩容后元素位置会变 |
+`map` 默认使用 `std::less<Key>`；自定义比较器可改变遍历顺序。若 `!comp(a,b) && !comp(b,a)`，两个键被视为等价；比较器必须满足严格弱序，不能随外部状态随意变化。
 
 ```cpp
-// map：有序，适合范围查询
-std::map<int, std::string> scores;
-scores.insert({1, "Alice"});
-scores.insert({3, "Bob"});
-scores.insert({2, "Charlie"});
-for (auto& [k, v] : scores)  // 输出: 1:Alice, 2:Charlie, 3:Bob
-    std::cout << k << ":" << v << " ";
+#include <cassert>
+#include <map>
+#include <string>
 
-// 范围查询
-auto it = scores.lower_bound(2);  // 第一个 >= 2 的元素
-auto it2 = scores.upper_bound(3); // 第一个 > 3 的元素
+int main() {
+    std::map<std::string, int> stock;
+    stock.try_emplace("apple", 3); // 已有键不会覆盖
+    stock.insert_or_assign("pear", 5);
+    stock["apple"] += 1;          // 缺键时会插入默认值
+    assert(stock.at("apple") == 4);
 
-// unordered_map：哈希，更快
-std::unordered_map<int, std::string> fast;
-```
+    auto first = stock.lower_bound("banana");
+    auto last = stock.upper_bound("pear");
+    for (auto it = first; it != last; ++it)
+        assert(it->first == "pear");
 
-## 迭代器稳定性
-
-| 操作 | `map`/`set` | `unordered_map`/`unordered_set` |
-|------|-------------|----------------------------------|
-| 插入 | **不影响**已有迭代器 | 仅 rehash 时**全部**失效 |
-| 删除 | 仅被删节点 | 仅被删节点（rehash 除外） |
-| clear | 全部失效 | 全部失效 |
-
-## map 的 operator[] 陷阱
-
-```cpp
-// operator[] 在 key 不存在时会 **插入默认构造的值**
-std::map<std::string, int> m;
-int v = m["nonexistent"];  // ❌ 插入了 {"nonexistent", 0}
-
-// ✅ 使用 find 或 at() 来判断存在性
-auto it = m.find("key");
-if (it != m.end()) { /* 存在 */ }
-
-int val = m.at("key");  // 不存在则抛 out_of_range
-```
-
-## 工程建议
-
-```cpp
-// ✅ 需要有序遍历 → map/set
-// ✅ 需要范围查询 → map（lower_bound/upper_bound）
-// ✅ 纯查找操作 → unordered_map（O(1) vs O(log N)）
-
-// ✅ 自定义类型作为 key 时，map 需要 operator<
-struct Key {
-    int a, b;
-    bool operator<(const Key& o) const {
-        return std::tie(a, b) < std::tie(o.a, o.b);
-    }
-};
-
-// ✅ emplace 避免临时对象
-m.emplace(std::piecewise_construct,
-          std::forward_as_tuple("key"),
-          std::forward_as_tuple(42));
-
-// ❌ 不要频繁在 map 和 unordered_map 之间切换——各有适用场景
-// ❌ unordered_map 的 hash 碰撞攻击（C++11 后标准库使用随机 seed 缓解）
-```
-
-> **面试高频**：红黑树的旋转有几种？插入后如何恢复平衡？—— 插入时叔父节点的颜色决定是染色还是旋转。删除情况更复杂（4 种 case），但核心是"借兄弟节点来补足黑色数量"。
-
----
-
-# unordered map Hash Table (哈希表与冲突)
-
-> [!note] 本节重点：哈希表结构（bucket + linked list）、rehash 策略、自定义哈希函数、碰撞解决
-
-## 底层结构：Separate Chaining（链地址法）
-
-```text
-bucket array (vector of linked lists):
-┌──────┐
-│ [0]  │──→ node ──→ node
-├──────┤
-│ [1]  │──→ node
-├──────┤
-│ [2]  │──→ (empty)
-├──────┤
-│ [3]  │──→ node ──→ node ──→ node
-├──────┤
-│ ...  │
-└──────┘
-```
-
-- 每个 bucket 是一个单向链表
-- `hash(key) % bucket_count` 决定元素放入哪个 bucket
-- 当 `load_factor > max_load_factor`（默认 1.0）时触发 rehash
-
-## Load Factor & Rehash
-
-```cpp
-// load_factor = size / bucket_count
-// max_load_factor 默认 1.0（可自定义）
-std::unordered_map<int, std::string> m;
-m.max_load_factor(0.75f);  // 自定义阈值
-
-// rehash：
-// 1. 创建更大的 bucket 数组（通常是 2x 左右）
-// 2. 重新计算所有元素的 bucket index
-// 3. 迁移元素
-// rehash 后全部迭代器失效！
-```
-
-**rehash 的触发条件**：
-- `insert` 后 `load_factor > max_load_factor` → 自动 rehash
-- `rehash(n)` / `reserve(n)` 显式调用
-
-## 哈希函数
-
-```cpp
-// 标准库已提供基础类型的哈希
-std::hash<int>{} (42);
-std::hash<std::string>{} ("hello");
-
-// 自定义类型的哈希（两种方式）
-struct Point { int x, y; };
-
-// 方式 1：特化 std::hash
-namespace std {
-    template<> struct hash<Point> {
-        size_t operator()(const Point& p) const {
-            return hash<int>{}(p.x) ^ (hash<int>{}(p.y) << 1);
-        }
-    };
+    assert(stock.find("orange") == stock.end());
 }
-using PointMap = std::unordered_map<Point, int>;
+```
 
-// 方式 2：用结构化绑定（C++20 更简洁的写法）
-// 或用 std::hash 组合
-struct PairHash {
-    size_t operator()(const std::pair<int,int>& p) const {
-        return hash<int>{}(p.first) ^ (hash<int>{}(p.second) << 1);
+`find` 不插入，`at` 缺键抛异常，`operator[]` 缺键则插入默认构造值。`map` 的键不能通过迭代器改坏排序；值可以改。有序容器插入不使旧迭代器/引用失效，擦除只使被删元素失效。
+
+`map::lower_bound` 是成员操作。通用 `std::lower_bound(map.begin(), map.end(), ...)` 即使比较次数对数，双向迭代器的前进次数也可能线性，因此查键范围优先用成员函数。
+
+# 无序容器：哈希与相等必须一致
+
+相等的键必须得到相同哈希值；不同键允许碰撞。默认 `std::hash` 不保证随机种子或抗攻击能力。不可信键、大规模碰撞或错误的自定义哈希可能让平均常数复杂度退化。
+
+```cpp
+#include <cassert>
+#include <cstddef>
+#include <functional>
+#include <unordered_map>
+
+struct Point { int x, y; };
+struct PointHash {
+    std::size_t operator()(const Point& p) const noexcept {
+        auto x = std::hash<int>{}(p.x);
+        auto y = std::hash<int>{}(p.y);
+        return x ^ (y << 1); // 教学组合，不是抗碰撞哈希
     }
 };
+struct PointEqual {
+    bool operator()(const Point& a, const Point& b) const noexcept {
+        return a.x == b.x && a.y == b.y;
+    }
+};
+
+int main() {
+    std::unordered_map<Point, int, PointHash, PointEqual> cells;
+    cells.reserve(100); // 为约 100 个元素准备容量，不是恰好 100 个桶
+    cells.emplace(Point{1, 2}, 7);
+    int& value = cells.at(Point{1, 2});
+    [[maybe_unused]] auto old_iterator = cells.begin();
+    cells.rehash(1000); // 旧迭代器失效；指向现存元素的引用仍有效
+    value = 8;
+    assert(cells.at(Point{1, 2}) == 8);
+}
 ```
 
-**好的哈希函数标准**：
-- **均匀分布**：避免哈希碰撞
-- **高效计算**：不要为了"完美"而使用复杂的哈希（如加密哈希）
-- 不要返回常量——所有元素都在同一 bucket 退化为链表（O(N)）
+`load_factor()` 是元素数与桶数之比；`max_load_factor()` 影响扩桶。`reserve(n)` 以预期**元素数**为参数，`rehash(n)` 以桶数为参数。`rehash` 使所有迭代器失效，但不使现存元素的指针/引用失效；`erase` 只使被删元素的引用失效。不要在 `rehash` 后比较或解引用旧迭代器，即便特定实现看似还能用。
 
-## 性能关键操作
+## 使用边界
 
-| 操作 | 均摊复杂度 | 最坏情况 |
-|------|-----------|----------|
-| `operator[]` / `find` | O(1) | O(N)（全部在同一 bucket）|
-| `insert` | O(1) | O(N)（rehash 时）|
-| `erase` | O(1) | O(N) |
-| `rehash` | O(N) | — |
+- 范围查询或按键顺序输出：优先有序容器；不需要排序且频繁按键访问：比较哈希容器。
+- 需要重复键时选 `multi...`，不要靠后插入覆盖旧值模拟多值。
+- 并发修改并不因迭代器稳定就自动安全；容器的同步协议仍需单独设计。
+- 对外部可控输入评估碰撞退化、内存上限和限流，不能假设标准库已经替你随机加盐。
 
-## 工程建议 · 延伸要点 2
-```cpp
-// ✅ 预分配减少 rehash
-std::unordered_map<int, int> m;
-m.reserve(10000);  // 预先分配 10000 个 bucket
-
-// ✅ 大批量插入前 reserve
-std::vector<std::pair<Key, Val>> batch;
-m.reserve(batch.size() * 1.5);  // 预留空间
-m.insert(batch.begin(), batch.end());
-
-// ✅ 选择合适容器
-// 需要有序？→ map
-// 需要 O(1) 查找？→ unordered_map
-// key 是整数且范围小？→ vector 甚至更快（缓存友好）
-
-// ❌ 不要在 unordered_map 中存大量自定义类型而不特化 hash
-// ❌ 不要假设遍历顺序稳定（rehash 后 bucket index 改变）
-// ❌ 对性能敏感时避免频繁 insert/erase（rehash O(N)）
-```
-
-> **面试重点**：哈希碰撞攻击——如果哈希函数对所有输入返回相同的值（或攻击者构造大量碰撞 key），`unordered_map` 退化为链表（O(N)）。C++11 后标准库使用**随机 seed** 的哈希函数缓解此问题，但自定义哈希函数仍可能容易受攻击。
-
----
-
-
-> [!info]- 延伸阅读
-> - 下一步：[03-Iterators Algorithms and Adapters (迭代器算法与适配器)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/03-Iterators%20Algorithms%20and%20Adapters%20(迭代器算法与适配器).md)
-
+参考：[有序关联容器要求](https://eel.is/c++draft/associative.reqmts.general)、[无序容器与 `rehash`](https://eel.is/c++draft/unord.req.general)。

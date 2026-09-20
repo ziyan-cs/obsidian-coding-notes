@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [language/go, go/memory]
 ---
 

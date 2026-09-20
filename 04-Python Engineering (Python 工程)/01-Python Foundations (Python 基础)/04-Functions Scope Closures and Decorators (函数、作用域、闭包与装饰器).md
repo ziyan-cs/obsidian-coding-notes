@@ -1,9 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
-verified: 2026-10-02
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-02
 tags: [language/python, python/functions]
 ---

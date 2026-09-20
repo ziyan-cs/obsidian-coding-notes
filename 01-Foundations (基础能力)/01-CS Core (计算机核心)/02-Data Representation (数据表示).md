@@ -1,11 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
-tags: [cs/architecture, learning/foundation]
-verified: 2026-10-03
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-03
+tags: [cs/architecture, learning/foundation]
 ---
 
 > [!abstract] 阅读方式

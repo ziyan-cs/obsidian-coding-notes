@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：能区分 data race、原子性和跨线程同步，并为 release/acquire 写出完整的读写配对条件。
@@ -31,7 +29,7 @@ content_verified: 2026-09-19
 
 # Atomic & Memory Order (原子操作与内存序)
 
-> [!note] 本节重点：原子操作 vs 锁的性能差异、内存序（Memory Order）控制可见性、无锁编程基础
+原子操作解决单个对象的不可分割访问，锁可以保护跨多个对象的不变量。两者成本都受竞争强度、平台和实现影响；内存序规定跨线程可依赖的同步关系，不能简化为“控制可见性”的开关。
 
 ## std::atomic 基础
 
@@ -175,7 +173,8 @@ if (big.is_lock_free()) {
 
 // ❌ atomic 不支持复合操作（除非用 CAS 循环）
 // 不能同时修改两个 atomic 变量
-// atomic 不能用于 std::vector 等容器（不可拷贝/移动）
+// std::atomic<T> 通常不可拷贝/移动，因此 vector<atomic<T>> 的扩容、插入等
+// 需要搬移元素的操作受限；不能简单断言“完全不能放进 vector”。
 ```
 
 > **关键边界**：release 与 acquire 不是任意配对就能同步。acquire 必须在同一原子对象上读到相应 release（或其 release sequence）的值，才建立 `synchronizes-with`，进而让前序普通写对后续普通读可见。

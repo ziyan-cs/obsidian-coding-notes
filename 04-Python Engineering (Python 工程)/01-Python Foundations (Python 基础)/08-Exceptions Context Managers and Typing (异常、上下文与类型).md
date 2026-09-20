@@ -1,11 +1,6 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-10-16
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-16
-previous_review_due: 2026-09-25
 ---
 
 > [!abstract] 学习定位
@@ -77,38 +72,8 @@ def error_rate(statuses: Iterable[int]) -> float:
 # 失败设计练习
 
 为批量 API 工具设计异常层次：配置非法立即退出；单个输入非法记录并继续；远端 timeout 可在幂等前提下重试；认证失败停止整批；最终 CLI 将异常映射为稳定退出码。写测试验证异常链仍包含底层原因，日志不重复也不泄漏 token。
-# 三条规则
+# 组合起来看失败路径
 
-1. 只捕获你能恢复或能补充上下文的异常；不要裸 `except` 吞掉错误。
-2. 文件、连接、锁等资源优先写进 `with`，让退出路径天然释放资源。
-3. 对公共函数标注输入、输出与可空性；类型不是运行时验证的替代品。
+写一个 `load_name(path: Path) -> str`：用 `with` 关闭文件，把底层 `OSError` 转为带路径的业务异常，并让 CLI 在最外层记录一次、返回非零退出码。然后故意制造文件不存在和解码错误，观察异常链与资源关闭。
 
-# 后端辅助中的用法
-
-- 读取配置失败：抛出含文件路径和字段名的异常。
-- 批量调用 API：区分网络瞬态失败、业务拒绝与数据格式错误。
-- 数据转换函数：用类型标注暴露期望 schema，必要时配合运行时校验。
-
-# 三件工具如何配合
-
-```python
-from pathlib import Path
-
-def load_name(path: Path) -> str:
-    try:
-        with path.open(encoding="utf-8") as f:
-            return f.read().strip()
-    except OSError as exc:
-        raise RuntimeError(f"cannot read {path}") from exc
-```
-
-`with` 保证文件关闭；异常链 `from exc` 保留底层原因；`Path -> str` 标注让调用契约更清楚。类型检查能发现接口不匹配，但它不会替你验证 JSON 字段、网络响应或用户输入；这些需要显式的运行时校验。
-
-# 边界
-
-库代码通常应抛出有语义的异常，让应用入口统一记录日志和决定 HTTP/CLI 返回码。若每一层都记录同一异常，会制造重复日志；若捕获后返回 `None`，又会把真正的失败伪装成正常分支。
-
-> [!question]- 自测：先回答再展开
-> 1. `finally` 与 context manager 分别解决什么问题？
-> 2. 哪种情况应当重新抛出异常，而不是记录日志后继续？
-
+注意 `finally` 中的操作若再次抛错，可能遮蔽原始异常；事务示例的 `commit()` 也可能失败，是否需要回滚取决于连接与数据库协议，不能把“提交失败”当成一定没有发生副作用。上面的 context manager 管理的是事务状态，并不自动关闭由调用方持有的连接。

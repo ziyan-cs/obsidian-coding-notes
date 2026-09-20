@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -88,7 +86,7 @@ public:
 - 无法利用多核 CPU
 - 不适合有计算密集型业务的场景
 
-> Redis 用单线程 Reactor 的原因：Redis 的操作都是内存操作，极快，不存在阻塞问题；且避免了多线程的锁竞争。
+> 单 Reactor 的优势是连接状态集中、同步简单；但业务处理、慢系统调用或大回复仍可能阻塞事件循环。不能把“内存操作”理解为绝无阻塞；具体产品是否采用多线程 I/O 也随版本与配置变化。
 
 ---
 
@@ -97,7 +95,7 @@ public:
 > [!note] 本节重点： 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
 > 解决了单线程模型"业务处理阻塞"的问题
 
-## 模型结构 · 延伸要点 2
+## IO 线程与工作线程
 ```text
 ┌───────────────────────────────────────────┐
 │  Main Thread (Reactor)                    │
@@ -130,82 +128,45 @@ public:
 └──────────┴──────────┴─────────────────────┘
 ```
 
-## 核心代码结构 · 延伸要点 2
-```cpp
-// 主线程 Reactor + 工作线程池（简化）
-class ThreadPool {
-    std::vector<std::thread> workers_;
-    std::queue<Task> tasks_;
-    std::mutex mtx_;
-    std::condition_variable cv_;
-    bool stop_ = false;
+## 任务交接与连接生命周期
 
-public:
-    ThreadPool(int n) {
-        for (int i = 0; i < n; i++)
-            workers_.emplace_back([this] {
-                while (true) {
-                    Task t;
-                    {
-                        std::unique_lock lock(mtx_);
-                        cv_.wait(lock, [this] { return stop_ || !tasks_.empty(); });
-                        if (stop_ && tasks_.empty()) return;
-                        t = std::move(tasks_.front()); tasks_.pop();
-                    }
-                    t();  // 工作线程执行业务逻辑
-                }
-            });
-    }
-    void submit(Task t) {
-        std::lock_guard lock(mtx_);
-        tasks_.push(std::move(t));
-        cv_.notify_one();
-    }
-};
+以下是**流程伪代码**，不是可直接编译的 C++ 类。之前常见的 `read()` 后直接用返回值构造 `std::string(buf, n)` 存在缺陷：`n` 可为 `-1`（错误）或 `0`（对端关闭），且一次读取不一定是一条完整消息；异步 lambda 捕获裸 `this` 还可能在连接关闭后悬空。
 
-// 使用方式：Handler 中收到读事件后
-void Handler::on_readable() {
-    char buf[4096]; int n = read(fd_, buf, sizeof(buf));
-    // 将业务处理提交到线程池，不阻塞主线程
-    thread_pool_.submit([this, data = std::string(buf, n)] {
-        std::string resp = process(data);  // 业务处理（在 worker 线程）
-        // 将响应投递回所属 Reactor；由 I/O 线程写入连接的 write buffer。
-        reactor_.queue_in_loop([this, resp = std::move(resp)] {
-            append_and_enable_write(resp);
-        });
-    });
-}
+```text
+I/O thread: read until EAGAIN / EOF / error; feed bytes into frame parser
+            only dispatch complete request and immutable data to bounded pool
+            if queue full: pause read / reject / apply per-connection backpressure
+worker:     process request without touching socket or Connection mutable state
+            post result plus connection identity/generation to its owner loop
+I/O thread: check connection is still live and request ordering policy
+            append response to write buffer; enable writable notification
 ```
 
-## 工作流程 · 延伸要点 2
+连接对象通常由所属 loop 管理；跨线程结果用可验证的连接 token、generation 或受控 `weak_ptr` 关联，不能假定 fd 数值未被复用。停止时先拒绝新任务，再排空或取消队列，最后等待 worker；队列容量与每连接在途数都必须有限。
+
+## 一次请求的执行路径
 1. 主线程 Reactor 监听事件，Acceptor 接受新连接
 2. 读事件到来，Handler 在**主线程**完成 `read()`，将数据投递给线程池
 3. 工作线程处理业务逻辑
 4. 工作线程将结果投递回 Reactor；所属 I/O 线程更新 write buffer 与 `EPOLLOUT`
 
-## 优点 · 延伸要点 2
+## 收益
 - 业务处理与 I/O 解耦，业务耗时不影响 I/O 响应
 - 能利用多核 CPU
 
-## 缺点 · 延伸要点 2
+## 边界与代价
 - **单 Reactor 仍是瓶颈**：所有 I/O 事件都在一个线程处理
 - 工作线程写回时需要注意线程安全（共享的 fd → 加锁或排队写）
 
-> **与 05a 的区别：** 05a 所有工作在单线程串行；05b 将业务逻辑卸载到工作线程，I/O 读写与连接状态仍归 Reactor 线程所有。高并发下主线程仍可能成为瓶颈——进一步优化见 05c 主从 Reactor 模型。
+相比单 Reactor 单线程，此模型把业务计算卸载到 worker，但连接 I/O 与状态仍归 Reactor 线程所有；如果主 loop 饱和，再考虑拆分为多个 I/O loop。
 
 > [!summary] 核心摘要
 >
 > 单 Reactor 多线程把连接 I/O 与业务计算拆开，但不把一个连接的状态随意交给多个线程。Reactor 线程读请求并拥有 fd/read-write buffer；worker 只处理独立业务数据，完成后通过线程安全队列投递结果回 Reactor。关键风险是任务积压、连接已关闭和响应乱序。
 >
-> ---
->
-> ---
-
 # Multi Reactor Architecture (多Reactor架构)
 
-> [!note] 本节重点： 主从 Reactor 多线程模型、one loop per thread 设计、Nginx/Netty/Redis 等实际应用
-> 代表：Nginx、Netty、Muduo、Node.js cluster 模式  
-> 最成熟的高性能网络服务器架构
+> 本节以主 Reactor 接收、多个子 Reactor 分管连接的**一种设计**为例；Muduo/Netty 可参考，但 Nginx 的 master/worker 多进程不能画成下面这张线程分发图。
 
 ```text
 ┌────────────────────────────────────────────────┐
@@ -239,9 +200,9 @@ void Handler::on_readable() {
 
 ## "One Loop Per Thread" 的含义
 
-每个 Sub Reactor 是一个独立的 **event loop**，运行在自己的线程中，负责管理一批连接的所有 I/O 操作。线程之间的连接互不干扰，**天然无锁**。
+每个 Sub Reactor 是一个独立的 **event loop**，运行在自己的线程中，负责一批连接的 I/O。若连接状态只由所属线程修改，这部分状态可避免跨线程锁；工作队列、共享缓存、统计与连接迁移仍需同步。
 
-## 工作流程 · 延伸要点 3
+## 连接分配与处理流程
 1. Main Reactor 只监听 listening fd，`accept()` 新连接
 2. 通过负载均衡策略（轮询、最少连接）将新连接的 fd 分配给某个 Sub Reactor
 3. 各 Sub Reactor 在自己的线程中独立运行 event loop，处理分配给它的所有连接的读写
@@ -253,7 +214,7 @@ void Handler::on_readable() {
 |---|---|
 |accept 不成瓶颈|Main Reactor 专职 accept，不处理 I/O|
 |I/O 充分并行|N 个 Sub Reactor 并行处理，充分利用多核|
-|无锁设计|同一连接的所有操作在同一线程，无需加锁|
+|减少连接状态锁|同一连接的可变状态归所属 loop，跨线程共享部分仍需同步|
 |线性扩展|Sub Reactor 数量通常 = CPU 核数|
 
 ## 与前两种模型的对比
@@ -297,11 +258,10 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 ---
 
 > [!tip]- **工程要点**
-> 主从 Reactor 是目前高并发服务器最成熟的架构模式，其核心优势在于"无锁"——同一连接的所有操作在同一线程中，天然避免了锁竞争。但需注意 Sub Reactor 之间的负载均衡（轮询可能导致热点），实际生产中常结合连接预估或最少连接策略来分配。
+> 主从 Reactor 是一种常见的连接分片方案，不是所有高并发服务的唯一标准架构。它减少连接内部的跨线程共享，但任务队列、全局资源与观测仍可能需要锁；还要验证子 loop 负载、热点连接和关闭时跨线程回调的生命周期。
 >
 
 
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Timers (定时器)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/03-Timers%20(定时器).md)
-

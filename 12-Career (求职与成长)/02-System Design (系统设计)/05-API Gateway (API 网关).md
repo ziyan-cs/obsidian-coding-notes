@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [distributed/system]
 ---
 
@@ -370,4 +368,3 @@ func handleRequest(ctx *Context) {
 
 [!info]- 延伸阅读
 - 下一步：[04-Config Center (配置中心)](/12-Career%20(求职与成长)/02-System%20Design%20(系统设计)/04-Config%20Center%20System%20Design%20(配置中心系统设计).md)
-

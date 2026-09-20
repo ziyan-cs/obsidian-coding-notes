@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -9,7 +7,7 @@ content_verified: 2026-09-18
 > Shell 将程序、参数、重定向和管道组合成可重复的文本处理流程；先确认命令的输入输出与退出码，再处理引号、空白、通配符和失败传播。脚本能运行不等于可靠，还要做到可重入、可观察并对异常退出。
 >
 
-> [!note] 本节重点：Shell 命令分类与速查、文件操作/查找/过滤/压缩/系统管理、重定向与管道、Shell 脚本基础
+> [!warning] 示例中的 `<file>`、`<dir>`、`<src>` 等是占位符，不是可原样执行的命令。复制前换成确认过的真实路径；尤其不要把未解析的变量直接传给删除命令。
 
 # 命令查询与文件操作
 
@@ -81,9 +79,9 @@ rm -rf <dir>         # 递归强制删除（危险！）
 
 ```bash
 ln -s <src> <dst>    # 创建软链接（快捷方式，可跨文件系统，支持目录）
-ln <src> <dst>       # 创建硬链接（文件备份，指向同一 inode，不可跨文件系统）
+ln <src> <dst>       # 创建硬链接（同一 inode 的另一目录项，不是独立备份）
 
-rm -rf <link_dst>
+rm -- <link_dst>     # 删除软链接本身；先用 ls -l 确认目标
 ```
 
 ## 文件内容查看
@@ -409,7 +407,6 @@ read -t 10 -p "Enter number: " num    # 10 秒超时
 > - `[[ ]]` 是 Bash 条件语法，支持模式匹配与正则；需要 POSIX `sh` 时使用 `[ ]`
 > - `$(( ))` 是最推荐的整数运算方式
 
-Shell 命令与脚本详解见 → File System & Permissions (文件系统与权限) · System Administration Basics (系统管理基础)
 
 ---
 ## 先建立 Shell 执行模型

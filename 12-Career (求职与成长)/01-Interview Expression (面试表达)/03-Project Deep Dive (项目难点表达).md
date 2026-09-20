@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [distributed/system]
 ---
 

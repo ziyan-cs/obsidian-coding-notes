@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/errors, go/context]
 ---
 
@@ -53,31 +51,55 @@ context 传播取消、deadline 和少量请求范围元数据。把它作为第
 # 失败设计练习
 
 实现批量导入：非法记录返回带行号的错误；数据库 timeout 保留错误链；事务失败回滚；顶层把错误分类为可重试和永久失败。注入一次 panic，验证只有请求边界 recover，同时日志包含 stack 和 request ID 且不泄漏原始敏感记录。
-# 最小例子
+# 两种不同的资源边界
+
+本地文件读取和 HTTP 请求都要及时释放资源，但取消能力不同。`os.File` 的普通读取没有 `context.Context` 参数；读取前做一次 `ctx.Done()` 检查，**不能**让随后的 `io.ReadAll` 因取消自动中断。因此下例把文件大小单独设上限，而把请求取消交给真正支持 context 的 HTTP API。
 
 ```go
-func readName(ctx context.Context, path string) (string, error) {
+package lesson
+
+import (
+    "context"
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+    "strings"
+)
+
+func readName(path string) (string, error) {
     f, err := os.Open(path)
-    if err != nil { return "", fmt.Errorf("open %q: %w", path, err) }
+    if err != nil {
+        return "", fmt.Errorf("open name file: %w", err)
+    }
     defer f.Close()
 
-    select {
-    case <-ctx.Done():
-        return "", ctx.Err()
-    default:
+    const maxBytes = 4096
+    body, err := io.ReadAll(io.LimitReader(f, maxBytes+1))
+    if err != nil {
+        return "", fmt.Errorf("read name file: %w", err)
     }
-    b, err := io.ReadAll(f)
-    if err != nil { return "", fmt.Errorf("read name: %w", err) }
-    return strings.TrimSpace(string(b)), nil
+    if len(body) > maxBytes {
+        return "", fmt.Errorf("name file exceeds %d bytes", maxBytes)
+    }
+    return strings.TrimSpace(string(body)), nil
+}
+
+func getStatus(ctx context.Context, client *http.Client, url string) (int, error) {
+    req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+    if err != nil {
+        return 0, fmt.Errorf("build request: %w", err)
+    }
+    resp, err := client.Do(req)
+    if err != nil {
+        return 0, fmt.Errorf("send request: %w", err)
+    }
+    defer resp.Body.Close()
+    return resp.StatusCode, nil
 }
 ```
 
-# 规则
-
-- 错误发生处立刻处理、包装或返回；调用者用 `errors.Is` / `errors.As` 判断语义。
-- `defer` 在**所在函数返回时**执行，采用后进先出；循环内 `defer` 可能延迟过久。
-- `context.Context` 作为第一个参数传入；不要放进 struct，不要传 `nil`，不要用它传可选业务参数。
-- `panic` 适合无法恢复的程序员错误或启动期不变量被破坏，不适合普通请求失败。
+`getStatus` 返回 HTTP 状态码，但不会自动把非 2xx 当成 Go `error`；调用方还需按协议判断。`client` 应配置 timeout 并复用；上下文取消是否能及时终止具体 I/O，要通过测试和客户端实现验证。关闭错误若影响数据正确性（例如写文件的 flush/close），要显式检查，不能仅靠 `defer Close()`。
 
 # C++ 对照
 
@@ -91,4 +113,3 @@ func readName(ctx context.Context, path string) (string, error) {
 > 1. 为什么 `defer f.Close()` 应紧跟成功 `Open`？
 > 2. 为什么不能用 `context` 传数据库连接或业务参数？
 > 3. 什么时候应该包装 error，什么时候原样返回？
-

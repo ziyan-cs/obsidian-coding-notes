@@ -1,9 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
-verified: 2026-09-27
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-27
 tags: [language/python, engineering/workflow]
 ---
@@ -34,4 +30,3 @@ tags: [language/python, engineering/workflow]
 # 完成证据
 
 一个 Python 工具完成时，应留下源码、测试、构建制品、匿名样例、一次真实失败记录和恢复方式。进一步选题和学习进度统一进入 Study Cycle，本篇不保存周次或月末清单。
-

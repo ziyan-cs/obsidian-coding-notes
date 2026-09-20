@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [learning/standard, linux, networking]
 ---
 
@@ -43,4 +41,3 @@ tags: [learning/standard, linux, networking]
 2. 一次 HTTPS 请求首次访问比复用连接慢，额外时间可能花在哪里？
 3. 服务端 accept 很快但业务响应很慢，你会按什么顺序收集证据？
 4. 对端关闭连接时，本端的 read、write 和协议状态可能如何变化？
-

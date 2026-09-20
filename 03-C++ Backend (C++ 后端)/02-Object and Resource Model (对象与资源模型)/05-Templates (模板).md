@@ -1,15 +1,8 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-verified: 2026-10-12
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-12
-
-previous_review_due: 2026-09-15
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -99,14 +92,14 @@ double_val(5);     // OK
 
 // C++20 Concepts（更清晰的约束）
 template<std::integral T>
-T double_val(T x) { return x * 2; }
+T double_val_constrained(T x) { return x * 2; }
 ```
 
 ## 模板与编译
 
 ```cpp
-// 模板定义必须在头文件中（编译器需要看到完整定义才能实例化）
-// .h 中声明+定义，或 .h 中声明 + .tpp 中定义再 include
+// 隐式实例化点通常必须看到模板定义，故通用模板通常放在头文件。
+// 也可以只在 .cpp 定义，再对所需类型显式实例化；这限制可用类型集合。
 
 // 显式实例化（减少重复编译）
 // 在 .cpp 中：

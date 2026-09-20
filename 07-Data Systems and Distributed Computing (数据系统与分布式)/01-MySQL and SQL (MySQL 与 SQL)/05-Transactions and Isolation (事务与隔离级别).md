@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -253,6 +251,5 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 ---
 
-四种隔离级别详解见 → Isolation Levels：RU, RC, RR, Serializable (四种隔离级别) · MVCC Internals：undo log & read view (MVCC底层实现)
 
 ---

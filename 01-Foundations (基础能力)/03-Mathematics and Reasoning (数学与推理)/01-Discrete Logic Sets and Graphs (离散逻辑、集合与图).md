@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 tags: [math/discrete, foundations/reasoning]
 ---
 

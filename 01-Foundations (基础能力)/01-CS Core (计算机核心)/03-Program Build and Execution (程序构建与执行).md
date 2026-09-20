@@ -1,11 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
-tags: [cs/toolchain, learning/foundation]
-verified: 2026-10-10
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-10
+tags: [cs/toolchain, learning/foundation]
 ---
 
 > [!abstract] 阅读方式

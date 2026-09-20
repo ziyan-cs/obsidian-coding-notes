@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [python/testing, testing/property, testing/integration]
 ---
 
@@ -27,13 +25,17 @@ tags: [python/testing, testing/property, testing/integration]
 性质不是把实现再写一遍，而是描述所有合法输入都应满足的关系：序列化再反序列化保持值、排序结果单调且元素多重集合不变、归一化操作幂等。
 
 ~~~python
-def test_normalize_is_idempotent(samples: list[str]) -> None:
-    once = [normalize(value) for value in samples]
-    twice = [normalize(value) for value in once]
-    assert twice == once
+from hypothesis import given, strategies as st
+
+def normalize(text: str) -> str:
+    return " ".join(sorted(set(text.split())))
+
+@given(st.text())
+def test_normalize_is_idempotent(text: str) -> None:
+    assert normalize(normalize(text)) == normalize(text)
 ~~~
 
-Property-based 工具会生成输入并在失败后 shrink 到较小反例。保留失败 seed 或最小样本作为回归测试；生成器必须遵守业务输入约束，否则大量无意义非法数据会掩盖真正问题。
+上例先用 `uv add --dev hypothesis` 安装依赖。Hypothesis 会生成输入并尽量 shrink 到较小反例；把最小反例加入固定回归测试。策略必须遵守业务输入约束，否则大量无意义非法数据会掩盖真正问题。
 
 # Fuzzing 不等于随机乱测
 

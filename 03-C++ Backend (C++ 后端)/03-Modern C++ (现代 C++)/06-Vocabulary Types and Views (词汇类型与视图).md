@@ -1,220 +1,137 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
-> [!abstract] 学习目标：用 optional、variant、string_view 和结构化绑定表达状态、联合值与非拥有视图。
+> [!abstract] 学习目标
+> 给函数接口选出能准确表达“缺席、多种结果、借用数据”的类型，并能画出每个视图所依赖对象的生命周期。
 
-> [!note] 先问值是否可缺席、是否有多种合法形态，再判断是否需要保留失败原因。`optional` 不保存错误原因，`variant` 能显式区分不同结果。
+# 先决定结果是值、缺席还是错误
 
-# std::optional（C++17）
+| 需求 | 候选类型 | 不适用的情况 |
+| --- | --- | --- |
+| 成功时有 `T`，无结果也是正常情况 | `std::optional<T>`（C++17） | 需要区分多种失败原因 |
+| 结果可能是若干封闭形态之一 | `std::variant<A, B, ...>`（C++17） | 备选类型没有清晰领域意义 |
+| 成功值或明确错误 | 领域 `variant`，或 `std::expected<T,E>`（C++23） | 不应把所有失败都压成同一个哨兵值 |
 
-表示"可能有值也可能没有值"，替代空指针、哨兵值、`bool` + 输出参数：
+## `optional`：缺席是接口状态，不是错误说明
+
+下面的解析器要求**整个输入**都是十进制整数；空串、溢出和尾随字符都返回空状态。调用者如需区分这三类原因，就不能只用 `optional`。
 
 ```cpp
 #include <charconv>
 #include <optional>
 #include <string_view>
+#include <system_error>
 
-std::optional<int> parse(std::string_view s) {
-    if (s.empty()) return std::nullopt;
+std::optional<int> parse_int(std::string_view text) {
+    if (text.empty()) return std::nullopt;
     int value{};
-    const auto [next, error] = std::from_chars(s.data(), s.data() + s.size(), value);
-    if (error != std::errc{} || next != s.data() + s.size())
-        return std::nullopt; // 不允许溢出或尾随垃圾字符
+    const char* first = text.data();
+    const char* last = first + text.size();
+    auto [next, error] = std::from_chars(first, last, value);
+    if (error != std::errc{} || next != last)
+        return std::nullopt;
     return value;
 }
 
-auto result = parse("42");
-if (result) {                        // 检查是否有值
-    std::cout << *result;            // 解引用
-    std::cout << result.value();     // 同上，但无值时抛 std::bad_optional_access
+int main() {
+    auto result = parse_int("42");
+    if (!result) return 1;
+    return *result == 42 ? 0 : 2;
 }
-result.value_or(0);                  // 有值返回值，无值返回 0
-result.has_value();                  // 显式检查
-
-// 链式操作（C++23 monadic interface）
-auto opt = parse("5")
-    .transform([](int x){ return x * 2; })    // 有值则转换
-    .and_then([](int x) -> std::optional<int> {
-        return x > 5 ? std::optional{x} : std::nullopt;
-    });
 ```
 
-`optional<T>` 在自身存储中容纳 `T`，不会为所含对象单独动态分配；是否适合大对象取决于对象体积、复制移动成本和外围对象的存储位置。
+先判断 `has_value()` 或使用条件判断再解引用；`value()` 在空状态时抛 `std::bad_optional_access`，`value_or(default)` 在空状态时返回默认值，但别让默认值掩盖必须处理的失败。`optional<T>` 自身存放一个 `T`，不会**为所含对象单独**分配内存；`T` 的内部资源仍可能动态分配。C++23 的 `transform` / `and_then` 是后续可选语法，不应混进 C++17 基础示例。
 
----
+## `variant`：封闭的结果集合
 
-# std::variant（C++17）
-
-类型安全的联合体（Tagged Union），可以存储多种类型之一：
+`variant` 任一时刻持有一个备选类型。读取不匹配的备选时，`std::get` 抛 `std::bad_variant_access`；`std::get_if` 返回空指针。对失败原因建模时，不要把所有打开失败误写成“文件不存在”：
 
 ```cpp
+#include <fstream>
+#include <string>
+#include <type_traits>
 #include <variant>
 
-std::variant<int, double, std::string> v;
+enum class ReadError { open_failed, read_failed };
+using ReadResult = std::variant<std::string, ReadError>;
 
-v = 42;
-v = 3.14;
-v = std::string("hello");
+ReadResult read_file(const std::string& path) {
+    std::ifstream input(path, std::ios::binary);
+    if (!input) return ReadError::open_failed;
 
-// 访问
-std::get<std::string>(v);         // 若类型不匹配抛 std::bad_variant_access
-std::get<2>(v);                   // 按下标
-std::get_if<std::string>(&v);     // 返回指针，不匹配返回 nullptr
-
-v.index();                        // 当前持有类型的下标（0-based）
-std::holds_alternative<int>(v);   // 检查是否持有某类型
-
-// std::visit：访问当前值（推荐）
-std::visit([](auto&& val) {
-    using T = std::decay_t<decltype(val)>;
-    if      constexpr (std::is_same_v<T, int>)         std::cout << "int: "    << val;
-    else if constexpr (std::is_same_v<T, double>)      std::cout << "double: " << val;
-    else if constexpr (std::is_same_v<T, std::string>) std::cout << "str: "    << val;
-}, v);
-```
-
-## 用 variant 实现错误处理
-
-```cpp
-using Result = std::variant<std::string, std::error_code>;
-
-Result readFile(const std::string& path) {
-    std::ifstream f(path);
-    if (!f) return std::make_error_code(std::errc::no_such_file_or_directory);
-    return std::string{std::istreambuf_iterator<char>(f), {}};
+    std::string content;
+    char ch;
+    while (input.get(ch)) content.push_back(ch);
+    if (input.bad()) return ReadError::read_failed;
+    return content;
 }
 
-auto r = readFile("config.json");
-std::visit([](auto&& v) {
-    using T = std::decay_t<decltype(v)>;
-    if constexpr (std::is_same_v<T, std::string>)
-        std::cout << "content: " << v;
-    else
-        std::cout << "error: " << v.message();
-}, r);
+int main() {
+    ReadResult result = read_file("config.txt");
+    return std::visit([](const auto& value) -> int {
+        using T = std::decay_t<decltype(value)>;
+        if constexpr (std::is_same_v<T, std::string>)
+            return 0; // 包括合法的空文件
+        else
+            return value == ReadError::open_failed ? 1 : 2;
+    }, result);
+}
 ```
 
----
+这个领域枚举还不能区分权限、路径、设备错误；若确需精确信息，应在系统调用边界收集实际错误码。`std::visit` 的 visitor 应覆盖所有备选；新增备选后应让编译器帮助发现未处理分支。异常期间 `variant` 在特定操作后可能进入 `valueless_by_exception`，不要笼统声称它永远保存一个值。
 
-# 借用视图与结构化绑定
+# 视图只借用，不延长底层数据寿命
 
-> [!note] 本节重点：string_view 非拥有视图与生命周期注意事项、结构化绑定的使用场景
-
-## std::string_view（C++17）
-
-对字符串的**非拥有只读视图**，避免不必要的字符串拷贝：
+`std::string_view` 借用连续字符，`std::span<T>`（C++20）借用连续元素。它们适合短期**参数**和局部观察，却不自动拥有内存；销毁、扩容、重分配或错误的跨线程使用都可能让视图失效。
 
 ```cpp
+#include <span>
+#include <string>
 #include <string_view>
+#include <vector>
 
-// 可以从字面量、string、char* 构造，零拷贝
-void print(std::string_view sv) {
-    std::cout << sv << " len=" << sv.size() << '\n';
+void log_message(std::string_view text); // 只在调用期间使用
+void change_first(std::span<int> values) {
+    if (!values.empty()) values.front() = 7;
 }
 
-print("hello");                        // char 字面量，无拷贝
-print(std::string("world"));           // std::string，无拷贝（只存指针和长度）
+int main() {
+    std::string owner = "hello";
+    std::string_view text = owner;
+    log_message(text);
 
-std::string_view sv = "hello world";
-sv.substr(0, 5);    // 返回新的 string_view，不分配内存
-sv.starts_with("hello");   // C++20
-sv.find("world");
+    std::vector<int> numbers{1, 2, 3};
+    change_first(numbers);
+    // 若 numbers 后续发生导致重分配的操作，旧 span 不能再使用。
+}
 ```
 
-## string_view 的生命周期陷阱
+直接把临时 `std::string` 传给只在调用期间使用的 `string_view` 参数，通常是安全的；把该视图存入回调或从函数返回则可能悬垂。`string_view` **不保证末尾有 `'\0'`**，传给 C API 前要确认边界或构造拥有的 `std::string`。`span` 同理，不应返回指向局部 `vector` 的视图。可变 `span<int>` 允许修改元素；`span<const int>` 只读。必要时让接口接收拥有值的容器或明确共享所有权。
+
+# 结构化绑定：看清是否复制
+
+`auto [a,b]` 默认按值生成绑定对象；`auto& [a,b]` 绑定原对象。遍历 map 时，若只读，常用 `const auto&` 避免复制 key/value：
 
 ```cpp
-// 危险！string_view 持有临时 string 的引用，函数返回后悬空
-std::string_view dangerous() {
-    std::string s = "hello";
-    return s;   // s 析构后 string_view 悬空！
-}
+#include <map>
+#include <string>
 
-// 安全：被观察的对象必须比 string_view 活得更长
-std::string s = "hello world";
-std::string_view sv = s;   // OK，sv 的生命周期在 s 内
-```
+int main() {
+    std::map<std::string, int> scores{{"Alice", 95}};
+    for (const auto& [name, score] : scores) {
+        (void)name;
+        (void)score;
+    }
 
-**函数参数用 `string_view` 代替 `const string&`：**
-
-```cpp
-// 旧写法：传字面量时会构造临时 string
-void old_func(const std::string& s);
-
-// 新写法：通常无需复制字符，同时接受 string、字面量、char* 等；调用方必须保证底层字符仍有效
-void new_func(std::string_view sv);
-```
-
----
-
-## Structured Bindings（结构化绑定，C++17）
-
-解包 pair、tuple、struct、数组到多个命名变量：
-
-```cpp
-// pair
-std::pair<int, std::string> p{1, "Alice"};
-auto [id, name] = p;
-
-// tuple
-auto [x, y, z] = std::make_tuple(1, 2.0, "three");
-
-// map 遍历（最常用）
-std::map<std::string, int> scores{{"Alice",95},{"Bob",87}};
-for (auto& [name, score] : scores) {
-    std::cout << name << ": " << score << '\n';
-}
-
-// struct（聚合类型）
-struct Point { double x, y; };
-Point pt{3.0, 4.0};
-auto [px, py] = pt;
-
-// 数组
-int arr[] = {1, 2, 3};
-auto [a, b, c] = arr;
-
-// 绑定为引用（可修改）
-auto& [rx, ry] = pt;
-rx = 10.0;   // 修改 pt.x
-```
-
-## 与 if/switch 结合（C++17 init-statement）
-
-```cpp
-// 在 if 的初始化语句中使用结构化绑定
-if (auto [it, ok] = myMap.insert({key, val}); ok) {
-    std::cout << "inserted\n";
-} else {
-    std::cout << "key already exists\n";
-}
-
-// lock_guard + 结构化绑定（C++17 scoped init）
-if (auto [lock, data] = acquireData(); data.valid()) {
-    process(data);
+    auto [it, inserted] = scores.insert({"Bob", 87});
+    if (inserted) it->second += 1;
 }
 ```
 
----
+按引用绑定要继续遵守原对象的生命周期和迭代器失效规则。结构化绑定只是解包语法，不会自动把数据变成独立安全的副本。
 
-# 先判断所有权，再选词汇类型
+> [!note] 接口选择顺序
+> 先问“拥有还是借用”，再问“失败需不需要原因”，最后才选方便的语法。短生命周期的只读参数可用视图；跨作用域保存时明确所有权；可恢复错误要返回足够诊断信息。
 
-| 类型 | 是否拥有值 | 关键边界 |
-| --- | --- | --- |
-| `optional<T>` | 内嵌一个 `T` 或空状态 | 体积至少能容纳 `T`；optional 本身不为所含对象单独动态分配 |
-| `variant<Ts...>` | 内嵌其中一种备选 | 访问需匹配类型；异常情况下可能 `valueless_by_exception` |
-| `string_view` | 不拥有字符 | 底层字符必须存活且未失效；不保证 `\0` 结尾 |
-| `span<T>` | 不拥有连续元素 | 容器扩容、销毁后视图失效 |
-
-`optional` 适合“可能没有结果”，但不能同时表达多种失败原因；需要诊断时使用 `expected<T,E>`（C++23）或领域结果类型。大对象是否按值存入应根据复制、移动和对象布局决定，而不是笼统说“不能用 optional”。
-
-`variant` 是封闭集合的 tagged union。visitor 应覆盖所有备选，新增类型能触发编译期审查。不要用 `variant<any,string>` 之类逃避领域建模；`any` 丢失封闭集合与穷尽处理能力。
-
-`string_view` 作为参数很常用，但返回值尤其危险：不能返回局部 `string` 的视图，也不能在原 `string` 扩容后继续使用。传给要求 C 字符串的 API 前必须确认终止符或构造拥有的 `string`。
-
-结构化绑定默认 `auto [x,y]` 产生按值绑定；需要修改原对象用 `auto&`，只读借用用 `const auto&`。在 map 遍历中误用按值会复制 key/value。
-
-参考：[C++ reference library](https://en.cppreference.com/w/cpp/utility.html)。
+参考：[C++ 标准库 `optional`](https://eel.is/c++draft/optional)、[`variant`](https://eel.is/c++draft/variant)、[`string_view`](https://eel.is/c++draft/string.view)、[`span`](https://eel.is/c++draft/views.span)。

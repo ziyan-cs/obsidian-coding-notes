@@ -1,9 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
-verified: 2026-10-09
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-09
 tags: [language/python, python/object-model]
 ---
@@ -20,10 +16,13 @@ class RetryPolicy:
     default_attempts = 3  # 类属性
 
     def __init__(self, attempts: int | None = None) -> None:
-        self.attempts = attempts or self.default_attempts
+        chosen = self.default_attempts if attempts is None else attempts
+        if chosen < 1:
+            raise ValueError("attempts must be at least 1")
+        self.attempts = chosen
 ~~~
 
-读取 `obj.name` 时先考虑描述符，再查实例和类的 MRO；对初学阶段，至少要记住：在类上定义的可变 list/dict 会被所有未覆盖该属性的实例共享。
+读取 `obj.name` 时会涉及数据描述符、实例字典和类的 MRO；对初学阶段，至少要记住：在类上定义的可变 list/dict 会被所有未覆盖该属性的实例共享。上面的参数不能写成 `attempts or 3`：`0` 与“未提供”是不同输入，应显式拒绝。
 
 实例方法本质是函数通过 descriptor 绑定实例后得到的 bound method，`self` 只是惯例名称，不是关键字。`@classmethod` 接收类，适合替代构造器；`@staticmethod` 不接收实例或类，若与类型状态无关，也可能更适合放在模块函数中。
 

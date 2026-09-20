@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [cloud-native/kubernetes, backend/deployment]
 ---
 
@@ -68,6 +66,23 @@ spec:
 
 镜像使用不可变 digest 可以避免同一 tag 指向不同内容。`requests` 参与调度与资源保障；`limits` 的 CPU/内存行为不同，设置前要理解 throttling、OOM 与应用负载。
 
+上面的 `registry.example/api@sha256:...` 是占位符，替换成真实镜像与完整 digest 后才能应用。仅有 Deployment 时，Pod IP 仍不稳定；下面的 Service 与 Deployment 使用同一个 `app: api` 标签，把 Service 的 80 端口转发到容器监听的 8080 端口：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  type: ClusterIP
+  selector: { app: api }
+  ports:
+    - port: 80
+      targetPort: 8080
+```
+
+这只创建**集群内部**服务入口；要从集群外访问，还需按环境选择 Gateway/Ingress、LoadBalancer 或其他入口。Service 不会替应用修复错误监听地址，也不保证下游调用成功。
+
 # Service 与网络路径
 
 Pod IP 会变化。Service 用 selector 选择一组后端 Pod，并提供稳定虚拟地址与服务发现；Ingress 或 Gateway API 处理进入集群的 HTTP/TLS 流量。它们不自动提供业务认证、授权和幂等。
@@ -79,6 +94,8 @@ Pod IP 会变化。Service 用 selector 选择一组后端 Pod，并提供稳定
 3. Pod 是否监听正确地址与端口，而不是只监听 `127.0.0.1`。
 4. NetworkPolicy、CNI、节点网络和入口控制器是否允许流量。
 5. 应用是否因下游超时、连接池或资源限制而慢。
+
+最小验证顺序：`kubectl get deploy,pod,svc -o wide` 看对象与副本；`kubectl get endpointslice -l kubernetes.io/service-name=api` 看实际后端；从同 namespace 的测试 Pod 请求 `http://api/`，再从应用日志核对请求。DNS、Service 端口、EndpointSlice 和 Pod 本地监听是四个独立故障点。
 
 # 调度、容量与故障
 

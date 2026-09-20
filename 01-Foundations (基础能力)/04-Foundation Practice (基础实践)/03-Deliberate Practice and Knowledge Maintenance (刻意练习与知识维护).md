@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice]
 ---
 
@@ -86,13 +84,13 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 4. 对照原文只修正缺口；
 5. 根据表现调整下一次复查，而不是机械遵守旧日期。
 
-`verified` / `review_due` 在本库中用于学习队列，不等于内容真实性：
+学习队列属性不等于正文事实核验：
 
-- `verified`：计划或最近一次完成主动验证的日期；
-- `review_due`：下一次需要主动回忆/实践的日期；
-- `content_verified`：正文事实最近一次校准日期。
+- `study_stage`：待学、首次学习、复习阶段或已巩固；
+- `review_due`：下一次实际学习、主动回忆或实践的日期；
+- `studied_on`：首次有效学习的真实日期，不能用排期日预填。
 
-完成学习后，应按实际掌握程度更新 `verified` 与 `review_due`。完全不会可短期复查；能解释但不会实践，安排变体练习；连续多次独立完成后再拉长间隔。具体任务统一由 Hub 和查询脚本呈现。
+完成学习后写入 `studied_on`，按实际掌握程度更新 `study_stage` 与 `review_due`。完全不会可短期复查；能解释但不会实践，安排变体练习；连续多次独立完成后再拉长间隔。正文事实的版本与来源单独记录在相关段落。具体任务统一由 Hub 和查询脚本呈现。
 
 # 从笔记走向项目证据
 

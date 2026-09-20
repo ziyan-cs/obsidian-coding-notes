@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [security/sandbox, ai/agent]
 ---
 
@@ -29,6 +27,8 @@ tags: [security/sandbox, ai/agent]
 | 虚拟机/微虚拟机 | 隔离更强 | 启动、镜像和运维成本更高 |
 
 高风险、多租户、任意代码通常需要比普通业务容器更强的边界。
+
+以在线代码判题为例，编译和运行阶段可以拆开：编译器本身也解析不可信源码，因此两个阶段都要隔离。输入只读挂载，输出进入限定目录；限制 wall time、CPU、内存、进程数、文件数和磁盘写入，并禁用不必要的出网。即使使用微虚拟机，也不能把云凭据、宿主共享目录或高权限控制 socket 交给任务。
 
 # 执行协议
 

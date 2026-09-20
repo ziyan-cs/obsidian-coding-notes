@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [comparison, resource/lifetime]
 ---
 
@@ -41,4 +39,3 @@ acquire -> one clear owner -> use -> release
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Concurrency Models (并发模型)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)
-

@@ -41,15 +41,13 @@
 
 ~~~yaml
 ---
-status: learning
-confidence: medium
-verified: 2026-09-18
-review_due: 2026-09-25
+study_stage: learn
+review_due: 2026-09-23
 tags: [topic/example]
 ---
 ~~~
 
-`review_due` 与 `tags` 按需存在。涉及版本或 API 的结论以官方文档为准；性能结论必须保留环境、负载和测量方法。
+`study_stage` 始终存在：`backlog` 待排期、`learn` 首次学习、`D1` 至 `D60` 复习、`solid` 已巩固、`reference` 为 Hub 参考页。`review_due` 仅在有下一次任务时写；实际学完才增加 `studied_on: YYYY-MM-DD`；`tags` 可选。涉及版本或 API 的结论在正文附近记录来源与版本；性能结论保留环境、负载和测量方法。
 
 ## 内容质量门槛
 

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [sre/slo, observability/alerting]
 ---
 
@@ -16,10 +14,13 @@ tags: [sre/slo, observability/alerting]
 
 常见 SLI 包括成功请求比例、满足延迟阈值的请求比例、数据新鲜度和任务按时完成率。分母、排除项和测量位置必须清楚，否则同一指标会得到不同结论。
 
-~~~text
-availability SLI = good requests / valid requests
-error budget = 1 - SLO target
-~~~
+```text
+availability SLI     = good requests / eligible requests
+allowed bad fraction = 1 - SLO target
+allowed bad requests = eligible requests × allowed bad fraction
+```
+
+例：30 天请求量为 1,000,000，目标是 99.9% 合格，则最多允许 1,000 次不合格请求。若已经有 450 次，当前还剩 550 次预算；这不是“还能安全发布 550 次失败”的许可，因为后续请求总数与故障风险仍会变化。**请求型 SLO** 按请求数算，**时间型 SLO** 按时间算，不能混用分母。
 
 健康检查成功不代表用户请求成功；客户端、边缘和服务端测量各有盲区。
 
@@ -49,7 +50,7 @@ SLI          = good events / valid events
 
 # 错误预算与燃烧率
 
-99.9% 目标意味着窗口内允许 0.1% bad events。燃烧率表示当前消耗速度相对预算允许速度的倍数：短窗口高燃烧捕获快速事故，长窗口较低燃烧捕获慢性退化。实际阈值按团队响应能力和 SLO 窗口设计，不照抄固定数字。
+99.9% 目标意味着窗口内允许 0.1% bad events。对有足够请求量的服务，可把燃烧率近似写成 `当前坏请求比例 / 0.1%`：若最近窗口坏请求比例为 1%，则是 10× 燃烧；若持续，预算消耗速度约为允许速度的十倍。短窗口高燃烧捕获快速事故，长窗口较低燃烧捕获慢性退化；低流量服务容易因一两个请求导致噪声，需另设最小样本/外部探测等规则。告警阈值须按团队响应能力设计，不照抄数字。[Google SRE Workbook：SLO 告警](https://sre.google/workbook/alerting-on-slos/)
 
 错误预算策略应事先说明：预算健康时允许哪些风险；接近耗尽时减少什么变更；已经耗尽时由谁批准例外。预算不是处罚研发，而是把发布速度和可靠性放进同一决策框架。
 

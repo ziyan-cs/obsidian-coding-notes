@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [cloud-native/kubernetes, sre/troubleshooting, operations]
 ---
 
@@ -53,7 +51,7 @@ user / synthetic check
 
 1. 镜像绑定 digest，并保存源码、构建与 SBOM 证据。
 2. 在发布前检查配额、策略、配置和数据库兼容性。
-3. 用 maxUnavailable/maxSurge、PodDisruptionBudget 与拓扑分布控制容量窗口。
+3. 用 Deployment 的 `maxUnavailable`/`maxSurge` 控制滚动更新容量，用拓扑分布降低同域故障；PDB 主要约束 Eviction API 发起的自愿驱逐（如节点维护），**不限制 Deployment/StatefulSet 自身滚动更新**。
 4. 逐步放量，比较新旧版本的错误率、尾延迟和业务指标。
 5. 回滚前判断是否存在不可逆 Schema、消息或外部副作用。
 
@@ -74,4 +72,3 @@ NetworkPolicy 要同时考虑 ingress 与 egress；是否生效取决于 CNI 实
 - [Kubernetes Troubleshooting](https://kubernetes.io/docs/tasks/debug/)
 - [Kubernetes Observability](https://kubernetes.io/docs/concepts/cluster-administration/observability/)
 - [Kubernetes Security Checklist](https://kubernetes.io/docs/concepts/security/security-checklist/)
-

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
@@ -17,12 +15,9 @@ content_verified: 2026-09-17
 
 ## 为什么需要 RPC
 
-微服务架构中，服务之间需要通信。HTTP/REST 虽然简单，但存在痛点：
-- 文本协议（JSON）序列化/反序列化开销大
-- 无强类型接口约束，客户端与服务端容易不一致
-- 只支持请求-响应模式，流式通信需要额外实现
+HTTP/JSON 适合公开 API、浏览器和直接调试；当内部服务需要可生成的契约或双向流时，gRPC 值得评估。但 JSON 并不必然慢，也能配合 OpenAPI 获得类型契约；SSE、WebSocket 和分块响应同样能提供不同形式的流式能力。
 
-**gRPC** 解决这些问题：Protobuf 强类型 + HTTP/2 多路复用 + 四种通信模式。
+gRPC 的取舍是 Protobuf 契约、HTTP/2 流与代码生成，代价包括代理兼容、二进制调试、版本治理和依赖链复杂度。
 
 ---
 
@@ -48,6 +43,10 @@ message GetUserRequest {
     int32 user_id = 1;
 }
 
+message ListUsersRequest {}
+message UpdateUserRequest { User user = 1; }
+message ChatMessage { string text = 1; }
+
 message User {
     int32 id = 1;
     string name = 2;
@@ -61,117 +60,56 @@ message User {
 
 | 特性 | 说明 |
 |------|------|
-| **varint 编码** | 小整数用 1 字节，大整数用更多，自动变长 |
-| **字段编号 1-15** | 1 字节编码（高频字段放这里） |
-| **字段编号 16+** | 2 字节编码 |
+| **varint 编码** | 非负小整数通常较短；负 `int32` 不一定省空间，需区分 `sint32` 的 ZigZag 编码 |
+| **字段编号 1–15** | 字段号与 wire type 组成的 tag 通常占 1 字节；字段值另计 |
+| **字段编号 16–2047** | tag 通常占 2 字节；更大字段号占更多字节 |
 | **proto3 默认值省略** | 标量零值默认不序列化（隐式 presence，非 Go 的 omitempty） |
-| **前向兼容** | 新增字段不影响旧客户端（老代码忽略不识别的字段） |
+| **演进兼容** | 增加可选字段通常可兼容旧二进制读者；未知字段在二进制透传中通常保留，但转 JSON 或手动逐字段复制可能丢失。删除字段要 `reserved` 其编号和名称，不能复用旧 tag |
 
 相比 JSON，Protobuf 通常体积更小、编解码更快（二进制 + 字段编号），但**具体倍数受消息结构、字段类型与运行时实现影响，无固定值**，应以本场景基准测试为准（MEASURE_LOCALLY）。
 
 ---
 
-## C++ gRPC 服务端
+## C++：一次 RPC 的契约与失败路径
+
+先由 `.proto` 生成 C++ 消息类与服务/客户端 stub，再实现服务方法。下面是**源文件片段**：它依赖生成的 `user_service.grpc.pb.h`，不是单独编译即可运行的服务器。为了让取消、错误码与响应赋值清楚，示例只实现 `GetUser`，其余三个 RPC 需要单独补实现与测试。
 
 ```cpp
+#include <chrono>
+#include <memory>
 #include <grpcpp/grpcpp.h>
 #include "user_service.grpc.pb.h"
 
-using grpc::Server;
-using grpc::ServerBuilder;
-using grpc::ServerContext;
-using grpc::Status;
-
-class UserServiceImpl final : public UserService::Service {
-    Status GetUser(ServerContext* context, const GetUserRequest* request,
-                   User* reply) override {
-        // 从数据库/缓存查询用户
-        int userId = request->user_id();
-        User user = db_.findUser(userId);
-        if (!user) {
-            return Status(grpc::NOT_FOUND, "user not found");
+class UserServiceImpl final : public userservice::UserService::Service {
+public:
+    grpc::Status GetUser(grpc::ServerContext* context,
+                         const userservice::GetUserRequest* request,
+                         userservice::User* reply) override {
+        if (context->IsCancelled()) {
+            return {grpc::StatusCode::CANCELLED, "request cancelled"};
         }
-        *reply = std::move(user);
-        return Status::OK;
-    }
-
-    // 服务端流：批量返回
-    Status ListUsers(ServerContext* context, const ListUsersRequest* request,
-                     grpc::ServerWriter<User>* writer) override {
-        for (const auto& user : db_.allUsers()) {
-            writer->Write(user);  // 多次 Write，流式返回
+        if (request->user_id() != 1) {
+            return {grpc::StatusCode::NOT_FOUND, "user not found"};
         }
-        return Status::OK;
+        reply->set_id(1);
+        reply->set_name("Ada");
+        return grpc::Status::OK;
     }
-
-private:
-    UserDatabase db_;
 };
 
-int main() {
-    UserServiceImpl service;
-    ServerBuilder builder;
-    builder.AddListeningPort("0.0.0.0:50051", grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
-
-    std::unique_ptr<Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on port 50051" << std::endl;
-    server->Wait();  // 阻塞等待
+grpc::Status FetchUser(const std::shared_ptr<grpc::Channel>& channel,
+                       int user_id, userservice::User* reply) {
+    auto stub = userservice::UserService::NewStub(channel);
+    grpc::ClientContext context;
+    context.set_deadline(std::chrono::system_clock::now() +
+                         std::chrono::seconds(2));
+    userservice::GetUserRequest request;
+    request.set_user_id(user_id);
+    return stub->GetUser(&context, request, reply);
 }
 ```
 
----
-
-## C++ gRPC 客户端
-
-```cpp
-#include <grpcpp/grpcpp.h>
-#include "user_service.grpc.pb.h"
-
-using grpc::ClientContext;
-using grpc::Status;
-
-class UserClient {
-public:
-    UserClient(const std::string& target)
-        : stub_(UserService::NewStub(
-              grpc::CreateChannel(target, grpc::InsecureChannelCredentials()))) {}
-
-    // 简单 RPC（Unary）
-    User GetUser(int userId) {
-        GetUserRequest req;
-        req.set_user_id(userId);
-
-        User reply;
-        ClientContext ctx;
-        // 设置超时（关键！）
-        ctx.set_deadline(std::chrono::system_clock::now() + std::chrono::seconds(5));
-
-        Status status = stub_->GetUser(&ctx, req, &reply);
-        if (!status.ok()) {
-            throw std::runtime_error("GetUser failed: " + status.error_message());
-        }
-        return reply;
-    }
-
-    // 服务端流式读取
-    void ListUsers() {
-        ListUsersRequest req;
-        ClientContext ctx;
-        auto reader = stub_->ListUsers(&ctx, req);
-        User user;
-        while (reader->Read(&user)) {
-            std::cout << "Got user: " << user.name() << std::endl;
-        }
-        Status status = reader->Finish();  // 检查流结束状态
-    }
-
-private:
-    std::unique_ptr<UserService::Stub> stub_;
-};
-```
-
----
+真实服务在 `GetUser` 中要让数据库查询服从剩余 deadline，并把“未找到”和“依赖失败”映射为不同 status；客户端检查 `status.ok()`，不要只读取 `reply`。流式 RPC 每次 `Write` 可能失败，读取循环结束还必须检查 `Finish()` 的最终状态。一个 `Channel` 可复用，但它不替每次 RPC 自动设业务 deadline。服务端监听地址、TLS 凭据和生成代码的构建步骤，以 [gRPC C++ basics](https://grpc.io/docs/languages/cpp/basics/) 的目标版本为准。
 
 ## gRPC 四种通信模式
 
@@ -205,66 +143,18 @@ private:
 
 ## 生产配置要点
 
-### 连接池与复用
+| 边界 | 落地要求 |
+| --- | --- |
+| Deadline 与取消 | 客户端按业务预算设置 deadline；服务端把剩余时间传给下游，取消后停止无意义工作 |
+| Status 与重试 | 区分 `INVALID_ARGUMENT`、`NOT_FOUND`、`UNAVAILABLE`、`DEADLINE_EXCEEDED`；只在语义可重试且有幂等保护时重试 |
+| Channel 复用 | 复用长期 Channel/Stub，避免每次 RPC 都重新建连；连接行为受 resolver、负载均衡与配置影响 |
+| Keepalive | 不复制“10 秒无请求也 ping”的模板；先与服务端/代理约定，过密 PING 可能收到 `GOAWAY: too_many_pings` |
+| 安全 | 生产链路配置 TLS/身份认证，控制 metadata 的敏感字段，避免把内部错误详情直接暴露给客户端 |
+| 观测 | 按服务、方法、status 记录次数、耗时和在途流；长流另跟踪存活时间、背压与消息尺寸 |
 
-```cpp
-// 创建连接池，复用 channel（channel 是线程安全的）
-auto channel = grpc::CreateChannel(target, creds);
-auto stub1 = UserService::NewStub(channel);
-auto stub2 = OrderService::NewStub(channel);  // 复用同一连接
+接口演进时优先新增字段；废弃字段时保留 `reserved` 编号和名称，不能把旧 tag 重新赋予另一种含义。`optional`/presence、`oneof`、枚举新增值及 Protobuf JSON 映射需分别做跨版本测试；“二进制能解析”不等于业务含义兼容。
 
-// 设置 Keepalive
-grpc::ChannelArguments args;
-args.SetInt(GRPC_ARG_KEEPALIVE_TIME_MS, 10000);        // 10s ping
-args.SetInt(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, 5000);      // 5s 超时
-args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, 1); // 无活跃请求也 ping
-auto ch = grpc::CreateCustomChannel(target, creds, args);
-```
-
-### 超时与重试
-
-```cpp
-// 客户端超时
-ClientContext ctx;
-ctx.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(200));
-
-// 服务端超时（从 metadata 中读取 deadline）
-auto deadline = context->deadline();
-if (std::chrono::system_clock::now() >= deadline) {
-    return Status(grpc::DEADLINE_EXCEEDED, "timeout");
-}
-```
-
-### 拦截器（Interceptor）
-
-```cpp
-// 日志拦截器示例
-class LogInterceptor : public grpc::Interceptor {
-    void Intercept(grpc::InterceptorBatchMethods* methods) override {
-        if (methods->QueryInterceptionHookPoint(
-                grpc::InterceptionHookPoints::POST_RECV_INITIAL_METADATA)) {
-            std::cout << "RPC started" << std::endl;
-        }
-        methods->Proceed();  // 继续拦截链
-    }
-};
-```
-
-> **版本/API 核验（VERSION_CHECK）**：拦截器 C++ API 在不同 gRPC 版本间有变化（`grpc::Interceptor` 基类、`InterceptorBatchMethods`、工厂注册方式等），上例为示意，编译前以所用 gRPC 版本头文件为准。
-
----
-
-> [!example]- 题型索引
-> | 题型 | 要点 |
-> |------|------|
-> | gRPC vs Thrift | gRPC 基于 HTTP/2，Thrift 可自定义传输层；gRPC 生态更好 |
-> | Protobuf 编码 | Varint + ZigZag + 字段编号 (field_number << 3 \| wire_type) |
-> | gRPC 流的实现 | 基于 HTTP/2 的 DATA frame，同一连接多流复用 |
-> | gRPC 为什么快 | Protobuf 编解码快 + HTTP/2 多路复用减少连接数 |
-> | Channel 的安全性 | 多个 Stub 共享 Channel 是线程安全的，不需要额外锁 |
->
-
-> [!tip]- **工程要点**：内部服务可优先评估 gRPC，但不是默认答案。每个 RPC 都应显式设置 deadline；复用 Channel 而非每次新建。Keepalive 应按代理、负载均衡器和服务端策略配置，过于激进会制造无效流量。CMake 中锁定并验证所用 gRPC 版本与 ABI。
+拦截器可承担认证、追踪或统一日志，但 C++ API 与工厂注册方式随 gRPC 版本变化；在锁定依赖版本后参照官方示例实现，不在通用笔记里保留可能无法编译的伪代码。生产评估还要纳入代理是否支持 HTTP/2/gRPC、最大消息尺寸、流级背压和优雅关闭。
 
 ### 官方资料
 

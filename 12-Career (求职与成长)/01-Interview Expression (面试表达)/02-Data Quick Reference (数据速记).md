@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [career/interview]
 ---
 
@@ -107,4 +105,3 @@ EPOLLIN=0x001  EPOLLOUT=0x004  EPOLLET=0x80000000  // epoll 事件
 
 [!info]- 延伸阅读
 - 下一步：[03-Project Deep Dive (项目难点表达)](/12-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/03-Project%20Deep%20Dive%20(项目难点表达).md)
-

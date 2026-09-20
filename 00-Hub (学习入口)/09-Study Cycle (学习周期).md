@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-verified: 2026-09-18
+study_stage: reference
 tags: [learning/execution, learning/dashboard]
 ---
 
@@ -29,7 +27,7 @@ tags: [learning/execution, learning/dashboard]
 | 周六 | 13:30–17:00 | 计算机组成/系统基础与实验 | 一篇重文，必须有观察证据 |
 | 周日 | 13:30–17:00；20:30 周复盘 | 复习、短实践笔记、项目输出 | 最多一篇短文；先复习再新增 |
 
-三条线不是互相争抢时间：C++ 训练资源与工程模型，Python 提供自动化和验证能力，计算机组成与系统基础解释程序为何这样运行。强化版首月共 28 篇；周日先复习，再用一篇短实践笔记把三者连接到同一个产物。
+三条线不是互相争抢时间：C++ 训练资源与工程模型，Python 提供自动化和验证能力，计算机组成与系统基础解释程序为何这样运行。以 2026-09-23 为重新排期的起点，首月仍保留 28 篇、周二不加新课、周日先复习的负荷；已经废弃的旧日期不再留在单篇属性里。首月之后按实际进度滚动安排，不预填整个大学的死日期。
 
 # 2026-09-23 至 2026-10-22
 
@@ -83,12 +81,11 @@ tags: [learning/execution, learning/dashboard]
 排期状态：
 
 ```yaml
-verified: 2026-09-23
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-23
 ```
 
-真正学完后，将 `verified` 校正为实际完成日，`review_stage` 改为 `D1`，`review_due` 改为次日。之后按 `D1 → D3 → D7 → D14 → D30 → D60 → solid` 推进；答不出机制、边界或最小代码则退回 D1。达到 `solid` 后删除 `review_due`。
+真正学完后才写 `studied_on`（实际完成日），把 `study_stage` 改为 `D1`，`review_due` 改为次日。之后按 `D1 → D3 → D7 → D14 → D30 → D60 → solid` 推进；答不出机制、边界或最小代码则退回 D1。达到 `solid` 后删除 `review_due`。
 
 # 首月验收
 

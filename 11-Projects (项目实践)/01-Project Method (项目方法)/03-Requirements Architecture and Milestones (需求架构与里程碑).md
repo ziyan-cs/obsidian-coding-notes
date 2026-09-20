@@ -1,11 +1,9 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
-> > 项目推进应把模糊目标转成可验收场景、架构边界和短周期里程碑，每个里程碑都留下可运行产物与证据。
+> 项目推进应把模糊目标转成可验收场景、架构边界和短周期里程碑，每个里程碑都留下可运行产物与证据。
 
 > [!summary] 核心摘要
 >
@@ -45,6 +43,8 @@ client -> API -> domain service -> repository -> database
 
 每步都应可运行、可回退、可演示。不要让分支持续数周无法集成。
 
+对每个里程碑写清 `输入条件 → 可运行增量 → 自动验收 → 失败回退`。例如短链接第一阶段只有内存存储：输入一个合法 URL，创建短码并重定向；测试覆盖重复创建、非法 scheme 和不存在短码；若设计改变，删除实验数据即可回退。第二阶段引入数据库时，验收变为“进程重启后映射仍存在”，并增加迁移失败的回退方案。
+
 # 风险驱动决策
 
 优先验证最可能推翻设计的假设，例如热点写入、消息重复、断线重连或外部 API 限流。低风险的页面美化和抽象重构不应抢占早期验证时间。
@@ -65,4 +65,3 @@ client -> API -> domain service -> repository -> database
 > [!info]- 延伸阅读
 > - 前置：[01-Project Design Template (项目设计模板)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)
 > - 延伸：[02-Testing Benchmark and Evidence (测试压测与证据)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)
-

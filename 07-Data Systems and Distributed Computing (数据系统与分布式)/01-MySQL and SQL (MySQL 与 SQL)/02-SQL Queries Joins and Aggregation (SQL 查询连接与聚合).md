@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：从 SELECT 执行目标出发组织过滤、连接、子查询、分组与聚合。
@@ -252,7 +250,6 @@ SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 
 ---
 
-多表查询见 → Joins & Subqueries (多表查询与子查询) · Aggregate Functions & Group By (聚合与分组)
 
 ---
 

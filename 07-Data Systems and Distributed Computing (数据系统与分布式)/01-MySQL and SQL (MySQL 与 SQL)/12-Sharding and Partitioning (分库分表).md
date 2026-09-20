@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -160,8 +158,6 @@ CREATE TABLE order (
 >
 > ---
 >
-> 主从复制原理见 → Master-Slave Replication (主从复制原理) · MySQL vs Redis：Caching Strategy (缓存策略对比)
 
 > [!info]- 延伸阅读
 > - 下一步：[13-MySQL and Redis Caching (MySQL 与 Redis 缓存)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/13-MySQL%20and%20Redis%20Caching%20(MySQL%20与%20Redis%20缓存).md)
-

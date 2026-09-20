@@ -1,11 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-tags: [engineering/build, cpp/dependencies]
-verified: 2026-10-22
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-22
+tags: [engineering/build, cpp/dependencies]
 ---
 
 > [!abstract] 学习目标

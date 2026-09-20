@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [cloud/configuration, cloud/policy]
 ---
 
@@ -38,6 +36,8 @@ tags: [cloud/configuration, cloud/policy]
 
 每项配置记录类型、单位、范围、默认值、是否敏感、动态/静态生效方式和废弃版本。启动时输出非敏感配置摘要与来源，便于判断实例实际加载了什么；动态配置则需要版本、校验、原子切换和 last-known-good。
 
+以 `DB_POOL_MAX` 为例：类型为整数，单位为连接数，允许范围由数据库总连接预算和服务最大副本数共同决定；缺失时是否允许默认值要明确，不能随手设成 100。配置验证应同时检查单实例 `DB_POOL_MAX` 和 `max_replicas × DB_POOL_MAX`，否则自动扩容后可能把数据库连接耗尽。密码则只保存秘密引用，不把明文写进环境差异文件或启动日志。
+
 ```text
 same artifact digest
  dev config -> test config -> production canary -> production
@@ -52,6 +52,8 @@ same artifact digest
 拒绝规则应返回对象、字段、违反原因和修复建议。例外包含申请人、业务原因、补偿控制和到期时间，并进入审计；没有到期的例外会逐渐变成永久漏洞。
 
 策略测试至少包含允许、拒绝和例外样本。策略升级先以 audit 模式观察现有对象，再逐步 enforce，避免一次更新阻断所有部署。对策略引擎不可用时是 fail-open 还是 fail-closed，需要按风险和可用性明确决定。
+
+例如“生产 Pod 不得使用 privileged 容器”：允许样本是非特权 Pod；拒绝样本是 `securityContext.privileged: true`；例外样本还需限定 namespace、负责人和到期时间。分别在静态校验与 admission 阶段验证，记录真实 API 拒绝信息。Kubernetes `ValidatingAdmissionPolicyBinding` 的 `Audit`、`Warn`、`Deny` 是不同动作，不应把“仅审计”写成“已阻断”。[Kubernetes Admission Policy](https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/)
 
 # Feature flag 与秘密
 

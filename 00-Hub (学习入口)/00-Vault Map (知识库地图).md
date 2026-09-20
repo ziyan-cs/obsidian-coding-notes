@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-verified: 2026-09-18
+study_stage: reference
 tags: [vault/navigation, backend-learning]
 ---
 
@@ -10,12 +8,12 @@ tags: [vault/navigation, backend-learning]
 
 # 四个核心入口
 
-| 需要解决的问题 | 唯一入口 | 不在这里做什么 |
-| --- | --- | --- |
-| 今天和本周做什么 | [Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md) | 不把任务散落进知识模块 |
-| 长期先学什么、何时升级 | [Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md) | 不绑定具体日期 |
-| 哪些笔记需要复习 | `List-ReviewDue.ps1` 与 [Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md) | 不预先为未学习内容排期 |
-| 一个模块学到什么程度 | 各模块 `00-... Standard` | 不记录每日进度 |
+| 需要解决的问题     | 唯一入口                                                                                                               | 不在这里做什么     |
+| ----------- | ------------------------------------------------------------------------------------------------------------------ | ----------- |
+| 今天和本周做什么    | [Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)                                                | 不把任务散落进知识模块 |
+| 长期先学什么、何时升级 | [Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)                | 不绑定具体日期     |
+| 哪些笔记需要复习    | `List-ReviewDue.ps1` 与 [Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md) | 不预先为未学习内容排期 |
+| 一个模块学到什么程度  | 各模块 `00-... Standard`                                                                                              | 不记录每日进度     |
 
 # 知识库维护
 
@@ -47,4 +45,3 @@ tags: [vault/navigation, backend-learning]
 2. 学习前查看模块标准，学习后完成最小实验或代码。
 3. 需要长期记忆时才写 `review_due`，由脚本统一汇总。
 4. 错误进入 Mistake Log，知识库结构问题进入 Audit Queue；两者都不混入学习日程。
-

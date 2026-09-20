@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-verified: 2026-09-18
+study_stage: reference
 tags: [vault/sources, learning/verification]
 ---
 
@@ -49,9 +47,9 @@ tags: [vault/sources, learning/verification]
 | 安全 | [NIST SSDF](https://csrc.nist.gov/projects/ssdf)、[OWASP Top 10](https://top10.owasp.org/) 与 CISA |
 | AI 系统 | [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework)、[OWASP GenAI Security](https://genai.owasp.org/) 与 [NVIDIA Triton 文档](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/) |
 
-# 何时更新 verified
+# 时效核验怎样记录
 
-更新 verified 的条件是实际审阅了该笔记的结构和关键结论。它不表示所有外部资料当天重新发布或全部重新实验。
+`studied_on` 只记录个人首次有效学习日，不承担内容事实核验。对易变结论，在相关段落附近写明资料版本、核验日期、一手来源和必要的本机实验；没有核验就保留 `VERSION_CHECK` 或 `MEASURE_LOCALLY`，不要用一个全篇日期暗示每项事实都已验证。
 
 下列内容需要在正文中写明版本或验证入口：
 
@@ -84,4 +82,3 @@ tags: [vault/sources, learning/verification]
 - 安全通告影响当前依赖或部署。
 
 更新后优先修改结论与边界；只有确有复盘价值时才保留简短变更记录，避免笔记变成流水账。
-

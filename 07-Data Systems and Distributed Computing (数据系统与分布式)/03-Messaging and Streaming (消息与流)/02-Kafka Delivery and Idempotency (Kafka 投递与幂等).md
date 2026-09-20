@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -24,13 +22,11 @@ offset: 0     1     2     3     4     5
 
 - **分区内有序**：消息按写入顺序追加，offset 递增
 - **全局无序**：不同分区之间不保证顺序
-- **分区数决定并行度**：一个分区同时只能被一个消费者消费
+- **组内并行度受分区数限制**：同一消费组中，一个分区在稳定分配期间只分配给一个消费者；跨消费组互不影响，分区数也不是吞吐的唯一决定因素
 
 ### Consumer Group
 
-```properties
-
-```
+同一组内的成员分摊 topic 分区；不同组各自维护消费进度。`offset` 是分区内位置，不是全局消息 ID。消费成功和提交 offset 是两个动作：如果副作用已落库但 offset 尚未提交就崩溃，重启后会再次读到该消息。
 
 ---
 
@@ -43,15 +39,17 @@ rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
     RD_KAFKA_V_PARTITION(0),
     RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 
-// 2. 有 key -> hash(key) % 分区数 （相同 key 保证同一分区）
+// 2. 有 key -> 由客户端分区器按 key 选分区；具体算法随客户端/配置变化
 rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
     RD_KAFKA_V_KEY("user123", 7),
     RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 
-// 3. 无 key -> 轮询（round-robin，librdkafka 自动处理）
+// 3. 无 key -> 使用客户端默认分区器；不要假定总是轮询
 rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
     RD_KAFKA_V_VALUE("value", 5), RD_KAFKA_V_END);
 ```
+
+同一 key 在**分区数与分区算法不变**时通常落到同一分区；扩容分区或更换分区器后可能改变映射。需要严格按业务键保序时，应显式规定路由规则并设计迁移。
 
 ---
 
@@ -74,22 +72,19 @@ Consumer-3 宕机 -> Rebalance:
 **减少影响：**
 - 合理设置 session.timeout.ms
 - Cooperative Rebalancing (Kafka 2.4+)
-- 固定分区数
+- 避免把可用性与顺序性假设绑定在固定分区数上；变更时先评估 key 路由
 
 ---
 
 ## 关键配置
 
 ```properties
-acks=all                    # 等待所有副本确认
-retries=3                   # 重试次数
-linger.ms=5                 # 批量发送等待
-batch.size=16384            # 批次 16KB
-compression.type=snappy     # 压缩
+acks=all                    # 按当前 ISR 与 min.insync.replicas 约束确认，不等于所有配置副本
+enable.idempotence=true     # 生产者重试去重；需核对依赖客户端版本的限制
+compression.type=snappy     # 示例值；按真实负载比较压缩率、CPU 与延迟
 
-enable.auto.commit=false    # 手动提交
-auto.offset.reset=earliest  # 最早开始
-max.poll.records=500        # 每次拉取条数
+enable.auto.commit=false    # 消费者关闭自动提交；还须显式实现成功后的提交
+auto.offset.reset=earliest  # 仅在消费组没有有效已提交位点等情况下生效
 ```
 
 ---
@@ -101,18 +96,16 @@ max.poll.records=500        # 每次拉取条数
 > | 消息顺序保证 | 同 key 进同分区（分区内有序） |
 > | Consumer Group 作用 | 组内竞争消费，组间独立 |
 > | Rebalance 影响 | 期间消费暂停，应避免频繁触发 |
-> | 分区数建议 | 通常 = 消费者数 = CPU 核数 |
+> | 分区数规划 | 以目标吞吐、单分区负载、组内并行度、扩容与顺序范围综合决定 |
 >
 
 > [!tip]- **工程要点**
-> 性能与分区数相关——分区太多增加选举和句柄开销。建议分区数不超过 1000/集群。手动提交 offset，处理成功后再提交。
+> 分区过多增加元数据、复制与文件句柄等开销，但没有通用的“集群上限 1000”规则。手动提交 offset 也不能自动保证外部数据库副作用恰好一次，必须明确失败和重放路径。
 
 >
 > ---
 >
-> 消息可靠性保证详解见 → 03b2-Message Delivery Guarantees (消息可靠性)
->
-> ---
+> 接下来把生产确认、broker 副本和消费位点连成同一条故障路径。
 
 # Message Delivery and Idempotency (消息可靠性与幂等)
 
@@ -125,9 +118,9 @@ max.poll.records=500        # 每次拉取条数
 
 | 语义 | 说明 | 设置方式 |
 |------|------|---------|
-| At Most Once | 最多一次（可能丢） | acks=0 / 自动 commit |
-| At Least Once | 至少一次（可能重复） | acks=all + 手动 commit |
-| Exactly Once | 恰好一次 | 幂等生产者 + 事务 |
+| At most once | 尽量不重复，允许遗漏 | 例如先确认位点再执行副作用；失败可能漏处理 |
+| At least once | 可重试直至成功，允许重复 | 成功处理后再确认位点；重放时业务需幂等 |
+| Exactly once（限定范围） | 某个定义好的结果只生效一次 | Kafka 内部可组合事务、幂等与 `read_committed`；外部系统需另设计原子边界 |
 
 ---
 
@@ -136,15 +129,15 @@ max.poll.records=500        # 每次拉取条数
 ### ACK 机制
 
 ```properties
-acks=0      # 发完即走，不管是否写入（吞吐最高，可能丢）
+acks=0      # 不等待 broker 响应；可能丢失，也不能据此断言吞吐必然最高
 acks=1      # Leader 写入成功即返回（不等待 Follower）
-acks=all    # Leader + 所有 ISR 副本写入成功（最可靠）
+acks=all    # 等待当前 ISR 按配置确认；需结合 min.insync.replicas 和副本数
 ```
 
 ### 幂等生产者
 
 ```properties
-enable.idempotence=true   # Kafka 0.11+
+enable.idempotence=true   # 对生产者重试引入的重复进行去重；非跨系统幂等
 ```
 
 ### 事务性写入
@@ -169,25 +162,25 @@ Leader 崩溃 -> 从 ISR（In-Sync Replicas）中选举新 Leader
 ## 消费者端
 
 ```cpp
-// 手动提交 offset（处理完再提交，librdkafka 回调模式）
-class ConsumerCb : public RdKafka::ConsumeCb {
-    void consume_cb(RdKafka::Message& msg, void*) override {
-        if (msg.err()) return;                  // 出错跳过
-        process(msg.payload(), msg.len());       // 先处理
-        // librdkafka 内部自动管理 offset，或手动存储
-    }
-};
+// 流程伪代码：不是某个客户端可直接编译的 API
+for each record in poll():
+    if processing_succeeds(record):
+        commit_next_offset(record.partition, record.offset + 1)
+    else:
+        retry_or_pause_partition_and_alert()
 ```
+
+真实客户端还需区分“本地保存位点”和“提交到 broker”、同步/异步提交失败、分区 rebalance 时的在途任务及毒消息处置。`offset + 1` 表示下一条要消费的位置，不能跳过同分区中尚未处理的更早记录。
 
 ### 外部系统的处理一致性
 
 ```
 Kafka -> MySQL 的常见目标是“至少一次投递 + 幂等落库”：
 BEGIN TRANSACTION;
-  INSERT ... ON DUPLICATE KEY UPDATE ...;  -- 用业务唯一键去重
-  UPDATE consumer_offsets SET offset=X;
+  INSERT INTO processed_messages(consumer, message_id) ...;  -- 唯一约束做去重闸门
+  执行业务更新；记录该分区已连续完成的下一 offset
 COMMIT;
-仍需设计崩溃恢复：offset 与业务状态的存储边界、重试和补偿不能靠假设自动原子化。
+重启时从数据库里的业务位点恢复或重复读取并被去重表拦截；不能同时把 broker offset 和数据库位点当成互不协调的唯一真相。
 ```
 
 ---
@@ -208,14 +201,14 @@ Producer -> Broker -> Consumer
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
-> | Exactly Once 三层 | 生产者幂等、broker 副本、消费者事务 |
+> | Exactly once 边界 | Kafka 内部事务可覆盖 Kafka 主题之间的读-处理-写；外部副作用要另设计 |
 > | 幂等与事务区别 | 幂等防重试重复，事务跨分区原子 |
 > | 重复消费原因 | Rebalance、消费超时、手动提交失败 |
 > | 消费者幂等实现 | UPSERT、去重表、状态机 |
 >
 
 > [!tip]- **工程要点**
-> 生产推荐 acks=all + enable.idempotence=true + 手动 commit。追求极致吞吐可降为 acks=1，但需接受极端情况可能丢消息。
+> `acks=all`、幂等生产者、合理副本和消费成功后确认是可靠性起点，不是“零丢失”证明。还要实测故障注入、备份恢复、积压、毒消息以及外部副作用的幂等键。
 
 >
 
@@ -230,8 +223,7 @@ Producer -> Broker -> Consumer
 >
 > ---
 >
-> Kafka 核心概念详解见 → 03b1-Topic, Partition, Consumer Group (核心概念)
+> 参考 [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)；具体参数默认值与客户端分区器行为以部署版本为准。
 
 > [!info]- 延伸阅读
 > - 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/03-RabbitMQ%20and%20Kafka%20Selection%20(RabbitMQ%20与%20Kafka%20选型).md)
-

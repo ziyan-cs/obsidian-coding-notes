@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/evaluation, ai/data, engineering/experimentation]
 ---
 
@@ -55,6 +53,8 @@ business outcome
 
 比较两个方案时报告样本量、各 slice 结果和置信区间，不只比较总平均。多次采样可估计非确定性，但生产参数固定后仍需按真实调用方式评估。
 
+一个简单的发布规则可以是：总体任务完成率不得显著退化；跨租户泄漏与越权工具调用样本必须 **0 次通过**；P95 延迟和单任务费用不超过已定义预算。这里的“0 次”只表示当前测试集上未发现，不能宣称真实风险为零，因此还需要线上监控、灰度与定期扩充对抗样本。
+
 # 离线结果到线上发布
 
 离线通过不代表线上安全。发布流程应固定模型与依赖版本，先 replay 或 shadow，再小流量 canary；同时观察任务质量、错误、延迟、成本、安全事件和下游业务影响。出现回归时要能回退模型、prompt、检索索引或工具配置。
@@ -70,4 +70,3 @@ business outcome
 - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
 - [NIST AI Resource Center](https://airc.nist.gov/)
 - [OWASP Top 10 for LLM and GenAI](https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/)
-

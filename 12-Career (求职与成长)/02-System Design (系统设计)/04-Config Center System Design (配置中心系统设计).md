@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [distributed/system]
 ---
 
@@ -319,4 +317,3 @@ int timeout = cfg->rpc_timeout_ms;
 
 [!info]- 延伸阅读
 - 下一步：[05-API Gateway (API 网关)](/12-Career%20(求职与成长)/02-System%20Design%20(系统设计)/05-API%20Gateway%20(API%20网关).md)
-

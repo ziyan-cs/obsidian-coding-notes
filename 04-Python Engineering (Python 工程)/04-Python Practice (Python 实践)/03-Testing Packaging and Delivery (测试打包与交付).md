@@ -1,14 +1,12 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!note] 方法论坐标
 > 通用测试证据与发布门禁见 [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md) 和 [Release Verification and Quality Gates (发布验证与质量门禁)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/07-Release%20Verification%20and%20Quality%20Gates%20(发布验证与质量门禁).md)；本篇聚焦 Python 包、wheel 与交付流程。
 
 > [!abstract] 学习定位
-> > Python 项目只有在依赖可复现、行为可测试、入口可执行、产物可安装时，才从“本机脚本”升级为可交付工程。
+> Python 项目只有在依赖可复现、行为可测试、入口可执行、产物可安装时，才从“本机脚本”升级为可交付工程。
 
 > [!summary] 核心摘要
 >
@@ -40,6 +38,14 @@ project/
 - 修复过的缺陷是否有回归测试。
 
 ```python
+import pytest
+
+def parse_port(text: str) -> int:
+    value = int(text)
+    if not 1 <= value <= 65535:
+        raise ValueError("port out of range")
+    return value
+
 def test_parse_rejects_negative_port() -> None:
     with pytest.raises(ValueError):
         parse_port("-1")
@@ -78,6 +84,4 @@ def test_parse_rejects_negative_port() -> None:
 > [!info]- 延伸阅读
 > - 前置：[01-Runtime Modules Packages and uv (运行环境、模块与包管理)](/04-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/01-Runtime%20Modules%20Packages%20and%20uv%20(运行环境、模块与包管理).md)
 > - 延伸：[02-Automation Project Template (自动化项目模板)](/04-Python%20Engineering%20(Python%20工程)/04-Python%20Practice%20(Python%20实践)/02-Automation%20Project%20Template%20(自动化项目模板).md)
-
-
 

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [backend/server, architecture]
 ---
 
@@ -205,37 +203,21 @@ void shutdownWithDiscovery() {
 
 # k8s 环境中的优雅关闭
 
-Kubernetes 删除 Pod 时：
+Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kubelet 会先执行它，然后由容器运行时向容器主进程发送终止信号。`terminationGracePeriodSeconds` 默认 30 秒，但它覆盖 `preStop` 与应用排空的总过程，**不是收到 SIGTERM 后再额外获得 30 秒**；期限届满可能被强制终止。
 
-1. 发送 `SIGTERM` 给进程
-2. 等待 `terminationGracePeriodSeconds`（默认 30s）
-3. 超时未退出 → `SIGKILL`
-
-**Pod 同时从 Service Endpoint 中摘除**（与 SIGTERM 近乎同时），摘除和优雅关闭之间有短暂窗口，需要客户端侧重试逻辑配合。
+控制面并行更新 EndpointSlice：终止中的 endpoint 的 `ready` 会变为 false，但负载均衡器、客户端连接池与传播延迟并不保证瞬间停止流量。先标记应用不再接新业务、限制排空时间，再处理已有连接；同时测试老连接复用和晚到请求。具体行为按部署平台与 [Kubernetes Pod termination flow](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) 核对。
 
 ---
 
 > [!warning]- 易错点
 > | 陷阱 | 原因 | 解决 |
 > |------|------|------|
-> | `write()` 到已关闭连接 | 客户端在对端关闭后继续写 | 检查 `EPIPE`/`SIGPIPE`，忽略 SIGPIPE |
+> | `write()` 到已关闭连接 | 对端已关闭但本端继续发送 | 处理 `EPIPE`，Linux 可按需使用 `MSG_NOSIGNAL`；全局忽略 `SIGPIPE` 前评估整个进程 |
 > | 信号处理中调用非可重入函数 | `printf`、`malloc` 在信号上下文中不安全 | handler 只设 `volatile sig_atomic_t`，其余在主循环处理 |
 > | 关闭顺序错误 | 先释放资源再等待请求完成 | 先 stop accept → drain → cleanup |
-> | 关闭超时未退出 | 某个环节阻塞 | 启动 watchdog 线程，超时强制 `exit()` |
+> | 关闭超时未退出 | 某个环节阻塞 | 分阶段设置 deadline、记录未完成工作，让进程/平台按明确策略退出 |
 >
 
-> [!tip]- **工程要点**：优雅关闭是生产级服务的基本要求。核心三原则：1）收到信号后立即停 listen（不接受新连接）；2）依据上游超时、请求类型与发布平台，为存量请求设置有限 deadline；3）超时未完成也要强制退出（比无限等待好）。k8s 环境中配合 readiness probe 和 terminationGracePeriodSeconds 一起使用。
-
->
-
-> [!summary] 核心摘要
->
-> - **常见误区**：在信号 handler 里做重活（`printf`/`malloc` 等非可重入操作）；先关资源再等请求完成（顺序颠倒）。
-> - **自测**：1) 为什么信号 handler 里只允许置一个 `volatile sig_atomic_t` 或 `atomic<bool>`？ 2) k8s 里 `SIGTERM` 后最多多久不退出会被强杀？
->
-> ---
->
-> ---
+> [!tip]- **工程要点**：关闭流程要有总期限和分阶段预算。信号 handler 内只做允许的极简通知（例如设置 `volatile sig_atomic_t` 标志或使用经核对的 async-signal-safe 机制），在主循环停止接收新工作、排空在途请求并清理依赖。`std::atomic<bool>` 不能不加条件地当作任意平台的 signal-handler 安全替代品。
 
 下一步：[07-Backend Architecture Patterns (后端架构模式)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/07-Backend%20Architecture%20Patterns%20(后端架构模式).md)
-

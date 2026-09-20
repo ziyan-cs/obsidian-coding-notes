@@ -1,14 +1,8 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-10-01
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-01
-previous_review_due: 2026-09-11
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -61,7 +55,7 @@ public:
         if (amount > 0) balance_ += amount;
     }
     bool withdraw(double amount) {
-        if (amount > balance_) return false;
+        if (amount <= 0 || amount > balance_) return false;
         balance_ -= amount;
         return true;
     }
@@ -283,67 +277,62 @@ public:
     NonCopyable& operator=(NonCopyable&&)      = default;
 };
 
-// 若声明了析构/拷贝构造/拷贝赋值，编译器不自动生成移动操作
-// → 五法则：要么全定义，要么全 default/delete
+// 用户声明析构、拷贝构造或拷贝赋值会抑制隐式声明的移动操作。
+// 仅写 = default 也要检查成员类型是否让函数变为 deleted。
+// 真实项目优先使用 RAII 成员，让类遵循 Rule of Zero。
 ```
 
 ---
 
 # Operator Overloading (运算符重载)
 
-> [!note] 本节重点：运算符重载规则（成员 vs 非成员）、常见运算符重载模式、类型转换运算符
+运算符应保留读者熟悉的语义。`operator+=` 修改左侧并返回其引用；`operator+` 可以基于它返回新值。下标越界必须有明确契约，不能默默把所有非零下标当成第二个元素。需要左操作数隐式转换的对称运算符通常写成非成员。
 
 ```cpp
+#include <iostream>
+#include <stdexcept>
+
+class Vec2 {
+    double x_{};
+    double y_{};
+
 public:
-    double x, y;
-    Vec2(double x=0, double y=0) : x(x), y(y) {}
+    Vec2(double x = 0, double y = 0) : x_(x), y_(y) {}
 
-    // 成员运算符（隐式第一个操作数为 this）
-    Vec2  operator+(const Vec2& rhs) const { return {x+rhs.x, y+rhs.y}; }
-    Vec2  operator-() const { return {-x, -y}; }           // 一元负号
-    Vec2& operator+=(const Vec2& rhs) { x+=rhs.x; y+=rhs.y; return *this; }
-    bool  operator==(const Vec2& rhs) const { return x==rhs.x && y==rhs.y; }
-
-    // 下标运算符
-    double& operator[](int i) { return i==0 ? x : y; }
-    const double& operator[](int i) const { return i==0 ? x : y; }
-
-    // 类型转换运算符
-    explicit operator bool() const { return x!=0 || y!=0; }
-
-    // 友元：非成员但需访问私有成员
-    friend std::ostream& operator<<(std::ostream& os, const Vec2& v) {
-        return os << "(" << v.x << ", " << v.y << ")";
+    Vec2& operator+=(const Vec2& rhs) {
+        x_ += rhs.x_;
+        y_ += rhs.y_;
+        return *this;
     }
-    // 对称二元运算符也常用友元（支持 scalar * Vec2）
-    friend Vec2 operator*(double s, const Vec2& v) { return {s*v.x, s*v.y}; }
+    friend Vec2 operator+(Vec2 lhs, const Vec2& rhs) {
+        lhs += rhs;
+        return lhs;
+    }
+    friend Vec2 operator*(double scale, const Vec2& v) {
+        return {scale * v.x_, scale * v.y_};
+    }
+    friend std::ostream& operator<<(std::ostream& out, const Vec2& v) {
+        return out << '(' << v.x_ << ", " << v.y_ << ')';
+    }
+
+    double& at(int index) {
+        if (index == 0) return x_;
+        if (index == 1) return y_;
+        throw std::out_of_range("Vec2 index");
+    }
 };
 
-// 使用
-Vec2 a{1,2}, b{3,4};
-Vec2 c = a + b;                 // {4, 6}
-std::cout << c << '\n';         // (4, 6)
-double x = 2.0 * a;            // 友元支持左侧 scalar
+int main() {
+    Vec2 a{1, 2}, b{3, 4};
+    Vec2 c = a + b;
+    Vec2 scaled = 2.0 * a;
+    std::cout << c << ' ' << scaled << '\n'; // (4, 6) (2, 4)
+}
 ```
 
-**不可重载的运算符：** `::` `.` `.*` `?:` `sizeof` `typeid`
-
----
+转换运算符如果容易产生意外重载，标为 `explicit`。例如 `explicit operator bool() const` 可用于 `if (value)`，但不会作为普通隐式数值转换。重载比较运算符时，浮点数的精确相等是否符合业务语义要单独决定。`::`、`.`、`.*`、`?:`、`sizeof`、`typeid` 不能重载。
 
 
-> [!check]- 学完后检查
-> ### 复述
->
-> - 不看正文，说明 03-Object Lifetime and Copy Control (对象生命周期与拷贝控制) 的问题、核心机制与边界。
->
-> ### 验证
->
-> - 写一个最小示例、测试用例或项目观察点，验证其中一个关键行为。
->
-> ### 自测
->
-> 1. 这个主题解决什么问题？
-> 2. 它在什么条件下会失效、变慢或需要替代方案？
 
 > [!info]- 延伸阅读
 > - 下一步：[04-Polymorphism and Inheritance (多态与继承)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)

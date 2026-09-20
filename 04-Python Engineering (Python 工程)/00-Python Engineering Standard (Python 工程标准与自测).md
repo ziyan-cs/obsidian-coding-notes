@@ -1,12 +1,12 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [learning/standard, language/python, automation]
 ---
 
 > [!abstract] 完成标准
 > Python 先承担自动化、测试、数据处理和后端辅助。学完后应能交付可重复运行、可测试、失败可诊断的小型工程，而不是只会在交互环境里拼 API。
+
+本模块以 Python 3.11+ 为示例基线（`asyncio.TaskGroup`、`asyncio.timeout` 从 3.11 提供）；实际项目仍应在 `pyproject.toml` 中声明并测试支持的版本范围。
 
 # 语言与运行环境
 

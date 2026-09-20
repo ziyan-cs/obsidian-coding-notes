@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [career/evidence, backend/competency]
 ---
 
@@ -37,4 +35,3 @@ tags: [career/evidence, backend/competency]
 # 维护方式
 
 本页只定义证据标准。当前需要补哪项证据写入 Study Cycle；已经完成的材料放进项目 README、测试报告或作品集，不在 Career 模块复制另一份日程。
-

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -16,10 +14,7 @@ content_verified: 2026-09-17
 
 ## 为什么需要连接池
 
-建立 TCP 连接的成本：
-- 三次握手：1.5 RTT
-- TLS 握手：1-2 RTT（TLS 1.3/1.2）
-- 慢启动阶段：初始拥塞窗口小
+建立连接可能付出 TCP 往返、TLS 握手、认证和连接初始化成本；典型 TCP 客户端需要约 1 RTT 才能完成建连，TLS 1.3 完整握手通常再需 1 RTT，恢复路径与 TCP Fast Open/QUIC 则另论。不能把“1.5 RTT + 1–2 RTT”当作所有连接的固定公式。初始拥塞窗口也会影响新连接的数据传输。
 
 对于频繁的短时请求，每次新建连接的开销巨大。连接池通过**复用已有连接**消除这些开销。
 
@@ -60,142 +55,42 @@ content_verified: 2026-09-17
 - `max_total`：最大总连接数（防止打垮后端）
 - `max_wait`：获取连接的最大等待时间
 
-## 基本接口
+## 连接池的状态与所有权
 
-```c
-typedef struct connection_pool {
-    // 连接链表
-    connection *idle_list;      // 空闲连接
-    connection *active_list;    // 活跃连接
-    int idle_count;
-    int active_count;
-    int max_total;
-    int min_idle;
-    int max_idle;
+真实连接池的核心不是一段链表代码，而是保持 `idle + leased + creating + returning <= max_total`（建连预留与归还清理中的连接也计入容量）。一条连接在任意时刻只属于其中一种状态；返回池时必须先从借用集合移出。池关闭后不再发放连接，所有等待者得到明确错误。
 
-    // 同步
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
+| 操作 | 必须处理的边界 |
+| --- | --- |
+| `acquire(deadline)` | 空闲连接可能已失效；池满时等待必须保留原 deadline，取消/关闭要唤醒等待者 |
+| 建连 | 先在锁内预留容量，再解锁执行可能阻塞的 connect/auth；失败时回收预留并通知等待者 |
+| `release(conn)` | 连接只归还一次；事务/协议状态须复位，坏连接要从借用集合移除并释放容量 |
+| 健康检查 | 锁内摘取候选，锁外做网络 I/O；检查通过也不保证下一次使用不会断开 |
+| `close()` | 拒绝新借用，关闭空闲连接，等待或取消在用连接并按期限返回 |
 
-    // 统计
-    uint64_t total_created;
-    uint64_t total_acquired;
-    uint64_t total_timeout;
-} connection_pool;
+```text
+acquire(deadline):
+  lock pool
+  loop:
+    if closing: unlock; return pool-closed
+    if idle exists: take one; mark leased; unlock; validate/use or retire
+    if idle + leased + creating + returning < max_total:
+      creating++; unlock; connect with deadline
+      lock; creating--; if success and not closing: mark leased; unlock; return
+      notify waiter; unlock; return connection error
+    wait on condition until state changes or original deadline expires
 
-// 从连接池获取连接
-connection *pool_acquire(connection_pool *pool) {
-    pthread_mutex_lock(&pool->mutex);
-
-    // 有空闲连接 → 直接取出
-    if (pool->idle_list != NULL) {
-        connection *conn = pool->idle_list;
-        pool->idle_list = conn->next;
-        pool->idle_count--;
-        conn->next = pool->active_list;
-        pool->active_list = conn;
-        pool->active_count++;
-        pthread_mutex_unlock(&pool->mutex);
-        return conn;
-    }
-
-    // 没有空闲但未达上限 → 新建
-    if (pool->active_count < pool->max_total) {
-        connection *conn = create_new_connection();
-        conn->next = pool->active_list;
-        pool->active_list = conn;
-        pool->active_count++;
-        pool->total_created++;
-        pthread_mutex_unlock(&pool->mutex);
-        return conn;
-    }
-
-    // 已达上限 → 等待
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    ts.tv_sec += MAX_WAIT_SEC;
-    int ret = pthread_cond_timedwait(&pool->cond, &pool->mutex, &ts);
-    if (ret == ETIMEDOUT) {
-        pool->total_timeout++;
-        pthread_mutex_unlock(&pool->mutex);
-        return NULL;  // 超时返回
-    }
-
-    // 被唤醒后递归获取
-    pthread_mutex_unlock(&pool->mutex);
-    return pool_acquire(pool);
-}
-
-// 归还连接到连接池
-void pool_release(connection_pool *pool, connection *conn) {
-    pthread_mutex_lock(&pool->mutex);
-
-    // 检查连接是否有效
-    if (!conn_is_alive(conn)) {
-        close_connection(conn);
-        pool->active_count--;
-        // 如果低于最小空闲，新建一个
-        if (pool->idle_count < pool->min_idle)
-            create_idle_connection(pool);
-        pthread_cond_signal(&pool->cond);  // 唤醒等待者
-        pthread_mutex_unlock(&pool->mutex);
-        return;
-    }
-
-    // 从活跃列表移除
-    remove_from_active(pool, conn);
-
-    if (pool->idle_count >= pool->max_idle) {
-        // 空闲连接太多了，关闭
-        close_connection(conn);
-    } else {
-        // 放回空闲列表
-        conn->next = pool->idle_list;
-        pool->idle_list = conn;
-        pool->idle_count++;
-    }
-    pool->active_count--;
-
-    pthread_cond_signal(&pool->cond);  // 唤醒等待者
-    pthread_mutex_unlock(&pool->mutex);
-}
+release(conn):
+  lock; verify conn is leased exactly once; move leased -> returning; unlock
+  reset protocol state outside lock (may fail or require I/O)
+  lock; move returning -> idle only if healthy, open and below idle limit
+  otherwise release capacity; notify waiter; unlock; close retired conn
 ```
 
-## 连接保活与健康检查
+这是**算法伪代码**，不是可直接编译的 C/C++。实际实现还需解决“锁外校验后状态又变化”的并发竞态、建连失败后的唤醒、条件变量虚假唤醒、时钟选择、连接所有权与异常安全。`pthread_cond_timedwait` 默认按条件变量配置的时钟解释绝对时间；若选择单调时钟，初始化属性与构造 deadline 必须一致，不能递归重置超时。
 
-```c
-// 后台线程定期检查
-void *health_check_thread(void *arg) {
-    connection_pool *pool = (connection_pool *)arg;
-    while (1) {
-        sleep(HEALTH_CHECK_INTERVAL);  // 每 5 秒检查一次
+## 活性与容量验证
 
-        pthread_mutex_lock(&pool->mutex);
-        connection *prev = NULL;
-        connection *curr = pool->idle_list;
-
-        while (curr) {
-            if (!conn_is_alive(curr)) {
-                // 移除坏连接
-                if (prev) prev->next = curr->next;
-                else pool->idle_list = curr->next;
-                close_connection(curr);
-                pool->idle_count--;
-
-                // 补充新连接
-                connection *new_conn = create_new_connection();
-                new_conn->next = pool->idle_list;
-                pool->idle_list = new_conn;
-                pool->idle_count++;
-                break;  // 重新开始遍历
-            }
-            prev = curr;
-            curr = curr->next;
-        }
-        pthread_mutex_unlock(&pool->mutex);
-    }
-}
-```
+测试至少覆盖：池满时等待直到超时；多个等待者被归还连接唤醒；建连失败后容量不泄漏；关闭期间借用者归还；坏连接不再发放；重复 release 被拒绝。指标应包含空闲/借用/创建中数量、等待队列、等待耗时、建连错误、超时和失效淘汰。只有保证不变量与故障路径，才谈池大小调优。
 
 ## 连接池大小调优
 
@@ -282,119 +177,45 @@ typedef struct buffer {
 //  └─────────────────────────────┴─────────────┘
 ```
 
-**关键操作：**
+**核心不变量：** `0 <= read_pos <= write_pos <= capacity`；可读区间为 `[read_pos, write_pos)`。必须另设每连接读/写缓冲上限，防止慢客户端或恶意长度让内存无界增长。
 
-```c
-// 可读数据长度
-size_t buffer_readable(buffer *b) {
-    return b->write_pos - b->read_pos;
-}
+```text
+append(bytes):
+  reject if bytes exceeds configured remaining capacity
+  if tail space insufficient: compact unread bytes only when worthwhile
+  if still insufficient: grow to at least write_pos + bytes.length
+      check size_t overflow, max capacity and allocation failure first
+  copy bytes into tail; advance write_pos
 
-// 可写空间长度
-size_t buffer_writable(buffer *b) {
-    return b->capacity - b->write_pos;
-}
-
-// 初始化
-void buffer_init(buffer *b, size_t initial_size) {
-    b->data = malloc(initial_size);
-    b->capacity = initial_size;
-    b->read_pos = 0;
-    b->write_pos = 0;
-}
-
-// 写入数据（从 socket 读入 buffer）
-int buffer_append(buffer *b, const char *data, size_t len) {
-    if (b->capacity - b->write_pos < len) {
-        // 空间不够 → 先尝试 compact，再扩容
-        buffer_compact(b);
-        if (b->capacity - b->write_pos < len) {
-            buffer_expand(b, b->capacity * 2);  // 翻倍扩容
-        }
-    }
-    memcpy(b->data + b->write_pos, data, len);
-    b->write_pos += len;
-    return 0;
-}
-
-// 读取数据
-size_t buffer_read(buffer *b, char *out, size_t len) {
-    size_t readable = buffer_readable(b);
-    size_t n = len < readable ? len : readable;
-    memcpy(out, b->data + b->read_pos, n);
-    b->read_pos += n;
-    return n;
-}
-
-// Compact：将未读数据移到头部
-void buffer_compact(buffer *b) {
-    size_t readable = buffer_readable(b);
-    if (readable > 0 && b->read_pos > 0) {
-        memmove(b->data, b->data + b->read_pos, readable);
-    }
-    b->read_pos = 0;
-    b->write_pos = readable;
-}
-
-// 扩容
-void buffer_expand(buffer *b, size_t new_capacity) {
-    b->data = realloc(b->data, new_capacity);
-    b->capacity = new_capacity;
-}
+consume(n):
+  n = min(n, write_pos - read_pos)
+  process/copy exactly n bytes; advance read_pos
+  if read_pos == write_pos: reset both offsets to zero
 ```
+
+这是状态算法，不是可直接编译的 C。若用 `realloc`，先写入临时指针，成功后才替换旧指针；否则分配失败会丢失原指针。扩容不能只做一次 `capacity * 2`：大请求可能仍放不下，而且乘法会溢出。读取协议长度字段后先校验最大帧长，再考虑分配。
 
 ## 写 Buffer 与事件管理
 
-对于非阻塞 socket，`write()` 可能无法一次性发送所有数据：
+非阻塞 `send/write` 可能只写一部分，也可能返回 `EINTR`、`EAGAIN`、`EPIPE` 等。以下流程由连接所属 I/O loop 执行，跨线程业务结果必须先投递回该 loop：
 
-```c
-// 写缓冲区：暂存未发送完的数据
-typedef struct connection {
-    buffer read_buf;     // 读缓冲区：暂存收到的数据
-    buffer write_buf;    // 写缓冲区：暂存待发送的数据
-    int fd;
-    int events;          // 当前关注的事件（EPOLLIN / EPOLLOUT）
-} connection;
+```text
+enqueue(response):
+  if pending bytes + response exceeds high-water mark: pause read / reject / close by policy
+  append response to bounded write buffer; try_flush()
 
-// 尝试发送数据
-int connection_send(connection *conn, const char *data, size_t len) {
-    // 如果写缓冲区为空，尝试直接发送
-    if (buffer_readable(&conn->write_buf) == 0) {
-        ssize_t n = write(conn->fd, data, len);
-        if (n > 0) {
-            data += n;
-            len -= n;
-        }
-    }
-
-    // 未发送完的放入缓冲区
-    if (len > 0) {
-        buffer_append(&conn->write_buf, data, len);
-        // 关注 EPOLLOUT 事件（socket 可写时继续发送）
-        conn->events |= EPOLLOUT;
-        update_epoll_events(conn);
-    }
-}
-
-// 在事件循环中处理 EPOLLOUT
-void handle_write(connection *conn) {
-    size_t pending = buffer_readable(&conn->write_buf);
-    if (pending == 0) {
-        // 写缓冲区清空，取消对 EPOLLOUT 的关注
-        conn->events &= ~EPOLLOUT;
-        update_epoll_events(conn);
-        return;
-    }
-
-    ssize_t n = write(conn->fd,
-                      conn->write_buf.data + conn->write_buf.read_pos,
-                      pending);
-    if (n > 0) {
-        conn->write_buf.read_pos += n;  // 标记已发送
-    }
-    // 如果 n < pending，下次 EPOLLOUT 继续发送
-}
+try_flush():
+  while pending bytes exist:
+    n = send(fd, pending prefix)
+    if n > 0: consume exactly n bytes; continue
+    if EINTR: retry
+    if EAGAIN or EWOULDBLOCK: enable EPOLLOUT; return
+    otherwise: record error and close connection through owner loop
+  disable EPOLLOUT when buffer becomes empty
+  if pending bytes dropped below low-water mark: resume reads if safe
 ```
+
+`EPOLLOUT` 通常持续就绪，因此不要在无待发送数据时长期关注它，否则事件循环可能空转。ET 模式下处理一次可写事件后应尽力发送到 `EAGAIN` 或清空；LT 模式也要限制单连接单轮工作量，避免饿死其他连接。对端关闭与 fd 复用期间，只有所属 loop 才能安全修改该连接的事件和缓冲状态。
 
 ## 扩容策略对比
 
@@ -441,8 +262,4 @@ ssize_t n = writev(fd, iov, iovcnt);
 
 > [!tip]- **工程要点**：Buffer 设计首先要保证边界、部分读写与背压正确，再考虑减少 copy。Compact 不是“每次读事件都必须做”，应在需要连续空闲空间时再做；`readv`/`writev` 减少用户态拼接，但不自动消除所有 copy 或内核开销。
 
-> [!summary] 核心摘要
-> - **常见误区**：`write()` 返回正数但 < len 时直接丢弃剩余数据；扩容后旧指针失效未更新。
-> - **自测**：1) 为什么每次读事件要先 `buffer_compact`？ 2) `EPOLLOUT` 何时注册、何时撤销？
->
-> ---
+复查时重点追问两个状态边界：扩容失败后原缓冲区是否仍可用？`EPOLLOUT` 只在有待发送字节时关注，发送完是否确实撤销？**不应**每次读事件都 `compact`；只有尾部空间不足且头部可回收时才考虑搬移。

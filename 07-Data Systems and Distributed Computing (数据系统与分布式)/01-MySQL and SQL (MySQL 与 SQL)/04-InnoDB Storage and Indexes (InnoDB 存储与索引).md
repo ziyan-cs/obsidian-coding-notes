@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -112,7 +110,6 @@ innodb_page_cleaners = 8
 >
 > ---
 >
-> B+树索引结构详解见 → B+ Tree Index Structure (B+树索引结构)
 >
 > ---
 
@@ -221,7 +218,6 @@ InnoDB 每页 16KB，假设：
 >
 > ---
 >
-> 页结构基础见 → Page Structure & Buffer Pool (页结构与缓冲池) · Clustered vs Secondary Index (聚簇索引与二级索引)
 >
 > ---
 
@@ -323,7 +319,6 @@ UUID/VARCHAR 主键：
 
 ---
 
-B+树结构详解见 → B+ Tree Index Structure (B+树索引结构) · Index Pushdown & Covering Index (索引下推与覆盖索引)
 
 ---
 
@@ -364,7 +359,7 @@ SELECT * FROM user WHERE name LIKE 'Z%' AND address = 'CN';
 Extra: Using index condition    ← 表示 ICP 生效
 ```
 
-## 覆盖索引 · 延伸要点 2
+## 覆盖索引的查询收益与维护成本
 当二级索引包含查询所需的所有列时，MySQL 可以直接从索引获取数据，完全避免回表：
 
 ```sql
@@ -443,8 +438,6 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 ---
 
-B+树索引结构见 → B+ Tree Index Structure (B+树索引结构) · Clustered vs Secondary Index (聚簇索引与二级索引)
 
 > [!info]- 延伸阅读
 > - 下一步：[05-Transactions and Isolation (事务与隔离级别)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/05-Transactions%20and%20Isolation%20(事务与隔离级别).md)
-

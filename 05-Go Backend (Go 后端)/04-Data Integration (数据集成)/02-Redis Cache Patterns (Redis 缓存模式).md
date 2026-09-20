@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: medium
-content_verified: 2026-09-18
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位
@@ -35,7 +33,7 @@ write: validate -> database commit -> invalidate cache -> response
 | 击穿 | 单个热点 key 同时过期 | singleflight/互斥回源、逻辑过期 |
 | 雪崩 | 大量 key 同时过期或 Redis 故障 | TTL 抖动、限流、降级、容量与故障演练 |
 
-Bloom filter 不允许 false negative，但允许 false positive：它能判断“一定不存在”或“可能存在”，不能证明数据真实存在。缓存空值会占空间并改变“未找到”的表示，TTL 应较短且要防止恶意高基数 key。
+标准 Bloom filter 在**所有当前有效 key 都已插入、没有错误删除且过滤器状态未丢失**的前提下，不产生 false negative，但允许 false positive。若数据库新增 key 没同步写入过滤器，仍可能误判不存在；它只能作回源前的辅助判断，不能成为唯一真相。缓存空值会占空间并改变“未找到”的表示，TTL 应较短且要防止恶意高基数 key。
 
 singleflight 只合并同一进程内同 key 的并发回源；多实例仍可能同时访问数据库。分布式锁也不是免费解法，要设计租约、持有者崩溃与超时后的行为。
 
@@ -57,4 +55,3 @@ TTL、容量、timeout 和热点阈值都由新鲜度目标与测量决定，不
 
 > [!info]- 关联
 > - 可靠补偿：[03-Messaging and Idempotency (消息与幂等)](/05-Go%20Backend%20(Go%20后端)/04-Data%20Integration%20(数据集成)/03-Messaging%20and%20Idempotency%20(消息与幂等).md)
-

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-verified: 2026-09-18
+study_stage: reference
 tags: [english/engineering, learning/glossary]
 ---
 

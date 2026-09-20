@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [cloud/iac, cloud/gitops]
 ---
 
@@ -26,6 +24,8 @@ change -> validate -> plan/diff -> review -> apply/reconcile
 ~~~
 
 计划输出可能包含敏感信息；生产 apply 需要受控身份和审批。导入既有资源、重命名和删除尤其要确认实际影响，不能只看配置文本。
+
+例如，配置中把数据库资源名从 `db_old` 改为 `db_new`，plan 可能显示“销毁旧资源、创建新资源”，而不是安全重命名。即使只改一行，也应先检查资源身份、数据保留策略、依赖引用和回退方案；不要把 plan 当作无副作用的“预演执行”。保存的 plan 文件也可能包含明文敏感值，按 [Terraform 敏感数据指南](https://developer.hashicorp.com/terraform/language/manage-sensitive-data) 限权保存。
 
 # GitOps 边界
 

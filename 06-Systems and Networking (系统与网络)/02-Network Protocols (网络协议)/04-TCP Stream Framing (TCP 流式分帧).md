@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -44,18 +42,18 @@ content_verified: 2026-09-17
 
 ---
 
-# 根本原因
+# 为什么一次读写不能对应一条消息
 
 ## 1. TCP 是字节流协议
 
 TCP **不保留消息边界**，只保证字节的顺序和可靠性。发送的 "消息" 概念在 TCP 层是不存在的，只有连续的字节流。
 
-## 2. Nagle 算法
+## 2. 发送端可能合并小段
 
-为减少小包发送，Nagle 算法会将多个小数据合并成一个 TCP 段再发送：
+Nagle 算法可能推迟部分小数据发送，以减少过多小 TCP 段：
 
-- 条件：有未确认的数据 && 待发数据 < MSS → 等待，累积后再发
-- 结果：多个应用层 write() 的数据可能被合并成一个 TCP 段
+- 条件与行为还受未确认数据、MSS、发送缓冲区及实现影响，不应背成单一 if 公式。
+- 即使禁用 Nagle，多个 `write()` 仍可能被一次 `read()` 读到；一次 `write()` 也可能被多次读取。Nagle **不是**消息边界丢失的根因。
 
 ## 3. 接收缓冲区读取时机
 
@@ -74,7 +72,7 @@ TCP **不保留消息边界**，只保证字节的顺序和可靠性。发送的
 
 ```
 发送：[MSG_001____][MSG_002____]（每条固定 10 字节）
-接收：每次 read(10 bytes) 即为一条完整消息
+接收：累计读满 10 字节才得到一条完整消息；单次 read(10) 可能提前返回
 ```
 
 - ✅ 实现简单
@@ -108,7 +106,7 @@ TCP **不保留消息边界**，只保证字节的顺序和可靠性。发送的
 ```
 
 - ✅ 灵活、高效，适合二进制协议
-- ✅ 工业界主流方案（Dubbo、gRPC、Kafka 等都用这种）
+- ✅ 常见于二进制协议；具体产品的帧头格式、长度含义和最大帧限制各不相同
 - ❌ 需要处理拆包逻辑（一次 read() 可能只读到部分头部）
 
 > [!tip] HTTP/1.1 的“消息边界”不能简单归为分隔符：请求/响应头以空行结束，但消息体由 `Content-Length`、`Transfer-Encoding: chunked` 或连接关闭等规则界定。
@@ -124,77 +122,68 @@ TLV（Type-Length-Value）结构：
 └─────────┴─────────┴──────────────┘
 ```
 
-- ✅ 扩展性强，支持多种消息类型
-- ✅ 适合复杂协议（MQTT、自定义 RPC 框架）
+- ✅ 扩展性强，支持多种消息类型；上图只是自定义示例，不代表 MQTT 等协议的实际字节布局
+- ✅ 适合需要显式类型与长度的自定义二进制协议
 
 ---
 
-# 禁用 Nagle 算法
+# 长度前缀的阻塞读取示例
 
-对于**低延迟场景**（如游戏、实时通信），可以禁用 Nagle 算法，让小包立即发送：
-
-```cpp
-int flag = 1;
-setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
-```
-
-- 减少合包延迟，但会增加网络中小包数量
-- 适合：SSH 交互、游戏操作同步、低延迟 RPC
-
----
-
-# 粘包处理的代码模式（C++ 实现）
+下面是 POSIX 阻塞 socket 的示例：先读满 4 字节长度，再读满消息体。`false` 仅表示**尚未开始下一帧时**遇到正常 EOF；读到半帧后连接关闭属于协议截断。生产代码还需按协议决定空消息是否允许，以及异常后如何关闭连接。
 
 ```cpp
-// 读取完整消息（方案三：头部 + 长度字段）
-// 返回 0 成功，-1 连接关闭/出错
-int readMessage(int fd, vector<char>& out) {
-    // 1. 读取 4 字节头部，获取消息长度
-    uint32_t netLen;
-    ssize_t n = read(fd, &netLen, sizeof(netLen));
-    if (n <= 0) return -1;                         // 关闭或错误
-    size_t remain = sizeof(netLen) - (size_t)n;
-    while (remain > 0) {                           // 处理拆包：头部可能没读完
-        n = read(fd, (char*)&netLen + sizeof(netLen) - remain, remain);
-        if (n <= 0) return -1;
-        remain -= (size_t)n;
-    }
-    uint32_t bodyLen = ntohl(netLen);              // 网络字节序转主机字节序
-    constexpr uint32_t kMaxBodyLen = 16 * 1024 * 1024;
-    if (bodyLen > kMaxBodyLen) return -1;          // 防止恶意长度字段导致过度分配
+#include <arpa/inet.h>
+#include <cerrno>
+#include <cstddef>
+#include <cstdint>
+#include <stdexcept>
+#include <system_error>
+#include <vector>
+#include <unistd.h>
 
-    // 2. 按长度读取消息体
-    out.resize(bodyLen);
-    remain = bodyLen;
-    char* ptr = out.data();
-    while (remain > 0) {
-        n = read(fd, ptr, remain);
-        if (n <= 0) return -1;
-        ptr += n;
-        remain -= (size_t)n;
+// 仅适用于阻塞 socket；允许在本次读取的第一个字节之前遇到正常 EOF。
+bool readExactly(int fd, void* dest, std::size_t size) {
+    auto* p = static_cast<unsigned char*>(dest);
+    std::size_t done = 0;
+    while (done < size) {
+        const ssize_t n = ::read(fd, p + done, size - done);
+        if (n > 0) {
+            done += static_cast<std::size_t>(n);
+        } else if (n == 0) {
+            if (done == 0) return false;
+            throw std::runtime_error("truncated frame");
+        } else if (errno != EINTR) {
+            throw std::system_error(errno, std::generic_category(), "read");
+        }
     }
-    return 0;
+    return true;
 }
 
-// 发送消息（长度头部 + 消息体）
-void sendMessage(int fd, const char* data, uint32_t len) {
-    uint32_t netLen = htonl(len);                  // 主机转网络字节序
-    vector<iovec> iov(2);
-    iov[0] = {&netLen, sizeof(netLen)};
-    iov[1] = {(void*)data, len};
-    writev(fd, iov.data(), (int)iov.size());        // 聚集写，减少系统调用
+bool readMessage(int fd, std::vector<char>& out) {
+    std::uint32_t networkLength = 0;
+    if (!readExactly(fd, &networkLength, sizeof networkLength)) return false;
+
+    constexpr std::uint32_t kMaxBody = 16U * 1024U * 1024U;
+    const std::uint32_t bodyLength = ntohl(networkLength);
+    if (bodyLength > kMaxBody) throw std::runtime_error("frame too large");
+
+    out.resize(bodyLength);
+    if (bodyLength != 0 && !readExactly(fd, out.data(), bodyLength)) {
+        throw std::runtime_error("truncated frame body");
+    }
+    return true;
 }
 ```
 
-> **关键点：** 阻塞 `read()` 不保证一次读满；非阻塞 socket 还要正确处理 `EAGAIN/EWOULDBLOCK`、`EINTR` 与缓冲区状态。`writev` 也可能部分写入，生产代码必须保存未写完的 iovec 后续续写。网络字节序用 `htonl`/`ntohl` 转换，保证跨平台兼容。
+发送端也必须按相同格式先写 `htonl(bodyLength)` 的 4 字节，再写消息体；`write()`/`writev()` 可能部分写入，必须保存偏移并继续发送。非阻塞 socket 不能直接套用此函数：遇到 `EAGAIN/EWOULDBLOCK` 时要保留已读头部、期望体长和已读体长，待下一次可读事件继续。限长之外，还需考虑读超时、慢速客户端、总缓冲预算和异常连接清理。`TCP_NODELAY` 只影响部分小包发送时机，**不能代替分帧**。
 
 # 总结对比
 
 |方案|适用场景|优点|缺点|
 |---|---|---|---|
-|固定长度|消息格式固定的内部协议|最简单|不灵活|
-|分隔符|文本协议（HTTP、Redis）|简单易读|内容受限|
-|长度头部|通用二进制协议（主流）|灵活高效|需处理拆包|
-|TLV|复杂协议（MQTT、RPC）|扩展性强|实现复杂|
+|固定长度|消息格式固定的内部协议|边界易计算|每帧仍须累计读满，变长数据不便|
+|分隔符|按行组织的文本协议|易观察、易调试|要处理转义、限长与扫描成本|
+|长度头部|自定义二进制协议|适合变长消息|须校验长度并累计读满|
+|TLV|需要扩展字段的二进制协议|可扩展字段类型|须定义类型、长度及未知字段规则|
 
 ---

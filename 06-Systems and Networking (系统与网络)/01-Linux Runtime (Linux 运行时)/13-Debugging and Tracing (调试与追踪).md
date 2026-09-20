@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!note] 方法论坐标
@@ -18,7 +16,7 @@ content_verified: 2026-09-17
 
 # strace：系统调用追踪
 
-strace 拦截和记录进程发出的所有系统调用及其返回值，是排查"程序为什么不工作"的第一工具。
+`strace` 可跟踪指定进程/线程的系统调用及返回值，适合回答“卡在哪个调用、返回了什么 errno”；`-f` 才会跟踪新创建的子进程/线程。附加追踪会改变时序并增加开销，线上先缩小时间窗和调用集合，不把它当成所有故障的第一工具。
 
 ```bash
 strace ls -l
@@ -37,7 +35,7 @@ strace -o trace.log ./prog
 **常用场景：**
 - 程序启动时"找不到文件" → `strace -e trace=openat,stat ./prog`
 - 程序卡住不动 → `strace -p <pid>` 看停在哪个系统调用
-- 性能瓶颈 → `strace -c ./prog` 统计系统调用耗时分布
+- 系统调用疑点 → `strace -c ./prog` 看被追踪调用的计数与时间；这不是低开销的精确性能剖析，热点仍应用 `perf`/应用指标交叉验证
 
 # gdb：交互式调试器
 
@@ -72,7 +70,7 @@ gdb -p 1234            # 附加到运行进程
 
 **调试崩溃流程：**
 ```
-$ ulimit -c unlimited          # 开启 coredump
+$ ulimit -c unlimited          # 允许生成 core，实际保存位置还受 core_pattern/systemd-coredump 控制
 $ ./prog
 Segmentation fault (core dumped)
 $ gdb ./prog core
@@ -112,9 +110,8 @@ Performance counter stats for './prog':
        1,234,567      branch-misses             #  2.1% of branches
 
 关键指标：
-- instructions per cycle (IPC) < 1 → 可能内存瓶颈
-- cache-misses 比例高 → 优化数据局部性
-- branch-misses 比例高 → 优化分支预测
+- IPC、cache-miss、branch-miss 必须和同一机器、同一负载的基线比较；IPC < 1 不能单独诊断为内存瓶颈
+- 先确认采样是否覆盖用户态/内核态、符号是否可解析、CPU 是否被其他进程占用，再定位具体调用路径
 ```
 
 # 实战排查流程
@@ -126,7 +123,7 @@ Performance counter stats for './prog':
 2. perf top -p PID          → 看热点函数
 3. perf record -p PID -g    → 采样调用栈
 4. perf report              → 分析代码路径
-5. strace -c -p PID         → 检查系统调用频率
+5. 只有怀疑系统调用等待/错误时，限时使用 strace 并说明观测开销
 6. 如果热点在用户态 → 优化算法/数据结构
    如果热点在内核态 → 减少系统调用/优化 IO 模式
 ```
@@ -144,6 +141,5 @@ Performance counter stats for './prog':
    如果断言失败 → 检查前置条件
 ```
 
-> [!tip]- **工程要点**：三把刀各有所长——strace 看"程序在做什么系统调用"，gdb 看"程序内部状态是什么"，perf 看"程序时间花在哪"。排查问题时先从 strace/perf 宏观定位，再到 gdb 微观确认。**不要上来就用 gdb 单步调试几万行的服务器程序。**
+> [!tip]- **工程要点**：先用日志、指标与最小复现界定故障，再选工具：`strace` 查 syscall/errno，`gdb` 查进程内部状态与 core，`perf` 查采样热点。附加调试器会暂停进程，追踪会改变时序；在生产环境先评估权限、敏感数据与性能影响。
 
-调试与追踪工具见 → System Calls Overview (常用系统调用速查) · Dynamic Library & Shared Object (动态库原理)

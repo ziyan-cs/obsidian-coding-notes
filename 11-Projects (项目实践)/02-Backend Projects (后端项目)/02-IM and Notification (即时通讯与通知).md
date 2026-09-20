@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [project/im, backend/concurrency]
 ---
 
@@ -14,7 +12,7 @@ tags: [project/im, backend/concurrency]
 
 # 最小范围
 
-- 单机 WebSocket / TCP 连接管理。
+- 第一版做单机 WebSocket 连接管理；原始 TCP 自定义帧是独立的后续练习，避免同时维护两套协议。
 - 心跳、登录/登出、单聊消息、离线消息占位。
 - 不做端到端加密、群聊大规模 fan-out、多机全局顺序。
 
@@ -32,6 +30,8 @@ tags: [project/im, backend/concurrency]
 ```
 
 `message_id` 用于去重；`conversation_id + sequence` 用于定义一个会话内的顺序范围；`sender_id` 用于权限和审计。服务端写入消息后再通知接收方，客户端重连时按最后确认的 sequence 拉取缺口，不能依赖一次 WebSocket 推送必达。
+
+发送请求还应带客户端生成的 `client_message_id`。服务端从已认证连接确定 `sender_id`，在同一事务中检查会话成员资格、去重并持久化消息；成功回执返回服务端 `message_id` 与 `sequence`。客户端重试沿用同一个 `client_message_id`，否则服务端无法识别“同一次发送”。
 
 # 连接状态与单机结构
 
@@ -60,6 +60,8 @@ accepted -> persisted -> delivered -> acknowledged/read
 
 第一版使用数据库保存消息和会话内单调 sequence。发送请求携带客户端生成的 idempotency key，数据库以发送者与 key 的唯一约束避免重试创建两条消息。服务端成功 ack 表示“已持久化并分配 sequence”，不冒充“对方已读”。
 
+会话序号必须由持久化事务分配或受唯一约束保护，不能由多个 handler 读取当前最大值后各自加一。单机可用会话行锁加序号；它简单但会成为热门会话的串行瓶颈，需先测量再优化。数据库提交成功而 ack 丢失时，客户端重试应返回同一条消息与序号。
+
 客户端保存最后确认 sequence，重连后调用同步接口拉取缺口。实时推送只是降低延迟，持久化日志和按序补拉才是恢复事实。多设备场景要明确已读位置属于用户、设备还是会话；第一版可以只支持单设备并写成非目标。
 
 # 背压、顺序与扩展
@@ -71,7 +73,7 @@ accepted -> persisted -> delivered -> acknowledged/read
 # 测试与运行证据
 
 - 状态机单测：重复登录、未认证发送、关闭竞态。
-- 协议测试：半包、粘包/帧边界、非法长度、未知类型。
+- 协议测试：WebSocket 库已处理底层 TCP 分包；应用层重点覆盖非法 JSON/二进制消息、超大帧、未知类型与不完整业务字段。若另做原始 TCP 协议，再单独测试长度前缀和半包/粘包。
 - 并发测试：`go test -race`，连接注册/注销与关闭同时发生。
 - 慢客户端：发送队列耗尽时内存保持有界，其他用户不被拖慢。
 - 断线恢复：在 ack 前后断开，重连后既不丢消息也不重复副作用。

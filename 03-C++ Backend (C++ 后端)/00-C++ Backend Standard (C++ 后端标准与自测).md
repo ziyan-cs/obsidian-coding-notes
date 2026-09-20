@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [learning/standard, language/cpp, backend]
 ---
 
@@ -26,7 +24,7 @@ tags: [learning/standard, language/cpp, backend]
 
 - [ ] 能正确管理线程生命周期，使用 mutex、condition variable、future 和 atomic 建立同步关系。
 - [ ] 能解释 data race、happens-before、memory order、伪共享与无锁结构的适用边界。
-- [ ] 能实现有界线程池、任务关闭与异常传播，并证明不会丢任务或永久阻塞。
+- [ ] 能实现有界线程池、定义拒绝与排空语义，并验证成功提交的任务不会静默丢失；能说明任务永久阻塞时关闭也可能等待。
 - [ ] 能通过基准、profiling 和 sanitizer 找到瓶颈或缺陷，不凭直觉声称“更快”。
 
 # 后端工程
@@ -42,3 +40,4 @@ tags: [learning/standard, language/cpp, backend]
 2. 资源获取到一半抛出异常时，怎样保证已经获得的资源全部释放？
 3. 线程池关闭时，如何定义“停止接收、排空任务、立即取消”三种语义？
 4. 一次服务延迟升高时，你会怎样区分 CPU、锁、内存、系统调用和下游依赖问题？
+5. 哪些关于 vtable、对象对齐、NRVO、标准容器底层结构的说法属于实现观察，而非 C++ 标准保证？

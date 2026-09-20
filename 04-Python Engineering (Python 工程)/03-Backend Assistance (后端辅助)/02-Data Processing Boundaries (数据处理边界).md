@@ -1,8 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-previous_review_due: 2026-10-02
+study_stage: backlog
 tags: [language/python, python/data]
 ---
 
@@ -35,44 +32,43 @@ tags: [language/python, python/data]
 为统计结果准备可人工核对的小样本，手算期望值；再用真实规模测试时间和内存。检查记录总数守恒、唯一键覆盖、金额/计数范围和错误记录数量。报告不仅给结果，还要说明排除了什么数据以及为什么。
 
 练习：读取压测 CSV，校验字段和时区，按 endpoint 输出请求数、错误率和 p50/p95/p99。先对十行样本手算，再生成百万行输入测量峰值内存；若超限，改为分块或 SQLite 聚合并比较结果。
-# 推荐场景
+# 一个可检查的 CSV 聚合
 
-- 解析服务日志，统计 p50/p95/p99、错误码和热点接口。
-- 合并 CSV/JSON，生成测试数据、报表或图表。
-- 调用多个 API 做巡检、回归、批处理。
-- 将压测、CI、数据库导出等重复流程变为 CLI。
-
-# 边界和风险
-
-- 数据比内存大：用流式处理、分块或交给数据库，不要直接 `read()` 全部内容。
-- 需要精确并发/低尾延迟：先 profile；可能应放到 Go/C++ 服务。
-- 处理不可信输入：限制文件大小、校验 schema、避免 `eval`、记录失败项。
-- 分析脚本也要有输入版本、输出说明和测试，否则结论不可复现。
-
-> [!summary] 核心摘要
->
-> Python 是后端工程的“杠杆语言”：它很适合把日志、接口、数据导出和 CI 流程自动化。边界在于不把内存不受控的大数据处理、严格低尾延迟或复杂常驻并发服务草率塞进脚本。出现性能问题先 profile，再决定优化算法、分块、下推计算或更换实现。
-
-> [!question]- 自测：先回答再展开
-> 1. 一个 CSV 无法放进内存时，你的第一版处理方案是什么？
-> 2. 为什么离线报表也需要记录输入版本和输出定义？
-> 3. 什么证据会让你把一个 Python 脚本迁为 Go/C++ 服务？
-
-# 小练习
-
-读取压测 CSV，按 endpoint 汇总请求数、错误率和 p95；输出 Markdown 表格。先用标准库 `csv`，数据量或分析需求明显增长后再学习 pandas。
-
-# 分块读取的最小例子
+下面的程序只保存按 endpoint 聚合的状态，不把整份输入读入内存；它仍可能因为 endpoint 种类无限增加而耗尽内存，因此设置维度上限。
 
 ```python
 import csv
 from collections import Counter
+from pathlib import Path
 
-counts: Counter[str] = Counter()
-with open("access.csv", newline="", encoding="utf-8") as f:
-    for row in csv.DictReader(f):
-        counts[row["endpoint"]] += 1
+def count_statuses(path: Path, max_endpoints: int = 10_000) -> dict[str, tuple[int, int]]:
+    if max_endpoints < 1:
+        raise ValueError("max_endpoints must be positive")
+    total: Counter[str] = Counter()
+    failed: Counter[str] = Counter()
+    with path.open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        if not {"endpoint", "status"} <= set(reader.fieldnames or ()):
+            raise ValueError("CSV needs endpoint and status columns")
+        for line_no, row in enumerate(reader, start=2):
+            endpoint = row["endpoint"]
+            if not endpoint:
+                raise ValueError(f"line {line_no}: empty endpoint")
+            try:
+                status = int(row["status"])
+            except (TypeError, ValueError) as exc:
+                raise ValueError(f"line {line_no}: invalid status") from exc
+            if not 100 <= status <= 599:
+                raise ValueError(f"line {line_no}: status out of range")
+            if endpoint not in total and len(total) >= max_endpoints:
+                raise ValueError("too many distinct endpoints")
+            total[endpoint] += 1
+            failed[endpoint] += status >= 500
+    return {key: (total[key], failed[key]) for key in sorted(total)}
 ```
 
-这个例子一次只保留当前行与聚合结果；若聚合结果本身也可能无限增长，就需要限制维度、写入数据库或使用外部排序。所谓“流式”不是魔法，它只解决输入不能一次装入内存的问题。
+这段代码的“失败”定义为 5xx；是否把 4xx、timeout 或业务错误计入失败，必须先写入报告契约。小样本先手算总数、失败数和错误率；分位数另需明确算法与窗口，不能从上述两个计数反推出 p95。
 
+# 动手验证
+
+准备十行压测 CSV，覆盖缺列、空 endpoint、非法 status 与超过维度上限。先手算预期，再运行并对照；对百万行输入测峰值内存。如果维度上限确实不足，再比较数据库聚合、外部排序或近似算法，而不是直接删掉边界。

@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -12,7 +10,7 @@ content_verified: 2026-09-17
 
 ## WAL 的核心思想
 
-**WAL（Write-Ahead Logging）：** 在将数据写入磁盘之前，先确保日志已经写入磁盘。
+**WAL（Write-Ahead Logging）：** 在脏数据页持久化之前，先保证恢复它所需的 redo 已按所选策略持久化。事务提交是否足够耐久，还取决于 redo/binlog 刷盘策略及存储设备是否兑现落盘语义。
 
 ```
 常规写入（无 WAL）：
@@ -27,10 +25,9 @@ WAL 写入：
 
 | 操作 | redo log 写入 | 数据页写入 |
 |------|-------------|-----------|
-| IO 类型 | 顺序写入 | 随机写入 |
-| 单次 IO 量 | 小（KB 级） | 大（16KB 页） |
-| 写入位置 | 固定文件末尾 | 分散在不同位置 |
-| 写入效率 | 极高 | 低（需要寻道） |
+| 写入组织 | 顺序追加、可批量/组提交 | 后续按脏页刷新 |
+| 作用 | 缩短提交关键路径，提供恢复信息 | 将最终页状态写入表空间 |
+| 注意 | 仍有刷盘及容量成本 | SSD 也有随机写成本，但不能照搬机械盘寻道模型 |
 
 ## Redo Log 的写入流程
 
@@ -61,15 +58,10 @@ innodb_flush_log_at_trx_commit = 1
 | 值 | 行为 | 安全性 | 性能 |
 |----|------|-------|------|
 | 1（常见默认） | 每次事务提交请求日志落盘 | 在正确的存储持久化假设下最强 | 开销较高 |
-| 2 | 每次事务提交写入 OS cache，每秒刷盘 | 次高（OS 崩溃丢 1s 数据） | 快 |
-| 0 | 每秒写入 OS cache + 刷盘 | 最低（MySQL 崩溃丢 1s 数据） | 最快 |
+| 2 | 提交时写入 OS cache，后台周期性刷盘 | 主机/OS 崩溃可能丢已确认事务；周期不是严格 1 秒上界 | 延迟通常较低 |
+| 0 | 后台周期性写入并刷盘 | mysqld/主机崩溃均可能丢已确认事务；窗口不保证恰为 1 秒 | 延迟通常较低 |
 
-**工程权衡：**
-```
-金融/支付场景 → innodb_flush_log_at_trx_commit = 1
-日志/非关键数据 → innodb_flush_log_at_trx_commit = 2
-批量导入 → innodb_flush_log_at_trx_commit = 0（然后设为 1）
-```
+不要按“金融/日志/批量导入”机械套参数。先写清恢复点目标（RPO）、允许丢失的已确认事务、是否启用 binlog 与故障模型，再核对 `sync_binlog`、设备写缓存和备份策略。改全局刷盘参数会影响同实例其他业务。
 
 ## Undo Log 的作用
 
@@ -92,9 +84,9 @@ MVCC 快照读时：
 
 ```
 A（原子性）← undo log：事务回滚
-C（一致性）← undo + redo：事务要么全部完成要么全部回滚
-I（隔离性）← undo log：MVCC 快照读
-D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
+C（一致性）← 业务约束、SQL 约束、事务语义共同维护，不是某个日志单独保证
+I（隔离性）← MVCC + 锁与所选隔离级别
+D（持久性）← redo 与刷盘/存储假设；binlog、复制与备份承担不同恢复目标
 ```
 
 > [!tip]- **工程要点**：WAL 把“日志先于数据页持久化”作为恢复基础。`innodb_flush_log_at_trx_commit` 的选择是耐久性、延迟和设备语义之间的权衡；任何可承受丢失窗口或性能提升倍数都必须以当前版本、存储栈和压测结果验证。redo/undo 的具体记录格式也属于实现细节。
@@ -105,7 +97,6 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 >
 > ---
 >
-> 崩溃恢复详解见 → Redo Log：Crash Recovery (崩溃恢复) · Binlog vs Redo Log：Differences (两者区别)
 >
 > ---
 
@@ -115,50 +106,25 @@ D（持久性）← redo log：WAL 保证即使崩溃也不丢数据
 
 ## Redo Log 的物理结构
 
-Redo Log 是**物理日志**——记录的是"在某个页的某个偏移量写入了什么数据"，而非 SQL 语句。
+Redo 记录 InnoDB 页级变更所需的恢复信息，而非原始 SQL；具体记录类型、格式与版本相关，不应把某一个字节覆盖示意当作真实统一格式。
 
 ```
-redo log 记录格式：
-  ┌─────────┬─────────┬──────────┬──────────┐
-  │  type   │ space_id│ page_no  │  data    │
-  ├─────────┼─────────┼──────────┼──────────┤
-  │ MLOCK_1 │    5    │   100    │ ...      │
-  │ MLOCK_1 │    5    │   100    │ ...      │
-  │ MLOCK_1 │    5    │   101    │ ...      │
-  └─────────┴─────────┴──────────┴──────────┘
-
-type = MLOCK_1: 写入不大于 512 字节的数据
-        MLOCK_2: 写入不大于 1024 字节的数据
-        ... 多种类型适配不同大小的修改
-
-记录内容示例：
-  "在 space_id=5 的 表空间，page_no=100 的页，偏移量 812 处，写入 8 字节数据"
+概念示意：事务修改 Buffer Pool 页 → 产生 redo 记录 → 按提交策略刷盘
+恢复时依据检查点与日志序号重放需要的页级变更，再处理未提交事务。
 ```
 
-**Redo Log 文件配置：**
-```ini
-innodb_log_file_size = 512M
-
-innodb_log_files_in_group = 3
-
-```
+MySQL 8.4 应优先了解 `innodb_redo_log_capacity`；旧笔记常见的 `innodb_log_file_size` 与 `innodb_log_files_in_group` 已被其取代，不要照抄旧配置。实际容量应按写入速率、checkpoint 压力和恢复演练调整。[MySQL 8.4 官方说明](https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html)
 
 ## Redo Log 的循环写入
 
 Redo log 文件不是无限增长的——它使用**固定大小的循环缓冲区**：
 
 ```
-redo log 文件组（3 个文件，循环使用）：
+逻辑上可将 redo 空间理解为有容量约束、可复用的日志区域：
+  追加位置 ──────────→ 新 redo
+  检查点 ───────────→ 此位置之前对应的脏页已满足复用条件
 
-  File 0     File 1     File 2
-  ┌──────┐   ┌──────┐   ┌──────┐
-  │      │   │      │   │      │
-  └──────┘   └──────┘   └──────┘
-      ↑                     ↑
-  write_pos              checkpoint 
-  (当前写入位置)           (已刷盘的安全点位)
-
-  当 write_pos 追到 checkpoint 时 → 强制刷脏页 → 推进 checkpoint
+  写入逼近可复用边界时 → 增加刷脏页/checkpoint 压力，写入可能受限
 ```
  
 ## Checkpoint 机制
@@ -281,32 +247,15 @@ Binlog（逻辑日志）：
 - 记录的是"怎么改"，与具体 SQL 无关，更纯粹
 - 崩溃恢复时只需按位置重放，不需要理解 SQL 语义
 
-**逻辑日志的优点：**
-- 跨版本兼容（不同 MySQL 版本的页结构不同，但 SQL 兼容）
-- 主从复制时主库和从库可以不同版本
-- 支持时间点恢复（可以恢复到任意一秒）
+**Binlog 的用途：** 复制与基于备份的时间点恢复（PITR）。恢复到目标时刻需要合适的全量备份、连续可用的 binlog、时间/位点选择与演练；它不是任意时刻都能“恢复到任意一秒”的按钮。跨版本复制也必须遵守官方支持矩阵，不能因其是逻辑日志就推断任意版本兼容。
 
 ## Binlog 三种格式
 
 ### STATEMENT 格式
 
-```sql
--- 配置
-SET SESSION binlog_format = STATEMENT;
+STATEMENT 记录语句及执行所需上下文。部分依赖数据分布、执行顺序或系统状态的语句会被判为不安全；但 `NOW()` **不是**“副本重新取本机当前时间而必然不一致”的正确例子，MySQL 文档明确将其视为可安全复制的函数之一。不要在新环境中为了实验直接切换生产会话的 binlog 格式。
 
--- 记录的是原始 SQL
-UPDATE user SET balance=balance-100 WHERE id=1;
--- binlog 中记录：UPDATE user SET balance=balance-100 WHERE id=1;
-```
-
-**问题：** 非确定性函数可能导致主从不一致。
-```sql
-UPDATE user SET update_time = NOW() WHERE id=1;
--- 主库执行时 NOW() = 2024-01-01 12:00:00
--- 从库重放时 NOW() = 2024-01-01 12:05:30  ← 不一致！
-```
-
-### ROW 格式（MySQL 5.7+ 默认）
+### ROW 格式（MySQL 8.4 默认）
 
 ```sql
 -- 记录的是每一行修改前后的值
@@ -321,17 +270,7 @@ UPDATE user SET balance=balance-100 WHERE id=1;
 
 ### MIXED 格式
 
-MySQL 自动判断：如果 SQL 是确定性的，用 STATEMENT；否则用 ROW。
-
-```sql
--- 确定性 SQL → STATEMENT
-UPDATE user SET balance=0 WHERE id=1;
--- binlog: UPDATE user SET balance=0 WHERE id=1
-
--- 非确定性 SQL → ROW
-UPDATE user SET update_time=NOW() WHERE id=1;
--- binlog: 记录行修改前后的完整值
-```
+MIXED 根据服务器对语句安全性的判断选择格式，并非“含非确定性函数一律 ROW”。MySQL 8.4 已将 `binlog_format` 标记为 deprecated，新复制部署优先使用 ROW；具体变更必须依照部署版本文档。[官方格式与安全性说明](https://dev.mysql.com/doc/refman/8.4/en/replication-rbr-safe-unsafe.html)
 
 ## 两阶段提交（Two-Phase Commit）
 
@@ -343,7 +282,7 @@ Binlog 和 Redo Log 需要在事务提交时保持一致——两阶段提交解
                     Prepare Phase
                          ↓
     ① Redo Log 写入 Prepare 状态（此时事务处于 prepare 阶段）
-    ② 写入 Binlog（binlog 是协调者）
+    ② 写入 Binlog，并按 sync_binlog 等策略持久化
                          ↓
                     Commit Phase
                          ↓
@@ -374,13 +313,13 @@ Binlog 和 Redo Log 需要在事务提交时保持一致——两阶段提交解
   redo log commit → 崩溃 → binlog 没有该事务
   主库已包含数据 → 从库未同步 → 主从不一致
 
-两阶段提交保证了 redo log 和 binlog 的最终一致性。
+该内部提交协议用于协调同一 MySQL 实例内 redo 与 binlog 的恢复判定；它**不是**跨数据库、跨服务的 XA/2PC，也不自动保证副本或外部消费者已持久处理。刷盘策略和设备故障仍可能影响可恢复性。
 ```
 
 ```sql
 -- 查看 binlog 相关信息
 SHOW BINARY LOGS;                              -- 所有 binlog 文件列表
-SHOW MASTER STATUS;                             -- 当前正在写的 binlog
+SHOW BINARY LOG STATUS;                         -- MySQL 8.4 当前 binlog 文件与位置
 SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 ```
 
@@ -388,4 +327,3 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 > [!info]- 延伸阅读
 > - 下一步：[09-Query Analysis and Optimization (查询分析与优化)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/09-Query%20Analysis%20and%20Optimization%20(查询分析与优化).md)
-

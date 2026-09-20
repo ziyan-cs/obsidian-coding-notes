@@ -1,257 +1,130 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
-verified: 2026-10-05
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-05
-previous_review_due: 2026-09-17
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# Modern C++ Overview (现代 C++ 总览)
+# 现代 C++ 的主线：让类型表达意图
 
-> [!note] 本节重点： C++11/14/17/20 关键特性一览、现代 C++ 的核心设计理念
+“现代”不是把所有语法换成 `auto`，而是明确**所有权、生命周期、错误状态与泛型契约**。先熟悉 C++17 作为工程基线，再按项目要求学习 C++20 的 concepts、ranges 和 coroutines；新标准功能还受编译器与标准库版本影响。
 
-|特性|标准|核心价值|
-|---|---|---|
-|auto / decltype|C++11|减少冗余类型声明|
-|Lambda|C++11/14|就地定义可调用对象|
-|右值引用 / 移动语义|C++11|消除不必要的深拷贝|
-|unique_ptr / shared_ptr|C++11|自动内存管理，消除裸 new/delete|
-|完美转发|C++11|泛型代码中保持值类别|
-|constexpr|C++11/14/17|将计算移到编译期|
-|if constexpr|C++17|编译期条件分支，替代 SFINAE|
-|std::optional|C++17|表达"可能无值"，替代哨兵值|
-|std::variant|C++17|类型安全联合体，替代 union|
-|string_view|C++17|零拷贝字符串视图|
-|Structured Bindings|C++17|解包 pair/tuple/struct|
-|Concepts|C++20|约束模板参数类型，替代 SFINAE|
-|Ranges|C++20|可组合的惰性序列操作|
-|Coroutines|C++20|协程支持，异步编程|
+| 主题 | 先解决什么问题 | 本文件夹的后续专题 |
+| --- | --- | --- |
+| `auto`、`decltype`、lambda | 减少样板但不丢类型语义 | 本篇 |
+| 值类别、移动、转发 | 避免不必要复制，保持所有权边界 | 02、04 |
+| `unique_ptr` / `shared_ptr` | 把动态所有权显式化 | 03 |
+| `constexpr`、concepts | 编译期不变量与泛型接口 | 05、07 |
+| `optional`、`variant`、视图 | 用类型表达缺席、错误和借用 | 06 |
+| coroutines | 组织可暂停的控制流 | 08 |
 
----
+# `auto` 与 `decltype`：推导仍有规则
 
-# Type Deduction (类型推导)
-
-> [!note] 本节重点：auto 的推导规则、decltype 与 auto 的区别、trailing return type
-
-## auto
-
-编译器根据初始化表达式推导变量类型，消除冗长的类型声明。
+`auto` 按初始化表达式推导，普通变量推导通常去掉顶层 `const` 和引用；需要借用时写 `auto&` / `const auto&`。它不会神奇地避免拷贝。
 
 ```cpp
-auto i = 42;                        // int
-auto d = 3.14;                      // double
-auto s = std::string("hello");      // std::string
-auto v = std::vector<int>{1,2,3};   // std::vector<int>
+#include <type_traits>
+#include <vector>
 
-// 迭代器
-for (auto it = v.begin(); it != v.end(); ++it) { ... }
-for (auto& x : v) x *= 2;   // 引用避免拷贝
-for (const auto& x : v) ... // 只读引用
-```
+int main() {
+    int value = 7;
+    int& ref = value;
+    const int frozen = 9;
 
-### auto 的推导规则（重要）
+    auto copy = ref;              // int，独立副本
+    auto& borrowed = ref;         // int&
+    auto copied_const = frozen;   // int
+    const auto& observed = frozen;// const int&
 
-```cpp
-int  x = 10;
-int& ref = x;
+    static_assert(std::is_same_v<decltype(copy), int>);
+    static_assert(std::is_same_v<decltype(borrowed), int&>);
+    static_assert(std::is_same_v<decltype(copied_const), int>);
+    static_assert(std::is_same_v<decltype(observed), const int&>);
 
-auto  a = ref;    // a 是 int（auto 丢弃引用！）
-auto& b = ref;    // b 是 int&
-auto  c = &x;     // c 是 int*
-
-const int cx = 5;
-auto  d = cx;     // d 是 int（auto 丢弃顶层 const！）
-auto& e = cx;     // e 是 const int&（引用保留 const）
-```
-
-**auto 会丢弃：顶层 const、引用。** 需要保留时显式加 `const` 和 `&`。
-
-```cpp
-// 函数返回类型推导（C++14）
-auto add(int a, int b) { return a + b; }  // 返回 int
-
-// Trailing return type（C++11，用于返回类型依赖参数）
-template<typename T, typename U>
-auto add(T a, U b) -> decltype(a + b) { return a + b; }
-```
-
----
-
-## decltype
-
-推导**表达式的类型**，不计算表达式的值，保留引用和 const。
-
-```cpp
-int x = 0;
-int& ref = x;
-
-decltype(x)    a = 1;    // int
-decltype(ref)  b = x;    // int&（保留引用！）
-decltype((x))  c = x;    // int&（双括号 = 左值表达式，推导为引用）
-decltype(x+1)  d = 0;    // int（表达式结果类型）
-```
-
-**`decltype(x)` vs `decltype((x))`：**
-
-- `decltype(x)`：变量名，推导为变量声明类型 `int`
-- `decltype((x))`：表达式（左值），推导为 `int&`
-
-```cpp
-// decltype(auto)：保留 auto 推导结果的引用和 const（C++14）
-int x = 42;
-int& ref = x;
-
-auto         a = ref;          // int（丢弃引用）
-decltype(auto) b = ref;        // int&（保留引用）
-
-// 常见用途：完美转发返回值
-template<typename F, typename... Args>
-decltype(auto) call(F&& f, Args&&... args) {
-    return std::forward<F>(f)(std::forward<Args>(args)...);
+    std::vector<int> items{1, 2, 3};
+    for (auto& item : items) item *= 2;
+    return items[0] == 2 ? 0 : 1;
 }
 ```
 
----
-
-# Lambda and Function Objects (Lambda 与函数对象)
-
-> [!note] 本节重点：捕获方式、泛型 lambda、std::function 的开销
-
-> [!warning] 捕获列表就是生命周期契约
-> 值捕获复制状态，引用捕获依赖外部对象仍然存活。把 lambda 存起来、异步执行或作为回调传出时，默认引用捕获尤其容易产生悬空引用。
-
-## Lambda 基本语法
+`decltype(name)` 对未加括号的名字取得声明类型；`decltype((expr))` 按表达式值类别推导。因此 `decltype(value)` 是 `int`，`decltype((value))` 是 `int&`。`decltype(auto)` 用在返回类型时能保留引用，但**不能盲目给局部值加括号返回**：
 
 ```cpp
-[捕获列表](参数列表) mutable -> 返回类型 { 函数体 }
+#include <type_traits>
 
-auto add = [](int a, int b) -> int { return a + b; };
-auto greet = [] { std::cout << "hello\n"; };  // 无参数时参数列表可省略
+int global_value = 3;
+decltype(auto) copy_value() { return global_value; }   // int
+decltype(auto) borrow_value() { return (global_value); } // int&
+
+static_assert(std::is_same_v<decltype(copy_value()), int>);
+static_assert(std::is_same_v<decltype(borrow_value()), int&>);
 ```
 
-## 捕获方式
+若 `return (local);` 中 `local` 是局部值，推导出的引用会悬垂。推导不替代生命周期设计。
+
+# Lambda：捕获列表是生命周期契约
+
+值捕获在闭包中保存副本；引用捕获依赖原对象继续存活。短期算法谓词用局部引用往往可行，但回调被保存、交给线程或在外层函数返回后执行时，默认 `[&]` 最容易悬垂。
 
 ```cpp
-int x = 10, y = 20;
+#include <algorithm>
+#include <vector>
 
-// 值捕获（拷贝，lambda 内的 x 与外部无关）
-auto f1 = [x]() { return x; };
+int main() {
+    std::vector<int> values{3, 1, 2};
+    std::sort(values.begin(), values.end(),
+              [](int left, int right) { return left < right; });
 
-// 引用捕获（lambda 持有引用，需注意悬空）
-auto f2 = [&x]() { x++; };
+    int threshold = 2;
+    auto is_large = [threshold](int x) { return x > threshold; };
+    return is_large(values.back()) ? 0 : 1;
+}
+```
 
-// 混合捕获
-auto f3 = [x, &y]() { return x + y; };
+成员函数中的 `[this]` 只捕获指针；对象若先销毁，调用闭包会悬垂。C++17 的 `[*this]` 复制当前对象，可用于确实要**快照**且对象可复制的场景，但副本成本与语义须审视：
 
-// 默认值捕获（捕获所有用到的局部变量的副本）
-auto f4 = [=]() { return x + y; };
-
-// 默认引用捕获
-auto f5 = [&]() { x++; y++; };
-
-// 混合默认：引用捕获 x，值捕获其余
-auto f6 = [&, y]() { x++; return y; };
-
-// 捕获 this（在成员函数中使用）
-struct Foo {
-    int val = 42;
-    auto getF() {
-        return [this]() { return val; };     // 捕获 this 指针
-        // C++17 推荐：[*this]() { return val; };  // 捕获 this 的副本，更安全
+```cpp
+struct Counter {
+    int value = 0;
+    auto snapshot() const {
+        return [*this] { return value; };
     }
 };
+
+int main() {
+    auto read_snapshot = Counter{7}.snapshot();
+    return read_snapshot() == 7 ? 0 : 1;
+}
 ```
 
-## mutable：修改值捕获的副本
+引用捕获、`this` 指针、`string_view` 等借用都不能自动延长寿命。跨线程回调还需要同步共享状态；“按值捕获”也不自动让所指对象线程安全。
+
+# `std::function`：运行时统一接口的代价
+
+C++17 的 `std::function<R(Args...)>` 是类型擦除包装器，可存储**可复制**的目标。它适合回调表、运行期可替换策略；如果调用方类型在编译期已知且处于热点路径，模板参数可能更容易内联。间接调用及可能的分配成本都由具体实现与捕获对象决定，不能写成固定纳秒数字。
 
 ```cpp
-int x = 0;
-auto f = [x]() mutable { x++; return x; };  // 不加 mutable，值捕获不可修改
-f();  // 返回 1，但外部 x 仍为 0
-```
-
-## 泛型 Lambda（C++14）
-
-```cpp
-// auto 参数，等价于模板函数
-auto print = [](auto x) { std::cout << x << '\n'; };
-print(42);
-print("hello");
-print(3.14);
-
-// 多参数
-auto max_val = [](auto a, auto b) { return a > b ? a : b; };
-```
-
-## Lambda 作为排序谓词
-
-```cpp
-std::vector<std::pair<int,int>> v = {{3,1},{1,2},{2,3}};
-
-// 按第二个元素降序
-std::sort(v.begin(), v.end(), [](const auto& a, const auto& b){
-    return a.second > b.second;
-});
-
-// 捕获外部变量作为比较依据
-int pivot = 5;
-auto less_than = [pivot](int x) { return x < pivot; };
-```
-
----
-
-## std::function
-
-类型擦除的通用函数包装器，可存储任何可调用对象（函数、lambda、函数对象）：
-
-```cpp
+#include <algorithm>
 #include <functional>
+#include <vector>
 
-std::function<int(int, int)> f;
-
-f = [](int a, int b) { return a + b; };   // 存 lambda
-f = std::plus<int>{};                      // 存函数对象
-f = add;                                   // 存函数指针
-
-// 回调/策略模式
-void process(std::vector<int>& v, std::function<bool(int)> pred) {
-    v.erase(std::remove_if(v.begin(), v.end(), pred), v.end());
+void erase_if_match(std::vector<int>& values,
+                    const std::function<bool(int)>& predicate) {
+    values.erase(std::remove_if(values.begin(), values.end(), predicate),
+                 values.end());
 }
-process(nums, [](int x){ return x % 2 == 0; });  // 删除偶数
-```
 
-### std::function 的代价
-
-`std::function` 使用**类型擦除**保存不同种类的可调用对象。实现细节不由标准规定，但相较模板参数通常可能带来以下成本：
-
-- 间接调用，调用点通常不易内联
-- 某些实现或较大捕获对象可能发生额外分配
-- 性能敏感且类型可在编译期确定时，可优先传模板参数
-
-```cpp
-// 性能敏感时：模板参数（编译期确定类型，可内联）
-template<typename F>
-void process(std::vector<int>& v, F pred) {
-    v.erase(std::remove_if(v.begin(), v.end(), pred), v.end());
+int main() {
+    std::vector<int> values{1, 2, 3, 4};
+    erase_if_match(values, [](int x) { return x % 2 == 0; });
+    return values == std::vector<int>{1, 3} ? 0 : 1;
 }
 ```
 
----
+如果目标仅可移动，C++23 提供 `std::move_only_function`；能否使用要核对项目编译器与标准库。选择 API 时先问：需要保存回调吗？需要运行期替换吗？是否必须接受 move-only 捕获？答案决定选模板、`std::function` 还是其他明确的封装。
 
+> [!note] 掌握标志
+> 能解释 `auto` 的复制/借用、`decltype(auto)` 的返回引用、lambda 捕获的生命周期，以及 `std::function` 为什么不应无条件放进最热的调用路径。
 
-> [!summary] 核心摘要
->
-> lambda 是编译器生成的闭包对象；捕获方式决定它保存副本还是引用。短期算法谓词常用无捕获或值捕获，跨作用域/异步回调要把对象生命周期说清。`std::function` 适合需要统一回调类型的运行时接口；若类型可见且处于热点路径，模板参数更容易优化。
+延伸：[02-Value Categories and Move (值类别与移动语义)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/03-Modern%20C++%20(现代%20C++)/02-Value%20Categories%20and%20Move%20(值类别与移动语义).md)。
 
-> [!question]- 自测：先回答再展开
-> 1. 为什么 `[&]` 返回的 lambda 可能在调用者处悬空？
-> 2. `[this]` 与 `[*this]` 的资源与生命周期语义有什么差异？
-> 3. 什么时候 API 应接收 `std::function`，什么时候用模板参数？
-
-> [!info]- 延伸阅读
-> - 下一步：[02-Value Categories and Move (值类别与移动语义)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/03-Modern%20C++%20(现代%20C++)/02-Value%20Categories%20and%20Move%20(值类别与移动语义).md)
 

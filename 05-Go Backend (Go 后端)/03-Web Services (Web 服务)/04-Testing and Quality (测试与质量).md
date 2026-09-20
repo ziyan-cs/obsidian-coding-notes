@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/testing]
 ---
 
@@ -32,10 +30,30 @@ tags: [language/go, go/testing]
 race detector 发现实际运行到的 data race，配合高并发测试和重复运行；它不能证明没有死锁、泄漏或逻辑竞态。fuzz target 要快速、确定，并断言不变量，例如“解析后再编码可读”“非法帧不 panic”。失败 corpus 保存到测试数据形成回归。
 
 ```go
+package todo
+
+import (
+    "errors"
+    "strconv"
+    "testing"
+)
+
+func ParseID(text string) (int64, error) {
+    id, err := strconv.ParseInt(text, 10, 64)
+    if err != nil || id < 1 {
+        return 0, errors.New("invalid id")
+    }
+    return id, nil
+}
+
 func FuzzParseID(f *testing.F) {
     f.Add("42")
+    f.Add("-1")
     f.Fuzz(func(t *testing.T, text string) {
-        _, _ = ParseID(text) // 必须不 panic；再检查业务不变量
+        id, err := ParseID(text)
+        if err == nil && id < 1 {
+            t.Fatalf("successful parse returned %d", id)
+        }
     })
 }
 ```
@@ -47,51 +65,50 @@ benchmark 在循环外准备数据，使用 `b.ResetTimer` 或新版计时 API �
 固定 Go 版本，依次运行格式化检查、vet、测试、race（可按成本拆分）、构建与漏洞检查。失败保存测试日志和最小复现，不让 flaky test 通过自动重跑被掩盖。覆盖率用于发现未触达代码，不作为单一目标。
 
 练习：为 todo service 建立表驱动规则测试、fake repository 测试、httptest 协议测试、真实数据库事务测试、race worker 测试和一个 fuzz parser；说明每层能发现什么、发现不了什么。
-# 基线命令
+# 一份完整的表驱动测试
 
-```text
-go test ./...
-go test -race ./...
-go test -cover ./...
-go vet ./...
-```
-
-# 规则
-
-- 测试文件为 `*_test.go`，函数名以 `TestXxx` 开头。
-- 先覆盖正常、空输入、边界、错误和取消；覆盖率不是质量本身。
-- 用 `httptest` 测 handler，避免测试中真的监听固定端口。
-- 遇到不可控时间、随机数、网络，抽象成依赖并注入可控替身。
-
-# Table-driven test 的目标
+以下可独立保存为 `todo_test.go`；真实项目将 `CreateTodo` 放入业务文件，测试文件只保留测试代码。
 
 ```go
-cases := []struct { name, title string; wantErr bool }{
-    {"valid", "learn Go", false},
-    {"empty", "", true},
+package todo
+
+import (
+    "errors"
+    "strings"
+    "testing"
+)
+
+func CreateTodo(title string) (string, error) {
+    title = strings.TrimSpace(title)
+    if title == "" || len([]rune(title)) > 80 {
+        return "", errors.New("invalid title")
+    }
+    return title, nil
 }
-for _, tc := range cases {
-    t.Run(tc.name, func(t *testing.T) {
-        _, err := CreateTodo(tc.title)
-        if (err != nil) != tc.wantErr { t.Fatalf("err = %v", err) }
-    })
+
+func TestCreateTodo(t *testing.T) {
+    cases := []struct {
+        name, input, want string
+        wantErr bool
+    }{
+        {"valid", " learn Go ", "learn Go", false},
+        {"empty", " ", "", true},
+        {"too long", strings.Repeat("x", 81), "", true},
+    }
+    for _, tc := range cases {
+        t.Run(tc.name, func(t *testing.T) {
+            got, err := CreateTodo(tc.input)
+            if (err != nil) != tc.wantErr || got != tc.want {
+                t.Fatalf("CreateTodo(%q) = %q, %v; want %q, error=%v",
+                    tc.input, got, err, tc.want, tc.wantErr)
+            }
+        })
+    }
 }
 ```
 
-测试表格不是为了少写代码，而是让输入域、预期行为和失败案例并排可读。对并发代码再运行 `go test -race`；race detector 发现的是运行到的 data race，不是并发正确性的数学证明。
-
-# 测试层次
-
-| 层次 | 验证对象 | 速度 |
-| --- | --- | --- |
-| unit | 业务规则、纯函数 | 快，数量最多 |
-| integration | DB、缓存、真实序列化 | 较慢，验证边界 |
-| HTTP | 路由、状态码、响应体 | 覆盖协议契约 |
-
-> [!question]- 自测：先回答再展开
-> 为“创建 todo，标题不能为空”写至少三个测试：成功、空标题、超长标题。
+从 `go test ./...` 开始；并发代码额外运行 `go test -race ./...`，静态检查运行 `go vet ./...`。fuzz 需单独按目标执行，例如 `go test -fuzz=FuzzParseID -fuzztime=30s`；生成的反例要进入回归语料。测试表格的目标是并排呈现输入、预期和边界，不是追求行数最少。
 
 > [!info]- 延伸阅读
 > - 下一步：[05-Observability and Operations (可观测性与运行)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/05-Observability%20and%20Operations%20(可观测性与运行).md)
-
 

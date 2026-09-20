@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-verified: 2026-09-17
+study_stage: reference
 tags: [vault/standard, learning/note-taking]
 ---
 
@@ -14,19 +12,16 @@ tags: [vault/standard, learning/note-taking]
 
 ```yaml
 ---
-status: learning       # learning | stable
-confidence: medium     # low | medium | high
-content_verified: YYYY-MM-DD # 可选：笔记内容最近一次质量核验日期
-verified: YYYY-MM-DD   # 计划并最终校正为首次有效学习日期
-review_stage: learn    # learn | D1 | D3 | D7 | D14 | D30 | D60 | solid
-review_due: YYYY-MM-DD # 下一次实际动作日期；solid 后删除
+study_stage: learn     # backlog | learn | D1 | D3 | D7 | D14 | D30 | D60 | solid | reference
+review_due: YYYY-MM-DD # 下一次实际学习或复习日期；仅有任务时写
+studied_on: YYYY-MM-DD # 可选：首次有效学习的真实日期，不能预填
 tags: [topic/example]  # 可选：确有检索价值时使用
 ---
 ```
 
-`status`、`confidence` 与可选的 `content_verified` 描述笔记内容质量，不冒充个人掌握度。学习进度由 `verified`、`review_stage` 和 `review_due` 表示：未排期时不写这三项；首次排期时分别写计划日、`learn` 和计划日；真正学完后把 `verified` 校正为实际完成日，并按间隔复习系统推进后两项。
+`study_stage` 是唯一的进度状态：`backlog` 待排期，`learn` 已排首次学习，`D1` 至 `D60` 是复习阶段，`solid` 已巩固，`reference` 用于 Hub 等不参与学习队列的参考页。`review_due` 是脚本读取的下一次任务日；`studied_on` 只有真正完成首次学习后才填写。待排期、已巩固和参考页不写 `review_due`，不为两年后的内容预填死日期。
 
-`verified` 也不表示所有外部事实都在当天重新查证。涉及版本或 API 时标记 `VERSION_CHECK` 并写明核验入口；性能数字必须保留环境与方法，标记 `MEASURE_LOCALLY`。
+旧 `status`、`confidence`、`content_verified`、`verified` 与 `previous_review_due` 已退出属性：它们曾把内容质量、旧排期和实际学习混在一起。内容事实是否可靠，应在相关段落写出来源、适用版本和实验条件；涉及版本或 API 时标记 `VERSION_CHECK`，性能数字保留环境与方法并标记 `MEASURE_LOCALLY`。
 
 # 正文骨架
 

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [project/url-shortener, backend/api]
 ---
 
@@ -17,6 +15,8 @@ tags: [project/url-shortener, backend/api]
 - `GET /{code}`：查询并 302 redirect。
 - `GET /v1/links/{code}`：读取元数据。
 - 不做登录、多地域、复杂分析；这些作为后续扩展。
+
+一次最小演示应能复现：`POST` 提交 `https://example.org/a` 得到短码 `k7Q2`；访问 `/k7Q2` 收到 `Location: https://example.org/a` 和 302；不存在短码返回 404，已存在但过期的短码可返回 410。是否向未授权访问者区分 404/410，取决于是否允许公开推断短码曾存在。
 
 # 关键问题
 
@@ -45,6 +45,8 @@ CREATE TABLE link (
 
 URL 校验至少限制 scheme、长度和控制字符。若系统允许服务端抓取目标页面，还必须防 SSRF；若只是重定向，也要考虑钓鱼、恶意域名和滥用封禁。原始 URL 可能含 token 或个人信息，日志与分析事件不应完整记录。
 
+跳转只根据数据库中与短码绑定的目标地址，不能再接受请求参数覆盖 `Location`；这仍不能消除平台被用于钓鱼的风险，应准备封禁、举报和滥用追踪。第一版采用 302，是为了保留未来修改或封禁目标的空间；301 可能被客户端长期缓存，不适合需要可撤销目标的语义。这里只支持 GET 跳转，不能把 302 当作保留 POST 方法的保证。
+
 # 读写路径与失败窗口
 
 创建路径先校验，再生成短码并插入数据库；唯一冲突时重新生成，达到上限后返回可重试内部错误。缓存写入不是创建成功的必要条件，数据库提交成功后即可以返回结果。
@@ -59,6 +61,8 @@ GET /{code}
 ```
 
 缓存 TTL 不得超过业务过期时间。不存在结果可以短暂负缓存，但要防止攻击者用随机 code 制造高基数 key。热点失效时使用 singleflight、回源并发上限或逻辑过期，不能让所有实例同时压向数据库。
+
+若允许编辑或封禁短码，缓存不再只是“写后自然过期”问题：管理操作先提交数据库，再删除或更新对应缓存；并发读在删除前可能短暂返回旧值。必须在需求里写明允许的陈旧窗口；若要求封禁立即生效，读路径就需要强制查权威状态或采用可验证的版本机制，不能仅依赖长 TTL。
 
 访问统计与重定向主路径解耦：先保证重定向成功，再把访问事件写入有界缓冲或消息系统。统计允许一定延迟和少量重复时，消费者按 event ID 去重；不能因为统计后端故障阻塞所有跳转。
 
@@ -83,6 +87,8 @@ GET /{code}
 - [ ] Python checker 生成链接、验证 redirect、汇总延迟。
 - [ ] 一张读路径图、一份压测报告、一条缓存失效复盘。
 
+负向测试至少包含：短码碰撞达到重试上限、过期边界、Redis 故障回源、热点 key 同时失效、非法目标 scheme、目标含敏感查询参数，以及封禁后缓存尚未失效。压测把热读、冷读、写入和缓存故障分开报告，不用一次混合 QPS 代表所有路径。
+
 > [!summary]- 项目表达检查：学完后再展开
 >
 > 我用短链接服务练习“写入正确性和读路径性能”的分离：短码由唯一约束兜底，读请求走 cache-aside，缓存失效时仍以数据库为 source of truth。第一版只证明重定向、冲突处理、超时和观测，不把多地域或分析系统伪装成已实现能力。
@@ -91,6 +97,7 @@ GET /{code}
 > [!warning] 常见误区
 > hash 截断不等于永不冲突；302/301 的选择、负缓存和热点保护都需要以真实需求与测试结果决定。
 
+协议与安全参考：[RFC 9110 重定向语义](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4)、[OWASP Unvalidated Redirects Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)。
+
 > [!info]- 延伸阅读
 > - 下一步：[02-IM and Notification (即时通讯与通知)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/02-IM%20and%20Notification%20(即时通讯与通知).md)
-

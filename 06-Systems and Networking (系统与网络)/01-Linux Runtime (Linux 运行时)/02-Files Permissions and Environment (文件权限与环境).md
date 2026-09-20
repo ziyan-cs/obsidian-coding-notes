@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!summary] 核心摘要
@@ -84,7 +82,7 @@ Ctrl+W → h/j/k/l   " 切换窗口
 # 环境变量 🔥
 
 ```bash
-set              # 查看所有系统环境变量
+printenv         # 查看当前进程继承的环境变量；set 还会显示 shell 变量/函数
 echo $PATH       # 命令搜索路径
 echo $HOME       # 当前用户家目录
 echo $USER       # 登录用户名
@@ -113,7 +111,7 @@ echo $APP_HOME                      # 验证
 ```
 /
 ├── bin/     → 基本命令（ls, cp, cat...）
-├── sbin/    → 系统管理命令（root 使用）
+├── sbin/    → 管理工具的历史位置；普通用户也可能运行，部分系统已合并到 /usr
 ├── etc/     → 系统配置文件
 ├── home/    → 用户家目录
 ├── root/    → root 用户家目录
@@ -174,7 +172,7 @@ chown -R alice dir/   # 递归修改目录
 
 ## umask 默认权限 🔥
 
-umask 控制新文件/目录的默认权限：**实际权限 = 最大权限 - umask**
+`umask` 通过**位屏蔽**去掉创建时请求的权限，不是普通十进制减法。常见 shell 新文件基准为 `0666`、目录为 `0777`；例如 `umask 0022` 时分别得到 `0644` 和 `0755`，但应用也可以主动请求更窄权限。
 
 ```bash
 umask                  # 查看当前值（通常是 022）
@@ -192,14 +190,14 @@ chmod +t dir/         # Sticky bit：仅文件所有者能删自己的文件（�
 
 chmod 4755 file       # 4 = SUID
 chmod 2755 dir/       # 2 = SGID
-chmod 1777 /tmp       # 1 = Sticky bit
+ls -ld /tmp            # 观察 sticky bit，通常显示为末位 t；不要为练习改系统目录权限
 ```
 
 ---
 
 # inode 与目录项
 
-每个文件有唯一 **inode**，存储文件元数据（权限、大小、时间戳、数据块位置），**不包含文件名**（文件名存在目录项中）。
+inode 号在**同一文件系统内**标识文件对象，存储权限、大小、时间戳和数据块位置等元数据，不包含文件名（文件名存在目录项中）。多个硬链接可指向同一个 inode，跨文件系统不能仅凭 inode 数字相等判断是同一对象。
 
 ```bash
 ls -i file           # 查看 inode 号
@@ -222,6 +220,5 @@ ln -s <src> <dst>    # 创建软链接
 ln <src> <dst>       # 创建硬链接
 ```
 
-文件系统与权限详解见 → Shell & Basic Commands (命令行与Shell编程) · System Administration Basics (系统管理基础)
 
 ---

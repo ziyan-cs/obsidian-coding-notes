@@ -1,14 +1,12 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：掌握 pthread 创建、等待、分离、取消与线程资源回收边界。
 
 > [!note] 本节重点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
-## 线程的本质
+# 线程的本质
 
 线程是进程内的**执行流**，共享进程的地址空间、文件描述符、信号处理，但拥有独立的：
 
@@ -19,36 +17,41 @@ content_verified: 2026-09-17
 
 ---
 
-## 创建与等待
+# 创建与等待
 
 ```c
 #include <pthread.h>
-// 编译：gcc -o prog prog.c -lpthread
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// 编译：cc -std=c11 -Wall -Wextra -pthread prog.c -o prog
 
-void *worker(void *arg) {
+static void *worker(void *arg) {
     int id = *(int *)arg;
     printf("Thread %d running\n", id);
-    return (void *)(long)id;    // 返回值
+    return NULL;
 }
 
-int main() {
+int main(void) {
     pthread_t tid;
     int arg = 42;
-
-    // 创建线程
-    pthread_create(&tid, NULL, worker, &arg);
-
-    // 等待线程结束，获取返回值
-    void *retval;
-    pthread_join(tid, &retval);
-    printf("Thread returned: %ld\n", (long)retval);
-    return 0;
+    int rc = pthread_create(&tid, NULL, worker, &arg);
+    if (rc != 0) {
+        fprintf(stderr, "pthread_create: %s\n", strerror(rc));
+        return EXIT_FAILURE;
+    }
+    rc = pthread_join(tid, NULL);
+    if (rc != 0) {
+        fprintf(stderr, "pthread_join: %s\n", strerror(rc));
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 ```
 
 ---
 
-## 线程属性
+# 线程属性
 
 ```c
 pthread_attr_t attr;
@@ -66,7 +69,7 @@ pthread_attr_destroy(&attr);
 
 ---
 
-## 分离（detach）与合并（join）
+# 分离（detach）与合并（join）
 
 ```c
 // join：主线程等待子线程，获取返回值
@@ -82,7 +85,7 @@ pthread_detach(pthread_self());
 
 ---
 
-## 线程本地存储（TLS）
+# 线程本地存储（TLS）
 
 每个线程有独立的副本，互不干扰：
 
@@ -97,7 +100,6 @@ pthread_setspecific(key, malloc(100));  // 设置当前线程的值
 void *val = pthread_getspecific(key);   // 获取当前线程的值
 ```
 
-POSIX 线程详解见 → Mutex & Condition Variable (互斥锁与条件变量) · Deadlock (死锁原理与预防)
 
 ---
 

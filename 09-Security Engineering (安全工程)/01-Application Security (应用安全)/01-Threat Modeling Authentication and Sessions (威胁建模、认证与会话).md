@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [security/threat-model, security/authentication]
 ---
 
@@ -50,6 +48,8 @@ Authentication（AuthN）确认“你是谁”，Authorization（AuthZ）决定�
 
 # Session 与 Token
 
+以一个校内资料平台为例：访客登录后，服务端把登录凭据验证为内部 `user_id`，创建会话，再在每次请求中从会话恢复主体。浏览器提交的 `user_id`、`role` 和 `tenant_id` 只能当输入，不能反过来决定身份。若用户改邮箱，先检查当前会话，再要求近期重新认证；若账号被封禁，还应使现有会话失效。这个流程把“登录成功”和“持续拥有访问权”分开。
+
 服务端 session 通常让客户端只持有随机、不可预测的 session ID，权限与状态保存在服务端；JWT 把声明放进签名 token，便于跨服务验证，但撤销、密钥轮换和权限即时变更更复杂。
 
 选择依据：
@@ -64,6 +64,8 @@ Authentication（AuthN）确认“你是谁”，Authorization（AuthZ）决定�
 浏览器 cookie 至少考虑 `Secure`、`HttpOnly`、合适的 `SameSite`、窄化的 `Path/Domain` 与过期时间。登录、提权和重新认证后轮换 session ID，退出时让服务端状态失效。`SameSite` 是纵深防御，不能无条件替代 CSRF 防护。
 
 JWT 使用时必须固定允许的算法，验证签名、issuer、audience、有效期和必要声明；不要把敏感数据当作“被加密”写进普通签名 JWT。
+
+对浏览器应用，还要先决定凭据的存放和传输方式：Cookie 自动随请求发送，因此必须考虑 CSRF；脚本可读取的存储在 XSS 后可能泄漏 token。不存在对所有应用通用的“JWT 比 Session 更安全”结论。画出登录、续期、登出、封禁、密钥轮换五条状态路径，再选择机制。
 
 # 失败路径与验证
 

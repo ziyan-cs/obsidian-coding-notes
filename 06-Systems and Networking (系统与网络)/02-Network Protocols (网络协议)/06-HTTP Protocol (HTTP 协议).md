@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -92,7 +90,7 @@ HTTP/1.1 是基于文本的协议，协议头是 ASCII 文本，用 `\r\n` 分�
 - **可读性强**：直接 telnet 调试
 - **解析简单**：逐行读取，冒号分隔键值
 - **冗余较大**：头部的重复字段每次请求都传输
-- **队头阻塞**：文本协议的逐行解析在管道中有天然的 HOL blocking
+- **响应顺序限制**：HTTP/1.1 pipelining 在同一连接上仍须按请求顺序返回响应；队头阻塞来自该顺序语义，而不是“文本逐行解析”本身
 
 ```
 telnet www.example.com 80
@@ -123,7 +121,7 @@ Host: www.example.com
 
 **幂等（Idempotent）：** 重复请求的预期资源状态与执行一次相同；响应状态码/响应体可以不同（例如重复 `DELETE` 可能返回 404）。POST 常用于非幂等创建；PATCH 是否幂等取决于补丁定义。
 
-**安全（Safe）：** 不会修改服务器状态。GET/HEAD/OPTIONS 是安全的，可以放心预取。
+**安全（Safe）：** 方法语义要求客户端不请求状态改变；服务器仍可记录日志、计数等副作用。GET/HEAD/OPTIONS 属安全方法，但带副作用的业务操作不能藏在 GET URL 中；预取前也要考虑缓存与鉴权边界。
 
 ## 状态码分类
 
@@ -314,112 +312,25 @@ TCP 流可能分段到达：
 状态机：每次处理到当前数据末尾 → 保存状态 → 等待下次数据
 ```
 
-## HTTP 解析状态定义
+## HTTP/1.1 解析状态与结果
 
-```c
-typedef enum {
-    // 请求行解析
-    METHOD_START,       // 等待方法首字符
-    METHOD,             // 读取方法名
-    URI_START,          // 等待 URI 起始
-    URI,                // 读取 URI
-    VERSION_H,          // 遇到 H（HTTP 的 H）
-    VERSION_HT,         // HT
-    VERSION_HTT,        // HTT
-    VERSION_HTTP,       // HTTP
-    VERSION_MAJOR,      // 主版本号
-    VERSION_DOT,        // 版本号点
-    VERSION_MINOR,      // 次版本号
-    REQ_LINE_CR,        // 请求行 \r
-    REQ_LINE_LF,        // 请求行 \n
+教学上可以把解析器压缩为“请求行 → 首部 → body → 完成/错误”四个阶段；真实实现还要保存已消费字节数，使同一个 TCP 缓冲区里的下一条请求不会被误吞。下列是状态流程，不是可直接编译或对外开放的 HTTP 解析器：
 
-    // 头部解析
-    HEADER_START,       // 头部起始（也可能是空行）
-    HEADER_KEY,         // 读取 header key
-    HEADER_COLON,       // 冒号
-    HEADER_SPACE,       // 冒号后的空格
-    HEADER_VALUE,       // 读取 header value
-    HEADER_CR,          // 头部 \r
-    HEADER_LF,          // 头部 \n
-
-    // 空行 → 进入 body
-    HEADERS_COMPLETE_CR, // 空行的 \r
-    HEADERS_COMPLETE_LF, // 空行的 \n → body 开始
-
-    // Body
-    BODY_IDENTITY,       // Content-Length body
-    BODY_CHUNKED_SIZE,   // chunked 块大小
-    BODY_CHUNKED_DATA,   // chunked 块数据
-    BODY_CHUNKED_CR,     // chunked 块 \r
-    BODY_CHUNKED_LF,     // chunked 块 \n
-    BODY_CHUNKED_END,    // chunked 结束
-
-    COMPLETE,            // 解析完成
-    ERROR                // 解析错误
-} http_parser_state;
+```text
+feed(bytes, limit):
+  while bytes remain:
+    REQUEST_LINE: consume through CRLF; enforce line limit; parse method/target/version
+    HEADERS: consume complete CRLF lines; enforce total bytes and field count
+             reject ambiguous or invalid framing before accepting a body
+    BODY_LENGTH: consume exactly Content-Length bytes, capped by body limit
+    BODY_CHUNKED: parse chunk size; consume exact chunk bytes + CRLF
+                  stop at zero chunk and process/limit trailers
+    COMPLETE: return (message, consumed_byte_count, remaining_bytes)
+    ERROR: reject request and close or follow explicit error policy
+  return NEED_MORE without discarding incomplete token state
 ```
 
-## 核心解析循环
-
-```c
-typedef struct {
-    http_parser_state state;
-    char *buffer;
-    size_t buffer_used;
-    size_t buffer_size;
-
-    // 解析中间结果
-    char method[16];
-    char uri[1024];
-    // 头部 key-value 表
-    // body 指针和长度
-} http_parser;
-
-http_parser_state http_parser_execute(http_parser *parser, const char *data, size_t len) {
-    size_t i = 0;
-    char ch;
-
-    while (i < len && parser->state != COMPLETE && parser->state != ERROR) {
-        ch = data[i++];
-
-        switch (parser->state) {
-            case METHOD_START:
-                if (is_upper_alpha(ch)) {
-                    parser->method[0] = ch;
-                    parser->method_len = 1;
-                    parser->state = METHOD;
-                } else { parser->state = ERROR; }
-                break;
-
-            case METHOD:
-                if (is_upper_alpha(ch)) {
-                    parser->method[parser->method_len++] = ch;
-                } else if (ch == ' ') {
-                    parser->method[parser->method_len] = '\0';
-                    parser->state = URI_START;
-                } else { parser->state = ERROR; }
-                break;
-
-            // ... 其他状态转换 ...
-
-            case HEADERS_COMPLETE_LF:
-                // 空行结束，进入 body 解析
-                if (parser->chunked) {
-                    parser->state = BODY_CHUNKED_SIZE;
-                } else {
-                    parser->body_remaining = parser->content_length;
-                    parser->state = parser->body_remaining > 0
-                        ? BODY_IDENTITY : COMPLETE;
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-    return parser->state;
-}
-```
+解析器每次必须说明已消费多少字节；只有完整验证后才把请求交给业务。对代理链路尤其要防请求走私：`Transfer-Encoding` 与 `Content-Length` 同时出现、重复且不一致的长度、非法 chunk、模糊空白和超限头部都应按 RFC 9112 的规则处理，并确保前端与后端对消息边界的解释一致。生产服务应使用经过维护与模糊测试的解析实现，而不是把这个示意状态机扩写后直接上线。
 
 ## 缓冲区管理
 
@@ -460,6 +371,8 @@ TCP 数据到达 → buffer 写入 → parse() 逐字节消费
                         重置解析器 → 解析下一个消息
 ```
 
-> [!tip]- **工程要点**：实际生产中使用现成的高性能解析器（http_parser、llhttp），它们使用 goto 驱动的状态机（而非 switch-case）以获得极致性能。理解状态机原理比自己实现更重要——关键是**解析器不持有状态本身的语义**，只做字节级别的状态跳转，上层回调才是业务处理入口。
+> [!tip]- **工程要点**：生产中优先使用被持续维护、经过协议一致性与安全测试的 HTTP 库。解析器可能采用表驱动、状态机或其他实现；选择依据是正确的消息定界、限额、代理一致性与测试证据，而非 `goto` 和 `switch` 的表面写法。
+
+[RFC 9110: HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html) · [RFC 9112: HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112.html)
 
 ---

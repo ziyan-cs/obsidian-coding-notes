@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -12,33 +10,24 @@ content_verified: 2026-09-17
 
 ## CAP 定理
 
-分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition Tolerance）三者最多同时满足两个。
+CAP 讨论的是**发生网络分区时**的限制：若相互隔离的节点仍都要对请求给出成功响应，就无法同时保证线性一致（linearizability）。它不是“三个按钮任选两个”，更不能说某产品平时只能拥有其中两项；分区发生与否、操作种类、客户端路由和故障处理策略都要写清。
 
-```
-          Consistency
-             /    \
-            /      \
-           /        \
-          /          \
-CP (Redis/Mongo/ZK)   AP (Cassandra/DynamoDB)
-          \          /
-           \        /
-            \      /
-             \    /
-         Availability
-                \
-                 \
-                  \
-             CA（实际上不存在——网络分区时无法同时保证 C 和 A）
+原始证明及模型边界见 [Gilbert 与 Lynch 的论文](https://groups.csail.mit.edu/tds/papers/Gilbert/Brewer2.pdf)。
+
+```text
+节点 A 与 B 失联（partition）
+客户端仍可能分别向 A、B 发请求
+  维持线性一致 → 至少一侧的部分操作必须等待或失败
+  两侧都立即成功 → 至少某些读写无法保证线性一致
 ```
 
 ### 三个属性
 
 | 属性 | 说明 |
 |------|------|
-| **C（Consistency）** | 所有节点在同一时刻看到相同的数据（强一致性） |
-| **A（Availability）** | 每次请求都能获得非错误的响应（但不保证数据最新） |
-| **P（Partition Tolerance）** | 网络分区（节点间通信中断）时系统仍能正常运行 |
+| **C（Consistency）** | CAP 语境中的线性一致：每次操作看起来在调用与响应之间某一瞬间原子生效，不是“所有机器同一时刻字节完全相同” |
+| **A（Availability）** | 非故障节点收到请求后最终给出非错误响应；不保证响应及时或数据最新 |
+| **P（Partition Tolerance）** | 允许节点间消息被任意延迟/丢失的分区故障模型，不是一个可随意关掉的功能开关 |
 
 ### 核心洞察
 
@@ -46,11 +35,11 @@ CP (Redis/Mongo/ZK)   AP (Cassandra/DynamoDB)
 
 ```
 网络分区发生时：
-CP（如 ZooKeeper）：选择一致性，牺牲可用性
-  -> 少数节点停止服务，保证多数节点数据一致
+偏向一致性：没有多数派的一侧拒绝或挂起相关写入/线性读
+  -> 客户端能否成功还取决于它能否访问多数派
   
-AP（如 Cassandra）：选择可用性，牺牲一致性
-  -> 所有节点继续服务，但数据可能不一致（最终一致）
+偏向可用性：隔离两侧都可能先接受操作，再通过合并/冲突解决收敛
+  -> 需要定义冲突规则与业务不变量；不是所有操作都自动“最终一致”
 ```
 
 ---
@@ -122,7 +111,6 @@ E（正常）时     → 在 L（延迟）和 C（一致性）间选择
 >
 > ---
 >
-> 一致性模型与分布式事务详解见 → Consistency Models：Strong, Eventual (一致性模型) · Distributed Transaction：2PC & Saga (分布式事务)
 >
 > ---
 
@@ -243,8 +231,6 @@ D4 ([A:3])         <- A 更新 v3（与 D3 冲突！需要合并）
 >
 > ---
 >
-> 一致性模型与分布式理论基础详解见 → CAP Theorem & BASE Theory (CAP理论) · Paxos Overview (Paxos概念了解)
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Raft Consensus (Raft 共识)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/02-Raft%20Consensus%20(Raft%20共识).md)
-

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/http]
 ---
 
@@ -14,21 +12,37 @@ tags: [language/go, go/http]
 # 最小 handler
 
 ```go
-type greeting struct { Message string `json:"message"` }
+package main
+
+import (
+    "encoding/json"
+    "log"
+    "net/http"
+    "time"
+)
+
+type greeting struct {
+    Message string `json:"message"`
+}
 
 func hello(w http.ResponseWriter, r *http.Request) {
-    if r.Method != http.MethodGet {
-        http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-        return
-    }
     w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(greeting{Message: "hello"})
+    if err := json.NewEncoder(w).Encode(greeting{Message: "hello"}); err != nil {
+        log.Printf("write greeting: %v", err)
+    }
 }
 
 func main() {
     mux := http.NewServeMux()
-    mux.HandleFunc("GET /hello", hello) // Go 1.22+ pattern
-    log.Fatal(http.ListenAndServe(":8080", mux))
+    mux.HandleFunc("GET /hello", hello) // Go 1.22+ 方法路由
+    srv := &http.Server{
+        Addr:              ":8080",
+        Handler:           mux,
+        ReadHeaderTimeout: 5 * time.Second,
+    }
+    if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+        log.Fatal(err) // 仅示范 main 入口；生产关闭协议见本模块生命周期篇
+    }
 }
 ```
 
@@ -124,18 +138,9 @@ srv := &http.Server{
 
 官方参考：[net/http package](https://pkg.go.dev/net/http)、[encoding/json package](https://pkg.go.dev/encoding/json)。
 
-> [!summary] 核心摘要
->
-> Go 的 HTTP 分层中，handler 只处理协议边界：路由、输入校验、鉴权上下文与 JSON/状态码转换；service 保存业务规则和事务边界；repository 隔离存储细节。中间件放日志、超时、恢复和认证等横切关注点。这样既便于 `httptest` 覆盖边界，也便于替换实现。
+# 动手验证
 
-> [!question]- 自测：先回答再展开
-> 1. `POST /todos` 中，哪些错误应该映射为 400、401、404、409、500？
-> 2. 为什么不应让 repository 直接返回 HTTP 状态码？
-> 3. 怎样用 `httptest` 验证响应的状态码、`Content-Type` 和 JSON body？
-
-# 练习
-
-写 `GET /healthz` 与 `POST /todos`，限制 body，拒绝未知字段，并用 `httptest.NewRecorder` 覆盖 200、400、405、413。再用一个会超时的假 repository 验证 request context 能终止下游工作。
+给 `GET /hello` 和 `POST /todos` 写 `httptest`：分别检查成功 JSON、错误方法、未知字段、第二个 JSON 值、body 超限和服务层错误。方法路由的 405 与 `Allow` 响应由当前 `ServeMux` 负责；请求体超限应识别 `*http.MaxBytesError` 并映射为 413，而不是一律返回 400。
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Routing Validation and Errors (路由校验与错误)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/02-Routing%20Validation%20and%20Errors%20(路由校验与错误).md)

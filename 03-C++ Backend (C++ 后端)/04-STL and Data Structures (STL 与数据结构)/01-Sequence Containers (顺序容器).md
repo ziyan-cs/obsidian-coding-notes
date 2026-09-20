@@ -1,320 +1,118 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
-# vector Dynamic Array and Reallocation (动态扩容原理)
+> [!abstract] 学习目标
+> 能按“连续内存、两端操作、节点稳定性”选容器；能对每次插删指出迭代器、引用与指针各自是否仍有效。以下以 C++17 为基线。
 
-> [!note] 本节重点：动态数组的连续内存布局、扩容策略、迭代器失效场景、与 `std::array`/原始数组的抉择
+# 先选数据布局，而不是背容器排名
 
-## 内存布局与核心特性
+| 容器 | 存储与访问 | 擅长的操作 | 主要代价 |
+| --- | --- | --- | --- |
+| `std::array<T,N>` | 固定大小、连续存储，随机访问 O(1) | 大小编译期已知、无需动态增长 | 容量不能变 |
+| `std::vector<T>` | 可增长的连续存储，随机访问 O(1) | 顺序遍历、尾部追加、与连续内存 API 交互 | 中间插删移动后续元素；扩容使旧地址失效 |
+| `std::deque<T>` | 分段存储，随机访问 O(1) | 两端增删 | 不能当一整块数组使用；迭代器规则不同于引用 |
+| `std::list<T>` | 双向节点链，双向迭代 | 已知位置插删、节点转移、稳定元素地址 | 查位置 O(N)，每节点额外存储与分配 |
 
-`vector` 管理一块连续存储；实现常以起始、结束、容量边界表示状态，但具体内部布局不由标准规定：
+不存在固定的“少于 100 个元素必用 vector”或“list 遍历一定慢十倍”。先根据接口要求排除不合适容器，再用实际元素大小、操作分布和负载测量常数成本。
+
+# `vector`：连续存储与重分配
+
+`size()` 是已构造元素数，`capacity()` 是不需重新分配就能容纳的元素数，`data()` 指向连续元素区。标准保证连续存储、尾部追加均摊常数复杂度，但**不规定容量每次增长 1.5 倍还是 2 倍**。一次扩容可能移动或复制既有元素；`emplace_back` 仅在尾部直接构造新元素，不保证扩容时没有移动/复制。
+
+| 操作 | 复杂度 | 失效规则的重点 |
+| --- | --- | --- |
+| `push_back` / `emplace_back` | 均摊 O(1)，扩容时 O(N) | 重新分配：全部迭代器、引用、指针失效；否则旧元素有效，旧 `end()` 失效 |
+| `reserve(n)` | 最多 O(N) | 仅当发生重新分配时使全部失效；不改变 `size()` |
+| `insert(pos)` | 通常 O(N) | 重新分配则全部失效；否则插入点及之后的迭代器/引用失效 |
+| `erase(pos)` | O(N) | 删除点及之后的迭代器/引用失效，包含旧 `end()` |
+| `pop_back` | O(1) | 被删除元素和旧 `end()` 失效 |
+| `resize` | 可能 O(N) | 增长且重分配则全失效；缩小时被删元素失效；旧 `end()` 需重取 |
+
+以下示例先 `reserve` 再取得迭代器，且追加后仍未超过容量，因此旧元素迭代器有效。若把 `reserve` 放在保存迭代器**之后**，它反而可能使该迭代器失效。
 
 ```cpp
-// 伪代码：典型 vector 内部结构
-struct vector_internals {
-    T* _start;       // 数据起始
-    T* _finish;      // 已构造元素末尾
-    T* _end_of_storage; // 已申请内存末尾
-};
-// size() = _finish - _start
-// capacity() = _end_of_storage - _start
-```
+#include <cassert>
+#include <vector>
 
-**连续内存是核心优势**：Cache locality 极好，迭代、随机访问都是 O(1)。
+int main() {
+    std::vector<int> values;
+    values.reserve(4);
+    values.push_back(1);
+    auto first = values.begin();
+    values.push_back(2); // size <= capacity，无重分配
+    assert(*first == 1);
 
-## 扩容策略（Reallocation）
-
-当 `size() == capacity()` 时 `push_back` 触发扩容：
-
-```cpp
-// 典型扩容流程
-void push_back(const T& val) {
-    if (_finish == _end_of_storage) {
-        size_t new_cap = grow();  // 计算新容量
-        T* new_buf = allocate(new_cap);
-        move_or_copy(_start, _finish, new_buf);  // 转移已有元素
-        deallocate(_start);
-        _start = new_buf;
-        _finish = new_buf + old_size;
-        _end_of_storage = new_buf + new_cap;
+    for (auto it = values.begin(); it != values.end();) {
+        if (*it % 2 == 0) it = values.erase(it);
+        else ++it;
     }
-    construct(_finish, val);
-    ++_finish;
+    assert(values.size() == 1 && values[0] == 1);
 }
 ```
 
-**扩容倍数对比（工程选择）**：
+已知大致规模时 `reserve` 可减少重分配，但过度预留浪费内存；`shrink_to_fit` 是**非强制请求**，不能写成“调用就会释放容量”。`vector<bool>` 是标准特化，其元素访问可能是代理而非 `bool&`；需要真正的独立 `bool` 引用时不要用它。
 
-| 策略 | 实现 | 均摊 O(1) | 内存浪费 | 典型使用者 |
-|------|------|-----------|----------|-----------|
-| 固定增量 | `cap += N` | ❌ O(N) | 低 | — |
-| 几何增长 | 实现定义 | ✅ | 与增长因子有关 | 标准不规定具体倍数 |
+## 为何不能用 `realloc` 搬运一般对象
 
-> **工程选择**：标准只保证扩容后的复杂度语义，不保证增长倍数。不要把某编译器版本的容量序列写进业务逻辑；已知数量时用 `reserve`，未知数量时依据 profile 判断是否值得优化。
+非平凡 C++ 对象有构造、移动、析构和异常安全规则；把其字节直接挪到新地址不能代替这些操作。学习 `vector` 扩容时记住“申请新存储 → 构造新元素/转移旧元素 → 成功后销毁旧元素并释放旧存储”，但具体顺序和异常处理由实现与元素类型决定，不能把概念流程当源码布局。
 
-## 关键操作与复杂度
+# `deque`：两端操作与迭代器陷阱
 
-| 操作 | 复杂度 | 说明 |
-|------|--------|------|
-| `operator[]` / `at()` | O(1) | `at()` 带边界检查（抛异常） |
-| `push_back` | **均摊** O(1) | 扩容时 O(N)，极少数次 |
-| `pop_back` | O(1) | 不释放内存，只析构 |
-| `insert(pos)` | O(N) | 后续元素全部后移 |
-| `erase(pos)` | O(N) | 后续元素全部前移 |
-| `emplace_back` | **均摊** O(1) | 原地构造，避免拷贝 |
+`deque` 支持随机访问以及两端单元素常数时间增删。常见实现用多个块与索引结构，但块大小、指针层数、增长倍数不是标准保证；不能把“每块 512 字节”当可移植事实。
 
-## 迭代器失效（面试重点）
+尤其要区分**迭代器**和**元素引用**：
 
-哪些操作会让迭代器**失效**：
-
-| 操作 | 失效范围 | 原因 |
-|------|---------|------|
-| `push_back` / `emplace_back` | 发生重分配则全部；否则通常仅 `end()` | 重分配或末尾变化 |
-| `insert` / `erase` | 发生重分配则全部；否则位置及之后失效 | 元素移动 |
-| `reserve` | 仅当容量真的改变时全部失效 | 可能触发重分配 |
-| `resize(n)` (n > capacity) | **全部** | 触发重分配 |
-| `resize(n)` (n <= capacity) | 仅超出元素失效 | 仅析构超出部分 |
-| `pop_back` | 仅被删除元素及 `end()` | — |
+| 操作 | 旧迭代器 | 旧元素引用/指针 |
+| --- | --- | --- |
+| 两端插入一个元素 | 全部失效 | 指向原有元素的仍有效 |
+| 中间插入 | 全部失效 | 全部失效 |
+| 擦除首元素但不擦最后元素 | 仅被删元素失效 | 仅被删元素失效 |
+| 擦除最后元素 | 被删元素和旧 `end()` 失效 | 仅被删元素失效 |
+| 擦除中间元素 | 全部失效 | 全部失效 |
 
 ```cpp
-// ❌ 错误：扩容导致迭代器失效
-std::vector<int> v{1, 2, 3};
-auto it = v.begin();
-v.push_back(4);  // 可能扩容，it 悬空
-*it = 10;        // 未定义行为！
+#include <cassert>
+#include <deque>
 
-// ✅ 正确：预留足够容量
-v.reserve(100);
-auto it2 = v.begin();
-v.push_back(42);  // 不会扩容
-*it2 = 10;        // ✅ 安全
+int main() {
+    std::deque<int> queue{1, 2};
+    int& original = queue.front();
+    [[maybe_unused]] auto old_begin = queue.begin();
+    queue.push_back(3);
+    assert(original == 1); // 原元素引用仍有效
+    // old_begin 已失效，不能再比较、解引用或递增
+    assert(queue[1] == 2);
+}
 ```
 
-## 工程最佳实践
+想继续遍历时，插入后重新取得 `begin()` / `end()`。`deque` 不是一整块连续数组，不能把 `&d[0]` 当成长度为 `d.size()` 的 C 数组传入接口。若主要需求是连续扫描而非双端操作，应先考虑 `vector` 并基准验证。
+
+# `list`：稳定节点与已知位置的 O(1)
+
+`list` 的插入和擦除不会使**其他元素**的迭代器、引用失效。给定正确位置后，单元素插入或擦除是常数时间；如果要先按值查找该位置，查找仍是 O(N)。没有随机访问迭代器，因此不能写 `list[i]` 或交给 `std::sort`；使用 `list::sort`。
 
 ```cpp
-// ✅ 预分配避免频繁扩容
-std::vector<int> v;
-v.reserve(1000);  // 已知大约数量时提前预留
+#include <cassert>
+#include <list>
 
-// ✅ 在直接传构造参数时可用 emplace_back；已有对象时 push_back 同样清晰
-v.emplace_back(args...);
+int main() {
+    std::list<int> left{1, 3, 5};
+    std::list<int> right{2, 4, 6};
+    auto keep = left.begin();       // 指向 1
+    left.merge(right);              // 两边已按同一比较器排序
+    assert(right.empty() && *keep == 1);
 
-// ✅ shrink_to_fit 释放多余内存（O(N) 拷贝, 谨慎使用）
-v.shrink_to_fit();
-
-// ❌ 不要把 vector<bool> 当普通 vector 用
-// vector<bool> 是位压缩特化，operator[] 返回代理对象而非引用
+    std::list<int> extra{9};
+    left.splice(left.end(), extra); // 整表转移；extra 变空
+    assert(extra.empty() && *keep == 1);
+    left.sort();
+}
 ```
 
-> **面试常见题**：重分配需要在新存储中构造元素，并处理移动/拷贝的异常安全；不能把非平凡 C++ 对象按字节 `realloc`。实现会依据元素类型的移动/拷贝性质选择策略。
+`splice` 转移节点而非复制元素，但复杂度要看重载：整表或单节点转移为常数时间；**跨容器区间**转移通常要线性计数。不同 list 的分配器不相等时，不能随意拼接。`merge` 要求两个链表都已按同一比较关系排序；上例先归并再拼接 `9`，最后重新排序。`list::unique` 仅移除**相邻**重复值，不是全局去重。
 
-> [!summary] 核心摘要
->
-> `vector` 用连续存储换取随机访问与 cache locality，代价是中间插删和扩容时可能移动元素。重分配会使全部迭代器、指针和引用失效；未重分配时要按具体操作判断失效范围。容量增长倍数是实现细节，已知规模才用 `reserve` 明确表达预分配意图。
+在需要长期保存元素地址、从已知位置频繁转移节点时 `list` 可能合适；仅因“中间插入 O(1)”就选它，常忽略了寻找位置、分配和遍历成本。
 
-## vector vs 其他容器
-
-| 场景 | 推荐 |
-|------|------|
-| 随机访问为主 | `vector` |
-| 频繁头插/头删 | `deque` 或 `list` |
-| 频繁中间插入 | `list` 或 `deque` |
-| 大小固定且编译期已知 | `std::array` |
-| 需要稳定迭代器 | `list`（插入删除不影响已有迭代器） |
-
----
-
-# deque Block Based Storage (分块存储)
-
-> [!note] 本节重点：双端队列的分块存储结构、中间段指针管理、与 vector 的性能取舍
-
-## 内存布局
-
-`deque` 由**多个固定大小的块（buffer）** 和一个**中控器（map）** 组成：
-
-```text
-deque Memory Layout:
-
-  Map (Middle Controller / Pointer Array)
-  ┌─────────────────────────────────────┐
-  │  blk ptr 0  │  blk ptr 1  │  blk ptr 2  │  blk ptr 3  │
-  └──────┬──────────────────┬──────────────┴──────────────┘
-         │                  │              │
-         ↓                  ↓              ↓
-  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-  │  Data Block 0 │  │  Data Block 1 │  │  Data Block 2 │
-  ├──────────────┤  ├──────────────┤  ├──────────────┤
-  │ elem │ elem │  │ elem │ elem │  │ elem │ elem │
-  │ elem │ elem │  │ elem │ elem │  │ elem │ elem │
-  └──────────────┘  └──────────────┘  └──────────────┘
-
-Properties:
-  - Each block is fixed size (typically 512 bytes)
-  - push_front / push_back: O(1) amortized
-  - Random access operator[]: O(1) but requires double indirection
-    (map → buffer → element)
-```
-
-- 每个 buffer 固定大小（通常是 512 字节，或 `max(1, 512/sizeof(T))` 个元素）
-- map 是中控器（指针数组），元素指向各个 buffer
-- 向两端插入时，头/尾 buffer 满了就分配新 buffer 并更新 map
-
-## 核心操作
-
-| 操作 | 复杂度 | 说明 |
-|------|--------|------|
-| `push_front` / `push_back` | O(1) | 只有新 buffer 时才分配 |
-| `pop_front` / `pop_back` | O(1) | 释放整个 buffer 达到阈值时才真正释放 |
-| `operator[]` | O(1) | **两次间接跳转**（map → buffer → element）|
-| `insert` 中间 | O(N) | 需要搬移元素 |
-| `begin` / `end` | O(1) | |
-
-## deque 与 vector 关键区别
-
-| 特性 | `vector` | `deque` |
-|------|----------|---------|
-| 内存布局 | 单一连续块 | 多块不连续 |
-| 头插 | O(N) ❌ | O(1) ✅ |
-| 尾插 | 均摊 O(1) | O(1) |
-| 随机访问 | O(1) **一次间接** | O(1) **两次间接** |
-| 扩容影响 | **全部**迭代器失效 | 仅**指向被移动元素的**迭代器失效 |
-| `push_front` | 不支持 | 支持 |
-| 与 C API 兼容 | ✅ `&v[0]` | ❌ |
-| 内存碎片 | 低 | 略高 |
-
-## 迭代器失效规则
-
-```cpp
-deque<int> d = {1, 2, 3, 4, 5};
-
-// ✅ 头尾插入：不影响已有元素的迭代器
-auto it = d.begin() + 2;  // 指向 3
-d.push_front(0);
-d.push_back(6);
-assert(*it == 3);  // ✅ 安全
-
-// ❌ 中间插入/删除：全部失效
-d.insert(d.begin() + 2, 99);
-*it;  // 未定义行为！
-```
-
-## 工程建议
-
-```cpp
-// ✅ deque 适合：双端队列、滑动窗口
-std::deque<int> window;
-
-// ✅ 也适合：任务队列（两端调度）
-std::deque<std::function<void()>> tasks;
-
-// ✅ 与 vector 混合：vector 存大数据时，重分配拷贝代价高
-// 但 deque 分段存储，扩容不拷贝已有元素
-
-// ❌ 不要假设 deque 元素是连续存储的
-// ❌ 不要用 &d[0] 传给 C 接口
-// ❌ 不适合频繁随机访问——两次间接开销高于 vector
-```
-
-> **选择依据**：`deque` 和 `vector` 均支持常数时间随机访问，但 `deque` 是分段存储，局部性与常数成本可能不同；不存在通用的“慢几倍”结论。需要连续内存或与 C API 互操作时选 `vector`；频繁在两端增删且不要求连续内存时考虑 `deque`，再按真实负载基准测试。
-
----
-
-# list Doubly Linked List (双向链表)
-
-> [!note] 本节重点：双向链表的节点级内存分配、插入删除不失效、与 vector 的性能反转
-
-## 内存布局 · 延伸要点 2
-`list` 是一个**双向循环链表**（GCC 实现为带哨兵节点的循环链表）：
-
-```cpp
-// 节点结构
-struct _List_node {
-    _List_node* _M_next;  // 指向下一个节点
-    _List_node* _M_prev;  // 指向上一个节点
-    T           _M_data;  // 存储的元素
-};
-
-// 哨兵节点（list 自身持有一个哨兵节点）
-// 空 list: 哨兵._M_next = 哨兵._M_prev = &哨兵
-// 非空: 哨兵  ↔  node1  ↔  node2  ↔  哨兵
-```
-
-**每个节点独立分配在堆上**——这是 `list` 最核心的性能特征。
-
-## 核心操作复杂度
-
-| 操作 | 复杂度 | 说明 |
-|------|--------|------|
-| `push_back` / `push_front` | O(1) | 只操作指针 |
-| `pop_back` / `pop_front` | O(1) | 只操作指针，析构节点 |
-| `insert(pos, val)` | O(1) | **已知迭代器时**，只改邻近指针 |
-| `erase(pos)` | O(1) | 同上 |
-| `operator[]` | ❌ **不支持** | 需要遍历 |
-| `find(val)` | O(N) | 线性遍历 |
-| `size()` | O(1) (C++11+) | C++11 前是 O(N) |
-| `splice` | O(1) | 只移动节点（不拷贝数据） |
-
-## list vs vector：性能反转场景
-
-```cpp
-// vector: 中间插入 O(N) ❌
-// list:   中间插入 O(1) ✅ (已知位置)
-std::list<int> l = {1, 2, 3, 4, 5};
-auto it = l.begin(); std::advance(it, 2);
-l.insert(it, 99);  // O(1) — 只改指针
-```
-
-| 场景 | `vector` | `list` |
-|------|----------|--------|
-| 遍历全部元素 | ✅ 极快（连续内存，缓存友好） | ❌ 慢（跳跃访问，缓存不友好）|
-| 任意位置插入 | ❌ O(N) | ✅ O(1) |
-| 随机访问 | ✅ O(1) | ❌ 不支持 |
-| 内存开销 | 低（只有数据） | 高（每节点 2 个指针 + 可能的内存碎片）|
-| 排序 | ✅ `std::sort` | 只能 `list::sort` (归并) |
-| 迭代器稳定性 | 扩容时全失效 | **插入/删除不影响其他迭代器** |
-
-> **关键认知**：遍历 `list` 比 `vector` **慢一个数量级**。因为 `list` 的节点在堆上随机分布，每次访问 `_M_next` 都可能 cache miss。如果你需要**大量遍历**（一次遍历耗时超过数十次插入节省的时间），宁愿用 `vector`。
-
-## 唯一特性：拼接与归并
-
-```cpp
-std::list<int> a{1, 3, 5}, b{2, 4, 6};
-
-// splice：把 b 的所有节点转移到 a（O(1) 指针操作）
-a.splice(a.end(), b);  // 之后 b 为空
-// b 的节点被"嫁接"到 a——零拷贝！
-
-// merge：归并两个有序链表
-a.sort();
-b.sort();
-a.merge(b);  // O(N) 比较 + 指针操作
-
-// unique：去除连续重复元素
-a.unique();
-```
-
-## 工程建议 · 延伸要点 2
-```cpp
-// ✅ list 适合：需要维护指向元素的稳定指针/迭代器
-struct Request { int id; /* big data */ };
-std::list<Request> pending;
-auto iter = pending.insert(pending.end(), {42});
-// 后续大量插入/删除不影响 iter
-
-// ✅ 适合：大对象的容器（拷贝代价高，无法移动的场景）
-// ✅ 适合：需要 O(1) 的 splice/merge
-
-// ❌ 数据量小（< 100 元素）时不必用 list，vector 遍历更快
-// ❌ 频繁 size() 调用（C++11 后没问题，但 list::size O(1) 有额外计数开销）
-// ❌ 缓存不敏感场景：如果不做频繁中间插入，vector + reserve 几乎总是更好
-```
-
-> **面试重点**：为什么 `list::size()` 在 C++11 前是 O(N)？原因是某些实现（GCC）为了让 `splice` 保持 O(1) 而不维护 `_M_size`。C++11 规定 `size()` 必须是 O(1)，因此 GCC 增加了 `_M_size` 计数器，splice 时手动调整。
-
----
+参考：[`vector` 容量](https://eel.is/c++draft/vector.capacity)、[`deque` 插删失效规则](https://eel.is/c++draft/deque.modifiers)、[`list` 节点操作](https://eel.is/c++draft/list.ops)。

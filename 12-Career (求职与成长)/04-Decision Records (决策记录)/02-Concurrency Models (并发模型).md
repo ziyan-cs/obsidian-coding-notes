@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [comparison, concurrency]
 ---
 
@@ -45,4 +43,3 @@ tags: [comparison, concurrency]
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Error Handling (错误处理)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/03-Error%20Handling%20(错误处理).md)
-

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/server]
 ---
 
@@ -49,7 +47,7 @@ srv := &http.Server{
 
 # 关闭状态机
 
-推荐顺序：readiness=false 并等待负载均衡传播；停止接收新工作；取消根 context；调用 `Server.Shutdown` 等待在途请求；停止 producer；关闭任务队列并等待 worker；flush 有界缓冲；最后关闭数据库等依赖。
+推荐顺序：readiness=false 并按部署条件等待流量摘除；停止接收新工作；调用 `Server.Shutdown` 排空普通 HTTP 请求；再按依赖关系停止后台 producer、关闭任务队列并等待 worker；flush 有界缓冲；最后关闭数据库等依赖。不要在排空前无差别取消所有在途请求的父 context。
 
 顺序取决于依赖图：仍在使用 DB 的 worker 退出前不能先关 DB。所有等待都有总 deadline，超时后记录未完成数量和 goroutine/任务证据，再决定强制退出。
 
@@ -66,24 +64,10 @@ srv := &http.Server{
 # 故障演练
 
 在请求处理中发送 SIGTERM，确认新请求被摘除、在途请求在期限内完成；让一个 handler 永不返回，确认总 deadline 后进程能退出并留下证据；让后台 worker 先失败，确认主进程不会继续假装健康。
-# 检查清单
+# Shutdown 的边界与演练
 
-- [ ] readiness / health endpoint 语义不同：能否接流量 vs 进程是否活着。
-- [ ] 所有请求路径能接收 `context` 取消。
-- [ ] shutdown 有超时；超时后记录必要日志。
-- [ ] DB、Redis、worker 等依赖有明确关闭顺序。
-- [ ] 启动、监听失败与正常关闭分别处理，不能全部 `Fatal`。
+`Server.Shutdown(ctx)` 会关闭 listener、拒绝新连接，并等待当前普通 HTTP 请求结束；传入的 `ctx` 是**关闭操作的预算**，应从未取消的独立 context 派生。若它超时返回，尚未结束的请求可能仍在运行，进程必须有明确的强制退出策略及未完成工作记录。
 
-> [!summary] 核心摘要
->
-> 优雅关闭的顺序是：收到取消信号，停止接收新请求，让 readiness 反映不可接流量；在有限 timeout 内等待在途请求，并按依赖关系关闭 worker、连接池等资源。`context` 应从入口向下传递，监听失败、正常关闭和关闭超时也必须区分处理。
+`Shutdown` 不自动等待 hijacked 连接（如 WebSocket）或任意后台 goroutine；这些资源需要应用自己发停止信号、等待并设置上限。演练时分别制造慢请求、永不返回的 handler 和长连接，观察 readiness、监听返回、关闭耗时与已完成请求数。
 
-> [!question]- 自测：先回答再展开
-> 1. health 与 readiness 为什么不能总用同一个 endpoint？
-> 2. 为什么 `Shutdown` 的 timeout 不应复用已经被取消的根 `context`？
-> 3. 有后台 worker、HTTP server 和 DB pool 时，关闭顺序如何确定？
-
-# C++ 对照
-
-与 C++ server 的“优雅关闭”目标相同：停止接入、排空在途任务、释放资源。差异在于 Go 通常以 `context` 从入口向下传播取消信号。
-
+官方依据：[net/http Server.Shutdown](https://pkg.go.dev/net/http#Server.Shutdown)。

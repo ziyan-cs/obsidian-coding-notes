@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
@@ -15,7 +13,7 @@ content_verified: 2026-09-17
 
 # 传统 IO 的数据拷贝
 
-传统 `read + write` 传输文件涉及 **4 次上下文切换 + 4 次数据拷贝（其中 2 次 DMA、2 次 CPU）**：
+在经典“磁盘文件经用户缓冲区发送到网卡”的简化模型里，`read + write` 涉及两次用户/内核之间的 CPU 数据复制；下面的箭头只用于比较路径，**不是每次请求固定发生的物理拷贝次数**。页缓存命中、设备 DMA、TLS 与网络卸载都会改变真实路径。
 
 ```
 磁盘 → 内核缓冲区（DMA 拷贝）
@@ -38,7 +36,7 @@ ssize_t n = write(sockfd, addr, length);
 munmap(addr, length);
 ```
 
-**拷贝次数：** 3 次（2 次 DMA + 1 次 CPU）
+**简化模型：** 映射让应用访问页缓存，省去 `read` 填充用户缓冲区的一次 CPU 复制；`write` 仍可能把数据复制到 socket 路径。
 - 磁盘 → 内核缓冲区（DMA）
 - 内核缓冲区 → socket 缓冲区（CPU）← 省去了一次用户缓冲区拷贝
 - socket 缓冲区 → 网卡（DMA）
@@ -60,31 +58,30 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
 
 # 零拷贝深入：scatter/gather
 
-Linux 2.4+ 的 sendfile 进一步优化：内核缓冲区无需真正将数据拷贝到 socket 缓冲区，而是通过**描述符**直接告诉网卡数据位置（SG-DMA）：
+某些内核、设备与发送路径可以让 `sendfile` 通过页引用或 scatter/gather 进一步减少内核内的数据复制；这是**可能的实现优化**，不是 Linux 2.4+ 在任何文件、socket 和 TLS 配置上的统一保证：
 
 ```
 磁盘 → 内核缓冲区（DMA 拷贝）
 内核缓冲区 → 网卡（SG-DMA，零 CPU 拷贝）
 ```
 
-# 各方案对比
+# 各方案对比（概念模型）
 
-| 方案 | CPU 拷贝 | DMA 拷贝 | 上下文切换 | 系统调用 |
-|------|---------|---------|-----------|---------|
-| read + write | 2 | 2 | 4 | 2 |
-| mmap + write | 1 | 2 | 2 | 2 |
-| sendfile | 0 | 2 | 2 | 1 |
-| 带 scatter/gather 的 sendfile | 0 | 2 | 2 | 1 |
+| 方案 | 用户缓冲区 CPU copy | 主要限制 |
+|------|---------------------|----------|
+| `read` + `write` | 通常需要 | 可由应用解析、修改数据；必须处理短读写 |
+| `mmap` + `write` | 省去文件到用户缓冲区的一次复制 | 映射生命周期、页错误与 `write` 路径仍有成本 |
+| `sendfile` | 通常避免 | 输入 fd 类型有限，可能短传输，TLS/设备能力影响路径 |
 
 # splice：管道零拷贝
 
 ```c
 // splice 在两个 fd 之间移动数据，不经过用户空间
-int splice(int fd_in, loff_t *off_in, int fd_out,
-           loff_t *off_out, size_t len, unsigned int flags);
+ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
+               loff_t *off_out, size_t len, unsigned int flags);
 ```
 
-用于任意两个 fd 之间的零拷贝数据传输（不限于文件到 socket）。
+两个 fd 中至少一个必须是 pipe；可借助 pipe 在受支持的 fd 之间转移数据，但不是“任意两个 fd 直接互传”。还需处理短传输、`EAGAIN` 和文件系统不支持等失败。
 
 > [!tip]- **工程要点**：零拷贝的核心思路是避免不必要的用户态数据搬运。`sendfile` 常适合静态文件到 socket 的直通路径；一旦需要在应用层查看或修改 body（例如内容转换），就需要不同的数据路径。TLS/协议栈配置也可能改变实际收益，先测量再选择。
 
@@ -92,4 +89,4 @@ int splice(int fd_in, loff_t *off_in, int fd_out,
 >
 > `mmap` 让文件页映射进进程虚拟地址空间，应用仍可读写该映射；`sendfile` 让内核在文件与 socket 之间组织传输，通常避免用户缓冲区 copy。它们解决的是数据搬运成本，不替代缓存策略、网络瓶颈或应用层处理；“是否更快”必须针对真实文件大小、TLS 和网卡环境验证。
 >
-> 零拷贝与 mmap 详解见 → File System & Permissions (文件系统与权限) · Process Lifecycle (生命周期)
+> 实施前查 [sendfile(2)](https://man7.org/linux/man-pages/man2/sendfile.2.html) 与 [splice(2)](https://man7.org/linux/man-pages/man2/splice.2.html) 的 fd 限制，并在目标环境测量。

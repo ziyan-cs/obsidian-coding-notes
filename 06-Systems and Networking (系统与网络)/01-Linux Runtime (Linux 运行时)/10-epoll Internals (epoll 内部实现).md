@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标：理解兴趣集合、就绪列表与事件返回成本，避免 mmap 零拷贝等错误表述。
@@ -108,25 +106,26 @@ Key Advantage:
 
 内核维护关注集合与就绪集合；epoll_wait 将就绪事件返回到用户提供的 events 缓冲区。epoll 不以 mmap 共享用户态/内核态事件区作为其机制——就绪事件经 copy_to_user 拷入用户空间，代价 O(k)（k 为就绪事件数）。
 
-# 性能对比数字
+# 性能模型：关注集合与本次就绪数
 
 ```
-场景：100 万个连接，只有 1 个活跃连接
+场景：注册了很多连接，本轮只有少量 fd 就绪
 
-select: 遍历 100 万位 → O(n)  → 100 万次检查
-poll:   遍历 100 万 pollfd → O(n) → 100 万次检查
-epoll:  仅返回 1 个就绪事件 → O(1) → 1 次取数
+select/poll: 每轮传入并检查关注集合，工作量随关注数量 n 增长
+epoll:       关注集合保留在内核，返回至多 maxevents 个就绪项
+             用户态处理 k 个返回事件至少需要 O(k) 工作
 
 场景：100 个连接，50 个活跃
 
-select/poll: 仍遍历 100 → O(n)
-epoll:       返回 50 → O(k)，k=50
+select/poll: 每轮仍需检查传入的关注集合
+epoll:       本轮至多返回 50 个事件，用户态逐项处理
 ```
 
 > [!tip]- **工程要点**
-> epoll 的优势在连接数大（>1000）时尤其明显。对于少量长连接，select 或 poll 的简单性足够。epoll 的红黑树维护本身也有开销——适合"大并发、稀疏活跃"的场景。Redis 单线程用 epoll 处理数万连接正是利用了 O(1) 就绪通知的优势。
+> epoll 通常适合关注 fd 多、每轮就绪比例低的事件循环，但没有通用的“超过 1000 必须改用 epoll”阈值。`epoll_wait` 仍需把本轮事件写入用户缓冲区，应用也要逐项处理；注册、修改、回调与锁争用都有成本。`select` 还受 `fd_set`/`FD_SETSIZE` 使用方式限制，不能把“百万 fd 的 select”当作可直接执行的对照实验。实际选型以目标平台的负载和 profile 为准。
 
 ---
 
 关联：[epoll API and Trigger Modes (epoll API 与触发模式)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/09-epoll%20API%20and%20Trigger%20Modes%20(epoll%20API%20与触发模式).md)
-- System Administration Basics (系统管理基础)
+
+[epoll(7) Linux manual](https://man7.org/linux/man-pages/man7/epoll.7.html) · [epoll_wait(2) Linux manual](https://man7.org/linux/man-pages/man2/epoll_wait.2.html)

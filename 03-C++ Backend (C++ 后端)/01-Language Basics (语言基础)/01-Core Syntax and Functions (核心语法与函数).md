@@ -1,8 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-previous_review_due: 2026-09-07
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标
@@ -88,5 +85,5 @@ std::optional<int> divide_exact(int numerator, int denominator) {
 3. 测试 `divide_exact` 的除零、不整除、精确整除和 `INT_MIN / -1`。
 
 > [!info]- 延伸阅读
-> - [02-Arrays Strings and IO (数组字符串与输入输出)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)
+> - [02-Arrays Strings and IO (数组字符串与输入输出)](/03-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)
 > - 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)

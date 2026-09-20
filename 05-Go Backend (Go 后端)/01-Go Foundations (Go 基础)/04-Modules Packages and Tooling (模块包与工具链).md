@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [language/go, go/tooling]
 ---
 
@@ -40,13 +38,13 @@ todo-api/
 
 > [!warning]- 易错点
 > - 不要手改 `go.sum` 来“解决”依赖问题；先理解是版本、网络还是 import 错误。
-> - `internal/` 外的 package 无法导入其下目录，这是刻意的封装边界。
+> - `internal/` 的可导入范围由其父目录树决定，不是简单的“只有同一 module 能导入”；把它放在 module 根下时，通常符合本项目的封装预期。
 > - 不在同一项目中随意创建多个 module；初学项目先保持一个 `go.mod`。
 >
 
 > [!summary] 核心摘要
 >
-> `go.mod` 定义 module，也就是依赖和版本的边界；package 是一个目录内共同编译的代码单元。`internal/` 是编译器帮助执行的封装规则：同 module 外的代码不能导入它。项目先维持一个 module、清晰的业务 package，再用 `go mod tidy` 与测试命令保持依赖真实可用。
+> `go.mod` 定义 module 的路径、最低 Go 版本和依赖；package 是同目录共同编译的代码单元。`internal/` 的导入限制依父目录树，而非直接依 module 边界判定。项目先维持一个 module、清晰的业务 package，再用 `go mod tidy` 与测试命令保持依赖真实可用。
 
 > [!question]- 自测：先回答再展开
 > 1. `go mod tidy` 为什么不是“万能修复命令”？它会做什么、不做什么？
@@ -64,6 +62,4 @@ todo-api/
 - 核验日期：2026-09-06
 
 > [!info]- 延伸阅读
-> - 下一步：[03-Errors Defer and Context (错误、defer 与 context)](/05-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20(错误、panic、defer%20与资源安全).md)
-
-
+> - 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](/05-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20(错误、panic、defer%20与资源安全).md)

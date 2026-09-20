@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-verified: 2026-09-18
+study_stage: reference
 tags: [career/roadmap, career/backend]
 ---
 
@@ -65,4 +63,3 @@ Python 在 Go 之前进入主线，用于建立脚本、测试、数据处理和
 - 唯一任务面板：[Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)
 - 到期复习：[Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)
 - 全库入口：[Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
-

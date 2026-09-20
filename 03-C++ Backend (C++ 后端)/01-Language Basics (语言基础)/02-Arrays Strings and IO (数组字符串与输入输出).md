@@ -1,8 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-previous_review_due: 2026-09-08
+study_stage: backlog
 ---
 
 > [!abstract] 学习目标
@@ -92,5 +89,5 @@ int main() {
 3. 用正常行、空行、非法 ID、文件不存在四种输入运行文件示例，记录各分支行为。
 
 > [!info]- 延伸阅读
-> - [01-Sequence Containers (顺序容器)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/01-Sequence%20Containers%20(顺序容器).md)
+> - [01-Sequence Containers (顺序容器)](/03-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/01-Sequence%20Containers%20(顺序容器).md)
 > - 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)

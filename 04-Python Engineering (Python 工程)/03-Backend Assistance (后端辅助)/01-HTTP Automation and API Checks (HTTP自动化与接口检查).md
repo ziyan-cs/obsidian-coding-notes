@@ -1,8 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
-previous_review_due: 2026-10-01
+study_stage: backlog
 tags: [language/python, python/http, testing/api]
 ---
 
@@ -13,26 +10,44 @@ tags: [language/python, python/http, testing/api]
 > 脚本的失败输出应足够让人定位问题，但不能泄露 `Authorization`、Cookie、token 或完整用户数据。把 URL、timeout 与凭据来源显式配置，避免“只在我的电脑能跑”。
 
 ```python
-from urllib.request import Request, urlopen
-from urllib.error import URLError, HTTPError
 import json
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
 
-def health(url: str, timeout: float = 3.0) -> dict:
+MAX_BODY = 1_048_576  # 1 MiB；由服务契约决定
+
+def health(url: str, timeout: float = 3.0) -> dict[str, object]:
+    if timeout <= 0:
+        raise ValueError("timeout must be positive")
+    host = urlsplit(url).hostname or "<unknown>"
     request = Request(url, headers={"Accept": "application/json"})
     try:
         with urlopen(request, timeout=timeout) as response:
             if response.status != 200:
-                raise RuntimeError(f"unexpected status: {response.status}")
-            return json.load(response)
+                raise RuntimeError(f"unexpected HTTP {response.status} from {host}")
+            media_type = response.headers.get_content_type()
+            if media_type != "application/json" and not media_type.endswith("+json"):
+                raise ValueError(f"unexpected content type from {host}")
+            body = response.read(MAX_BODY + 1)
     except HTTPError as exc:
-        raise RuntimeError(f"HTTP {exc.code} from {url}") from exc
+        raise RuntimeError(f"HTTP {exc.code} from {host}") from exc
     except URLError as exc:
-        raise RuntimeError(f"network error for {url}") from exc
+        raise RuntimeError(f"network error for {host}") from exc
+    if len(body) > MAX_BODY:
+        raise ValueError(f"response too large from {host}")
+    try:
+        value = json.loads(body)
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid JSON from {host}") from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"expected JSON object from {host}")
+    return value
 ```
 
 # 请求生命周期与预算
 
-一次 HTTP 调用可能在 DNS、建连、TLS、等待响应头和读取 body 任一阶段失败。timeout 不是“网络慢的重试按钮”，而是调用方愿意等待的预算；连接 timeout 与整体 deadline 应按客户端能力分别配置。
+一次 HTTP 调用可能在 DNS、建连、TLS、等待响应头和读取 body 任一阶段失败。`urlopen(timeout=...)` 约束底层阻塞操作，不能把它误认为整次请求的严格总 deadline；整体预算与取消需要在调用层另行设计。
 
 复用 client/session 可以复用连接池，避免每次重新握手。连接池也可能成为排队点，应限制并发并记录池等待、首字节和总耗时。客户端任务被取消后要停止后续重试和读取。
 
@@ -52,34 +67,14 @@ def health(url: str, timeout: float = 3.0) -> dict:
 
 默认验证证书和主机名，不用 `verify=False` 修复证书问题。token 从环境或秘密系统注入，限制作用域和有效期；日志记录 host、method、status、耗时和 request ID，但不记录 Authorization、Cookie 和敏感 body。
 
+上面的 checker 假设 URL 来自可信配置。若 URL 可由不可信用户提供，必须额外限制 scheme、目标 host/IP 与重定向，并考虑 DNS 变化；仅用 `urlsplit` 取出 host 供错误提示，**不能**防止 SSRF。
+
 # 测试矩阵
 
 用本地测试 server 或传入 fake transport 覆盖：成功、非 2xx、非法 JSON、body 过大、连接 timeout、读取 timeout、429、重复游标和客户端取消。断言重试不越过总预算，非幂等请求不会自动重复执行。
-# 检查维度
+# 动手验证
 
-- 网络：域名、连接、timeout、TLS。
-- 协议：method、status、header、JSON 格式。
-- 业务：必须字段、错误码、响应时间阈值。
-- 安全：token 从环境变量/安全存储读取；日志中脱敏。
-
-> [!summary] 核心摘要
->
-> Python 很适合做黑盒 API checker：发一个可配置、带 timeout 的请求，检查协议层（状态码、header、JSON）与业务层（字段、错误码、阈值），在失败时以非零退出码和脱敏上下文结束。它验证的是服务可观察到的行为，不替代服务端单元测试。
-
-> [!question]- 自测：先回答再展开
-> 1. `HTTPError` 和 `URLError` 分别代表哪一类失败？为什么要分别报告？
-> 2. 为什么“请求成功返回 200”还不足以判定接口健康？
-> 3. 如何让命令行脚本在健康检查失败时返回非零退出码？
-
-# C++ / Go 对照
-
-Python 适合写黑盒 API checker、回归脚本和压测结果处理；服务实现仍优先放在 Go/C++。工具必须保留可配置 URL、timeout 和明确失败输出，不能只在你电脑上“碰巧能跑”。
-
-# 练习
-
-为你的 Go `GET /healthz` 写 checker：成功打印 JSON；超时、非 200、无效 JSON 分别返回非零退出码。
+为一个本地 `GET /healthz` 写 checker，并用本地测试 server 覆盖：200 对象、200 数组、非 JSON、超过上限、非 2xx、连接失败和超时。CLI 应将失败映射为非零退出码，只输出脱敏 host、分类和 request ID。上例不自动重试；若要重试，应单独设计总 deadline、幂等前提与退避策略。
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Data Processing Boundaries (数据处理边界)](/04-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/02-Data%20Processing%20Boundaries%20(数据处理边界).md)
-
-

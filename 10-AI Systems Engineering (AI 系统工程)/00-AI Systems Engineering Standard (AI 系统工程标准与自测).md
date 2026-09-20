@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/standard, learning/self-assessment]
 ---
 
@@ -31,6 +29,8 @@ tags: [ai/standard, learning/self-assessment]
 - [ ] 能说明 GPU 调度、模型加载和多租户隔离的基本矛盾。
 
 # 综合自测
+
+完成本专题后，建议交付一个小型、只读的带引用问答服务：有可版本化的文档索引、租户/权限过滤、无答案拒答、12 条入门验证样本与更大规模的后续评估集；同时记录检索候选、引用、模型/索引版本、TTFT、总延迟和单位成功任务成本。再接入一个无副作用工具，用故障注入验证 schema、授权、超时和重试；真正的写操作须另外经过幂等与审批设计。
 
 1. 设计带引用的内部知识问答服务，说明数据更新、评估和权限边界。
 2. Agent 获得数据库与工单工具后，如何阻止提示注入诱导越权操作？

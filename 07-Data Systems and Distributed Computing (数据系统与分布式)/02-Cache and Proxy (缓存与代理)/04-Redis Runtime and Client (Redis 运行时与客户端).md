@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -66,32 +64,21 @@ Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O�
 | 原因 | 说明 |
 |------|------|
 | **纯内存操作** | 避免普通磁盘访问，但延迟仍受数据结构、CPU、缓存未命中与网络影响 |
-| **I/O 多路复用** | 单线程处理大量并发连接（基于 epoll） |
+| **I/O 多路复用** | 在 Linux 常用 epoll，其他平台可用不同事件后端 |
 | **非阻塞 I/O** | 不等待就绪事件，事件循环高效轮询 |
-| **无锁竞争** | 单线程不存在锁竞争和上下文切换 |
-| **数据结构优化** | SDS、ziplist 等针对内存效率优化 |
+| **命令执行路径简单** | 串行命令避免这一核心路径的大量共享数据锁竞争，但网络线程、后台任务与系统调度并非“全进程无锁无切换” |
+| **数据结构优化** | SDS、listpack、哈希表、跳表等在不同规模与访问模式下权衡内存和 CPU |
 
-### 延迟对比
+### 延迟先分解再归因
 
-```
-内存访问（L1/L2/L3）:  ~1-10 ns
-内存访问（RAM）:     ~100 ns
-SSD 随机读:         ~10-50 μs  ← 100× slower
-网络 RTT（同机房）:  ~0.5 ms  ← 5000× slower
-磁盘寻道:           ~10 ms   ← 100000× slower
-
-Redis 瓶颈通常在网络 I/O，而非 CPU
-```
-
-> 上表为**数量级参考**（经典 "Latency Numbers Every Programmer Should Know"），具体数值随硬件与网络环境变化，非精确测量值（MEASURE_LOCALLY）。Redis 实际延迟应通过 `redis-benchmark` / `redis-cli --latency` 在本机测量。
+一次请求的总延迟包含排队、网络往返、命令执行、响应传输及客户端自身开销。Redis 在内存执行不等于“瓶颈通常只在网络”：大 key、大集合遍历、Lua/Functions、过期清理、持久化、fork、缺页或 CPU 饱和都可能拉高尾延迟。用客户端端到端直方图、`SLOWLOG`、`LATENCY`、CPU/内存指标与网络测量定位，不背固定硬件纳秒或倍数。[Redis 延迟排查](https://redis.io/docs/latest/management/optimization/latency/)
 
 ---
 
 ## I/O 多路复用
 
 ```c
-// Redis 事件循环核心（ae.c）
-// 基于 epoll（Linux）/ kqueue（macOS）/ select（兜底）
+// 概念伪代码：非 Redis 源码，不可直接编译或据此推断当前版本内部结构
 
 void aeMain(aeEventLoop *eventLoop) {
     while (!eventLoop->stop) {
@@ -150,7 +137,7 @@ LTRIM / LREM   # 列表操作可能 O(N)
 ## Redis 6.0 多线程 I/O
 
 ```ini
-io-threads 4          # I/O 线程数（默认 4）
+io-threads 4          # 配置示例，不是通用默认值；先确认部署版本和 CPU 预算
 io-threads-do-reads yes  # 启用多线程读取
 ```
 
@@ -178,7 +165,7 @@ Main Thread                       I/O Threads
     ├── Next round of event loop       │
 ```
 
-**命令执行仍是单线程**，所以无需修改数据结构，无需考虑并发安全问题。
+多数常规命令仍由主事件循环串行执行，但这不意味着客户端并发读写天然安全：跨多条命令仍会交错，业务不变量要用原子命令、事务、Lua/Functions 或上层并发控制表达。
 
 ---
 
@@ -389,8 +376,6 @@ public:
 >
 > ---
 >
-> Redis 性能模型与缓存策略详解见 → Redis Single Thread Model (单线程模型为何高性能) · Expiration & Eviction Strategy (过期与淘汰策略)
 
 > [!info]- 延伸阅读
 > - 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/05-Nginx%20Proxy%20and%20Load%20Balancing%20(Nginx%20代理与负载均衡).md)
-

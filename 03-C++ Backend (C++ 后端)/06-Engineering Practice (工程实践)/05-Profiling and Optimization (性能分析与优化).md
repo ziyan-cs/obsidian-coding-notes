@@ -1,155 +1,91 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
 > [!note] 方法论坐标
 > 基准实验与剖析方法统一见 [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)；本篇聚焦 C++ release 构建、perf、分配器和 Google Benchmark。
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
 > 优化的起点是可复现测量：用 profiler 找到热点，提出单一假设并验证收益与回归；没有测量证据的“优化”通常只是复杂度转移。
 
-# Performance Profiling perf & valgrind (性能分析)
+# 从性能目标到可复现实验
 
-> [!note] 本节重点：性能分析工具链、perf 的基本使用、热点定位、优化前先测量
+性能优化首先要写出**要改善的量**：吞吐（requests/s）、延迟（尤其 P95/P99）、CPU 时间、内存峰值或分配率。不同目标可能冲突；单次微基准更快，不等于服务端到端延迟更低。保留输入规模、并发数、硬件、编译器与编译选项、运行环境及基线结果，才能比较“前后”。
 
-## 性能分析的原则
+1. 用真实或代表性的负载复现问题，确认瓶颈是 CPU、等待 I/O、锁竞争、分配还是下游服务。
+2. 用合适的工具定位热点，提出**可证伪的假设**，一次只改一个主要变量。
+3. 在相同条件下多次测量，报告波动和退化；同时跑正确性测试。
+4. 收益不足以抵消复杂度、内存或维护成本时回退该优化。
 
-```text
-1. 先测量，再优化（不要猜测瓶颈）
-2. 优化热点（Hotspot），而非所有代码
-3. 每次只改一处，重新测量
-4. 理解 80/20 法则：80% 时间花在 20% 代码上
-```
+“80% 时间必在 20% 代码”只是提醒先找热点的经验说法，不能用它推断本项目的实际占比。
+
+## 计时与采样各解决什么
+
+简短的墙钟计时可看一个操作的端到端耗时，但不能告诉你时间花在哪里；对跨线程或阻塞 I/O 的服务，CPU 时间与墙钟时间也不同。单调计时用 `steady_clock`，不要假设 `high_resolution_clock` 一定单调。
 
 ```cpp
-// 简单的计时器（不需要外部工具时）
-class Timer {
-    std::chrono::high_resolution_clock::time_point start_;
-public:
-    Timer() : start_(std::chrono::high_resolution_clock::now()) {}
-    ~Timer() {
-        auto end = std::chrono::high_resolution_clock::now();
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start_);
-        std::cout << "Elapsed: " << ms.count() << "ms\n";
-    }
-};
+#include <chrono>
+#include <iostream>
+
+auto start = std::chrono::steady_clock::now();
+// 调用需要测量的操作
+auto elapsed = std::chrono::steady_clock::now() - start;
+std::cout << std::chrono::duration<double, std::milli>(elapsed).count()
+          << " ms\n";
 ```
 
-# perf（Linux 性能分析利器）
+这一片段示意测量位置，不构成独立程序。短操作应重复多次并控制预热、缓存、输入分布和后台负载；不要只凭一次结果下结论。
+
+Linux 上先用 `perf stat` 看整体事件，再用 `perf record` / `perf report` 采样调用栈。`-g` 记录调用链；`-a` 是系统范围采样，不应作为只分析本程序的默认参数。事件和堆栈可用性受 CPU、内核、权限与编译选项影响。
 
 ```bash
-perf record ./main           # 运行并记录
-perf report                  # 查看热点（函数级别热点）
-
-perf stat ./main             # 统计 CPU 周期、缓存 miss、分支预测等
-perf stat -e cache-misses ./main  # 只看缓存 miss
-
+perf stat -- ./server --workload sample
+perf record -g -- ./server --workload sample
+perf report
 ```
 
-**perf report 输出解读**：
+`perf report` 中某函数占 45% 采样，并不直接证明“它造成 45% 请求延迟”。先看所采事件、是否包含等待时间、该函数是自身开销还是子调用累计开销，再结合调用栈和业务指标判断。必要时用火焰图观察宽栈，但火焰图横轴是采样数量，不是请求时间线。参考 [perf record 手册](https://man7.org/linux/man-pages/man1/perf-record.1.html)。
 
-```text
-Samples: 1M of event 'cpu-cycles'
-Event count (approx.): 250000000000
-Overhead  Command  Shared Object     Symbol
-  45.2%  main     main              [.] process_request
-  12.1%  main     libstdc++.so      [.] malloc
-   8.5%  main     main              [.] serialize
-   5.3%  main     libc.so           [.] __memcpy_avx2
-```
+## 用微基准检验一个局部假设
 
-→ **瓶颈明确**：`process_request` 占 45%，优先优化它。
-
-## perf 热点分析实战
-
-```bash
-perf record -F 99 -ag -- ./main   # 99Hz 采样
-perf script > out.perf
-git clone https://github.com/brendangregg/FlameGraph
-perf script | ./FlameGraph/stackcollapse-perf.pl > out.folded
-./FlameGraph/flamegraph.pl out.folded > flame.svg
-```
-
-火焰图怎么看：
-- **X 轴**：采样占比（越宽越热）
-- **Y 轴**：调用栈（顶层是实际执行的函数）
-- 关注 **宽顶** → 函数本身消耗大
-- 关注 **宽塔** → 调用链消耗大
-
-## 常见性能瓶颈与优化
+Google Benchmark 适合验证局部实现差异。下面测量对给定长度数组的求和；编译须链接项目已安装的 Google Benchmark，示例不是 C++ 标准库自带工具。
 
 ```cpp
-// 1. 不必要的拷贝
-// ❌ 慢
-std::string process(std::string s) { return s + "_processed"; }
-// ✅ 快（传引用）
-std::string process(const std::string& s) { return s + "_processed"; }
-
-// 2. 不必要的动态分配
-// ❌ 每次 push_back 可能触发分配
-std::vector<int> v;
-for (int i = 0; i < 10000; i++) v.push_back(i);
-// ✅ 预分配
-v.reserve(10000);
-
-// 3. 缓存不友好
-// ❌ 链表遍历（跳跃的内存访问）
-std::list<Data> list;
-for (auto& item : list) process(item);  // cache miss × N
-
-// ✅ 连续内存遍历
-std::vector<Data> vec;
-for (auto& item : vec) process(item);   // cache hit ✓
-
-// 4. 虚函数热点
-// ❌ 频繁调用的 hot loop 中有虚函数调用（无法内联）
-// ✅ 考虑 CRTP / std::variant + visit
-```
-
-# Google Benchmark（微基准测试）
-
-```cpp
-// 安装：https://github.com/google/benchmark
 #include <benchmark/benchmark.h>
+#include <numeric>
+#include <vector>
 
-static void BM_VectorPushBack(benchmark::State& state) {
+static void BM_Sum(benchmark::State& state) {
+    std::vector<int> values(static_cast<std::size_t>(state.range(0)), 1);
     for (auto _ : state) {
-        std::vector<int> v;
-        v.reserve(state.range(0));
-        for (int i = 0; i < state.range(0); ++i)
-            v.push_back(i);
+        benchmark::DoNotOptimize(values.data());
+        auto total = std::accumulate(values.begin(), values.end(), 0LL);
+        benchmark::DoNotOptimize(total);
     }
 }
-BENCHMARK(BM_VectorPushBack)->Arg(1000)->Arg(10000)->Arg(100000);
-
+BENCHMARK(BM_Sum)->Arg(1'000)->Arg(100'000);
 BENCHMARK_MAIN();
 ```
 
-# Google PerfTools（tcmalloc）
+`DoNotOptimize` 能减少结果被无用代码消除的风险，但**不保证表达式内部不被优化或不会循环外提**；必要时检查反汇编、换输入和对照组。报告重复测量的分布，不把最小值当作唯一事实。参考 [Google Benchmark User Guide](https://github.com/google/benchmark/blob/main/docs/user_guide.md)。
 
-```bash
-CPUPROFILE=main.prof ./main
-pprof --text ./main main.prof
+## 优化建议必须带前提
 
-HEAPPROFILE=main.heap ./main
-```
+| 假设 | 可尝试的改动 | 必须验证 |
+| --- | --- | --- |
+| `std::vector` 增长反复分配 | 已知规模时 `reserve` | 容量是否过度预留、峰值内存与总耗时 |
+| 对象复制占热点 | 减少不必要的复制 | 是否改变所有权/生存期；值传递是否本来可移动 |
+| 数据遍历出现缓存未命中 | 比较连续容器与节点容器 | 插入删除成本、稳定引用需求和实际访问模式 |
+| 锁争用严重 | 缩小临界区、分片或调整任务粒度 | 正确性、吞吐、尾延迟、饥饿与复杂度 |
+| 虚调用处于热点 | 评估去虚化或其他分派方式 | 编译器是否已经优化、二进制尺寸和可维护性 |
 
-## 性能优化清单
+不要把“`const std::string&` 一定比值传递快”“虚函数一定不能内联”“vector 一定胜过 list”写成定律。调用方可能传右值，值传递可能直接移动；编译器也可能去虚化。只有与 API 语义一致且在代表性负载上获益，改动才成立。
 
-| 检查项 | 工具 |
-|--------|------|
-| CPU 热点 | `perf record/report` |
-| 缓存 miss | `perf stat -e cache-misses` |
-| 内存分配热点 | `perf` 看 malloc 占比 |
-| 内存泄漏 | `valgrind --leak-check=full` |
-| 数据竞争 | `ThreadSanitizer` |
-| 分支预测失败 | `perf stat -e branch-misses` |
+## 验收一项优化
 
-> [!tip]- **工程要点**：先定义吞吐、延迟、CPU 或内存目标，再用适合平台的 profiler 定位瓶颈并建立基线。不要预设热点一定是拷贝、缓存或分配；优化后用相同负载复测，并检查正确性与可维护性。
+保留基线与改动后的同一套测试：正确性、吞吐、P95/P99、CPU/内存、分配次数及异常路径。尤其检查高并发下锁竞争和尾延迟是否恶化。`ASan` / `UBSan` / `TSan` 分别用于发现特定类别错误，不能把它们的高开销运行结果直接当作 release 性能数据。
 
----
+> [!note] 最小交付证据
+> 写清“问题负载 → 指标基线 → profiler 证据 → 修改假设 → 对照结果 → 正确性回归”。如果无法复现原问题或收益落在测量噪声内，先不要宣称优化成功。

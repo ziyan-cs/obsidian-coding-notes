@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: medium
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [distributed/system]
 ---
 
@@ -217,4 +215,3 @@ Snowflake ID: 0 | 41-bit timestamp | 10-bit worker | 12-bit sequence
 
 > [!info]- 延伸阅读
 > - 下一步：[02-IM System (即时通信系统)](/12-Career%20(求职与成长)/02-System%20Design%20(系统设计)/02-IM%20System%20(即时通信系统).md)
-

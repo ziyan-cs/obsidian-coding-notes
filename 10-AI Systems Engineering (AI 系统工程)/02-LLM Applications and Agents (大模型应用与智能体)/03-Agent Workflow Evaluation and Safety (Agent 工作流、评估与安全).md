@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [ai/agent, ai/evaluation, ai/security]
 ---
 
@@ -23,6 +21,8 @@ plan -> validate -> act -> observe -> decide
 ~~~
 
 状态机比自由循环更容易测试和解释。能够用普通程序确定完成的步骤，不必交给模型决定。
+
+例如“查询订单并创建售后工单”：查询订单是可重试读操作；创建工单是副作用。状态可依次为 `validated → order_loaded → approval_received → ticket_pending → ticket_succeeded`。在 `ticket_pending` 之后超时，任务只能通过幂等键查询工单是否已经创建，不能从头重放整条工作流。模型负责提出下一步，状态转移条件由确定性代码把关。
 
 # 可靠执行与预算
 

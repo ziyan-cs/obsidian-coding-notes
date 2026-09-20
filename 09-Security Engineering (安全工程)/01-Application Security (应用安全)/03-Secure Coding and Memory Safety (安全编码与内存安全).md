@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [security/secure-coding, language/cpp]
 ---
 
@@ -35,7 +33,9 @@ std::optional<std::string> read_frame(std::span<const std::byte> input) {
 }
 ~~~
 
-示例先比较上限与剩余长度，再切片；真实协议还要处理字节序、编码、认证和增量读取。
+代码是接口示意，`decode_u32`、`decode_text` 和 `kMaxFrame` 需由具体协议实现，不能直接编译使用。它先比较上限与剩余长度，再切片；真实协议还要处理字节序、编码、认证和增量读取。
+
+这里的 `std::span` **不拥有**输入内存：若调用方销毁底层 buffer，span 立即悬空。`decode_text` 还需明确是否复制数据、如何处理非法编码；如果它返回 view，调用方必须继续保证源 buffer 存活。安全设计既要检查边界，也要把所有权写进接口契约。
 
 # 注入与危险能力
 
@@ -50,6 +50,8 @@ std::optional<std::string> read_frame(std::span<const std::byte> input) {
 模糊测试以协议不变量为 oracle：任意输入不得崩溃、越界或无限运行；成功解析后重新编码应保持语义；最小失败样本进入回归集。C++ 分别运行 ASan/UBSan、TSan 与静态分析，release 配置也要测试，不能把 sanitizer 无报告当作安全证明。
 
 跨语言 FFI 是额外边界：明确 buffer 所有权、长度、编码、异常/错误码和回调生命周期。Go/Python 的内存安全不能保护错误的 C ABI。
+
+练习可以从一个长度前缀协议开始：构造长度为 0、头部截断、宣称长度大于剩余字节、接近最大整数、重复帧和非法 UTF-8 的输入；用 ASan/UBSan 运行回归与 fuzz target。目标不是证明“绝对安全”，而是让每类失败稳定地返回错误且不分配超额内存。
 
 参考：[SEI CERT C++ Coding Standard](https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88046682)、[LLVM LibFuzzer](https://llvm.org/docs/LibFuzzer.html)。
 

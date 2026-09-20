@@ -1,11 +1,6 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
-verified: 2026-09-30
-review_stage: learn
+study_stage: learn
 review_due: 2026-09-30
-previous_review_due: 2026-09-22
 tags: [language/python, python/object-model]
 ---
 
@@ -25,7 +20,7 @@ x = 42
 x = "ready"  # 名称 x 重新绑定到另一种对象
 ~~~
 
-`id(obj)` 可观察一次运行中的身份，但业务代码不应依赖其具体数值。`type(obj)` 给出直接类型；判断替换关系通常用 `isinstance` 或 Protocol，而不是写死精确类型。
+`id(obj)` 可观察一次运行中的身份，但业务代码不应依赖其具体数值；对象销毁后该数值甚至可能被复用。比较两个仍存活对象的身份用 `is`。`type(obj)` 给出直接类型；判断替换关系通常用 `isinstance` 或 Protocol，而不是写死精确类型。
 
 `==` 比较值语义，`is` 比较是否为同一对象。`None` 这类单例哨兵使用 `is`；字符串、整数和容器使用 `==`。解释器可能缓存小整数或字符串，不能据此把 `is` 当值比较。
 
@@ -35,14 +30,14 @@ x = "ready"  # 名称 x 重新绑定到另一种对象
 
 ~~~python
 text = "go"
-before = id(text)
+original_text = text
 text += "od"          # 创建新字符串并重新绑定
-assert id(text) != before
+assert text == "good" and text is not original_text
 
 items = [1, 2]
-before = id(items)
+original_items = items
 items.append(3)        # 原地修改同一个 list
-assert id(items) == before
+assert items == [1, 2, 3] and items is original_items
 ~~~
 
 tuple 本身不可变，但可以引用可变元素；所以 tuple 不自动等于深度不可变，也不保证一定可哈希。

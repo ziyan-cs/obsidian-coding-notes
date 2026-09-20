@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-18
+study_stage: backlog
 tags: [language/go, go/foundations]
 ---
 
@@ -14,14 +12,22 @@ Go 文件属于一个 package；可执行程序从 `package main` 的 `main()` �
 
 变量声明后即有零值：数值为 0、bool 为 false、string 为空、pointer/slice/map/channel/function/interface 为 nil。设计类型时尽量让零值可用，例如 `sync.Mutex` 无需构造；但 nil map 不能写入，nil channel 会永久阻塞。
 
-~~~go
-var retries int
-var enabled bool
+把下面的程序保存为 `main.go`，执行 `go run main.go`，先观察零值和短声明的实际输出：
 
-name := "service" // 函数内部，至少声明一个新变量
+~~~go
+package main
+
+import "fmt"
+
+func main() {
+    var retries int
+    var enabled bool
+    name := "service" // 只能用于函数内部，左侧至少有一个新变量
+    fmt.Printf("name=%s retries=%d enabled=%t\n", name, retries, enabled)
+}
 ~~~
 
-短声明会在当前作用域重用已有变量并创建新变量，容易发生 shadowing：
+短声明会在当前作用域重用已有变量并创建新变量，容易发生 shadowing。下面是函数内部片段，`load`、`transform` 为示意函数，并非可独立运行的程序：
 
 ~~~go
 result, err := load()
@@ -41,6 +47,8 @@ if enabled {
 
 整数类型不自动互转，网络、文件和数据库边界要检查范围后显式转换。金额不用 float 表达；使用最小货币单位或经过验证的 decimal 方案。string 是只读字节序列，`len` 返回字节数；遍历 string 时 `range` 解码 UTF-8 rune，并给出字节偏移。
 
+下面的代码也是函数内部片段，需导入 `fmt` 与 `unicode/utf8`：
+
 ~~~go
 text := "中A"
 fmt.Println(len(text))         // 4 bytes
@@ -52,6 +60,8 @@ Go 只有 `for` 循环；`range` 遍历数组、slice、string、map 和 channel
 # Struct、指针与方法
 
 struct 是字段组成的值。赋值、传参和返回默认复制整个 struct；若字段包含 slice、map、pointer，则复制的是这些描述符或指针，底层状态仍可能共享。
+
+以下类型与方法是片段，放入 package 文件时需导入 `errors` 与 `strings`：
 
 ~~~go
 type User struct {
@@ -77,6 +87,8 @@ func (u *User) Rename(name string) error {
 # 构造、不变量与组合
 
 Go 没有构造函数关键字。需要校验或默认值时提供 `NewType`；零值已安全可用时无需机械创建 constructor。
+
+以下是另一个独立类型片段，需导入 `fmt`：
 
 ~~~go
 type Limiter struct {

@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [comparison, backend/http]
 ---
 
@@ -45,4 +43,3 @@ tags: [comparison, backend/http]
 
 > [!info]- 延伸阅读
 > - 下一步：[05-Observability and Performance (可观测性与性能)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
-

@@ -1,11 +1,6 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
-verified: 2026-10-08
-review_stage: learn
+study_stage: learn
 review_due: 2026-10-08
-previous_review_due: 2026-09-18
 ---
 
 > [!abstract] 学习目标：区分表达式值类别、移动构造与复制消除；能说明移动后对象的有效边界和 `noexcept` 的真实作用。
@@ -18,15 +13,17 @@ previous_review_due: 2026-09-18
 
 > [!note] 本节重点：左值/右值/将亡值的定义，右值引用的绑定规则
 
-## 值类别
+## 表达式的值类别
 
-```
-expression
-  - lvalue: 可标识具体对象或函数的表达式；例：`x`、`*p`、`a[i]`
-  - rvalue: temporary or expiring value
-    - prvalue: `42`, temporary `std::string`, postfix `i++`
-    - xvalue: `std::move(x)`, a function returning `T&&`
-```
+`lvalue` 和 `xvalue` 都是 `glvalue`（有可辨识身份）；`prvalue` 和 `xvalue` 都是 `rvalue`。因此“右值就是临时对象”并不准确：`std::move(x)` 产生 xvalue，仍指向原来的 `x`。
+
+| 表达式 | 值类别 | 直觉 |
+| --- | --- | --- |
+| `x`、`*p`、`a[i]` | lvalue | 有名字或可定位的对象 |
+| `42`、返回 `T` 的函数调用 | prvalue | 用于初始化结果对象的纯右值 |
+| `std::move(x)`、返回 `T&&` 的函数调用 | xvalue | 可复用原对象资源的将亡值 |
+
+值类别是**表达式**的性质，不是变量声明中的 `&&` 本身的性质；有名字的右值引用变量在表达式中仍是左值。
 
 ```cpp
 int x = 10;
@@ -68,29 +65,23 @@ source = {"new"};
 对于自己编写的资源类型，优先让 `std::vector`、`std::string`、`std::unique_ptr` 等成员承担所有权，再依靠编译器生成的特殊成员函数（Rule of Zero）。确需手写移动时，必须保证源对象与目标对象在所有路径上都能安全析构，并测试自移动赋值、异常与资源释放。移动的复杂度由具体类型及分配器条件决定，不能统一写成 O(1)。
 
 
-## 五法则（Rule of Five）
+## Rule of Zero 优先，Rule of Five 用来审查
 
-若类需要自定义以下任意一个，通常需要全部自定义：
-
-|特殊函数|声明方式|
-|---|---|
-|析构函数|`~T()`|
-|拷贝构造|`T(const T&)`|
-|拷贝赋值|`T& operator=(const T&)`|
-|**移动构造**|`T(T&&) noexcept`|
-|**移动赋值**|`T& operator=(T&&) noexcept`|
+如果类只组合标准容器和 RAII 成员，先让编译器生成特殊成员函数，不要为了“遵守五法则”机械地手写五个。显式声明析构、拷贝或移动操作会影响其余操作的隐式生成；确需自管资源时，逐项决定**应该支持、删除或实现**哪些操作，并测试异常和自赋值。
 
 ```cpp
-// 不需要资源管理时：用 = default 让编译器生成
-struct Point {
-    double x, y;
-    Point(const Point&) = default;
-    Point(Point&&)      = default;
-    Point& operator=(const Point&) = default;
-    Point& operator=(Point&&)      = default;
-    ~Point() = default;
+#include <memory>
+#include <string>
+
+struct Session {
+    std::string name;
+    std::unique_ptr<int> state;
 };
+// Session 可移动、不可复制；这由成员的所有权语义自然决定。
+// 不必为了凑齐五个函数而定义无意义的拷贝操作。
 ```
+
+如果拥有文件描述符或其他原始句柄，则需要明确析构、移动后源对象状态及重复关闭的防护；此时 Rule of Five 是检查清单，不是“五个都必须能调用”的要求。
 
 ## `noexcept` 与容器异常保证
 

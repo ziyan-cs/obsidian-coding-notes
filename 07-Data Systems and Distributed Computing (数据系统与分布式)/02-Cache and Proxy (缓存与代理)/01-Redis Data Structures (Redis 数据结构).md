@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -95,7 +93,6 @@ sdsfree(s);                     // 释放
 >
 > ---
 >
-> 压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
 >
 > ---
 
@@ -138,7 +135,7 @@ ziplist 整体布局：
 // → 第二个 entry 变长 → 第三个 entry 也要扩展...
 // → 连锁反应！时间复杂度 O(n²)
 
-// 不影响——概率极低且 entry 数量少（默认 list-max-ziplist-size)
+// 连锁更新在特定边界长度变化时可能发生；频率与数据分布有关，不应说成必然可忽略
 ```
 
 ---
@@ -160,19 +157,19 @@ listpack: [encoding] [content]  [backlen]
 - 增加 `backlen`：从尾部向前解析时知道当前 entry 的长度
 - **连锁更新完全消除**——一个 entry 修改不影响其他 entry
 
-**适用场景：** List/Hash/ZSet 中元素较少时使用（默认阈值：512 个或 64B）。
+**适用场景：** 小型聚合对象的紧凑编码；List、Hash、ZSet、Set 的内部编码选择与阈值并不完全相同，并随 Redis 版本变化。
 
 ---
 
 ## 使用条件
 
-```c
-// Redis 配置
-hash-max-ziplist-entries 512   // 元素数 ≤ 512 用 ziplist
-hash-max-ziplist-value 64      // 单元素大小 ≤ 64 字节
-list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
-
-// 超过阈值 → 升级为 hashtable / linkedlist / skiplist
+```text
+Redis <= 6.2：小 Hash / ZSet 的 ziplist 配置名以 *-max-ziplist-* 为主
+Redis >= 7.0：小 Hash / ZSet 的配置名改为 *-max-listpack-*
+例如 hash-max-listpack-entries、hash-max-listpack-value、
+     zset-max-listpack-entries、zset-max-listpack-value。
+超过容量/元素大小阈值后，Hash 可转为 hashtable，ZSet 可转为 skiplist 编码。
+List 通常使用 quicklist 组织节点，不应套用 Hash 的阈值。
 ```
 
 ---
@@ -183,16 +180,15 @@ list-max-ziplist-size -2       // -2 表示每个节点 ≤ 8KB
 > | ziplist 连锁更新 | 修改一个 entry 导致后续 entry 的 prev_len 扩张，概率极低 |
 > | listpack 解决了什么 | 去掉 prev_len 字段，消除连锁更新 |
 > | ziplist 优点 | 内存连续，CPU 缓存友好，小数据时比 hashtable 省内存 |
-> | 什么时候升级 | 元素超限或某元素超 64B → 升级为 hashtable/quicklist |
+> | 什么时候升级 | 按当前版本与对象类型的编码阈值决定；不要背统一的 64B 规则 |
 >
 
 > [!tip]- **工程要点**
-> ziplist/listpack 的关键价值是内存紧凑性——一个小 hash 用 ziplist 比 hashtable 省数十倍内存。`DEBUG OBJECT key` 可查看内部编码（`encoding:ziplist`）。
+> ziplist/listpack 的关键价值是紧凑存储，但内存节省倍数依数据而变。用 `OBJECT ENCODING key` 观察实例实际编码；参见 [Redis 编码文档](https://redis.io/docs/latest/commands/object-encoding/) 与 [内存优化文档](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/)。
 
 >
 > ---
 >
-> Redis 底层数据结构详解见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a3-skiplist：Sorted Set Internals (跳表)
 >
 > ---
 
@@ -278,7 +274,7 @@ int zslRandomLevel(void) {
 ## ZSet 使用的两种结构
 
 ```c
-// ZSet 底层 = ziplist (小数据) + dict + skiplist (大数据)
+// 大型 ZSet 的结构示意；小型 ZSet 在 Redis >= 7.0 通常使用 listpack
 typedef struct zset {
     dict *dict;         // key→score 映射（O(1) 查分值）
     zskiplist *zsl;    // score→key 排序（范围查询）
@@ -287,8 +283,8 @@ typedef struct zset {
 
 | 条件 | 编码 | 说明 |
 |------|------|------|
-| 元素 < 128 且分值 < 64B | ziplist | 紧凑存储 |
-| 超过阈值 | skiplist + dict | 双结构支持高效查询和排序 |
+| 小型对象，满足当前 `zset-max-listpack-*` 阈值 | listpack（Redis >= 7.0） | 紧凑存储；旧版可能是 ziplist |
+| 超出紧凑编码阈值 | skiplist 编码（含字典与跳表） | 支持按元素查分值与按分值范围访问 |
 
 ---
 
@@ -308,7 +304,6 @@ typedef struct zset {
 >
 > ---
 >
-> 动态字符串实现见 → 01a1-SDS：Simple Dynamic String (简单动态字符串) · 01a4-dict：Hash Table Rehashing (字典与渐进式rehash)
 >
 > ---
 
@@ -435,8 +430,6 @@ void dictRehash(dict *d, int n) {
 >
 > ---
 >
-> 压缩列表实现见 → 01a2-ziplist & listpack (压缩列表) · 01a3-skiplist：Sorted Set Internals (跳表)
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/02-Redis%20Persistence%20and%20Eviction%20(Redis%20持久化与淘汰).md)
-

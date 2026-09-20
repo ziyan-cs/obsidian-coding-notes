@@ -1,10 +1,7 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -50,6 +47,8 @@ content_verified: 2026-09-17
 void worker(int id) { /* ... */ }
 std::thread t1(worker, 42);                 // 函数 + 参数
 std::thread t2([](int id) { /* ... */ }, 1); // Lambda
+t1.join();
+t2.join(); // 本示例离开作用域前汇合，避免 joinable 析构时 terminate
 
 // RAII 包装：确保线程被 join 或 detach
 class ThreadGuard {
@@ -66,89 +65,59 @@ public:
 
 ## 线程生命周期管理
 
+`std::thread` 析构时若仍为 `joinable()`，会调用 `std::terminate()`。`join()` 等待结束并回收线程句柄；`detach()` 让线程独立运行，之后不能再 `join()` 或查询其结果。二者是**互斥选择**，不能在同一对象上依次调用。
+
 ```cpp
 std::thread t(worker, 42);
+t.join();  // t 不再 joinable
 
-t.join();   // 阻塞等待线程结束，之后 t 不再 joinable
-// 或
-t.detach(); // 分离，线程在后台运行，t 不再关联线程
-
-// 重要：析构前必须 join 或 detach
-// 否则 std::thread::~thread() 会调用 std::terminate()！
+// 只有确实需要独立生命周期时才考虑 detach；
+// 必须保证线程使用的引用、指针和外部资源一直有效。
+std::thread background(worker, 43);
+background.detach();
 ```
 
-**关键规则**：
-- 每个 `std::thread` 对象在析构前必须调用 `join()` 或 `detach()`
-- `joinable()` 检查线程是否可被 join
-- `detach` 后的线程无法再获取其状态
+优先让线程有明确的拥有者，并在析构前汇合；`detach` 不等于“自动管理生命周期”。如果需要取消协作，C++20 的 `std::jthread` 更合适。
 
-## 参数传递陷阱
+## 参数传递与生命周期
+
+`std::thread` 默认把实参复制或移动到内部存储。线程函数需要引用时使用 `std::ref` / `std::cref`，且调用者要保证被引用对象活到线程结束。
 
 ```cpp
-// ❌ 危险：传递引用时忘记用 std::ref
+#include <functional>
+#include <thread>
+
 void modify(int& x) { x = 42; }
 int val = 0;
-std::thread t(modify, val);    // 编译错误或拷贝！thread 会拷贝参数
-std::thread t(modify, std::ref(val));  // ✅ 正确传递引用
-
-// ❌ 危险：传入临时对象的指针
-void process(const Data& d);
-Data d;
-std::thread t(process, std::cref(d));  // ✅ 确保 d 在线程执行期间存活
+std::thread t(modify, std::ref(val));
+t.join();  // 此后读取 val 才有同步保证
 ```
 
-## 线程与 POSIX pthread 的关系
+直接写 `std::thread t(modify, val)` 不能把保存的值参数绑定给 `int&`，通常编译失败。传入局部对象的指针或引用再 `detach` 则可能悬垂；即使对象仍存活，并发读写也仍需同步。
+
+## 平台接口与线程数
+
+`std::thread` 是跨平台接口；其 `native_handle()` 类型和可用操作取决于实现。例如在使用 POSIX 线程的环境中，可借助平台 API 设置线程名，但这部分不是可移植 C++。`hardware_concurrency()` 只是并行度提示：可能返回 0，也不保证等于容器的 CPU 配额或适合的工作线程数。
+
+## `std::jthread` 与异常边界（C++20）
 
 ```cpp
-// std::thread 底层封装了 pthread（Linux/macOS）或 Windows Threads
+#include <thread>
 
-// 获取原生句柄
-std::thread t(worker, 1);
-pthread_t handle = t.native_handle();  // Linux 返回 pthread_t
-pthread_setname_np(handle, "worker-1"); // 设置线程名称（调试用）
-t.detach();
-
-// 硬件并发
-unsigned int n = std::thread::hardware_concurrency();  // 逻辑 CPU 核心数
-```
-
-# std::jthread (C++20)
-
-```cpp
-// C++20 引入：自动 join + 可取消
-std::jthread jt([](std::stop_token st) {
-    while (!st.stop_requested()) {
-        // 工作循环
+std::jthread jt([](std::stop_token stop) {
+    while (!stop.stop_requested()) {
+        // 每轮完成有限工作后再次检查停止请求
     }
 });
-// jt 析构时自动 join()
-
-// 请求停止
 jt.request_stop();
 ```
 
-## 线程 ID 与异常安全
+`jthread` 析构时，若仍可汇合，会先请求停止再 `join()`。停止请求是**协作式**的，不会强制打断死循环或阻塞的 I/O；工作函数必须主动检查，等待操作也要设计可唤醒的退出路径。
 
-```cpp
-// 获取当前线程 ID
-std::cout << std::this_thread::get_id();
+线程函数中未捕获的异常不能由创建线程的 `try/catch` 接住，会导致 `std::terminate()`。应在线程内部处理异常，或通过 `std::promise` / `std::future` 等机制把失败传回拥有者。
 
-// 异常安全：在线程中捕获所有异常
-try {
-    std::thread t([&] {
-        try {
-            throw std::runtime_error("error");
-        } catch (...) {
-            // 处理异常
-        }
-    });
-    t.join();
-} catch (...) {
-    // 不能在此捕获线程内的异常！
-}
-```
-
-> [!tip]- **工程要点**：线程是稀缺资源。创建线程的开销大约为几微秒（栈分配 + 系统调用）。**不要为短任务创建线程**——用线程池。一个进程的线程数通常不超过 `hardware_concurrency`。
+> [!tip] 工程取舍
+> 建线程、栈空间、调度与上下文切换都有成本，但固定的“几微秒”并不适用于所有机器和负载。短任务通常复用线程池；CPU 密集型任务可从可用并行度附近起步测量，I/O 密集型任务还需考虑阻塞比例、队列与资源上限，不能简单规定线程数不得超过 `hardware_concurrency()`。
 
 ---
 
@@ -203,69 +172,56 @@ void writer() {
 }
 ```
 
-## 死锁与预防
+## 死锁与锁顺序
 
-**死锁四条件**：
-1. 互斥（资源不可共享）
-2. 持有并等待（线程持有资源同时等待其他资源）
-3. 不可剥夺（资源必须由持有者释放）
-4. 循环等待（A 等 B，B 等 A 的资源）
+同时持有多把锁时，线程 A 若先拿 `a` 再等 `b`，线程 B 却先拿 `b` 再等 `a`，就可能形成循环等待。固定全局锁顺序是一种解法；同一组锁也可用 `std::scoped_lock` 的多锁构造，避免手写 `lock`/`adopt_lock` 配对。
 
 ```cpp
-// ❌ 典型死锁：两个锁顺序不一致
-std::mutex a, b;
+#include <mutex>
 
-void thread1() {
-    std::lock_guard lk1(a);
-    std::lock_guard lk2(b);  // 与 thread2 顺序相反 → 可能死锁
-}
+struct PairState {
+    std::mutex left_mutex;
+    std::mutex right_mutex;
+    int left = 0;
+    int right = 0;
 
-void thread2() {
-    std::lock_guard lk1(b);
-    std::lock_guard lk2(a);
-}
+    void update_both() {
+        std::scoped_lock both{left_mutex, right_mutex};
+        ++left;
+        ++right;
+    }
+};
+```
 
-// ✅ 方案 1：固定锁顺序（都先锁 a 再锁 b）
-void thread1() {
-    std::lock_guard lk1(a);
-    std::lock_guard lk2(b);
-}
-void thread2() {
-    std::lock_guard lk1(a);  // 同样顺序
-    std::lock_guard lk2(b);
-}
+`scoped_lock` 避免的是这组互斥量互相争用时的加锁死锁，不保证调用链在别处没有锁环。调用外部回调、日志或阻塞 I/O 前，仍要审查是否持锁及其反向调用路径。
 
-// ✅ 方案 2：std::lock 一次锁多个（C++11）
-void safe_lock() {
-    std::lock(a, b);  // 同时锁 a 和 b，避免死锁
-    // 所有权已转移，但仍需管理解锁
-    std::lock_guard lk1(a, std::adopt_lock);
-    std::lock_guard lk2(b, std::adopt_lock);
-    // 临界区
+## 锁的粒度与快照
+
+临界区只覆盖维持共享不变量所需的读写，但不能把依赖共享状态的检查盲目移出去。需要在锁外做长计算时，先在锁内取一致快照，再对快照计算：
+
+```cpp
+#include <mutex>
+#include <vector>
+
+struct Repository {
+    std::mutex mutex;
+    std::vector<int> data;
+
+    std::vector<int> snapshot() {
+        std::lock_guard lock{mutex};
+        return data; // 拷贝可能耗时；若是热点，重新设计数据所有权。
+    }
+};
+
+int sum_snapshot(Repository& repo) {
+    const auto copy = repo.snapshot();
+    int sum = 0;
+    for (int value : copy) sum += value;
+    return sum;
 }
 ```
 
-## 锁的粒度
-
-```cpp
-// ❌ 粗粒度：整个操作期间持有锁（性能差）
-void process_big() {
-    std::lock_guard lock(mtx);
-    read_sensor();      // 可能花 100ms
-    compute_result();   // 可能花 50ms
-    write_database();   // 可能花 200ms
-}
-
-// ✅ 细粒度：只在访问共享数据时持有锁
-void process_better() {
-    auto data = [&] {
-        std::lock_guard lock(mtx);
-        return read_sensor();    // 只锁这行
-    }();
-    compute_result(data);        // 不锁
-    // ...
-}
-```
+快照方式给出的是取快照时刻的一致数据，不自动保证“计算完成时仍为最新”。若操作必须检查并提交同一个条件，应在锁内完成或使用版本校验/事务协议。
 
 ## std::call_once
 
@@ -362,30 +318,32 @@ cv.wait(lock, [] { return ready; });
 - 操作系统层面：线程可能从 `wait` 返回但条件并未满足
 - 必须**始终在循环中检查条件**，不能假设被唤醒就是条件满足了
 
-## notify_one vs notify_all
+## `notify_one` 与 `notify_all`
 
-| | `notify_one` | `notify_all` |
-|--|-------------|--------------|
-| 行为 | 只唤醒一个等待线程 | 唤醒所有等待线程 |
-| 适用场景 | 单生产者-单消费者 | 多生产者-多消费者 / barrier 模式 |
-| 性能 | 更好（只唤醒一个） | 较差的惊群效应 |
+选择依据是**当前状态变化后有多少等待者可能前进**，而不是生产者和消费者各有几个。队列新增一个任务，通常 `notify_one()` 就够了，即使是多生产者、多消费者；关闭队列、广播配置变化等使所有等待者都应重新检查状态时，用 `notify_all()`。通知可能被合并或在无人等待时消失，真正的条件必须保存在受锁保护的状态里。
 
-## 信号量（Semaphore, C++20）
+## 信号量（Semaphore，C++20）
+
+计数信号量保存“还有多少许可”；`acquire()` 等待并消耗一个许可，`release()` 归还许可。它不自动保护被访问对象的内部状态。
 
 ```cpp
 #include <semaphore>
 
-std::counting_semaphore<10> sem(3);  // 最大计数 10，初始值 3
-// std::binary_semaphore 是 counting_semaphore<1> 的别名
+std::counting_semaphore<3> slots(3);  // 同时最多三个许可
 
-void worker(int id) {
-    sem.acquire();  // P 操作：计数器 -1，如果为 0 则阻塞
-    // 访问有限资源
-    std::println("Worker {} is working", id);
-    std::this_thread::sleep_for(1s);
-    sem.release();  // V 操作：计数器 +1，唤醒等待者
+void use_resource() {
+    slots.acquire();
+    try {
+        // 占用一个有限资源；共享数据仍需各自的同步保护
+        slots.release();
+    } catch (...) {
+        slots.release();
+        throw;
+    }
 }
 ```
+
+真实代码应把归还许可封装成 RAII，避免新增提前返回路径时漏掉 `release()`；不要把这种手工 `try/catch` 当作最终资源管理方案。`std::binary_semaphore` 通常定义为 `counting_semaphore<1>` 的别名。
 
 ## 条件变量 vs 信号量
 
@@ -405,28 +363,19 @@ void worker(int id) {
 // C++20 提供了 std::counting_semaphore
 ```
 
-## 工程陷阱
+## 通知时机与超时
+
+`notify_one()` 在锁内或锁外调用都可以是正确的；常见做法是先在锁内修改谓词，再解锁通知，以免被唤醒的线程立刻竞争同一把锁。是否能安全地在锁外通知还取决于等待者、条件变量及其拥有对象的生命周期，不可一概而论。
 
 ```cpp
-// ❌ 在持有锁时 notify
-// 虽不会出错，但被唤醒的线程会立刻尝试获取锁，造成不必要的上下文切换
 {
-    std::lock_guard lock(mtx);
-    ready = true;
-    cv.notify_one();  // 锁内 notify
-} // ✅ 更好的做法：在锁外 notify
-
-// ✅ 推荐：锁内修改数据，锁外 notify
-{
-    std::lock_guard lock(mtx);
+    std::lock_guard<std::mutex> lock(mtx);
     ready = true;
 }
 cv.notify_one();
-
-// ❌ 忘记 notify
-// 消费者永远阻塞——超时是常见的调试手段
-cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 ```
+
+忘记通知时，`wait_for` 的超时可以帮助发现卡住，但**不能代替通知协议**。超时返回也需在持锁状态下重新检查谓词，业务上要区分“达到条件”和“等待超时”。
 
 > **面试重点**：条件变量内部的 `wait` 做了三步：1）解锁 mutex；2）阻塞等待通知；3）被唤醒后重新加锁。所以 `wait` 需要 `unique_lock`（可手动 lock/unlock）而不是 `lock_guard`。
 
@@ -435,4 +384,3 @@ cv.wait_for(lock, 1s, [] { return ready; });  // 带超时的等待
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Atomics and Memory Order (原子与内存序)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/02-Atomics%20and%20Memory%20Order%20(原子与内存序).md)
-

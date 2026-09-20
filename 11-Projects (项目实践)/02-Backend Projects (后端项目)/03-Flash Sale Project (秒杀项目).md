@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: low
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [project/flash-sale, distributed/consistency]
 ---
 
@@ -56,6 +54,8 @@ unique(user_id, activity_id, sku_id)  // 每人限购一件的示例
 
 阶段一在单个数据库事务内创建订单并执行条件扣减，记录连接池等待、锁等待和吞吐上限。只有证据显示数据库无法承受目标峰值后，才引入排队或 Redis 原子预扣。
 
+一个最小事务可按“查幂等键 → 条件扣减库存 → 插入带唯一约束的订单 → 提交”实现。若插入因重复购买或其他错误失败，整笔事务回滚，库存扣减也必须回滚；若客户端在提交后断开，用同一幂等键查询已经生成的订单，而不是重新扣库存。数据库 `available >= 0` 和订单唯一约束是可测试的不变量，Redis 限流只负责保护容量。
+
 ```text
 request -> auth / per-user limit / global admission
         -> atomic stock decision
@@ -72,9 +72,13 @@ request -> auth / per-user limit / global admission
 
 排队不等于无限接收。队列达到上限时快速失败，消费者速率按数据库承载能力配置。热点活动需要隔离队列、连接与指标，避免一个 SKU 占满所有资源。
 
+对外状态要区分 `rejected`（未接收）、`accepted/pending`（已持久化意图，结果待查）、`confirmed`（订单成功）与 `failed`（确定失败）。如果只把请求放进内存队列就返回“抢购成功”，进程崩溃会丢失承诺；若确需异步，接受事实必须先落在可恢复介质里，并能按请求 ID 查询最终状态。
+
 # 验证不变量而不是只看 QPS
 
 压测结束后执行数据库断言：库存不小于零；成功订单数与扣减一致；同一用户没有重复订单；所有已接受请求最终有确定状态。再检查 P95/P99、拒绝率、队列深度、consumer lag、数据库锁等待和恢复时间。
+
+断言需限定同一活动和同一统计时点：`初始库存 = 可用库存 + 已确认订单占用 + 待处理预留`，取消或退款则按明确的回补记录计入。只比较订单行数与剩余库存而忽略 pending/取消，会把合法的暂态误报成故障，也可能漏掉重复补偿。
 
 故障矩阵：库存决策后进程崩溃、消息重复、consumer 提交后 ack 丢失、数据库慢、Redis 切换、补偿重复执行。每个实验先写预期状态，再比对实际记录与指标。
 
@@ -95,5 +99,4 @@ request -> auth / per-user limit / global admission
 > Redis 预扣库存、数据库扣减、消息投递不是三件独立操作；必须说明它们的顺序、失败补偿和最终 source of truth。
 
 > [!info]- 延伸阅读
-> - 下一步：[04-Config Center (配置中心)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/04-Config%20Center%20Project%20(配置中心项目).md)
-
+> - 下一步：[04-Config Center Project (配置中心项目)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/04-Config%20Center%20Project%20(配置中心项目).md)

@@ -1,13 +1,10 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
 > [!note] 方法论坐标
 > 通用故障定位与动态分析见 [Debugging and Failure Localization (调试与故障定位)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/02-Debugging%20and%20Failure%20Localization%20(调试与故障定位).md) 和 [Memory Safety and Dynamic Analysis (内存安全与动态分析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/03-Memory%20Safety%20and%20Dynamic%20Analysis%20(内存安全与动态分析).md)；本篇保留 C++ 异常安全、GDB 与编译器工具的落地细节。
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
@@ -19,26 +16,30 @@ content_verified: 2026-09-19
 
 ## 三种异常安全保证
 
-```cpp
-// 1. 基本保证：抛出异常后，对象处于合法状态
-// 2. 强保证：抛出异常后，状态回滚（类似事务）
-// 3. 不抛出：绝不抛出异常（noexcept）
+| 保证 | 抛出后仍须成立的条件 | 典型实现 |
+| --- | --- | --- |
+| 基本保证（basic guarantee） | 不泄漏资源，对象仍满足不变量，但内容可以改变 | RAII 管资源，分步更新时维护合法状态 |
+| 强保证（strong guarantee） | 操作失败后，对外可观察状态保持不变 | 先在临时对象中完成可能失败的工作，再以不抛异常的提交步骤替换 |
+| 不抛出保证（no-throw guarantee） | 操作不会以异常退出 | 析构、资源释放、真正不抛异常的 `swap` |
 
-class Vector {
-    int* data_;
-    size_t size_;
+下面先构造新状态；只有成功后才提交。`std::vector` 在这段代码中负责内存释放，避免手写 `new[]` 时遗漏拷贝构造失败等路径。
+
+```cpp
+#include <utility>
+#include <vector>
+
+class Numbers {
+    std::vector<int> values_;
 public:
-    // 强保证：使用 copy-and-swap
-    void push_back(int val) {
-        auto new_data = new int[size_ + 1];
-        std::copy(data_, data_ + size_, new_data);
-        new_data[size_] = val;
-        std::swap(data_, new_data);  // swap 不抛出
-        delete[] new_data;
-        ++size_;
+    void append(int value) {
+        auto next = values_;       // 复制失败：原对象不变
+        next.push_back(value);     // 分配失败：原对象不变
+        values_.swap(next);        // 在此模型中，默认分配器的 swap 不抛出
     }
 };
 ```
+
+这不是所有操作都必须复制一份的建议；实际 `std::vector::push_back` 本身也有条件化的异常保证，应按元素类型、性能需求选择实现。
 
 ## noexcept
 
@@ -101,55 +102,31 @@ int main() {
 2. 每退出一层，该层栈上所有对象的析构函数被调用
 3. 找到匹配的 `catch` 后，进入异常处理
 
-## 异常安全编程指南
+## 异常边界与 RAII
+
+`std::unique_ptr`、容器、锁守卫在栈展开时析构，资源释放不依赖逐层 `catch`。只有能恢复、添加上下文或转换成接口错误的层，才应捕获异常。
 
 ```cpp
-// ✅ 使用 RAII 管理资源（异常安全的核心）
-std::unique_ptr<Foo> ptr(new Foo());
-// 不需要 try-catch，析构函数自动释放
+#include <memory>
 
-// ✅ 使用智能指针而不是裸 new
-std::unique_ptr<int[]> buffer(new int[100]);
-
-// ❌ 危险的裸 new
-void bad() {
-    Foo* p = new Foo();
-    bar();     // 如果 bar() 抛出异常，p 泄漏！
-    delete p;
+void use() {
+    auto resource = std::make_unique<Foo>();
+    bar();  // 即使抛出，resource 也会析构
 }
-
-// ✅ 异常中立：让异常继续向上传播
-void wrapper() {
-    // 不需要处理时，不要 catch
-}
-
-// ✅ 析构函数/swap/移动构造/移动赋值 应标记 noexcept
-~Foo() noexcept;
-void swap(Foo&) noexcept;
 ```
 
-## 异常 vs 错误码
+不能机械地给所有 `swap`、移动操作标 `noexcept`：先确认成员操作确实不会抛出；若承诺被违反，运行时会调用 `std::terminate()`。析构函数应设计为不抛异常，尤其要避免栈展开期间再抛出。
 
-| | 异常 | 错误码 |
-|--|------|--------|
-| 传播方式 | 自动展开栈 | 手动传递和检查 |
-| 性能 | 正常路径无开销，异常路径慢 | 每条路径都要检查 |
-| 信息量 | 多（类型 + what()） | 少（一个整数）|
-| 被忽略的可能 | ❌ 无法忽略 | ✅ 可能被忘记检查 |
-| 适用场景 | **致命/意外错误** | **频繁发生/性能关键的预期错误** |
+## 异常、错误返回与预期失败
 
-```cpp
-// ✅ 异常适用：意料之外的错误
-int divide(int a, int b) {
-    if (b == 0) throw std::runtime_error("division by zero");
-    return a / b;
-}
+| 维度 | 异常 | 显式结果（错误码、`std::expected` 等） |
+| --- | --- | --- |
+| 传播 | 沿栈展开；调用点不必逐层检查 | 调用者显式处理或向上传递 |
+| 控制流 | 不在返回类型中直接体现；适合无法就地处理的失败 | 失败是常规分支时更清晰 |
+| 资源 | 栈展开依靠 RAII 清理 | 同样需要 RAII 清理局部资源 |
+| 性能 | 正常路径和抛出路径的成本需按实现与负载测量 | 检查与传递也有成本，不能笼统说更快 |
 
-// ✅ 错误码适用：预期中的失败
-std::error_code ec;
-auto result = read_file("config.txt", ec);
-if (ec) { /* 处理不存在等预期情况 */ }
-```
+文件不存在可能是正常分支，也可能是致命配置错误；判断依据是**接口契约和调用场景**，不是错误类型的名字。C++23 提供 `std::expected<T, E>`；旧标准可用项目已有的结果类型。不要假定“错误码只有整数、异常一定包含丰富信息”，两者都取决于具体类型设计。
 
 > [!tip]- **工程要点**：异常安全首先靠 RAII 管理资源，而非到处补 `try-catch`。正常的 C++ 异常栈展开会析构已构造的自动对象；但 `std::terminate`、进程异常退出或被跳过的析构路径不能据此保证清理。应在能恢复、转换错误或建立业务边界的层级捕获异常。
 
@@ -247,13 +224,16 @@ int b = 1 / a;    // division by zero
 
 ## Core Dump 分析
 
+在支持 core dump 的 Linux 环境，可先查看 `ulimit -c` 与系统的 core dump 配置；许多发行版由 systemd-coredump 接管，不一定在当前目录生成 `core.*` 文件。
+
 ```bash
 ulimit -c unlimited
-echo "core.%p" > /proc/sys/kernel/core_pattern
-
-gdb ./main core.1234
-
+coredumpctl list
+coredumpctl debug <PID>
+# 若已经拿到 core 文件：gdb ./main /path/to/core
 ```
+
+不应把“向 `/proc/sys/kernel/core_pattern` 写值”当作普通用户调试步骤：它更改系统级策略，需要权限，还可能影响其他进程。
 
 ## Valgrind 基础
 
@@ -271,7 +251,8 @@ valgrind --tool=callgrind ./main
 | **ThreadSanitizer** | 数据竞争检测 | 开销因程序/平台而异，需独立测试配置 |
 | **UBSan** | 部分未定义行为检测 | 开销因启用检查项而异 |
 
-> [!tip]- **工程要点**：现代 C++ 调试首选 **AddressSanitizer**（快、准）。在 CI 中应开启 ASan + UBSan。与 GDB 配合使用：ASan 告诉你问题类型和位置，GDB 帮你分析上下文。
+> [!tip] 工具选择
+> ASan/UBSan 能发现**被测试路径触发**的一部分内存与未定义行为问题，不是“跑过即安全”；TSan 通常单独构建运行。GDB 用于追踪崩溃现场和验证假设。具体 Sanitizer 组合与平台支持要在项目中验证。
 
 > [!tip]- **工程要点**：把 Sanitizer 作为可重复的测试配置，而不是“跑过一次就安全”。ASan/UBSan 常适合日常 CI；TSan 通常独立运行；GDB 用于观察真实崩溃现场。具体组合以项目平台、依赖与测试时长为准。
 

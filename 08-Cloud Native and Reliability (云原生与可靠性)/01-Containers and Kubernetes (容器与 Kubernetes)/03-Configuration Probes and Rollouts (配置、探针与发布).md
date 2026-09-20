@@ -1,7 +1,5 @@
 ---
-status: learning
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 tags: [cloud-native/kubernetes, operations/reliability]
 ---
 
@@ -15,10 +13,10 @@ ConfigMap 保存非敏感配置，Secret 保存敏感数据对象，但 Kubernet
 配置注入方式：
 
 - 环境变量：简单，但进程通常无法自动看到更新，且可能进入诊断信息。
-- 卷文件：适合证书和结构化配置，可以观察文件变化，但应用必须正确 reload。
+- 卷文件：适合证书和结构化配置。更新向 Pod 投射有传播延迟，应用还须正确 reload；通过 `subPath` 挂载的 ConfigMap/Secret 文件不会自动收到更新。
 - 配置服务/API：支持动态更新，但引入可用性、缓存、版本和权限问题。
 
-配置要有 schema、默认值、启动校验和版本。无法识别的关键配置应 fail fast；动态配置更新要先校验、再原子切换，并保留最后一个可用版本。
+配置要有 schema、默认值、启动校验和版本。无法识别的关键配置应 fail fast；动态配置更新要先校验、再原子切换，并保留最后一个可用版本。环境变量方式注入的 ConfigMap/Secret 值不会在运行进程中自动更新，通常需要重建 Pod。[ConfigMap 更新规则](https://kubernetes.io/docs/concepts/configuration/configmap/)
 
 # Startup、Readiness 与 Liveness
 
@@ -56,6 +54,8 @@ livenessProbe:
 - 旧版本是否能读取新版本写入的数据。
 
 Deployment 回滚只能恢复 Pod template，不能自动回滚外部数据库、消息或对象存储中的状态。高风险变更使用 canary 或分批发布，并让指标决定是否继续，而不是只等待固定时间。
+
+小型练习：将镜像从版本 A 更新到 B，先执行 `kubectl rollout status deployment/api` 并观察新 Pod readiness 与 EndpointSlice，再注入错误配置使新 Pod 不就绪，查看 Deployment events；确认旧副本是否仍可服务后运行 `kubectl rollout undo deployment/api`。记录的是 Deployment 模板变化，不要在这个实验里修改生产数据库。
 
 # 观测与排障
 

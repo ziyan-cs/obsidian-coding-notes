@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -28,7 +26,7 @@ EXPLAIN SELECT * FROM user WHERE age > 20\G
 ## type 访问类型详解
 
 ```
-从最优到最差：
+常见访问类型（不是脱离行数、覆盖率与实际耗时的好坏排行榜）：
 
 system       表只有一行（系统表），const 的特例
 const        主键/唯一索引等值查询，最多返回一行
@@ -37,7 +35,7 @@ ref          普通索引等值查询
 ref_or_null  普通索引等值查询 + NULL 值
 range        索引范围查询（>, <, BETWEEN, IN）
 index        索引全扫描（遍历整个索引树）
-ALL          全表扫描（最差）
+ALL          全表扫描；对小表或大量返回行可能比索引回表更合适
 ```
 
 ```sql
@@ -154,7 +152,6 @@ SELECT * FROM user WHERE age = 20;
 >
 > ---
 >
-> 索引设计原则见 → Index Design Principles (索引设计原则) · Slow Query Log & Optimization (慢查询分析)
 >
 > ---
 
@@ -273,8 +270,8 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 ### 索引设计原则（面试高频）
 
 - 优先为 **WHERE、JOIN、ORDER BY、GROUP BY** 条件中的字段创建索引
-- 复合索引遵循**最左匹配原则**，将区分度高的字段放在前面
-- 避免在低基数列（如性别、状态）上创建索引，优化效果几乎为 0
+- 复合索引遵循最左前缀的一般规则；列顺序同时考虑等值/范围、排序、覆盖与真实查询组合，不能只按单列区分度排序
+- 低基数列单独建索引未必有效，但与其他列组合或服务特定排序/覆盖时可能有价值，先看执行计划与实测
 - 索引字段类型尽量小，优先使用 `INT` 而非 `VARCHAR`
 - 避免创建过多索引，增删改操作的维护成本会显著增加
 
@@ -320,7 +317,6 @@ ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 
 ---
 
-表设计与 SQL 基础见 → MySQL Basics (MySQL 基础) · EXPLAIN & Execution Plan Analysis (执行计划分析)
 
 ---
 
@@ -373,18 +369,17 @@ WHERE phone = 13800138000  -- phone 是 VARCHAR
 
 -- 4. 前导模糊查询
 WHERE name LIKE '%zhang'
--- 改成：WHERE name LIKE 'zhang%'（能用索引）
+-- 不能直接改成 'zhang%'：前缀与后缀匹配语义不同；需全文/倒排、反转列等设计并验证需求
 
 -- 5. 联合索引不满足最左前缀
 -- 索引 (a, b, c)
-WHERE b = 1           -- 失效
-WHERE a = 1 AND c = 2 -- 只用到 a
+WHERE b = 1           -- 不能按常规最左前缀定位；某些版本/计划可能使用 skip scan
+WHERE a = 1 AND c = 2 -- a 可定位，c 可能用于过滤；看 EXPLAIN/EXPLAIN ANALYZE
 
 -- 6. OR 条件
 WHERE name = 'Bob' OR age = 20
--- 改成：UNION ALL
-SELECT * FROM user WHERE name = 'Bob'
-UNION ALL SELECT * FROM user WHERE age = 20
+-- 不要直接改成 UNION ALL：同时满足 name 和 age 的行会被返回两次。
+-- 先保留 OR 并检查实际计划；若改写，须设计与原查询等价的去重规则。
 
 -- 7. IN 条件值过多
 WHERE id IN (1,2,3,...,100000)
@@ -392,7 +387,7 @@ WHERE id IN (1,2,3,...,100000)
 
 -- 8. 不等于/NOT IN
 WHERE status != 'active'
--- 通常走全表扫描，因为不等于范围太大
+-- 是否扫描全表由选择性、索引覆盖和统计信息决定
 
 -- 9. IS NULL / IS NOT NULL
 WHERE name IS NOT NULL
@@ -427,21 +422,20 @@ SELECT COUNT(DISTINCT name) FROM user;
 -- 差（COUNT 大字段）
 SELECT COUNT(*) FROM user WHERE content LIKE '%keyword%';
 
--- 好（使用近似值）
-SHOW TABLE STATUS LIKE 'user';  -- rows 字段是近似值
+-- 仅当业务明确允许近似值时，才考虑估算行数；SHOW TABLE STATUS 的 rows 不能替代精确 COUNT(*).
 
 -- 好（使用汇总表）
 -- 维护一张计数器表，INSERT/DELETE 时更新
 ```
 
-**3. 子查询优化**
+**3. 子查询与 JOIN：先比较语义与执行计划**
 ```sql
--- 差（子查询在 MySQL 中可能被重写为相关子查询）
+-- IN 子查询：优化器可能转成 semijoin 等计划，未必比 JOIN 慢
 SELECT * FROM user WHERE id IN (
     SELECT user_id FROM `order` WHERE amount > 100
 );
 
--- 好（使用 JOIN）
+-- JOIN + DISTINCT 是另一种等价候选；去重本身有成本，必须实测
 SELECT DISTINCT u.* FROM user u
 INNER JOIN `order` o ON u.id = o.user_id
 WHERE o.amount > 100;
@@ -474,4 +468,3 @@ pt-query-digest /var/log/mysql/slow.log
 
 > [!info]- 延伸阅读
 > - 下一步：[10-Connection Pool (连接池)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/10-Connection%20Pool%20(连接池).md)
-

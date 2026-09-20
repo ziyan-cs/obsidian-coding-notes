@@ -1,203 +1,120 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-19
+study_stage: backlog
 ---
 
-> [!abstract] 阅读方式：本专题合并同一学习动作中的机制、边界与实践内容；以完整理解代替碎片记忆。
 
 > [!summary] 核心摘要
 >
-> C++20 协程由编译器转换为可暂停、可恢复的状态机；它擅长组织异步控制流，但不等于线程，也不会自动提供调度器、取消或资源安全。
+> C++20 协程让函数暂停并在以后恢复，编译器负责保存所需状态；**谁持有状态、谁恢复、在哪个线程恢复**由返回类型、awaitable 和执行器共同决定。`co_await` 本身不是非阻塞 I/O，也不会自动提供取消。
 
-# 协程模型与编译器变换
+# 先用一个同步生成器认识模型
 
-> [!note] 本节重点：C++20 协程可暂停和恢复，暂停所需状态保存在协程状态中；它本身不提供线程调度或异步 I/O，需要调度器及 I/O 库配合。
-
-## 什么是协程
+函数体出现 `co_await`、`co_yield` 或 `co_return` 时，它是协程。与普通函数不同，返回类型必须提供 `promise_type` 等协议。以下示例只用于教学：单线程、调用者同步执行 `next()`；它没有调度器，也没有异步 I/O。
 
 ```cpp
-// 协程是"可暂停和恢复执行的函数"
-// 当函数中含有以下关键字之一，它就是协程：
-// co_await  — 等待异步操作
-// co_yield  — 产生一个值（类似生成器）
-// co_return — 返回并结束协程
+#include <coroutine>
+#include <exception>
+#include <iostream>
+#include <optional>
+#include <utility>
 
-// 最简单的协程起手式
-generator<int> counter(int n) {
-    for (int i = 0; i < n; ++i)
-        co_yield i;  // 每次产出一个值，暂停执行
-}  // 调用 next() 时恢复执行
-```
-
-**C++20 协程是无栈协程**：暂停状态保存在 coroutine frame 中；frame 的存储与暂停/恢复成本由实现、返回类型和 awaitable 决定，不能假定总在堆上或固定快于线程切换。
-
-## 三个核心概念
-
-```text
-协程框架由三部分组成：
-1. promise_type    — 控制协程的行为（返回值、异常处理）
-2. coroutine_handle— 操作协程的句柄（恢复/销毁）
-3. awaitable       — 定义了 co_await 行为（是否暂停、暂停后做什么）
-```
-
-但这些在工程中可以靠库来封装（不需要每次手动实现）：
-
-```cpp
-// 使用 cppcoro 库（或自行封装）后的实际使用
-cppcoro::task<int> fetch_data() {
-    auto result = co_await http_get("api.example.com/data");
-    // 发起请求 → 暂停 → 等待 IO 完成 → 恢复 → 继续执行
-    co_return parse_result(result);
-}
-
-cppcoro::task<> process() {
-    auto data = co_await fetch_data();
-    std::println("Got: {}", data);
-}
-```
-
-# 返回对象与执行模式
-
-```cpp
-// 一个简单的 Generator 封装（简化版）
-template<typename T>
-struct Generator {
+template<class T>
+class Generator {
+public:
     struct promise_type {
-        T current_value;
-        
+        std::optional<T> current;
+        std::exception_ptr error;
+
+        Generator get_return_object() noexcept {
+            return Generator{
+                std::coroutine_handle<promise_type>::from_promise(*this)};
+        }
+        std::suspend_always initial_suspend() noexcept { return {}; }
+        std::suspend_always final_suspend() noexcept { return {}; }
         std::suspend_always yield_value(T value) {
-            current_value = std::move(value);
+            current.emplace(std::move(value));
             return {};
         }
-        std::suspend_always initial_suspend() { return {}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        Generator get_return_object() {
-            return Generator{std::coroutine_handle<promise_type>::from_promise(*this)};
+        void return_void() noexcept {}
+        void unhandled_exception() noexcept {
+            error = std::current_exception();
         }
-        void return_void() {}
-        void unhandled_exception() { std::terminate(); }
     };
-    
-    std::coroutine_handle<promise_type> handle_;
-    
-    explicit Generator(std::coroutine_handle<promise_type> h) : handle_(h) {}
+
+    using Handle = std::coroutine_handle<promise_type>;
+
+    explicit Generator(Handle h) noexcept : handle_(h) {}
+    Generator(const Generator&) = delete;
+    Generator& operator=(const Generator&) = delete;
+    Generator(Generator&& other) noexcept
+        : handle_(std::exchange(other.handle_, {})) {}
+    Generator& operator=(Generator&&) = delete;
     ~Generator() { if (handle_) handle_.destroy(); }
-    
+
     bool next() {
+        if (!handle_ || handle_.done()) return false;
         handle_.resume();
+        if (handle_.promise().error)
+            std::rethrow_exception(handle_.promise().error);
         return !handle_.done();
     }
-    T value() { return handle_.promise().current_value; }
+
+    const T& value() const { return *handle_.promise().current; }
+
+private:
+    Handle handle_;
 };
 
-// 使用：
-Generator<int> fib(int n) {
-    int a = 0, b = 1;
-    for (int i = 0; i < n; ++i) {
-        co_yield a;
-        int next = a + b;
-        a = b;
-        b = next;
-    }
+Generator<int> count_to(int n) {
+    for (int i = 0; i < n; ++i) co_yield i;
 }
 
 int main() {
-    auto gen = fib(10);
-    while (gen.next()) {
-        std::cout << gen.value() << " ";  // 0 1 1 2 3 5 8 13 21 34
+    auto numbers = count_to(3);
+    while (numbers.next()) {
+        std::cout << numbers.value() << ' '; // 0 1 2
     }
 }
 ```
 
-## Task（异步任务）模式
+`initial_suspend()` 返回 `suspend_always`，所以调用 `count_to(3)` 只创建协程对象，不运行循环；每次 `next()` 才恢复。`co_yield` 把当前值存入 promise 并暂停。`final_suspend()` 留住已结束的 frame，等待拥有者析构时 `destroy()`；不能对已完成/已销毁的 handle 再 `resume()`。`value()` 只能在 `next()` 返回 `true` 后、下一次 `next()` 前读取；其引用不拥有协程状态。
 
-```cpp
-// Task 是协程最常用的模式：封装异步操作
-// 完整的实现较复杂，通常使用库（cppcoro, folly::coro）
+## frame、promise、handle 各管什么
 
-// 概念理解：一个协程的执行流
-task<int> async_process(int x) {
-    // 在协程框架中：
-    // 1. initial_suspend：是否立即开始（suspend_never）还是延迟（suspend_always）
-    auto result = co_await async_compute(x);
-    // 2. co_await awaitable：根据 awaitable 决定是否暂停
-    // 3. 当 async_compute 完成时，恢复执行
-    co_return result + 1;
-}
-```
+| 部件 | 职责 | 风险 |
+| --- | --- | --- |
+| coroutine frame | 保存跨暂停点仍需存在的参数、局部状态和 promise | 泄漏 handle 会泄漏 frame；销毁后引用悬垂 |
+| `promise_type` | 定义启动、最终暂停、产值和异常处理 | `unhandled_exception` 策略必须明确 |
+| `coroutine_handle` | 无所有权的低层恢复/销毁入口；示例由 `Generator` 独占管理 | 重复销毁、完成后恢复均不允许 |
+| awaiter | `await_ready` / `await_suspend` / `await_resume` 决定暂停与恢复行为 | 回调持有悬垂 handle 可造成 UAF |
 
-# 协程 vs 线程 vs 回调
+frame 的存储可经分配函数取得；满足条件时实现也可省略分配。不能写成“协程默认在堆上，`noop_coroutine` 可以优化掉分配”。C++20 标准库提供底层协程设施，但没有开箱即用的通用异步 `task`；C++23 引入 `std::generator`，使用前仍要核对编译器和标准库支持。
 
-| 特性 | 协程 (C++20) | 线程 | 回调 |
-|------|-------------|------|------|
-| 开销 | frame 分配与调度取决于实现 | 线程栈与内核调度 | 闭包与调度取决于框架 |
-| 暂停/恢复 | ✅ 语言支持 | ❌ 需要系统调度 | ✅ 函数调用 |
-| 同步写法 | ✅ 同步风格写异步 | ✅ 同步 | ❌ 回调地狱 |
-| 并行 | ❌（同一线程内协作）| ✅（真并行）| ❌ |
-| 栈需求 | 无栈 | 有栈 (MB 级) | 无栈 |
+# `co_await` 并不自动异步
 
-```cpp
-// 协程让异步代码看起来像同步代码
-// 对比：
+对一个 awaiter，`co_await` 大致经历：
 
-// 回调方式
-void fetch_callback() {
-    async_request([](Response r) {
-        async_process(r, [](Result res) {
-            std::cout << res;
-        });
-    });
-}
+1. `await_ready()`：已准备好则不暂停。
+2. `await_suspend(handle)`：需要暂停时注册后续恢复逻辑；可返回 `void`、`bool` 或另一个 coroutine handle。
+3. `await_resume()`：恢复后取得结果或抛出错误。
 
-// 协程方式（同步风格）
-task<void> fetch_coro() {
-    auto r = co_await async_request();  // 像同步调用
-    auto res = co_await async_process(r);
-    std::cout << res;
-}
-```
+`await_suspend` 返回另一个 handle 时，语言支持将控制流转给该协程，即**对称转移**；不需要先断言“必须靠库额外实现”。但是执行器、定时器、socket 事件和线程切换策略仍需库实现。一个协程可在不同线程依次恢复；并行执行靠线程/执行器安排，不是 `co_await` 的自动属性。跨线程公布 handle 时要建立正确同步，尤其不能在公布后仍假定 awaiter 对象一定存活。
 
-## 工程注意事项
+| 问题 | 线程 | 协程 |
+| --- | --- | --- |
+| 并行执行 | 多线程可并行 | 由恢复它的线程/执行器决定 |
+| 等待 I/O | 同步等待可阻塞线程 | 需非阻塞 I/O 与 awaitable，暂停才不占该线程 |
+| 生命周期 | 线程对象与工作函数要汇合/停止 | frame/handle、底层操作与回调要一起管理 |
+| 性能 | 有线程栈和调度成本 | frame、调度与库开销；必须在真实负载测量 |
 
-```cpp
-// 1. 协程默认在堆上分配状态
-// 某些场景可以用 std::noop_coroutine 优化
+# 用于后端时必须定义的契约
 
-// 2. 协程无法用 return 返回值（必须用 co_return）
-// ❌ int coro() { return 42; }  // 不是协程
-// ✅ task<int> coro() { co_return 42; }
+- **所有权**：返回的 task/generator 谁持有？调用方提前放弃后，底层回调是否仍持有 handle？
+- **启动与恢复**：`initial_suspend` 决定 eager/lazy；在什么执行器、什么线程恢复？暂停期间不能无条件持有 `mutex`。
+- **取消**：C++20 核心协程不内置通用取消。先让底层 I/O 不再回调或能安全完成，再销毁可能被引用的 frame。
+- **异常**：协程内未处理异常走 `promise_type::unhandled_exception()`；可像上例保存 `exception_ptr`，在调用方 `next()` 时重抛。生产 task 应定义统一错误传播协议。
+- **借用数据**：协程参数若按引用传入，暂停后引用对象可能已销毁；和普通同步函数不同，必须把生命周期延伸到最后一次恢复或复制/转移所有权。
 
-// 3. 协程中慎用线程局部存储（TLS）
-// 协程可能在恢复时切换到不同线程
+验证一个异步封装至少覆盖立即完成、实际暂停后恢复、异常、取消、调用方提前销毁、服务停止时仍有待完成 I/O 六种路径。协程解决的是控制流表达；是否比线程模型更合适，要连同库、负载、调试与维护成本测量。
 
-// 4. 非对称转移：一个协程只能"返回"给它的调用者/恢复者
-// 对称转移需要库级支持
-
-// 5. 标准库支持有限（C++20）
-// C++20 只提供了协程框架（coroutine_handle, promise_type, awaitable）
-// 没有提供标准 task / generator
-// 需要使用第三方库（cppcoro, folly::coro）或自己封装
-```
-
-> [!tip]- **工程要点**：C++20 协程是"框架级"设施（像虚函数/模板一样），不是"开箱即用"的。生产项目中需要配合库使用（cppcoro, folly::coro 或自己封装）。协程的最大价值是**用同步写法写异步代码**，消除回调地狱。对于 IO 密集型的后端服务，协程是比线程更轻量的并发方案。
-
----
-
-# 生命周期、取消与工程边界
-
-编译器把局部状态、promise 和暂停点所需信息放入 coroutine frame。frame 经常通过分配函数获得存储，但标准允许在满足条件时省略/嵌入分配，因此不能断言“总在堆上”或给出固定开销。真正成本要由目标编译器、awaitable 和负载测量。
-
-调用协程函数通常先创建返回对象，不等于异步工作已经开始；`initial_suspend` 决定 eager/lazy。暂停后由谁持有 handle、谁恢复、谁最终 `destroy()` 必须唯一明确。对已完成或已销毁 handle 调用 `resume` 是错误，泄漏 handle 会泄漏整个 frame。
-
-`co_await` 不自动切换线程。awaitable 的 `await_suspend` 把 continuation 注册到事件循环/执行器，完成事件在哪个线程恢复取决于库。协程恢复到不同线程后，原线程的 TLS、锁和线程亲和资源可能不再成立。
-
-## 取消、异常和生命周期
-
-取消不是 C++20 核心协程自动提供的能力，需要库定义 stop token、取消槽或操作对象。取消后仍必须等待底层 I/O 回调不再引用 frame，不能先销毁 frame 再让完成回调恢复悬空 handle。
-
-异常在协程体内进入 `promise_type::unhandled_exception()`；task 类型应保存并在 await 时重新抛出或转成显式错误。析构阶段不得让异常逃逸。持有 mutex 跨越 `co_await` 往往危险，因为暂停时间无界且恢复线程不确定。
-
-工程实践优先使用已有异步库的 task、executor、timer 和 I/O awaitable，并阅读其 eager/lazy、取消、线程和销毁契约。最小测试覆盖立即完成、真正暂停、异常、取消、调用方提前销毁和服务关闭。
-
-参考：[C++ coroutine language support](https://en.cppreference.com/w/cpp/language/coroutines.html)。
+参考：[C++ 标准草案：await 表达式](https://eel.is/c++draft/expr.await)、[协程定义及参数生命周期](https://eel.is/c++draft/dcl.fct.def.coroutine)。

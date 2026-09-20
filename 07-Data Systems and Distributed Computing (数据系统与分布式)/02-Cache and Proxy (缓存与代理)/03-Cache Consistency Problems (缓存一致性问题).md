@@ -1,7 +1,5 @@
 ---
-status: stable
-confidence: high
-content_verified: 2026-09-17
+study_stage: backlog
 ---
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
@@ -132,7 +130,6 @@ if (id <= 0 || id > MAX_VALID_ID) {
 >
 > ---
 >
-> 缓存三大问题系列详解见 → 01d2-Cache Breakdown (缓存击穿：热点key失效) · 01d3-Cache Avalanche (缓存雪崩：大量key同时失效)
 >
 > ---
 
@@ -257,7 +254,6 @@ while (true) {
 >
 > ---
 >
-> 缓存三大问题系列详解见 → 01d1-Cache Penetration (缓存穿透：布隆过滤器) · 01d3-Cache Avalanche (缓存雪崩：大量key同时失效)
 >
 > ---
 
@@ -285,7 +281,7 @@ while (true) {
 
 ---
 
-## 解决方案 · 延伸要点 2
+## 雪崩防护：分散过期与保护回源
 ### 方案 1：过期时间加随机化
 
 ```cpp
@@ -293,9 +289,7 @@ while (true) {
 int ttl = 3600 + rand() % 600;  // 基础 1h + 随机 0-10min
 redis.setex(key, ttl, value);
 
-// 或者用固定时间 + 随机偏移
-redis.setex(key, 3600, value);
-redis.expire(key, ttl);  // 重设随机 TTL
+// 不要先 SETEX 再 EXPIRE 分两步设置随机 TTL；单条 SET EX 完成更易保证语义
 ```
 
 ### 方案 2：多级缓存
@@ -303,11 +297,11 @@ redis.expire(key, ttl);  // 重设随机 TTL
 ```
 用户请求
     ↓
-Level 1：本地缓存（Caffeine/LRU） ≈ 响应时间 1ms
+Level 1：本地缓存（如 Caffeine）
     ↓（未命中）
-Level 2：Redis 集群              ≈ 响应时间 5ms
+Level 2：Redis 集群
     ↓（未命中）
-Level 3：数据库 / 降级处理       ≈ 响应时间 50ms+
+Level 3：数据库 / 降级处理
 ```
 
 **本地缓存（如 Caffeine）：** 每个应用节点本地缓存热点数据，即使 Redis 不可用，本地缓存仍生效。缺点是各节点缓存不一致。
@@ -345,7 +339,7 @@ string getWithDegrade(string key) {
 
 ---
 
-## 方案对比 · 延伸要点 2
+## 雪崩防护的适用边界
 | 方案 | 解决的问题 | 成本 |
 |------|-----------|------|
 | TTL 随机化 | 大量 key 同时过期 | 极低 |
@@ -371,4 +365,3 @@ string getWithDegrade(string key) {
 >
 > ---
 >
-> 缓存三大问题系列详解见 → 01d1-Cache Penetration (缓存穿透：布隆过滤器) · 01d2-Cache Breakdown (缓存击穿：热点key失效)
