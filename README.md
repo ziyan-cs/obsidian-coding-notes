@@ -24,7 +24,7 @@
 | --- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 01  | 基础能力      | [基础能力标准](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)                                                                                   |
 | 02  | 工程基础      | [工程基础标准](/02-Engineering%20Fundamentals%20(工程基础)/00-Engineering%20Fundamentals%20Standard%20(工程基础标准与自测).md)                                                     |
-| 03  | C++ 后端    | [C++ 后端](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)                                                                       |
+| 03  | C++ 后端    | [C++ 后端标准](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)                                                                     |
 | 04  | Python 工程 | [Python 工程标准](/04-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md)                                              |
 | 05  | Go 后端     | [Go 后端标准](/05-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md)                                                                          |
 | 06  | 系统与网络     | [系统与网络标准](/06-Systems%20and%20Networking%20(系统与网络)/00-Systems%20and%20Networking%20Standard%20(系统与网络标准与自测).md)                                                  |
