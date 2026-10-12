@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-09-25
+review_due: 2026-10-14
 tags: [language/python, python/collections]
 ---
 

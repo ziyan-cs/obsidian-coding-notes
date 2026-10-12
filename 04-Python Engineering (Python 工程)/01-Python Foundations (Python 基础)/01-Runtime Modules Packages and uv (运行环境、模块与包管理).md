@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-09-23
+review_due: 2026-10-13
 ---
 
 > [!abstract] 学习定位
@@ -78,5 +78,4 @@ src/example_app/
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](/04-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Names%20Mutability%20and%20Copying%20(对象、名称、可变性与复制).md)
-
 

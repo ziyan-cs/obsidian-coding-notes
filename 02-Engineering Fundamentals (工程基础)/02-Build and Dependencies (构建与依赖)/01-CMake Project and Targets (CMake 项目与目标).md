@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-22
+review_due: 2026-11-12
 tags: [engineering/build, cpp/cmake]
 ---
 

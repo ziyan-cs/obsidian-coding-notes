@@ -4,11 +4,10 @@
 
 ## 从这里开始
 
+- 今天执行：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)。平板从带日期的 Todo 直接进入笔记；电脑也可运行 `./List-ReviewDue.ps1`，完整队列使用 `./List-ReviewDue.ps1 -All`。
 - 总入口：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
-- 学习路线：[01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
-- 学习周期：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)
+- 长期路线：[01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
 - 验证与诊断：[01-Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)，同目录统一收录调试、内存、性能、可观测性、安全检测与发布门禁。
-- 到期复习：运行 `./List-ReviewDue.ps1`；完整队列使用 `./List-ReviewDue.ps1 -All`。
 
 ## 阅读约定
 
@@ -42,7 +41,7 @@
 ~~~yaml
 ---
 study_stage: learn
-review_due: 2026-09-23
+review_due: YYYY-MM-DD
 tags: [topic/example]
 ---
 ~~~
@@ -58,7 +57,7 @@ tags: [topic/example]
 
 ## 维护边界
 
-- `.obsidian/`、`.git/`、`.trash/` 与 `assets/` 不属于正文整理范围。
+- `.obsidian/`、`.git/`、`.trash/` 与 `assets/` 不属于正文整理范围；跨设备传输笔记时必须携带 `assets/`，`.obsidian/` 配置则按设备需要选择同步。
 - 文件统一使用 `序号-English (中文).md`，目录最多三级。
 - 二级知识目录原则上至少包含 3 篇实质笔记，不创建空壳导航页。
 - 拆分和合并以知识因果链、工程任务与检索价值为准，不追求机械行数一致。

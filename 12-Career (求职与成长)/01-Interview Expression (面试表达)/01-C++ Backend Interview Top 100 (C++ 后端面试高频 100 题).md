@@ -66,7 +66,7 @@ tags: [career/interview]
 | 29  | Concept 解决了什么问题                                  | ★★  | Concepts & SFINAE                                                                                               |
 | 30  | Structured Binding（结构化绑定）                        | ★   | string_view & Structured Bindings                                                                                                                                                                                |
 
-## 并发
+## 并发问题
 
 | # | 题目 | 难度 | 笔记位置 |
 |---|------|------|---------|
@@ -81,7 +81,7 @@ tags: [career/interview]
 | 39 | 读写锁 (`shared_mutex`) 适用场景 | ★★ | Concurrency & Performance Optimization |
 | 40 | lock-free 编程的基本思路 | ★★★ | Lock-free Structures |
 
-## STL
+## STL 问题
 
 | #   | 题目                                 | 难度  | 笔记位置                                                                                                                                                                                    |
 | --- | ---------------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

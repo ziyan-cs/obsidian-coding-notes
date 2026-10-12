@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-18
+review_due: 2026-11-01
 tags: [language/python, python/testing]
 ---
 

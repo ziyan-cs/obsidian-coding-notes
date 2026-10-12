@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-03
+review_due: 2026-10-24
 tags: [cs/architecture, learning/foundation]
 ---
 

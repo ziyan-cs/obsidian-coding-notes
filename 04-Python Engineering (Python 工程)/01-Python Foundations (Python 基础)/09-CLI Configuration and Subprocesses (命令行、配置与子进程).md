@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-21
+review_due: 2026-11-11
 tags: [language/python, python/cli]
 ---
 
@@ -109,4 +109,3 @@ def probe(repository: Path) -> str:
 给日志汇总工具加入 `--output`、`--min-level` 和 `--dry-run`，测试以下契约：正常输出只写 stdout；非法参数由 argparse 返回非零；不可读文件写 stderr 且不输出半成品；`--dry-run` 不修改目标。若输出将覆盖现有文件，还要复用文件专题中的临时文件与清理策略。
 
 官方参考：[argparse](https://docs.python.org/3/library/argparse.html) · [subprocess](https://docs.python.org/3/library/subprocess.html)。
-

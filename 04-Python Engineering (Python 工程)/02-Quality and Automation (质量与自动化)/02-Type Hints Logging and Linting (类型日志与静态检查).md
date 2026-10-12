@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-11
+review_due: 2026-10-25
 tags: [language/python, python/quality]
 ---
 

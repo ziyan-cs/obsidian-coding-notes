@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-09-28
+review_due: 2026-10-19
 ---
 
 > [!abstract] 学习目标：分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。

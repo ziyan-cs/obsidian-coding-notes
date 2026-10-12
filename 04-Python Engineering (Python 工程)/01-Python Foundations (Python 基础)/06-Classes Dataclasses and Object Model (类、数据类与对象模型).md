@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-09
+review_due: 2026-10-30
 tags: [language/python, python/object-model]
 ---
 

@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-07
+review_due: 2026-10-28
 tags: [language/python, python/iteration]
 ---
 

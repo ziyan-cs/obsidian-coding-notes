@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-01
+review_due: 2026-10-22
 ---
 
 
