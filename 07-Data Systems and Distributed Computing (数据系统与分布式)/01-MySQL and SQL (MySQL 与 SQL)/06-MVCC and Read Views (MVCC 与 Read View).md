@@ -169,13 +169,11 @@ RR 级别下：
 > [!tip]- **工程要点**
 > MVCC 的核心优势是"读不阻塞写"——这在 OLTP 系统中极其重要。快照读是 MVCC 的主角，不加任何锁。而当前读（SELECT ... FOR UPDATE）不走 MVCC，直接读最新数据并加锁——这在高并发下容易成为瓶颈。在线业务中，尽量用快照读，只在"检测并更新"（如扣库存）的原子操作中使用当前读。
 
-> [!summary] 核心摘要
+> [!question]- 可见性检查
 >
 > - **常见误区**：以为 RR 下 `BEGIN` 时就建 Read View（实际首次快照读才建）；把 `LOCK IN SHARE MODE` 当成快照读（它是当前读）。
 > - **自测**：1) Read View 里 min_trx_id / max_trx_id / m_ids 分别怎么判断可见性？ 2) 为什么 RR 靠 MVCC 只能防"快照读"的不可重复读，仍需 Next-Key Lock 防当前读的幻读？
 >
-> ---
 >
 > 关联：[Transactions and Isolation (事务与隔离级别)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/05-Transactions%20and%20Isolation%20(事务与隔离级别).md) · [Locks and Deadlocks (锁与死锁)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/07-Locks%20and%20Deadlocks%20(锁与死锁).md)
 >
-> ---

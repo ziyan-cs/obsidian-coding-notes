@@ -134,10 +134,8 @@ nginx -s reload
 > `worker_connections` 限制单 worker 可打开的连接数，反向代理通常同时占用客户端与上游连接；不能把配置值直接乘 worker 数当成可承受客户端数。还应核查进程 fd 限额、上游容量及真实负载。
 
 >
-> ---
 >
 >
-> ---
 
 # Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
@@ -281,10 +279,8 @@ server {
 > 动静分离可显著提升性能。HTTPS 建议 Let's Encrypt 自动续期。调试用 `nginx -T` 查看合并配置。
 
 >
-> ---
 >
 >
-> ---
 
 # Nginx and Application Server (Nginx 与应用服务器)
 
@@ -379,5 +375,4 @@ Nginx（路由）
 > 反向代理可以承担 TLS、路由、静态文件与流量治理，但不是每个 Go/C++ 服务都必须部署 Nginx。已有网关、Ingress、云负载均衡或直接暴露服务时，应比较功能、额外跳数、运维与故障域。
 
 >
-> ---
 >

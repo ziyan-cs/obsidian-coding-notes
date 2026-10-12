@@ -95,10 +95,8 @@ D（持久性）← redo 与刷盘/存储假设；binlog、复制与备份承担
 >
 > **redo 和 undo 分别解决什么？** redo 支持崩溃后的重做，保证已提交修改可恢复；undo 保存旧版本，用于回滚与 MVCC。WAL 的核心顺序是先让恢复所需日志按策略持久化，再异步刷数据页。
 >
-> ---
 >
 >
-> ---
 
 # Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 

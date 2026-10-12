@@ -91,10 +91,8 @@ sdsfree(s);                     // 释放
 > SDS 的预分配策略是"空间换时间"的典型——大多数 append 操作无需重新分配。`SDS_MAX_PREALLOC` 设为 1MB 避免大字符串翻倍浪费。
 
 >
-> ---
 >
 >
-> ---
 
 # ziplist and listpack (压缩列表)
 
@@ -187,10 +185,8 @@ List 通常使用 quicklist 组织节点，不应套用 Hash 的阈值。
 > ziplist/listpack 的关键价值是紧凑存储，但内存节省倍数依数据而变。用 `OBJECT ENCODING key` 观察实例实际编码；参见 [Redis 编码文档](https://redis.io/docs/latest/commands/object-encoding/) 与 [内存优化文档](https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/)。
 
 >
-> ---
 >
 >
-> ---
 
 # skiplist (跳表)
 
@@ -302,10 +298,8 @@ typedef struct zset {
 > 跳表是典型的"以空间换时间"结构，每层索引是概率性平衡而非确定性平衡。Redis 中跳表主要用于 ZSet，此外还在集群中用做内部数据结构。
 
 >
-> ---
 >
 >
-> ---
 
 # dict Hash Table (字典与渐进式 rehash)
 
@@ -428,7 +422,6 @@ void dictRehash(dict *d, int n) {
 > dict 是 Redis 全局键空间的基础——`redisDb->dict` 存所有 key-value。渐进式 rehash 的设计思想（分批迁移、读写查两张表、新增只进新表）被许多需要在线扩容的系统借鉴。
 
 >
-> ---
 >
 
 > [!info]- 延伸阅读

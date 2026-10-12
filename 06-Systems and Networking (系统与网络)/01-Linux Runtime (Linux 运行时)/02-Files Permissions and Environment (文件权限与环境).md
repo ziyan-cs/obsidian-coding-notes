@@ -79,7 +79,7 @@ Ctrl+W → h/j/k/l   " 切换窗口
 
 ---
 
-# 环境变量 🔥
+# 环境变量
 
 ```bash
 printenv         # 查看当前进程继承的环境变量；set 还会显示 shell 变量/函数
@@ -170,7 +170,7 @@ chgrp dev file        # 仅修改所属组
 chown -R alice dir/   # 递归修改目录
 ```
 
-## umask 默认权限 🔥
+## umask 默认权限
 
 `umask` 通过**位屏蔽**去掉创建时请求的权限，不是普通十进制减法。常见 shell 新文件基准为 `0666`、目录为 `0777`；例如 `umask 0022` 时分别得到 `0644` 和 `0755`，但应用也可以主动请求更窄权限。
 
@@ -181,7 +181,7 @@ umask 022              # 临时修改（重启失效）
 echo "umask 002" >> ~/.bashrc
 ```
 
-## 特殊权限位 🔥
+## 特殊权限位
 
 ```bash
 chmod u+s file        # SetUID：以文件所有者身份执行（如 /usr/bin/passwd）

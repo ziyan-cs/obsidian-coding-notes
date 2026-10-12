@@ -103,7 +103,6 @@ auto.offset.reset=earliest  # 仅在消费组没有有效已提交位点等情�
 > 分区过多增加元数据、复制与文件句柄等开销，但没有通用的“集群上限 1000”规则。手动提交 offset 也不能自动保证外部数据库副作用恰好一次，必须明确失败和重放路径。
 
 >
-> ---
 >
 > 接下来把生产确认、broker 副本和消费位点连成同一条故障路径。
 
@@ -221,7 +220,6 @@ Producer -> Broker -> Consumer
 > 2. Kafka transaction 能否让 Kafka 与 MySQL 自动成为同一个原子事务？
 > 3. 业务去重键应选择消息 ID、订单 ID 还是两者组合？为什么？
 >
-> ---
 >
 > 参考 [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)；具体参数默认值与客户端分区器行为以部署版本为准。
 

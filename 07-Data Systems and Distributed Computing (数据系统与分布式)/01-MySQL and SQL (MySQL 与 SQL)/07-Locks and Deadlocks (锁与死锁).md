@@ -251,14 +251,12 @@ Gap Lock 是 RR 级别下锁争用的常见原因：
 
 > [!tip]- **工程要点**：范围条件可能锁住比业务直觉更大的索引区间。排查时用 `performance_schema.data_locks`、事务信息和执行计划确认实际锁范围；切换 RC 可能减少部分 gap locking，但并不保证所有场景都没有 gap lock，须结合当前版本与约束验证。
 
-> [!summary] 核心摘要
+> [!question]- 锁范围检查
 > - **常见误区**：以为唯一索引查询一定会退化（范围查询不退化）；以为 Gap Lock 锁的是记录本身（实际锁间隙，所以同间隙可共存）；忽略"无索引"导致全表逐行加锁。
 > - **自测**：1) 为什么唯一索引等值查询能退化为 Record Lock？ 2) 索引 1,5,10 上 `WHERE id=5 FOR UPDATE` 的 Next-Key Lock 锁哪些范围？
 >
-> ---
 >
 >
-> ---
 
 # Deadlock Detection and Avoidance (死锁检测与避免)
 

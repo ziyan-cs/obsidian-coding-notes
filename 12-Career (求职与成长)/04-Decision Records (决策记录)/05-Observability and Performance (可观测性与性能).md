@@ -39,7 +39,7 @@ tags: [comparison, observability, performance]
 > [!warning] 常见误区
 > 只报平均延迟、只截一张 profiler 图、或在本机单次运行后宣称“快了 N 倍”，都不是可复现的性能结论。
 
-> [!summary] 核心摘要
+> [!question]- 决策复盘
 > 性能优化先定义用户可感知的目标，再记录环境与负载，以 baseline 对照分析分位延迟、错误率和资源。没有证据的优化只是猜测。
 >
 > - 自测：吞吐上升但 p99 变差，你会再看哪些队列、GC、锁或依赖指标？

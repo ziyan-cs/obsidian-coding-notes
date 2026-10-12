@@ -29,7 +29,7 @@ tags: [comparison, backend/http]
 > [!warning] 常见误区
 > 把 SQL、缓存细节或第三方 SDK 直接写进 handler，会让协议层和业务层一起失去可测试性；“返回 200 + 错误字符串”也会破坏客户端语义。
 
-> [!summary] 核心摘要
+> [!question]- 决策复盘
 > HTTP handler 做协议转换，service 承载业务规则，repository 封装外部存储。每一层都应能单独测试；timeout、取消和可观测性从请求入口贯穿到依赖调用。
 >
 > - 自测：创建资源遇到重复键、依赖超时、参数非法，分别应返回什么类别的 HTTP 响应？

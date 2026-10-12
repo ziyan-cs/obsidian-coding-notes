@@ -35,7 +35,7 @@ tags: [comparison, concurrency]
 > [!warning] 常见误区
 > channel 不是 mutex 的替代品，async 也不是并行。一个共享不变量仍需要明确的同步策略；CPU 密集型 Python coroutine 仍会阻塞 event loop。
 
-> [!summary] 核心摘要
+> [!question]- 决策复盘
 > 并发模型只改变任务调度和通信表达，不能消除状态一致性问题。先定义任务的所有者、退出条件、背压和错误路径，再选线程、channel 或 async。
 >
 > - 自测：一个消费者停住时，生产者是阻塞、丢弃、限流还是持久化？为什么？

@@ -214,9 +214,7 @@ int shutdown(int sockfd, int how);
 > | 作用       | 减少 fd 引用计数，为 0 时才真正关闭 | 立即关闭指定方向        |
 > | 多进程 fork | close 只减引用计数          | shutdown 直接影响连接 |
 >
-> ---
 >
-> ---
 
 # Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 

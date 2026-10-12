@@ -124,7 +124,6 @@ pthread_rwlock_unlock(&rwlock);
 >
 > mutex 保护共享不变量；condition variable 不保存条件本身，只负责等待/通知，所以必须配合受同一 mutex 保护的 predicate，并在 `while` 中等待。通知不是“事件不会丢”的保证，正确性来自“修改 predicate 与检查 predicate 都在锁下”。
 >
-> ---
 
 # Deadlock Causes and Prevention (死锁原因与预防)
 

@@ -195,9 +195,7 @@ DELETE /users/42       → 删除用户        204 No Content / 404
 >
 > **自测：** 为什么 PATCH 不能机械标为“非幂等”？为什么不能把“重复 DELETE 返回 404”直接当作不幂等？
 >
-> ---
 >
-> ---
 
 # HTTP Connection Management (HTTP 连接管理)
 

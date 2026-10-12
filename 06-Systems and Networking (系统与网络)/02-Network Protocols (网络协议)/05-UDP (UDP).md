@@ -205,7 +205,6 @@ sendto(fd, buf, len, 0,
 > |"UDP 数据报不会分片"|超过 MTU 仍会被 IP 层分片，分片丢失会导致整个数据报丢失，建议应用层控制包大小 < 1472 字节|
 > |"UDP 没有粘包问题就不用处理边界"|消息边界保留，但仍需处理大包分片、乱序等问题|
 >
-> ---
 
 > [!info]- 延伸阅读
 > - 下一步：[06-HTTP Protocol (HTTP 协议)](/06-Systems%20and%20Networking%20(系统与网络)/02-Network%20Protocols%20(网络协议)/06-HTTP%20Protocol%20(HTTP%20协议).md)

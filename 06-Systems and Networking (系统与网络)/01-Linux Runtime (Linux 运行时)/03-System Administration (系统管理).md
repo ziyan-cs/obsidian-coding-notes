@@ -201,7 +201,7 @@ systemctl disable nginx   # 取消自启
 # 自动化任务与日志
 ## 任务调度
 
-### crontab 定时任务 🔥
+### crontab 定时任务
 
 ```bash
 systemctl status cron     # Debian/Ubuntu 常见服务名；其他发行版可能为 crond

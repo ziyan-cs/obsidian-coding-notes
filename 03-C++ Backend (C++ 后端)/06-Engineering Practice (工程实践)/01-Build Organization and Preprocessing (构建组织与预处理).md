@@ -148,10 +148,8 @@ inline int square(int x) { return x * x; }
 >
 > 编译把源文件分别变成目标文件，链接器再解析跨文件符号并重定位地址。`undefined reference` 先查“声明有了但定义/库没有参与链接”，`multiple definition` 先查“同一外部符号被定义多次”。静态/动态链接是部署、更新、隔离与启动成本的权衡，不能只用“谁更快”概括。
 >
-> ---
 >
 >
-> ---
 
 # Header & Source Organization (头文件与源文件组织)
 

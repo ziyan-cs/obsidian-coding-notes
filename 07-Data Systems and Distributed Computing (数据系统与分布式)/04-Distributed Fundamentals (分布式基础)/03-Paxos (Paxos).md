@@ -116,7 +116,6 @@ Raft 与 Multi-Paxos 都利用多数派和稳定 leader 降低正常路径开销
 > Paxos 理论价值极高但实现困难。实际操作中，新系统应优先选择 Raft（etcd/Consul/TiKV 已验证），而非从头实现 Paxos。了解 Paxos 有助于理解分布式一致性的本质。
 
 >
-> ---
 >
 
 > [!info]- 延伸阅读

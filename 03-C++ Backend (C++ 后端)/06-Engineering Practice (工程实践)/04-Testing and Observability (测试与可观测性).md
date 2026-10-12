@@ -5,6 +5,8 @@ study_stage: backlog
 > [!note] 方法论坐标
 > 测试证据设计与可观测性语义统一见 [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md) 和 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)；本篇聚焦 GoogleTest/GMock、spdlog、Prometheus 与 OpenTelemetry C++。
 
+> [!summary] 核心摘要
+> 测试用可重复断言证明行为，可观测性用日志、指标和追踪解释运行中的系统。C++ 服务需要同时覆盖业务契约、资源生命周期与失败路径，并让测试和运行证据共享稳定的语义，而不是只追求覆盖率或日志数量。
 
 # 测试：从契约到证据
 

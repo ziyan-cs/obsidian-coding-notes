@@ -183,11 +183,9 @@ Main Thread                       I/O Threads
 > 生产环境避免 `KEYS *`，对大 key 使用 `SCAN`、拆分与异步删除等策略。通过 `redis-cli --bigkeys` 与慢日志定位问题；延迟目标必须由部署拓扑、SLO 和本机测量确定，不能背固定 1ms/5ms 阈值。
 
 >
-> ---
 >
 关联：[Redis Data Structures (Redis 数据结构)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/01-Redis%20Data%20Structures%20(Redis%20数据结构).md)
 >
-> ---
 
 # Redis Client Integration (Redis 客户端集成)
 
@@ -374,7 +372,6 @@ public:
 > 生产环境推荐使用 Pipeline 批量操作（可提升 5-10 倍吞吐）。注意 Pipeline 无事务性，中间失败不影响后续命令。超时时间设为 200-500ms 较为合理，避免长时间等待。
 
 >
-> ---
 >
 
 > [!info]- 延伸阅读

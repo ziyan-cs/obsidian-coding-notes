@@ -4,6 +4,10 @@ study_stage: backlog
 
 > [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
 
+> [!summary] 核心摘要
+>
+> 持久化回答重启后如何恢复数据，过期回答 key 何时失效，淘汰回答内存达到上限时舍弃谁，三者目标不同。RDB/AOF 的恢复点、fork 与 COW 成本以及 `maxmemory` 策略，必须结合写入峰值和可接受的数据损失选择。
+
 # RDB Persistence (RDB 持久化)
 
 > [!note] 本节重点： RDB 触发方式、BGSAVE 写时复制（COW）、RDB 文件结构、优缺点
@@ -94,15 +98,13 @@ Client              Redis Main Process        Forked Child           Disk
 
 >
 
-> [!summary] 核心摘要
+> [!question]- 持久化检查
 >
 > - **常见误区**：以为 BGSAVE 完全零开销（fork 大内存实例可达秒级）；只开 RDB 却要求"不丢数据"（应配 AOF/混合持久化）。
 > - **自测**：1) COW 机制下，BGSAVE 期间大量写操作会发生什么？ 2) 为什么 fork 会被形容为"可能阻塞主进程"？
 >
-> ---
 >
 >
-> ---
 
 # AOF Persistence (AOF 持久化)
 
@@ -241,10 +243,8 @@ AOF 重写时，将当前内存数据以 RDB 格式写在 AOF 文件开头，后
 > 生产配置应由恢复点目标、恢复时间目标、备份演练和目标 Redis 版本决定。AOF 不替代备份，RDB 也不自动成为异地备份；`INFO persistence` 与延迟指标用于定位问题，但不能单凭一个计数器证明数据安全。
 
 >
-> ---
 >
 >
-> ---
 
 # Expiration and Eviction (过期与淘汰)
 
@@ -384,7 +384,7 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 
 >
 
-> [!summary] 核心摘要
+> [!note] 过期与淘汰小结
 >
 > 过期是 key 的生命周期语义，淘汰是在内存达到 `maxmemory` 后的资源策略；二者不能混为一谈。Redis 通过访问时检查与后台主动清理处理过期 key，再按 `maxmemory-policy` 在候选 key 中淘汰。生产选型要看数据是否允许被驱逐、TTL 覆盖率、写入峰值和持久化/COW 内存余量。
 
@@ -393,7 +393,6 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 > 2. `volatile-*` 与 `allkeys-*` 的候选集合有何不同？
 > 3. `evicted_keys` 持续增长时，为什么不能只盲目调大采样数？
 >
-> ---
 >
 
 > [!info]- 延伸阅读

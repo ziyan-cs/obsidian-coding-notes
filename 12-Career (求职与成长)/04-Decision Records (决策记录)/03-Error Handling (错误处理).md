@@ -32,7 +32,7 @@ cause -> classify -> add context -> log once -> safe response
 
 “我把底层错误与对外协议分开：底层保留 cause，领域层分类，入口层映射稳定响应。日志只在能补充上下文的边界记录一次，避免泄漏内部细节和重复日志。”
 
-> [!summary] 核心摘要
+> [!question]- 决策复盘
 > 好的错误处理保留原因、上下文和边界语义。底层不直接决定 HTTP 文案；在 service/handler 边界把可预期错误映射为稳定响应，并让未知错误可观测。
 >
 > - 自测：`duplicate key` 应映射为哪类领域错误？是否该让客户端看到原始 SQL？

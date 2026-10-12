@@ -260,10 +260,8 @@ void worker() {
 >
 > > **面试重点**：`lock_guard` vs `unique_lock` vs `scoped_lock`（C++17）。`scoped_lock` 等价于 `lock_guard` 但支持多锁且用 `std::lock` 避免死锁。在需要锁多个 mutex 时首选 `scoped_lock`。
 >
-> ---
 >
 >
-> ---
 
 # Condition Variable & Semaphore (条件变量与信号量)
 

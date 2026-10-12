@@ -75,7 +75,7 @@ rm -f <file>         # 强制删除（不提示）
 rm -rf <dir>         # 递归强制删除（危险！）
 ```
 
-### 链接 🔥
+### 链接
 
 ```bash
 ln -s <src> <dst>    # 创建软链接（快捷方式，可跨文件系统，支持目录）
@@ -133,7 +133,7 @@ updatedb                      # 更新文件名数据库
 locate <file>                 # 基于预建数据库快速查找
 ```
 
-## grep — 文本搜索 🔥
+## grep — 文本搜索
 
 ```bash
 grep <pattern> <file>         # 在文件中搜索
@@ -164,7 +164,7 @@ uniq -d <file>                # 只显示重复行
 uniq -u <file>                # 只显示不重复行
 ```
 
-## awk — 按列处理 🔥
+## awk — 按列处理
 
 ```bash
 awk '{print $1}' <file>       # 输出第 1 列（默认空格分隔）
@@ -203,7 +203,7 @@ xargs -I {} cp {} /backup/    # 用 {} 作占位符
 # 压缩与系统信息
 ## 压缩与解压
 
-### tar 🔥
+### tar
 
 ```bash
 tar -cvf archive.tar <dir>       # 打包不压缩

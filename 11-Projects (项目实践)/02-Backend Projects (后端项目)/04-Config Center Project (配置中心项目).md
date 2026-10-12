@@ -88,7 +88,7 @@ RBAC 至少区分读取、编辑、发布和管理权限；敏感配置不应以
 
 版本化订阅可参考 [Kubernetes list-then-watch 与 resourceVersion 语义](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes)；本项目不必照搬 Kubernetes API，但必须解决相同的读后订阅窗口。
 
-> [!summary]- 项目表达检查：学完后再展开
+> [!question]- 项目表达检查：学完后再展开
 >
 > 配置中心把配置当成带版本的发布物：服务读取的是可验证版本，watch 只是加速通知而不是唯一事实来源；断连后必须能重新拉取并比较版本，回滚通过生成新版本保留审计链。
 >

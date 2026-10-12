@@ -150,10 +150,8 @@ SELECT * FROM user WHERE age = 20;
 >
 > 读 EXPLAIN 先看访问路径、估算扫描行数、连接顺序与过滤/排序是否符合预期，而不是背 `type` 排名或见到 `filesort` 就建索引。索引必须同时服务真实的 WHERE、JOIN、ORDER BY 和写入成本；用实际执行数据验证优化是否减少端到端延迟。
 >
-> ---
 >
 >
-> ---
 
 # Index Design Principles (索引设计原则)
 

@@ -25,7 +25,7 @@ study_stage: backlog
 
 ---
 
-## fork() 🔥
+## fork()
 
 ```c
 #include <unistd.h>
