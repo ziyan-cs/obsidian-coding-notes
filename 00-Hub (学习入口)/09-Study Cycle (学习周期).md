@@ -105,8 +105,6 @@ Windows 端默认显示逾期、当天和明天，`-All` 查看所有已经排�
 
 `review_due` 只给未来 2～4 周的任务，不一次性写死两年日期。每周复盘时，从本队列最靠前的未完成项中选择符合下周时段的任务写入日期；Todo 决定**先后**，日期决定**何时**。
 
-<!-- queue-count: 209 -->
-
 ## 阶段二 · 夯实基础、工程工具与主语言
 
 - [ ] [05-Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)
@@ -190,6 +188,16 @@ Windows 端默认显示逾期、当天和明天，`-All` 查看所有已经排�
 - [ ] [03-Testing Packaging and Delivery (测试打包与交付)](/04-Python%20Engineering%20(Python%20工程)/04-Python%20Practice%20(Python%20实践)/03-Testing%20Packaging%20and%20Delivery%20(测试打包与交付).md)
 
 ## 阶段三 · 建立项目方法
+
+### 工程决策复盘
+
+- [ ] [01-Resource Lifetime (资源生命周期)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/01-Resource%20Lifetime%20(资源生命周期).md)
+- [ ] [02-Concurrency Models (并发模型)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)
+- [ ] [03-Error Handling (错误处理)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/03-Error%20Handling%20(错误处理).md)
+- [ ] [04-HTTP Service Design (HTTP 服务设计)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/04-HTTP%20Service%20Design%20(HTTP%20服务设计).md)
+- [ ] [05-Observability and Performance (可观测性与性能)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
+
+### 项目方法
 
 - [ ] [01-Project Design Template (项目设计模板)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)
 - [ ] [02-Testing Benchmark and Evidence (测试压测与证据)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)
@@ -299,12 +307,12 @@ Windows 端默认显示逾期、当天和明天，`-All` 查看所有已经排�
 - [ ] [03-Configuration Probes and Rollouts (配置、探针与发布)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/01-Containers%20and%20Kubernetes%20(容器与%20Kubernetes)/03-Configuration%20Probes%20and%20Rollouts%20(配置、探针与发布).md)
 - [ ] [04-Cluster Scheduling Resources and Storage (集群调度、资源与存储)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/01-Containers%20and%20Kubernetes%20(容器与%20Kubernetes)/04-Cluster%20Scheduling%20Resources%20and%20Storage%20(集群调度、资源与存储).md)
 - [ ] [05-Kubernetes Troubleshooting and Production Operations (Kubernetes 排障与生产运维)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/01-Containers%20and%20Kubernetes%20(容器与%20Kubernetes)/05-Kubernetes%20Troubleshooting%20and%20Production%20Operations%20(Kubernetes%20排障与生产运维).md)
-- [ ] [01-Infrastructure as Code and GitOps (基础设施即代码与 GitOps)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/01-Infrastructure%20as%20Code%20and%20GitOps%20(基础设施即代码与%20GitOps).md)
-- [ ] [02-Developer Platforms and Golden Paths (开发者平台与黄金路径)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/02-Developer%20Platforms%20and%20Golden%20Paths%20(开发者平台与黄金路径).md)
-- [ ] [03-Policy Configuration and Environments (策略、配置与多环境)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/03-Policy%20Configuration%20and%20Environments%20(策略、配置与多环境).md)
 - [ ] [01-SLO Error Budgets and Alerting (SLO、错误预算与告警)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/03-Reliability%20Engineering%20(可靠性工程)/01-SLO%20Error%20Budgets%20and%20Alerting%20(SLO、错误预算与告警).md)
 - [ ] [02-Capacity Autoscaling and Cost (容量、自动扩缩与成本)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/03-Reliability%20Engineering%20(可靠性工程)/02-Capacity%20Autoscaling%20and%20Cost%20(容量、自动扩缩与成本).md)
 - [ ] [03-Incident Response Chaos and Recovery (事故响应、混沌与恢复)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/03-Reliability%20Engineering%20(可靠性工程)/03-Incident%20Response%20Chaos%20and%20Recovery%20(事故响应、混沌与恢复).md)
+- [ ] [01-Infrastructure as Code and GitOps (基础设施即代码与 GitOps)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/01-Infrastructure%20as%20Code%20and%20GitOps%20(基础设施即代码与%20GitOps).md)
+- [ ] [02-Developer Platforms and Golden Paths (开发者平台与黄金路径)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/02-Developer%20Platforms%20and%20Golden%20Paths%20(开发者平台与黄金路径).md)
+- [ ] [03-Policy Configuration and Environments (策略、配置与多环境)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/02-Platform%20Engineering%20(平台工程)/03-Policy%20Configuration%20and%20Environments%20(策略、配置与多环境).md)
 - [ ] [00-Cloud Native and Reliability Standard (云原生与可靠性标准与自测)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/00-Cloud%20Native%20and%20Reliability%20Standard%20(云原生与可靠性标准与自测).md)
 
 ### 安全工程
@@ -360,11 +368,6 @@ Windows 端默认显示逾期、当天和明天，`-All` 查看所有已经排�
 - [ ] [01-Backend Competency Evidence (后端能力证据)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/01-Backend%20Competency%20Evidence%20(后端能力证据).md)
 - [ ] [02-Resume Evidence and Portfolio (简历证据与作品集)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/02-Resume%20Evidence%20and%20Portfolio%20(简历证据与作品集).md)
 - [ ] [03-Interview Practice and Retrospective (面试训练与复盘)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/03-Interview%20Practice%20and%20Retrospective%20(面试训练与复盘).md)
-- [ ] [01-Resource Lifetime (资源生命周期)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/01-Resource%20Lifetime%20(资源生命周期).md)
-- [ ] [02-Concurrency Models (并发模型)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)
-- [ ] [03-Error Handling (错误处理)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/03-Error%20Handling%20(错误处理).md)
-- [ ] [04-HTTP Service Design (HTTP 服务设计)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/04-HTTP%20Service%20Design%20(HTTP%20服务设计).md)
-- [ ] [05-Observability and Performance (可观测性与性能)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
 - [ ] [00-Career Standard (求职能力标准与自测)](/12-Career%20(求职与成长)/00-Career%20Standard%20(求职能力标准与自测).md)
 
 # 学完后的属性更新

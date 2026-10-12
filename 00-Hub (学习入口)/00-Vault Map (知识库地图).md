@@ -9,7 +9,7 @@ tags: [vault/navigation, backend-learning]
 # 四个核心入口
 
 - **今天学什么**：电脑运行 `List-ReviewDue.ps1`；平板直接打开 [Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)，从带日期的 Todo 进入笔记。
-- **长期先学什么**：查看 [Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)，按能力依赖与项目证据升级，不绑定死日期。
+- **长期先学什么**：继续沿 Study Cycle 的后续总队列勾选；[Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)负责解释能力依赖和阶段产物，不维护第二套顺序。
 - **怎样安排复习**：脚本负责列出 `review_due`，规则与延期方式见 [Spaced Review System (间隔复习系统)](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md)。
 - **一个模块学到什么程度**：进入下方对应的 `00-... Standard`，开始前看目标，阶段结束后做综合自测。
 

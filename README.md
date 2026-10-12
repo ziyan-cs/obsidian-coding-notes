@@ -4,7 +4,7 @@
 
 ## 从这里开始
 
-- 今天执行：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)。平板从带日期的 Todo 直接进入笔记；电脑也可运行 `./List-ReviewDue.ps1`，完整队列使用 `./List-ReviewDue.ps1 -All`。
+- 今天执行：[09-Study Cycle (学习周期)](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)。平板从带日期的 Todo 进入当天笔记，并沿后续总队列查看完整学习顺序；电脑运行 `./List-ReviewDue.ps1`，`-All` 仅显示所有已经排定日期的任务。
 - 总入口：[00-Vault Map (知识库地图)](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)
 - 长期路线：[01-Backend Learning Roadmap (后端学习路线)](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)
 - 验证与诊断：[01-Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)，同目录统一收录调试、内存、性能、可观测性、安全检测与发布门禁。
