@@ -42,10 +42,6 @@ todo-api/
 > - 不在同一项目中随意创建多个 module；初学项目先保持一个 `go.mod`。
 >
 
-> [!summary] 核心摘要
->
-> `go.mod` 定义 module 的路径、最低 Go 版本和依赖；package 是同目录共同编译的代码单元。`internal/` 的导入限制依父目录树，而非直接依 module 边界判定。项目先维持一个 module、清晰的业务 package，再用 `go mod tidy` 与测试命令保持依赖真实可用。
-
 > [!question]- 自测：先回答再展开
 > 1. `go mod tidy` 为什么不是“万能修复命令”？它会做什么、不做什么？
 > 2. `cmd/api/main.go` 与 `internal/todo/service.go` 分别应承担什么职责？
@@ -59,7 +55,6 @@ todo-api/
 
 - [Go Modules Reference](https://go.dev/ref/mod)
 - [go.mod file reference](https://go.dev/doc/modules/gomod-ref)
-- 核验日期：2026-09-06
 
 > [!info]- 延伸阅读
 > - 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](/05-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20(错误、panic、defer%20与资源安全).md)

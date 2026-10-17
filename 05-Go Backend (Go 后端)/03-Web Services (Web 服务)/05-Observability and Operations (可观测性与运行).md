@@ -8,10 +8,6 @@ study_stage: backlog
 > [!abstract] 学习定位
 > 可观测性不是“多打日志”，而是让请求、依赖与资源状态能被度量、关联并用于决策。
 
-> [!summary] 核心摘要
->
-> metrics 发现趋势与告警，structured log 解释离散事件，trace 串起跨服务链路；三者共享上下文，才能从用户症状追到系统原因。
-
 # 从服务目标选择信号
 
 面向请求的服务先看 RED：Rate、Errors、Duration；面向资源再看 USE：Utilization、Saturation、Errors。指标必须服务于 SLO 或排障问题，而不是因为“能采集”就全部保留。

@@ -38,4 +38,4 @@ acquire -> one clear owner -> use -> release
 > - 自测：为什么不能用“对象最终会被 GC”解释文件描述符不会泄漏？
 
 > [!info]- 延伸阅读
-> - 下一步：[02-Concurrency Models (并发模型)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/02-Concurrency%20Models%20(并发模型).md)
+> - 下一步：[02-Concurrency Models (并发模型)](/11-Projects%20(项目实践)/03-Engineering%20Decision%20Records%20(工程决策记录)/02-Concurrency%20Models%20(并发模型).md)

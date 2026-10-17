@@ -69,12 +69,9 @@ def health(url: str, timeout: float = 3.0) -> dict[str, object]:
 
 上面的 checker 假设 URL 来自可信配置。若 URL 可由不可信用户提供，必须额外限制 scheme、目标 host/IP 与重定向，并考虑 DNS 变化；仅用 `urlsplit` 取出 host 供错误提示，**不能**防止 SSRF。
 
-# 测试矩阵
+# 验证边界
 
-用本地测试 server 或传入 fake transport 覆盖：成功、非 2xx、非法 JSON、body 过大、连接 timeout、读取 timeout、429、重复游标和客户端取消。断言重试不越过总预算，非幂等请求不会自动重复执行。
-# 动手验证
-
-为一个本地 `GET /healthz` 写 checker，并用本地测试 server 覆盖：200 对象、200 数组、非 JSON、超过上限、非 2xx、连接失败和超时。CLI 应将失败映射为非零退出码，只输出脱敏 host、分类和 request ID。上例不自动重试；若要重试，应单独设计总 deadline、幂等前提与退避策略。
+为本地 `GET /healthz` 写 checker，并用本地测试 server 覆盖：200 对象、200 数组、非 JSON、超过上限、非 2xx、连接失败和 timeout；再为分页接口覆盖重复游标与中途失败。CLI 将错误映射为非零退出码，只输出脱敏 host、分类和 request ID。若引入重试，再补充 429、总 deadline、幂等前提和退避测试；非幂等请求不能自动重复执行。
 
 > [!info]- 延伸阅读
 > - 下一步：[02-Data Processing Boundaries (数据处理边界)](/04-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/02-Data%20Processing%20Boundaries%20(数据处理边界).md)

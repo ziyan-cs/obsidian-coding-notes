@@ -160,6 +160,5 @@ grpc::Status FetchUser(const std::shared_ptr<grpc::Channel>& channel,
 
 - [gRPC C++ 文档](https://grpc.io/docs/languages/cpp/)
 - [Protocol Buffers 文档](https://protobuf.dev/)
-- 核验日期：2026-09-06
 
 ---

@@ -50,7 +50,7 @@ git revert --abort
 
 `git rerere` 可记录冲突形状与解决结果，在后续重复冲突时复用，但仍需检查上下文并运行验证。
 
-# restore、reset 与 revert
+# 状态与历史恢复
 
 三个命令针对的层次不同：
 
@@ -84,7 +84,7 @@ git restore --source=<commit> file
 
 `git revert <commit>` 生成新提交来反向应用目标改动，适合共享历史。revert 合并提交需要用 `-m` 指定主线父提交；它还会影响未来合并语义，执行前要理解原拓扑并验证结果。
 
-# Reflog 与对象恢复
+## Reflog 与对象恢复
 
 reflog 记录本地引用曾指向的位置：
 
@@ -96,7 +96,7 @@ git branch rescue HEAD@{2}
 
 安全恢复习惯是先创建 `rescue` 分支，再检查内容，而不是立刻再次 reset。reflog 是本地记录，受过期和清理策略影响，也不会自动存在于其他克隆中，因此不是备份系统。
 
-# Stash 的边界
+## Stash 的边界
 
 ```bash
 git stash push -u -m "wip parser experiment"
@@ -128,7 +128,7 @@ tag 指向源码版本，不等于制品已经经过同一构建、签名和发�
 5. 提交是否已共享？是否先建 rescue 分支？
 ```
 
-# 检查理解
+## 检查理解
 
 1. 自动合并成功为什么仍需测试？
 2. 如何分别“取消暂存”和“丢弃工作区修改”？

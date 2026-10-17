@@ -5,10 +5,6 @@ study_stage: backlog
 > [!abstract] 学习定位
 > 缓存是可丢弃的派生数据；设计必须先确定真相来源，再说明读写路径、失效窗口和回源保护。
 
-> [!summary] 核心摘要
->
-> cache-aside 以数据库为真相来源；miss、热点失效、删除失败和 Redis 不可用都要有明确策略，缓存不能悄悄改变业务正确性。
-
 # Cache-Aside 读写路径
 
 ```text

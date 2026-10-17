@@ -64,10 +64,11 @@ partition 把区间划为“小于枢轴 / 等于枢轴 / 大于枢轴”。三�
 ```cpp
 std::sort(values.begin(), values.end());
 std::stable_sort(records.begin(), records.end(), by_key);
+// 选择第 k 个 0-based 元素；必须满足 k < values.size()
 std::nth_element(values.begin(), values.begin() + k, values.end());
 ```
 
-比较器必须形成 strict weak ordering。不要写 `a <= b`；相等元素必须互不“小于”，否则标准算法行为不满足要求。排序复杂对象时考虑移动成本、projection 和间接排序。
+`nth_element` 可接受 `nth == last`，但此时没有对应元素可选；本例要求 `k < values.size()`。调用后第 `k` 个元素与完全排序后的同位置元素等价，左右两侧满足分区关系，但各自内部不保证有序。比较器必须形成 strict weak ordering。不要写 `a <= b`；相等元素必须互不“小于”，否则标准算法行为不满足要求。排序复杂对象时考虑移动成本、projection 和间接排序。
 
 # 检查理解
 

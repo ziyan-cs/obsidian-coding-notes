@@ -6,10 +6,6 @@ tags: [language/go, go/basics]
 > [!abstract] 学习定位
 > Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
 
-> [!summary] 核心摘要
->
-> 先用 struct 表达数据，用函数表达操作；当调用方只依赖少数行为时，在消费者一侧定义小 interface，让具体类型隐式满足。
-
 # 核心语法
 
 ```go
@@ -82,7 +78,7 @@ func Contains[T comparable](items []T, target T) bool {
 
 若不同类型需要不同业务行为，小 interface 或普通函数更合适。不要用泛型隐藏反射、序列化和数据库字段差异；也不要为了消除两三行重复制造难懂 constraint。
 
-Go 1.27 新增**具体类型的泛型方法**，但 interface 的方法仍不能自己声明类型参数，泛型方法也不能据此实现 interface 方法。初学时先掌握普通泛型函数与方法集，再读 [Go 1.27 发布说明](https://go.dev/doc/go1.27)；不要把旧资料中的“Go 方法绝不能有类型参数”当成现行规则。
+Go 1.27 新增**具体类型的泛型方法**，但 interface 的方法仍不能自己声明类型参数，泛型方法也不能据此实现 interface 方法。初学时先掌握普通泛型函数与方法集，再读 [Go 1.27 发布说明](https://go.dev/doc/go1.27)；不要把旧资料中的“Go 方法绝不能有类型参数”当成现行规则。该特性来自 Go 1.27，库或服务若支持更低版本，不应在兼容代码中使用。
 
 # 实验
 

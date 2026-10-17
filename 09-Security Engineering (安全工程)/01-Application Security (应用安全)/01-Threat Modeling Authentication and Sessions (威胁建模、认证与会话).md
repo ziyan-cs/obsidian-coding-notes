@@ -39,7 +39,7 @@ Authentication（AuthN）确认“你是谁”，Authorization（AuthZ）决定�
 
 密码处理原则：
 
-- 只保存专用 password hashing 算法的结果，使用成熟库提供的 Argon2id、scrypt、bcrypt 或 PBKDF2；不要保存明文，也不要直接使用快速通用哈希。
+- 只保存专用 password hashing 算法的结果；新系统优先采用成熟库的 Argon2id，环境不支持时评估 scrypt。bcrypt/PBKDF2 多用于兼容性或合规约束场景；按目标机器负载调参并提供渐进迁移，不要自行实现算法，也不要使用快速通用哈希。
 - 每个密码使用独立 salt；算法参数需要随硬件能力升级，并为旧记录设计登录后渐进迁移。
 - 登录错误不要暴露“用户存在但密码错误”等可枚举差异；对失败进行限速、告警和异常检测。
 - 修改密码、邮箱、支付信息等敏感操作应重新验证身份；高风险场景使用 MFA。
@@ -63,7 +63,7 @@ Authentication（AuthN）确认“你是谁”，Authorization（AuthZ）决定�
 
 浏览器 cookie 至少考虑 `Secure`、`HttpOnly`、合适的 `SameSite`、窄化的 `Path/Domain` 与过期时间。登录、提权和重新认证后轮换 session ID，退出时让服务端状态失效。`SameSite` 是纵深防御，不能无条件替代 CSRF 防护。
 
-JWT 使用时必须固定允许的算法，验证签名、issuer、audience、有效期和必要声明；不要把敏感数据当作“被加密”写进普通签名 JWT。
+JWT 使用时必须在服务端固定允许的算法并将 key 与算法绑定，验证签名、issuer、audience、有效期和必要声明；还要按 token profile 区分 access token、ID token、重置凭据等不同用途，避免 token confusion。普通签名 JWT 的 payload 可被读取，不要把敏感数据当作“被加密”写进去。
 
 对浏览器应用，还要先决定凭据的存放和传输方式：Cookie 自动随请求发送，因此必须考虑 CSRF；脚本可读取的存储在 XSS 后可能泄漏 token。不存在对所有应用通用的“JWT 比 Session 更安全”结论。画出登录、续期、登出、封禁、密钥轮换五条状态路径，再选择机制。
 
@@ -76,8 +76,5 @@ JWT 使用时必须固定允许的算法，验证签名、issuer、audience、�
 - [ ] access token 过期、refresh token 重用与密钥轮换。
 - [ ] 管理账户是否能从普通公网登录入口访问。
 - [ ] 身份服务超时或不可用时，系统是 fail closed 还是允许有限降级。
-
-> [!summary] 核心摘要
-> 从一次登录开始，说明凭据如何验证、会话如何建立、每个请求如何恢复身份、权限在哪里检查，以及注销、泄漏和密钥轮换时怎样收回访问能力。
 
 官方参考：[OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) · [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)

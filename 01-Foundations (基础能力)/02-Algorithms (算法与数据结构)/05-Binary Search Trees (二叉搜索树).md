@@ -14,6 +14,16 @@ tags: [algorithm/tree, algorithm/search, learning/foundation]
 
 # 查找、插入与验证
 
+以下示例使用最小节点模型；生产实现还需定义节点所有权、重复键策略和比较器：
+
+```cpp
+struct TreeNode {
+    int value;
+    TreeNode* left = nullptr;
+    TreeNode* right = nullptr;
+};
+```
+
 ```cpp
 bool contains(const TreeNode* root, int key) {
     while (root != nullptr) {

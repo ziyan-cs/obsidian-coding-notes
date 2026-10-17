@@ -61,10 +61,7 @@ srv := &http.Server{
 
 容器环境的 SIGTERM、termination grace period、readiness 探针和 preStop 必须与应用 shutdown timeout 协调。若平台只给 30 秒而程序内部最多等 60 秒，最终仍会被强杀。PID 1、信号转发和 shell wrapper 也要在目标镜像验证。
 
-# 故障演练
-
-在请求处理中发送 SIGTERM，确认新请求被摘除、在途请求在期限内完成；让一个 handler 永不返回，确认总 deadline 后进程能退出并留下证据；让后台 worker 先失败，确认主进程不会继续假装健康。
-# Shutdown 的边界与演练
+# 关闭边界与故障演练
 
 `Server.Shutdown(ctx)` 会关闭 listener、拒绝新连接，并等待当前普通 HTTP 请求结束；传入的 `ctx` 是**关闭操作的预算**，应从未取消的独立 context 派生。若它超时返回，尚未结束的请求可能仍在运行，进程必须有明确的强制退出策略及未完成工作记录。
 

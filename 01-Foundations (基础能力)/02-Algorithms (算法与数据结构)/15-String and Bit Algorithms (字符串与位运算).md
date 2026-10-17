@@ -13,10 +13,10 @@ tags: [algorithm/string, algorithm/bit-manipulation, learning/foundation]
 ## 构建前缀函数
 
 ```cpp
-std::vector<int> prefix_function(std::string_view pattern) {
-    std::vector<int> pi(pattern.size());
+std::vector<std::size_t> prefix_function(std::string_view pattern) {
+    std::vector<std::size_t> pi(pattern.size());
     for (std::size_t i = 1; i < pattern.size(); ++i) {
-        int j = pi[i - 1];
+        std::size_t j = pi[i - 1];
         while (j > 0 && pattern[i] != pattern[j]) j = pi[j - 1];
         if (pattern[i] == pattern[j]) ++j;
         pi[i] = j;
@@ -33,11 +33,11 @@ std::vector<int> prefix_function(std::string_view pattern) {
 std::size_t kmp_find(std::string_view text, std::string_view pattern) {
     if (pattern.empty()) return 0;
     auto pi = prefix_function(pattern);
-    int j = 0;
+    std::size_t j = 0;
     for (std::size_t i = 0; i < text.size(); ++i) {
         while (j > 0 && text[i] != pattern[j]) j = pi[j - 1];
         if (text[i] == pattern[j]) ++j;
-        if (j == static_cast<int>(pattern.size()))
+        if (j == pattern.size())
             return i + 1 - pattern.size();
     }
     return std::string_view::npos;
@@ -48,7 +48,7 @@ std::size_t kmp_find(std::string_view text, std::string_view pattern) {
 
 # 周期与其他字符串结构
 
-长度为 `n` 的字符串若 `period = n - pi[n-1]` 且 `n % period == 0`，则可由长度为 `period` 的片段重复构成。这个结论依赖 border 与周期关系，不是对任意 `pi` 值都直接成立。
+非空字符串长度为 `n`，令 `period = n - pi[n-1]`；若 `n % period == 0`，则可由长度为 `period` 的片段重复构成。空串没有 `pi[n-1]`，实现前应单独处理。这个结论依赖 border 与周期关系，不是对任意 `pi` 值都直接成立。
 
 其他常用结构：Trie 适合前缀检索；rolling hash 可快速比较子串但存在碰撞，安全敏感场景需双哈希或最终字符比较；Z-function 记录从每个位置开始与整个字符串前缀的匹配长度。应按查询类型选择，不必把所有问题都改写成 KMP。
 

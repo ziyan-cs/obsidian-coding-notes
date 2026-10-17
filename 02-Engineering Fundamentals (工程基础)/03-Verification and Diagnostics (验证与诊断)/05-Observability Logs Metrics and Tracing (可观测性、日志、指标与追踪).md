@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 可观测性（Observability）不是“接入监控平台”，而是让未知故障能通过系统外部信号被解释。本篇统一日志、指标、追踪、告警和 SLO 的设计方法；语言 SDK 与平台配置留在各专题。
 
 # 从问题开始设计信号
@@ -128,3 +128,6 @@ Dashboard 用于理解状态，不应变成所有指标的陈列柜。首页保�
 - [OpenTelemetry Observability Primer](https://opentelemetry.io/docs/concepts/observability-primer/)
 - [Google SRE Books](https://sre.google/books/)
 - [Kubernetes Observability](https://kubernetes.io/docs/concepts/cluster-administration/observability/)
+
+> [!summary] 本篇结论
+> 可观测性要让系统状态能被解释：指标发现聚合趋势，trace 展示请求经过的组件，日志补充离散事件和上下文；SLI/SLO 与告警则把信号连接到用户影响和可执行响应。三类信号需要关联，而不是各自堆积。

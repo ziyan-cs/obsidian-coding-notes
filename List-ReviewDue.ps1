@@ -33,6 +33,17 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAct
             return
         }
 
+        $studyStage = [regex]::Match($frontmatter.Groups[1].Value, '(?m)^study_stage:\s*([^#\r\n]+)')
+        $stage = if ($studyStage.Success -and $studyStage.Groups[1].Value.Trim() -eq 'learn') {
+            'LEARN'
+        }
+        elseif ($studyStage.Success -and $studyStage.Groups[1].Value.Trim() -match '^D(?:1|3|7|14|30|60)$') {
+            $studyStage.Groups[1].Value.Trim().ToUpperInvariant()
+        }
+        else {
+            'TASK'
+        }
+
         $rawDate = $due.Groups[1].Value.Trim().Trim('"', "'")
         $parsedDate = [datetime]::MinValue
         if (-not [datetime]::TryParseExact(
@@ -50,8 +61,9 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAct
         }
 
         $items.Add([pscustomobject]@{
-            Due  = $parsedDate.Date
-            Name = $file.Name
+            Due   = $parsedDate.Date
+            Stage = $stage
+            Name  = $file.Name
         })
     }
 
@@ -88,7 +100,9 @@ else {
         }
         # Keep the label itself compact; pad only after the closing bracket.
         $outsidePadding = ' ' * (7 - $label.Length)
-        Write-Output ("- [{0}]{1} {2:yyyy-MM-dd} | {3}" -f $label, $outsidePadding, $item.Due, $item.Name)
+        $stageField = "[$($item.Stage)]"
+        $stagePadding = ' ' * ([Math]::Max(0, 7 - $stageField.Length))
+        Write-Output ("- [{0}]{1} {2:yyyy-MM-dd} | {3}{4} | {5}" -f $label, $outsidePadding, $item.Due, $stageField, $stagePadding, $item.Name)
     }
 }
 

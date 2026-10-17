@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-19
+review_due: 2026-10-22
 ---
 
 > [!abstract] 学习目标：分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。
@@ -194,8 +194,6 @@ p->~T();  // 不可对 p 调用 delete；T 必须在此作用域中是完整类�
 ```
 
 ---
-
-
 
 > [!info]- 延伸阅读
 > - 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)

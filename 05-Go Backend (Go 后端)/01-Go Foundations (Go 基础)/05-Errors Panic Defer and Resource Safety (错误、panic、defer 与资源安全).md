@@ -6,10 +6,6 @@ tags: [language/go, go/errors, go/context]
 > [!abstract] 学习定位
 > Go 用显式 `error` 表达可预期失败，用 `defer` 绑定局部清理，用 `context` 传播请求取消、截止时间和请求范围数据。
 
-> [!summary] 核心摘要
->
-> 函数返回后立刻处理 `error` 并补充上下文；资源一获取就 `defer` 释放；跨调用链只传递派生出的 `context`，并尊重取消与超时。
-
 # 错误语义与包装
 
 error 是普通接口值。错误信息为人提供上下文，错误类型或 sentinel 为程序提供稳定判断。使用 `%w` 包装保留链，调用方通过 `errors.Is/As` 判断，不比较完整错误字符串。

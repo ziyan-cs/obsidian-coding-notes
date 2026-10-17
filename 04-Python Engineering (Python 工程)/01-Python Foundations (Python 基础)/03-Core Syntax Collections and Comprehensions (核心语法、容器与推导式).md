@@ -1,15 +1,11 @@
 ---
-study_stage: learn
-review_due: 2026-10-14
+study_stage: D3
+review_due: 2026-10-17
 tags: [language/python, python/collections]
 ---
 
 > [!abstract] 学习定位
 > Python 的核心语法围绕“对象组成的容器”和“协议驱动的操作”展开；选对容器、写清边界，比追求一行代码更重要。
-
-> [!summary] 核心摘要
->
-> `list` 保存有序可变序列，`tuple` 表达固定记录，`dict` 做键值索引，`set` 做去重与成员判断。推导式适合短小的映射和过滤，复杂控制流应恢复为普通循环。
 
 # 控制流与真值
 

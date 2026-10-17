@@ -83,7 +83,8 @@ kubectl rollout history deployment/<name>
 - [ ] 能解释 Pending、CrashLoopBackOff、OOMKilled、ImagePullBackOff 和 Ready=false 的证据入口。
 - [ ] 数据库或缓存不可用时，不会因探针设计引发全量重启风暴。
 
-> [!summary] 核心摘要
-> 说明一次新版本从镜像进入 Deployment，到 Pod Ready、Service 接流量、指标确认成功的完整过程；指出代码回滚不能自动撤销哪些外部状态。
+## 发布自测
+
+说明一次新版本从镜像进入 Deployment，到 Pod Ready、Service 接流量、指标确认成功的完整过程；指出代码回滚不能自动撤销哪些外部状态。
 
 官方参考：[Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) · [Configure Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) · [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)

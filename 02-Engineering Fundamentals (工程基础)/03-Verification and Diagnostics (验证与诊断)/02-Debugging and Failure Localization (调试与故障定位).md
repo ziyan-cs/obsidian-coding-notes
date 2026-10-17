@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 调试不是随机改代码，而是把“现象”逐步收敛为可证伪的根因假设。本篇统一现场保护、复现、二分、动态调试和 core dump 分析；具体语言的异常模型留在语言专题。
 
 # 一条可靠的故障定位链
@@ -137,3 +137,6 @@ strace -ff -tt -T -p <pid>
 - [GDB Documentation](https://sourceware.org/gdb/documentation/)
 - [systemd-coredump](https://www.freedesktop.org/software/systemd/man/latest/systemd-coredump.html)
 - [strace manual](https://man7.org/linux/man-pages/man1/strace.1.html)
+
+> [!summary] 本篇结论
+> 高效调试是在维护证据链：先保护现场、陈述事实并构造最小复现，再用能区分假设的实验缩小范围，定位首次错误状态，最后用回归验证修复没有破坏原有行为。

@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 质量门禁把静态检查、测试、安全、制品完整性和上线观测转换为可执行的发布决策。目标不是检查越多越好，而是在反馈速度、风险和可追溯性之间建立明确规则。
 
 # 从变更到可验证制品
@@ -93,3 +93,6 @@ Canary 先接收小部分代表性流量，对照稳定版本比较成功率、�
 - [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf)
 - [Kubernetes Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 - [Google SRE Books](https://sre.google/books/)
+
+> [!summary] 本篇结论
+> 发布决策应建立在可追溯的同一制品、分层质量门禁和真实运行信号上。渐进发布需要明确观测窗口与自动停止条件；应用回退不能代替数据兼容方案，回滚和向前修复都应预先设计并验证。

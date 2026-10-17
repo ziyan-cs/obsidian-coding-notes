@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 性能工作先建立可重复基线，再用 profile 解释资源花在哪里。基准给出“多慢”，剖析回答“慢在哪里”，系统模型解释“为什么”；没有相同条件下的前后证据，就不能宣称优化有效。
 
 # 先定义性能契约
@@ -87,3 +87,6 @@ baseline -> hypothesis -> measurement -> change
 - [Linux perf documentation](https://perf.wiki.kernel.org/)
 - [Brendan Gregg - Flame Graphs](https://www.brendangregg.com/flamegraphs.html)
 - [Google Benchmark User Guide](https://benchmark.readthedocs.io/)
+
+> [!summary] 本篇结论
+> 性能结论来自可重复的对照实验：先定义场景和指标、建立基线，再用 profile 定位瓶颈，最后在相同条件下复测，并检查延迟、错误率和资源成本是否出现新的退化。没有可比证据的“变快了”只是猜测。

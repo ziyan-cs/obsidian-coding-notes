@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 内存安全工具通过运行时插桩或模拟观察已执行路径，能暴露越界、生命周期错误、未定义行为和数据竞争，但不能证明未执行路径正确。本篇统一选择、运行和解释动态分析工具的方法。
 
 # 从失败类型选择工具
@@ -114,3 +114,6 @@ scheduled Valgrind/fuzz corpus
 - [Clang AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)
 - [Clang ThreadSanitizer](https://clang.llvm.org/docs/ThreadSanitizer.html)
 - [Valgrind Memcheck Manual](https://valgrind.org/docs/manual/mc-manual.html)
+
+> [!summary] 本篇结论
+> 动态分析只能观察实际执行到的路径，报告是缺陷线索而非全程序正确性证明。应按缺陷类型选择 sanitizer、Memcheck 与 fuzzing 等工具，并保留工具配置、输入和报告以便复现。

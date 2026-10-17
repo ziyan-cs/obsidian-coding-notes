@@ -1,5 +1,6 @@
 ---
-study_stage: backlog
+study_stage: learn
+review_due: 2026-10-22
 ---
 
 > [!abstract] 学习目标
@@ -7,7 +8,7 @@ study_stage: backlog
 
 # 对象、类型与初始化
 
-声明引入名称；对象有类型、存储和生命周期。类型决定可表示的值及合法操作。不要把常见机器上的大小当成语言保证：`sizeof(char) == 1`，但一个 byte 有多少位由 `CHAR_BIT` 决定；`int`、`long`、`long double` 的宽度依实现而定。精确宽度需求可查看 `<cstdint>` 的 `std::int32_t` 等类型；容器大小与下标通常用 `std::size_t`。
+声明引入名称；对象有类型、存储和生命周期。类型决定可表示的值及合法操作。不要把常见机器上的大小当成语言保证：`sizeof(char) == 1`，但一个 byte 有多少位由 `CHAR_BIT` 决定；`int`、`long`、`long double` 的宽度依实现而定。若实现提供精确宽度类型，可用 `<cstdint>` 中的 `std::int32_t` 等表达需求；容器大小与下标通常用 `std::size_t`。
 
 ```cpp
 #include <iostream>
@@ -78,11 +79,63 @@ std::optional<int> divide_exact(int numerator, int denominator) {
 
 `std::optional` 明确表示可能没有整数结果。`inline` 允许符合 ODR 约束的定义出现在多个翻译单元，并不保证机器码内联展开。默认实参通常写在头文件声明处，调用点决定采用哪个默认值。递归要有基例并评估栈深；C++ 不保证尾调用优化。
 
+# 运算符重载：让类型表达自然操作
+
+运算符应保留读者熟悉的语义。`operator+=` 修改左侧并返回其引用；`operator+` 可以基于它返回新值。自定义下标访问要有明确契约：`operator[]` 通常由调用者保证索引有效，需检查边界时提供 `at()`。需要左操作数隐式转换的对称运算符通常写成非成员。
+
+```cpp
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+
+class Vec2 {
+    double x_{};
+    double y_{};
+
+public:
+    Vec2(double x = 0, double y = 0) : x_(x), y_(y) {}
+
+    Vec2& operator+=(const Vec2& rhs) {
+        x_ += rhs.x_;
+        y_ += rhs.y_;
+        return *this;
+    }
+    friend Vec2 operator+(Vec2 lhs, const Vec2& rhs) {
+        lhs += rhs;
+        return lhs;
+    }
+    friend Vec2 operator*(double scale, const Vec2& v) {
+        return {scale * v.x_, scale * v.y_};
+    }
+    friend std::ostream& operator<<(std::ostream& out, const Vec2& v) {
+        return out << '(' << v.x_ << ", " << v.y_ << ')';
+    }
+
+    double& operator[](std::size_t index) noexcept { // 前置条件：index < 2
+        return index == 0 ? x_ : y_;
+    }
+    double& at(std::size_t index) {
+        if (index >= 2) throw std::out_of_range("Vec2 index");
+        return (*this)[index];
+    }
+};
+
+int main() {
+    Vec2 a{1, 2}, b{3, 4};
+    Vec2 c = a + b;
+    Vec2 scaled = 2.0 * a;
+    std::cout << c << ' ' << scaled << '\n'; // (4, 6) (2, 4)
+}
+```
+
+转换运算符如果容易产生意外重载，标为 `explicit`。例如 `explicit operator bool() const` 可用于 `if (value)`，但不会作为普通隐式数值转换。重载比较运算符时，浮点数的精确相等是否符合业务语义要单独决定。`::`、`.`、`.*`、`?:`、`sizeof`、`typeid` 不能重载。
+
 ## 动手验证
 
 1. 用 `-std=c++17 -Wall -Wextra -Wconversion` 编译首段示例，改成 `int n{3.5};` 观察诊断。
 2. 测试 `sum_positive` 的空数组、全负数和大正数，指出溢出边界。
 3. 测试 `divide_exact` 的除零、不整除、精确整除和 `INT_MIN / -1`。
+4. 运行 `Vec2` 示例，解释 `operator+` 为什么复用 `operator+=`，并验证 `at(2)` 的异常边界。
 
 > [!info]- 延伸阅读
 > - [02-Arrays Strings and IO (数组字符串与输入输出)](/03-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)

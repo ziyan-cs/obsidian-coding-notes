@@ -6,10 +6,6 @@ tags: [language/go, backend/workflow]
 > [!abstract] 学习定位
 > 本篇描述 Go 服务从业务规则到生产运行的长期交付路径，不规定首月周次。当前任务由 Hub 的 Study Cycle 选择。
 
-> [!summary] 核心摘要
->
-> Go 实践先把业务规则与协议分离，再逐层加入取消、并发、数据、测试、观测和关闭语义；每一层都要用故障实验说明系统如何失败和恢复。
-
 # 业务核心与包边界
 
 先实现不依赖 HTTP 的 service 与内存 repository，写清业务不变量和错误类型。package 按业务能力组织，`cmd` 只负责装配；interface 由使用方定义，只抽象真正需要替换的边界。

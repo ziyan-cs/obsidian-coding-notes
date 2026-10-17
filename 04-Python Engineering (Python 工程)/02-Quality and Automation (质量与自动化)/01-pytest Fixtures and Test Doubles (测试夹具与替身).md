@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-11-01
+review_due: 2026-12-02
 tags: [language/python, python/testing]
 ---
 
@@ -9,10 +9,6 @@ tags: [language/python, python/testing]
 
 > [!abstract] 学习定位
 > pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
-
-> [!summary] 核心摘要
->
-> fixture 负责可复用的准备与清理；临时目录隔离文件副作用；mock、fake 等 test double 替代不可控依赖，断言最终行为而非实现过程。
 
 # 命令与规则
 
@@ -104,7 +100,6 @@ fixture 不应隐藏断言或创建与当前测试无关的大量对象。若读
 > [!question]- 自测：先回答再展开
 > 给 JSON config loader 写：正确对象、顶层数组、缺失文件、非法 JSON 四个测试。
 
-# 官方参考
-
-- [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
-- 验证日期：2026-09-05
+> [!info]- 官方参考
+> - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
+> - [pytest fixtures](https://docs.pytest.org/en/stable/how-to/fixtures.html)

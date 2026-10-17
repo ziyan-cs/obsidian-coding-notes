@@ -2,7 +2,7 @@
 study_stage: backlog
 ---
 
-> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+> [!abstract] 监听 socket 负责接入，连接 socket 承载会话；非阻塞服务必须区分就绪、暂时无数据、EOF 与错误，并明确 fd 和连接状态的所有权。
 
 # Socket API and Options (Socket API与选项)
 
@@ -258,7 +258,7 @@ while (true) {
 }
 ```
 
-> **为什么 ET 要循环读到 EAGAIN？**  
+> **为什么 ET 要循环读到 EAGAIN？**
 > epoll ET 模式只在“未就绪 → 就绪”变化时通知。若一次没有读到 `EAGAIN`，应用可能不再收到新的边沿通知，导致连接长期积压。LT 下通常仍应尽量批量读写以提高吞吐，但不必把“读到 EAGAIN”误解为唯一正确策略。
 
 ---
@@ -282,7 +282,7 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
     - `SOL_SOCKET`: 通用套接字选项层（最常用）
     - `IPPROTO_TCP`: TCP 协议
     - `IPPROTO_IP`: IP 协议
-    
+
 - **optname**: 要设置的选项名
     - `SO_REUSEADDR`: 调整地址重用规则，具体绑定冲突语义依平台
     - `SO_REUSEPORT`: 在支持的平台上允许一组符合条件的监听 socket 绑定同一地址/端口
@@ -290,7 +290,7 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
     - `TCP_NODELAY`: 禁用 Nagle 算法；是否降低业务延迟要结合发送模式与测量
     - `SO_RCVBUF`/`SO_SNDBUF`: 设置接收 / 发送缓冲区大小
     - `SO_RCVTIMEO`/`SO_SNDTIMEO`: 设置接收 / 发送超时时间
-    
+
 - **optval**: 选项值的指针（如 int、struct timeval 等）
 
 ## SO_REUSEADDR

@@ -4,12 +4,8 @@ review_due: 2026-10-24
 tags: [cs/architecture, learning/foundation]
 ---
 
-> [!abstract] 阅读方式
+> [!abstract] 学习目标
 > 位模式本身没有业务含义；类型、编码和协议决定如何解释这些位。本文从整数、浮点、文本、字节序和位运算建立统一模型，并用 C++ 实验验证边界，而不是背若干孤立技巧。
-
-> [!summary] 核心摘要
->
-> 固定位宽整数按模运算，有符号数采用补码但溢出规则由语言规定；IEEE 754 浮点表达范围与精度的折中，运算包含舍入和特殊值；Unicode 区分码点、编码单元与用户看到的字符。跨进程、跨语言和跨机器传输时，必须显式约定位宽、符号、字节序、文本编码和版本。
 
 # 位模式、类型与解释
 
@@ -136,8 +132,10 @@ Unicode 为字符分配**码点（code point）**，UTF-8/UTF-16/UTF-32 是把�
 | --- | --- |
 | U+0000–U+007F | `0xxxxxxx` |
 | U+0080–U+07FF | `110xxxxx 10xxxxxx` |
-| U+0800–U+FFFF | `1110xxxx 10xxxxxx 10xxxxxx` |
+| U+0800–U+FFFF（排除代理项 U+D800–U+DFFF） | `1110xxxx 10xxxxxx 10xxxxxx` |
 | U+10000–U+10FFFF | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` |
+
+表中范围描述可编码为 UTF-8 的 Unicode 标量值。代理项用于 UTF-16 的编码机制，不是合法 Unicode 标量值，不能编码为 UTF-8；解码器遇到对应的非法序列时应报告错误或按明确策略替换，不能当作普通字符接受。
 
 但“一个字符”至少有三种含义：
 
@@ -247,9 +245,14 @@ g++ -std=c++20 -O2 -Wall -Wextra -fsanitize=undefined demo.cpp
 > - 以为 Unicode 码点、UTF-8 字节和界面字符是一一对应。
 > - 为了“位运算更快”牺牲语义和可读性，却没有任何 benchmark。
 
-# 资料与后续
+> [!summary] 本篇结论
+> 固定位宽整数按模运算，有符号数采用补码但溢出规则由语言规定；IEEE 754 浮点表达范围与精度的折中，运算包含舍入和特殊值；Unicode 区分码点、编码单元与用户看到的字符。跨进程、跨语言和跨机器传输时，必须显式约定位宽、符号、字节序、文本编码和版本。
+
+## 权威依据
 
 - [C++ working draft: fundamental types](https://eel.is/c++draft/basic.fundamental)
 - [C++ working draft: shift operators](https://eel.is/c++draft/expr.shift)
 - [The Unicode Standard — latest version](https://www.unicode.org/versions/latest/)
-- 下一步：[Program Build and Execution (程序构建与执行)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Program%20Build%20and%20Execution%20(程序构建与执行).md)
+- [Unicode 18.0 Core Specification: Conformance and Unicode Encoding Forms](https://unicode.org/versions/Unicode18.0.0/core-spec/chapter-3/)
+
+下一步：[Program Build and Execution (程序构建与执行)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/03-Program%20Build%20and%20Execution%20(程序构建与执行).md)

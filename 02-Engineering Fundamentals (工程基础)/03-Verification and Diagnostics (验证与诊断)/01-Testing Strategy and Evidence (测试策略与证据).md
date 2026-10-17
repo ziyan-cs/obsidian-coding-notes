@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 测试不是“把函数跑一遍”，而是用可重复的实验约束系统行为。本篇统一测试分层、用例设计、替身边界、并发与故障测试以及证据保存；语言框架的具体语法留在各语言专题。
 
 # 从风险反推测试
@@ -124,3 +124,6 @@ format/lint -> compile/type check -> unit -> component
 - [OWASP Web Security Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
 - [Go Fuzzing](https://go.dev/doc/security/fuzz/)
 - [Python unittest documentation](https://docs.python.org/3/library/unittest.html)
+
+> [!summary] 本篇结论
+> 测试的价值不在数量，而在关键风险上建立可重复、可判定的证据。测试范围应由失效代价和系统边界决定；单元、集成、端到端、并发与故障测试互相补充，不能彼此替代。

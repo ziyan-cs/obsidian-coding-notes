@@ -1,9 +1,7 @@
 ---
 study_stage: learn
-review_due: 2026-10-22
+review_due: 2026-10-29
 ---
-
-
 > [!summary] 核心摘要
 >
 > C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。类只要管理资源，就必须先写清所有权，再决定是否允许拷贝、如何移动以及析构时做什么。现代 C++ 优先使用 RAII 成员类型以遵循 Rule of Zero；只有直接管理资源时才需要 Rule of Five。
@@ -34,104 +32,6 @@ moved-from object -> valid for destruction and assignment
 > 1. 一个独占 `FILE*` 的 wrapper 应该支持拷贝吗？移动后源对象必须满足什么条件？
 > 2. 为什么 `std::vector<T>` 会关心 `T` 的 move constructor 是否 `noexcept`？
 > 3. 哪些成员类型已经让你无需自己写析构函数？
-
-# Object Oriented Programming (面向对象编程)
-
-> [!note] 本节重点：封装、继承、多态三大面向对象特性在 C++ 中的实现
-
-## 封装（Encapsulation）
-
-```cpp
-class BankAccount {
-    double balance_;      // private：外部不可直接访问
-    std::string owner_;
-
-public:
-    BankAccount(std::string owner, double init)
-        : owner_(std::move(owner)), balance_(init) {}
-
-    // 公开接口控制访问方式
-    void deposit(double amount) {
-        if (amount > 0) balance_ += amount;
-    }
-    bool withdraw(double amount) {
-        if (amount <= 0 || amount > balance_) return false;
-        balance_ -= amount;
-        return true;
-    }
-    double balance() const { return balance_; }  // const 成员函数
-};
-```
-
-**访问控制：**
-
-|说明符|类内|派生类|外部|
-|---|---|---|---|
-|`private`|✅|❌|❌|
-|`protected`|✅|✅|❌|
-|`public`|✅|✅|✅|
-
-`class` 默认 `private`，`struct` 默认 `public`。
-
----
-
-## 继承（Inheritance）
-
-```cpp
-class Animal {
-public:
-    std::string name;
-    Animal(std::string n) : name(std::move(n)) {}
-    virtual void speak() const { std::cout << name << " makes a sound\n"; }
-    virtual ~Animal() = default;   // 多态基类析构必须是 virtual！
-};
-
-class Dog : public Animal {
-public:
-    Dog(std::string n) : Animal(std::move(n)) {}
-    void speak() const override { std::cout << name << " barks\n"; }
-};
-
-class Cat : public Animal {
-public:
-    Cat(std::string n) : Animal(std::move(n)) {}
-    void speak() const override { std::cout << name << " meows\n"; }
-};
-```
-
-**继承方式与访问控制变化：**
-
-|继承方式|基类 public|基类 protected|基类 private|
-|---|---|---|---|
-|`public`|public|protected|不可访问|
-|`protected`|protected|protected|不可访问|
-|`private`|private|private|不可访问|
-
----
-
-## 多态（Polymorphism）
-
-```cpp
-// 运行时多态（虚函数）
-std::vector<std::unique_ptr<Animal>> zoo;
-zoo.push_back(std::make_unique<Dog>("Rex"));
-zoo.push_back(std::make_unique<Cat>("Whiskers"));
-
-for (auto& a : zoo)
-    a->speak();   // 运行时根据实际类型调用（动态分派）
-
-// 编译期多态（模板，CRTP）
-template<typename Derived>
-struct Shape {
-    double area() const { return static_cast<const Derived*>(this)->areaImpl(); }
-};
-struct Circle : Shape<Circle> {
-    double r;
-    double areaImpl() const { return 3.14159 * r * r; }
-};
-```
-
----
 
 # Construction and Destruction (构造与析构)
 
@@ -281,58 +181,6 @@ public:
 // 仅写 = default 也要检查成员类型是否让函数变为 deleted。
 // 真实项目优先使用 RAII 成员，让类遵循 Rule of Zero。
 ```
-
----
-
-# Operator Overloading (运算符重载)
-
-运算符应保留读者熟悉的语义。`operator+=` 修改左侧并返回其引用；`operator+` 可以基于它返回新值。下标越界必须有明确契约，不能默默把所有非零下标当成第二个元素。需要左操作数隐式转换的对称运算符通常写成非成员。
-
-```cpp
-#include <iostream>
-#include <stdexcept>
-
-class Vec2 {
-    double x_{};
-    double y_{};
-
-public:
-    Vec2(double x = 0, double y = 0) : x_(x), y_(y) {}
-
-    Vec2& operator+=(const Vec2& rhs) {
-        x_ += rhs.x_;
-        y_ += rhs.y_;
-        return *this;
-    }
-    friend Vec2 operator+(Vec2 lhs, const Vec2& rhs) {
-        lhs += rhs;
-        return lhs;
-    }
-    friend Vec2 operator*(double scale, const Vec2& v) {
-        return {scale * v.x_, scale * v.y_};
-    }
-    friend std::ostream& operator<<(std::ostream& out, const Vec2& v) {
-        return out << '(' << v.x_ << ", " << v.y_ << ')';
-    }
-
-    double& at(int index) {
-        if (index == 0) return x_;
-        if (index == 1) return y_;
-        throw std::out_of_range("Vec2 index");
-    }
-};
-
-int main() {
-    Vec2 a{1, 2}, b{3, 4};
-    Vec2 c = a + b;
-    Vec2 scaled = 2.0 * a;
-    std::cout << c << ' ' << scaled << '\n'; // (4, 6) (2, 4)
-}
-```
-
-转换运算符如果容易产生意外重载，标为 `explicit`。例如 `explicit operator bool() const` 可用于 `if (value)`，但不会作为普通隐式数值转换。重载比较运算符时，浮点数的精确相等是否符合业务语义要单独决定。`::`、`.`、`.*`、`?:`、`sizeof`、`typeid` 不能重载。
-
-
 
 > [!info]- 延伸阅读
 > - 下一步：[04-Polymorphism and Inheritance (多态与继承)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)

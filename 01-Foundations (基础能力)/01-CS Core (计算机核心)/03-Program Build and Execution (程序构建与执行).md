@@ -4,12 +4,8 @@ review_due: 2026-10-31
 tags: [cs/toolchain, learning/foundation]
 ---
 
-> [!abstract] 阅读方式
+> [!abstract] 学习目标
 > 本文沿一条真实路径展开：C++ 源文件如何变成目标文件，链接器如何解析符号和重定位，内核与动态加载器如何把 ELF 变成进程，最终怎样进入 `main`。CPU 内部流水线只作为执行背景，不与构建流程混写。
-
-> [!summary] 核心摘要
->
-> 编译负责把单个翻译单元变成可重定位目标文件；链接负责跨文件符号解析、节布局和重定位；加载负责建立进程地址空间、装入解释器与共享库并转移控制。排错时先判断问题属于预处理、编译、链接、加载还是运行时，能显著缩小搜索范围。
 
 # 从源文件到进程
 
@@ -199,10 +195,14 @@ strace -f -o trace.txt ./app
 > - 用 `ldd` 检查来源不可信的文件；某些环境下这可能执行目标相关代码。
 > - 只保存最终二进制，不保存工具链、符号、build ID 和构建参数。
 
-# 资料与后续
+> [!summary] 本篇结论
+> 编译负责把单个翻译单元变成可重定位目标文件；链接负责跨文件符号解析、节布局和重定位；加载负责建立进程地址空间、装入解释器与共享库并转移控制。排错时先判断问题属于预处理、编译、链接、加载还是运行时，能显著缩小搜索范围。
+
+## 权威依据
 
 - [GCC documentation](https://gcc.gnu.org/onlinedocs/gcc/)
 - [GNU Binutils documentation](https://sourceware.org/binutils/docs/)
 - [GNU ld linker scripts](https://sourceware.org/binutils/docs/ld/Scripts.html)
 - [Linux execve(2)](https://man7.org/linux/man-pages/man2/execve.2.html)
-- 下一步：[Memory Hierarchy and IO (存储层级与输入输出)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/04-Memory%20Hierarchy%20and%20IO%20(存储层级与输入输出).md)
+
+下一步：[Memory Hierarchy and IO (存储层级与输入输出)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/04-Memory%20Hierarchy%20and%20IO%20(存储层级与输入输出).md)

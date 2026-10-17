@@ -5,7 +5,7 @@ study_stage: backlog
 > [!note] 方法论坐标
 > 通用定位链见 [Debugging and Failure Localization (调试与故障定位)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/02-Debugging%20and%20Failure%20Localization%20(调试与故障定位).md)，性能实验见 [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)；本篇保留 strace、GDB、perf 等 Linux 现场工具。
 
-> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+> [!abstract] 按问题层级选工具：`strace` 看系统调用，GDB 看程序状态，`perf` 看 CPU 热点；用复现和证据把现象连回代码路径。
 
 > [!summary] 核心摘要
 >

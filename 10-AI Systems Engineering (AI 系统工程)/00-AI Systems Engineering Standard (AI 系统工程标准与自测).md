@@ -38,3 +38,5 @@ tags: [ai/standard, learning/self-assessment]
 4. 为什么合法 JSON 仍可能是错误或危险结果？
 5. 一个 RAG 新版本总分提高但跨权限样本退化，是否允许发布？怎样设计门槛与回滚？
 6. Go、Python、C++ 分别适合承担哪些组件？
+
+安全基线可对照 [OWASP Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) 与 [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)；它们帮助补充威胁与测试场景，不是合规证明，也不能替代本系统的威胁建模。

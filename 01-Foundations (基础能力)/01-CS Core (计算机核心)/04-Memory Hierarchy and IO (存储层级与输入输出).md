@@ -4,12 +4,8 @@ review_due: 2026-11-07
 tags: [cs/architecture, cs/io, learning/foundation]
 ---
 
-> [!abstract] 阅读方式
+> [!abstract] 学习目标
 > 存储层级解决“容量、延迟、带宽和成本不能同时最优”，I/O 系统解决“速度和控制方式不同的设备如何安全搬运数据”。本文不背固定纳秒表，而是建立局部性、缓存、互连、中断、DMA 与 MMIO 的因果链，并要求用本机实验验证。
-
-> [!summary] 核心摘要
->
-> 缓存按块复制相邻层数据，命中依赖时间与空间局部性；性能由命中时间、缺失率、缺失代价、带宽和并行度共同决定。设备通过控制器与片上互连通信，CPU 可轮询或处理中断，设备可借助 DMA 搬运批量数据；MMIO、DMA、一致性与 IOMMU 决定数据何时对谁可见。
 
 # 存储层级与局部性
 
@@ -238,9 +234,13 @@ iostat -xz 1
 > - 认为 DMA 绕过 CPU 就同时绕过 IOMMU、缓存一致性和驱动管理。
 > - 把 `write()` 成功等同于数据已经持久化到介质。
 
-# 资料与后续
+> [!summary] 本篇结论
+> 缓存按块复制相邻层数据，命中依赖时间与空间局部性；性能由命中时间、缺失率、缺失代价、带宽和并行度共同决定。设备通过控制器与片上互连通信，CPU 可轮询或处理中断，设备可借助 DMA 搬运批量数据；MMIO、DMA、一致性与 IOMMU 决定数据何时对谁可见。
+
+## 权威依据
 
 - [Intel 64 and IA-32 Optimization Reference Manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel64-and-ia32-architectures-optimization.html)
 - [Linux kernel: Dynamic DMA mapping](https://kernel.org/doc/html/next/core-api/dma-api.html)
 - [Linux kernel memory barriers](https://kernel.org/doc/html/latest/core-api/wrappers/memory-barriers.html)
-- 下一步：[Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)
+
+下一步：[Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)

@@ -29,7 +29,7 @@ tags: [algorithm/data-structure, algorithm/two-pointers, learning/foundation]
 适合有序数组两数和、回文判断、盛水容器等。以升序数组两数和为例：
 
 ```cpp
-std::optional<std::pair<int, int>> two_sum_sorted(
+std::optional<std::pair<std::size_t, std::size_t>> two_sum_sorted(
     const std::vector<int>& a, int target) {
     std::size_t left = 0;
     if (a.empty()) return std::nullopt;
@@ -38,7 +38,7 @@ std::optional<std::pair<int, int>> two_sum_sorted(
     while (left < right) {
         const long long sum = static_cast<long long>(a[left]) + a[right];
         if (sum == target) {
-            return std::pair{static_cast<int>(left), static_cast<int>(right)};
+            return std::pair{left, right};
         }
         if (sum < target) ++left;
         else --right;

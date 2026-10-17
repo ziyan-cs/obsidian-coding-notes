@@ -6,10 +6,6 @@ tags: [ai/agent, ai/evaluation, ai/security]
 > [!abstract] 学习目标
 > 将 Agent 视为模型参与决策的有状态工作流，使用显式状态、受限工具、检查点和评估控制可靠性，而不是依赖无限自主循环。
 
-> [!summary] 核心摘要
->
-> 将计划、调用、观察和结束条件写成可追踪状态；每一步有预算、权限和恢复语义。高风险动作需要确定性规则或人工批准。
-
 # 工作流状态
 
 任务至少记录输入、当前步骤、已执行工具、结果摘要、预算、错误和终止原因。长任务将检查点持久化，重启后从安全状态恢复，不能重复不可逆副作用。
@@ -49,3 +45,5 @@ plan -> validate -> act -> observe -> decide
 
 > [!question]- 理解检查
 > Agent 在创建工单后超时并重试整个任务，怎样避免重复创建？检查点应该保存什么？
+
+参考：[OWASP Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) · [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)。风险清单用于建立测试覆盖，不替代具体系统的威胁建模与权限验证。

@@ -1,5 +1,6 @@
 ---
-study_stage: backlog
+study_stage: learn
+review_due: 2026-12-05
 tags: [cs/os, learning/foundation]
 ---
 
@@ -68,7 +69,7 @@ DMA 是否要求物理连续取决于设备能力、scatter-gather、IOMMU 和�
 
 内存紧张时，内核需要在匿名页和文件页间选择回收对象：干净文件页可直接丢弃并按需重读；脏页需要回写；匿名页若要回收通常依赖 swap。若回收速度跟不上分配，任务会进入 direct reclaim，严重时触发 OOM 处理。
 
-“Linux 使用 Clock 算法”已不足以描述现代实现。Linux 提供基于 folio 的 **Multi-Gen LRU**：用代际近似冷热，结合页表访问、反向映射与 refault 反馈进行 aging 和 eviction。具体是否启用及行为取决于内核版本和配置。
+“Linux 使用 Clock 算法”已不足以描述现代实现。Linux 提供可选的、基于 folio 的 **Multi-Gen LRU**：用代际近似冷热，结合页表访问、反向映射与 refault 反馈进行 aging 和 eviction。是否编入内核及默认启用状态取决于内核配置；可检查 `CONFIG_LRU_GEN`、`CONFIG_LRU_GEN_ENABLED` 和运行时接口，不能假定每台 Linux 都在使用它。
 
 # 局部性与可观察性
 

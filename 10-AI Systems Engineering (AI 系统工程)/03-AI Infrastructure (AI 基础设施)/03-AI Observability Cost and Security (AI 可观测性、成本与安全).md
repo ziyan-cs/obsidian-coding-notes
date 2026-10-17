@@ -9,10 +9,6 @@ tags: [ai/observability, ai/security, ai/cost]
 > [!abstract] 学习定位
 > AI 系统必须同时观察传统服务指标、模型质量、数据链路、工具行为和费用；只监控 HTTP 200 会漏掉最重要的失败。
 
-> [!summary] 核心摘要
->
-> 一次 trace 串起检索、模型、工具和副作用，记录版本、延迟、token、费用和评估结果。敏感内容按最小化原则采集，安全控制独立于模型判断。
-
 # 统一 Trace
 
 ~~~text
@@ -62,5 +58,6 @@ unit cost = (model tokens + retrieval + tools + retries + allocated infrastructu
 > 一个 AI 接口成功率 99.99%，为什么仍可能完全不可用？列出质量、权限和成本层的失败例子。
 
 > [!info]- 官方参考
-> - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
+> - [OWASP Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/)
+> - [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 > - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)

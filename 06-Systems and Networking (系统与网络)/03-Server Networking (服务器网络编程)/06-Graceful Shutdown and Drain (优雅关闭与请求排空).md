@@ -203,7 +203,7 @@ void shutdownWithDiscovery() {
 
 # k8s 环境中的优雅关闭
 
-Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kubelet 会先执行它，然后由容器运行时向容器主进程发送终止信号。`terminationGracePeriodSeconds` 默认 30 秒，但它覆盖 `preStop` 与应用排空的总过程，**不是收到 SIGTERM 后再额外获得 30 秒**；期限届满可能被强制终止。
+Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kubelet 会先执行它，完成后容器运行时才向容器主进程发送终止信号。`terminationGracePeriodSeconds` 默认 30 秒，但它覆盖 `preStop` 与应用排空的总过程，**不是收到 SIGTERM 后再额外获得 30 秒**；期限届满可能被强制终止。设置预算时要给 hook、应用收尾和调度误差留出空间。
 
 控制面并行更新 EndpointSlice：终止中的 endpoint 的 `ready` 会变为 false，但负载均衡器、客户端连接池与传播延迟并不保证瞬间停止流量。先标记应用不再接新业务、限制排空时间，再处理已有连接；同时测试老连接复用和晚到请求。具体行为按部署平台与 [Kubernetes Pod termination flow](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) 核对。
 

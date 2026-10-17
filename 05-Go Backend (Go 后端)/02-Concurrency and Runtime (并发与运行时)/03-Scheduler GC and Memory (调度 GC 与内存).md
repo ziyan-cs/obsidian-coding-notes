@@ -5,10 +5,6 @@ study_stage: backlog
 > [!abstract] 学习定位
 > goroutine 很轻但并非免费；调度、栈、分配和 GC 都会影响尾延迟，优化必须从 profile 证据开始。
 
-> [!summary] 核心摘要
->
-> 阻塞、逃逸分配和堆增长都会影响调度与 GC；先测 CPU、heap、goroutine 与 trace，再针对已证明的瓶颈降低分配、阻塞或争用。
-
 # G-M-P 心智模型
 
 `G` 表示 goroutine，`M` 表示 OS thread，`P` 是运行 Go 代码所需的调度资源。调度器把可运行的 G 安排到持有 P 的 M 上。这个模型解释许多 goroutine 如何复用较少线程，但具体队列、抢占和栈实现会随版本演进，不应背成稳定 API。

@@ -6,10 +6,6 @@ tags: [ai/foundation, backend/api]
 > [!abstract] 学习定位
 > 模型 API 是具有配额、延迟、版本和概率失败的远程依赖；结构化输出降低解析歧义，但不能代替语义校验。
 
-> [!summary] 核心摘要
->
-> 调用端设置 deadline、并发限制和重试预算；返回 JSON 后仍要验证 schema、范围、权限和业务状态，再允许产生副作用。
-
 # 请求边界
 
 封装模型 provider，业务层依赖自己的接口与错误语义。请求明确模型、输入、最大输出、timeout 和幂等标识。不要让 provider SDK 类型散布到全部业务代码。

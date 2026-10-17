@@ -5,10 +5,6 @@ study_stage: backlog
 > [!abstract] 学习定位
 > HTTP handler 的职责是把协议输入转换为明确的应用命令，并把可预期失败稳定地映射为响应；业务规则不要散落在 handler 内。
 
-> [!summary] 核心摘要
->
-> handler 只做解析、校验、调用服务与映射响应；领域服务维护业务不变量；用统一错误码和响应体让客户端得到可预测结果。
-
 # 输入限制与解码
 
 所有 HTTP 输入都不可信。先限制 body 大小，再解码；JSON decoder 可拒绝未知字段，并确认文档结束后没有第二个 JSON 值。路径 ID、查询参数、header 与 body 分别解析成明确类型，再进入 service。

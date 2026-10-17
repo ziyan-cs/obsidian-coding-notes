@@ -40,6 +40,8 @@ std::vector<int> next_greater(const std::vector<int>& a) {
 
 队列先进先出（FIFO），适合按发现顺序处理状态。无权图 BFS 按边数逐层扩展，因此第一次到达节点时得到最短边数。
 
+下面的实现假定 `source` 与每条边的端点都是合法编号 `0..graph.size()-1`；处理不可信输入时，应先验证图的尺寸和端点范围。
+
 ```cpp
 std::vector<int> bfs_distance(
     const std::vector<std::vector<int>>& graph, int source) {

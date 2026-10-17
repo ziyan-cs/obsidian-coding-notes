@@ -3,7 +3,7 @@ study_stage: backlog
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 学习目标
 > 安全检测的目标不是收集尽可能多的日志，而是把攻击假设转成可执行检测，并在事件发生后保留可信证据。本篇统一威胁驱动检测、日志语义、告警分级、证据保全和响应交接。
 
 # 从威胁场景反推检测
@@ -99,3 +99,6 @@ first observed -> initial access -> privilege/action
 - [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf)
 - [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html)
+
+> [!summary] 本篇结论
+> 检测工程把威胁假设转成可观测数据、规则、分级调查和响应措施。规则既要命中模拟攻击，也要验证正常高峰、数据缺失和规则失效等场景；事件处理还必须保留时间、来源、完整性与交接记录。

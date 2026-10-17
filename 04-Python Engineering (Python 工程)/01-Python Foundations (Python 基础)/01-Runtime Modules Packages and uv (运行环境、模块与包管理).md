@@ -1,14 +1,10 @@
 ---
-study_stage: learn
-review_due: 2026-10-13
+study_stage: D7
+review_due: 2026-10-20
 ---
 
 > [!abstract] 学习定位
 > 项目依赖必须隔离、可复现、可声明；不要把“电脑上能跑”误当成项目环境正确。
-
-> [!summary] 核心摘要
->
-> 用项目级虚拟环境隔离解释器与依赖；用 `pyproject.toml` 声明需求、锁文件固定解析结果；在新机器或 CI 中从零安装验证复现。
 
 # 最小工作流
 

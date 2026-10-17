@@ -174,9 +174,9 @@ SHOW INDEX FROM [表名];
 ## 索引类型
 
 - 主键索引（Primary Key Index）
-	
-	- 基于主键自动创建，一张表只能有一个 
-	- 天然具备 `NOT NULL + UNIQUE` 约束 
+
+	- 基于主键自动创建，一张表只能有一个
+	- 天然具备 `NOT NULL + UNIQUE` 约束
 	- InnoDB 中为聚簇索引，决定数据物理存储顺序
 
 ```sql
@@ -190,7 +190,7 @@ ALTER TABLE [表名] ADD   ;
 ```
 
 - 唯一索引（Unique Index）
-	
+
 	- 字段值不可重复（允许一个 NULL）
 	- 一张表可建多个，非聚簇索引
 
@@ -205,9 +205,9 @@ ALTER TABLE [表名] ADD UNIQUE INDEX idx_phone(phone);
 ```
 
 - 普通索引（Normal Index）
-	
-	- 基于主键自动创建，一张表只能有一个 
-	- 天然具备 `NOT NULL + UNIQUE` 约束 
+
+	- 基于主键自动创建，一张表只能有一个
+	- 天然具备 `NOT NULL + UNIQUE` 约束
 	- InnoDB 中为聚簇索引，决定数据物理存储顺序
 
 ```sql
@@ -222,7 +222,7 @@ ALTER TABLE [表名] ADD INDEX idx_name(name);
 ```
 
 - 复合索引（联合索引）
-	
+
 	- 由多个字段组合而成的索引，遵循**最左匹配原则**
 	- 适用于多条件查询场景，可覆盖多个查询条件
 
@@ -239,7 +239,7 @@ ALTER TABLE [表名] ADD INDEX idx_user_goods(user_id, goods_id);
 ```
 
 - 全文索引（FULLTEXT）
-	
+
 	- 用于文本字段的模糊查询（`MATCH AGAINST`）
 	- 支持中文分词，比 `LIKE '%xxx%'` 效率高很多
 

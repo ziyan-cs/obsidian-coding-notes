@@ -42,4 +42,4 @@ tags: [comparison, concurrency]
 > - 自测：Go service 关闭时，怎样证明没有 goroutine leak？
 
 > [!info]- 延伸阅读
-> - 下一步：[03-Error Handling (错误处理)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/03-Error%20Handling%20(错误处理).md)
+> - 下一步：[03-Error Handling (错误处理)](/11-Projects%20(项目实践)/03-Engineering%20Decision%20Records%20(工程决策记录)/03-Error%20Handling%20(错误处理).md)

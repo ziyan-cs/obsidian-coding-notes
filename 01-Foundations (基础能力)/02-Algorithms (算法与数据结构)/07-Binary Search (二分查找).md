@@ -51,7 +51,7 @@ std::size_t lower_bound_index(const std::vector<int>& a, int target) {
 long long first_feasible(long long low, long long high) {
     // 约定答案存在于 [low, high]，high 必须可行
     while (low < high) {
-        long long mid = low + (high - low) / 2;
+        long long mid = std::midpoint(low, high); // <numeric>；避免 high - low 溢出
         if (feasible(mid)) high = mid;
         else low = mid + 1;
     }

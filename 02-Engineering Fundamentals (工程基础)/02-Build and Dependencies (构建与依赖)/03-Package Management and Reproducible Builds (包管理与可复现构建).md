@@ -89,7 +89,7 @@ application
 ## 权威依据
 
 - [Reproducible Builds project](https://reproducible-builds.org/docs/)
-- [SLSA specification](https://slsa.dev/spec/v1.0/)
+- [SLSA specification v1.2](https://slsa.dev/spec/v1.2/)
 - [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
 下一步：[04-Make and Shell Automation (Make 与 Shell 自动化)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/04-Make%20and%20Shell%20Automation%20(Make%20与%20Shell%20自动化).md)

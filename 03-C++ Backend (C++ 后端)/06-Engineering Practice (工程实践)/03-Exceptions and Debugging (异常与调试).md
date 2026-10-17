@@ -184,20 +184,33 @@ g++ -fsanitize=address -g -O1 main.cpp -o main
 
 ## ASan 检测的问题类型
 
+下面是互相独立的错误示例。每次只编译、运行一个；ASan 通常会在首个错误处终止，不能把它们串起来期待一次看到所有报告。
+
 ```cpp
+#include <new>
+
 int* p = new int[10];
-
-p[10] = 42;     // ✅ ASan 检测：heap-buffer-overflow
+p[10] = 42; // heap-buffer-overflow
 delete[] p;
-*p = 1;         // ✅ ASan 检测：heap-use-after-free
+```
 
-int* q = (int*)malloc(4);
-free(q);
-free(q);        // ✅ ASan 检测：double-free
+```cpp
+int* p = new int(42);
+delete[] p;
+*p = 1; // heap-use-after-free
+```
 
-int a;
-int* r = &a;
-delete r;       // ✅ ASan 检测：delete on stack variable
+```cpp
+#include <cstdlib>
+
+int* q = static_cast<int*>(std::malloc(sizeof(int)));
+std::free(q);
+std::free(q); // double-free
+```
+
+```cpp
+int value{};
+delete &value; // 错误：只能 delete 与 new 表达式匹配的对象
 ```
 
 ## 其他 Sanitizers

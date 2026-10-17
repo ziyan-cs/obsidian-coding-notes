@@ -5,10 +5,6 @@ study_stage: backlog
 > [!abstract] 学习定位
 > `context.Context` 用来沿调用链传递取消、截止时间与请求范围元数据；它不是任意参数包，也不是可选的全局变量。
 
-> [!summary] 核心摘要
->
-> `context.Context` 让请求的取消和 deadline 从入口一致地传到数据库、HTTP、RPC、worker 与 goroutine。它解决的是工作何时应停止，不承担业务参数传递；每个派生 goroutine 都必须有退出路径，并在阻塞点检查 `Done()` 或使用支持 context 的 API。
-
 # 取消传播检查表
 
 1. handler 是否将 request context 传给 service？

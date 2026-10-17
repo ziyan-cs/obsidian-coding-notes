@@ -2,7 +2,7 @@
 study_stage: backlog
 ---
 
-> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+> [!abstract] Reactor 将 I/O 就绪事件分发给对应处理器；扩展到多线程时仍需明确连接状态归属、跨线程回传和队列背压。
 
 # Reactor Pattern (Reactor模式)
 

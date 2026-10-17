@@ -21,7 +21,8 @@ DFS 沿路径深入，适合连通分量、环检测、回溯和进入/退出时
 ## Kahn 拓扑排序
 
 ```cpp
-std::vector<int> topological_sort(const std::vector<std::vector<int>>& graph) {
+std::optional<std::vector<int>> topological_sort(
+    const std::vector<std::vector<int>>& graph) {
     std::vector<int> indegree(graph.size());
     for (const auto& edges : graph)
         for (int v : edges) ++indegree[v];
@@ -37,12 +38,12 @@ std::vector<int> topological_sort(const std::vector<std::vector<int>>& graph) {
         for (int v : graph[u])
             if (--indegree[v] == 0) q.push(v);
     }
-    if (order.size() != graph.size()) return {}; // 存在有向环
+    if (order.size() != graph.size()) return std::nullopt; // 存在有向环
     return order;
 }
 ```
 
-拓扑序只对 DAG 存在，且通常不唯一。若需要字典序最小结果，可把普通队列换成最小堆，复杂度随之改变。
+拓扑序只对 DAG 存在，且通常不唯一。此接口用 `std::nullopt` 表示有环，空图则返回合法的空序列，避免两种情况混淆。若需要字典序最小结果，可把普通队列换成最小堆，复杂度随之改变。
 
 # 并查集：维护动态连通分量
 
@@ -81,7 +82,7 @@ public:
 |---|---|---:|
 | 无权/等权 | BFS | `O(V + E)` |
 | 权重仅 0/1 | 0-1 BFS | `O(V + E)` |
-| 非负权 | Dijkstra + 堆 | `O((V+E) log V)` |
+| 非负权 | Dijkstra + 堆 | decrease-key 堆为 `O((V+E) log V)`；惰性重复入堆为 `O(V + E log(E+1))` |
 | 有负边、需检测负环 | Bellman–Ford | `O(VE)` |
 | DAG | 拓扑序松弛 | `O(V + E)` |
 | 全源、图较稠密/规模较小 | Floyd–Warshall | `O(V³)`、空间 `O(V²)` |
@@ -103,8 +104,10 @@ std::vector<long long> dijkstra(const std::vector<std::vector<Edge>>& g, int s) 
         if (d != dist[u]) continue;
         for (auto [v, w] : g[u]) {
             if (w < 0) throw std::invalid_argument("negative edge");
-            if (dist[v] > d + w) {
-                dist[v] = d + w;
+            if (w > INF - d) continue; // 跳过超过本实现可表示范围的路径，避免加法溢出
+            const long long candidate = d + w;
+            if (dist[v] > candidate) {
+                dist[v] = candidate;
                 pq.push({dist[v], v});
             }
         }
@@ -113,7 +116,7 @@ std::vector<long long> dijkstra(const std::vector<std::vector<Edge>>& g, int s) 
 }
 ```
 
-使用足够宽的距离类型，并让 `INF + weight` 不溢出。若需恢复路径，松弛时记录 `parent[v] = u`。
+本实现把 `INF` 及以上的距离视作不可达，因此输入规模应保证所有需要表示的最短距离小于 `INF`；换用其他上界时也要保留溢出检查。若需恢复路径，松弛时记录 `parent[v] = u`。
 
 # 检查理解
 

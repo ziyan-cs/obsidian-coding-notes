@@ -42,4 +42,4 @@ tags: [comparison, backend/http]
 3. **第三步 · 验证**：追问：回答“为什么不用另一种方案”，并说出代价而非只说优点。
 
 > [!info]- 延伸阅读
-> - 下一步：[05-Observability and Performance (可观测性与性能)](/12-Career%20(求职与成长)/04-Decision%20Records%20(决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
+> - 下一步：[05-Observability and Performance (可观测性与性能)](/11-Projects%20(项目实践)/03-Engineering%20Decision%20Records%20(工程决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)

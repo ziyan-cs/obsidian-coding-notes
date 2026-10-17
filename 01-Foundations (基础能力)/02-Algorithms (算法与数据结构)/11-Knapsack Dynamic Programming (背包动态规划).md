@@ -35,7 +35,7 @@ long long zero_one_knapsack(
     std::vector<long long> dp(capacity + 1, 0);
 
     for (std::size_t i = 0; i < weight.size(); ++i) {
-        if (weight[i] <= 0) throw std::invalid_argument("non-positive weight");
+        if (weight[i] < 0) throw std::invalid_argument("negative weight");
         for (int c = capacity; c >= weight[i]; --c) {
             dp[c] = std::max(dp[c], dp[c - weight[i]] + value[i]);
         }
@@ -45,6 +45,8 @@ long long zero_one_knapsack(
 ```
 
 容量倒序确保 `dp[c - w]` 仍来自上一层，因此当前物品不会在同一轮重复使用。这里状态语义是“容量不超过 c”，所以全 0 初始化允许不装满。
+
+0-1 背包允许单件物品重量为 0：每件物品只处理一次，因此其价值最多计入一次。完全背包的零重量正价值物品则会令最优值无界，需拒绝或另行定义。
 
 # 完全背包：容量正序
 

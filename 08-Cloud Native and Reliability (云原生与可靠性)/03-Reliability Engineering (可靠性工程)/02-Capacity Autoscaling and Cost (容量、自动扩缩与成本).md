@@ -6,10 +6,6 @@ tags: [sre/capacity, cloud/cost]
 > [!abstract] 学习定位
 > 容量规划同时约束性能、可靠性和成本；自动扩缩只能响应可观测信号，不能修复无界队列、热点或错误资源模型。
 
-> [!summary] 核心摘要
->
-> 从单位工作资源成本、流量增长和故障冗余估算容量，再用负载测试验证。扩缩指标要领先于用户故障，并考虑启动时间、冷却和下游上限。
-
 # 容量模型
 
 先确定单位请求或任务消耗的 CPU、内存、连接、磁盘与下游配额，再考虑峰值、增长和单区故障。平均利用率不能描述热点和尾延迟。
@@ -44,12 +40,6 @@ observe -> decide desired replicas -> start instances -> become ready
 成本按成功请求或有效任务归一化，同时观察 headroom。盲目提高利用率会减少故障余量；购买更便宜实例若增加尾延迟和重试，也可能提高总成本。
 
 官方参考：[Kubernetes Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)。
-
-# 自动扩缩
-
-CPU 适合计算型负载；队列长度或等待时间更适合异步 worker；并发数和请求率可用于 I/O 服务。指标必须能反映尚未造成用户失败的压力。
-
-扩容有启动延迟，缩容会影响缓存与在途任务。设置最小/最大规模、稳定窗口和排空策略，避免指标抖动导致反复伸缩。
 
 # 过载保护
 

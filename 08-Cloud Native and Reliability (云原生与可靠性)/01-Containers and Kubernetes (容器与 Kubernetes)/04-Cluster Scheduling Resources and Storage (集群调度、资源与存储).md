@@ -6,10 +6,6 @@ tags: [cloud-native/kubernetes, kubernetes/scheduling, kubernetes/storage]
 > [!abstract] 学习目标
 > 从 API 对象进入调度、节点资源与存储控制循环，理解 Pod 为什么 Pending、为什么被驱逐、为什么挂载失败。重点不是背字段，而是根据事件和状态解释控制面决策。
 
-> [!summary] 核心摘要
->
-> scheduler 为未绑定 Pod 过滤并评分节点，kubelet 和运行时在目标节点落实规格；requests、节点条件、亲和性、污点与拓扑共同决定能否放置。持久化由 PV、PVC、StorageClass 与 CSI 协作，Pod 重建不等于数据自动正确恢复。
-
 # 调度是一组约束求解
 
 新 Pod 进入 API Server 后，scheduler 先过滤不满足硬约束的节点，再对候选节点评分并完成绑定。它根据声明和当前快照决策，不预测未来负载，也不了解业务层热点。

@@ -6,10 +6,6 @@ tags: [cloud-native/kubernetes, sre/troubleshooting, operations]
 > [!abstract] 学习目标
 > 建立从用户症状到 Kubernetes 对象、节点和依赖的排障证据链，并把发布、容量、备份和访问控制纳入生产运行。`kubectl` 命令只是取证工具，目标是形成可证伪的故障假设。
 
-> [!summary] 核心摘要
->
-> 生产排障先确定影响面和时间线，再沿入口、Service/EndpointSlice、Pod、节点与下游逐层验证。事件解释状态变化，日志解释组件行为，指标描述规模与趋势，trace 连接一次请求；重启只能改变现场，不能替代根因分析。
-
 # 从症状构造排障路径
 
 ```text

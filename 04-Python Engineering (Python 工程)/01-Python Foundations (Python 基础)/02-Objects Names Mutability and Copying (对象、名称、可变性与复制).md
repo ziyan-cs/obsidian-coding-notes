@@ -1,15 +1,13 @@
 ---
-study_stage: learn
-review_due: 2026-10-16
-tags: [language/python, python/object-model]
+study_stage: D1
+review_due: 2026-10-17
+tags:
+  - language/python
+  - python/object-model
 ---
 
 > [!abstract] 学习定位
 > Python 名称绑定对象，赋值通常不复制对象；理解身份、相等、可变性和共享引用，是解释参数传递、容器修改与资源生命周期的基础。
-
-> [!summary] 核心摘要
->
-> 名称不是装值的盒子，而是当前作用域到对象的绑定。`a = b` 让两个名称指向同一对象；不可变对象的“修改”产生新对象，可变对象可以原地改变。复制前必须明确需要隔离哪一层状态。
 
 # 名称、对象与类型
 

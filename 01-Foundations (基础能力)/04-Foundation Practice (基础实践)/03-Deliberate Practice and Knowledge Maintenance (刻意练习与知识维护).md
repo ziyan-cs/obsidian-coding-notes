@@ -59,7 +59,7 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 
 不要保存完整题面和最终答案堆积。若错误只属于某一篇知识点，把原则修订回正文；若跨多个专题重复出现，再保留在统一错误记录中。
 
-# 模板库的边界
+## 模板库的边界
 
 模板只适合稳定、跨题复用且容易写错的骨架。每个模板必须同时包含：
 
@@ -116,7 +116,7 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 - 链接只连接真正的前置、后续或对照主题，不创建装饰性链接墙；
 - 定期删除重复摘要、废弃计划和已被正文吸收的临时记录。
 
-# 自我验收
+## 自我验收
 
 学习一个专题后，尝试在没有笔记的情况下完成：
 
@@ -129,11 +129,11 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 
 若只能完成前两项，说明处于理解阶段；能够迁移到陌生问题和项目约束，才接近掌握。
 
-# 检查理解
+## 检查理解
 
 1. 为什么复制完整题解通常不是高价值错题记录？
 2. 什么内容应该留在专题正文，什么内容适合统一错误记录？
-3. `content_verified` 与学习进度字段有什么区别？
+3. 正文事实的版本与来源记录，和 `study_stage`、`review_due` 这类学习进度属性有什么区别？
 4. 怎样证明自己掌握了知识，而不只是熟悉笔记措辞？
 
 > [!summary] 本篇结论

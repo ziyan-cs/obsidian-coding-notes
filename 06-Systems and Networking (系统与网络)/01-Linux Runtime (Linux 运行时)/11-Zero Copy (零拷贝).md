@@ -2,7 +2,7 @@
 study_stage: backlog
 ---
 
-> [!abstract] 学习定位：沿着一次事件或请求的完整路径学习协议、内核与服务器模型，重点是状态变化、阻塞点和释放时机。
+> [!abstract] 零拷贝关注减少不必要的数据搬运，不代表绝对没有复制；选择 `mmap`、`sendfile` 或普通读写，要看数据路径、TLS、应用处理需求与实测结果。
 
 # Zero Copy and sendfile (零拷贝与 sendfile)
 

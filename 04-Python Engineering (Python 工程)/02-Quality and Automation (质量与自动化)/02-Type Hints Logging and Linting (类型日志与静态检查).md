@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-10-25
+review_due: 2026-12-09
 tags: [language/python, python/quality]
 ---
 
@@ -20,11 +20,15 @@ from collections.abc import Iterable
 log = logging.getLogger(__name__)
 
 def mean(values: Iterable[float]) -> float:
-    items = list(values)
-    if not items:
+    total = 0.0
+    count = 0
+    for value in values:
+        total += value
+        count += 1
+    if count == 0:
         raise ValueError("values must not be empty")
-    result = sum(items) / len(items)
-    log.info("computed mean for %d values", len(items))
+    result = total / count
+    log.info("computed mean for %d values", count)
     return result
 ```
 
@@ -50,9 +54,6 @@ union 通过真实判断收窄：`if value is None`、`isinstance`、枚举分�
 
 本地与 CI 使用同一配置和命令。逐步启用严格规则：先消除真实错误，再提高覆盖范围；大量无理由 `# noqa`、`type: ignore` 会把门禁变成装饰。每个忽略都应尽量指定规则并说明边界。
 
-练习：给 API checker 定义响应 TypedDict 或 dataclass，在解析边界验证 JSON；日志只记录 URL host、status、耗时和 request ID；构造带 token 的错误，验证日志中没有秘密。
-# 动手验证
-
-给 API checker 的响应建立 `TypedDict` 或 dataclass：解析网络 JSON 时先检查字段，再进入带类型的业务层。用测试构造含 token 的错误，验证日志只包含 host、status、耗时和 request ID，不包含凭据。最后分别运行格式检查、静态检查和 pytest，说明三者发现的问题为何不同。
+动手验证：给 API checker 的响应建立 `TypedDict` 或 dataclass，在解析边界先验证 JSON，再进入带类型的业务层。用测试构造含 token 的错误，确认日志只包含 host、status、耗时和 request ID；最后分别运行格式检查、静态检查和 pytest，解释三者发现的问题为何不同。
 
 官方资料：[typing](https://docs.python.org/3/library/typing.html) · [logging](https://docs.python.org/3/library/logging.html)。

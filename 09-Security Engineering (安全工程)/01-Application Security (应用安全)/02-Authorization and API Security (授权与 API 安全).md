@@ -50,13 +50,13 @@ Authorization: Bearer <user-A-token>
 - 超时、并发上限、速率限制与下游调用预算。
 - 允许的 content type、HTTP method 和 schema 版本。
 
-SSRF 防护不能只校验字符串前缀：应限制允许的 scheme/host/port，解析并检查最终地址，控制重定向，阻断环回、链路本地和内部网段，并在网络层限制服务可访问范围。
+SSRF 防护不能只校验字符串前缀：应限制允许的 scheme/host/port，解析并检查所有 A/AAAA 结果，阻断环回、链路本地和内部网段；防止 DNS rebinding，确保实际连接使用的目标 IP 仍经过校验。默认禁用重定向，或对每一跳重新执行完整验证；再用网络层出口策略限制服务可访问范围。URL 解析与连接库的规范化行为也要纳入测试。
 
 # Web 与 API 常见边界
 
 - CORS 是浏览器跨源读取策略，不是认证或服务端访问控制。
 - CSRF 利用浏览器自动携带凭据；使用 cookie 会话时需要 SameSite、CSRF token 或同源校验等组合措施。
-- XSS 的主要防线是按输出上下文编码与严格 CSP；输入清洗不能替代正确输出处理。
+- XSS 的主要防线是按输出上下文编码与安全 DOM API；严格 CSP 是纵深防御，不能替代正确输出处理。
 - SQL injection 通过参数化查询和安全 ORM 用法防御，不依赖手写转义。
 - 错误响应对客户端稳定，但内部日志应保留 request ID、根因和安全事件上下文；不要把堆栈、SQL 或密钥返回给客户端。
 - 第三方 API 的响应同样不可信，需要 schema、大小、超时和内容校验。
@@ -72,7 +72,7 @@ SSRF 防护不能只校验字符串前缀：应限制允许的 scheme/host/port�
 | 资源 | 超大 body、深层 JSON、慢上传、高并发和昂贵查询 |
 | 外联 | SSRF 到 localhost、metadata endpoint、重定向后的内网地址 |
 
-> [!summary] 核心摘要
-> 选择一个“修改订单”接口，说明身份从哪里来、对象归属如何检查、允许修改哪些字段、怎样限制资源消耗，以及需要哪些负向测试。
+## 场景自测
 
+选择一个“修改订单”接口，说明身份从哪里来、对象归属如何检查、允许修改哪些字段、怎样限制资源消耗，以及需要哪些负向测试。
 官方参考：[OWASP API Security Top 10](https://api-security.owasp.org/editions/2023/en/0x11-t10/) · [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)

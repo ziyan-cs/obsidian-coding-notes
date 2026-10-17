@@ -44,14 +44,14 @@ tags: [algorithm/greedy, algorithm/sliding-window, learning/foundation]
 
 ```cpp
 std::size_t longest_unique(std::string_view s) {
-    std::array<int, 256> last;
-    last.fill(-1);
+    std::array<std::size_t, 256> last;
+    last.fill(std::string_view::npos);
     std::size_t left = 0, answer = 0;
     for (std::size_t right = 0; right < s.size(); ++right) {
         unsigned char c = static_cast<unsigned char>(s[right]);
-        if (last[c] >= 0)
-            left = std::max(left, static_cast<std::size_t>(last[c] + 1));
-        last[c] = static_cast<int>(right);
+        if (last[c] != std::string_view::npos)
+            left = std::max(left, last[c] + 1);
+        last[c] = right;
         answer = std::max(answer, right - left + 1);
     }
     return answer;

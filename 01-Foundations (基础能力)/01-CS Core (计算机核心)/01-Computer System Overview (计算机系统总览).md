@@ -4,12 +4,8 @@ review_due: 2026-10-17
 tags: [cs/architecture, learning/foundation]
 ---
 
-> [!abstract] 阅读方式
+> [!abstract] 学习目标
 > 先用存储程序模型理解“程序怎样驱动硬件”，再沿寄存器传送过程观察一条指令，最后把 ISA、操作系统、固件与微架构放进同一张分层图。本文建立坐标系，不替代后续的数据表示、存储层级和操作系统专题。
-
-> [!summary] 核心摘要
->
-> 程序以指令和数据的形式存放在可寻址存储中，处理器通过取指、译码、执行和提交状态变化推进计算。ISA 规定软件可见的指令、寄存器和异常语义，微架构用流水线、缓存、乱序执行等机制实现 ISA；操作系统和固件在不同阶段管理与抽象硬件资源。
 
 # 存储程序模型与系统部件
 
@@ -27,21 +23,14 @@ tags: [cs/architecture, learning/foundation]
 ## 五类逻辑部件
 
 ```text
-				    ┌─────────────────────┐
-				    │    Control Unit     │
-				    └──────────┬──────────┘
-							   │ control
-		  ┌────────────────────┼────────────────────┐
-		  │                    │                    │
-		  ▼                    ▼                    ▼
-  ┌──────────────┐     ┌───────────────┐     ┌───────────────┐
-  │ Input / I-O  │◄───►│  Main Memory  │◄───►│ Output / I-O  │
-  └──────────────┘     └───────┬───────┘     └───────────────┘
-							   │ data
-							   ▼
-					    ┌──────────────┐
-					    │  ALU / Exec  │
-					    └──────────────┘
+                 System Interconnect
+        ┌──────────────┼──────────────┐
+        │              │              │
+        ▼              ▼              ▼
+  ┌───────────┐  ┌───────────┐  ┌───────────┐
+  │    CPU    │  │  Memory   │  │    I/O    │
+  │ CU + ALU  │  │ code/data │  │ devices   │
+  └───────────┘  └───────────┘  └───────────┘
 ```
 
 | 逻辑部件 | 主要职责 | 现代实现中的对应物 |
@@ -229,11 +218,15 @@ strace -o trace.txt ./demo
 > - 认为指令执行完成就意味着数据已经写入 DRAM。
 > - 认为高级语言语句与机器指令一一对应，忽略编译优化、运行时和系统调用。
 
-# 资料与后续
+> [!summary] 本篇结论
+> 程序以指令和数据的形式存放在可寻址存储中，处理器通过取指、译码、执行和提交状态变化推进计算。ISA 规定软件可见的指令、寄存器和异常语义，微架构用流水线、缓存、乱序执行等机制实现 ISA；操作系统和固件在不同阶段管理与抽象硬件资源。
+
+## 权威依据
 
 本文的现代实现边界核对自 Intel 64/IA-32 手册入口、Arm 关于指令/数据缓存同步的官方说明，以及 UEFI 2.11 规范。版本化实现细节应继续以厂商手册为准。
 
 - [Intel 64 and IA-32 Architectures Software Developer's Manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 - [Arm: Caches and Self-Modifying Code](https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/caches-self-modifying-code-implementing-clear-cache)
 - [UEFI Specification 2.11](https://uefi.org/specs/UEFI/2.11/)
-- 下一步：[Data Representation (数据表示)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Data%20Representation%20(数据表示).md)
+
+下一步：[Data Representation (数据表示)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Data%20Representation%20(数据表示).md)

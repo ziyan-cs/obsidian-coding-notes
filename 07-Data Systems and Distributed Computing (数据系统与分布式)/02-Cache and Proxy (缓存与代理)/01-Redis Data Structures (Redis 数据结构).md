@@ -342,11 +342,11 @@ typedef struct dictEntry {
 ### 触发条件
 
 ```c
-// 扩容条件（负载因子）
+// 以下为 Redis dict 的实现示意；阈值/策略可能随版本变化，不是 Redis 命令层保证
 // load_factor = ht[0].used / ht[0].size
-// 主动扩容：load_factor >= 1（BGSAVE/BGREWRITEAOF 时 >= 5）
-// 被动扩容：load_factor >= 5
-// 缩容条件：load_factor < 0.1
+// 传统实现通常在允许扩容时负载因子达到 1 左右触发扩容；
+// fork 子进程期间为减少 copy-on-write 可能延后普通扩容，强制扩容阈值亦属实现细节
+// 缩容阈值同样属于版本实现细节，具体以目标版本源码/配置验证
 
 // 扩容后新 size = 第一个 >= ht[0].used * 2 的 2^n
 ```

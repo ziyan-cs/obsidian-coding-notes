@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-11-04
+review_due: 2026-11-18
 tags: [language/python, python/files]
 ---
 
@@ -73,7 +73,6 @@ def replace_text(target: Path, content: str) -> None:
 
 `read_text()` 会把完整文件放入内存。大日志按行迭代，二进制大对象按块读取。流式只限制输入缓冲；若把每个唯一用户都放入 dict，聚合状态仍可能耗尽内存。此时需要限制维度、分区、外部排序或数据库。
 
-练习：实现配置文件更新器。它校验 JSON schema，`--dry-run` 展示差异，写临时文件后替换，并通过故意制造非法 JSON、目标目录不存在和写入中断验证失败路径。
 # 动手验证
 
-实现 `summarize_logs.py <directory>`：逐行读取日志、校验输入目录、统计级别并输出 JSON。先在临时目录运行，加入 `--dry-run` 展示目标与预计变更；测试非法 JSON、无权限目标和替换失败，确认旧文件仍可读取、临时文件被清理。
+实现 `update_config.py <path>`：读取并校验 JSON 配置，`--dry-run` 展示差异；正式写入时先在目标目录创建临时文件，再替换原文件。测试非法 JSON、目标目录不存在和写入中断，确认旧文件仍可读取、临时文件被清理。若再扩展为日志汇总，应逐行处理并对聚合维度设上限。

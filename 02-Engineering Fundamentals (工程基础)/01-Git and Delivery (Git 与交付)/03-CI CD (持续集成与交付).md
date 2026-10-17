@@ -24,7 +24,7 @@ commit/PR
   → 运行期验证
 ```
 
-# 触发器与事件边界
+# 信任边界与工作流权限
 
 PR 流水线处理不可信贡献时，应避免让代码获得仓库写权限和 secrets。特别要理解 `pull_request` 与 `pull_request_target` 的信任边界：后者在目标仓库上下文运行，若检出并执行攻击者代码可能泄露凭据。
 
@@ -38,7 +38,7 @@ concurrency:
 
 触发条件要覆盖默认分支、PR、tag 和手工发布等实际流程，避免只在 feature branch 验证、合并后组合却从未测试。
 
-# 最小权限与依赖固定
+## 最小权限与依赖固定
 
 GitHub Actions 的 `GITHUB_TOKEN` 权限应显式最小化：
 
@@ -51,7 +51,7 @@ permissions:
 
 第三方 action 也是供应链依赖。高风险环境应固定到完整 commit SHA，并由自动化工具跟踪升级；仅使用可变 tag 会让同一工作流在未来执行不同代码。
 
-# 一份可解释的 C++ CI
+# 流水线与不可变制品
 
 ```yaml
 name: ci
@@ -74,12 +74,16 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        compiler: [gcc, clang]
+        include:
+          - compiler: gcc
+            cxx: g++
+          - compiler: clang
+            cxx: clang++
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@<full-commit-sha>
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
       - name: Build
         run: cmake --build build --parallel
       - name: Test
@@ -90,7 +94,7 @@ jobs:
 
 矩阵只覆盖有价值差异：编译器、操作系统、构建类型或关键依赖版本。组合爆炸时设置一个快速必过集合，再把昂贵覆盖放到夜间/发布流程，但不要让非必过任务永久失败无人处理。
 
-# 缓存不是制品
+## 缓存不是制品
 
 - **cache**：可删除的性能优化，命中错误不得改变构建语义；key 必须包含锁文件、工具链和相关配置。
 - **artifact**：本次运行需要保存、下载或交付的结果，具有明确保留期和摘要。
@@ -98,7 +102,7 @@ jobs:
 
 缓存投毒和跨信任边界恢复必须纳入威胁模型。排查疑似缓存错误时，先做无缓存干净构建。
 
-# 门禁、环境与发布
+# 发布与交付证据
 
 GitHub environment 可绑定生产等目标，并设置审批、分支限制和 secrets。保护规则通过后，job 才能访问对应环境凭据。
 
@@ -112,11 +116,11 @@ GitHub environment 可绑定生产等目标，并设置审批、分支限制和 
 
 回滚应用版本不一定能回滚数据变更。破坏性 schema 修改应分阶段：先兼容读写，再迁移数据，最后删除旧结构。
 
-# 制品完整性与 provenance
+## 制品完整性与 provenance
 
 保存依赖清单/SBOM、构建参数、工具链或 runner 镜像、制品哈希。Artifact attestation 可声明制品由哪个仓库、commit 和 workflow 构建；只有消费端验证 attestation 时才产生安全价值。
 
-# 失败诊断顺序
+# 故障诊断与验收
 
 1. 确认失败 job、step 和首个根因，而非最后一串级联错误；
 2. 对比本地与 CI 的工具链、环境变量、工作目录、权限和网络；
@@ -124,7 +128,7 @@ GitHub environment 可绑定生产等目标，并设置审批、分支限制和 
 4. 使用相同容器/命令本地复现；
 5. 修复后保留最小回归证据，禁止用无界重试掩盖 flaky test。
 
-# 检查理解
+## 检查理解
 
 1. Continuous Delivery 与 Deployment 的差别在哪里？
 2. 为什么 cache 命中不能成为构建正确性的前提？

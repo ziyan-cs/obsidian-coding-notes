@@ -6,7 +6,7 @@ tags: [learning/standard, language/go, backend]
 > [!abstract] 完成标准
 > Go 主线以可维护的并发服务为目标。学完后应能写出边界清楚、可取消、可测试、可观测并能优雅退出的 HTTP/RPC 服务。
 
-版本基线：以 Go 1.27 官方文档核对语言与标准库；动手前用 `go version` 确认本机工具链，并在 `go.mod` 的 `go` 行声明项目最低版本。`ServeMux` 方法路由要求 Go 1.22+；Go 1.27 才支持具体类型的泛型方法。
+示例按 Go 1.27 文档核对，但不是要求所有项目都使用最新版本。动手前用 `go version` 确认工具链，并在 `go.mod` 声明项目最低 Go 版本；Go 1.22 加入 `ServeMux` 方法路由，Go 1.27 加入具体类型的泛型方法（generic methods），但 interface 仍不能声明带类型参数的方法。需要兼容旧版本时，按项目最低版本选择语法和标准库 API。
 
 # 语言与工程基础
 

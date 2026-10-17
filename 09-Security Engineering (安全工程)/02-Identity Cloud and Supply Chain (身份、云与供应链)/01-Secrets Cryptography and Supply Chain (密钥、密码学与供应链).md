@@ -67,7 +67,8 @@ TLS 保护传输链路，但不会自动解决服务端越权、日志泄密、�
 - [ ] 服务被入侵后，它的账户和网络权限能否限制横向移动？
 - [ ] 日志和审计记录是否足以回答谁在何时访问或修改了敏感资源？
 
-> [!summary] 核心摘要
-> 从一个数据库密码的创建开始，说明它如何进入服务、怎样限制权限、如何轮换、怎样避免进入日志和镜像，以及泄漏后如何撤销并审计影响。
+## 生命周期自测
+
+从一个数据库密码的创建开始，说明它如何进入服务、怎样限制权限、如何轮换、怎样避免进入日志和镜像，以及泄漏后如何撤销并审计影响。
 
 参考：[OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) · [SLSA Supply-chain Levels](https://slsa.dev/)

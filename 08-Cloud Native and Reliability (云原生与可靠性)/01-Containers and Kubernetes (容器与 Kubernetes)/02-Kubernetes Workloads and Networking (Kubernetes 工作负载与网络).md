@@ -105,7 +105,7 @@ Pod IP 会变化。Service 用 selector 选择一组后端 Pod，并提供稳定
 - 临时磁盘、PID、连接数和下游配额同样可能成为资源边界。
 - 优雅终止需要应用处理 SIGTERM、停止接流量、排空请求，并与 `terminationGracePeriodSeconds` 配合。
 
-> [!summary] 核心摘要
-> 从一次 Deployment 更新开始，说明 API Server、controller、scheduler、kubelet、Pod 和 Service 分别做什么；再解释一个 Pod Running 但请求仍失败时应检查哪些层。
+## 架构自测
 
+从一次 Deployment 更新开始，说明 API Server、controller、scheduler、kubelet、Pod 和 Service 分别做什么；再解释一个 Pod Running 但请求仍失败时应检查哪些层。
 官方参考：[Kubernetes Cluster Architecture](https://kubernetes.io/docs/concepts/architecture/) · [Pods](https://kubernetes.io/docs/concepts/workloads/pods/) · [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)

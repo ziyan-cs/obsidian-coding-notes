@@ -16,6 +16,26 @@ study_stage: backlog
 | 编译期多态 | templates / concepts |
 | 异构对象集合 | 基类指针或 type erasure，并管理生命周期 |
 
+## 封装与访问控制
+
+封装的重点是守住对象不变量：外部通过稳定的 `public` 接口操作对象，不能绕过校验直接改内部状态。`class` 默认成员访问级别是 `private`，`struct` 默认是 `public`；显式写出访问级别更利于阅读。
+
+| 访问级别 | 类内 | 派生类 | 外部 |
+| --- | --- | --- | --- |
+| `private` | 可访问 | 不可直接访问 | 不可访问 |
+| `protected` | 可访问 | 可访问 | 不可访问 |
+| `public` | 可访问 | 可访问 | 可访问 |
+
+继承声明还会改变基类 `public` / `protected` 成员在派生类中的访问级别：
+
+| 继承方式 | 基类 `public` 成员 | 基类 `protected` 成员 |
+| --- | --- | --- |
+| `public` | `public` | `protected` |
+| `protected` | `protected` | `protected` |
+| `private` | `private` | `private` |
+
+基类的 `private` 成员始终不能被派生类直接访问；它们仍属于基类子对象，可由基类自己的成员函数管理。
+
 ## 必须守住的规则
 
 1. 多态基类通常应有 virtual destructor，否则经由基类指针删除派生对象是未定义行为。
@@ -45,6 +65,8 @@ base pointer --> dynamic object --> implementation metadata
 面试时先讲动态类型与 final overrider，再补充“很多实现借助虚表”。对象大小、反汇编和布局输出可用于观察本机实现，不能拿来推导语言保证。
 
 ```cpp
+#include <iostream>
+
 class Base {
 public:
     virtual void foo() { std::cout << "Base::foo\n"; }
@@ -59,13 +81,17 @@ public:
 };
 
 // 观察本机实现：这里的 sizeof 结果由编译器、ABI 与目标平台决定。
-std::cout << sizeof(Base) << ' ' << sizeof(Derived) << '\n';
+int main() {
+    std::cout << sizeof(Base) << ' ' << sizeof(Derived) << '\n';
+}
 ```
 
 ## 虚函数调用流程
 
-```
-Base* p = new Derived();
+```cpp
+// 接上方的 Base 与 Derived 定义：
+Derived object;
+Base* p = &object;
 p->foo();
 // 语义：根据对象动态类型调用 foo 的最终覆盖者。
 // 实现可能使用虚表；优化器若证明动态类型，也可能去虚化并内联。
@@ -94,13 +120,26 @@ class Leaf final : public Derived { };  // 禁止继承 Leaf
 > [!note] 本节重点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp
-// 动态分派：运行时根据对象实际类型查 VTable
+#include <iostream>
+
+// 一个最小可编译的多态示例；动态分派是语言语义，vtable 只是常见实现方式。
+struct Animal {
+    virtual ~Animal() = default;
+    virtual void speak() const { std::cout << "Animal\n"; }
+};
+struct Dog : Animal {
+    void speak() const override { std::cout << "Dog\n"; }
+};
+struct Cat : Animal {
+    void speak() const override { std::cout << "Cat\n"; }
+};
+
 void makeSpeak(Animal* a) {
-    a->speak();   // 不是 Animal::speak，而是 a 实际类型的 speak
+    if (a) a->speak();
 }
 
-Dog d("Rex");
-Cat c("Whiskers");
+Dog d;
+Cat c;
 makeSpeak(&d);   // Derived::speak via VTable
 makeSpeak(&c);   // Derived::speak via VTable
 ```
@@ -108,9 +147,9 @@ makeSpeak(&c);   // Derived::speak via VTable
 ## 切片问题（Object Slicing）
 
 ```cpp
-// 按值传递/赋值时，派生类部分被"切掉"
-Dog dog("Rex");
-Animal a = dog;    // 切片！a 只有 Animal 部分，vptr 指向 Animal::VTable
+// 按值初始化时，派生类部分被切片；切片后的对象动态类型就是 Animal。
+Dog dog;
+Animal a = dog;    // 只保留 Animal 基类子对象
 a.speak();         // 调用 Animal::speak，而非 Dog::speak
 
 // 解决：通过指针或引用使用多态

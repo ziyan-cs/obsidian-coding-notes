@@ -1,6 +1,6 @@
 ---
 study_stage: learn
-review_due: 2026-11-11
+review_due: 2026-11-25
 tags: [language/python, python/cli]
 ---
 
@@ -103,9 +103,8 @@ def probe(repository: Path) -> str:
 
 对部分成功的批处理，输出成功、跳过、失败与可重试清单；重复执行不应再次破坏已经完成的项目。危险操作增加明确确认或 `--force`，但自动化环境不能依赖交互式提示。
 
-练习：实现批量文件转换 CLI。配置来自文件、环境与参数；dry-run 输出计划；真实运行使用临时文件原子替换；非法输入返回 2，运行失败返回 1，并为 subprocess timeout 写测试。
 # 动手验证
 
-给日志汇总工具加入 `--output`、`--min-level` 和 `--dry-run`，测试以下契约：正常输出只写 stdout；非法参数由 argparse 返回非零；不可读文件写 stderr 且不输出半成品；`--dry-run` 不修改目标。若输出将覆盖现有文件，还要复用文件专题中的临时文件与清理策略。
+实现批量文件转换 CLI：配置可由文件、环境变量和命令行覆盖；`--dry-run` 展示计划；真实运行通过临时文件安全替换。验证正常结果只写 stdout，非法参数和运行失败写 stderr 并返回稳定的非零退出码；子进程 timeout 不留下仍在运行的直接子进程。若工具会创建子进程树，还需针对目标操作系统验证子进程树的清理方式。
 
 官方参考：[argparse](https://docs.python.org/3/library/argparse.html) · [subprocess](https://docs.python.org/3/library/subprocess.html)。
