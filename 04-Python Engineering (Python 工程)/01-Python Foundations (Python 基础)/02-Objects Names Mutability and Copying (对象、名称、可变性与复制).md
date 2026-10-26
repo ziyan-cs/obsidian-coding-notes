@@ -1,6 +1,6 @@
 ---
-study_stage: D1
-review_due: 2026-10-17
+study_stage: backlog
+review_due:
 tags:
   - language/python
   - python/object-model

@@ -1,6 +1,7 @@
 ---
-study_stage: D3
-review_due: 2026-10-18
+study_stage: backlog
+review_due:
+
 ---
 
 > [!abstract] 学习目标

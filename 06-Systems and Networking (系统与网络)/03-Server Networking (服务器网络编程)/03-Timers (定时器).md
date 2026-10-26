@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 定时器把到期时间转换为事件循环中的待处理工作；设计取舍集中在插入/取消成本、精度、定时器规模与回调是否阻塞 loop。

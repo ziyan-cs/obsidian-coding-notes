@@ -1,6 +1,7 @@
 ---
-study_stage: learn
-review_due: 2026-10-29
+study_stage: backlog
+review_due:
+
 ---
 > [!summary] 核心摘要
 >

@@ -28,8 +28,8 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAct
             return
         }
 
-        $due = [regex]::Match($frontmatter.Groups[1].Value, '(?m)^review_due:\s*([^#\r\n]+)')
-        if (-not $due.Success) {
+        $due = [regex]::Match($frontmatter.Groups[1].Value, '(?m)^review_due:[ \t]*([^#\r\n]*)')
+        if (-not $due.Success -or [string]::IsNullOrWhiteSpace($due.Groups[1].Value)) {
             return
         }
 

@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 系统调用是进程请求内核操作资源的受控边界；库函数可能封装 syscall，也可能只在用户态完成工作，动态链接另涉及装载与 ABI。

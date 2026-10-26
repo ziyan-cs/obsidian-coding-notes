@@ -1,6 +1,6 @@
 ---
-study_stage: D7
-review_due: 2026-10-20
+study_stage: D3
+review_due: 2026-10-23
 ---
 
 > [!abstract] 学习定位

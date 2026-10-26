@@ -1,6 +1,7 @@
 ---
-study_stage: learn
-review_due: 2026-11-26
+study_stage: backlog
+review_due:
+
 ---
 
 > [!abstract] 学习目标

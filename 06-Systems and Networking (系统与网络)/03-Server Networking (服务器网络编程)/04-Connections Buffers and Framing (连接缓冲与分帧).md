@@ -1,263 +1,164 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
-> [!abstract] 连接对象要统筹 fd、协议状态、读写缓冲与生命周期；TCP 是字节流，应用协议必须自行恢复消息边界并处理背压与关闭竞态。
+> [!abstract] TCP 只提供有序字节流，不保留应用消息边界。服务器必须在每条连接上保存未解析输入与待发送输出，并用有界缓冲、增量解析和事件循环协作处理部分读写、慢客户端与关闭。
 
-> [!summary] 核心摘要
->
-> 连接对象同时管理 fd、读写缓冲、协议解析状态和生命周期。TCP 是字节流，必须用长度、分隔符或固定格式恢复消息边界，并处理半包、粘包、背压和关闭竞态。
+> [!summary] 阅读主线
+> 收到字节 → 累积到输入缓冲 → 按协议解析完整帧 → 交给业务；业务响应进入输出缓冲 → 持续发送直到清空或暂时不可写。缓冲区只解决“字节暂存”，分帧器解决“消息边界”，两者不能混为一谈。
 
-# Connection Pool Design (连接池设计)
+## TCP 字节流为什么需要分帧
 
-> [!note] 本节重点：连接池多线程安全设计、连接复用与回收、池大小调优与性能隔离
+TCP 的可靠性体现在字节有序交付，不意味着一次 `send()` 对应一次 `recv()`。一次发送的数据可能被拆成多次读取，多次发送的数据也可能在一次读取中一起到达。接收端不能根据 TCP 段、包或 `recv()` 返回次数判断应用消息边界。[RFC 9293](https://www.rfc-editor.org/rfc/rfc9293.html)
 
-## 为什么需要连接池
-
-建立连接可能付出 TCP 往返、TLS 握手、认证和连接初始化成本；典型 TCP 客户端需要约 1 RTT 才能完成建连，TLS 1.3 完整握手通常再需 1 RTT，恢复路径与 TCP Fast Open/QUIC 则另论。不能把“1.5 RTT + 1–2 RTT”当作所有连接的固定公式。初始拥塞窗口也会影响新连接的数据传输。
-
-对于频繁的短时请求，每次新建连接的开销巨大。连接池通过**复用已有连接**消除这些开销。
-
-## 连接池的核心职责
+例如发送端依次写入 `HELLO`、`WORLD`，接收端可能观察到：
 
 ```text
-┌───────────────────────────────────────────┐
-│  Application                              │
-├──────────┬──────────┬─────────────────────┤
-│ Thread 1 │ Thread 2 │  Thread 3           │
-└─────┬────┴─────┬────┴────────┬────────────┘
-      │ get()    │ get()       │ get()
-      ▼          ▼              ▼
-┌───────────────────────────────────────────┐
-│  Connection Pool                          │
-├───────────────────────────────────────────┤
-│  ┌─────────────────────┐  ┌────────────┐  │
-│  │ Idle Connection Q   │  │ In-Use Set │  │
-│  │ (idle_connections)  │  │ (in_use)   │  │
-│  └──────────┬──────────┘  └──────┬─────┘  │
-│             │                    │        │
-│     ┌───────┴───────┐    ┌───────┴───┐    │
-│     │ min_idle      │    │ max_size  │    │
-│     └───────────────┘    └───────────┘    │
-└──────────┬────────────────────────────────┘
-           │ acquire/release
-           ▼
-┌───────────────────────────────────────────┐
-│  Database                                 │
-├──────────┬──────────┬─────────────────────┤
-│ MySQL 1  │ MySQL 2  │  MySQL 3            │
-└──────────┴──────────┴─────────────────────┘
+发送调用：  [ HELLO ] [ WORLD ]
+可能读取：  [ HE ] [ LLOWWO ] [ RLD ]
+也可能：    [ HELLOWORLD ]
 ```
 
-**核心参数：**
-- `min_idle`：最小空闲连接数（预热保持）
-- `max_idle`：最大空闲连接数（防止资源浪费）
-- `max_total`：最大总连接数（防止打垮后端）
-- `max_wait`：获取连接的最大等待时间
+常说的“粘包 / 半包”不是 TCP 把应用消息弄坏了，而是应用把字节流误当成了消息队列。正确做法是定义应用层 framing（分帧规则），并在收到足够字节前保留解析状态。
 
-## 连接池的状态与所有权
+常见 framing 方案：
 
-真实连接池的核心不是一段链表代码，而是保持 `idle + leased + creating + returning <= max_total`（建连预留与归还清理中的连接也计入容量）。一条连接在任意时刻只属于其中一种状态；返回池时必须先从借用集合移出。池关闭后不再发放连接，所有等待者得到明确错误。
+| 方案 | 边界规则 | 优点 | 需要防范 |
+| --- | --- | --- | --- |
+| 固定长度 | 每帧长度固定 | 解析简单、开销低 | 可变内容需要填充或拆成多种固定格式 |
+| 分隔符 | 以换行、零字节等结束 | 文本协议直观 | 内容中的分隔符要转义；必须限制最大帧长 |
+| 长度前缀 | 头部声明 payload 长度 | 支持任意二进制内容 | 校验长度字段、字节序、整数溢出和最大帧长 |
+| 自描述格式 | 由格式本身解析边界 | 语义丰富 | 仍要有完整性判断、深度/大小限制和解析成本控制 |
 
-| 操作 | 必须处理的边界 |
-| --- | --- |
-| `acquire(deadline)` | 空闲连接可能已失效；池满时等待必须保留原 deadline，取消/关闭要唤醒等待者 |
-| 建连 | 先在锁内预留容量，再解锁执行可能阻塞的 connect/auth；失败时回收预留并通知等待者 |
-| `release(conn)` | 连接只归还一次；事务/协议状态须复位，坏连接要从借用集合移除并释放容量 |
-| 健康检查 | 锁内摘取候选，锁外做网络 I/O；检查通过也不保证下一次使用不会断开 |
-| `close()` | 拒绝新借用，关闭空闲连接，等待或取消在用连接并按期限返回 |
+对于长度前缀协议，假设头部为 4 字节无符号大端长度，解析顺序应是：先等齐 4 字节头部，解码长度并检查 `length <= max_frame_size`，再等齐 `4 + length` 字节，最后交付 payload。不能先按未经验证的长度分配内存。
+
+## 每条连接的状态与缓冲区
+
+事件驱动服务器通常为每个连接维护 `fd`、输入缓冲区、输出缓冲区、解析状态、关闭状态和所属 event loop。连接状态由所属 loop 串行修改，可避免多个线程同时移动缓冲区游标、改变 epoll 关注事件或重复关闭 fd。
 
 ```text
-acquire(deadline):
-  lock pool
-  loop:
-    if closing: unlock; return pool-closed
-    if idle exists: take one; mark leased; unlock; validate/use or retire
-    if idle + leased + creating + returning < max_total:
-      creating++; unlock; connect with deadline
-      lock; creating--; if success and not closing: mark leased; unlock; return
-      notify waiter; unlock; return connection error
-    wait on condition until state changes or original deadline expires
-
-release(conn):
-  lock; verify conn is leased exactly once; move leased -> returning; unlock
-  reset protocol state outside lock (may fail or require I/O)
-  lock; move returning -> idle only if healthy, open and below idle limit
-  otherwise release capacity; notify waiter; unlock; close retired conn
+socket readable
+      │ recv() 得到任意数量字节
+      ▼
+┌──────────────────────────────┐
+│ Input Buffer                 │  保存尚未组成完整帧的字节
+└──────────────┬───────────────┘
+               │ incremental parser
+               ▼
+        complete frame(s) ──→ business handler
+                                  │ response bytes
+                                  ▼
+┌──────────────────────────────┐
+│ Output Buffer                │  保存尚未成功写出的字节
+└──────────────┬───────────────┘
+               │ send()，直到清空或 EAGAIN
+               ▼
+             socket
 ```
 
-这是**算法伪代码**，不是可直接编译的 C/C++。实际实现还需解决“锁外校验后状态又变化”的并发竞态、建连失败后的唤醒、条件变量虚假唤醒、时钟选择、连接所有权与异常安全。`pthread_cond_timedwait` 默认按条件变量配置的时钟解释绝对时间；若选择单调时钟，初始化属性与构造 deadline 必须一致，不能递归重置超时。
-
-## 活性与容量验证
-
-测试至少覆盖：池满时等待直到超时；多个等待者被归还连接唤醒；建连失败后容量不泄漏；关闭期间借用者归还；坏连接不再发放；重复 release 被拒绝。指标应包含空闲/借用/创建中数量、等待队列、等待耗时、建连错误、超时和失效淘汰。只有保证不变量与故障路径，才谈池大小调优。
-
-## 连接池大小调优
-
-**误区：连接池越大越好**
-
-```
-连接池大小的启发式（仅用于提出初始假设，MEASURE_LOCALLY）：
-  连接数 = 核心数 × (1 + 等待时间 / 处理时间)
-
-  例如：CPU 8 核，请求处理时间 5ms，等待 DB 响应 20ms
-  连接数 = 8 × (1 + 20/5) = 8 × 5 = 40
-
-  连接太少：CPU 等待，利用率低
-  连接太多：上下文切换 + 资源竞争，性能反而下降
-```
-
-**调优实践：**
-1. 从较小的池开始（如 10-20）
-2. 逐步增加，观察 TPS/QPS 增速
-3. 当 TPS 不再随连接数增长时停止
-4. 监控连接等待超时率
-
-> [!tip]- **工程要点**：连接池的正确实现涉及超时、取消、健康检查、关闭、总连接上限与监控。不要在池锁内执行可能阻塞的建连或健康检查；连接数先由后端容量和等待指标约束，再用压测调整。不存在通用“最快连接池”实现。
-
-> [!question]- 连接池检查
->
-> - **常见误区**：连接池越大越好（实际受核心数与等待/处理时间比值约束，过大反而增加上下文切换）；归还前不校验存活，把坏连接放回池中。
-> - **自测**：1) `min_idle` / `max_idle` / `max_total` 分别控制什么？ 2) 如何避免"取到已被服务端关闭的连接"？
->
->
-
-# Protocol Framing and Buffering (协议分帧与缓冲区)
-
-> [!note] 本节重点：读写 Buffer 设计模式、缓冲区扩容策略、读事件与写事件的管理
-
-## 为什么需要 Buffer
-
-网络编程中，数据以流的形式到达，无法预知每次 `read()` 会收到多少数据：
+一种连续内存 buffer 可用两个游标表示：
 
 ```text
-┌──────────────────────────┐    ┌──────────────────────────┐
-│  Network Interface /     │    │  Network Interface /     │
-│  Socket                  │    │  Socket                  │
-└──────────┬───────────────┘    └──────────────────────────┘
-           │ epoll readable             ▲
-           ▼                            │ epoll writable
-┌──────────────────────────┐    ┌───────┴──────────────────┐
-│  Read Buffer             │    │  Write Buffer            │
-│  (ring buffer / kbuf)    │    │  (ring buffer / kbuf)    │
-│  read_pos → write_pos    │    │  write_pos → send_pos    │
-└──────────┬───────────────┘    └──────────────────────────┘
-           │ read / parse               ▲
-           ▼                            │ encode / serialize
-┌───────────────────────────────────────┴──────────────────┐
-│  Application Layer Processing                            │
-└──────────────────────────────────────────────────────────┘
+0                 read_pos          write_pos             capacity
+| 已消费、可回收 | 未消费的有效字节 |       空闲尾部       |
+                  [-----------------)
 ```
 
-## Buffer 核心结构
+不变量是 `0 <= read_pos <= write_pos <= capacity`，可读数据位于 `[read_pos, write_pos)`。解析器消费完整帧后推进 `read_pos`；当所有数据都消费完，可将两个游标重置为 0。若尾部空间不足但头部已有可回收空间，可以把未消费字节向前 compact；不需要每次读事件都 compact。
 
-```c
-typedef struct buffer {
-    char *data;           // 底层内存
-    size_t capacity;      // 总容量
-    size_t read_pos;      // 已读位置（读指针）
-    size_t write_pos;     // 已写位置（写指针）
-} buffer;
+实现时要明确区分三个量：已消费字节、待解析字节、缓冲区总容量。扩容前检查加法/乘法是否溢出、是否超过配置上限以及分配失败如何回滚。扩容失败时，原 buffer 必须仍然有效。
 
-// 图解：
-//
-//          read_pos    write_pos capacity
-//          │           │         │
-//          v           v         v
-//  ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐
-//  │ │ │ | │H│e│l│l│o│ │W│o│r│l│d│ │ │ │ | | | |
-//  └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘
-//  ┌───────┬─────────────────────┬─────────────┐
-//  | Read  |   Pending Valid     | Free Write  |
-//  | Area  │      Data           │   Space     │
-//  ├───────┴─────────────────────┼─────────────┤
-//  |    ← Recyclable Memory →    |             |
-//  └─────────────────────────────┴─────────────┘
-```
+## 增量解析与非阻塞读取
 
-**核心不变量：** `0 <= read_pos <= write_pos <= capacity`；可读区间为 `[read_pos, write_pos)`。必须另设每连接读/写缓冲上限，防止慢客户端或恶意长度让内存无界增长。
+分帧器应当像状态机一样工作：输入不足时返回“需要更多数据”，而不是把不完整帧当成错误；输入中有多帧时可以连续解析，但每帧都必须完整且合法。
 
 ```text
-append(bytes):
-  reject if bytes exceeds configured remaining capacity
-  if tail space insufficient: compact unread bytes only when worthwhile
-  if still insufficient: grow to at least write_pos + bytes.length
-      check size_t overflow, max capacity and allocation failure first
-  copy bytes into tail; advance write_pos
+parse(input):
+  while true:
+    if 当前协议头不完整:
+      return NEED_MORE
 
-consume(n):
-  n = min(n, write_pos - read_pos)
-  process/copy exactly n bytes; advance read_pos
-  if read_pos == write_pos: reset both offsets to zero
+    frame_length = 解码并校验协议头
+    if frame_length 非法或超过 max_frame_size:
+      return PROTOCOL_ERROR
+
+    if 当前完整帧尚未到齐:
+      return NEED_MORE
+
+    frame = 取出一帧
+    dispatch(frame)
+    consume(frame_length)
 ```
 
-这是状态算法，不是可直接编译的 C。若用 `realloc`，先写入临时指针，成功后才替换旧指针；否则分配失败会丢失原指针。扩容不能只做一次 `capacity * 2`：大请求可能仍放不下，而且乘法会溢出。读取协议长度字段后先校验最大帧长，再考虑分配。
-
-## 写 Buffer 与事件管理
-
-非阻塞 `send/write` 可能只写一部分，也可能返回 `EINTR`、`EAGAIN`、`EPIPE` 等。以下流程由连接所属 I/O loop 执行，跨线程业务结果必须先投递回该 loop：
+对非阻塞 socket，`recv()` 返回值必须逐种处理：`n > 0` 表示只收到这 `n` 个字节；`n == 0` 表示对端有序关闭发送方向；`EINTR` 可按策略重试；`EAGAIN/EWOULDBLOCK` 表示当前没有更多可读数据，应回到事件循环。一次 `recv()` 不保证填满缓冲区或一个协议帧。[Linux `recv(2)`](https://man7.org/linux/man-pages/man2/recv.2.html)
 
 ```text
-enqueue(response):
-  if pending bytes + response exceeds high-water mark: pause read / reject / close by policy
-  append response to bounded write buffer; try_flush()
+on_readable(connection):
+  while input_buffer 未达到上限:
+    n = recv(fd, input_buffer 的可写区域)
+    if n > 0: 提交这 n 个字节；继续读取
+    if n == 0: 标记 peer_eof；停止等待新的输入
+    if errno == EINTR: continue
+    if errno == EAGAIN 或 EWOULDBLOCK: break
+    否则: 通过连接所属 loop 进入错误关闭流程
+
+  parse(input_buffer)
+```
+
+如果输入缓冲达到上限仍不能解析出完整帧，不能继续无界读取。根据协议与服务策略，可判为超大/非法帧、暂停该连接的读事件，或关闭连接。暂停读取期间要有恢复条件和超时，否则连接可能永久占用资源。
+
+## 输出缓冲、部分写入与背压
+
+`send()` 成功返回只表示本次有若干字节被本地内核接受，不代表整个应用响应已经写完，更不代表对端应用已处理。返回值 `n` 后，只能从输出缓冲中移除前 `n` 个字节；剩余部分必须保留供下一次可写时继续发送。[Linux `send(2)`](https://man7.org/linux/man-pages/man2/sendmsg.2.html)
+
+```text
+queue_response(bytes):
+  若 pending_output + bytes 超过上限:
+    按策略拒绝、暂停上游生产或关闭连接
+  否则追加到 output_buffer
+  try_flush()
 
 try_flush():
-  while pending bytes exist:
-    n = send(fd, pending prefix)
-    if n > 0: consume exactly n bytes; continue
-    if EINTR: retry
-    if EAGAIN or EWOULDBLOCK: enable EPOLLOUT; return
-    otherwise: record error and close connection through owner loop
-  disable EPOLLOUT when buffer becomes empty
-  if pending bytes dropped below low-water mark: resume reads if safe
+  while output_buffer 非空:
+    n = send(fd, 尚未发送的连续字节)
+    if n > 0: 恰好消费 n 字节；继续
+    if errno == EINTR: continue
+    if errno == EAGAIN 或 EWOULDBLOCK:
+      注册可写事件；返回
+    否则:
+      通过所属 loop 处理错误关闭
+
+  移除可写事件关注
+  若此前因背压暂停读取且低水位条件满足，则恢复读取
 ```
 
-`EPOLLOUT` 通常持续就绪，因此不要在无待发送数据时长期关注它，否则事件循环可能空转。ET 模式下处理一次可写事件后应尽力发送到 `EAGAIN` 或清空；LT 模式也要限制单连接单轮工作量，避免饿死其他连接。对端关闭与 fd 复用期间，只有所属 loop 才能安全修改该连接的事件和缓冲状态。
+socket 通常很快就处于可写状态，因此不应在输出缓冲为空时一直关注 `EPOLLOUT`，否则 loop 可能反复收到无工作可做的事件。输出从空变为非空时尝试立即发送；只有遇到 `EAGAIN` 且仍有待发送字节时才关注可写事件，清空后及时取消关注。
 
-## 扩容策略对比
+背压（backpressure）是让数据生产速度服从下游消费能力，而不是不断堆积内存。常见做法是设置高低水位：输出超过 high-water mark 时暂停读取或限制业务继续产出；降到 low-water mark 后再恢复。还应设置每连接和全局内存上限、帧大小上限、空闲超时及慢客户端策略，防止少数连接耗尽进程资源。
 
-| 策略 | 空间浪费 | 扩容次数 | 适用场景 |
-|------|---------|---------|---------|
-| 固定大小 | 无 | 0 | 已知最大消息大小 |
-| 翻倍扩容 | 最多浪费 50% | O(log n) | 通用场景 |
-| 1.5 倍扩容 | 略多 | O(log n) | 内存敏感场景 |
-| 分段链表（chain） | 极少 | 无需扩容 | 流式处理 |
+## 生命周期、边界与验证
 
-**翻倍扩容 vs 1.5 倍：**
-- 翻倍扩容：每次扩容大小翻倍，均摊 O(1)，但可能浪费内存
-- 1.5 倍扩容：增长更平缓，内存利用率更高（翻倍可能导致下一块分配失败）
+关闭不是简单地 `close(fd)`：连接可能仍有待处理输入、待发送响应或尚未完成的业务任务。应区分“停止接收新数据”“对端发送方向 EOF”“停止生成响应”“输出排空”和“最终释放连接”。如果协议允许半关闭，收到 EOF 后仍可能需要发送最后的响应；如果协议不允许，则可直接按协议错误处理。具体策略由协议定义。
 
-## 零拷贝 Buffer
+在 Reactor 架构中，连接对象及其缓冲区最好由一个 event loop 独占。工作线程完成计算后，把结果投递回连接所属 loop，再由 loop 更新输出缓冲、事件关注和生命周期。这样可避免 worker 与关闭流程并发访问已释放对象或被系统复用的 fd。
 
-高级 Buffer 设计使用**指针/偏移量**而非 memcpy 来避免数据拷贝：
+最值得做的测试不是只测“正常请求成功”，而是主动打碎边界：
 
-```c
-// 使用分散-聚集 IO（readv/writev）
-typedef struct buffer_chain {
-    struct buffer_chain *next;
-    char *data;
-    size_t len;
-    size_t total_size;  // 包含未使用部分
-} buffer_chain;
+- 将一个帧拆成逐字节输入；把多个帧合并一次输入；验证都能得到相同帧序列。
+- 长度头只到一部分、payload 只到一部分、连续多帧后剩余半帧。
+- 长度字段为 0、最大允许值、超过上限、整数边界值和非法格式。
+- 输出端模拟短写、`EINTR`、`EAGAIN`，确认字节不丢、不重、不乱序。
+- 慢客户端持续不读、读缓冲满、写缓冲越过高水位、降到低水位后恢复。
+- 对端在帧中途关闭、输出排空前关闭、本地关闭与事件回调交错。
 
-// writev 一次发送多个 buffer_chain
-struct iovec iov[MAX_IOV];
-int iovcnt = 0;
-for (buffer_chain *c = head; c && iovcnt < MAX_IOV; c = c->next) {
-    iov[iovcnt].iov_base = c->data;
-    iov[iovcnt].iov_len = c->len;
-    iovcnt++;
-}
-ssize_t n = writev(fd, iov, iovcnt);
-```
+判断实现是否可靠，可检查四个不变量：缓冲区索引始终合法；每个输入字节只被消费一次；每个输出字节只在 `send()` 确认接受后移除；任何单连接都不能让内存和处理时间无界增长。
 
-## 实际项目中的 Buffer
+> [!tip] 实现顺序
+> 先写纯内存的 framing parser，并用碎片化输入测试；再接非阻塞读取；接着实现可恢复的部分写；然后加入水位与资源上限；最后接入 Reactor 生命周期。不要先追求零拷贝，先证明边界正确、失败可控。
 
-- **libevent**：`struct evbuffer`，支持链式存储、零拷贝、回调通知
-- **muduo**：`Buffer` 类，用 `std::vector<char>` 实现，prependable 空间支持
-- **Redis**：`sds`（简单动态字符串），用空间预分配消除 realloc 热点
+## 延伸阅读
 
-> [!tip]- **工程要点**：Buffer 设计首先要保证边界、部分读写与背压正确，再考虑减少 copy。Compact 不是“每次读事件都必须做”，应在需要连续空闲空间时再做；`readv`/`writev` 减少用户态拼接，但不自动消除所有 copy 或内核开销。
-
-复查时重点追问两个状态边界：扩容失败后原缓冲区是否仍可用？`EPOLLOUT` 只在有待发送字节时关注，发送完是否确实撤销？**不应**每次读事件都 `compact`；只有尾部空间不足且头部可回收时才考虑搬移。
+- [Socket 与事件循环](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/01-Sockets%20and%20Event%20Loop%20(Socket%20与事件循环).md)：系统调用、非阻塞语义与 socket 生命周期。
+- [Reactor 架构](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/02-Reactor%20Architecture%20(Reactor%20架构).md)：就绪事件如何驱动连接状态机。
+- [RFC 9293：TCP](https://www.rfc-editor.org/rfc/rfc9293.html)。

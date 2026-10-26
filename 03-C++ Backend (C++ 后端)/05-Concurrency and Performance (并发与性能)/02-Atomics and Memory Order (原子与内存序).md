@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 学习目标：能区分 data race、原子性和跨线程同步，并为 release/acquire 写出完整的读写配对条件。

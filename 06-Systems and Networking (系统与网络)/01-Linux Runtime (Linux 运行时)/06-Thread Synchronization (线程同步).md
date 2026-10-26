@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 学习目标：用互斥锁、条件变量和信号量建立同步关系，并识别死锁条件。

@@ -1,6 +1,6 @@
 ---
-study_stage: learn
-review_due: 2026-12-05
+study_stage: backlog
+review_due:
 tags: [cs/os, learning/foundation]
 ---
 

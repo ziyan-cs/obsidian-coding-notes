@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] UDP 保留数据报边界，但不保证送达、顺序或去重；若应用需要可靠性与拥塞控制，必须由上层协议明确提供。

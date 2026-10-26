@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 学习目标：掌握 pthread 创建、等待、分离、取消与线程资源回收边界。

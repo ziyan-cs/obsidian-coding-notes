@@ -1,7 +1,9 @@
 ---
 study_stage: D3
-review_due: 2026-10-17
-tags: [language/python, python/collections]
+review_due: 2026-10-24
+tags:
+  - language/python
+  - python/collections
 ---
 
 > [!abstract] 学习定位

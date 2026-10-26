@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 监听 socket 负责接入，连接 socket 承载会话；非阻塞服务必须区分就绪、暂时无数据、EOF 与错误，并明确 fd 和连接状态的所有权。

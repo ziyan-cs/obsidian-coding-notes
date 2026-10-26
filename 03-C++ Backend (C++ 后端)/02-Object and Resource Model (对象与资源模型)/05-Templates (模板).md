@@ -1,6 +1,7 @@
 ---
-study_stage: learn
-review_due: 2026-12-03
+study_stage: backlog
+review_due:
+
 ---
 
 

@@ -1,6 +1,7 @@
 ---
-study_stage: learn
-review_due: 2026-11-12
+study_stage: backlog
+review_due:
+
 ---
 
 > [!abstract] 学习目标：区分表达式值类别、移动构造与复制消除；能说明移动后对象的有效边界和 `noexcept` 的真实作用。

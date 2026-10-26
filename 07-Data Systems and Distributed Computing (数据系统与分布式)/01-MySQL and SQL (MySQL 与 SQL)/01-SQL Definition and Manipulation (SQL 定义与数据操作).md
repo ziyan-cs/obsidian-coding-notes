@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 学习目标：掌握表结构定义、约束以及 INSERT、UPDATE、DELETE 的数据变更语义。

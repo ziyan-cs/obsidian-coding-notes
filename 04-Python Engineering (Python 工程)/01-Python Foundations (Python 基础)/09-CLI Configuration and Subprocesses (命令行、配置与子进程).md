@@ -1,6 +1,6 @@
 ---
-study_stage: learn
-review_due: 2026-11-25
+study_stage: backlog
+review_due:
 tags: [language/python, python/cli]
 ---
 

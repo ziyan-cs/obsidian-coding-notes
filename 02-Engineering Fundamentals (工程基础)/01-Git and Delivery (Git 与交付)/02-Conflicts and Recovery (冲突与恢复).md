@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 tags: [engineering/git, engineering/recovery]
 ---
 
@@ -11,11 +12,7 @@ tags: [engineering/git, engineering/recovery]
 Git 三方合并比较共同祖先 base、当前侧 ours 与另一侧 theirs。两侧对同一区域做了无法自动组合的修改时产生冲突；即使 Git 自动合并成功，语义仍可能错误，因此必须构建和测试。
 
 ```text
-<<<<<<< HEAD
 当前分支内容
-=======
-另一侧内容
->>>>>>> topic
 ```
 
 不要机械保留 ours/theirs。先回答两侧分别试图维持什么行为，再写出同时满足新契约的结果。

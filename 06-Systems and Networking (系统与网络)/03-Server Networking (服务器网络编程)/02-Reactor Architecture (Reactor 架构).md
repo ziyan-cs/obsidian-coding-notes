@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] Reactor 将 I/O 就绪事件分发给对应处理器；扩展到多线程时仍需明确连接状态归属、跨线程回传和队列背压。

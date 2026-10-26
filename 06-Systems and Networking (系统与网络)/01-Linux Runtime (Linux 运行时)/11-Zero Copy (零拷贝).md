@@ -1,5 +1,6 @@
 ---
 study_stage: backlog
+review_due:
 ---
 
 > [!abstract] 零拷贝关注减少不必要的数据搬运，不代表绝对没有复制；选择 `mmap`、`sendfile` 或普通读写，要看数据路径、TLS、应用处理需求与实测结果。

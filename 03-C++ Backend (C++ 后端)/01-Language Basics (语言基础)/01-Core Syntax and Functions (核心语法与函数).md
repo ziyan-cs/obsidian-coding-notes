@@ -1,6 +1,6 @@
 ---
-study_stage: learn
-review_due: 2026-10-22
+study_stage: D3
+review_due: 2026-10-23
 ---
 
 > [!abstract] 学习目标
