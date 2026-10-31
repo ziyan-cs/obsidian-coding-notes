@@ -1,5 +1,7 @@
 {
-  "enabledCssSnippets": [],
+  "enabledCssSnippets": [
+    "note-reading"
+  ],
   "cssTheme": "AnuPpuccin",
   "accentColor": "",
   "theme": "obsidian",
@@ -9,6 +11,6 @@
   "baseFontSize": 19,
   "interfaceFontFamily": "",
   "textFontFamily": "",
-  "showRibbon": true,
+  "showRibbon": false,
   "showViewHeader": true
 }

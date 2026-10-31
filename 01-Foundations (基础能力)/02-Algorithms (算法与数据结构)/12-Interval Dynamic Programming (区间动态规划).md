@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/dynamic-programming, algorithm/interval, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用区间长度确定依赖顺序，通过“最后一次合并/切分/选择”推导转移，并理解 `O(n³)` 优化不能脱离数学条件。
 
 # 区间 DP 的统一模型
@@ -89,4 +89,20 @@ dp[l][r] = max(dp[l][k] + value[l]×value[k]×value[r] + dp[k][r])
 > [!summary] 本篇结论
 > 区间 DP 通过最后一次操作把大区间拆为已知小区间。状态边界、遍历长度和切分点共同决定正确性；高级优化只有在代价结构满足严格条件时成立。
 
-下一步：[13-Sequence Dynamic Programming (序列动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/13-Sequence%20Dynamic%20Programming%20(序列动态规划).md)
+下一步：[13-Sequence Dynamic Programming (序列动态规划)](13-Sequence%20Dynamic%20Programming%20%28%E5%BA%8F%E5%88%97%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现矩阵链乘或石子合并，打印长度为 1、2、3 的 DP 表，检查分割点枚举范围。
+
+> [!note]- 验收要点
+> 按区间长度递增，单元素代价为 0；只引用更短区间且分割点位于区间内部。
+
+## 2. 机制追问
+
+区间 DP 为什么通常按区间长度递增计算？
+
+> [!note]- 参考答案
+> 大区间依赖更短子区间，按长度递增确保转移所需状态已求得；必须定义空区间、单元素以及分割点的合法范围。

@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/dynamic-programming, algorithm/sequence, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 区分子序列与连续子数组，掌握 LIS、LCS、编辑距离和回文子序列的状态设计，并理解长度、方案和路径恢复是不同输出。
 
 # 先区分连续性
@@ -106,4 +106,20 @@ s[l] == s[r]：dp[l][r] = dp[l+1][r-1] + 2
 > [!summary] 本篇结论
 > 序列 DP 的状态必须明确连续性、前缀范围和是否强制以当前位置结尾。长度可以压缩，恢复路径则需要保留决策；不要把输出要求当成无关细节。
 
-下一步：[14-Greedy and Sliding Window (贪心与滑动窗口)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/14-Greedy%20and%20Sliding%20Window%20(贪心与滑动窗口).md)
+下一步：[14-Greedy and Sliding Window (贪心与滑动窗口)](14-Greedy%20and%20Sliding%20Window%20%28%E8%B4%AA%E5%BF%83%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现 LIS 的 O(n²) DP 与 O(n log n) tails，两者随机小数组对拍并覆盖重复值。
+
+> [!note]- 验收要点
+> 严格递增时重复值不能延长长度；两种方法长度一致，tails 不直接代表一条固定答案序列。
+
+## 2. 机制追问
+
+最长递增子序列的 O(n log n) tails 方法为什么不能直接恢复所有 DP 信息？
+
+> [!note]- 参考答案
+> tails 维护每种长度的最小可能结尾，仅保证长度，不代表某条固定子序列；恢复路径需额外保存前驱和索引，遇到其他序列问题也不能机械套用。

@@ -3,15 +3,14 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：掌握表结构定义、约束以及 INSERT、UPDATE、DELETE 的数据变更语义。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 掌握表结构定义、约束以及 INSERT、UPDATE、DELETE 的数据变更语义。
 >
 > SQL 是声明式语言，先描述结果集合，再由优化器选择执行计划。正确性依赖表结构、约束和事务边界；性能要结合索引、扫描行数和真实数据分布验证。
 
 # 基础语法速查
 
-> [!note] 本节重点：DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
+**本节要点：** DDL 数据库/表/字段操作、DML 增删改、DQL 基础查询/条件过滤/聚合/分组/排序分页
 
 # DDL：结构与约束
 ## 1. 数据库操作
@@ -24,12 +23,12 @@ SHOW DATABASES;
 CREATE DATABASE [库名];
 
 -- 创建数据库（指定字符集）
-CREATE DATABASE [库名] 
+CREATE DATABASE [库名]
 DEFAULT CHARACTER SET utf8mb4;
 
 -- 创建数据库（同时指定字符集和校验规则）
-CREATE DATABASE [库名] 
-DEFAULT CHARACTER SET utf8mb4 
+CREATE DATABASE [库名]
+DEFAULT CHARACTER SET utf8mb4
 COLLATE utf8mb4_general_ci;
 
 -- 修改数据库字符集与校验规则
@@ -44,7 +43,7 @@ USE [库名];
 -- 查看当前使用的数据库
 SELECT DATABASE();
 
--- 查看指定数据库的字符集、校验规则 
+-- 查看指定数据库的字符集、校验规则
 SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '库名';
 ```
 
@@ -86,7 +85,7 @@ ALTER TABLE [表名] ADD COLUMN [字段名] [类型];
 -- 添加字段（带约束，推荐）
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型] [NOT NULL/DEFAULT/COMMENT];
 
--- 示例1：在末尾添加字段（默认） 
+-- 示例1：在末尾添加字段（默认）
 ALTER TABLE [表名] ADD COLUMN [字段名] [类型] COMMENT '字段说明';
 
 -- 示例2：在指定字段后添加
@@ -240,3 +239,19 @@ SELECT ROW_COUNT() AS affected_rows;
 - [MySQL 8.4 Reference Manual: Data Definition Statements](https://dev.mysql.com/doc/refman/8.4/en/sql-data-definition-statements.html)
 - [MySQL 8.4 Reference Manual: InnoDB and Online DDL](https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl.html)
 - [MySQL 8.4 Reference Manual: Transactional and Locking Statements](https://dev.mysql.com/doc/refman/8.4/en/sql-transactional-statements.html)
+
+# 考察题目
+
+## 1. 动手题
+
+建用户与订单两表，写唯一键和外键约束；在事务内故意违反约束并检查数据是否回滚。
+
+> [!note]- 验收要点
+> 约束阻止非法写入；核对目标实例、事务边界与错误码，记录 DDL 影响。
+
+## 2. 机制追问
+
+删除表列或更新多行前，怎样避免一次误操作破坏数据？
+
+> [!note]- 参考答案
+> 确认目标实例和筛选条件，在事务或备份策略支持下先 SELECT 核对影响范围；理解 DDL 与 DML 的提交和锁行为，保留恢复路径。

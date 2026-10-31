@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能区分数据竞争、锁竞争和伪共享；能解释 lock-free 的进展保证、CAS 线性化点与内存回收；能用测量证据选择优化方式。
 
 # 先定位瓶颈，再选并发结构
@@ -98,3 +98,19 @@ NUMA 机器上，线程访问其他节点的内存可能付出额外成本；但
 4. 若收益不稳定，回到指标与热点，勿为了“无锁”牺牲可维护性或安全性。
 
 规范核对：[原子智能指针的 lock-free 查询](https://eel.is/c++draft/util.smartptr.atomic)、[进展保证](https://eel.is/c++draft/intro.progress)、[缓存干扰常量](https://eel.is/c++draft/hardware.interference)。
+
+# 考察题目
+
+## 1. 动手题
+
+对一个 CAS 计数器和互斥锁计数器做正确性与性能对照；增加高争用和不同线程数。
+
+> [!note]- 验收要点
+> 两者结果一致；报告吞吐与 CPU，说明 CAS 失败重试和缓存争用，不能用此例推出任意无锁结构安全。
+
+## 2. 机制追问
+
+CAS 成功是否意味着无锁栈正确且更快？
+
+> [!note]- 参考答案
+> 不意味着。仍要证明 ABA、节点回收、内存序与进展保证；性能还受争用、缓存行和 NUMA 影响，需基线和压力测试。

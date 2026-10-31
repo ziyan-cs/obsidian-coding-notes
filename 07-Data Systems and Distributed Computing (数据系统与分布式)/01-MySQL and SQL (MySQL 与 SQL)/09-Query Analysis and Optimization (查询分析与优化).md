@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
+> [!abstract] 本篇要点
+> 用执行计划、扫描行数和真实工作负载定位慢查询；索引设计要同时考虑选择性、排序与写入成本。
 
 # EXPLAIN and Execution Plans (执行计划分析)
 
-> [!note] 本节重点：EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
+**本节要点：** EXPLAIN 输出解读（type/key/rows/Extra）、全表扫描 vs 索引扫描、慢 SQL 定位
 
 ## EXPLAIN 输出详解
 
@@ -152,11 +153,10 @@ SELECT * FROM user WHERE age = 20;
 > 读 EXPLAIN 先看访问路径、估算扫描行数、连接顺序与过滤/排序是否符合预期，而不是背 `type` 排名或见到 `filesort` 就建索引。索引必须同时服务真实的 WHERE、JOIN、ORDER BY 和写入成本；用实际执行数据验证优化是否减少端到端延迟。
 >
 >
->
 
 # Index Design Principles (索引设计原则)
 
-> [!note] 本节重点：索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
+**本节要点：** 索引选择性与区分度、联合索引最左前缀、索引覆盖与回表、索引下推优化
 
 ## 基础概念
 
@@ -169,8 +169,6 @@ SELECT * FROM user WHERE age = 20;
 -- 查看表中所有索引
 SHOW INDEX FROM [表名];
 ```
-
----
 
 ## 索引类型
 
@@ -255,16 +253,12 @@ CREATE TABLE [表名] (
 SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 ```
 
----
-
 ## InnoDB 索引底层原理（B+Tree）
 
 - 索引的底层数据结构为 **B + 树**，所有数据都存储在叶子节点
 - 聚簇索引：叶子节点直接存储完整的行数据，数据按主键顺序物理存储
 - 非聚簇索引：叶子节点存储主键值，查询时需通过主键回表获取完整数据
 - 特点：非叶子节点仅存储索引值，不存储数据，树的高度低，查询效率稳定
-
----
 
 ### 索引设计原则（面试高频）
 
@@ -274,8 +268,6 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 - 索引字段类型尽量小，优先使用 `INT` 而非 `VARCHAR`
 - 避免创建过多索引，增删改操作的维护成本会显著增加
 
----
-
 ### 索引失效场景（必背）
 
 - 使用 `OR` 连接条件，且非所有条件都包含索引字段
@@ -283,8 +275,6 @@ SELECT * FROM [表名] WHERE MATCH(content) AGAINST('关键词');
 - 隐式类型转换（如 `VARCHAR` 字段和数字比较）
 - 使用 `LIKE '%xxx'` 或 `LIKE '%xxx%'`，无法利用索引
 - 范围查询（`>、<、BETWEEN`）会导致复合索引后续字段失效
-
----
 
 ### 索引相关 SQL 操作
 
@@ -302,8 +292,6 @@ ALTER TABLE [表名] DROP PRIMARY KEY; -- 删除主键索引
 EXPLAIN SELECT * FROM [表名] WHERE [条件];
 ```
 
----
-
 ### 索引优化实践
 
 ```sql
@@ -314,14 +302,9 @@ EXPLAIN SELECT * FROM `purchase` WHERE customer_id = 1 AND goods_id = 100;
 ALTER TABLE `purchase` ADD INDEX idx_customer_goods(customer_id, goods_id);
 ```
 
----
-
-
----
-
 # Slow Query Optimization (慢查询优化)
 
-> [!note] 本节重点：慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
+**本节要点：** 慢查询日志配置与分析、索引失效常见场景、SQL 重写优化技巧
 
 ## 慢查询日志配置
 
@@ -465,5 +448,20 @@ pt-query-digest /var/log/mysql/slow.log
 
 > [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
 
-> [!info]- 延伸阅读
-> - 下一步：[10-Connection Pool (连接池)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/10-Connection%20Pool%20(连接池).md)
+**参考资料：** 下一步：[10-Connection Pool (连接池)](10-Connection%20Pool%20%28%E8%BF%9E%E6%8E%A5%E6%B1%A0%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+挑一个慢查询，保存 `EXPLAIN ANALYZE` 与基线；只改索引或 SQL 一项，再比较行数和耗时。
+
+> [!note]- 验收要点
+> 说明瓶颈变化及写入成本；索引命中不等于查询必然更快。
+
+## 2. 机制追问
+
+EXPLAIN 显示用了索引，查询仍慢，下一步看什么？
+
+> [!note]- 参考答案
+> 检查扫描行数、过滤率、回表、排序、锁等待及实际执行统计；索引被使用不等于代价低，需与业务负载及基线比较。

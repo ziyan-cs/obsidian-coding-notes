@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 安全检测的目标不是收集尽可能多的日志，而是把攻击假设转成可执行检测，并在事件发生后保留可信证据。本篇统一威胁驱动检测、日志语义、告警分级、证据保全和响应交接。
 
 # 从威胁场景反推检测
@@ -91,9 +91,9 @@ first observed -> initial access -> privilege/action
 
 ## 关联专题
 
-- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)：理解共用遥测管线与关联上下文。
-- [Security Logging and Detection (安全日志与检测)](/09-Security%20Engineering%20(安全工程)/03-Isolation%20Detection%20and%20Response%20(隔离、检测与响应)/02-Security%20Logging%20and%20Detection%20(安全日志与检测).md)：安全领域的规则、平台与演练实现。
-- [Incident Response and Recovery (安全事件响应与恢复)](/09-Security%20Engineering%20(安全工程)/03-Isolation%20Detection%20and%20Response%20(隔离、检测与响应)/03-Incident%20Response%20and%20Recovery%20(安全事件响应与恢复).md)：确认事件后的控制、根除和恢复。
+- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)：理解共用遥测管线与关联上下文。
+- [Security Logging and Detection (安全日志与检测)](../../09-Security%20Engineering%20%28%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%29/03-Isolation%20Detection%20and%20Response%20%28%E9%9A%94%E7%A6%BB%E3%80%81%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%93%8D%E5%BA%94%29/02-Security%20Logging%20and%20Detection%20%28%E5%AE%89%E5%85%A8%E6%97%A5%E5%BF%97%E4%B8%8E%E6%A3%80%E6%B5%8B%29.md)：安全领域的规则、平台与演练实现。
+- [Incident Response and Recovery (安全事件响应与恢复)](../../09-Security%20Engineering%20%28%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%29/03-Isolation%20Detection%20and%20Response%20%28%E9%9A%94%E7%A6%BB%E3%80%81%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%93%8D%E5%BA%94%29/03-Incident%20Response%20and%20Recovery%20%28%E5%AE%89%E5%85%A8%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)：确认事件后的控制、根除和恢复。
 
 ## 参考资料
 
@@ -103,3 +103,19 @@ first observed -> initial access -> privilege/action
 
 > [!summary] 本篇结论
 > 检测工程把威胁假设转成可观测数据、规则、分级调查和响应措施。规则既要命中模拟攻击，也要验证正常高峰、数据缺失和规则失效等场景；事件处理还必须保留时间、来源、完整性与交接记录。
+
+# 考察题目
+
+## 1. 动手题
+
+为“同一账户短时间多次失败登录”写检测规则和三组测试事件，包含正常误报样本。
+
+> [!note]- 验收要点
+> 规则明确窗口、身份键、阈值和去重；保存原始事件引用与误报分析。
+
+## 2. 机制追问
+
+一条安全告警命中后，怎样证明是攻击而非误报？
+
+> [!note]- 参考答案
+> 从检测规则追到原始事件、身份、时间线和资源影响，保留可追溯证据；检查规则覆盖与误报率，避免只凭告警标题下结论。

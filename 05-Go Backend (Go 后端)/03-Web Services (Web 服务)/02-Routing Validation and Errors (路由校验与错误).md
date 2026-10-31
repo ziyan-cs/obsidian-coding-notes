@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > HTTP handler 的职责是把协议输入转换为明确的应用命令，并把可预期失败稳定地映射为响应；业务规则不要散落在 handler 内。
 
 # 输入限制与解码
@@ -54,6 +54,20 @@ service 返回领域错误，不返回 HTTP status。handler 使用 `errors.Is/A
 
 在 handler 中按 `errors.Is/As` 判断已定义领域错误；对 `*http.MaxBytesError` 单独映射 413。错误 body 至少包含稳定 `code`、可安全展示的 `message` 和 `request_id`，例如 `{"code":"invalid_argument","message":"title is required","request_id":"..."}`。日志保留完整错误链，但过滤凭据和原始敏感输入。
 
-> [!info]- 延伸阅读
-> - 下一步：[03-API Lifecycle and Graceful Shutdown (服务生命周期)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/03-API%20Lifecycle%20and%20Graceful%20Shutdown%20(服务生命周期).md)
+**参考资料：** 下一步：[03-API Lifecycle and Graceful Shutdown (服务生命周期)](03-API%20Lifecycle%20and%20Graceful%20Shutdown%20%28%E6%9C%8D%E5%8A%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%29.md)
 
+# 考察题目
+
+## 1. 动手题
+
+为 `/items/{id}` 写路径解析与错误映射，测试非法 ID、不存在和数据库失败。
+
+> [!note]- 验收要点
+> 分别返回稳定的 400/404/5xx 语义，内部错误细节只记录于受控日志。
+
+## 2. 机制追问
+
+资源不存在、输入无效和内部故障为何不能都返回 500？
+
+> [!note]- 参考答案
+> 三者的客户端可操作性不同；在边界把错误映射为稳定状态码和响应契约，内部细节只进入受控日志，不泄露秘密或堆栈。

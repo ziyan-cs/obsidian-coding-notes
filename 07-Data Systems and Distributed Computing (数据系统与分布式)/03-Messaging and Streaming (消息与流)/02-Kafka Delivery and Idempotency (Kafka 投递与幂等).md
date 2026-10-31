@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
+> [!abstract] 本篇要点
+> Kafka 的分区提供顺序边界，确认与重试带来重复可能；端到端可靠性仍取决于业务幂等和失败恢复。
 
 # Kafka Core Concepts (Kafka核心概念)
 
-> [!note] 本节重点： Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
+**本节要点：** Topic/Partition/Consumer Group、分区机制、消息有序性、消费者 Rebalance
 
 ## Kafka 核心概念
 
@@ -28,8 +29,6 @@ offset: 0     1     2     3     4     5
 ### Consumer Group
 
 同一组内的成员分摊 topic 分区；不同组各自维护消费进度。`offset` 是分区内位置，不是全局消息 ID。消费成功和提交 offset 是两个动作：如果副作用已落库但 offset 尚未提交就崩溃，重启后会再次读到该消息。
-
----
 
 ## 分区与消息路由
 
@@ -52,8 +51,6 @@ rd_kafka_producev(rk, RD_KAFKA_V_TOPIC("topic"),
 
 同一 key 在**分区数与分区算法不变**时通常落到同一分区；扩容分区或更换分区器后可能改变映射。需要严格按业务键保序时，应显式规定路由规则并设计迁移。
 
----
-
 ## 消费者 Rebalance
 
 当消费者加入/退出或分区数变更时触发 Rebalance：
@@ -75,8 +72,6 @@ Consumer-3 宕机 -> Rebalance:
 - Cooperative Rebalancing (Kafka 2.4+)
 - 避免把可用性与顺序性假设绑定在固定分区数上；变更时先评估 key 路由
 
----
-
 ## 关键配置
 
 ```properties
@@ -87,8 +82,6 @@ compression.type=snappy     # 示例值；按真实负载比较压缩率、CPU �
 enable.auto.commit=false    # 消费者关闭自动提交；还须显式实现成功后的提交
 auto.offset.reset=earliest  # 仅在消费组没有有效已提交位点等情况下生效
 ```
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -109,7 +102,7 @@ auto.offset.reset=earliest  # 仅在消费组没有有效已提交位点等情�
 
 # Message Delivery and Idempotency (消息可靠性与幂等)
 
-> [!note] 本节重点： 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
+**本节要点：** 消息可靠性三语义、ACK 机制、幂等生产者、事务、三端保证
 
 > [!warning] “Exactly Once” 必须说明边界
 > Kafka 的幂等与事务能约束 Kafka 内部的写入/消费链路；把消息处理结果写进 MySQL 等外部系统时，不能仅凭一段本地 SQL 就宣称端到端 exactly-once。通常要使用幂等写入、去重键、outbox/inbox 或可恢复的状态机。
@@ -121,8 +114,6 @@ auto.offset.reset=earliest  # 仅在消费组没有有效已提交位点等情�
 | At most once | 尽量不重复，允许遗漏 | 例如先确认位点再执行副作用；失败可能漏处理 |
 | At least once | 可重试直至成功，允许重复 | 成功处理后再确认位点；重放时业务需幂等 |
 | Exactly once（限定范围） | 某个定义好的结果只生效一次 | Kafka 内部可组合事务、幂等与 `read_committed`；外部系统需另设计原子边界 |
-
----
 
 ## 生产者端
 
@@ -146,8 +137,6 @@ enable.idempotence=true   # 对生产者重试引入的重复进行去重；非�
 transactional.id=my-txn-id
 ```
 
----
-
 ## Broker 端
 
 ```properties
@@ -156,8 +145,6 @@ min.insync.replicas=2         # 最少同步副本数
 ```
 
 Leader 崩溃 -> 从 ISR（In-Sync Replicas）中选举新 Leader
-
----
 
 ## 消费者端
 
@@ -183,8 +170,6 @@ COMMIT;
 重启时从数据库里的业务位点恢复或重复读取并被去重表拦截；不能同时把 broker offset 和数据库位点当成互不协调的唯一真相。
 ```
 
----
-
 ## 消息不丢失总结
 
 ```
@@ -195,8 +180,6 @@ Producer -> Broker -> Consumer
 ② Broker：replication.factor=3 + min.insync.replicas=2
 ③ Consumer：手动提交 + 处理成功再 commit
 ```
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -224,5 +207,20 @@ Producer -> Broker -> Consumer
 >
 > 参考 [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)；具体参数默认值与客户端分区器行为以部署版本为准。
 
-> [!info]- 延伸阅读
-> - 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/03-Messaging%20and%20Streaming%20(消息与流)/03-RabbitMQ%20and%20Kafka%20Selection%20(RabbitMQ%20与%20Kafka%20选型).md)
+**参考资料：** 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](03-RabbitMQ%20and%20Kafka%20Selection%20%28RabbitMQ%20%E4%B8%8E%20Kafka%20%E9%80%89%E5%9E%8B%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写 Kafka 消费者在业务写库后、提交 offset 前崩溃；重启消费并检查重复记录。
+
+> [!note]- 验收要点
+> 业务键或消息 ID 去重，最终副作用一次；记录分区和重平衡条件。
+
+## 2. 机制追问
+
+消费者处理完成后还没提交 offset 就崩溃，会怎样？
+
+> [!note]- 参考答案
+> 重启后可能再次消费同一消息；业务副作用需幂等或与进度记录原子协调，不能把提交 offset 当成恰好一次业务执行。

@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能判断一次调用是否**必须**在常量求值中完成，并区分 `constexpr`、`consteval`、`constinit` 和 `if constexpr` 的职责；不用“编译期更快”代替真实成本分析。
 
 # `constexpr`：允许常量求值，不等于每次都在编译期执行
@@ -98,3 +98,19 @@ int main() {
 把不变量、固定小表或类型约束放在编译期，能更早发现错误；代价是编译时间、诊断复杂度与可能的代码膨胀。先用 `static_assert` 固定边界，再分别编译运行期和常量求值调用；对性能收益也要像运行时代码一样测量。不要为展示模板技巧而搬移普通业务流程。
 
 参考：[C++ 标准草案：常量表达式](https://eel.is/c++draft/expr.const)、[立即函数](https://eel.is/c++draft/dcl.constexpr)。
+
+# 考察题目
+
+## 1. 动手题
+
+写同一计算的 `constexpr` 和 `consteval` 版本，分别传常量与运行时值，记录哪些能编译。
+
+> [!note]- 验收要点
+> `constexpr` 可运行时求值，`consteval` 要求常量求值；用 `static_assert` 验证编译期结果。
+
+## 2. 机制追问
+
+constexpr 函数是否每次调用都在编译期执行？
+
+> [!note]- 参考答案
+> 不是，它允许常量求值；实际是否在编译期取决于上下文和实参。consteval 则要求调用可在编译期求值；编译期计算还要考虑编译成本。

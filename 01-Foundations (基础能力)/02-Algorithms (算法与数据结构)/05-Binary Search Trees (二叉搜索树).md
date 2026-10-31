@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/tree, algorithm/search, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 理解二叉搜索树的顺序不变量、退化原因、插入删除与验证方法，并用 AVL 的高度约束和旋转理解“平衡如何换来最坏界”。
 
 # BST 的顺序不变量
@@ -86,4 +86,20 @@ balance = height(left) - height(right)
 > [!summary] 本篇结论
 > BST 用全局顺序不变量把查找缩到一条根到叶路径；复杂度取决于高度。AVL 通过局部旋转维护严格高度界，从而把最坏查找、插入和删除限制在 `O(log n)`。
 
-下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/06-Graphs%20Union%20Find%20and%20Shortest%20Paths%20(图并查集与最短路).md)
+下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](06-Graphs%20Union%20Find%20and%20Shortest%20Paths%20%28%E5%9B%BE%E5%B9%B6%E6%9F%A5%E9%9B%86%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现 BST 查找、插入和删除；用有序输入构造退化树，再测高度与查找次数。
+
+> [!note]- 验收要点
+> 每个节点满足左右顺序不变量；退化树高度可达 n，删除双子节点要正确替换后继或前驱。
+
+## 2. 机制追问
+
+BST 查找为什么可能退化成线性时间？平衡树解决了什么？
+
+> [!note]- 参考答案
+> 普通 BST 的高度可能达到 n，如有序插入形成链；平衡树通过旋转等维护高度约 O(log n)，以额外维护成本换取稳定查找和更新复杂度。

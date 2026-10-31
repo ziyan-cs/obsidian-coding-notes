@@ -4,7 +4,7 @@ review_due:
 tags: [cloud-native/kubernetes, operations/reliability]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 可交付的 Kubernetes 服务必须把配置、秘密、健康、发布和观测设计成运行时契约。探针不是装饰，Secret 也不是天然加密；每个配置项都要能安全变更和回滚。
 
 # ConfigMap 与 Secret
@@ -89,3 +89,19 @@ kubectl rollout history deployment/<name>
 说明一次新版本从镜像进入 Deployment，到 Pod Ready、Service 接流量、指标确认成功的完整过程；指出代码回滚不能自动撤销哪些外部状态。
 
 官方参考：[Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) · [Configure Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) · [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+
+# 考察题目
+
+## 1. 动手题
+
+给服务配置 startup/readiness/liveness，注入数据库故障并滚动发布新版本。
+
+> [!note]- 验收要点
+> 依赖故障导致实例暂不接流量而非无意义重启；失败版本可回滚。
+
+## 2. 机制追问
+
+把依赖数据库的检查写进 liveness，可能引发什么事故？
+
+> [!note]- 参考答案
+> 数据库短暂故障会让所有实例反复重启，扩大故障；liveness 检查进程是否需重启，readiness 表示能否接流量，startup 保护慢启动。

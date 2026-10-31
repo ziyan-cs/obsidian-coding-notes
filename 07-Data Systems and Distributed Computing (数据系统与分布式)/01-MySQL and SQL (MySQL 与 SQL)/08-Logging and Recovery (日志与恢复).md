@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
+> [!abstract] 本篇要点
+> 从 WAL 到 redo、binlog 和崩溃恢复，区分事务提交、页落盘与复制事件的时间边界。
 
 # Write Ahead Logging (预写日志)
 
-> [!note] 本节重点：WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
+**本节要点：** WAL 预写日志保证持久性、先写日志再写数据、redo log 崩溃恢复能力
 
 ## WAL 的核心思想
 
@@ -97,11 +98,10 @@ D（持久性）← redo 与刷盘/存储假设；binlog、复制与备份承担
 > **redo 和 undo 分别解决什么？** redo 支持崩溃后的重做，保证已提交修改可恢复；undo 保存旧版本，用于回滚与 MVCC。WAL 的核心顺序是先让恢复所需日志按策略持久化，再异步刷数据页。
 >
 >
->
 
 # Redo Log and Crash Recovery (Redo 日志与崩溃恢复)
 
-> [!note] 本节重点：redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
+**本节要点：** redo log 物理日志记录页修改、崩溃恢复前滚、checkpoint 机制与循环写
 
 ## Redo Log 的物理结构
 
@@ -217,7 +217,7 @@ LSN 的作用：
 
 # Binlog and Redo Log (Binlog 与 Redo Log)
 
-> [!note] 本节重点：binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
+**本节要点：** binlog 逻辑日志与 redo log 物理日志区别、binlog 三种格式（STATEMENT/ROW/MIXED）、两阶段提交
 
 ## Binlog vs Redo Log 概览
 
@@ -324,5 +324,20 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 > [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
 
-> [!info]- 延伸阅读
-> - 下一步：[09-Query Analysis and Optimization (查询分析与优化)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/09-Query%20Analysis%20and%20Optimization%20(查询分析与优化).md)
+**参考资料：** 下一步：[09-Query Analysis and Optimization (查询分析与优化)](09-Query%20Analysis%20and%20Optimization%20%28%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E4%B8%8E%E4%BC%98%E5%8C%96%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+对测试库写一笔事务并在提交前/后模拟故障，检查恢复结果；标注 redo、undo、binlog 的角色。
+
+> [!note]- 验收要点
+> 未提交变更回滚，已提交变更按持久性设置恢复；记录刷盘配置与故障模型。
+
+## 2. 机制追问
+
+redo、undo、binlog 分别支撑什么？只写其中一个能否满足全部需求？
+
+> [!note]- 参考答案
+> redo 支撑崩溃恢复，undo 支撑回滚与 MVCC 历史版本，binlog 用于逻辑变更与复制/恢复；三者记录层次和时机不同，不能互相简单替代。

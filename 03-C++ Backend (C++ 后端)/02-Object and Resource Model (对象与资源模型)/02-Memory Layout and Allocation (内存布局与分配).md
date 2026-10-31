@@ -4,9 +4,8 @@ review_due:
 
 ---
 
-> [!abstract] 学习目标：分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 分清 C++ 对象存储期、操作系统进程映射和 ABI 对齐布局，不把常见 Linux 图当成标准保证。
 >
 > 内存布局回答对象和程序的字节在哪里；分配策略回答谁申请、谁释放以及分配成本是否值得优化。先用值类型、容器和 RAII 管理资源；对齐、placement new、内存池只在 profile 或明确约束证明必要时使用。
 
@@ -86,11 +85,9 @@ void foo() {
 |生命周期|离开作用域结束（例外见延长生命周期规则）|由所有者决定，常通过 RAII 结束|
 |碎片|不是这种分配方式的主要问题|可能产生，取决于分配模式和分配器|
 
----
-
 # Memory Alignment (内存对齐)
 
-> [!note] 本节重点：内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
+**本节要点：** 内存对齐规则、padding 与 sizeof、alignof/alignas 关键字
 
 ## 对齐规则
 
@@ -147,11 +144,9 @@ struct Example {
 // offsetof(Example, b) 等观察实际布局；不要把示例数值做跨平台断言。
 ```
 
----
-
 # Memory Pool (内存池)
 
-> [!note] 本节重点：先证明分配是瓶颈，再选择内存资源；池化必须守住对齐、生命周期和回收边界。
+**本节要点：** 先证明分配是瓶颈，再选择内存资源；池化必须守住对齐、生命周期和回收边界。
 
 ## 为什么需要内存池
 
@@ -183,8 +178,6 @@ int main() {
 
 `monotonic_buffer_resource` 适合一批对象共享生命周期：单次 `deallocate` 不回收，资源析构或 `release()` 时整体释放；缓冲区耗尽可向上游资源申请。不能在仍有对象使用资源时调用 `release()`。需要频繁独立回收时再比较 pool resource，并按线程共享方式选择同步版本。
 
----
-
 ## Placement New
 
 ```cpp
@@ -194,7 +187,20 @@ T* p = new (storage) T(args);
 p->~T();  // 不可对 p 调用 delete；T 必须在此作用域中是完整类型
 ```
 
----
+**参考资料：** 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](03-Object%20Lifetime%20and%20Copy%20Control%20%28%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8B%B7%E8%B4%9D%E6%8E%A7%E5%88%B6%29.md)
 
-> [!info]- 延伸阅读
-> - 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/03-Object%20Lifetime%20and%20Copy%20Control%20(对象生命周期与拷贝控制).md)
+# 考察题目
+
+## 1. 动手题
+
+用 placement new 在预分配存储中构造对象，明确调用析构和释放存储的顺序；记录地址与对齐。
+
+> [!note]- 验收要点
+> 构造/析构次数各一次，存储释放与对象销毁分开；避免在失效对象上访问。
+
+## 2. 机制追问
+
+对象占用的存储与对象生命周期是同一回事吗？
+
+> [!note]- 参考答案
+> 不是。存储可已分配但对象尚未构造，或对象析构后存储仍在；对齐、栈/堆位置和分配器不决定所有权，需分别跟踪构造、析构与释放。

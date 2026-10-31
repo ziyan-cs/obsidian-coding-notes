@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 监听 socket 负责接入，连接 socket 承载会话；非阻塞服务必须区分就绪、暂时无数据、EOF 与错误，并明确 fd 和连接状态的所有权。
+> [!abstract] 本篇要点
+> 监听 socket 负责接入，连接 socket 承载会话；非阻塞服务必须区分就绪、暂时无数据、EOF 与错误，并明确 fd 和连接状态的所有权。
 
 # Socket API and Options (Socket API与选项)
 
-> [!note] 本节重点：每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
+**本节要点：** 每个系统调用的作用、参数含义、服务端与客户端各自的调用流程
 
 ## 函数调用链
 
@@ -45,8 +46,6 @@ Server                    OS Kernel                Client
   ├──────── close() ───────→│                        │
 ```
 
----
-
 ## 接口语义
 
 ```cpp
@@ -66,7 +65,7 @@ Server                    OS Kernel                Client
 ```cpp
 // int socket(int domain, int type, int protocol);
 
-int fd = socket(AF_INET, SOCK_STREAM, 0); 
+int fd = socket(AF_INET, SOCK_STREAM, 0);
 if (fd < 0) perror("socket failed");
 ```
 
@@ -198,8 +197,8 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 ## close / shutdown
 
 ```cpp
-int close(int fd); 
-int shutdown(int sockfd, int how); 
+int close(int fd);
+int shutdown(int sockfd, int how);
 // how: SHUT_RD / SHUT_WR / SHUT_RDWR
 ```
 
@@ -215,11 +214,10 @@ int shutdown(int sockfd, int how);
 > | 作用       | 减少 fd 引用计数，为 0 时才真正关闭 | 立即关闭指定方向        |
 > | 多进程 fork | close 只减引用计数          | shutdown 直接影响连接 |
 >
->
 
 # Nonblocking IO and Event Loop (非阻塞IO与事件循环)
 
-> [!note] 本节重点：阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
+**本节要点：** 阻塞 vs 非阻塞的行为差异、如何设置、如何正确处理 EAGAIN
 
 ## 阻塞 vs 非阻塞
 
@@ -229,8 +227,6 @@ int shutdown(int sockfd, int how);
 | write( ) 缓冲区满 | 挂起线程，等待缓冲区空 | 立即返回 -1，errno = EAGAIN      |
 | accept( ) 无连接 | 挂起线程，等待新连接  | 立即返回 -1，errno = EAGAIN      |
 | connect( )    | 阻塞直到握手完成    | 立即返回 -1，errno = EINPROGRESS |
-
----
 
 ## 设置非阻塞
 
@@ -242,8 +238,6 @@ int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 int flags = fcntl(fd, F_GETFL, 0);
 fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 ```
-
----
 
 ## 非阻塞的正确使用模式
 
@@ -262,8 +256,6 @@ while (true) {
 > **为什么 ET 要循环读到 EAGAIN？**
 > epoll ET 模式只在“未就绪 → 就绪”变化时通知。若一次没有读到 `EAGAIN`，应用可能不再收到新的边沿通知，导致连接长期积压。LT 下通常仍应尽量批量读写以提高吞吐，但不必把“读到 EAGAIN”误解为唯一正确策略。
 
----
-
 ## EAGAIN vs EWOULDBLOCK
 
 - POSIX 允许两者相同；Linux 上通常相同，但可移植代码应同时处理两者
@@ -271,12 +263,12 @@ while (true) {
 
 # Socket Options and Connection Health (套接字选项与连接健康)
 
-> [!note] 本节重点：套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
+**本节要点：** 套接字选项高度依赖操作系统语义；区分 `SO_REUSEADDR`、`SO_REUSEPORT`、内核 keepalive 与应用层心跳。
 
 ## setsockopt
 
 ```cpp
-int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen); 
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
 ```
 
 - **level**: 选项所属的协议层
@@ -315,8 +307,6 @@ setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 |主要用途|按平台规则调整重绑行为，常见于服务重启|多监听 socket 共享绑定地址，内核分发连接|
 |内核分发|不提供此分发能力|分发算法依协议、内核版本与附加配置而异，不保证固定四元组哈希|
 |典型场景|服务重启|Nginx worker 进程、多线程 accept|
-
----
 
 ## SO_KEEPALIVE
 
@@ -357,5 +347,20 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Reactor Architecture (Reactor 架构)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/02-Reactor%20Architecture%20(Reactor%20架构).md)
+**参考资料：** 下一步：[02-Reactor Architecture (Reactor 架构)](02-Reactor%20Architecture%20%28Reactor%20%E6%9E%B6%E6%9E%84%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现非阻塞 echo，限制每次 send 的字节数以制造部分写；验证最终响应字节完全一致。
+
+> [!note]- 验收要点
+> 维护输出偏移和可写关注，处理 EAGAIN、关闭与缓冲上限。
+
+## 2. 机制追问
+
+非阻塞 socket 写入只成功一部分时，事件循环应如何处理？
+
+> [!note]- 参考答案
+> 保存未写字节及偏移，在可写时续写；设置输出缓冲上限和背压，处理 EAGAIN、连接关闭与错误，不能丢弃剩余数据。

@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/sorting, algorithm/invariant, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从比较模型、稳定性、空间与输入分布选择排序；理解插入、归并、快速、堆排序和线性排序的核心不变量，并优先正确使用标准库。
 
 # 排序问题先定义什么
@@ -81,4 +81,20 @@ std::nth_element(values.begin(), values.begin() + k, values.end());
 > [!summary] 本篇结论
 > 排序的选择取决于稳定性、最坏界、空间、键结构和数据分布。工程上优先标准算法；手写排序的价值在于理解分区、归并、堆序和比较器不变量。
 
-下一步：[09-Backtracking and State Space Search (回溯与状态空间搜索)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/09-Backtracking%20and%20State%20Space%20Search%20(回溯与状态空间搜索).md)
+下一步：[09-Backtracking and State Space Search (回溯与状态空间搜索)](09-Backtracking%20and%20State%20Space%20Search%20%28%E5%9B%9E%E6%BA%AF%E4%B8%8E%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现插入排序与归并排序，输入带原始下标的相等键，验证稳定性并测近乎有序数据。
+
+> [!note]- 验收要点
+> 稳定排序中相等键原始顺序不变；比较次数与耗时需分开记录，样本和优化条件固定。
+
+## 2. 机制追问
+
+排序方案除了 O(n log n) 还要比较哪些性质？
+
+> [!note]- 参考答案
+> 比较稳定性、原地空间、输入分布、最坏复杂度及缓存行为。需要保留相等元素相对顺序时选稳定排序；数据近乎有序时插入排序可能有优势。

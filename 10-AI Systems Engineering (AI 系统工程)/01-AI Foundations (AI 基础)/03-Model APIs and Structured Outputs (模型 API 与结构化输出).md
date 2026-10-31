@@ -4,7 +4,7 @@ review_due:
 tags: [ai/foundation, backend/api]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 模型 API 是具有配额、延迟、版本和概率失败的远程依赖；结构化输出降低解析歧义，但不能代替语义校验。
 
 # 请求边界
@@ -57,9 +57,20 @@ syntax/schema -> semantic constraints -> authorization/state -> execute idempote
 
 模拟四类失败：provider 429、响应到一半连接断开、合法 JSON 包含越权对象、工具执行成功但响应丢失。验证 deadline、重试次数、幂等记录、审计日志和用户可见错误是否符合预期。
 
-> [!info]- 权威参考
-> - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
-> - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
+**参考资料：** [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) · [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
 
-> [!question]- 理解检查
-> 模型返回符合 schema 的“删除用户”工具调用时，后端还必须检查哪些条件？
+# 考察题目
+
+## 1. 动手题
+
+调用模型生成 JSON，测试缺字段、错误类型、超时与限额；对结果做运行时校验。
+
+> [!note]- 验收要点
+> 合法 JSON 仍需业务与权限校验，错误可分类，重试有预算。
+
+## 2. 机制追问
+
+模型返回合法 JSON，是否就能直接执行其中的操作？
+
+> [!note]- 参考答案
+> 不能。结构合法不代表语义正确或已获授权；还需校验字段、范围、业务不变量和权限，并处理超时、限额与结果未知。

@@ -5,7 +5,7 @@ review_due:
 tags: [engineering/build, engineering/automation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把 GNU Make 看作按文件依赖执行的增量构建器，把 shell 看作独立解释层；能够维护正确的头文件依赖、并行构建和错误传播，而不靠手动删除 build 目录“修复”依赖图。
 
 # Make 管理有向依赖图
@@ -133,4 +133,20 @@ CMake 更适合跨平台项目声明目标和配置依赖；其生成器可选�
 - [GNU Make prerequisites](https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html)
 - [Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
 
-下一步：[01-Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)
+下一步：[01-Testing Strategy and Evidence (测试策略与证据)](../03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写 Makefile 包含头文件依赖与 clean/test 目标；修改头文件后观察增量重建，故意让管道前段失败。
+
+> [!note]- 验收要点
+> 受影响目标应重建；脚本应报告前段失败而非只返回最后命令状态。
+
+## 2. 机制追问
+
+Make 目标明明有依赖却未重建，可能遗漏了什么？Shell 脚本怎样保留失败语义？
+
+> [!note]- 参考答案
+> 检查依赖图是否包含头文件、生成文件等真实输入；脚本明确处理退出码、管道失败、引用与清理，不能只看最后一条命令成功。

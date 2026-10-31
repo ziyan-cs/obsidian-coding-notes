@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/ci-cd, engineering/delivery, security/supply-chain]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把 CI/CD 设计为从源码提交到可验证制品与受控发布的证据链；理解触发器、权限、缓存、制品、环境门禁和回滚，而不是只会复制 YAML。
 
 # CI、Delivery 与 Deployment
@@ -145,4 +145,20 @@ GitHub environment 可绑定生产等目标，并设置审批、分支限制和 
 - [GitHub Actions security](https://docs.github.com/en/actions/how-tos/secure-your-work)
 - [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
-下一步：[01-CMake Project and Targets (CMake 项目与目标)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
+下一步：[01-CMake Project and Targets (CMake 项目与目标)](../02-Build%20and%20Dependencies%20%28%E6%9E%84%E5%BB%BA%E4%B8%8E%E4%BE%9D%E8%B5%96%29/01-CMake%20Project%20and%20Targets%20%28CMake%20%E9%A1%B9%E7%9B%AE%E4%B8%8E%E7%9B%AE%E6%A0%87%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+为小项目写 CI：干净环境安装依赖、构建、运行测试、保存制品；故意让一项检查失败。
+
+> [!note]- 验收要点
+> 失败任务应阻止制品进入交付步骤；锁定依赖和最小权限，能从日志定位失败阶段。
+
+## 2. 机制追问
+
+CI 通过是否等于可以安全发布？流水线还需验证什么？
+
+> [!note]- 参考答案
+> CI 只证明配置的检查在指定环境通过；发布还要检查制品一致性、权限、配置、迁移、健康、回滚和运行证据，避免构建与部署使用不同输入。

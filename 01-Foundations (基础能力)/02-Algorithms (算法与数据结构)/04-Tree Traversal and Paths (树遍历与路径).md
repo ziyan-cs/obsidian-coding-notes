@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/tree, algorithm/traversal, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用“节点语义、递归返回值、进入/退出时机”统一二叉树 DFS、BFS、路径与最近公共祖先问题，并能把递归可靠地改写为迭代。
 
 # 先定义节点与空树语义
@@ -120,4 +120,20 @@ TreeNode* lca(TreeNode* root, TreeNode* p, TreeNode* q) {
 > [!summary] 本篇结论
 > 树题的统一模型是：进入节点时获得自顶向下状态，退出节点时汇总子树返回值。先定义路径和空树语义，再选择 DFS 的处理时机或 BFS 的层次顺序。
 
-下一步：[05-Binary Search Trees (二叉搜索树)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/05-Binary%20Search%20Trees%20(二叉搜索树).md)
+下一步：[05-Binary Search Trees (二叉搜索树)](05-Binary%20Search%20Trees%20%28%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现二叉树层序遍历与根到叶路径和；测试空树、只有根和负数节点，写出递归/队列状态。
+
+> [!note]- 验收要点
+> 层序按队列当前层大小分组；路径和仅在叶节点判定，不能把空孩子当终点。
+
+## 2. 机制追问
+
+树的路径问题为什么不能只套前序遍历模板？递归状态应保存什么？
+
+> [!note]- 参考答案
+> 要先定义路径端点、是否允许空树及答案更新时机；递归状态可能包含当前路径、累计量或从节点向下的最优值，回溯时必须撤销局部选择。

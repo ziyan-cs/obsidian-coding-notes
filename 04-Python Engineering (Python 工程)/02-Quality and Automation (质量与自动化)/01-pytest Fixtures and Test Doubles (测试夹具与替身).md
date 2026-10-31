@@ -4,10 +4,7 @@ review_due:
 tags: [language/python, python/testing]
 ---
 
-> [!note] 方法论坐标
-> 测试分层与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)；本篇聚焦 pytest fixture、参数化与 Python 测试替身。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > pytest 测试行为而不是打印结果；对文件、时间、网络等外部依赖，用临时目录或 test double 控制输入。
 
 # 命令与规则
@@ -100,6 +97,23 @@ fixture 不应隐藏断言或创建与当前测试无关的大量对象。若读
 > [!question]- 自测：先回答再展开
 > 给 JSON config loader 写：正确对象、顶层数组、缺失文件、非法 JSON 四个测试。
 
-> [!info]- 官方参考
-> - [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html)
-> - [pytest fixtures](https://docs.pytest.org/en/stable/how-to/fixtures.html)
+**参考资料：** [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html) · [pytest fixtures](https://docs.pytest.org/en/stable/how-to/fixtures.html)
+
+> [!info]- 关联笔记
+> 测试分层与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦 pytest fixture、参数化与 Python 测试替身。
+
+# 考察题目
+
+## 1. 动手题
+
+给 HTTP 客户端写 fixture 隔离临时文件和假响应；再用本地测试服务补一个真实协议测试。
+
+> [!note]- 验收要点
+> fixture 每例独立并清理；替身测试故障分支，真实服务验证序列化、状态码与超时契约。
+
+## 2. 机制追问
+
+测试通过但生产依赖行为不同，fixture 和替身可能掩盖了什么？
+
+> [!note]- 参考答案
+> 替身只模拟设定契约，可能漏掉序列化、事务、超时和错误形态；fixture 应隔离资源并清理，关键边界仍需真实依赖集成测试。

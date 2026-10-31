@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从文件描述符一路追踪到 VFS、目录项、inode、页缓存和持久介质，理解命名、打开、读写、同步与崩溃一致性的边界。
 
 # 文件不是只有一个名字
@@ -107,4 +107,20 @@ cat /proc/filesystems
 - [Linux pathname lookup](https://docs.kernel.org/filesystems/path-lookup.html)
 - [Linux ext4 documentation](https://docs.kernel.org/filesystems/ext4/index.html)
 
-下一步：[10-Synchronization Primitives (同步原语)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/10-Synchronization%20Primitives%20(同步原语).md)
+下一步：[10-Synchronization Primitives (同步原语)](10-Synchronization%20Primitives%20%28%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写程序创建临时文件并替换目标文件；分别在写入、fsync 文件、fsync 目录后模拟中断，写出预期风险。
+
+> [!note]- 验收要点
+> 原子替换与持久化是两种保证；需考虑数据和目录项的刷盘顺序，不能以写调用成功代替落盘。
+
+## 2. 机制追问
+
+写入成功后立刻断电，数据一定还在吗？哪些层次需要确认？
+
+> [!note]- 参考答案
+> 不一定。写入可能只到用户缓冲、内核页缓存或设备缓存；需按持久性要求确认 flush/fsync、目录项更新和文件系统及设备的崩溃语义。

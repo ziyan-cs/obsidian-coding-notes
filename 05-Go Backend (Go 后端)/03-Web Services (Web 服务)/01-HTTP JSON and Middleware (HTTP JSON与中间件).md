@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/http]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > HTTP handler 负责协议转换，service 负责业务；先用 `net/http` 和 `httptest` 看清请求生命周期，再引入框架。
 
 > [!tip] 先守住边界，再增加框架
@@ -143,6 +143,20 @@ srv := &http.Server{
 
 给 `GET /hello` 和 `POST /todos` 写 `httptest`：分别检查成功 JSON、错误方法、未知字段、第二个 JSON 值、body 超限和服务层错误。方法路由的 405 与 `Allow` 响应由当前 `ServeMux` 负责；请求体超限应识别 `*http.MaxBytesError` 并映射为 413，而不是一律返回 400。
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Routing Validation and Errors (路由校验与错误)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/02-Routing%20Validation%20and%20Errors%20(路由校验与错误).md)
+**参考资料：** 下一步：[02-Routing Validation and Errors (路由校验与错误)](02-Routing%20Validation%20and%20Errors%20%28%E8%B7%AF%E7%94%B1%E6%A0%A1%E9%AA%8C%E4%B8%8E%E9%94%99%E8%AF%AF%29.md)
 
+# 考察题目
+
+## 1. 动手题
+
+写 POST JSON handler，限制请求体、拒绝未知字段和多余 JSON 值；测试非法输入和中间件调用顺序。
+
+> [!note]- 验收要点
+> 错误响应稳定，非法请求不进入业务写入；中间件不替代资源级授权。
+
+## 2. 机制追问
+
+一个 Go handler 解码 JSON 后直接写数据库，最少还缺哪些边界？
+
+> [!note]- 参考答案
+> 需限制请求体、拒绝非法或多余字段、校验业务约束，统一错误映射与超时；中间件处理身份、日志等横切逻辑但不代替业务授权。

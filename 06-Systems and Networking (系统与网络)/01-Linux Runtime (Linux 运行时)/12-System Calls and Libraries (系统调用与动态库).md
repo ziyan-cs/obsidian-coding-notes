@@ -3,15 +3,14 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 系统调用是进程请求内核操作资源的受控边界；库函数可能封装 syscall，也可能只在用户态完成工作，动态链接另涉及装载与 ABI。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 系统调用是进程请求内核操作资源的受控边界；库函数可能封装 syscall，也可能只在用户态完成工作，动态链接另涉及装载与 ABI。
 >
 > 系统调用通过用户态到内核态的受控入口访问进程、文件和网络资源；库函数可封装系统调用，也可能完全在用户态完成。动态链接还涉及符号解析、装载路径和 ABI 兼容。
 
 # System Calls Overview (常用系统调用)
 
-> [!note] 本节重点：文件/进程/网络/内存管理相关系统调用速查、用户态与内核态切换、系统调用开销
+**本节要点：** 文件/进程/网络/内存管理相关系统调用速查、用户态与内核态切换、系统调用开销
 
 ## 系统调用的成本
 
@@ -92,12 +91,9 @@ review_due:
 
 > [!tip]- **工程要点**：系统调用次数只是成本之一。`readv/writev` 可减少用户态拼接和调用数，`mmap` 改变文件访问路径，`epoll` 改变大量 fd 的就绪等待方式；这些不是彼此可直接替代的“加速开关”。先测瓶颈，再决定是否优化。
 
-
----
-
 # Dynamic Libraries and Shared Objects (动态库与共享对象)
 
-> [!note] 本节重点：动态库与静态库的区别、共享对象 (.so) 的加载与链接、PLT/GOT 与位置无关代码
+**本节要点：** 动态库与静态库的区别、共享对象 (.so) 的加载与链接、PLT/GOT 与位置无关代码
 
 ## 静态库 vs 动态库
 
@@ -179,7 +175,7 @@ dlclose(handle);
               push reloc_index      // 压入重定位索引
               jmp  resolver         // 跳转到动态链接器
               resolver: 查找 func 地址 → 写入 GOT[func]
-                                     
+
 后续调用 func()：
   main → call func@plt
   func@plt → jmp *GOT[func]         // 直接跳转到 func
@@ -187,9 +183,22 @@ dlclose(handle);
 
 > [!tip]- **工程要点**：`-fPIC`、懒绑定、`LD_PRELOAD` 与库搜索路径都可能影响性能、安全或可复现性，但不能笼统断言静态库总是更快。部署时固定 ABI 与库版本，避免生产进程从可写的未知目录加载 `.so`。
 
-
 [ld.so(8) Linux manual](https://man7.org/linux/man-pages/man8/ld.so.8.html) · [ldd(1) security note](https://man7.org/linux/man-pages/man1/ldd.1.html)
 
-> [!info]- 延伸阅读
-> - 下一步：[13-Debugging and Tracing (调试与追踪)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/13-Debugging%20and%20Tracing%20(调试与追踪).md)
+**参考资料：** 下一步：[13-Debugging and Tracing (调试与追踪)](13-Debugging%20and%20Tracing%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)
 
+# 考察题目
+
+## 1. 动手题
+
+对文件读写程序运行 `strace`，标出哪些高层库调用触发 read/write/openat，哪些只是用户态计算。
+
+> [!note]- 验收要点
+> 用调用轨迹而非函数名猜测系统调用；区分返回错误与库内部重试。
+
+## 2. 机制追问
+
+调用 read 时从用户代码到内核经历什么？libc 函数一定是系统调用吗？
+
+> [!note]- 参考答案
+> 系统调用通过受控入口切换到内核并校验参数；libc 函数可能包装系统调用，也可能完全在用户态完成，需用追踪或文档区分。

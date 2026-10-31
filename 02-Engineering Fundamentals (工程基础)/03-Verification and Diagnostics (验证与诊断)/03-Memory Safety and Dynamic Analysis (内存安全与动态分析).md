@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 内存安全工具通过运行时插桩或模拟观察已执行路径，能暴露越界、生命周期错误、未定义行为和数据竞争，但不能证明未执行路径正确。本篇统一选择、运行和解释动态分析工具的方法。
 
 # 从失败类型选择工具
@@ -107,8 +107,8 @@ scheduled Valgrind/fuzz corpus
 
 ## 关联专题
 
-- [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)：用测试输入扩大动态分析覆盖。
-- [Debugging and Failure Localization (调试与故障定位)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/02-Debugging%20and%20Failure%20Localization%20(调试与故障定位).md)：从报告回到首次错误状态。
+- [Testing Strategy and Evidence (测试策略与证据)](01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：用测试输入扩大动态分析覆盖。
+- [Debugging and Failure Localization (调试与故障定位)](02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md)：从报告回到首次错误状态。
 
 ## 参考资料
 
@@ -118,3 +118,19 @@ scheduled Valgrind/fuzz corpus
 
 > [!summary] 本篇结论
 > 动态分析只能观察实际执行到的路径，报告是缺陷线索而非全程序正确性证明。应按缺陷类型选择 sanitizer、Memcheck 与 fuzzing 等工具，并保留工具配置、输入和报告以便复现。
+
+# 考察题目
+
+## 1. 动手题
+
+分别写两个最小例子：数组越界交给 ASan，两个线程无同步读写同一变量交给 TSan。独立构建运行，记录各自的诊断位置与触发条件。
+
+> [!note]- 验收要点
+> ASan 报出越界位置，TSan 报出冲突访问及线程信息；两种诊断对应不同缺陷，不能互相代替。
+
+## 2. 机制追问
+
+ASan 未报错能否证明代码没有数据竞争？
+
+> [!note]- 参考答案
+> 不能。ASan 主要检测地址与部分内存错误，TSan 用于数据竞争且通常单独构建；工具都有覆盖边界，还需测试输入和代码审查。

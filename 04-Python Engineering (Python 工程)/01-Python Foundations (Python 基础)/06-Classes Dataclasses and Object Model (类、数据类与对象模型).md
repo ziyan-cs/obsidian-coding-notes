@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/object-model]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Python 类把状态与行为组织为运行时对象；先用组合和小接口表达业务概念，再在确有替换关系时使用继承。
 
 # 类定义与属性查找
@@ -98,12 +98,20 @@ class ReportService:
 
 实现 `BatchJob`：构造时校验输入目录和并发上限；组合 `Reader`、`Processor`、`Writer` 三个小协议；用 fake 测试正常、空输入和写入失败。解释为什么不创建 `FileBatchJob`、`HttpBatchJob` 等深继承树。
 
-> [!question]- 理解检查
-> 1. 类属性中的可变对象为什么可能污染所有实例？
-> 2. dataclass 的 `frozen=True` 为什么不是深度不可变？
-> 3. 组合相比继承怎样改善测试与替换？
+**参考资料：** [Python Tutorial: Classes](https://docs.python.org/3/tutorial/classes.html) · [dataclasses](https://docs.python.org/3/library/dataclasses.html) · [Data Model](https://docs.python.org/3/reference/datamodel.html)
 
-> [!info]- 官方参考
-> - [Python Tutorial: Classes](https://docs.python.org/3/tutorial/classes.html)
-> - [dataclasses](https://docs.python.org/3/library/dataclasses.html)
-> - [Data Model](https://docs.python.org/3/reference/datamodel.html)
+# 考察题目
+
+## 1. 动手题
+
+写 `@dataclass` 的任务对象，字段含标签列表；创建两个实例并修改其一，验证另一实例不变。
+
+> [!note]- 验收要点
+> 用 `field(default_factory=list)` 创建独立列表；若暴露内部列表会被外部改动，需定义访问契约。
+
+## 2. 机制追问
+
+dataclass 字段持有列表时，多个实例为何可能共享或暴露内部状态？
+
+> [!note]- 参考答案
+> 可变默认值需用 default_factory；即使每实例独立，直接返回列表也会暴露可变内部状态。定义构造、不变量和访问契约。

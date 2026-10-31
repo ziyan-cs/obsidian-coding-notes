@@ -4,7 +4,7 @@ review_due:
 tags: [math/linear-algebra, math/numerical, ai/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 建立向量、矩阵、范数和线性变换直觉，理解向量检索的相似度语义，并识别浮点误差、数值稳定性和条件敏感问题。
 
 # 向量与线性组合
@@ -106,4 +106,20 @@ softmax(xᵢ) = exp(xᵢ - m) / Σ exp(xⱼ - m)，m=max(x)
 > [!summary] 本篇结论
 > 线性代数提供表示与变换语言，数值分析约束这些数学对象如何在有限精度机器上可靠计算。向量相似度是模型和度量下的证据，不是事实或权限证明。
 
-下一步：[01-Problem Solving and Debugging (问题求解与调试)](/01-Foundations%20(基础能力)/04-Foundation%20Practice%20(基础实践)/01-Problem%20Solving%20and%20Debugging%20(问题求解与调试).md)
+下一步：[01-Problem Solving and Debugging (问题求解与调试)](../04-Foundation%20Practice%20%28%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5%29/01-Problem%20Solving%20and%20Debugging%20%28%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3%E4%B8%8E%E8%B0%83%E8%AF%95%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现余弦相似度，测试零向量、缩放不变性和浮点舍入；写出零向量处理契约。
+
+> [!note]- 验收要点
+> 非零向量同向缩放不改余弦值；零向量分母为零应显式拒绝或定义哨兵，不能静默返回 1。
+
+## 2. 机制追问
+
+向量余弦相似度高是否必然代表语义正确？
+
+> [!note]- 参考答案
+> 不必然。相似度只反映选定嵌入空间和归一化方式下的几何关系，还受模型、数据、维度及数值误差影响；需用任务评估检验实际效果。

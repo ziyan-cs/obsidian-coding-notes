@@ -3,13 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > InnoDB MVCC 通过隐藏事务字段、undo log 版本链和 Read View 判断可见性，使普通快照读通常不必加读锁。RC 通常每次快照读创建新视图，RR 通常在事务首次快照读时复用视图；当前读仍要通过锁读取最新版本。
 
 # 版本链与可见性
 
-> [!note] 本节重点： MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
+**本节要点：** MVCC 通过 undo log 实现一致性读、Read View 可见性判断、快照读与当前读
 
 ## MVCC 核心思想
 
@@ -176,5 +175,20 @@ RR 级别下：
 > - **自测**：1) Read View 里 min_trx_id / max_trx_id / m_ids 分别怎么判断可见性？ 2) 为什么 RR 靠 MVCC 只能防"快照读"的不可重复读，仍需 Next-Key Lock 防当前读的幻读？
 >
 >
-> 关联：[Transactions and Isolation (事务与隔离级别)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/05-Transactions%20and%20Isolation%20(事务与隔离级别).md) · [Locks and Deadlocks (锁与死锁)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/07-Locks%20and%20Deadlocks%20(锁与死锁).md)
->
+> 关联：[Transactions and Isolation (事务与隔离级别)](05-Transactions%20and%20Isolation%20%28%E4%BA%8B%E5%8A%A1%E4%B8%8E%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%29.md) · [Locks and Deadlocks (锁与死锁)](07-Locks%20and%20Deadlocks%20%28%E9%94%81%E4%B8%8E%E6%AD%BB%E9%94%81%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在 RR 会话先做快照读，再让另一个会话更新并提交；同一事务分别做普通 SELECT 与 FOR UPDATE。
+
+> [!note]- 验收要点
+> 记录两种读可能看到的不同版本，说明 Read View 创建时机和当前读加锁。
+
+## 2. 机制追问
+
+同一 RR 事务先快照读到旧值，随后 SELECT FOR UPDATE 可能看到什么？为什么？
+
+> [!note]- 参考答案
+> 快照读沿用首次一致性读的 Read View；SELECT FOR UPDATE 是当前读，会读取并锁定最新可见记录，因此两次查询可能得到不同版本。

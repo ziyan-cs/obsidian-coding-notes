@@ -4,7 +4,7 @@ review_due:
 tags: [cloud-native/kubernetes, backend/deployment]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > Kubernetes 用声明式 API 和控制器把“期望状态”持续协调为“实际状态”。先理解 Pod、Controller、Service 和调度边界，再学习 YAML；不要把它当成一组需要背诵的 kubectl 命令。
 
 # 集群与控制循环
@@ -110,3 +110,19 @@ Pod IP 会变化。Service 用 selector 选择一组后端 Pod，并提供稳定
 
 从一次 Deployment 更新开始，说明 API Server、controller、scheduler、kubelet、Pod 和 Service 分别做什么；再解释一个 Pod Running 但请求仍失败时应检查哪些层。
 官方参考：[Kubernetes Cluster Architecture](https://kubernetes.io/docs/concepts/architecture/) · [Pods](https://kubernetes.io/docs/concepts/workloads/pods/) · [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+
+# 考察题目
+
+## 1. 动手题
+
+部署两个副本与 Service，故意改错 selector 和 targetPort；用 Endpoint、事件与请求验证定位。
+
+> [!note]- 验收要点
+> 能分别发现无 Endpoint 与端口错配；修复后请求到达两个副本。
+
+## 2. 机制追问
+
+Pod 正常运行但 Service 无法访问，排查顺序是什么？
+
+> [!note]- 参考答案
+> 核对 selector 与 Endpoint、容器监听地址和端口、readiness、Service/targetPort、网络策略及 DNS；Pod Running 不代表流量已被路由。

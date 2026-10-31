@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 线程池不是“把任务塞进队列”这么简单。读完应能解释提交、唤醒、背压、异常传递和关闭协议，并用测试验证任务不丢失。以下示例以 C++17 为基线。
 
 # 先定义线程池的契约
@@ -150,6 +150,20 @@ int main() {
 
 生产级实现还要明确：多提交者与关闭方的生命周期同步、超时和取消策略、队列公平性、指标、worker 崩溃策略、任务优先级是否真的需要，以及容量拒绝或阻塞的背压选择。工作窃取、动态扩缩容不是“必须有”，只有负载证据支持时再增加复杂度。
 
-> [!info]- 延伸阅读
-> - [01-Threads Locks and Coordination (线程锁与协作)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/01-Threads%20Locks%20and%20Coordination%20(线程锁与协作).md)
-> - [04-Lock Free and Performance (无锁与性能)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/04-Lock%20Free%20and%20Performance%20(无锁与性能).md)
+**参考资料：** [01-Threads Locks and Coordination (线程锁与协作)](01-Threads%20Locks%20and%20Coordination%20%28%E7%BA%BF%E7%A8%8B%E9%94%81%E4%B8%8E%E5%8D%8F%E4%BD%9C%29.md) · [04-Lock Free and Performance (无锁与性能)](04-Lock%20Free%20and%20Performance%20%28%E6%97%A0%E9%94%81%E4%B8%8E%E6%80%A7%E8%83%BD%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现有界线程池，压满队列后分别测试拒绝/等待策略，再并发提交与关闭。
+
+> [!note]- 验收要点
+> 任务不丢不重复，关闭后拒收新任务，已有任务按约定排空或取消，工作线程全部回收。
+
+## 2. 机制追问
+
+线程池关闭时，已提交任务和新提交任务应如何处理？
+
+> [!note]- 参考答案
+> 先定义停止接收、排空或取消的契约；同步任务队列与工作线程，确保等待者被唤醒、资源有界、线程被回收，并测试提交与关闭竞态。

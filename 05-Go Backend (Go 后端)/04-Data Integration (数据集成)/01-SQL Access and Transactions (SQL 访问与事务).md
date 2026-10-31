@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > `sql.DB` 是并发安全的连接池句柄；service 定义业务事务，repository 负责查询、扫描与数据库错误边界。
 
 # 连接池与调用生命周期
@@ -64,6 +64,20 @@ func transfer(ctx context.Context, db *sql.DB, from, to int64, amount int64) err
 
 repository 单元测试可验证 SQL 参数与错误转换，集成测试应使用与生产一致的数据库类型验证事务、隔离和约束。运行时监控池等待次数、等待时长、使用中/空闲连接、查询延迟与数据库错误分类。
 
-> [!info]- 官方参考
-> - [Accessing relational databases](https://go.dev/doc/database/)
-> - [Canceling in-progress database operations](https://go.dev/doc/database/cancel-operations)
+**参考资料：** [Accessing relational databases](https://go.dev/doc/database/) · [Canceling in-progress database operations](https://go.dev/doc/database/cancel-operations)
+
+# 考察题目
+
+## 1. 动手题
+
+写转账事务：扣款与入账任一步失败都回滚；并发重复请求用幂等键测试。
+
+> [!note]- 验收要点
+> 余额不变量成立，资源及时关闭；幂等键有唯一约束且结果可查询。
+
+## 2. 机制追问
+
+事务函数中途返回错误时，连接与事务如何处理？
+
+> [!note]- 参考答案
+> 确保结果集关闭，事务失败回滚、成功提交，并传播 context；连接池复用连接，不等于事务可跨请求共享。

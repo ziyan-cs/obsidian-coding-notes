@@ -4,10 +4,7 @@ review_due:
 tags: [security/detection, operations/incident]
 ---
 
-> [!note] 方法论坐标
-> 威胁驱动检测、日志语义与证据保全统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/06-Security%20Detection%20and%20Incident%20Evidence%20(安全检测与事件证据).md)；本篇聚焦安全事件源、规则运营和响应联动。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 安全控制无法保证永不失守；日志、检测和响应流程决定异常能否在影响扩大前被发现并限制。
 
 # 应记录的安全事件
@@ -50,5 +47,21 @@ detect -> triage -> contain -> preserve evidence
 
 为账号泄露、密钥泄露、恶意镜像、越权访问和数据泄漏准备运行手册。演练要验证联系人、权限、备份、回滚和日志查询真实可用。
 
-> [!question]- 理解检查
-> 为什么“记录所有请求体”不是好的安全日志策略？怎样平衡可调查性、隐私和成本？
+> [!info]- 关联笔记
+> 威胁驱动检测、日志语义与证据保全统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦安全事件源、规则运营和响应联动。
+
+# 考察题目
+
+## 1. 动手题
+
+为重复失败登录、越权请求和秘密读取写三种安全事件格式，生成正常与异常样本验证规则。
+
+> [!note]- 验收要点
+> 事件包含身份、资源、结果和关联 ID，敏感内容脱敏；规则有误报分析。
+
+## 2. 机制追问
+
+记录所有请求体是否能提高安全检测能力？
+
+> [!note]- 参考答案
+> 可能泄露敏感数据并产生噪声；应记录身份、动作、资源、结果和关联标识，基于威胁场景设计检测并验证误报与漏报。

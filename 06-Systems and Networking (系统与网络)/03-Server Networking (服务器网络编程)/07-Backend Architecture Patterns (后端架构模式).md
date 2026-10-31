@@ -4,9 +4,8 @@ review_due:
 tags: [backend/server, architecture]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 比较分层、CQRS、事件驱动和微服务拆分的责任边界；模式用于解决约束，不是项目必须收集的名词。
-
 
 # 分层架构（Layered Architecture）
 
@@ -76,8 +75,6 @@ server/
 - **数据流**：handler 处理协议校验，service 维护业务不变量，repository 执行持久化。不要让数据库异常原文直接成为 HTTP/gRPC 响应。
 - **错误策略**：返回 `Result`、`expected` 或异常都可以，但须统一约定边界转换、回滚与日志；`Result<T, Error>` 是示意类型，不是标准库现成 API。
 
----
-
 # CQRS（命令查询职责分离）
 
 CQRS 把修改状态的 command 与读取状态的 query 分成不同模型或接口。**最小形式可以仍使用同一个数据库**；只有当读写扩容、独立查询模型等需求足够强时才拆成不同存储。下面的图代表较复杂的双存储变体，不是 CQRS 的定义：
@@ -142,8 +139,6 @@ query:   read projection; expose version/staleness policy when needed
 | **同步调用有预算** | 需要立即结果时可同步，但限定超时、重试和降级 | A → B → C 无界同步链、失败放大 |
 | **独立部署是目标** | 版本兼容、数据迁移和可观测性支持错峰发布 | 每次改动必须同时部署所有服务 |
 
----
-
 ## 一种可选的多服务部署图
 
 下图只帮助辨认网关、各服务数据所有权和异步消费者；初学项目不必从三个服务、三个数据库和 Kafka 起步。先做模块边界清楚的单体，只有独立扩缩容、团队职责或故障隔离确有收益时再拆。
@@ -182,8 +177,6 @@ query:   read projection; expose version/staleness policy when needed
                     └───────────────────┘
 ```
 
----
-
 # 如何判断是否需要升级架构
 
 1. 先写出当前失败模式：是查询模型难维护、跨模块变更频繁、发布互相牵制，还是仅仅代码目录多？
@@ -192,3 +185,19 @@ query:   read projection; expose version/staleness policy when needed
 4. 若引入跨服务同步调用，画出最长调用链并分配总体 deadline；按故障注入验证下游变慢时是否级联失败。
 
 把“模式名称”转换成这些可测试的不变量，才算真正理解架构。[CQRS pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) · [Event-driven architecture](https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven)
+
+# 考察题目
+
+## 1. 动手题
+
+给已有小服务画模块和部署图，再提出拆成两个服务的方案，列出新增的超时、数据一致性与运维成本。
+
+> [!note]- 验收要点
+> 拆分有明确职责与容量理由；接口、失败传播和回滚边界可测试。
+
+## 2. 机制追问
+
+把所有逻辑拆成微服务是否一定更清晰？
+
+> [!note]- 参考答案
+> 不会。拆分引入网络、部署、一致性和观测成本；先按职责和故障边界划分模块，只有独立扩展或交付需求支持时再引入服务边界。

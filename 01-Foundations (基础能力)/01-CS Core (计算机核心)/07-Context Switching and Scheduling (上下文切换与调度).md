@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 分清模式转换、线程切换与地址空间切换，理解调度目标之间的冲突，并用当前 Linux 的调度类与 EEVDF 模型解释实际行为。
 
 # 一次切换究竟换了什么
@@ -103,4 +103,20 @@ perf sched latency
 - [Linux Scheduler documentation](https://docs.kernel.org/scheduler/index.html)
 - [sched(7)](https://man7.org/linux/man-pages/man7/sched.7.html)
 
-下一步：[08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/08-Virtual%20Memory%20Paging%20and%20Allocation%20(虚拟内存、分页与分配).md)
+下一步：[08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)](08-Virtual%20Memory%20Paging%20and%20Allocation%20%28%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E3%80%81%E5%88%86%E9%A1%B5%E4%B8%8E%E5%88%86%E9%85%8D%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+让一个线程忙算、一个线程睡眠、一个线程等锁，采集状态和上下文切换数据，判断每个线程在等什么。
+
+> [!note]- 验收要点
+> 忙算偏运行态，睡眠和锁等待偏阻塞；对照线程栈和自愿/非自愿切换，不仅看总数。
+
+## 2. 机制追问
+
+服务线程频繁切换但 CPU 利用率不高，可能在等什么？怎样验证？
+
+> [!note]- 参考答案
+> 可能等待 I/O、锁或调度；切换次数本身不是根因。先看线程状态、运行队列、阻塞栈与系统调用，再区分自愿阻塞和抢占切换。

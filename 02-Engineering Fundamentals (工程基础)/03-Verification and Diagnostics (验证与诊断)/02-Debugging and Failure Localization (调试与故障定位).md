@@ -5,7 +5,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 调试不是随机改代码，而是把“现象”逐步收敛为可证伪的根因假设。本篇统一现场保护、复现、二分、动态调试和 core dump 分析；具体语言的异常模型留在语言专题。
 
 # 一条可靠的故障定位链
@@ -131,8 +131,8 @@ strace -ff -tt -T -p <pid>
 
 ## 关联专题
 
-- [Memory Safety and Dynamic Analysis (内存安全与动态分析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/03-Memory%20Safety%20and%20Dynamic%20Analysis%20(内存安全与动态分析).md)：用 sanitizer 和动态分析验证内存/并发假设。
-- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)：从线上信号定位故障入口。
+- [Memory Safety and Dynamic Analysis (内存安全与动态分析)](03-Memory%20Safety%20and%20Dynamic%20Analysis%20%28%E5%86%85%E5%AD%98%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90%29.md)：用 sanitizer 和动态分析验证内存/并发假设。
+- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)：从线上信号定位故障入口。
 
 ## 参考资料
 
@@ -142,3 +142,19 @@ strace -ff -tt -T -p <pid>
 
 > [!summary] 本篇结论
 > 高效调试是在维护证据链：先保护现场、陈述事实并构造最小复现，再用能区分假设的实验缩小范围，定位首次错误状态，最后用回归验证修复没有破坏原有行为。
+
+# 考察题目
+
+## 1. 动手题
+
+对一个可复现超时，采集请求日志、线程栈与依赖耗时，写出可证伪的根因假设。
+
+> [!note]- 验收要点
+> 时间线能够定位阻塞段；修复后相同负载下超时消失且没有把错误转移到别处。
+
+## 2. 机制追问
+
+请求超时能否直接归因于数据库？怎样建立定位链？
+
+> [!note]- 参考答案
+> 先界定哪一段耗时或阻塞，关联请求日志、追踪、线程栈和依赖指标；提出可证伪假设后复现或注入故障，避免凭症状猜根因。

@@ -3,17 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 通用故障定位与动态分析见 [Debugging and Failure Localization (调试与故障定位)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/02-Debugging%20and%20Failure%20Localization%20(调试与故障定位).md) 和 [Memory Safety and Dynamic Analysis (内存安全与动态分析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/03-Memory%20Safety%20and%20Dynamic%20Analysis%20(内存安全与动态分析).md)；本篇保留 C++ 异常安全、GDB 与编译器工具的落地细节。
-
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > RAII 让资源释放沿作用域自动发生，异常安全则要求失败后仍维持不变量；调试先复现、缩小范围、验证假设，再依据证据定位根因。
 
 # Exception Handling (异常处理)
 
-> [!note] 本节重点：异常安全保证、栈展开、noexcept 优化、RAII 与异常
+**本节要点：** 异常安全保证、栈展开、noexcept 优化、RAII 与异常
 
 ## 三种异常安全保证
 
@@ -131,11 +126,9 @@ void use() {
 
 > [!tip]- **工程要点**：异常安全首先靠 RAII 管理资源，而非到处补 `try-catch`。正常的 C++ 异常栈展开会析构已构造的自动对象；但 `std::terminate`、进程异常退出或被跳过的析构路径不能据此保证清理。应在能恢复、转换错误或建立业务边界的层级捕获异常。
 
----
-
 # Debugging gdb & Sanitizers (调试工具)
 
-> [!note] 本节重点：GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
+**本节要点：** GDB 核心命令、AddressSanitizer 使用、Segment Fault 调试、Core Dump 分析
 
 ## GDB 核心命令
 
@@ -270,4 +263,21 @@ valgrind --tool=callgrind ./main
 
 > [!tip]- **工程要点**：把 Sanitizer 作为可重复的测试配置，而不是“跑过一次就安全”。ASan/UBSan 常适合日常 CI；TSan 通常独立运行；GDB 用于观察真实崩溃现场。具体组合以项目平台、依赖与测试时长为准。
 
----
+> [!info]- 关联笔记
+> 通用故障定位与动态分析见 [Debugging and Failure Localization (调试与故障定位)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md) 和 [Memory Safety and Dynamic Analysis (内存安全与动态分析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/03-Memory%20Safety%20and%20Dynamic%20Analysis%20%28%E5%86%85%E5%AD%98%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90%29.md)；本篇保留 C++ 异常安全、GDB 与编译器工具的落地细节。
+
+# 考察题目
+
+## 1. 动手题
+
+写构造中途抛异常的类，用日志或计数验证成员析构顺序；运行 ASan/UBSan。
+
+> [!note]- 验收要点
+> 已构造成员逆序析构，当前对象析构函数不运行；资源交给 RAII 成员管理。
+
+## 2. 机制追问
+
+构造函数中途抛异常，哪些对象会析构？如何定位资源泄漏？
+
+> [!note]- 参考答案
+> 已完全构造的基类和成员会逆序析构，当前对象本身的析构函数不会执行；资源应交给已构造的 RAII 成员，用 sanitizer 或失败注入验证。

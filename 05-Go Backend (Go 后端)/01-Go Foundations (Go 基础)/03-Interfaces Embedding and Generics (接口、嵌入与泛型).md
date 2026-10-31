@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/basics]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Go 用组合（composition）和小 interface 表达行为；interface 是隐式满足的，不是 C++ 的继承层级。
 
 # 核心语法
@@ -96,3 +96,19 @@ Go 1.27 新增**具体类型的泛型方法**，但 interface 的方法仍不能
 > [!question]- 自测：先回答再展开
 > 1. 为什么 `*User` 可能实现 interface，而 `User` 不实现？
 > 2. 哪种情况下该先写 interface，哪种情况下不该？
+
+# 考察题目
+
+## 1. 动手题
+
+写返回 `error` 的函数，故意返回带类型的 nil 指针；打印 `err==nil`，再修复。
+
+> [!note]- 验收要点
+> 带动态类型的接口不等于 nil；无错误时直接返回 nil 接口。
+
+## 2. 机制追问
+
+接口变量看似非 nil 却包含 nil 指针，为什么比较结果不是 nil？
+
+> [!note]- 参考答案
+> 接口值包含动态类型和动态值；只有两者都为空才等于 nil。返回 error 等接口时不要把带类型的 nil 指针装入接口。

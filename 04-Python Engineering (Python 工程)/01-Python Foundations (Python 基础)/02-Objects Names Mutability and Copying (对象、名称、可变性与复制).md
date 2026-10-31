@@ -6,7 +6,7 @@ tags:
   - python/object-model
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Python 名称绑定对象，赋值通常不复制对象；理解身份、相等、可变性和共享引用，是解释参数传递、容器修改与资源生命周期的基础。
 
 # 名称、对象与类型
@@ -102,12 +102,38 @@ dict key 和 set 元素必须可哈希，并且存放期间哈希值稳定。不
 
 随后设计一个配置对象并回答：调用方能否修改内部 list？getter 返回内部引用还是副本？多个 task 共享是否安全？没有这些契约，同一个对象会成为隐蔽耦合点。
 
-> [!question]- 理解检查
-> 1. `a = b` 对 list 做了什么，没有做什么？
-> 2. 为什么 tuple 可能包含可变状态？
-> 3. `deepcopy` 为什么不是共享问题的默认答案？
-> 4. 为什么资源清理不能依赖垃圾回收时机？
+**参考资料：** [Python Data Model](https://docs.python.org/3/reference/datamodel.html) · [copy — Shallow and deep copy operations](https://docs.python.org/3/library/copy.html)
 
-> [!info]- 官方参考
-> - [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
-> - [copy — Shallow and deep copy operations](https://docs.python.org/3/library/copy.html)
+# 考察题目
+
+## 1. 预测输出：共享引用
+
+```python
+rows = [[0], [0]]
+copy = rows[:]
+copy[0].append(1)
+copy[1] = [9]
+
+print(rows)
+print(copy)
+print(rows is copy)
+print(rows[0] is copy[0])
+```
+
+写出四行输出，并指出哪一步修改了共享对象、哪一步只是重新绑定元素。
+
+> [!note]- 参考答案
+> ```text
+> [[0, 1], [0]]
+> [[0, 1], [9]]
+> False
+> True
+> ```
+> 切片只复制外层列表；`append` 修改共享的内层列表，`copy[1] = [9]` 只替换副本中的一个引用。
+
+## 2. 机制追问
+
+函数修改列表参数后调用方也变化，复制一层列表为何仍可能互相影响？
+
+> [!note]- 参考答案
+> 名称绑定同一对象，列表可变；浅复制只复制外层容器，嵌套可变对象仍共享。需根据所有权契约选择不可变数据、显式复制或深复制。

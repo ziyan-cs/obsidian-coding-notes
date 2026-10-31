@@ -3,10 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Shell 将程序、参数、重定向和管道组合成可重复的文本处理流程；先确认命令的输入输出与退出码，再处理引号、空白、通配符和失败传播。脚本能运行不等于可靠，还要做到可重入、可观察并对异常退出。
->
 
 > [!warning] 示例中的 `<file>`、`<dir>`、`<src>` 等是占位符，不是可原样执行的命令。复制前换成确认过的真实路径；尤其不要把未解析的变量直接传给删除命令。
 
@@ -408,8 +406,6 @@ read -t 10 -p "Enter number: " num    # 10 秒超时
 > - `[[ ]]` 是 Bash 条件语法，支持模式匹配与正则；需要 POSIX `sh` 时使用 `[ ]`
 > - `$(( ))` 是最推荐的整数运算方式
 
-
----
 ## 先建立 Shell 执行模型
 
 Shell 的难点不是记住命令，而是理解一行文本如何变成进程、参数和数据流。可以按以下顺序阅读一条命令：
@@ -484,3 +480,19 @@ trap cleanup EXIT
 - [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
 - [ShellCheck Wiki](https://www.shellcheck.net/wiki/)
 - [POSIX Shell Command Language](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html)
+
+# 考察题目
+
+## 1. 动手题
+
+写脚本查找最近修改的日志并统计错误行；让查找命令失败，确认脚本返回非零状态。
+
+> [!note]- 验收要点
+> 正确引用路径，处理空结果与空格；`pipefail` 或逐段状态检查捕获前段失败。
+
+## 2. 机制追问
+
+管道最后一条命令成功，前面的查找失败，脚本为什么仍可能返回成功？
+
+> [!note]- 参考答案
+> shell 默认可能只返回管道最后一段状态；需要明确 pipefail 或逐段检查，并正确引用文件名与变量，避免空格和特殊字符破坏命令。

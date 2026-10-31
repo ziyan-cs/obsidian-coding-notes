@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从“保护与复用硬件”理解操作系统，分清系统调用、异常、中断与上下文切换，并能讲清 UEFI 机器从上电到用户空间的启动链。
 
 # 操作系统解决什么问题
@@ -116,4 +116,20 @@ systemd-analyze                # 使用 systemd 时观察启动阶段
 - [UEFI Specification](https://uefi.org/specifications)
 - [Linux x86 boot documentation](https://docs.kernel.org/arch/x86/boot.html)
 
-下一步：[06-Processes and Threads (进程与线程)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/06-Processes%20and%20Threads%20(进程与线程).md)
+下一步：[06-Processes and Threads (进程与线程)](06-Processes%20and%20Threads%20%28%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在当前系统记录启动后的进程树、内核版本及一个用户程序触发的系统调用，画出用户态到内核态路径。
+
+> [!note]- 验收要点
+> 进程树不能等同于启动全过程；证据至少区分固件/引导、内核初始化与用户空间。
+
+## 2. 机制追问
+
+从开机到用户程序运行，固件、引导程序、内核分别负责什么？
+
+> [!note]- 参考答案
+> 固件初始化硬件并选择启动目标；引导程序装载内核；内核建立内存、进程和设备管理后启动用户空间。普通程序通过系统调用请求受保护的资源。

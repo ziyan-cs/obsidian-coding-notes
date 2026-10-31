@@ -3,12 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-
-> [!note] 本节重点：分库分表策略（水平/垂直拆分）、Sharding Key 选择、跨节点查询与分布式事务问题
+> [!abstract] 本篇要点
+> 分片用于跨节点扩展数据与负载，分区表仍属同一数据库管理边界；两者都要处理路由、迁移与跨分片查询。
 
 # 何时需要分库分表
+
+**本节要点：** 分库分表策略（水平/垂直拆分）、Sharding Key 选择、跨节点查询与分布式事务问题
 
 当单库/单表达到性能瓶颈时考虑分片：
 
@@ -159,5 +159,20 @@ CREATE TABLE order (
 >
 >
 
-> [!info]- 延伸阅读
-> - 下一步：[13-MySQL and Redis Caching (MySQL 与 Redis 缓存)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/13-MySQL%20and%20Redis%20Caching%20(MySQL%20与%20Redis%20缓存).md)
+**参考资料：** 下一步：[13-MySQL and Redis Caching (MySQL 与 Redis 缓存)](13-MySQL%20and%20Redis%20Caching%20%28MySQL%20%E4%B8%8E%20Redis%20%E7%BC%93%E5%AD%98%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+用订单数据选两个候选分片键，模拟热点、跨分片查询和扩容迁移。
+
+> [!note]- 验收要点
+> 比较数据倾斜、路由复杂度与事务代价；先证明单库瓶颈再决定拆分。
+
+## 2. 机制追问
+
+分片键选错后，哪些操作会变贵？
+
+> [!note]- 参考答案
+> 跨分片查询、聚合、事务和扩容迁移会变复杂；选键需结合访问模式、热点、数据倾斜与增长，先验证单库瓶颈再拆分。

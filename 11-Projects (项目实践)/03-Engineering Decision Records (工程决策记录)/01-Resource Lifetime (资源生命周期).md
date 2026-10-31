@@ -4,9 +4,9 @@ review_due:
 tags: [comparison, resource/lifetime]
 ---
 
-> [!abstract] 学习定位：结论：GC 只处理内存可达性；文件、socket、锁、事务等资源仍须有确定的关闭协议。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 结论：GC 只处理内存可达性；文件、socket、锁、事务等资源仍须有确定的关闭协议。
+>
 > GC 只回收不可达内存，不替代文件、socket、锁和事务的关闭协议。C++ 用 RAII，Go 用 defer，Python 用 context manager，本质都是把资源生命周期绑定到明确作用域。
 
 # 工程落点
@@ -38,5 +38,20 @@ acquire -> one clear owner -> use -> release
 > - 自测：一个函数创建 DB 连接、打开文件并加锁，三种语言各应把释放写在哪里？
 > - 自测：为什么不能用“对象最终会被 GC”解释文件描述符不会泄漏？
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Concurrency Models (并发模型)](/11-Projects%20(项目实践)/03-Engineering%20Decision%20Records%20(工程决策记录)/02-Concurrency%20Models%20(并发模型).md)
+**参考资料：** 下一步：[02-Concurrency Models (并发模型)](02-Concurrency%20Models%20%28%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+从一条真实请求列出连接、任务、缓冲和事务的创建者与释放者；注入每个步骤失败。
+
+> [!note]- 验收要点
+> 每个资源释放一次，取消和关闭路径无泄漏，借用不越过所有者寿命。
+
+## 2. 机制追问
+
+一次请求跨网络、线程和数据库时，如何画出资源所有权？
+
+> [!note]- 参考答案
+> 对连接、缓冲、任务和事务分别指定创建者、持有者、释放时机与失败路径；借用关系不能跨越被借用对象生命周期。

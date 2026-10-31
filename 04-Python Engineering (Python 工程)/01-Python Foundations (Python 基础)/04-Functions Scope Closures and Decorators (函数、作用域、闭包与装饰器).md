@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/functions]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 函数是带局部作用域的对象；参数绑定、闭包捕获和装饰器包装都会影响接口语义，不能只把它们当语法技巧。
 
 # 参数绑定与接口设计
@@ -106,11 +106,39 @@ def timed(func: Callable[P, R]) -> Callable[P, R]:
 
 练习：编写一个重试高阶函数，参数包含最大尝试次数、退避函数和“哪些异常可重试”的判断。用 fake 函数验证成功、永久失败和达到上限三条路径。
 
-> [!question]- 理解检查
-> 1. 为什么给形参重新赋值不会改变调用者变量，但 `append` 可能改变调用者看到的 list？
-> 2. late binding 为什么会让多个 lambda 得到相同结果？
-> 3. 一个重试装饰器为什么必须考虑幂等性？
+**参考资料：** [Python Tutorial: Defining Functions](https://docs.python.org/3/tutorial/controlflow.html#defining-functions) · [Python FAQ: Why do lambdas defined in a loop return the same result?](https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result)
 
-> [!info]- 官方参考
-> - [Python Tutorial: Defining Functions](https://docs.python.org/3/tutorial/controlflow.html#defining-functions)
-> - [Python FAQ: Why do lambdas defined in a loop return the same result?](https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result)
+# 考察题目
+
+## 1. 修错：默认参数与缺省值
+
+```python
+def add_tag(tag, tags=[]):
+    tags.append(tag)
+    return tags
+
+def choose_limit(value):
+    return value or 10
+```
+
+分别说明什么输入会产生意外结果并改写；`choose_limit(0)` 必须保留 0。
+
+> [!note]- 参考实现
+> ```python
+> def add_tag(tag, tags=None):
+>     if tags is None:
+>         tags = []
+>     tags.append(tag)
+>     return tags
+>
+> def choose_limit(value):
+>     return 10 if value is None else value
+> ```
+> 默认列表跨调用共享；`or` 还会把 0、False、空字符串等假值替换为 10。
+
+## 2. 机制追问
+
+装饰器保存了计数状态，却意外让多个调用共享数据，原因和修复是什么？
+
+> [!note]- 参考答案
+> 闭包捕获外层变量并跨调用保留；明确状态应属于装饰器实例、每次调用还是请求上下文，避免可变默认参数和无界共享状态。

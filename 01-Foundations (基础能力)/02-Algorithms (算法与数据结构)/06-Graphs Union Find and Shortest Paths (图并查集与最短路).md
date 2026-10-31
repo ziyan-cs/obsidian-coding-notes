@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/graph, algorithm/shortest-path, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从图表示与可达性出发，掌握 DFS/BFS、拓扑排序、并查集和最短路，并能根据边权、规模与输出需求选择算法。
 
 # 图表示决定遍历成本
@@ -129,4 +129,20 @@ std::vector<long long> dijkstra(const std::vector<std::vector<Edge>>& g, int s) 
 > [!summary] 本篇结论
 > 图算法的第一步不是套模板，而是确定方向、边权、稀疏度和输出语义。遍历解决可达性，拓扑序解决依赖，并查集合并连通分量，最短路则由边权条件决定。
 
-下一步：[07-Binary Search (二分查找)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/07-Binary%20Search%20(二分查找).md)
+下一步：[07-Binary Search (二分查找)](07-Binary%20Search%20%28%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+给同一组节点分别建依赖图和带权图：实现拓扑排序、并查集连通查询、非负权最短路。
+
+> [!note]- 验收要点
+> 拓扑序必须满足每条依赖边；并查集只回答连通；Dijkstra 不用于负权边。
+
+## 2. 机制追问
+
+依赖排序、动态连通和非负权最短路各选什么算法？
+
+> [!note]- 参考答案
+> 依赖关系用拓扑排序并检测环；动态连通用并查集；非负边权最短路用 Dijkstra。BFS 只直接适用于无权或等权边。

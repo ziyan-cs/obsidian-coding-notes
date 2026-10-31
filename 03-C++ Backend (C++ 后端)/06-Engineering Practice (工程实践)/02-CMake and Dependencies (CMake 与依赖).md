@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能从零构建一个库与可执行文件，并解释编译要求如何沿 target 传播。本文用 CMake 3.20+ 和 C++17；终端命令与 CMake 语法分开。
 
 # 从一个可构建项目开始
@@ -111,5 +111,20 @@ target_link_libraries(app PRIVATE fmt::fmt)
 
 资料：[CMake 官方教程：目标命令](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)、[CMake 官方教程：链接作用域](https://cmake.org/cmake/help/latest/guide/tutorial/Getting%20Started%20with%20CMake.html)。
 
-> [!info]- 延伸阅读
-> - [03-Exceptions and Debugging (异常与调试)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/06-Engineering%20Practice%20(工程实践)/03-Exceptions%20and%20Debugging%20(异常与调试).md)
+**参考资料：** [03-Exceptions and Debugging (异常与调试)](03-Exceptions%20and%20Debugging%20%28%E5%BC%82%E5%B8%B8%E4%B8%8E%E8%B0%83%E8%AF%95%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写库、测试和可执行目标，给库添加公开/私有依赖；在下游目标中验证传播边界。
+
+> [!note]- 验收要点
+> 不使用全局 include/link 设置；干净构建时公开依赖可见、私有实现细节不泄漏。
+
+## 2. 机制追问
+
+CMake 中库能编译，使用它的程序却缺头文件或链接库，问题可能在哪？
+
+> [!note]- 参考答案
+> 依赖没有正确写在 target 上或 PUBLIC/PRIVATE 传播范围不对；从干净构建验证下游目标的 include 和链接要求。

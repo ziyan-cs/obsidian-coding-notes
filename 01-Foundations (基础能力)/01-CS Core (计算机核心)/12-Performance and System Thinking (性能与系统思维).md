@@ -4,7 +4,7 @@ review_due:
 tags: [cs/performance, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把性能问题转换为可重复测量的假设，理解延迟、吞吐、利用率、排队与扩展性的联系，并能从现象逐层定位瓶颈。
 
 # 性能首先是需求
@@ -114,4 +114,20 @@ L = λW
 - [Linux pressure stall information](https://docs.kernel.org/accounting/psi.html)
 - [Google SRE: Monitoring Distributed Systems](https://sre.google/sre-book/monitoring-distributed-systems/)
 
-回到：[00-Foundations Standard (基础能力标准与自测)](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)
+回到：[00-Foundations Standard (基础能力标准与自测)](../00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+给一个服务记录每秒到达率、平均响应时间和在途请求数，用 Little 定律估算并与观测比较。
+
+> [!note]- 验收要点
+> 在相对稳定区间检验 L≈λW；偏差可能来自采样窗口、排队、丢请求或定义不一致。
+
+## 2. 机制追问
+
+吞吐量翻倍后尾延迟恶化，为什么不能只看平均耗时？
+
+> [!note]- 参考答案
+> 利用率接近饱和时排队会放大，尾部请求受等待时间影响更大。记录负载、并发、延迟分位和资源瓶颈，再用 Little 定律核对并发与响应时间。

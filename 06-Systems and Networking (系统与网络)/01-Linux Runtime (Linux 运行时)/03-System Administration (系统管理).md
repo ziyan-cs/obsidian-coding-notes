@@ -3,14 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 系统管理的主线是“资源—进程—服务—日志”：先用指标确认 CPU、内存、磁盘或网络瓶颈，再定位进程与服务状态，最后用日志和复现命令闭环。不要在没有证据时直接重启或调参。
->
-
-> [!note] 本节重点：用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
 
 # 账户、用户组与权限
+
+**本节要点：** 用户与组管理、磁盘管理、任务调度、服务管理 systemctl、进程管理与系统监控、日志查看
 
 ## 创建与删除
 
@@ -58,8 +56,6 @@ who                       # 所有登录用户
 w                         # 增强版 who（含操作、负载）
 id                        # 查看当前 UID/GID/组
 ```
-
----
 
 # 存储设备与文件系统
 
@@ -110,8 +106,6 @@ vim /etc/fstab                # 添加：
 UUID=xxx /mnt/data ext4 defaults 0 0
 ```
 
----
-
 # 进程与资源观测
 
 ## 查看进程
@@ -152,8 +146,6 @@ pidof <name>              # 获取进程 PID
 | Z | 僵尸态（父进程未 wait 回收） |
 | T | 停止 / 被跟踪 |
 
----
-
 ## 系统资源监控
 
 ```bash
@@ -166,8 +158,6 @@ uptime                    # 运行时长 + 负载
 vmstat 1                  # 每秒刷新 CPU/内存/IO 统计
 iostat -x 1               # 磁盘 IO 统计
 ```
-
----
 
 # 网络与服务管理
 ## 网络管理
@@ -184,8 +174,6 @@ wget <URL>                # 下载文件
 traceroute <host>         # 路由追踪
 ```
 
----
-
 ## 服务管理（systemd）
 
 ```bash
@@ -196,8 +184,6 @@ systemctl status nginx    # 查看状态
 systemctl enable nginx    # 开机自启
 systemctl disable nginx   # 取消自启
 ```
-
----
 
 # 自动化任务与日志
 ## 任务调度
@@ -233,8 +219,6 @@ at now + 1 hour            # 一小时后
 atq                        # 查看待执行任务
 atrm <ID>                  # 删除指定任务
 ```
-
----
 
 ## 日志查看
 
@@ -340,3 +324,19 @@ journalctl -u example.service --since '30 min ago' --no-pager
 - [systemd Documentation](https://systemd.io/)
 - [Linux man-pages project](https://www.kernel.org/doc/man-pages/)
 - [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
+
+# 考察题目
+
+## 1. 动手题
+
+模拟服务写盘失败：分别耗尽 inode、设置只读目录或降低 fd 上限，收集诊断命令输出。
+
+> [!note]- 验收要点
+> 能区分容量、inode、权限与 fd 限额，不凭单一 `df -h` 判断。
+
+## 2. 机制追问
+
+磁盘空间够但服务仍无法写入，可能还有哪些系统限制？
+
+> [!note]- 参考答案
+> 检查 inode、配额、挂载只读、权限、文件描述符上限及容器限制；用实际报错和系统指标定位，不能只看 df 容量。

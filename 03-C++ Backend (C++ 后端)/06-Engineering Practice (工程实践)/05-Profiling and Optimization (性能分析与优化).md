@@ -3,12 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 基准实验与剖析方法统一见 [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)；本篇聚焦 C++ release 构建、perf、分配器和 Google Benchmark。
-
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 优化的起点是可复现测量：用 profiler 找到热点，提出单一假设并验证收益与回归；没有测量证据的“优化”通常只是复杂度转移。
 
 # 从性能目标到可复现实验
@@ -90,3 +85,22 @@ BENCHMARK_MAIN();
 
 > [!note] 最小交付证据
 > 写清“问题负载 → 指标基线 → profiler 证据 → 修改假设 → 对照结果 → 正确性回归”。如果无法复现原问题或收益落在测量噪声内，先不要宣称优化成功。
+
+> [!info]- 关联笔记
+> 基准实验与剖析方法统一见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇聚焦 C++ release 构建、perf、分配器和 Google Benchmark。
+
+# 考察题目
+
+## 1. 动手题
+
+对同一输入记录优化前后 CPU profile 和延迟分位，故意做一个只改善微基准、不改善端到端的改动。
+
+> [!note]- 验收要点
+> 能解释热点转移或瓶颈不在该函数；报告环境、负载和改动代价。
+
+## 2. 机制追问
+
+发现某函数占 CPU 样本最多，能否立即重写？
+
+> [!note]- 参考答案
+> 先确认负载代表目标场景、采样可靠且端到端瓶颈在此处；提出可测假设，改动后复测吞吐、分位延迟和资源代价。

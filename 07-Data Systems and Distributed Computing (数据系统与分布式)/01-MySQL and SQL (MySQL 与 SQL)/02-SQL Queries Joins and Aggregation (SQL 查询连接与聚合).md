@@ -3,7 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：从 SELECT 执行目标出发组织过滤、连接、子查询、分组与聚合。
+> [!abstract] 本篇要点
+> 从 SELECT 执行目标出发组织过滤、连接、子查询、分组与聚合。
 
 # 单表查询与聚合
 
@@ -91,7 +92,7 @@ SELECT MIN([字段名]) FROM [表名];
 - group by
 
 ```sql
--- 按指定字段分组 
+-- 按指定字段分组
 SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分组字段];
 ```
 
@@ -99,7 +100,7 @@ SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分�
 
 ```sql
 -- 分组后过滤结果
-SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分组字段] 
+SELECT [分组字段], [聚合函数]([字段名]) FROM [表名] GROUP BY [分组字段]
 	HAVING [聚合函数]([字段名]) [条件];
 ```
 
@@ -249,14 +250,9 @@ SELECT CASE WHEN [条件1] THEN [结果1] WHEN [条件2] THEN [结果2] ELSE [�
 SELECT NULLIF([表达式1], [表达式2]) FROM [表名];
 ```
 
----
-
-
----
-
 # 连接与子查询
 
-> [!note] 本节重点：INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
+**本节要点：** INNER/LEFT/RIGHT/FULL JOIN 区别与用法、子查询 EXISTS/IN、多表关联优化要点
 
 ## 联合查询
 
@@ -402,3 +398,19 @@ LIMIT 50;
 - [MySQL 8.4 Reference Manual: SELECT](https://dev.mysql.com/doc/refman/8.4/en/select.html)
 - [MySQL 8.4 Reference Manual: EXPLAIN](https://dev.mysql.com/doc/refman/8.4/en/explain.html)
 - [MySQL 8.4 Reference Manual: Window Functions](https://dev.mysql.com/doc/refman/8.4/en/window-functions.html)
+
+# 考察题目
+
+## 1. 动手题
+
+写查询统计每个用户的订单数，加入无订单用户、重复订单行和 NULL，比较 INNER/LEFT JOIN 结果。
+
+> [!note]- 验收要点
+> 连接键和聚合粒度正确；无订单用户在 LEFT JOIN 下仍保留且计数为 0。
+
+## 2. 机制追问
+
+JOIN 后结果行数意外翻倍，最先检查什么？
+
+> [!note]- 参考答案
+> 检查连接键是否唯一、关联基数和过滤条件；聚合前先核对原始行集，NULL 与外连接条件也可能改变结果。

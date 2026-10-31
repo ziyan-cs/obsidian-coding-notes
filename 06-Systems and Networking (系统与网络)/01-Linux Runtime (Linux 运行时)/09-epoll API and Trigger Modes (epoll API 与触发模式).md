@@ -3,7 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：掌握 epoll_ctl、epoll_wait、LT、ET 与非阻塞读写循环的契约。
+> [!abstract] 本篇要点
+> 掌握 epoll_ctl、epoll_wait、LT、ET 与非阻塞读写循环的契约。
 
 # 模型与选型
 
@@ -136,7 +137,20 @@ ev.events = EPOLLIN | EPOLLET;  // 边缘触发
 - **初学与常规服务**：优先 LT，减少漏通知风险；仍需限制每连接的处理预算并做好背压。
 - **已经有成熟非阻塞状态机的服务**：可对 ET 做基准测试，再决定是否采用。不要把某个产品的某一版本实现当作普遍性能定律。
 
-遇到“ET 连接卡住”，按顺序查：fd 是否非阻塞、读写是否处理到 `EAGAIN`、预算提前结束后是否已自行重新调度、`EPOLLONESHOT` 是否重新激活。详见 [epoll(7)](https://man7.org/linux/man-pages/man7/epoll.7.html) 与 [epoll Internals (epoll 内部实现)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/10-epoll%20Internals%20(epoll%20内部实现).md)。
+遇到“ET 连接卡住”，按顺序查：fd 是否非阻塞、读写是否处理到 `EAGAIN`、预算提前结束后是否已自行重新调度、`EPOLLONESHOT` 是否重新激活。详见 [epoll(7)](https://man7.org/linux/man-pages/man7/epoll.7.html) 与 [epoll Internals (epoll 内部实现)](10-epoll%20Internals%20%28epoll%20%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%29.md)。
 
+# 考察题目
 
----
+## 1. 动手题
+
+用 LT 与 ET 各处理一次连续发送的多段数据，故意在 ET 中只读一次，再改成读到 EAGAIN。
+
+> [!note]- 验收要点
+> 错误版可留下未处理数据；修复版使用非阻塞 fd，并处理连接关闭与部分写。
+
+## 2. 机制追问
+
+ET 模式只读一次就返回事件循环，为什么可能漏掉后续数据？
+
+> [!note]- 参考答案
+> 边缘通知未必再次触发仍处于就绪状态的 fd；配合非阻塞 fd 循环读写到 EAGAIN，并处理部分写与重新关注可写事件。

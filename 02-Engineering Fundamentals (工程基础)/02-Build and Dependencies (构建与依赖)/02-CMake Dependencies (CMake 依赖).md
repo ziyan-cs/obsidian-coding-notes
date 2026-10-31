@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/build, cpp/dependencies]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 区分“发现已有包”“配置时引入源码”和“解析安装包”，能安全地消费 imported target，并解释依赖版本、ABI 与网络边界。
 
 # 先看依赖究竟从哪来
@@ -115,4 +115,20 @@ CMakeToolchain
 - [vcpkg versioning](https://learn.microsoft.com/en-us/vcpkg/users/versioning)
 - [Conan 2 lockfiles](https://docs.conan.io/2/tutorial/versioning/lockfiles.html)
 
-下一步：[03-Package Management and Reproducible Builds (包管理与可复现构建)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/03-Package%20Management%20and%20Reproducible%20Builds%20(包管理与可复现构建).md)
+下一步：[03-Package Management and Reproducible Builds (包管理与可复现构建)](03-Package%20Management%20and%20Reproducible%20Builds%20%28%E5%8C%85%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8F%AF%E5%A4%8D%E7%8E%B0%E6%9E%84%E5%BB%BA%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+为练习项目引入一个外部依赖，记录来源、版本与离线/干净构建结果；故意删掉发现路径观察报错。
+
+> [!note]- 验收要点
+> 能解释 find_package、源码拉取或包管理器之一的输入；CI 与本地使用同一版本。
+
+## 2. 机制追问
+
+项目在开发机能构建、CI 找不到依赖，如何定位依赖来源？
+
+> [!note]- 参考答案
+> 检查 find_package 的配置包路径、版本、工具链和锁定信息；区分系统安装包、FetchContent、包管理器和源码内依赖，确保 CI 与本地输入一致。

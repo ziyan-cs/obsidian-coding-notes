@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 给函数接口选出能准确表达“缺席、多种结果、借用数据”的类型，并能画出每个视图所依赖对象的生命周期。
 
 # 先决定结果是值、缺席还是错误
@@ -136,3 +136,19 @@ int main() {
 > 先问“拥有还是借用”，再问“失败需不需要原因”，最后才选方便的语法。短生命周期的只读参数可用视图；跨作用域保存时明确所有权；可恢复错误要返回足够诊断信息。
 
 参考：[C++ 标准库 `optional`](https://eel.is/c++draft/optional)、[`variant`](https://eel.is/c++draft/variant)、[`string_view`](https://eel.is/c++draft/string.view)、[`span`](https://eel.is/c++draft/views.span)。
+
+# 考察题目
+
+## 1. 动手题
+
+写返回局部 `std::string_view` 的错误函数，修成返回 `std::string` 或让调用方持有底层字符串；加测试。
+
+> [!note]- 验收要点
+> 视图不能延长底层寿命；修复后借用关系清楚，`optional` 只用于可能缺席的值。
+
+## 2. 机制追问
+
+函数返回 string_view 指向局部 string 会发生什么？optional 与 variant 又解决什么问题？
+
+> [!note]- 参考答案
+> view 不拥有数据，局部 string 销毁后视图悬垂；optional 表示值可能缺席，variant 表示有限候选类型，二者不自动表达错误原因。

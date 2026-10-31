@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能写出最小、可测试的模板约束；区分“表达式可编译”和“算法语义正确”；遇到多个候选时能解释约束如何参与重载决议。
 
 # 从模板报错到接口契约
@@ -112,3 +112,19 @@ static_assert(!has_value_type<int>::value);
 为新泛型 API 列出实现实际使用的表达式，写最小 concept；再用一种满足类型、一种不满足类型、一个语义边界用例测试。维护旧代码时先理解 SFINAE 是怎样筛选候选，再评估 C++20 迁移是否改变重载、可用标准或二进制接口。`if constexpr` 用于**选定模板后的实现分支**，不是 `requires` 的完全替代品。
 
 参考：[C++ 标准草案：requires 表达式](https://eel.is/c++draft/expr.prim.req)、[约束偏序](https://eel.is/c++draft/temp.constr.order)。
+
+# 考察题目
+
+## 1. 动手题
+
+给模板加 `requires` 约束，只接受有 `size()` 的类型；用不满足要求的类型编译，比较诊断。
+
+> [!note]- 验收要点
+> 约束在接口处拒绝调用；编译失败应指向缺少的能力，而非深层模板实例化错误。
+
+## 2. 机制追问
+
+模板调用失败时，Concepts 比无约束模板改善了什么？
+
+> [!note]- 参考答案
+> Concepts 在接口处声明可满足的要求，能参与重载选择并给出更集中诊断；SFINAE 利用替换失败排除候选，仍需理解旧代码的约束方式。

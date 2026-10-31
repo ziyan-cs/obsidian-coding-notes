@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/testing, foundations/practice]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从契约和风险设计测试，掌握等价类、边界值、性质测试、模糊测试与并发验证，并知道测试能证明什么、不能证明什么。
 
 # 测试从契约开始
@@ -124,4 +124,20 @@ oracle：高精度参考实现
 > [!summary] 本篇结论
 > 测试质量来自契约、风险和 oracle，而不是用例数量。边界划分、性质、fuzzing、真实集成与并发控制从不同方向压缩未知行为，失败样本最终应沉淀为回归证据。
 
-下一步：[03-Deliberate Practice and Knowledge Maintenance (刻意练习与知识维护)](/01-Foundations%20(基础能力)/04-Foundation%20Practice%20(基础实践)/03-Deliberate%20Practice%20and%20Knowledge%20Maintenance%20(刻意练习与知识维护).md)
+下一步：[03-Deliberate Practice and Knowledge Maintenance (刻意练习与知识维护)](03-Deliberate%20Practice%20and%20Knowledge%20Maintenance%20%28%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0%E4%B8%8E%E7%9F%A5%E8%AF%86%E7%BB%B4%E6%8A%A4%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+为整数解析函数列出正常、边界、非法和溢出用例，并实现自动化测试。
+
+> [!note]- 验收要点
+> 每个用例有明确输入与预期，覆盖空串、符号、范围边界和尾随垃圾；测试应可重复运行。
+
+## 2. 机制追问
+
+一个函数只测正常输入为何不够？怎样从契约设计最小测试集？
+
+> [!note]- 参考答案
+> 从输入等价类与边界划分正常、边界、非法和失败路径；每条测试要有明确预期与可重复条件，覆盖高风险不变量而非仅覆盖代码行。

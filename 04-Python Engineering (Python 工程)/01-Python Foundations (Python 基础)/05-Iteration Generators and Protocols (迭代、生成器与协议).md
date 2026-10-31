@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/iteration]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Python 的 `for`、推导式和许多标准库函数都建立在 iterable/iterator 协议上；生成器把“怎样逐步产生数据”封装成可暂停状态机。
 
 # Iterable 与 Iterator
@@ -80,11 +80,52 @@ def emit(writer: Writer, message: str) -> None:
 
 练习：实现逐行读取访问日志的生成器，返回解析成功记录；非法行写入单独错误报告。用十行样例和一个大文件验证内存不会随输入线性增长。
 
-> [!question]- 理解检查
-> 1. iterable 与 iterator 有什么区别？
-> 2. 为什么 generator 的异常可能不在调用函数时发生？
-> 3. 流式处理降低了哪部分内存，哪些聚合状态仍可能无限增长？
+**参考资料：** [Python Tutorial: Iterators and Generators](https://docs.python.org/3/tutorial/classes.html#iterators) · [itertools](https://docs.python.org/3/library/itertools.html)
 
-> [!info]- 官方参考
-> - [Python Tutorial: Iterators and Generators](https://docs.python.org/3/tutorial/classes.html#iterators)
-> - [itertools](https://docs.python.org/3/library/itertools.html)
+# 考察题目
+
+## 1. 预测输出：闭包与生成器
+
+```python
+funcs = [lambda: i for i in range(3)]
+numbers = (x * 2 for x in range(3))
+
+print([f() for f in funcs])
+print(list(numbers))
+print(list(numbers))
+```
+
+写出三行输出，并分别解释闭包绑定和一次性消费。
+
+> [!note]- 参考答案
+> ```text
+> [2, 2, 2]
+> [0, 2, 4]
+> []
+> ```
+> Lambda 在调用时读取同一闭包变量 `i` 的最终值；生成器首次遍历后已耗尽。若要捕获当次值，可写 `lambda i=i: i`。
+
+## 2. 实现：提前停止的文件迭代
+
+写 `non_empty_lines(path: Path) -> Iterator[str]`，逐行产出 `strip()` 后的非空行。调用函数时文件打开了吗？只取第一行后长期保留生成器会怎样？如果必须保证提前停止时立即关闭文件，该怎样调整接口？
+
+> [!note]- 参考实现与边界
+> ```python
+> from collections.abc import Iterator
+> from pathlib import Path
+>
+> def non_empty_lines(path: Path) -> Iterator[str]:
+>     with path.open(encoding="utf-8") as stream:
+>         for raw in stream:
+>             line = raw.strip()
+>             if line:
+>                 yield line
+> ```
+> 文件在首次 `next()` 时打开；生成器被长期持有且未耗尽时，文件可能保持打开。调用方可显式 `close()`；若需要词法作用域保证，改为上下文管理器接口，让调用方在 `with` 中迭代。
+
+## 3. 机制追问
+
+生成器创建时为何没有读取文件？资源应在何时关闭？
+
+> [!note]- 参考答案
+> 生成器函数体到首次迭代才执行；资源若在生成器内部打开，应保证迭代完成或关闭时释放，部分消费与异常路径需特别验证。

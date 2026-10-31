@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：用互斥锁、条件变量和信号量建立同步关系，并识别死锁条件。
+> [!abstract] 本篇要点
+> 用互斥锁、条件变量和信号量建立同步关系，并识别死锁条件。
 
 # Mutex and Condition Variable (互斥锁与条件变量)
 
-> [!note] 本节重点：pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
+**本节要点：** pthread_mutex 互斥锁、pthread_cond 条件变量、生产者-消费者模型
 
 ## 互斥锁（Mutex）
 
@@ -53,8 +54,6 @@ void func() {
 }   // 离开作用域自动解锁，异常安全
 ```
 
----
-
 ## 条件变量（Condition Variable）
 
 用于线程间的**等待/通知**机制，解决"等待某个条件成立"的问题：
@@ -98,8 +97,6 @@ void *producer(void *arg) {
 2. 进入睡眠等待
 3. 被唤醒后重新持有 mutex
 
----
-
 ## 读写锁（rwlock）
 
 允许多个读者并发，写者独占：
@@ -120,15 +117,13 @@ pthread_rwlock_unlock(&rwlock);
 
 适合：**读多写少**的场景（如配置、缓存）。写多时写者频繁等待，反而不如 mutex。
 
-
 > [!summary] 核心摘要
 >
 > mutex 保护共享不变量；condition variable 不保存条件本身，只负责等待/通知，所以必须配合受同一 mutex 保护的 predicate，并在 `while` 中等待。通知不是“事件不会丢”的保证，正确性来自“修改 predicate 与检查 predicate 都在锁下”。
->
 
 # Deadlock Causes and Prevention (死锁原因与预防)
 
-> [!note] 本节重点：死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
+**本节要点：** 死锁四个必要条件（Coffman 条件）、锁顺序约定预防、死锁检测与恢复
 
 ## 死锁的四个必要条件（Coffman 条件）
 
@@ -143,8 +138,6 @@ pthread_rwlock_unlock(&rwlock);
 
 **破坏任意一个条件即可预防死锁。**
 
----
-
 ## 经典死锁场景
 
 ```c
@@ -153,8 +146,6 @@ lock(mutex1);                lock(mutex2);
 lock(mutex2);  ←─等待─→     lock(mutex1);
 // 循环等待，死锁！
 ```
-
----
 
 ## 预防策略
 
@@ -194,8 +185,6 @@ while (true) {
 
 给每个锁分配层级编号，只允许从高层级向低层级申请锁，不允许反向申请。
 
----
-
 ## 检测死锁
 
 ```bash
@@ -204,12 +193,9 @@ thread apply all bt
 valgrind --tool=helgrind ./myapp
 ```
 
-
----
-
 # Threads and Processes (线程与进程)
 
-> [!note] 本节重点：线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
+**本节要点：** 线程 vs 进程的创建/切换/通信开销、Linux clone 系统调用、共享资源差异
 
 ## 共享与隔离
 
@@ -230,7 +216,7 @@ valgrind --tool=helgrind ./myapp
 
 # Semaphores (信号量)
 
-> [!note] 本节重点：POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
+**本节要点：** POSIX 与 System V 信号量 API、二值/计数信号量、PV 操作与生产者-消费者同步
 
 ## 信号量的本质
 
@@ -240,8 +226,6 @@ valgrind --tool=helgrind ./myapp
 - **V 操作（signal/up/post）**：计数器加 1，唤醒等待者
 
 **二值信号量（0/1）** 可用于互斥，但没有 mutex 的所有者语义与优先级等特性；**计数信号量** 更自然地表达可用资源数量。
-
----
 
 # POSIX 信号量（推荐）
 
@@ -288,8 +272,6 @@ pthread_mutex_unlock(&mutex);
 sem_post(&empty);           // 通知生产者
 ```
 
----
-
 ## 信号量 vs 互斥锁 vs 条件变量
 
 | |互斥锁|条件变量|信号量|
@@ -299,5 +281,18 @@ sem_post(&empty);           // 通知生产者
 |跨进程|需特殊配置|需特殊配置|POSIX 有名信号量支持|
 |锁的所有者|只有加锁者能解锁|—|任何线程可 post|
 
+# 考察题目
 
----
+## 1. 动手题
+
+实现有界队列，运行 2 生产者 3 消费者；在关闭时同时唤醒等待者。
+
+> [!note]- 验收要点
+> 每项恰好处理一次，等待循环检查谓词，关闭后所有线程可 join。
+
+## 2. 机制追问
+
+共享队列的消费者在条件变量上醒来却发现队列为空，属于错误吗？
+
+> [!note]- 参考答案
+> 可能是虚假唤醒或其他消费者先取走；等待必须循环检查受同一锁保护的谓词，并定义停止条件以避免永久等待。

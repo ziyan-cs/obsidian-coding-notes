@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/git, engineering/recovery]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能从三方合并理解冲突，安全选择 restore、reset、revert、reflog 与 stash，并在执行破坏性操作前明确会改变哪一层状态。
 
 # 冲突是语义决策，不是删除标记
@@ -140,4 +140,20 @@ tag 指向源码版本，不等于制品已经经过同一构建、签名和发�
 - [Git: reset, restore and revert](https://git-scm.com/docs/git#_reset_restore_and_revert)
 - [git-reflog documentation](https://git-scm.com/docs/git-reflog)
 
-下一步：[03-CI CD (持续集成与交付)](/02-Engineering%20Fundamentals%20(工程基础)/01-Git%20and%20Delivery%20(Git%20与交付)/03-CI%20CD%20(持续集成与交付).md)
+下一步：[03-CI CD (持续集成与交付)](03-CI%20CD%20%28%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%8E%E4%BA%A4%E4%BB%98%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在两个分支修改同一函数制造冲突，完成语义合并并测试；再分别演练 revert 与 restore 的作用。
+
+> [!note]- 验收要点
+> 冲突标记清零不算完成；测试覆盖两边意图，恢复前后用 `git status` 和 diff 检查未提交改动。
+
+## 2. 机制追问
+
+合并冲突出现时，为什么不能只删冲突标记？如何确认恢复命令不会丢工作？
+
+> [!note]- 参考答案
+> 冲突是两边语义需人工整合；先看状态、两侧意图与未提交改动，再编辑并运行测试。恢复前确认 reset、restore、revert 的目标和影响范围。

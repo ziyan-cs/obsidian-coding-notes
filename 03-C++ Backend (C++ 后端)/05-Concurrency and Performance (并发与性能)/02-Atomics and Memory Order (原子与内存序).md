@@ -3,9 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：能区分 data race、原子性和跨线程同步，并为 release/acquire 写出完整的读写配对条件。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 能区分 data race、原子性和跨线程同步，并为 release/acquire 写出完整的读写配对条件。
 >
 > atomic 保证单个原子对象的读改写不发生 data race，但不自动让多个变量组成的业务状态保持一致。memory order 描述跨线程可见性与重排约束：默认 `seq_cst` 最容易推理；只有先证明同步关系并测到瓶颈，才考虑 acquire/release 或 relaxed。
 
@@ -123,7 +122,7 @@ flag.store(true);  // 等价于 seq_cst
   A.write1
   A.write2
   flag.store(true, release)  ← 之前的写不能重排到后面
-    
+
 线程 B（Acquire）:
   while (!flag.load(acquire));  ← 之后的读不能重排到前面
   B.read1     ← 保证看到 A.write1/A.write2
@@ -180,4 +179,18 @@ if (big.is_lock_free()) {
 
 > **关键边界**：release 与 acquire 不是任意配对就能同步。acquire 必须在同一原子对象上读到相应 release（或其 release sequence）的值，才建立 `synchronizes-with`，进而让前序普通写对后续普通读可见。
 
----
+# 考察题目
+
+## 1. 动手题
+
+写 release/acquire 消息发布实验，再故意让消费者读取错误的原子对象；说明为何测试偶尔通过也不证明同步。
+
+> [!note]- 验收要点
+> 只有读取到对应 release 序列才建立同步；用代码推导 happens-before，不能靠一次运行观测证明无竞态。
+
+## 2. 机制追问
+
+线程 B 用 acquire 读取 flag，却仍可能看不到线程 A 的普通写，缺了什么条件？
+
+> [!note]- 参考答案
+> B 必须从同一原子对象读到 A 的 release 写入或其 release sequence 的值，才建立 synchronizes-with；仅写了 acquire/release 关键字不保证配对。

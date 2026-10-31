@@ -5,7 +5,7 @@ review_due:
 tags: [engineering/build, security/supply-chain]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 知道“能在本机编译”和“他人能重建同一制品”差在哪里；能够记录依赖解析、工具链与环境输入，并区分可复现、可验证来源和供应链可信度。
 
 # 可复现有不同强度
@@ -94,4 +94,20 @@ application
 - [SLSA specification v1.2](https://slsa.dev/spec/v1.2/)
 - [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
-下一步：[04-Make and Shell Automation (Make 与 Shell 自动化)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/04-Make%20and%20Shell%20Automation%20(Make%20与%20Shell%20自动化).md)
+下一步：[04-Make and Shell Automation (Make 与 Shell 自动化)](04-Make%20and%20Shell%20Automation%20%28Make%20%E4%B8%8E%20Shell%20%E8%87%AA%E5%8A%A8%E5%8C%96%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在两个干净环境构建同一提交，记录依赖、编译器和构建参数；比较制品或测试结果。
+
+> [!note]- 验收要点
+> 至少固定源码与依赖解析，说明若字节不同是时间戳、路径还是工具链导致。
+
+## 2. 机制追问
+
+锁定版本号后为何仍可能无法重现构建？
+
+> [!note]- 参考答案
+> 构建还依赖编译器、平台、系统库、构建参数、源代码来源和环境变量；需记录或固定完整输入，并验证从干净环境构建。

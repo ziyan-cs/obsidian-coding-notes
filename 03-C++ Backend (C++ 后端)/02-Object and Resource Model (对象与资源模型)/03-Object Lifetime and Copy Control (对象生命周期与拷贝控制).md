@@ -3,8 +3,8 @@ study_stage: backlog
 review_due:
 
 ---
-> [!summary] 核心摘要
->
+
+> [!abstract] 本篇要点
 > C++ 对象生命周期由构造、拷贝/移动、赋值与析构共同定义。类只要管理资源，就必须先写清所有权，再决定是否允许拷贝、如何移动以及析构时做什么。现代 C++ 优先使用 RAII 成员类型以遵循 Rule of Zero；只有直接管理资源时才需要 Rule of Five。
 
 # 生命周期模型
@@ -36,7 +36,7 @@ moved-from object -> valid for destruction and assignment
 
 # Construction and Destruction (构造与析构)
 
-> [!note] 本节重点：构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
+**本节要点：** 构造/析构顺序（基类→成员→派生类）、virtual 析构函数的重要性
 
 ## 构造顺序
 
@@ -107,11 +107,9 @@ public:
 };
 ```
 
----
-
 # Copy Control and Rule of Five (拷贝控制与五法则)
 
-> [!note] 本节重点：Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
+**本节要点：** Rule of Five（析构/拷贝构造/拷贝赋值/移动构造/移动赋值）、浅拷贝 vs 深拷贝
 
 ```cpp
 #include <algorithm>
@@ -183,5 +181,20 @@ public:
 // 真实项目优先使用 RAII 成员，让类遵循 Rule of Zero。
 ```
 
-> [!info]- 延伸阅读
-> - 下一步：[04-Polymorphism and Inheritance (多态与继承)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/04-Polymorphism%20and%20Inheritance%20(多态与继承).md)
+**参考资料：** 下一步：[04-Polymorphism and Inheritance (多态与继承)](04-Polymorphism%20and%20Inheritance%20%28%E5%A4%9A%E6%80%81%E4%B8%8E%E7%BB%A7%E6%89%BF%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现持有文件描述符的类：禁止复制、支持移动；测试移动后析构和异常路径。
+
+> [!note]- 验收要点
+> 描述符恰好关闭一次，移动后源对象处于可析构状态；测试可用计数或系统调用追踪。
+
+## 2. 机制追问
+
+资源句柄类默认复制为什么可能双重释放？应怎样定义复制或移动契约？
+
+> [!note]- 参考答案
+> 默认成员复制会复制句柄值，两个对象可能都认为自己拥有资源；应禁止复制或实现深复制，并定义移动后的有效状态与析构责任。

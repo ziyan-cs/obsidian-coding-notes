@@ -3,15 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Nginx 在客户端与上游之间完成反向代理、连接复用、负载均衡和流量治理。配置时要明确超时、缓冲、重试和真实源地址边界，错误重试不能破坏非幂等请求。
 
 # Nginx Architecture (Nginx 架构)
 
-> [!note] 本节重点： Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
+**本节要点：** Nginx Master-Worker 架构、惊群处理、热加载、事件驱动模型
 
 ## Nginx 进程模型
 
@@ -53,8 +50,6 @@ review_due:
 | **Cache Loader** | 启动时加载缓存元数据到共享内存 | nobody |
 | **Cache Manager** | 管理缓存过期和清理 | nobody |
 
----
-
 ## 为什么 Nginx 性能好
 
 ### 1. 事件驱动 + 非阻塞
@@ -84,8 +79,6 @@ worker_processes auto;  # = CPU 核心数
 - 磁盘日志 → 缓冲区异步写
 ```
 
----
-
 ## 惊群问题（Thundering Herd）
 
 多进程同时 accept 同一个 socket，内核唤醒所有等待的 worker，但只有一个能成功。
@@ -99,15 +92,11 @@ accept_mutex_delay 500ms;    # 拿锁失败后等待时间
 
 **EPOLLEXCLUSIVE（Linux 4.5+）：** 内核级解决方案，只唤醒一个等待进程。
 
----
-
 ## 热加载（Hot Reload）
 
 ```bash
 nginx -s reload
 ```
-
----
 
 ## 架构对比
 
@@ -118,8 +107,6 @@ nginx -s reload
 | 静态文件 | 高效（异步 I/O + sendfile） | 中 |
 | 内存占用 | 低 | 高 |
 | 配置灵活性 | 中 | 高（.htaccess） |
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -136,11 +123,10 @@ nginx -s reload
 
 >
 >
->
 
 # Reverse Proxy and Load Balancing (反向代理与负载均衡)
 
-> [!note] 本节重点： 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
+**本节要点：** 反向代理配置、负载均衡策略、location 匹配规则、动静分离、HTTPS 配置
 
 ## 反向代理配置
 
@@ -162,8 +148,6 @@ server {
     }
 }
 ```
-
----
 
 ## 负载均衡策略
 
@@ -192,8 +176,6 @@ upstream backend_server {
 | IP Hash | 同一 IP 始终到同一后端 | 需要 session 保持 |
 | Least Connections | 选连接数最少的 | 请求处理时间不均 |
 
----
-
 ## location 匹配规则
 
 ```
@@ -210,8 +192,6 @@ upstream backend_server {
 - 否则检查正则匹配（按配置顺序），第一个匹配的正则生效
 - 如果没正则匹配，使用最长前缀匹配
 ```
-
----
 
 ## 动静分离
 
@@ -239,8 +219,6 @@ server {
 }
 ```
 
----
-
 ## HTTPS 配置
 
 ```nginx
@@ -264,8 +242,6 @@ server {
 }
 ```
 
----
-
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
@@ -281,11 +257,10 @@ server {
 
 >
 >
->
 
 # Nginx and Application Server (Nginx 与应用服务器)
 
-> [!note] 本节重点： Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
+**本节要点：** Nginx 与自写 Web Server 的职责边界、为什么用 Nginx 做反向代理、部署架构
 
 ## 为什么用 Nginx + 自写 Server
 
@@ -324,8 +299,6 @@ Nginx 做限流、IP 黑名单、过滤恶意请求
 → 即使 Nginx 被打满，自写 Server 不会直接暴露
 ```
 
----
-
 ## 常见部署架构
 
 ### 单层
@@ -352,15 +325,11 @@ Nginx（路由）
  └── /static → 直接返回
 ```
 
----
-
 ## 什么时候不需要 Nginx
 
 - 纯内网微服务（gRPC 直连）
 - 非 HTTP 协议服务（TCP/UDP）
 - 简单单体服务（开发/测试环境）
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -376,4 +345,19 @@ Nginx（路由）
 > 反向代理可以承担 TLS、路由、静态文件与流量治理，但不是每个 Go/C++ 服务都必须部署 Nginx。已有网关、Ingress、云负载均衡或直接暴露服务时，应比较功能、额外跳数、运维与故障域。
 
 >
->
+
+# 考察题目
+
+## 1. 动手题
+
+配置代理到两个上游，分别让一个上游返回 500、拒绝连接和超时，观察代理状态码与日志。
+
+> [!note]- 验收要点
+> 区分应用 500、连接失败与超时；路由、健康检查与重试策略有记录。
+
+## 2. 机制追问
+
+代理返回 502 与应用返回 500，排查路径有何不同？
+
+> [!note]- 参考答案
+> 502 多指上游连接或响应协议失败，查代理与上游连接日志；500 是应用明确返回的服务器错误，查应用请求日志。还需核对超时、健康检查和转发头。

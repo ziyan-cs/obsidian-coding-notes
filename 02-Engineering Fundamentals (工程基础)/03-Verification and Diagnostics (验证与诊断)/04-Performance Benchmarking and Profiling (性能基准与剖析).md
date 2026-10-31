@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 性能工作先建立可重复基线，再用 profile 解释资源花在哪里。基准给出“多慢”，剖析回答“慢在哪里”，系统模型解释“为什么”；没有相同条件下的前后证据，就不能宣称优化有效。
 
 # 先定义性能契约
@@ -80,8 +80,8 @@ baseline -> hypothesis -> measurement -> change
 
 ## 关联专题
 
-- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)：从线上指标进入有假设的性能分析。
-- [Benchmarking (压测)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/05-Benchmarking%20(压测).md)：服务器网络压测的工具与参数。
+- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)：从线上指标进入有假设的性能分析。
+- [Benchmarking (压测)](../../06-Systems%20and%20Networking%20%28%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%29/03-Server%20Networking%20%28%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%29/05-Benchmarking%20%28%E5%8E%8B%E6%B5%8B%29.md)：服务器网络压测的工具与参数。
 
 ## 参考资料
 
@@ -91,3 +91,19 @@ baseline -> hypothesis -> measurement -> change
 
 > [!summary] 本篇结论
 > 性能结论来自可重复的对照实验：先定义场景和指标、建立基线，再用 profile 定位瓶颈，最后在相同条件下复测，并检查延迟、错误率和资源成本是否出现新的退化。没有可比证据的“变快了”只是猜测。
+
+# 考察题目
+
+## 1. 动手题
+
+对一个热点函数做基线、一次优化和复测，保存负载参数、重复样本与 profile 截图或文本。
+
+> [!note]- 验收要点
+> 比较分位延迟和 CPU，而非一次计时；说明收益、方差和新增代价。
+
+## 2. 机制追问
+
+优化后 QPS 增加 20%，如何判断确实由改动造成？
+
+> [!note]- 参考答案
+> 固定负载、环境和测量方法，保留基线与重复样本；检查客户端、网络和日志是否成为瓶颈，再用 profile 将变化与目标代码联系起来。

@@ -1,12 +1,12 @@
 ---
-study_stage: D3
-review_due: 2026-10-24
+study_stage: backlog
+review_due:
 tags:
   - language/python
   - python/collections
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Python 的核心语法围绕“对象组成的容器”和“协议驱动的操作”展开；选对容器、写清边界，比追求一行代码更重要。
 
 # 控制流与真值
@@ -92,11 +92,38 @@ total = sum(int(line) for line in lines if line.strip())
 
 练习：读取若干 `{user_id, endpoint, status}` 记录，输出每个 endpoint 的失败用户集合和失败次数。分别用循环与推导式实现，并说明哪一版更容易扩展错误校验。
 
-> [!question]- 理解检查
-> 1. 为什么 `is` 不应用于普通字符串和整数值比较？
-> 2. 浅复制 list 后，什么仍可能共享？
-> 3. 何时应把推导式改回普通循环？
+**参考资料：** [Python Tutorial: Data Structures](https://docs.python.org/3/tutorial/datastructures.html) · [Python Tutorial: Control Flow Tools](https://docs.python.org/3/tutorial/controlflow.html)
 
-> [!info]- 官方参考
-> - [Python Tutorial: Data Structures](https://docs.python.org/3/tutorial/datastructures.html)
-> - [Python Tutorial: Control Flow Tools](https://docs.python.org/3/tutorial/controlflow.html)
+# 考察题目
+
+## 1. 实现：失败用户统计
+
+实现 `failed_users(records: list[dict[str, object]]) -> dict[str, set[int]]`。每条记录包含 `endpoint: str`、`user_id: int`、`status: str`；仅统计 `status == "failed"`，按 endpoint 收集去重的用户 ID。缺字段或类型错误抛 `ValueError`，先用普通循环实现。测试 `user_id=True`。
+
+> [!note]- 参考实现
+> ```python
+> def failed_users(records: list[dict[str, object]]) -> dict[str, set[int]]:
+>     result: dict[str, set[int]] = {}
+>     for record in records:
+>         if not isinstance(record, dict):
+>             raise ValueError("record must be a dict")
+>         try:
+>             endpoint = record["endpoint"]
+>             user_id = record["user_id"]
+>             status = record["status"]
+>         except KeyError as exc:
+>             raise ValueError("missing field") from exc
+>         if not isinstance(endpoint, str) or type(user_id) is not int or not isinstance(status, str):
+>             raise ValueError("invalid field type")
+>         if status == "failed":
+>             result.setdefault(endpoint, set()).add(user_id)
+>     return result
+> ```
+> `bool` 是 `int` 的子类，这里用 `type(user_id) is int` 明确拒绝布尔值。
+
+## 2. 机制追问
+
+列表推导式与生成器表达式何时选择不同？
+
+> [!note]- 参考答案
+> 列表推导式立即构造结果并占用相应内存；生成器惰性迭代、适合流式处理，但只能按迭代语义消费，还要注意副作用和异常出现时机。

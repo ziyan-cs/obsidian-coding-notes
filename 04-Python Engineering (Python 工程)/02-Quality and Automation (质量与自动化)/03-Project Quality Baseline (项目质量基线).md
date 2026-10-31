@@ -3,10 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 跨语言的合并与发布判定见 [Release Verification and Quality Gates (发布验证与质量门禁)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/07-Release%20Verification%20and%20Quality%20Gates%20(发布验证与质量门禁).md)；本篇聚焦 Python 项目的格式、类型、测试和依赖基线。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 小脚本一旦被重复运行或交给别人使用，就应具备可安装、可测试、可检查、可观测的最小工程边界。
 
 # 项目边界
@@ -67,9 +64,23 @@ project/
 4. 构建 wheel 或目标产物，并从产物安装一次，而不只是从源码目录运行。
 5. 检查密钥、机器绝对路径、缓存和测试数据没有进入产物。
 
-> [!question]- 理解检查
-> 如果单元测试全绿，但陌生机器无法运行项目，应从依赖声明、构建产物、配置入口和 README 哪一层开始定位？
+**参考资料：** [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/) · [Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 
-> [!info]- 官方参考
-> - [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
-> - [Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
+> [!info]- 关联笔记
+> 跨语言的合并与发布判定见 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)；本篇聚焦 Python 项目的格式、类型、测试和依赖基线。
+
+# 考察题目
+
+## 1. 动手题
+
+给已有脚本加入格式化、lint、类型检查和测试命令，并在 CI 中故意制造一项失败。
+
+> [!note]- 验收要点
+> 失败能阻止交付；配置可从干净环境复现，工具各覆盖不同风险。
+
+## 2. 机制追问
+
+一个 Python 脚本何时算可交付的小项目？
+
+> [!note]- 参考答案
+> 入口、依赖、配置、错误处理、测试和说明可从干净环境复现；质量检查覆盖格式、lint、类型和关键行为，避免只在开发者机器上可用。

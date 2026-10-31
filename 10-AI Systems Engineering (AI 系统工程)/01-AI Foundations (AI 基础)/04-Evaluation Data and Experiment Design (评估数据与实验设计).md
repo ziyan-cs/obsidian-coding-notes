@@ -4,7 +4,7 @@ review_due:
 tags: [ai/evaluation, ai/data, engineering/experimentation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把“感觉模型变好了”变成可复现的评估：定义任务、样本、评分器、基线、切片和发布阈值，同时识别数据泄漏、评分偏差和线上分布漂移。
 
 # 从产品目标到评估任务
@@ -67,3 +67,19 @@ business outcome
 - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
 - [NIST AI Resource Center](https://airc.nist.gov/)
 - [OWASP Top 10 for LLM and GenAI](https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/)
+
+# 考察题目
+
+## 1. 动手题
+
+建立 20 条包含正常、边界和拒答场景的评估集；比较两个提示配置并输出逐类错误。
+
+> [!note]- 验收要点
+> 样本有预期和评分规则，避免泄漏到调参数据；报告不确定性而非只给总准确率。
+
+## 2. 机制追问
+
+两个提示词在十个样本上胜负各半，能否断定效果相同？
+
+> [!note]- 参考答案
+> 不能。样本量与覆盖可能不足；固定任务定义、分层样本和评分规则，分析误差类型与置信区间，并避免评估集泄漏。

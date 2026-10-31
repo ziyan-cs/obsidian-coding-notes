@@ -3,16 +3,15 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：理解信号的递送、屏蔽、处理函数限制以及 sigaction 的安全用法。
-
-> [!note] 本节重点：信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
+> [!abstract] 本篇要点
+> 理解信号的递送、屏蔽、处理函数限制以及 sigaction 的安全用法。
 
 # 信号模型与投递
+
+**本节要点：** 信号的本质、常见信号、信号处理三种方式、可重入函数、信号与多线程
 ## 信号的本质
 
 信号是进程/线程收到的**异步通知机制**。进程定向信号可能由任一未屏蔽它的线程接收；由非法内存访问等执行错误产生的信号通常定向到出错线程。信号可处于待决、被屏蔽或已递送状态；被屏蔽不等于丢弃。标准信号多次出现通常不会逐次排队，不能拿它当可靠任务队列。
-
----
 
 ## 常见信号
 
@@ -32,8 +31,6 @@ review_due:
 | 定时 / 自定义 | SIGALRM   | 14    | 终止        | `alarm()` 定时器到期 |
 |          | SIGUSR1/2 | 10/12 | 终止        | 用户自定义信号         |
 
----
-
 ## 发送信号
 
 ```c
@@ -51,8 +48,6 @@ kill -9 1234       # 发 SIGKILL（强制，不可拦截）
 kill -l            # 列出所有信号
 killall nginx      # 按名称发信号
 ```
-
----
 
 ## 信号处理三种方式
 
@@ -76,8 +71,6 @@ void handler(int sig) {
 signal(SIGTERM, handler);     // 仅演示三种处置；实际注册推荐 sigaction
 ```
 
----
-
 # sigaction（更安全的注册方式）
 
 ```c
@@ -91,8 +84,6 @@ sigaction(SIGTERM, &sa, NULL);
 ```
 
 `signal()` 的处理器注册语义在系统之间不够一致，**生产代码优先使用 `sigaction()`**。`SA_RESTART` 不是“所有系统调用都不会返回 EINTR”：调用类型、套接字超时与平台行为均需核对，仍须检查返回值。
-
----
 
 ## 可重入函数（Async-Signal-Safe）
 
@@ -116,8 +107,6 @@ void handler(int sig) {
 }
 ```
 
----
-
 ## 信号屏蔽（Signal Mask）
 
 每个线程有独立的信号屏蔽字，被屏蔽的信号会被挂起，直到解除屏蔽：
@@ -133,8 +122,6 @@ pthread_sigmask(SIG_BLOCK, &set, NULL);
 // 这只影响当前线程；进程定向信号仍可能递送到其他未屏蔽线程
 pthread_sigmask(SIG_UNBLOCK, &set, NULL);
 ```
-
----
 
 ## 信号与多线程
 
@@ -166,3 +153,19 @@ int main() {
 ```
 
 `sigwait` 不把指定信号交给异步处理器；所有可能接收这些进程定向信号的线程都要先屏蔽它们。不要把示例中的 `SIGTERM` 接收流程误当作 `SIGKILL` 可优雅处理。查阅：[signal(7)](https://man7.org/linux/man-pages/man7/signal.7.html)、[signal-safety(7)](https://man7.org/linux/man-pages/man7/signal-safety.7.html)、[sigwait(3)](https://man7.org/linux/man-pages/man3/sigwait.3.html)。
+
+# 考察题目
+
+## 1. 动手题
+
+用 `sigaction` 让 SIGTERM 通知主循环退出，比较直接在 handler 打印日志与写入自管道/设置安全标志。
+
+> [!note]- 验收要点
+> handler 只做 async-signal-safe 操作；清理和日志在正常执行上下文完成。
+
+## 2. 机制追问
+
+信号处理函数里直接打印日志、加锁并关闭复杂对象，为什么危险？
+
+> [!note]- 参考答案
+> 许多库调用不是 async-signal-safe，可能重入或死锁；处理器只做安全的最小通知，实际清理交由正常线程或事件循环完成。

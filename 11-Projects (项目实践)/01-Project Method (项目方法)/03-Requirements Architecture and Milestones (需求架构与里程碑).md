@@ -3,10 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 项目推进应把模糊目标转成可验收场景、架构边界和短周期里程碑，每个里程碑都留下可运行产物与证据。
-
-> [!summary] 核心摘要
 >
 > 先写用户、场景、输入输出和成功标准，再画系统边界与关键数据流；把项目切成纵向可演示增量，而不是按“先写完数据库、再写完网络层”横向堆模块。每轮只增加一个主要风险，并用测试、日志或压测证明结果。
 
@@ -63,6 +61,20 @@ client -> API -> domain service -> repository -> database
 > 2. 哪个假设最可能推翻当前架构，如何用最小实验验证？
 > 3. 当前里程碑失败时，回退边界在哪里？
 
-> [!info]- 延伸阅读
-> - 前置：[01-Project Design Template (项目设计模板)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/01-Project%20Design%20Template%20(项目设计模板).md)
-> - 延伸：[02-Testing Benchmark and Evidence (测试压测与证据)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)
+**参考资料：** 前置：[01-Project Design Template (项目设计模板)](01-Project%20Design%20Template%20%28%E9%A1%B9%E7%9B%AE%E8%AE%BE%E8%AE%A1%E6%A8%A1%E6%9D%BF%29.md) · 延伸：[02-Testing Benchmark and Evidence (测试压测与证据)](02-Testing%20Benchmark%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E5%8E%8B%E6%B5%8B%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+把项目拆成三次可运行纵向切片，每次指定接口、数据状态与自动化验收。
+
+> [!note]- 验收要点
+> 每一步从请求到结果可演示，风险与依赖按顺序消减，不用“完成某一层”代替交付。
+
+## 2. 机制追问
+
+为什么项目里程碑应以可运行纵向切片划分，而非“先写完数据库层”？
+
+> [!note]- 参考答案
+> 纵向切片从入口到结果验证真实契约与集成风险，每步有可演示增量；横向分层完成不代表系统能工作。

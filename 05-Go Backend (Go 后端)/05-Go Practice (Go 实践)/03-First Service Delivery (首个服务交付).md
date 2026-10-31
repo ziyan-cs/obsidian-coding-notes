@@ -4,7 +4,7 @@ review_due:
 tags: [go/project, backend/delivery]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 第一个 Go 服务的目标不是堆功能，而是把一个小业务从契约、实现、数据、测试、观测到可重复交付完整走通，并留下别人能够复核的证据。
 
 # 项目范围与完成定义
@@ -197,8 +197,24 @@ go test -run Integration -count=1 ./tests/integration/...
 
 ## 关联专题与官方资料
 
-- [URL Shortener (短链接服务)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/01-URL%20Shortener%20(短链接服务).md)：后续项目迭代与验收记录。
-- [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)：测试层次和证据要求。
+- [URL Shortener (短链接服务)](../../11-Projects%20%28%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%29/02-Backend%20Projects%20%28%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE%29/01-URL%20Shortener%20%28%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%29.md)：后续项目迭代与验收记录。
+- [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：测试层次和证据要求。
 - [Go database/sql tutorial](https://go.dev/doc/tutorial/database-access)
 - [net/http package](https://pkg.go.dev/net/http)
 - [Go Diagnostics](https://go.dev/doc/diagnostics)
+
+# 考察题目
+
+## 1. 动手题
+
+让另一人只按 README 在干净环境启动服务，调用成功与失败接口，并执行关闭。
+
+> [!note]- 验收要点
+> 记录卡住的步骤并修正文档；测试、配置、端口、依赖与限制可复现。
+
+## 2. 机制追问
+
+首个服务通过本机测试后，还缺哪些最低交付证据？
+
+> [!note]- 参考答案
+> 干净环境可启动、配置和依赖可复现，接口及错误路径有测试，能优雅关闭，并在 README 写明演示步骤和已知限制。

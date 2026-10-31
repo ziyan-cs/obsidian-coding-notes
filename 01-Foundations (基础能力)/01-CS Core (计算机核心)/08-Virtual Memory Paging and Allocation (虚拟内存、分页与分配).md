@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 沿“虚拟地址 → VMA → 页表 → TLB → 物理页”解释访问过程，区分各类缺页，并理解 Linux 分配与回收内存的基本层次。
 
 # 虚拟内存的契约
@@ -99,4 +99,20 @@ perf stat -e page-faults,minor-faults,major-faults -- ./program
 - [Linux Multi-Gen LRU](https://docs.kernel.org/mm/multigen_lru.html)
 - [Linux Memory Management](https://docs.kernel.org/admin-guide/mm/index.html)
 
-下一步：[09-File Systems and Storage (文件系统与存储)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/09-File%20Systems%20and%20Storage%20(文件系统与存储).md)
+下一步：[09-File Systems and Storage (文件系统与存储)](09-File%20Systems%20and%20Storage%20%28%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%AD%98%E5%82%A8%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+申请大块内存但先不访问，再逐页写入；记录 RSS 和缺页变化，解释为何申请大小与物理占用不一致。
+
+> [!note]- 验收要点
+> 按需分配导致首次触页后 RSS 和次缺页上升；需控制 overcommit、页缓存与测量环境。
+
+## 2. 机制追问
+
+首次访问已分配内存发生缺页，是否说明程序出错？
+
+> [!note]- 参考答案
+> 不一定。按需映射会在首次访问时触发正常缺页，由内核建立映射；非法地址或权限错误才是故障。还要区分虚拟地址保留、物理页分配与用户态分配器。

@@ -3,15 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Redis 的 key 映射到带编码实现的数据结构；选型不只看命令，还要看元素规模、访问模式和内存放大。原子命令只保证单次操作，跨 key 业务不变量仍需事务、Lua 或上层协议。
 
 # SDS Strings (简单动态字符串)
 
-> [!note] 本节重点： SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
+**本节要点：** SDS 设计原理、相比 C 字符串的优势、内存预分配策略、二进制安全
 
 ## SDS 结构
 
@@ -30,8 +27,6 @@ struct sdshdr8 {
 
 **为什么设计 5 种类型：** 根据字符串长度选择最小的 header（sdshdr5/sdshdr8/sdshdr16/sdshdr32/sdshdr64），节省内存。
 
----
-
 ## SDS 相比 C 字符串的优势
 
 | 问题 | C 字符串 | SDS |
@@ -41,8 +36,6 @@ struct sdshdr8 {
 | **内存重分配** | 每次修改都需要 | 预分配 + 惰性释放 |
 | **二进制安全** | 遇 `\0` 截断（空字符结尾） | 用 len 记录长度，`\0` 可存储 |
 | **兼容 C 函数** | 天生兼容 | 也兼容（末尾保留 `\0`） |
-
----
 
 ## 内存预分配策略
 
@@ -60,8 +53,6 @@ else
 
 **惰性释放：** `sdstrim(s, "X")` 仅修改指针位置，不释放内存；`sdsclear(s)` 将 len 置 0 但保留 alloc。真正释放用 `sdsfree()`。
 
----
-
 ## SDS API 速查
 
 ```c
@@ -77,8 +68,6 @@ sdsfree(s);                     // 释放
 
 **API 设计特点：** 修改 SDS 的 API 都返回 `sds*`（可能因 realloc 改变地址），调用者必须用返回值。
 
----
-
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
@@ -93,11 +82,10 @@ sdsfree(s);                     // 释放
 
 >
 >
->
 
 # ziplist and listpack (压缩列表)
 
-> [!note] 本节重点： ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
+**本节要点：** ziplist 内存布局、连锁更新问题、listpack 的改进、何时使用
 
 # ziplist（压缩列表）
 
@@ -137,8 +125,6 @@ ziplist 整体布局：
 // 连锁更新在特定边界长度变化时可能发生；频率与数据分布有关，不应说成必然可忽略
 ```
 
----
-
 # listpack（紧凑列表）
 
 Redis 5.0 引入，旨在替代 ziplist，解决连锁更新问题：
@@ -158,8 +144,6 @@ listpack: [encoding] [content]  [backlen]
 
 **适用场景：** 小型聚合对象的紧凑编码；List、Hash、ZSet、Set 的内部编码选择与阈值并不完全相同，并随 Redis 版本变化。
 
----
-
 ## 使用条件
 
 ```text
@@ -170,8 +154,6 @@ Redis >= 7.0：小 Hash / ZSet 的配置名改为 *-max-listpack-*
 超过容量/元素大小阈值后，Hash 可转为 hashtable，ZSet 可转为 skiplist 编码。
 List 通常使用 quicklist 组织节点，不应套用 Hash 的阈值。
 ```
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -187,11 +169,10 @@ List 通常使用 quicklist 组织节点，不应套用 Hash 的阈值。
 
 >
 >
->
 
 # skiplist (跳表)
 
-> [!note] 本节重点： 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
+**本节要点：** 跳表数据结构、层高概率分布、与平衡树/B+ 树的对比、ZSet 实现
 
 ## 跳表（Skiplist）
 
@@ -248,8 +229,6 @@ int zslRandomLevel(void) {
 // 期望层高 = 1/(1-P) = 1.33
 ```
 
----
-
 ## 操作复杂度
 
 | 操作 | 跳表 | 平衡树 | B+ 树 |
@@ -266,8 +245,6 @@ int zslRandomLevel(void) {
 2. 插入/删除不需旋转/重平衡，代码更简洁
 3. 层高随机化，平均性能稳定
 
----
-
 ## ZSet 使用的两种结构
 
 ```c
@@ -282,8 +259,6 @@ typedef struct zset {
 |------|------|------|
 | 小型对象，满足当前 `zset-max-listpack-*` 阈值 | listpack（Redis >= 7.0） | 紧凑存储；旧版可能是 ziplist |
 | 超出紧凑编码阈值 | skiplist 编码（含字典与跳表） | 支持按元素查分值与按分值范围访问 |
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -300,11 +275,10 @@ typedef struct zset {
 
 >
 >
->
 
 # dict Hash Table (字典与渐进式 rehash)
 
-> [!note] 本节重点： dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
+**本节要点：** dict 结构、rehash 触发条件、渐进式 rehash 如何避免阻塞、与 Java HashMap 区别
 
 ## Redis dict 结构
 
@@ -335,8 +309,6 @@ typedef struct dictEntry {
     struct dictEntry *next;  // 链地址法解决冲突
 } dictEntry;
 ```
-
----
 
 ## Rehash 机制
 
@@ -394,8 +366,6 @@ void dictRehash(dict *d, int n) {
 3. **读写同时查两张表**：rehash 期间增删改查先在 ht[0] 操作，同时迁移到 ht[1]
 4. **新增只进 ht[1]**：rehash 期间新插入的数据直接放 ht[1]，ht[0] 只减不增
 
----
-
 ## 对比 Java HashMap
 
 | 特性 | Redis dict | Java HashMap |
@@ -405,8 +375,6 @@ void dictRehash(dict *d, int n) {
 | 扩容因子 | 负载因子 ≥ 1 | 负载因子 ≥ 0.75 |
 | 容量 | 2^n（用 & 取模） | 2^n |
 | 缩容 | 支持（< 0.1） | 不支持（`trimToSize` 手动） |
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -425,5 +393,20 @@ void dictRehash(dict *d, int n) {
 >
 >
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/02-Redis%20Persistence%20and%20Eviction%20(Redis%20持久化与淘汰).md)
+**参考资料：** 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](02-Redis%20Persistence%20and%20Eviction%20%28Redis%20%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E6%B7%98%E6%B1%B0%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+用 String、Hash、Set 分别实现同一访问需求，测对象数量、内存和请求延迟。
+
+> [!note]- 验收要点
+> 选型基于操作模式与数据规模，报告序列化和网络往返成本。
+
+## 2. 机制追问
+
+Redis 结构选型为什么不能只看命令时间复杂度？
+
+> [!note]- 参考答案
+> 还要看元素数量、编码、内存开销、访问模式、网络往返和持久化成本；用目标负载验证，而非只背 O(1)。

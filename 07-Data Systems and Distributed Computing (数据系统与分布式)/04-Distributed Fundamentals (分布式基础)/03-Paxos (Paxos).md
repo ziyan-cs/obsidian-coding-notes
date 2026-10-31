@@ -3,15 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Paxos 通过 proposal number 和多数派交集保证不会选择两个不同值；Prepare/Promise 与 Accept/Accepted 分别建立提案优先级和接受规则。工程实现通常使用 Multi-Paxos 降低重复协商成本。
 
 # Paxos Overview (Paxos概览)
 
-> [!note] 本节重点： Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
+**本节要点：** Paxos 核心思想、Basic Paxos、Multi-Paxos、与 Raft 对比
 
 # Paxos 简介
 
@@ -64,8 +61,6 @@ P2 重试 Prepare(4) -> ...
 使用 Leader 选举避免竞争 -> 这就是 Multi-Paxos 的思想
 ```
 
----
-
 # Multi-Paxos（多提议者扩展）
 
 Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
@@ -87,8 +82,6 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 | 提案效率 | 2 轮 RTT | 1 轮 RTT（选主后） | 1 轮 RTT |
 | 可理解性 | 极难 | 较难 | 简单 |
 
----
-
 # Paxos 与 Raft
 
 | 维度 | Paxos | Raft |
@@ -100,8 +93,6 @@ Basic Paxos 的优化——选出一个稳定的 Leader，简化后续流程：
 | 工业应用 | Google Chubby, Spanner | etcd, Consul, TiKV |
 
 Raft 与 Multi-Paxos 都利用多数派和稳定 leader 降低正常路径开销，但选举限制、日志匹配、成员变更与可理解性设计不同；不把 Raft 直接等同为某个 Multi-Paxos 实现。
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -119,5 +110,20 @@ Raft 与 Multi-Paxos 都利用多数派和稳定 leader 降低正常路径开销
 >
 >
 
-> [!info]- 延伸阅读
-> - 下一步：[04-Distributed Transactions (分布式事务)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/04-Distributed%20Fundamentals%20(分布式基础)/04-Distributed%20Transactions%20(分布式事务).md)
+**参考资料：** 下一步：[04-Distributed Transactions (分布式事务)](04-Distributed%20Transactions%20%28%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+手推两个提议者交错发送 prepare/accept，标出 promise、accepted 值与最终可选值。
+
+> [!note]- 验收要点
+> 多数派交集保证已选值不被新值覆盖；竞争可能延迟完成。
+
+## 2. 机制追问
+
+两个提议者竞争时，多数派交集为何有助于安全性，却不能自动保证活性？
+
+> [!note]- 参考答案
+> 任意多数派相交使后续提议能获知已接受值并遵守选择规则；持续竞争仍可能反复抢占，需要领导者或退避等活性机制。

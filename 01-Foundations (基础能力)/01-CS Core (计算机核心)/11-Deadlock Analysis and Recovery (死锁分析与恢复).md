@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, cpp/concurrency, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用等待关系诊断死锁，区分预防、避免、检测和恢复，并把方法应用到 C++、数据库与分布式系统，而不是只背四个条件。
 
 # 死锁与相邻故障
@@ -103,4 +103,20 @@ void transfer(Account& from, Account& to, int amount) {
 - [Linux lockdep design](https://docs.kernel.org/locking/lockdep-design.html)
 - [PostgreSQL explicit locking and deadlocks](https://www.postgresql.org/docs/current/explicit-locking.html)
 
-下一步：[12-Performance and System Thinking (性能与系统思维)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/12-Performance%20and%20System%20Thinking%20(性能与系统思维).md)
+下一步：[12-Performance and System Thinking (性能与系统思维)](12-Performance%20and%20System%20Thinking%20%28%E6%80%A7%E8%83%BD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E6%80%9D%E7%BB%B4%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写两个线程按相反顺序获取两把锁，复现卡死；画等待图，再用统一锁顺序或 `std::scoped_lock` 修复。
+
+> [!note]- 验收要点
+> 复现应有超时保护；修复后重复并发测试并确认锁顺序或一次性获取消除等待环。
+
+## 2. 机制追问
+
+两把锁发生死锁，如何证明等待环并避免再次发生？
+
+> [!note]- 参考答案
+> 记录线程持锁与等待关系，画等待图找环；统一加锁顺序或一次性获取多锁，避免循环等待，并为修复构造回归测试。

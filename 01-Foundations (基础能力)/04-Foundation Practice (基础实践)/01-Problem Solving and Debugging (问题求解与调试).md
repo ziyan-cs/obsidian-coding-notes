@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/debugging, foundations/practice]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把“程序不对”转成可复现、可观测、可证伪的问题；能够使用终端、日志、调试器、sanitizer 和系统工具逐层定位根因。
 
 # 调试是一套证据流程
@@ -144,4 +144,20 @@ perf report
 > [!summary] 本篇结论
 > 调试不是凭经验猜测，而是不断缩小可疑集合的证据过程。复现、最小化、不变量、工具观测和可证伪实验共同把症状推进到根因。
 
-下一步：[02-Testing and Verification (测试与验证)](/01-Foundations%20(基础能力)/04-Foundation%20Practice%20(基础实践)/02-Testing%20and%20Verification%20(测试与验证).md)
+下一步：[02-Testing and Verification (测试与验证)](02-Testing%20and%20Verification%20%28%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%AA%8C%E8%AF%81%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+选一个真实失败，写最小复现、三条可证伪假设与一个回归测试；记录哪条证据排除每个假设。
+
+> [!note]- 验收要点
+> 结果要能由他人复现；修复测试应在旧实现失败、新实现通过，不能只记录最终代码。
+
+## 2. 机制追问
+
+线上只知道“偶尔失败”，如何从现象走到可验证的根因？
+
+> [!note]- 参考答案
+> 先记录输入、环境和失败证据，缩小复现条件；一次只检验一个假设，用日志、栈、测试或追踪定位，修复后保留能区分旧错的回归用例。

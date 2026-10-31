@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 零拷贝关注减少不必要的数据搬运，不代表绝对没有复制；选择 `mmap`、`sendfile` 或普通读写，要看数据路径、TLS、应用处理需求与实测结果。
+> [!abstract] 本篇要点
+> 零拷贝关注减少不必要的数据搬运，不代表绝对没有复制；选择 `mmap`、`sendfile` 或普通读写，要看数据路径、TLS、应用处理需求与实测结果。
 
 # Zero Copy and sendfile (零拷贝与 sendfile)
 
-> [!note] 本节重点：mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
+**本节要点：** mmap 共享映射、sendfile 零拷贝、DMA 拷贝与 CPU 拷贝、零拷贝对性能的提升
 
 > [!warning] “零拷贝”是相对用户态 CPU copy 的工程术语
 > 实际数据路径受内核版本、文件系统、TLS、网卡卸载与硬件能力影响。不要把“0 次 CPU 拷贝”当作任何机器上的保证；应以目标环境的 profile、吞吐和尾延迟决定是否使用。
@@ -91,3 +92,19 @@ ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
 > `mmap` 让文件页映射进进程虚拟地址空间，应用仍可读写该映射；`sendfile` 让内核在文件与 socket 之间组织传输，通常避免用户缓冲区 copy。它们解决的是数据搬运成本，不替代缓存策略、网络瓶颈或应用层处理；“是否更快”必须针对真实文件大小、TLS 和网卡环境验证。
 >
 > 实施前查 [sendfile(2)](https://man7.org/linux/man-pages/man2/sendfile.2.html) 与 [splice(2)](https://man7.org/linux/man-pages/man2/splice.2.html) 的 fd 限制，并在目标环境测量。
+
+# 考察题目
+
+## 1. 动手题
+
+同一静态文件分别用 read+write 与 sendfile 发送，记录 CPU、吞吐和适用条件。
+
+> [!note]- 验收要点
+> 保证内容与负载相同，说明用户态拷贝减少不等于全路径零拷贝；TLS 场景单独讨论。
+
+## 2. 机制追问
+
+sendfile 被称为零拷贝，是否代表完全没有任何数据复制？
+
+> [!note]- 参考答案
+> 不是，通常指减少用户态与内核态之间的拷贝；设备、协议栈和具体内核路径仍可能复制或处理数据，适用性受文件来源、TLS 等条件限制。

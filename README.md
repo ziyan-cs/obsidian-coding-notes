@@ -1,61 +1,72 @@
-# Obsidian Coding Notes
+# 后端工程学习笔记
 
-> 一套持续建设的中文后端工程学习笔记：用 C++ 打牢语言与系统基础，以 Python 辅助工程实践，再逐步进入 Go 后端；通过项目把概念落到可运行、可验证的实现。
+以 C++ 的对象与资源模型、Python 工程实践和 Go 服务开发为主线，逐步连接系统、网络、数据、可靠性与项目交付。笔记以中文解释概念，保留必要的英文术语；每篇知识点末尾有动手题、机制追问和折叠参考。
 
-本仓库同时是个人 Obsidian 学习库、GitHub 备份和公开阅读资料。中文负责解释，常用英文技术术语保留。内容是个人学习整理，不替代官方文档；版本相关或变化较快的结论应结合官方资料与实际环境复核。
+这是学习笔记库，不是可直接部署的服务项目。涉及版本行为、性能数字或安全结论时，请核对笔记注明的环境、验证方式和原始资料。
 
-## 从这里开始
+## 开始阅读
 
-| 目标      | 入口                                                                                                                             |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| 按顺序学习   | [学习周期](/00-Hub%20(学习入口)/09-Study%20Cycle%20(学习周期).md)                                                                          |
-| 浏览全库结构  | [知识库地图](/00-Hub%20(学习入口)/00-Vault%20Map%20(知识库地图).md)                                                                          |
-| 了解长期方向  | [后端学习路线](/00-Hub%20(学习入口)/01-Backend%20Learning%20Roadmap%20(后端学习路线).md)                                                       |
-| 复习与维护笔记 | [间隔复习系统](/00-Hub%20(学习入口)/02-Spaced%20Review%20System%20(间隔复习系统).md) · [笔记规范](/00-Hub%20(学习入口)/03-Note%20Standard%20(笔记规范).md) |
+| 需求 | 入口 |
+| --- | --- |
+| 按任务继续学习 | [学习周期](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/09-Study%20Cycle%20%28%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%9C%9F%29.md) |
+| 浏览知识结构 | [知识库地图](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/00-Vault%20Map%20%28%E7%9F%A5%E8%AF%86%E5%BA%93%E5%9C%B0%E5%9B%BE%29.md) |
+| 了解能力方向 | [后端学习路线](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/01-Backend%20Learning%20Roadmap%20%28%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF%29.md) |
+| 安排复习 | [间隔复习系统](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/02-Spaced%20Review%20System%20%28%E9%97%B4%E9%9A%94%E5%A4%8D%E4%B9%A0%E7%B3%BB%E7%BB%9F%29.md) |
+| 查看写作约定 | [笔记规范](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/03-Note%20Standard%20%28%E7%AC%94%E8%AE%B0%E8%A7%84%E8%8C%83%29.md) |
 
-学习周期按知识依赖分为 13 个阶段，以学习块组织 Todo，不预设日期。每条按一个学习日的目标设计，强关联内容可组合，重专题单独推进；实际耗时随基础调整，也可空出一天自主复习。计算机基础、C++ 与 Python 交错起步，笔记是主线，实验帮助理解。
+**在 GitHub 阅读**：从上表进入笔记；库内链接使用相对路径，可在仓库页面继续导航。笔记中的 Obsidian 提示框在 GitHub 上可能显示为普通引用块，正文和代码仍可阅读。
 
-在 Windows 本地克隆后，可用 PowerShell 查看复习任务：
+**在 Obsidian 使用**：克隆或下载仓库，将目录作为 Obsidian 库打开。
+
+```bash
+git clone https://github.com/ziyan-cs/obsidian-coding-notes.git
+```
+
+笔记、属性和题目无需第三方插件；仓库内的外观配置可按个人偏好调整。学习记录保存在笔记的 YAML 属性中，不会由脚本自动改写。
+
+## 内容导航
+
+| 编号 | 模块入口 |
+| --- | --- |
+| 01 | [基础能力](./01-Foundations%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%29/00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 02 | [工程基础](./02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/00-Engineering%20Fundamentals%20Standard%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 03 | [C++ 后端](./03-C%2B%2B%20Backend%20%28C%2B%2B%20%E5%90%8E%E7%AB%AF%29/00-C%2B%2B%20Backend%20Standard%20%28C%2B%2B%20%E5%90%8E%E7%AB%AF%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 04 | [Python 工程](./04-Python%20Engineering%20%28Python%20%E5%B7%A5%E7%A8%8B%29/00-Python%20Engineering%20Standard%20%28Python%20%E5%B7%A5%E7%A8%8B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 05 | [Go 后端](./05-Go%20Backend%20%28Go%20%E5%90%8E%E7%AB%AF%29/00-Go%20Backend%20Standard%20%28Go%20%E5%90%8E%E7%AB%AF%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 06 | [系统与网络](./06-Systems%20and%20Networking%20%28%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%29/00-Systems%20and%20Networking%20Standard%20%28%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 07 | [数据系统与分布式](./07-Data%20Systems%20and%20Distributed%20Computing%20%28%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%29/00-Data%20Systems%20and%20Distributed%20Computing%20Standard%20%28%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 08 | [云原生与可靠性](./08-Cloud%20Native%20and%20Reliability%20%28%E4%BA%91%E5%8E%9F%E7%94%9F%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7%29/00-Cloud%20Native%20and%20Reliability%20Standard%20%28%E4%BA%91%E5%8E%9F%E7%94%9F%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 09 | [安全工程](./09-Security%20Engineering%20%28%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%29/00-Security%20Engineering%20Standard%20%28%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 10 | [AI 系统工程](./10-AI%20Systems%20Engineering%20%28AI%20%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%29/00-AI%20Systems%20Engineering%20Standard%20%28AI%20%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 11 | [项目实践](./11-Projects%20%28%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%29/00-Project%20Standard%20%28%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+| 12 | [求职与成长](./12-Career%20%28%E6%B1%82%E8%81%8C%E4%B8%8E%E6%88%90%E9%95%BF%29/00-Career%20Standard%20%28%E6%B1%82%E8%81%8C%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) |
+
+学习周期串联基础程序、C++ 资源与构建、HTTP 服务、Go 数据服务和项目实践；算法穿插练习，分布式、云原生、安全与 AI 等专题按实际项目或目标岗位深化。模块的 `00-... Standard` 页给出掌握范围和综合自测。
+
+## 复习检索
+
+在仓库根目录运行 [Shell 脚本](./List-ReviewDue.sh) 或 [PowerShell 脚本](./List-ReviewDue.ps1)。默认列出**逾期、今天和明天**的笔记；`-All` / `--all` 列出所有已填写 `review_due` 的笔记。输出包含日期、阶段和相对路径。脚本只读取文件，不修改学习进度。
+
+**Linux / macOS（Bash）**
+
+```bash
+bash ./List-ReviewDue.sh
+bash ./List-ReviewDue.sh --all
+bash ./List-ReviewDue.sh --root /path/to/vault
+```
+
+**Windows（PowerShell）**
 
 ```powershell
 .\List-ReviewDue.ps1
 .\List-ReviewDue.ps1 -All
+.\List-ReviewDue.ps1 -Root 'D:\Notes\Obsidian-Coding'
 ```
 
-## 学习路径
+PowerShell 7 在 Linux / macOS 上也可运行：`pwsh -File ./List-ReviewDue.ps1 -All`。Shell 脚本使用系统自带的 GNU 或 BSD `date`；Bash 3.2 及以上适用。若所有 `review_due` 仍为空，检索结果为空是预期行为。
 
-**程序与语言基础 → 数据结构与推理 → 工程习惯 → C++ 泛型与并发 → Linux 与网络 → 服务组织与接口实践 → 数据系统 → Go 服务 → 安全与主项目 → 云原生与安全治理 → AI 工程 → 系统设计与表达 → 核心专攻**
+第一次学懂一篇笔记后，把 `study_stage` 改为 `D1`，并将 `review_due` 填为次日日期（`YYYY-MM-DD`）。复习阶段和日期的更新规则见[间隔复习系统](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/02-Spaced%20Review%20System%20%28%E9%97%B4%E9%9A%94%E5%A4%8D%E4%B9%A0%E7%B3%BB%E7%BB%9F%29.md)。
 
-这是一条有前置关系的路线，不要求按目录机械清空。项目实践贯穿学习；遇到基础缺口时先回到对应知识补齐。
+## 维护与来源
 
-## 模块导航
-
-| 编号  | 模块        | 验收入口                                                                                                                                                      |
-| --- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 01  | 基础能力      | [基础标准](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)                                                                               |
-| 02  | 工程基础      | [工程标准](/02-Engineering%20Fundamentals%20(工程基础)/00-Engineering%20Fundamentals%20Standard%20(工程基础标准与自测).md)                                                 |
-| 03  | C++ 后端    | [C++ 标准](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)                                                                 |
-| 04  | Python 工程 | [Python 标准](/04-Python%20Engineering%20(Python%20工程)/00-Python%20Engineering%20Standard%20(Python%20工程标准与自测).md)                                          |
-| 05  | Go 后端     | [Go 标准](/05-Go%20Backend%20(Go%20后端)/00-Go%20Backend%20Standard%20(Go%20后端标准与自测).md)                                                                      |
-| 06  | 系统与网络     | [系统网络标准](/06-Systems%20and%20Networking%20(系统与网络)/00-Systems%20and%20Networking%20Standard%20(系统与网络标准与自测).md)                                             |
-| 07  | 数据系统与分布式  | [数据标准](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/00-Data%20Systems%20and%20Distributed%20Computing%20Standard%20(数据系统与分布式标准与自测).md) |
-| 08  | 云原生与可靠性   | [云原生标准](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/00-Cloud%20Native%20and%20Reliability%20Standard%20(云原生与可靠性标准与自测).md)                          |
-| 09  | 安全工程      | [安全标准](/09-Security%20Engineering%20(安全工程)/00-Security%20Engineering%20Standard%20(安全工程标准与自测).md)                                                         |
-| 10  | AI 系统工程   | [AI 标准](/10-AI%20Systems%20Engineering%20(AI%20系统工程)/00-AI%20Systems%20Engineering%20Standard%20(AI%20系统工程标准与自测).md)                                      |
-| 11  | 项目实践      | [项目标准](/11-Projects%20(项目实践)/00-Project%20Standard%20(项目标准与自测).md)                                                                                        |
-| 12  | 求职与成长     | [求职标准](/12-Career%20(求职与成长)/00-Career%20Standard%20(求职能力标准与自测).md)                                                                                        |
-
-## 笔记与复习约定
-
-- 每篇笔记围绕一个完整主题展开：解释概念与机制，说明适用边界，并配有可验证的示例或实践。
-- 文件名使用「序号-English (中文)」；正文标题用于组织知识，不重复文件名。
-- 模块的 00 Standard 页用于目标确认和综合自测；正文只链接真正相关的前置、对照或实践笔记。
-- 学习进度只维护两项：`study_stage` 表示学习或复习阶段，`review_due` 在未学时留空；首次学懂后手动改为 `D1`，将复习日期填写为次日。不记录学习日期。
-- 复习按 D1、D3、D7、D14、D30、D60 逐步间隔；答不出核心机制时先补学，再安排下一次复习。日期以实际进度滚动，不为追计划虚报完成。
-
-图片与附件应随笔记一并保留在仓库中，确保本地 Obsidian 与 GitHub 阅读时内容完整。涉及易变 API、版本行为或性能结论时，优先检查官方资料并记录环境与验证依据。
-
-## 验证与诊断
-
-工程中的测试、调试、内存安全、性能分析、可观测性与发布验证，统一从[测试与验证](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)开始。
-
+笔记的事实依据、时效和改动原则见[来源与时效规则](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/06-Sources%20%26%20Freshness%20Policy%20%28%E6%9D%A5%E6%BA%90%E4%B8%8E%E6%97%B6%E6%95%88%E8%A7%84%E5%88%99%29.md)；发现内容或链接问题，可按[审计与迁移队列](./00-Hub%20%28%E5%AD%A6%E4%B9%A0%E5%85%A5%E5%8F%A3%29/07-Vault%20Audit%20%26%20Migration%20Queue%20%28%E5%AE%A1%E8%AE%A1%E4%B8%8E%E8%BF%81%E7%A7%BB%E9%98%9F%E5%88%97%29.md)记录。图表、代码与练习随对应笔记维护。

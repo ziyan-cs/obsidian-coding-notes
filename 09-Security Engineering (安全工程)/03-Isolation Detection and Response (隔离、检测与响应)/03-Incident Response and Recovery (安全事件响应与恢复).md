@@ -4,10 +4,7 @@ review_due:
 tags: [security/incident-response, operations/recovery]
 ---
 
-> [!note] 方法论坐标
-> 检测质量与事件证据统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/06-Security%20Detection%20and%20Incident%20Evidence%20(安全检测与事件证据).md)；本篇聚焦确认事件后的隔离、根除、恢复与沟通。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 事件响应的首要目标是限制业务与数据损失，同时保存足以判断范围和根因的证据；恢复不是“服务能启动”，而是确认攻击路径被关闭、数据可信、风险回到可接受水平。
 
 # 准备与分级
@@ -58,11 +55,27 @@ tags: [security/incident-response, operations/recovery]
 4. 如何查询跨账号、跨区域和第三方系统的访问范围？
 5. 用什么证据宣布恢复，并防止同类秘密再次进入仓库？
 
-> [!question]- 理解检查
-> 某服务修补漏洞并恢复了流量，但没有轮换凭据、检查持久化账号或验证数据完整性。为什么这仍不能称为恢复完成？
-
 # 权威参考
 
 - [NIST SP 800-61 Rev. 3: Incident Response Recommendations and Considerations](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [CISA Incident Response Playbooks](https://www.cisa.gov/news-events/news/federal-government-cybersecurity-incident-and-vulnerability-response-playbooks)
 - [Google SRE Workbook: Incident Response](https://sre.google/workbook/incident-response/)
+
+> [!info]- 关联笔记
+> 检测质量与事件证据统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦确认事件后的隔离、根除、恢复与沟通。
+
+# 考察题目
+
+## 1. 动手题
+
+模拟测试凭据泄露，按时间线执行撤销、范围确认、日志保全、修复与恢复验证。
+
+> [!note]- 验收要点
+> 先止损再修复，证据有来源与时间，恢复后旧凭据无效。
+
+## 2. 机制追问
+
+发现凭据泄露后，先修补代码还是先遏制访问？
+
+> [!note]- 参考答案
+> 先评估并遏制正在发生的风险，如撤销或轮换凭据、限制权限，同时保留证据；再确认范围、根因、修复和恢复验证。

@@ -4,7 +4,7 @@ review_due:
 tags: [cloud-native/kubernetes, sre/troubleshooting, operations]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 建立从用户症状到 Kubernetes 对象、节点和依赖的排障证据链，并把发布、容量、备份和访问控制纳入生产运行。`kubectl` 命令只是取证工具，目标是形成可证伪的故障假设。
 
 # 从症状构造排障路径
@@ -69,3 +69,19 @@ NetworkPolicy 要同时考虑 ingress 与 egress；是否生效取决于 CNI 实
 - [Kubernetes Troubleshooting](https://kubernetes.io/docs/tasks/debug/)
 - [Kubernetes Observability](https://kubernetes.io/docs/concepts/cluster-administration/observability/)
 - [Kubernetes Security Checklist](https://kubernetes.io/docs/concepts/security/security-checklist/)
+
+# 考察题目
+
+## 1. 动手题
+
+模拟新版本因配置错误 CrashLoopBackOff，保存事件、日志和配置差异后回滚。
+
+> [!note]- 验收要点
+> 能复现根因，回滚后健康与流量恢复；不靠反复重启掩盖问题。
+
+## 2. 机制追问
+
+部署后请求失败，为什么先看事件、探针和配置版本而不是直接重启 Pod？
+
+> [!note]- 参考答案
+> 重启可能抹去现场且不能解决配置或依赖问题；先比对变更、事件、日志、Endpoint 和探针结果，保留证据后再恢复或回滚。

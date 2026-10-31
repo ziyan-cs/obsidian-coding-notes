@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/concurrency]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > goroutine 很轻，但泄漏、竞态和死锁仍真实存在；先定义所有权、退出条件和背压，再选 channel 或 mutex。
 
 > [!warning] 并发代码先写“退出设计”
@@ -141,3 +141,19 @@ func squareBatch(ctx context.Context, input []int, workers int) ([]int, error) {
 ## C++ 对照
 
 Go channel 类似“带同步语义的消息通道”，不是 `std::queue`；mutex 与 C++ mutex 同样需要保护不变量。Go 不让你免于理解并发，只减少线程创建和调度细节。
+
+# 考察题目
+
+## 1. 动手题
+
+实现最多 4 个并发 worker 的任务处理器，关闭输入后等待全部结果；加 `go test -race`。
+
+> [!note]- 验收要点
+> 任务不丢不重复，只有发送方关闭 channel，goroutine 全部退出；race 检查运行路径。
+
+## 2. 机制追问
+
+生产者退出后，消费者一直阻塞在 channel 上，谁应该关闭它？
+
+> [!note]- 参考答案
+> 通常由发送方或明确的唯一所有者在确认不再发送后关闭；不能由多个发送者随意关闭。还需传播取消、限制并发并测试所有退出路径。

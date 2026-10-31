@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 建立进程、线程、Linux task 与协程的边界，理解创建、执行、退出、等待以及资源共享对隔离和并发的影响。
 
 # 两种基本抽象
@@ -111,4 +111,20 @@ cat /proc/$$/status
 - [Linux fork(2)](https://man7.org/linux/man-pages/man2/fork.2.html)
 - [Linux proc_pid_status(5)](https://man7.org/linux/man-pages/man5/proc_pid_status.5.html)
 
-下一步：[07-Context Switching and Scheduling (上下文切换与调度)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/07-Context%20Switching%20and%20Scheduling%20(上下文切换与调度).md)
+下一步：[07-Context Switching and Scheduling (上下文切换与调度)](07-Context%20Switching%20and%20Scheduling%20%28%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2%E4%B8%8E%E8%B0%83%E5%BA%A6%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写两个程序：一个用进程通信传计数，一个用线程共享计数；各构造一次错误并观察故障影响范围。
+
+> [!note]- 验收要点
+> 进程需要显式 IPC；线程需同步共享状态。记录地址空间、资源释放和错误传播差异。
+
+## 2. 机制追问
+
+两个任务需要共享内存又要隔离故障，进程和线程如何取舍？
+
+> [!note]- 参考答案
+> 线程共享进程地址空间，通信方便但错误更易互相影响；进程有独立地址空间，隔离较强而通信与切换成本更高。选择取决于共享需求和故障边界。

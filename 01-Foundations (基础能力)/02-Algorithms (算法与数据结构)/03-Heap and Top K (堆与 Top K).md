@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/data-structure, algorithm/selection, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 理解二叉堆的形状与序性质，掌握建堆、优先队列、Top-K、堆排序和 Quickselect 的选择边界。
 
 # 二叉堆
@@ -105,4 +105,20 @@ C++ 已提供 `std::nth_element`：执行后，第 `nth` 个元素与完全排�
 > [!summary] 本篇结论
 > 堆用部分有序换取极值更新效率；Top-K 选择取决于是否流式、是否需要全序、是否允许修改输入以及最坏复杂度要求。先定义输出语义，再选全排序、受限堆或选择算法。
 
-下一步：[04-Tree Traversal and Paths (树遍历与路径)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/04-Tree%20Traversal%20and%20Paths%20(树遍历与路径).md)
+下一步：[04-Tree Traversal and Paths (树遍历与路径)](04-Tree%20Traversal%20and%20Paths%20%28%E6%A0%91%E9%81%8D%E5%8E%86%E4%B8%8E%E8%B7%AF%E5%BE%84%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现流式 Top K：每读一个整数维护大小为 K 的小根堆；用排序结果作对照，覆盖 K=0、K>n 和重复值。
+
+> [!note]- 验收要点
+> 堆大小不超过 K，堆顶是候选最小值；最终集合与排序前 K 项一致，复杂度 O(n log K)。
+
+## 2. 机制追问
+
+海量流数据只保留最大的 K 个值，为什么通常用大小为 K 的小根堆？
+
+> [!note]- 参考答案
+> 堆顶是当前候选中最小值，新值只有超过堆顶才需替换；时间约 O(n log K)、空间 O(K)。若可离线且无需排序结果，也可考虑 Quickselect。

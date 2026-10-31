@@ -4,186 +4,171 @@ review_due:
 tags: [career/interview]
 ---
 
-> [!abstract] 核心考点： C++ 后端面试最高频的 100 道题，每题指向笔记库中的对应章节
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 按语言、系统、网络、数据库和设计问题组织的 100 道练习题；先作答，再到对应专题验证机制与边界。
+>
 > 面试题不是孤立答案库。回答应先给结论，再解释对象模型、系统调用或数据结构等机制，补充边界与工程取舍，并能落到本库对应专题和真实代码。
->
-> ## 说明
->
-> 每题标注难度 ★~★★★ 和对应笔记位置。答案不在本篇展开，而是指向已有笔记——确保你复习时回到原笔记的完整上下文。
->
+
+每题标注难度或练习要点。题目用于定位薄弱处；答案速查仅作核对，详细机制见本库相应专题。
 
 # C++ 语言（30 题）
 
 ## 基础语法
 
-| #   | 题目                                | 难度  | 笔记位置                                                                                                                                                                         |
-| --- | --------------------------------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | `const` 在不同位置的含义（指针、函数、成员函数）      | ★   | Const & Static                                                                  |
-| 2   | `static` 的 5 种用法                  | ★   | Const & Static                                                                  |
-| 3   | 左值引用 vs 右值引用 vs 万能引用              | ★★  | Lvalue vs Rvalue        |
-| 4   | 指针和引用的区别（底层实现角度）                  | ★   | Pointers & References                                           |
-| 5   | `sizeof` 和 `alignof` 在空类、虚继承下的结果  | ★★  | Memory Model & Layout |
-| 6   | 重载、重写、隐藏的区别                       | ★   | Constructor & Destructor Order      |
-| 7   | `inline` 函数什么时候有用？什么时候无效？         | ★   | Functions                                                                                     |
-| 8   | 函数指针 vs `std::function` vs lambda | ★★  | Lambda & Function Object                                        |
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 1 | `const` 在不同位置的含义（指针、函数、成员函数） | ★ |
+| 2 | `static` 的 5 种用法 | ★ |
+| 3 | 左值引用 vs 右值引用 vs 万能引用 | ★★ |
+| 4 | 指针和引用的区别（底层实现角度） | ★ |
+| 5 | `sizeof` 和 `alignof` 在空类、虚继承下的结果 | ★★ |
+| 6 | 重载、重写、隐藏的区别 | ★ |
+| 7 | `inline` 函数什么时候有用？什么时候无效？ | ★ |
+| 8 | 函数指针 vs `std::function` vs lambda | ★★ |
 
 ## OOP
 
-| #   | 题目                  | 难度  | 笔记位置                             |
-| --- | ------------------- | --- | -------------------------------- |
-| 9   | 虚函数表（vtable）的内存布局   | ★★★ | Virtual Function & VTable Layout |
-| 10  | 多继承的菱形问题与虚继承        | ★★★ | Multiple & Virtual Inheritance   |
-| 11  | 构造函数和析构函数中调用虚函数会怎样  | ★★  | Multiple & Virtual Inheritance   |
-| 12  | 为什么析构函数要用 virtual   | ★   | Abstract Class & Pure Virtual    |
-| 13  | Rule of Five（三/五法则） | ★★  | Copy Control & Rule of 5         |
-| 14  | 拷贝构造函数参数为什么必须是引用    | ★   | Pointers & References            |
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 9 | 虚函数表（vtable）的内存布局 | ★★★ |
+| 10 | 多继承的菱形问题与虚继承 | ★★★ |
+| 11 | 构造函数和析构函数中调用虚函数会怎样 | ★★ |
+| 12 | 为什么析构函数要用 virtual | ★ |
+| 13 | Rule of Five（三/五法则） | ★★ |
+| 14 | 拷贝构造函数参数为什么必须是引用 | ★ |
 
 ## 内存
 
-| #   | 题目                                            | 难度  | 笔记位置                                                                                                                                                                                                                                                                                                                              |
-| --- | --------------------------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 15  | 程序内存布局：stack / heap / BSS / data / text       | ★★  | Stack, Heap, BSS, Text Segments |
-| 16  | 内存对齐的原则与 `#pragma pack`                       | ★★  | Memory Alignment                                           |
-| 17  | 栈上对象 vs 堆上对象的生命周期                             | ★   | Memory Alignment                                           |
-| 18  | 内存池的原理和适用场景                                   | ★★  | Memory Pool Implementation            |
-| 19  | placement new 和自定义分配器                         | ★★★ | Custom Allocators & Placement New                                                                                                 |
-| 20  | 智能指针：`unique_ptr` / `shared_ptr` / `weak_ptr` | ★★  | Smart Pointers                                                                          |
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 15 | 程序内存布局：stack / heap / BSS / data / text | ★★ |
+| 16 | 内存对齐的原则与 `#pragma pack` | ★★ |
+| 17 | 栈上对象 vs 堆上对象的生命周期 | ★ |
+| 18 | 内存池的原理和适用场景 | ★★ |
+| 19 | placement new 和自定义分配器 | ★★★ |
+| 20 | 智能指针：`unique_ptr` / `shared_ptr` / `weak_ptr` | ★★ |
 
 ## Modern C++
 
-| #   | 题目                                               | 难度  | 笔记位置                                                                                                                                                                                                             |
-| --- | ------------------------------------------------ | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 21  | 移动语义干了什么？什么时候用 `std::move`？                      | ★★  | Move Constructor & Move Assignment |
-| 22  | 完美转发的原理：引用折叠 + `std::forward`                    | ★★★ | Perfect Forwarding & Universal Reference                                                 |
-| 23  | `auto` 和 `decltype` 的类型推导规则                      | ★★  | Modern C++ Overview                                                                                        |
-| 24  | lambda 的捕获方式和生命周期                                | ★★  | Lambda & Function Object                                                                            |
-| 25  | `constexpr` 编译期计算 vs `consteval`                 | ★★  | constexpr & Compile-time Computation                                                              |
-| 26  | `if constexpr` 如何替代 SFINAE                       | ★★  | constexpr & Compile-time Computation                                                              |
-| 27  | `std::optional` / `std::variant` / `std::any`    | ★   | optional & variant                                                                                                    |
-| 28  | Coroutines：`co_await` / `co_yield` / `co_return` | ★★★ | Coroutines Overview                                                                                                     |
-| 29  | Concept 解决了什么问题                                  | ★★  | Concepts & SFINAE                                                                                               |
-| 30  | Structured Binding（结构化绑定）                        | ★   | string_view & Structured Bindings                                                                                                                                                                                |
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 21 | 移动语义干了什么？什么时候用 `std::move`？ | ★★ |
+| 22 | 完美转发的原理：引用折叠 + `std::forward` | ★★★ |
+| 23 | `auto` 和 `decltype` 的类型推导规则 | ★★ |
+| 24 | lambda 的捕获方式和生命周期 | ★★ |
+| 25 | `constexpr` 编译期计算 vs `consteval` | ★★ |
+| 26 | `if constexpr` 如何替代 SFINAE | ★★ |
+| 27 | `std::optional` / `std::variant` / `std::any` | ★ |
+| 28 | Coroutines：`co_await` / `co_yield` / `co_return` | ★★★ |
+| 29 | Concept 解决了什么问题 | ★★ |
+| 30 | Structured Binding（结构化绑定） | ★ |
 
 ## 并发问题
 
-| # | 题目 | 难度 | 笔记位置 |
-|---|------|------|---------|
-| 31 | `std::thread` vs POSIX 线程 | ★ | Thread Basics |
-| 32 | `std::mutex` / `std::lock_guard` / `std::unique_lock` | ★ | Mutex & Lock |
-| 33 | 死锁的四个必要条件与预防 | ★★ | Mutex & Lock |
-| 34 | `std::atomic` 和 memory order | ★★★ | Atomic & Memory Order |
-| 35 | 条件变量为什么必须配合 mutex | ★★ | Condition Variable & Semaphore |
-| 36 | 线程池的设计要点（任务队列、动态扩缩） | ★★ | Thread Pool Implementation |
-| 37 | 伪共享（False Sharing）的成因和解决 | ★★★ | Concurrency & Performance Optimization |
-| 38 | `std::future` / `std::promise` / `std::async` | ★★ | Lock-free Structures |
-| 39 | 读写锁 (`shared_mutex`) 适用场景 | ★★ | Concurrency & Performance Optimization |
-| 40 | lock-free 编程的基本思路 | ★★★ | Lock-free Structures |
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 31 | `std::thread` vs POSIX 线程 | ★ |
+| 32 | `std::mutex` / `std::lock_guard` / `std::unique_lock` | ★ |
+| 33 | 死锁的四个必要条件与预防 | ★★ |
+| 34 | `std::atomic` 和 memory order | ★★★ |
+| 35 | 条件变量为什么必须配合 mutex | ★★ |
+| 36 | 线程池的设计要点（任务队列、动态扩缩） | ★★ |
+| 37 | 伪共享（False Sharing）的成因和解决 | ★★★ |
+| 38 | `std::future` / `std::promise` / `std::async` | ★★ |
+| 39 | 读写锁 (`shared_mutex`) 适用场景 | ★★ |
+| 40 | lock-free 编程的基本思路 | ★★★ |
 
 ## STL 问题
 
-| #   | 题目                                 | 难度  | 笔记位置                                                                                                                                                                                    |
-| --- | ---------------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 41  | `vector` 扩容机制与 `reserve`           | ★★  | vector Dynamic Array |
-| 42  | `map` vs `unordered_map` 底层结构对比    | ★★  | STL Cheat Sheet                                                                                  |
-| 43  | `deque` 的块状存储结构                    | ★★  | STL Cheat Sheet                                                                                  |
-| 44  | 迭代器失效的场景（vector/map/unordered_map） | ★★  | Iterators & Iterator Categories                                                  |
-| 45  | `std::sort` 的实现原理（内省排序）            | ★★  | Algorithm Library                                                                                  |
-
----
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 41 | `vector` 扩容机制与 `reserve` | ★★ |
+| 42 | `map` vs `unordered_map` 底层结构对比 | ★★ |
+| 43 | `deque` 的块状存储结构 | ★★ |
+| 44 | 迭代器失效的场景（vector/map/unordered_map） | ★★ |
+| 45 | `std::sort` 的实现原理（内省排序） | ★★ |
 
 # 网络（15 题）
 
-| # | 题目 | 难度 | 笔记位置 |
-|---|------|------|---------|
-| 46 | 三次握手和四次挥手 State 变化 | ★★ | Three-Way Handshake & Four-Way Teardown |
-| 47 | TIME_WAIT 为什么是 2MSL | ★★ | TIME_WAIT |
-| 48 | TCP 拥塞控制的四种算法 | ★★★ | Flow Control & Congestion Control |
-| 49 | 粘包怎么解决（代码实现） | ★★ | Sticky Packet Problem & Solutions |
-| 50 | select / poll / epoll 对比 | ★★★ | epoll vs select |
-| 51 | epoll ET vs LT 模式 | ★★★ | Level Trigger vs Edge Trigger |
-| 52 | Reactor 和 Proactor 的区别 | ★★★ | Reactor & Proactor Pattern |
-| 53 | HTTPS TLS 握手过程 | ★★ | HTTPS & TLS Overview |
-| 54 | HTTP/2 多路复用的原理 | ★★ | HTTP/2 Key Features |
-| 55 | gRPC 四种通信模式 | ★★ | gRPC & Protobuf |
-| 56 | Protobuf 编码原理（varint） | ★★★ | gRPC & Protobuf |
-| 57 | 零拷贝：mmap + sendfile | ★★ | Memory-mapped IO & sendfile |
-| 58 | 非阻塞 connect 怎么实现 | ★★ | Non-blocking Socket |
-| 59 | SO_REUSEADDR 解决什么 | ★ | SO_REUSEADDR & SO_KEEPALIVE |
-| 60 | HTTP 状态机解析怎么实现 | ★★ | State Machine Parser Implementation |
-
----
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 46 | 三次握手和四次挥手 State 变化 | ★★ |
+| 47 | TIME_WAIT 为什么是 2MSL | ★★ |
+| 48 | TCP 拥塞控制的四种算法 | ★★★ |
+| 49 | 粘包怎么解决（代码实现） | ★★ |
+| 50 | select / poll / epoll 对比 | ★★★ |
+| 51 | epoll ET vs LT 模式 | ★★★ |
+| 52 | Reactor 和 Proactor 的区别 | ★★★ |
+| 53 | HTTPS TLS 握手过程 | ★★ |
+| 54 | HTTP/2 多路复用的原理 | ★★ |
+| 55 | gRPC 四种通信模式 | ★★ |
+| 56 | Protobuf 编码原理（varint） | ★★★ |
+| 57 | 零拷贝：mmap + sendfile | ★★ |
+| 58 | 非阻塞 connect 怎么实现 | ★★ |
+| 59 | SO_REUSEADDR 解决什么 | ★ |
+| 60 | HTTP 状态机解析怎么实现 | ★★ |
 
 # 操作系统（10 题）
 
-| #   | 题目             | 难度  | 笔记位置                                                                                                                                                                            |
-| --- | -------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 61  | 进程 vs 线程 vs 协程 | ★   | Process vs Thread                                                                  |
-| 62  | 上下文切换的成本       | ★★  | Context Switching                                                                     |
-| 63  | 虚拟内存解决了什么问题    | ★★  | Virtual Memory                                              |
-| 64  | 分页 vs 分段       | ★★  | Paging & Segmentation                             |
-| 65  | 页面置换算法（LRU 实现） | ★★  | LRU（当前无专题笔记） |
-| 66  | 死锁的四个条件和解决方案   | ★★  | Deadlock                                                                 |
-| 67  | 互斥锁和信号量的本质区别   | ★   | Mutex                                                                    |
-| 68  | CPU 调度算法对比     | ★★  | CPU Scheduling                                                                         |
-| 69  | 硬链接 vs 软链接     | ★   | File System Basics                                                              |
-| 70  | 零拷贝的几种实现方式     | ★★  | Memory-mapped IO & sendfile                                            |
-
----
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 61 | 进程 vs 线程 vs 协程 | ★ |
+| 62 | 上下文切换的成本 | ★★ |
+| 63 | 虚拟内存解决了什么问题 | ★★ |
+| 64 | 分页 vs 分段 | ★★ |
+| 65 | 页面置换算法（LRU 实现） | ★★ |
+| 66 | 死锁的四个条件和解决方案 | ★★ |
+| 67 | 互斥锁和信号量的本质区别 | ★ |
+| 68 | CPU 调度算法对比 | ★★ |
+| 69 | 硬链接 vs 软链接 | ★ |
+| 70 | 零拷贝的几种实现方式 | ★★ |
 
 # 数据库（15 题）
 
-| #   | 题目                               | 难度  | 笔记位置                                                                                                                                                                                         |
-| --- | -------------------------------- | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 71  | 索引的 B+ Tree 结构                   | ★★  | B+ Tree Index Structure                     |
-| 72  | 聚簇索引 vs 二级索引 vs 覆盖索引             | ★★★ | Clustered vs Secondary Index         |
-| 73  | 索引下推是什么                          | ★★  | Index Pushdown & Covering Index |
-| 74  | 四种隔离级别和并发问题                      | ★★  | Isolation Levels               |
-| 75  | MVCC 实现原理（undo log + ReadView）   | ★★★ | MVCC Internals                   |
-| 76  | Next-Key Lock 解决幻读               | ★★★ | Gap Lock & Next-Key Lock                          |
-| 77  | EXPLAIN 怎么看（type/key/rows/Extra） | ★★  | EXPLAIN & Execution Plan Analysis                 |
-| 78  | 最左前缀匹配原则                         | ★★  | EXPLAIN & Execution Plan Analysis                 |
-| 79  | Redo Log 崩溃恢复原理                  | ★★★ | Redo Log                                |
-| 80  | Binlog vs Redo Log 区别            | ★★  | Binlog vs Redo Log             |
-| 81  | 主从复制的三种模式                        | ★★  | Master-Slave Replication                                                                             |
-| 82  | JOIN 和子查询的性能差异                   | ★★  | Joins & Subqueries                                                                                      |
-| 83  | 分库分表的策略                          | ★★  | Sharding & Partitioning                                                                  |
-| 84  | 缓存穿透/击穿/雪崩                       | ★★  | MySQL vs Redis                                                                            |
-| 85  | Redis 为什么快（单线程模型）                | ★   | Redis Single Thread Model                             |
-
----
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 71 | 索引的 B+ Tree 结构 | ★★ |
+| 72 | 聚簇索引 vs 二级索引 vs 覆盖索引 | ★★★ |
+| 73 | 索引下推是什么 | ★★ |
+| 74 | 四种隔离级别和并发问题 | ★★ |
+| 75 | MVCC 实现原理（undo log + ReadView） | ★★★ |
+| 76 | Next-Key Lock 解决幻读 | ★★★ |
+| 77 | EXPLAIN 怎么看（type/key/rows/Extra） | ★★ |
+| 78 | 最左前缀匹配原则 | ★★ |
+| 79 | Redo Log 崩溃恢复原理 | ★★★ |
+| 80 | Binlog vs Redo Log 区别 | ★★ |
+| 81 | 主从复制的三种模式 | ★★ |
+| 82 | JOIN 和子查询的性能差异 | ★★ |
+| 83 | 分库分表的策略 | ★★ |
+| 84 | 缓存穿透/击穿/雪崩 | ★★ |
+| 85 | Redis 为什么快（单线程模型） | ★ |
 
 # 分布式系统（10 题）
 
-| # | 题目 | 难度 | 笔记位置 |
-|---|------|------|---------|
-| 86 | CAP 理论和 PACELC | ★★ | CAP Theorem & BASE Theory |
-| 87 | Raft 的 Leader 选举过程 | ★★★ | Leader Election |
-| 88 | Raft 日志复制和安全性 | ★★★ | Log Replication |
-| 89 | Paxos 和 Raft 的区别 | ★★★ | Paxos Overview |
-| 90 | 2PC 和 Saga 的优缺点 | ★★ | Distributed Transaction |
-| 91 | Kafka 消息可靠性的三种 ACK 模式 | ★★ | Kafka Message Delivery |
-| 92 | 一致性哈希解决了什么问题 | ★★ | Reverse Proxy & Load Balancing |
-| 93 | Redis 过期策略和内存淘汰 | ★★ | Expiration & Eviction Strategy |
-| 94 | Redis 持久化：RDB vs AOF | ★★ | Redis Persistence |
-| 95 | 布隆过滤器的原理 | ★★ | Cache Penetration |
-
----
+| # | 题目 | 难度 |
+| ---: | --- | :---: |
+| 86 | CAP 理论和 PACELC | ★★ |
+| 87 | Raft 的 Leader 选举过程 | ★★★ |
+| 88 | Raft 日志复制和安全性 | ★★★ |
+| 89 | Paxos 和 Raft 的区别 | ★★★ |
+| 90 | 2PC 和 Saga 的优缺点 | ★★ |
+| 91 | Kafka 消息可靠性的三种 ACK 模式 | ★★ |
+| 92 | 一致性哈希解决了什么问题 | ★★ |
+| 93 | Redis 过期策略和内存淘汰 | ★★ |
+| 94 | Redis 持久化：RDB vs AOF | ★★ |
+| 95 | 布隆过滤器的原理 | ★★ |
 
 # 系统设计（5 题）
 
-| # | 题目 | 要点 | 笔记位置 |
-|---|------|------|---------|
-| 96 | 设计一个短 URL 系统 | 发号器 + 哈希 + 重定向 | CAP Theorem & BASE Theory |
-| 97 | 设计一个即时通讯系统 | WebSocket + 消息存储 + 推拉 | gRPC & Protobuf |
-| 98 | 设计一个秒杀系统 | 限流 + 缓存 + 异步下单 | MySQL vs Redis |
-| 99 | 设计一个配置中心 | etcd + watch + 版本管理 | Leader Election |
-| 100 | 设计一个 API 网关 | 路由 + 限流 + 鉴权 + 熔断 | Backend Architecture Patterns |
+| # | 题目 | 要点 |
+| ---: | --- | :---: |
+| 96 | 设计一个短 URL 系统 | 发号器 + 哈希 + 重定向 |
+| 97 | 设计一个即时通讯系统 | WebSocket + 消息存储 + 推拉 |
+| 98 | 设计一个秒杀系统 | 限流 + 缓存 + 异步下单 |
+| 99 | 设计一个配置中心 | etcd + watch + 版本管理 |
+| 100 | 设计一个 API 网关 | 路由 + 限流 + 鉴权 + 熔断 |
 
-> **复习建议**：100 题不要求全背。把★的答到流利，★★的理解原理能画图，★★★的至少能说出核心思想。标注的笔记位置指向完整笔记，不要只看本题——回到原笔记深挖。
-
----
+> **复习建议**：100 题不要求全背。把★的答到流利，★★的理解原理能画图，★★★的至少能说出核心思想。遇到不确定的结论，回到相应专题用代码、实验或官方资料验证。
 
 # 答案速查
 
@@ -269,13 +254,13 @@ tags: [career/interview]
     `constexpr` 函数既可以在编译期也可以在运行时求值，取决于参数是否在编译期已知。`consteval`（C++20）强制函数只能在编译期求值，若无法在编译期求值则编译错误。两者都可用于编译期计算，但 `consteval` 提供了更严格的保证，适合需要绝对编译期确定的场景（如数组大小）。
 
 26. **`if constexpr` 如何替代 SFINAE**
-    `if constexpr` 在编译期根据常量表达式选择分支，未选中的分支不会被实例化（连语法检查都不做），从而替代传统 SFINAE（Substitution Failure Is Not An Error）的繁琐模板技巧。相比 `enable_if` 的多重重载，`if constexpr` 将条件逻辑集中在一个函数模板内，代码更清晰、更易维护。
+    `if constexpr` 在编译期按条件选择分支；模板实例化时会丢弃未选中的分支，但该分支仍须满足语法及非依赖名称等基本检查。它适合在同一模板内部选择实现；限制候选函数是否参与重载时，仍需约束、SFINAE 等机制。
 
 27. **`std::optional` / `std::variant` / `std::any`**
     `optional<T>` 表示可能包含 T 值或空（类似可为 null 的语义），避免使用哨兵值。`variant<T1, T2, ...>` 是类型安全的联合体，同时只持有一种类型的值，用 `std::visit` 访问。`any` 可以持有任意类型（类型擦除），性能开销大，应优先用 `variant`。
 
 28. **Coroutines：`co_await` / `co_yield` / `co_return`**
-    C++20 协程是无栈协程，函数中含 `co_await`/`co_yield`/`co_return` 即视为协程，可被挂起和恢复。`co_await` 等待一个可等待对象使协程挂起（如异步 IO 完成后再恢复）；`co_yield` 产生一个值并挂起（Generator 模式）；`co_return` 返回结果并结束协程。协程状态存储在堆上分配的协程帧中。
+    C++20 协程可挂起并恢复，状态保存在协程帧中；`co_await` 是否真正挂起以及何时恢复由 awaiter 决定，不能等同于异步 I/O。协程状态通常经分配函数获得存储，满足条件时编译器可省略动态分配；`co_yield` 产出值，`co_return` 结束协程。参见 [C++ 协程规则](https://eel.is/c++draft/dcl.fct.def.coroutine)。
     **追问方向：** 协程帧（coroutine frame）在堆上还是栈上分配？`co_await` 背后的 awaitable 和 awaiter 机制？
 
 29. **Concept 解决了什么问题**
@@ -287,7 +272,7 @@ tags: [career/interview]
 ## 并发
 
 31. **`std::thread` vs POSIX 线程**
-    `std::thread` 是 C++11 提供的跨平台线程抽象，内部封装 POSIX 线程（Linux）或 Windows 线程，API 统一。相比直接使用 pthread，`std::thread` 与 RAII 结合更好（析构自动 `join` 或 `detach`），配合 `std::jthread`（C++20）还能自动响应取消请求。
+    `std::thread` 是 C++11 的跨平台线程抽象；对象析构时若仍为 `joinable()`，会调用 `std::terminate()`，因此必须明确 `join()` 或 `detach()`。C++20 的 `std::jthread` 析构时请求停止并等待线程结束；停止请求仍需线程函数配合。参见 [C++ 线程规则](https://eel.is/c++draft/thread)。
 
 32. **`std::mutex` / `std::lock_guard` / `std::unique_lock`**
     `std::mutex` 是最基础的互斥量。`lock_guard` 是 RAII 封装：构造时加锁，析构时解锁，不可手动干预。`unique_lock` 更灵活，支持延迟加锁、尝试加锁、提前解锁，可与条件变量配合，但持有锁管理状态（是否已锁），有一定性能开销。优先用 `lock_guard`，需要灵活性时用 `unique_lock`。
@@ -406,13 +391,13 @@ tags: [career/interview]
     LRU 置换最久未被访问的页面。O(1) 实现：哈希表（快速查找）+ 双向链表（维护访问顺序）。每次访问时将节点移到链表头，淘汰时移除链表尾节点。手写 LRU Cache 是经典面试题。实际 OS 常用近似 LRU（如 Clock 算法）以减少硬件支持成本。
 
 66. **死锁的四个条件和解决方案**
-    四个条件：互斥、持有并等待、不可剥夺、循环等待。解决方案分四类：（1）预防——破坏上述一个条件（如按固定顺序加锁）；（2）避免——银行家算法（但实际 OS 较少用）；（3）检测与恢复——检测到死锁后强制终止或回滚线程；（4）鸵鸟策略——忽略（Linux/Windows 均采用）。
+    四个条件：互斥、持有并等待、不可剥夺、循环等待。常见治理方式有固定加锁顺序、限制资源获取、检测等待环以及超时或人工恢复。银行家算法是教学中的避免策略；具体系统是否检测或恢复死锁，取决于资源和组件，不能概括为整个操作系统统一“忽略”。
 
 67. **互斥锁和信号量的本质区别**
     互斥锁（Mutex）用于互斥访问，只能由持有锁的线程释放，无计数功能。信号量（Semaphore）是计数同步原语，允许多个线程同时访问有限资源（初始值 = 资源数），任何线程均可通过 `sem_post` 递增（不区分持有者）。信号量初始值 = 1 时可作互斥锁用，但语义不同（不强制谁释放）。
 
 68. **CPU 调度算法对比**
-    FCFS 简单但平均等待时间长（convoy effect，长任务阻塞短任务）。SJF 平均等待时间最短但无法预知 CPU 突发长度。时间片轮转（RR）保证公平和响应时间，但时间片太短则上下文切换频繁。多级反馈队列（MLFQ）综合多策略：按优先级调度，用完时间片降级，优先级高的时间片小。Linux CFS（完全公平调度）用红黑树按虚拟运行时间调度。
+    FCFS 可能产生 convoy effect；SJF 在已知任务长度的理想前提下优化平均等待时间；时间片轮转改善响应性，但时间片太短会增加切换成本。MLFQ 按反馈调整优先级。Linux 的普通任务调度已从 CFS 逐步转向 EEVDF，解释现场行为应先核对内核版本与调度类。参见 [Linux EEVDF 文档](https://docs.kernel.org/scheduler/sched-eevdf.html)。
 
 69. **硬链接 vs 软链接**
     硬链接指向同一 inode（文件数据），删除原文件不影响硬链接，不能跨文件系统和链接目录。软链接（符号链接）是独立文件，内容为目标路径，原文件删除后链接变成"悬空链接"，可跨文件系统和链接目录。Linux 中 `ls -li` 看 inode 号可区分。
@@ -423,24 +408,24 @@ tags: [career/interview]
 ## 数据库
 
 71. **索引的 B+ Tree 结构**
-    B+ Tree 是多路平衡查找树：所有数据存储在叶子节点（非叶子节点只存 key 作为路由索引），叶子节点通过链表相连形成有序链表。相比 B 树（数据在全部节点），B+ 树非叶子节点可存更多 key（树更矮，减少磁盘 IO），且范围查询只需遍历叶子链表，磁盘顺序读性能极好。
+    B+ 树用内部节点路由查找，叶节点保存可检索记录；在 InnoDB 中，聚簇索引叶节点存行记录，二级索引叶节点存索引键与主键。叶节点的有序组织适合范围扫描，但树高和 I/O 成本仍取决于页大小、键宽、填充和缓存命中。
 
 72. **聚簇索引 vs 二级索引 vs 覆盖索引**
-    聚簇索引（InnoDB 主键索引）的叶子节点直接存储整行数据，表数据就是索引，每表只能有一个。二级索引叶子节点存储主键值，通过二级索引查数据需要回表（再查一次聚簇索引）。覆盖索引是二级索引叶子节点已包含查询所需全部列，无需回表，Extra 显示 "Using index"，性能最好。
+    InnoDB 的聚簇索引叶节点保存行记录，一张表只有一个聚簇索引。二级索引叶节点保存索引列和聚簇键；查询需要的列若已由索引覆盖，可以避免回表。覆盖与否只是执行成本的一部分，仍需结合过滤性、扫描行数和执行计划判断。
     **追问方向：** 为什么 InnoDB 推荐使用自增主键？UUID 做主键有什么问题？
 
 73. **索引下推是什么**
     索引下推（Index Condition Pushdown，ICP）是 MySQL 5.6 引入的优化：在索引遍历过程中提前对索引包含的字段做 WHERE 条件过滤，减少回表次数。不加 ICP 时，存储引擎遍历索引到叶子节点后回表获取全行再交给 server 层过滤。ICP 将部分条件下推到存储引擎层，边遍历边过滤，减少 IO 开销。
 
 74. **四种隔离级别和并发问题**
-    RU（读未提交）可能脏读（读到其他事务未提交的数据）；RC（读已提交）避免脏读但不可重复读（同一事务内两次读不一致）；RR（可重复读）避免脏读和不可重复读但有幻读（同一条件范围两次读行数不同）；Serializable 最严格但性能最差。MySQL InnoDB 默认 RR，通过 MVCC 解决不可重复读，通过 Next-Key Lock 解决幻读。
+    RU 允许脏读；RC 的两次普通读取可看到不同已提交版本；RR 的普通一致性读沿用首次读取建立的快照，锁定读则读取当前状态并按索引范围加锁；Serializable 施加更强的隔离约束。不要把标准隔离级别的现象直接套到所有 InnoDB 读法上。参见 [MySQL 隔离级别](https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html)。
 
 75. **MVCC 实现原理（undo log + ReadView）**
     MVCC 通过隐藏字段（DB_TRX_ID 事务 ID、DB_ROLL_PTR 回滚指针）实现多版本并发控制。读时根据 ReadView 判断版本可见性：ReadView 记录当前活跃事务列表，只能看到已提交的快照版本。写时生成 undo log 保存旧版本。读不加锁（快照读），写加行锁，实现读写互不阻塞。
     **追问方向：** ReadView 在 RC 和 RR 级别下的生成时机有何不同？
 
 76. **Next-Key Lock 解决幻读**
-    Next-Key Lock = 行锁（Record Lock）+ 间隙锁（Gap Lock），锁住一个左开右闭区间。RR 级别下对范围查询不仅给匹配行加行锁，还在匹配行之间加 Gap Lock，阻止其他事务在间隙插入新行，从而解决幻读。注意：唯一索引的等值查询会退化为行锁（只锁存在的那一行），因为唯一性保证不会有幻行。
+    Next-Key Lock 组合索引记录锁和记录前的间隙锁，用于限制被扫描范围内的新记录插入。InnoDB 的 RR 级别下，范围型锁定读、`UPDATE`、`DELETE` 等可能使用间隙锁或 Next-Key Lock；普通 `SELECT` 的一致性读依赖快照，并不因此加这些锁。唯一索引且条件完整的等值查找若命中记录，通常只锁该记录。参见 [MySQL 幻读与 Next-Key Lock](https://dev.mysql.com/doc/refman/8.4/en/innodb-next-key-locking.html)。
     **追问方向：** 什么情况下 Gap Lock 会退化为行锁？唯一索引等值查找时 Next-Key Lock 的行为？
 
 77. **EXPLAIN 怎么看（type/key/rows/Extra）**
@@ -522,3 +507,19 @@ tags: [career/interview]
 
 100. **设计一个 API 网关**
      核心功能：统一路由（根据 URL 前缀分发到后端微服务）、认证鉴权（JWT/OAuth2 统一校验）、限流熔断（令牌桶/滑动窗口，超时比例超阈值后快速失败保护下游）、日志/监控/全链路追踪。高可用：无状态设计多实例部署、配置中心动态路由更新、断路器模式（circuit breaker）防止雪崩。
+
+# 考察题目
+
+## 1. 动手题
+
+任选一个所有权问题和一个并发问题，分别用最小 C++ 程序验证后口述 3 分钟。
+
+> [!note]- 验收要点
+> 回答含前提、机制、边界和运行证据；答不出时定位回原笔记。
+
+## 2. 机制追问
+
+面试中只背“智能指针防泄漏”，如何把回答提升为工程判断？
+
+> [!note]- 参考答案
+> 说明所有权问题、unique/shared/weak 的选择、循环引用与生命周期边界，再用实际代码或失败案例验证。

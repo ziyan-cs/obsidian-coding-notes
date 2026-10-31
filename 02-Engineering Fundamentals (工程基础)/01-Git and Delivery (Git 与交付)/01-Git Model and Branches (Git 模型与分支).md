@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/git, engineering/collaboration]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从对象、引用、工作区和暂存区理解 Git；能选择 merge、rebase、cherry-pick 与主干协作方式，并知道哪些操作会改写共享历史。
 
 # Git 保存的是快照与关系
@@ -141,4 +141,20 @@ was available, which allowed an out-of-bounds read on partial input.
 - [Git reference manual](https://git-scm.com/docs/git)
 - [Pro Git: Git Internals](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
 
-下一步：[02-Conflicts and Recovery (冲突与恢复)](/02-Engineering%20Fundamentals%20(工程基础)/01-Git%20and%20Delivery%20(Git%20与交付)/02-Conflicts%20and%20Recovery%20(冲突与恢复).md)
+下一步：[02-Conflicts and Recovery (冲突与恢复)](02-Conflicts%20and%20Recovery%20%28%E5%86%B2%E7%AA%81%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在练习仓库创建分支，做两个独立提交并合并；画出合并前后的提交图和引用移动。
+
+> [!note]- 验收要点
+> 提交粒度按动机划分；用 `git log --graph` 核对父子关系，合并后保留可审查历史。
+
+## 2. 机制追问
+
+本地提交、分支和远端分支各是什么？一次可审查变更应如何组织？
+
+> [!note]- 参考答案
+> 提交是快照与父子关系，分支是指向提交的引用，远端跟踪分支记录上次所见远端状态；小步提交并说明动机，推送前检查 diff 与测试。

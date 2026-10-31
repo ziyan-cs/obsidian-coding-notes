@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/backtracking, algorithm/search, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把递归看成显式状态转移，把回溯看成深度优先枚举决策树；能够设计路径、选择集合、终止条件、撤销操作和安全剪枝。
 
 # 从递归到状态空间树
@@ -125,4 +125,20 @@ if (i > start && a[i] == a[i - 1]) continue; // 组合/子集的同层去重
 > [!summary] 本篇结论
 > 回溯是对决策树的系统枚举：状态必须足够描述未来，选择与撤销必须对称，剪枝必须证明不会漏解。输出规模往往已经是指数级，因此复杂度要按搜索树和结果量分析。
 
-下一步：[10-One Dimensional Dynamic Programming (一维动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/10-One%20Dimensional%20Dynamic%20Programming%20(一维动态规划).md)
+下一步：[10-One Dimensional Dynamic Programming (一维动态规划)](10-One%20Dimensional%20Dynamic%20Programming%20%28%E4%B8%80%E7%BB%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现含重复元素的组合生成，分别用同层去重和错误的全局去重，给出能区分两者的输入。
+
+> [!note]- 验收要点
+> 排序后只跳过同层重复候选，回溯撤销选择；结果无重复且不漏合法组合。
+
+## 2. 机制追问
+
+组合问题含重复元素时，为什么“同层去重”和“同路径去重”不能混用？
+
+> [!note]- 参考答案
+> 同层去重避免同一位置分支生成相同组合；同路径可能仍允许重复值被选择。先定义状态与答案等价关系，再决定排序、跳过和撤销规则。

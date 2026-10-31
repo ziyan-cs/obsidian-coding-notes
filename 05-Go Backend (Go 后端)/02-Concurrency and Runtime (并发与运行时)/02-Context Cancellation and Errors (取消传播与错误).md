@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > `context.Context` 用来沿调用链传递取消、截止时间与请求范围元数据；它不是任意参数包，也不是可选的全局变量。
 
 # 取消传播检查表
@@ -106,5 +106,20 @@ case <-time.After(time.Second):
 
 把 `work` 改成调用支持 context 的 HTTP 请求或数据库 `QueryContext`，分别验证主动取消、自己设的超时、下游报错和正常返回。每条路径都等待子 goroutine 退出；若使用 `errgroup`，先把 `golang.org/x/sync/errgroup` 明确加入 module 依赖。错误分类使用 `errors.Is`，不要比较字符串。
 
-> [!info]- 延伸阅读
-> - 下一步：[03-Scheduler GC and Memory (调度 GC 与内存)](/05-Go%20Backend%20(Go%20后端)/02-Concurrency%20and%20Runtime%20(并发与运行时)/03-Scheduler%20GC%20and%20Memory%20(调度%20GC%20与内存).md)
+**参考资料：** 下一步：[03-Scheduler GC and Memory (调度 GC 与内存)](03-Scheduler%20GC%20and%20Memory%20%28%E8%B0%83%E5%BA%A6%20GC%20%E4%B8%8E%E5%86%85%E5%AD%98%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+HTTP handler 调用下游模拟慢查询；客户端取消后测试下游在限定时间内退出。
+
+> [!note]- 验收要点
+> 同一 context 沿调用链传递，创建子 context 者调用 cancel；不泄漏 goroutine 或连接。
+
+## 2. 机制追问
+
+HTTP 请求取消后，下游查询仍继续运行，最常见的缺口是什么？
+
+> [!note]- 参考答案
+> 调用链没有传递同一个 context，或阻塞操作不支持取消；每层传递 deadline/cancel，创建者负责调用 cancel，并验证任务和连接最终退出。

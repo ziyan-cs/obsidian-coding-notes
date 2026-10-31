@@ -3,10 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 日志、指标、追踪与 SLO 的共同语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)；本篇聚焦 Go 服务中的 context、middleware、runtime 指标与关闭流程。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 可观测性不是“多打日志”，而是让请求、依赖与资源状态能被度量、关联并用于决策。
 
 # 从服务目标选择信号
@@ -83,8 +80,23 @@ symptom -> scope -> recent change -> dependency/resource evidence
 
 上线前至少验证：仪表盘能显示流量、错误、尾延迟和饱和度；一条测试请求可从日志定位到 trace；readiness 与优雅关闭行为符合预期；回滚步骤真实可执行。
 
-> [!question]- 理解检查
-> P50 正常而 P99 变差时，哪些用户会受影响？为什么只看平均值可能完全漏掉故障？
+**参考资料：** [Go Diagnostics](https://go.dev/doc/diagnostics)
 
-> [!info]- 官方参考
-> - [Go Diagnostics](https://go.dev/doc/diagnostics)
+> [!info]- 关联笔记
+> 日志、指标、追踪与 SLO 的共同语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)；本篇聚焦 Go 服务中的 context、middleware、runtime 指标与关闭流程。
+
+# 考察题目
+
+## 1. 动手题
+
+给 Go API 加请求 ID、耗时直方图与错误计数，注入一次依赖超时并追踪到原因。
+
+> [!note]- 验收要点
+> 指标区分路由和结果，日志能关联请求，标签不过度高基数且无秘密。
+
+## 2. 机制追问
+
+请求偶发超时，Go 服务最少应记录哪些可关联信号？
+
+> [!note]- 参考答案
+> 记录请求 ID、路由、状态、耗时与错误类别，结合延迟分位和依赖指标；避免高基数标签和敏感数据，保留排查路径。

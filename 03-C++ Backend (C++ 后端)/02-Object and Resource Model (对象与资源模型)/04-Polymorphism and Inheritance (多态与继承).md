@@ -3,9 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 继承用于表达稳定的 is-a 抽象，运行时多态通过虚函数经由基类接口选择具体行为。它的代价是耦合、间接调用和对象布局复杂度；优先组合，只有确实需要以统一接口替换不同实现时再用继承。
 
 # 使用边界
@@ -50,7 +48,7 @@ review_due:
 
 # Virtual Functions and VTable (虚函数与虚表)
 
-> [!note] 本节重点：标准规定动态分派语义；vtable/vptr 是常见 ABI 实现，不是语言要求。
+**本节要点：** 标准规定动态分派语义；vtable/vptr 是常见 ABI 实现，不是语言要求。
 
 ## 虚函数表（VTable）
 
@@ -115,10 +113,9 @@ class Derived : public Base {
 class Leaf final : public Derived { };  // 禁止继承 Leaf
 ```
 
-
 # Polymorphism and Dynamic Dispatch (多态与动态分发)
 
-> [!note] 本节重点：运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
+**本节要点：** 运行时多态的实现机制、动态分派性能开销、RTTI typeid 原理
 
 ```cpp
 #include <iostream>
@@ -182,11 +179,9 @@ virtual ~Base() = default;   // 允许经 Base* 删除派生对象时需虚析�
 };
 ```
 
----
-
 # Abstract Classes and Pure Virtual (抽象类与纯虚函数)
 
-> [!note] 本节重点：若类中至少有一个纯虚函数的最终覆盖者仍为纯虚，该类就是抽象类，不能创建对象；这与“虚表不完整”无关。
+**本节要点：** 若类中至少有一个纯虚函数的最终覆盖者仍为纯虚，该类就是抽象类，不能创建对象；这与“虚表不完整”无关。
 
 ```cpp
 class Shape {
@@ -219,11 +214,9 @@ void Shape::draw() const { std::cout << "default draw\n"; }
 // 子类可通过 Shape::draw() 显式调用
 ```
 
----
-
 # Multiple and Virtual Inheritance (多继承与虚继承)
 
-> [!note] 本节重点：多继承的二义性、虚继承解决菱形继承问题、对象布局变化
+**本节要点：** 多继承的二义性、虚继承解决菱形继承问题、对象布局变化
 
 ## 多继承
 
@@ -294,4 +287,18 @@ Diamond Virtual Inheritance Layout:
               (location depends on implementation)
 ```
 
----
+# 考察题目
+
+## 1. 动手题
+
+构造一个基类指针指向派生对象的例子，使用虚析构验证资源释放；再检查删除无虚析构的对应代码为何不应运行。另用组合实现一个非“is-a”关系。
+
+> [!note]- 验收要点
+> 虚析构保证派生资源被释放；无虚析构的删除属未定义行为，不能用一次运行结果证明安全。
+
+## 2. 机制追问
+
+通过基类指针删除派生对象，什么时候会出错？如何判断该用继承还是组合？
+
+> [!note]- 参考答案
+> 作为多态基类时析构函数需为 virtual，否则删除行为可能未定义；继承表达可替换接口，复用实现或独立部件通常优先组合。

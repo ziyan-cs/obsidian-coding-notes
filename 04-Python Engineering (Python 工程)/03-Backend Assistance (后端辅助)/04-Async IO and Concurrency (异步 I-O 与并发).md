@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > `asyncio` 适合大量可等待的 I/O；CPU 密集计算仍应使用进程、原生扩展或专门服务。
 
 # 事件循环心智模型
@@ -73,10 +73,20 @@ CPython 从 3.13 起另有可选的 free-threaded 构建，可让线程并行执
 
 先记录任务数、队列长度、成功率、timeout、P95/P99 与事件循环延迟。若吞吐下降，检查是否存在阻塞调用、无界任务、连接池排队、下游限流或重试风暴，而不是先增加并发。
 
-> [!question]- 理解检查
-> 为什么把同步 HTTP 客户端直接放进 `async def` 不会得到真正的异步并发？当消费者速度低于生产者时，有界 queue 如何保护内存和下游？
+**参考资料：** [Coroutines and Tasks](https://docs.python.org/3/library/asyncio-task.html) · [Synchronization Primitives](https://docs.python.org/3/library/asyncio-sync.html) · [concurrent.futures](https://docs.python.org/3/library/concurrent.futures.html)
 
-> [!info]- 官方参考
-> - [Coroutines and Tasks](https://docs.python.org/3/library/asyncio-task.html)
-> - [Synchronization Primitives](https://docs.python.org/3/library/asyncio-sync.html)
-> - [concurrent.futures](https://docs.python.org/3/library/concurrent.futures.html)
+# 考察题目
+
+## 1. 动手题
+
+写异步批量 GET，限制同时最多 5 个请求；取消主任务后断言所有子任务退出且连接关闭。
+
+> [!note]- 验收要点
+> 用有界信号量或队列，设置总超时并在 finally 中回收任务；不能只限制任务创建速度。
+
+## 2. 机制追问
+
+异步请求数量不设上限，为什么单线程事件循环仍可能耗尽资源？
+
+> [!note]- 参考答案
+> 每个任务仍占连接、内存和下游容量；用信号量或队列限制并发，传播取消与超时，确保异常和退出时任务可回收。

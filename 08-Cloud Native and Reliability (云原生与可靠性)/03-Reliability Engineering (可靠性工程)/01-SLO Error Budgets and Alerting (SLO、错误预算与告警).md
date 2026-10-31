@@ -4,7 +4,7 @@ review_due:
 tags: [sre/slo, observability/alerting]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > SLO 把“足够可靠”写成用户可感知的目标，错误预算用于平衡可靠性与发布速度，告警只应在需要行动时打断人。
 
 # 从用户体验定义 SLI
@@ -63,5 +63,20 @@ SLI          = good events / valid events
 
 定期检查 SLI 是否仍代表产品体验，排除项是否掩盖故障，告警是否可行动。每次事故都应验证现有信号为何及时或未能发现问题。
 
-> [!info]- 官方参考
-> - [Google SRE Workbook: Implementing SLOs](https://sre.google/workbook/implementing-slos/)
+**参考资料：** [Google SRE Workbook: Implementing SLOs](https://sre.google/workbook/implementing-slos/)
+
+# 考察题目
+
+## 1. 动手题
+
+为一个 API 定义可用性与延迟 SLI，给定一周请求样本计算错误预算并写告警条件。
+
+> [!note]- 验收要点
+> 分母、窗口和用户路径明确；告警根据预算消耗与可操作性触发。
+
+## 2. 机制追问
+
+CPU 使用率高是否应该直接触发用户可用性告警？
+
+> [!note]- 参考答案
+> 不一定。优先用用户路径定义 SLI/SLO 和错误预算；资源指标可辅助诊断，告警应反映用户影响和可操作性，避免噪声。

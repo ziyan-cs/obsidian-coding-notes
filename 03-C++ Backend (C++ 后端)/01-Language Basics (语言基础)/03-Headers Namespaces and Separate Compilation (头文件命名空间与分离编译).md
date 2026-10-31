@@ -3,10 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 头文件声明接口，源文件提供定义，命名空间隔离名称；编译器分别生成目标文件，链接器再解析跨文件符号。读完应能分辨声明、定义、翻译单元与链接错误，并据此安排头文件边界。
-
-> [!summary] 核心摘要
 >
 > 分离编译让每个 `.cpp` 独立编译，只通过头文件看到依赖接口。头文件必须可重复包含且尽量稳定；普通函数或变量的定义不要放进头文件，否则多个翻译单元可能触发 ODR 冲突。模板和 `inline` 实体通常需要让使用点看到定义。
 
@@ -85,7 +83,20 @@ void connect(storage::Client& client);
 > 2. 哪些错误发生在编译期，哪些发生在链接期？
 > 3. 前置声明为什么不能支持按值成员？
 
-> [!info]- 延伸阅读
-> - 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](/03-C++%20Backend%20(C++%20后端)/00-C++%20Backend%20Standard%20(C++%20后端标准与自测).md)
-> - 前置：[01-Core Syntax and Functions (核心语法与函数)](/03-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/01-Core%20Syntax%20and%20Functions%20(核心语法与函数).md)
-> - 延伸：[01-CMake Project and Targets (CMake 项目与目标)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/01-CMake%20Project%20and%20Targets%20(CMake%20项目与目标).md)
+**参考资料：** 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](../00-C%2B%2B%20Backend%20Standard%20%28C%2B%2B%20%E5%90%8E%E7%AB%AF%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) · 前置：[01-Core Syntax and Functions (核心语法与函数)](01-Core%20Syntax%20and%20Functions%20%28%E6%A0%B8%E5%BF%83%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0%29.md) · 延伸：[01-CMake Project and Targets (CMake 项目与目标)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/02-Build%20and%20Dependencies%20%28%E6%9E%84%E5%BB%BA%E4%B8%8E%E4%BE%9D%E8%B5%96%29/01-CMake%20Project%20and%20Targets%20%28CMake%20%E9%A1%B9%E7%9B%AE%E4%B8%8E%E7%9B%AE%E6%A0%87%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+把一个全局变量错误地定义在头文件并由两个 cpp 包含，复现链接错误，再修成声明加单一定义。
+
+> [!note]- 验收要点
+> 修复后多翻译单元可链接；能用符号表指出重复定义来自哪里。
+
+## 2. 机制追问
+
+头文件里定义非 inline 全局变量导致重复定义，为什么单文件编译可能没暴露？
+
+> [!note]- 参考答案
+> 每个翻译单元都包含一份定义，链接多个目标时违反一次定义规则；头文件放声明，单个源文件放定义，或按语言规则使用 inline 变量。

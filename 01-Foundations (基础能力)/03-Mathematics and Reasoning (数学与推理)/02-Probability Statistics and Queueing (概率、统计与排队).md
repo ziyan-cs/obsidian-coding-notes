@@ -4,7 +4,7 @@ review_due:
 tags: [math/probability, math/statistics, performance/queueing]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用条件概率、期望、分布与置信区间解释测量结果，并用 Little 定律、利用率和排队模型判断容量、尾延迟与重试风险。
 
 # 概率：在信息条件下描述不确定性
@@ -106,4 +106,20 @@ W = 1 / (μ - λ)
 > [!summary] 本篇结论
 > 概率描述条件化的不确定性，统计判断样本证据是否可信，排队理论连接到达、在途量和延迟。容量决策必须同时观察分布、偏差、饱和与反馈，而非只看平均 QPS。
 
-下一步：[03-Linear Algebra and Numerical Intuition (线性代数与数值直觉)](/01-Foundations%20(基础能力)/03-Mathematics%20and%20Reasoning%20(数学与推理)/03-Linear%20Algebra%20and%20Numerical%20Intuition%20(线性代数与数值直觉).md)
+下一步：[03-Linear Algebra and Numerical Intuition (线性代数与数值直觉)](03-Linear%20Algebra%20and%20Numerical%20Intuition%20%28%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B8%8E%E6%95%B0%E5%80%BC%E7%9B%B4%E8%A7%89%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+用脚本模拟到达率逐渐接近服务率的单服务台，画平均等待与 p95 等待随利用率变化。
+
+> [!note]- 验收要点
+> 固定随机种子并报告分布与样本量；接近饱和时排队急剧增长，不能把一次模拟当普遍定律。
+
+## 2. 机制追问
+
+短时间压测观测到低延迟，为什么不能直接承诺高峰期也如此？
+
+> [!note]- 参考答案
+> 样本可能未覆盖高负载和尾部事件；利用率升高会增加排队。应说明负载分布、样本量、分位数和不确定性，并核对到达率与服务能力。

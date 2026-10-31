@@ -4,7 +4,7 @@ review_due:
 tags: [ai/agent, ai/evaluation, ai/security]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 将 Agent 视为模型参与决策的有状态工作流，使用显式状态、受限工具、检查点和评估控制可靠性，而不是依赖无限自主循环。
 
 # 工作流状态
@@ -44,7 +44,20 @@ plan -> validate -> act -> observe -> decide
 
 高风险动作展示计划、目标对象和影响，让用户明确批准。批准令牌绑定具体参数和有效期，避免一次确认授权后续任意操作。
 
-> [!question]- 理解检查
-> Agent 在创建工单后超时并重试整个任务，怎样避免重复创建？检查点应该保存什么？
-
 参考：[OWASP Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) · [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)。风险清单用于建立测试覆盖，不替代具体系统的威胁建模与权限验证。
+
+# 考察题目
+
+## 1. 动手题
+
+实现两步工具工作流，第二步制造“结果未知”超时并重试；另测跨租户工具参数。
+
+> [!note]- 验收要点
+> 检查点含步骤状态与幂等键；未知结果先查证，跨租户调用在确定性授权层拒绝。
+
+## 2. 机制追问
+
+工具调用通过 schema 校验，却试图访问其他租户的工单，在哪一层拦截？
+
+> [!note]- 参考答案
+> 在确定性服务端按用户、租户、任务和目标资源重新授权；schema 只验证结构，模型输出与工具结果都不能扩大权限。

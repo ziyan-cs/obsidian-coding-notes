@@ -1,3 +1,13 @@
+<#
+.SYNOPSIS
+列出笔记库中到期或即将到期的复习笔记。
+.DESCRIPTION
+只读取 Markdown 顶部的 study_stage 与 review_due；默认显示逾期、今天和明天。
+.PARAMETER Root
+笔记库根目录，默认是脚本所在目录。
+.PARAMETER All
+显示所有已填写 review_due 的笔记。
+#>
 [CmdletBinding()]
 param(
     [string]$Root = $PSScriptRoot,
@@ -16,7 +26,7 @@ $invalid = [System.Collections.Generic.List[object]]::new()
 # removed.  Ignore such read errors; only reachable Markdown notes are input.
 Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAction SilentlyContinue |
     Where-Object {
-        $_.FullName -notmatch '\\(?:\.git|\.obsidian|\.trash)\\'
+        $_.FullName -notmatch '[\\/](?:\.git|\.obsidian|\.trash)[\\/]'
     } |
     ForEach-Object {
         $file = $_
@@ -33,7 +43,7 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAct
             return
         }
 
-        $studyStage = [regex]::Match($frontmatter.Groups[1].Value, '(?m)^study_stage:\s*([^#\r\n]+)')
+        $studyStage = [regex]::Match($frontmatter.Groups[1].Value, '(?m)^study_stage:[ \t]*([^#\r\n]+)')
         $stage = if ($studyStage.Success -and $studyStage.Groups[1].Value.Trim() -eq 'learn') {
             'LEARN'
         }
@@ -63,11 +73,9 @@ Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter '*.md' -ErrorAct
         $items.Add([pscustomobject]@{
             Due   = $parsedDate.Date
             Stage = $stage
-            Name  = $file.Name
+            Name  = $file.FullName.Substring($resolvedRoot.TrimEnd([IO.Path]::DirectorySeparatorChar).Length + 1)
         })
     }
-
-Write-Output ''
 
 $displayItems = @()
 if ($All) {
@@ -82,7 +90,7 @@ else {
 }
 
 if ($displayItems.Count -eq 0) {
-    Write-Output '没有到期或待复习的笔记。'
+    Write-Output '没有符合条件的复习笔记。'
 }
 else {
     $mode = if ($All) { 'ALL' } else { 'NEAR_TERM' }
@@ -112,5 +120,3 @@ if ($invalid.Count -gt 0) {
         Write-Warning ("- {0}  (review_due: {1})" -f $item.Name, $item.Value)
     }
 }
-
-Write-Output ''

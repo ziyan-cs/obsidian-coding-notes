@@ -4,7 +4,7 @@ review_due:
 tags: [ai/inference, backend/performance]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 推理服务在吞吐、首 token 延迟、逐 token 速度、显存和公平性之间取舍；批处理与缓存必须用真实流量验证。
 
 # 请求生命周期
@@ -65,8 +65,20 @@ KV bytes ≈ 2 × layers × tokens × kv_heads × head_dim × bytes_per_element
 
 先定义用户侧 SLO，再选择可接受的 batch 等待和并发上限。若优化只提高总 tokens/s，却让交互请求频繁超时，它不是有效的服务优化。
 
-> [!info]- 官方参考
-> - [NVIDIA Triton: Dynamic Batching and Concurrent Model Execution](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/tutorials/Conceptual_Guide/Part_2-improving_resource_utilization/README.html)
+**参考资料：** [NVIDIA Triton: Dynamic Batching and Concurrent Model Execution](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/tutorials/Conceptual_Guide/Part_2-improving_resource_utilization/README.html)
 
-> [!question]- 理解检查
-> 为什么扩大 batch 可能提高总吞吐却恶化交互用户体验？应该同时观察哪些指标？
+# 考察题目
+
+## 1. 动手题
+
+在同一模型与负载下比较 batch size 为 1、4、16 时吞吐、p99 和排队时间。
+
+> [!note]- 验收要点
+> 记录硬件、输入长度和并发；批处理可能提高吞吐却增加等待。
+
+## 2. 机制追问
+
+批处理提高吞吐，为何可能让单请求尾延迟变差？
+
+> [!note]- 参考答案
+> 请求需等待凑批且共享计算资源；应测排队、批次大小、吞吐与分位延迟，结合超时预算和缓存命中率选择策略。

@@ -4,7 +4,7 @@ review_due:
 tags: [cs/architecture, cs/io, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 存储层级解决“容量、延迟、带宽和成本不能同时最优”，I/O 系统解决“速度和控制方式不同的设备如何安全搬运数据”。本文不背固定纳秒表，而是建立局部性、缓存、互连、中断、DMA 与 MMIO 的因果链，并要求用本机实验验证。
 
 # 存储层级与局部性
@@ -243,4 +243,20 @@ iostat -xz 1
 - [Linux kernel: Dynamic DMA mapping](https://kernel.org/doc/html/next/core-api/dma-api.html)
 - [Linux kernel memory barriers](https://kernel.org/doc/html/latest/core-api/wrappers/memory-barriers.html)
 
-下一步：[Operating System Overview and Boot (操作系统总览与启动)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/05-Operating%20System%20Overview%20and%20Boot%20(操作系统总览与启动).md)
+下一步：[Operating System Overview and Boot (操作系统总览与启动)](05-Operating%20System%20Overview%20and%20Boot%20%28%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%80%BB%E8%A7%88%E4%B8%8E%E5%90%AF%E5%8A%A8%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+用相同规模数组写顺序访问与跨步访问微基准，记录编译优化、数据量、耗时和缓存缺失；解释结果何时不可信。
+
+> [!note]- 验收要点
+> 预热、重复测量并防止优化器删循环；数据量跨缓存层级时才易观察差异，不能仅凭一次计时下结论。
+
+## 2. 机制追问
+
+顺序扫描为何常比随机访问快？缓存命中率高是否一定意味着 I/O 快？
+
+> [!note]- 参考答案
+> 连续访问有空间局部性并利于预取，随机访问易产生缓存和 TLB 缺失。I/O 还受页缓存、设备、系统调用及排队影响，单一命中率不能代表端到端性能。

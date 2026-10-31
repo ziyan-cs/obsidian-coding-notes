@@ -4,7 +4,7 @@ review_due:
 tags: [cloud/iac, cloud/gitops]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 基础设施和部署状态应以可审查、可重复、可回滚的声明描述；GitOps 用持续协调把声明与实际环境连接起来。
 
 # 声明与状态
@@ -68,5 +68,20 @@ Git desired state -> reconciler -> cluster actual state
 - 回滚应用版本时，数据库和基础设施是否兼容？
 - 手工漂移能否被发现并处理？
 
-> [!info]- 官方参考
-> - [OpenGitOps Principles](https://opengitops.dev/)
+**参考资料：** [OpenGitOps Principles](https://opengitops.dev/)
+
+# 考察题目
+
+## 1. 动手题
+
+在测试环境用声明式配置创建服务，手动改资源制造漂移，观察控制器如何调谐或告警。
+
+> [!note]- 验收要点
+> 期望、实际与同步状态可追踪；回滚用版本化变更完成。
+
+## 2. 机制追问
+
+Git 中配置正确，线上状态却不同，如何判断是漂移还是同步失败？
+
+> [!note]- 参考答案
+> 比较期望状态、控制器同步状态与实际资源，检查权限、依赖和人工改动；声明式配置需要可观测的调谐与回滚流程。

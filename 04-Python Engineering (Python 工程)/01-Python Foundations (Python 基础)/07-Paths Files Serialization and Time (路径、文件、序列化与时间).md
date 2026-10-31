@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/files]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 用 `pathlib` 表达路径，用 context manager 保证关闭文件，用 `json`/`csv` 做显式的输入校验和输出格式。
 
 > [!warning] 写文件是有副作用的操作
@@ -76,3 +76,38 @@ def replace_text(target: Path, content: str) -> None:
 # 动手验证
 
 实现 `update_config.py <path>`：读取并校验 JSON 配置，`--dry-run` 展示差异；正式写入时先在目标目录创建临时文件，再替换原文件。测试非法 JSON、目标目录不存在和写入中断，确认旧文件仍可读取、临时文件被清理。若再扩展为日志汇总，应逐行处理并对聚合维度设上限。
+
+# 考察题目
+
+## 1. 实现：配置读取与异常链
+
+实现 `load_port(path: Path) -> int`：读取 UTF-8 JSON，根对象必须包含整数 `port`，范围 1..65535。文件读取、文本解码和 JSON 解析失败均转换为 `ConfigError` 并保留原始异常链；字段错误也抛 `ConfigError`。测试缺字段、`port=0`、`port=True`。
+
+> [!note]- 参考实现
+> ```python
+> import json
+> from pathlib import Path
+>
+> class ConfigError(Exception):
+>     pass
+>
+> def load_port(path: Path) -> int:
+>     try:
+>         data = json.loads(path.read_text(encoding="utf-8"))
+>     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+>         raise ConfigError("cannot load config") from exc
+>     if not isinstance(data, dict):
+>         raise ConfigError("config root must be an object")
+>     port = data.get("port")
+>     if type(port) is not int or not 1 <= port <= 65535:
+>         raise ConfigError("port must be an integer in 1..65535")
+>     return port
+> ```
+> CLI 入口决定错误展示和退出码；此函数只转换它能解释的读取与数据异常。
+
+## 2. 机制追问
+
+写 JSON 文件时进程中途退出，如何避免原文件变成半截？
+
+> [!note]- 参考答案
+> 先在同目录临时文件写入并按需要 flush/fsync，再原子替换；还要处理编码、时间格式和目录持久性，不能把 rename 等同于所有环境的完整持久化保证。

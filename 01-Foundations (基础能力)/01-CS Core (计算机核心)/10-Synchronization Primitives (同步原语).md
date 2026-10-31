@@ -4,7 +4,7 @@ review_due:
 tags: [cs/os, cpp/concurrency, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从不变量、数据竞争与 happens-before 选择原子、互斥锁、条件变量、信号量和阶段协调工具，并能写出可证明正确的等待代码。
 
 # 先定义要保护的不变量
@@ -112,4 +112,20 @@ ThreadSanitizer 擅长发现数据竞争，不证明算法无死锁，也可能�
 - [C++ draft: concurrency support](https://eel.is/c++draft/thread)
 - [Linux futex(2)](https://man7.org/linux/man-pages/man2/futex.2.html)
 
-下一步：[11-Deadlock Analysis and Recovery (死锁分析与恢复)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/11-Deadlock%20Analysis%20and%20Recovery%20(死锁分析与恢复).md)
+下一步：[11-Deadlock Analysis and Recovery (死锁分析与恢复)](11-Deadlock%20Analysis%20and%20Recovery%20%28%E6%AD%BB%E9%94%81%E5%88%86%E6%9E%90%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现有界生产者消费者队列，加入停止标志和条件变量；用多生产者/消费者测试空队列、满队列与关闭。
+
+> [!note]- 验收要点
+> 所有共享谓词由锁保护；wait 用循环检查；关闭时唤醒两类等待者，不能丢任务或永久阻塞。
+
+## 2. 机制追问
+
+条件变量通知已经发出，等待线程为何仍可能继续等待？正确写法是什么？
+
+> [!note]- 参考答案
+> 通知不是状态，可能早于等待或出现虚假唤醒；在同一互斥锁保护下修改共享谓词，等待方用循环或带谓词的 wait 反复检查条件。

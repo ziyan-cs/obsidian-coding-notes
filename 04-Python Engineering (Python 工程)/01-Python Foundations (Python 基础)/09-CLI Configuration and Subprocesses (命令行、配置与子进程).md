@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/cli]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 脚本从“改源码里的路径再运行”升级为工具的第一步，是用 `argparse` 接收参数、提供 `--help` 和明确退出码。
 
 > [!tip] CLI 的用户也包括三个月后的自己
@@ -108,3 +108,59 @@ def probe(repository: Path) -> str:
 实现批量文件转换 CLI：配置可由文件、环境变量和命令行覆盖；`--dry-run` 展示计划；真实运行通过临时文件安全替换。验证正常结果只写 stdout，非法参数和运行失败写 stderr 并返回稳定的非零退出码；子进程 timeout 不留下仍在运行的直接子进程。若工具会创建子进程树，还需针对目标操作系统验证子进程树的清理方式。
 
 官方参考：[argparse](https://docs.python.org/3/library/argparse.html) · [subprocess](https://docs.python.org/3/library/subprocess.html)。
+
+# 考察题目
+
+## 1. 综合实现：安全写入的 CLI
+
+设计 `python -m app.cli INPUT --output OUTPUT [--dry-run]`：将输入文本的非空行去重、排序后写入输出文件。`--dry-run` 只显示目标路径和行数；正式执行先写目标目录内的临时文件，再替换目标。正常结果写 stdout，错误写 stderr，返回稳定退出码。指出大文件下仍会增长的内存部分。
+
+> [!note]- 参考实现骨架
+> ```python
+> import argparse
+> import os
+> import sys
+> import tempfile
+> from pathlib import Path
+>
+> def run(argv=None) -> int:
+>     parser = argparse.ArgumentParser()
+>     parser.add_argument("input", type=Path)
+>     parser.add_argument("--output", type=Path, required=True)
+>     parser.add_argument("--dry-run", action="store_true")
+>     args = parser.parse_args(argv)
+>     try:
+>         with args.input.open(encoding="utf-8") as source:
+>             lines = sorted({line.strip() for line in source if line.strip()})
+>         if args.dry_run:
+>             print(f"{args.output}: {len(lines)} lines")
+>             return 0
+>         temp_path = None
+>         try:
+>             with tempfile.NamedTemporaryFile(
+>                 mode="w", encoding="utf-8", dir=args.output.parent,
+>                 delete=False
+>             ) as target:
+>                 temp_path = Path(target.name)
+>                 target.write("\n".join(lines) + ("\n" if lines else ""))
+>             os.replace(temp_path, args.output)
+>         finally:
+>             if temp_path is not None:
+>                 temp_path.unlink(missing_ok=True)
+>         print(f"wrote {len(lines)} lines")
+>         return 0
+>     except (OSError, UnicodeError) as exc:
+>         print(f"error: {exc}", file=sys.stderr)
+>         return 1
+>
+> if __name__ == "__main__":
+>     raise SystemExit(run())
+> ```
+> 流式读取限制输入缓冲，但 `set` 与排序结果随唯一行数增长。若要求断电后仍持久，还需考虑文件及目录 `fsync`。
+
+## 2. 机制追问
+
+调用外部命令时，为什么不宜拼接用户输入成 shell 字符串？
+
+> [!note]- 参考答案
+> 可能产生注入和转义错误；优先传参数列表、不启用 shell，明确超时、退出码、stdout/stderr 和环境，必要时做 dry-run 与幂等设计。

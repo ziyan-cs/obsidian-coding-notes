@@ -4,7 +4,7 @@ review_due:
 
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 本篇依次回答三个问题：怎样用 `const`、类型别名和枚举表达接口约束；怎样选择显式类型转换；怎样用指针和引用表达借用关系。指针和引用通常不表达所有权；引用直接绑定临时对象时有特殊的生命周期延长规则。
 
 ## 类型声明与约束
@@ -273,6 +273,20 @@ auto owned = std::make_unique<int>(42);
 > 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
 > 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Memory Layout and Allocation (内存布局与分配)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/02-Memory%20Layout%20and%20Allocation%20(内存布局与分配).md)
-> - 标准草案：[指针算术](https://eel.is/c++draft/expr.add)、[dynamic_cast](https://eel.is/c++draft/expr.dynamic.cast)、[引用与引用折叠](https://eel.is/c++draft/dcl.ref)、[临时对象生命周期](https://eel.is/c++draft/class.temporary)、[const_cast](https://eel.is/c++draft/expr.const.cast)
+**参考资料：** 下一步：[02-Memory Layout and Allocation (内存布局与分配)](02-Memory%20Layout%20and%20Allocation%20%28%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E5%88%86%E9%85%8D%29.md) · 标准草案：[指针算术](https://eel.is/c++draft/expr.add)、[dynamic_cast](https://eel.is/c++draft/expr.dynamic.cast)、[引用与引用折叠](https://eel.is/c++draft/dcl.ref)、[临时对象生命周期](https://eel.is/c++draft/class.temporary)、[const_cast](https://eel.is/c++draft/expr.const.cast)
+
+# 考察题目
+
+## 1. 动手题
+
+编写返回局部变量引用的错误函数，用编译警告或 sanitizer 观察；改成返回值或由调用方持有对象。
+
+> [!note]- 验收要点
+> 修复后返回对象生命周期覆盖使用期；不能依赖地址“看起来还在”。
+
+## 2. 机制追问
+
+函数返回局部变量的引用为什么危险？指针与引用分别能表达哪些状态？
+
+> [!note]- 参考答案
+> 局部对象在函数返回时生命周期结束，引用悬垂；指针可为空且可重新指向，引用通常绑定已有对象，二者都不自动延长普通局部对象寿命。

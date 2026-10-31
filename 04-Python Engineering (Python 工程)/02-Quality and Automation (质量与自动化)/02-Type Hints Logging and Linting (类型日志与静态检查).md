@@ -4,10 +4,7 @@ review_due:
 tags: [language/python, python/quality]
 ---
 
-> [!note] 方法论坐标
-> 日志与信号语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/05-Observability%20Logs%20Metrics%20and%20Tracing%20(可观测性、日志、指标与追踪).md)，静态检查进入发布门禁的原则见 [Release Verification and Quality Gates (发布验证与质量门禁)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/07-Release%20Verification%20and%20Quality%20Gates%20(发布验证与质量门禁).md)；本篇聚焦 Python typing、logging 与 lint 工具。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 类型标注、结构化日志和小函数并不让 Python 失去灵活性，反而让一次性脚本可以安全长大。
 
 > [!tip] 把“边界”写清楚
@@ -57,3 +54,22 @@ union 通过真实判断收窄：`if value is None`、`isinstance`、枚举分�
 动手验证：给 API checker 的响应建立 `TypedDict` 或 dataclass，在解析边界先验证 JSON，再进入带类型的业务层。用测试构造含 token 的错误，确认日志只包含 host、status、耗时和 request ID；最后分别运行格式检查、静态检查和 pytest，解释三者发现的问题为何不同。
 
 官方资料：[typing](https://docs.python.org/3/library/typing.html) · [logging](https://docs.python.org/3/library/logging.html)。
+
+> [!info]- 关联笔记
+> 日志与信号语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)，静态检查进入发布门禁的原则见 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)；本篇聚焦 Python typing、logging 与 lint 工具。
+
+# 考察题目
+
+## 1. 动手题
+
+给接受外部 JSON 的函数写类型标注、运行时校验和结构化错误日志；把 `port=True` 当输入测试。
+
+> [!note]- 验收要点
+> bool 不应被误当合法整数；类型检查只能检查静态路径，日志有请求标识且不泄露输入秘密。
+
+## 2. 机制追问
+
+类型检查通过后，外部 JSON 是否可直接作为内部对象使用？
+
+> [!note]- 参考答案
+> 不能，类型标注不验证运行时输入；边界需解析、校验并收窄类型。日志还需结构化、脱敏与关联标识，lint 只覆盖其规则范围。

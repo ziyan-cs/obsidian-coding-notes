@@ -3,15 +3,14 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 从链路帧、IP 数据报、TCP 字节流到应用协议逐层看一次请求，区分每层的地址、边界与失败方式。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 从链路帧、IP 数据报、TCP 字节流到应用协议逐层看一次请求，区分每层的地址、边界与失败方式。
 >
 > IP 提供尽力而为的分组传输，TCP 在其上用序列号、确认、重传和窗口建立可靠字节流。排障时按链路、IP、端口、连接状态和应用协议逐层定位。
 
 # TCP/IP 分层与数据传输
 
-> [!note] 本节重点：OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
+**本节要点：** OSI 七层与 TCP/IP 四层对比、数据封装与解封装流程、IP/端口/MAC 协作寻址、DNS 解析流程
 
 ## 层级关系
 
@@ -29,8 +28,6 @@ review_due:
 
 - OSI 七层是教学参照，不是每种协议都必须严格落在一格；TLS、DNS 和隧道协议常跨越简化边界。
 - TCP/IP 四层是便于排障的模型，不代表真实报文永远只有四个固定头部；IPv6 扩展头、VLAN、隧道和 NAT 都会改变路径。
-
----
 
 ## 数据封装与传输流程
 
@@ -57,8 +54,6 @@ review_due:
 - 封装：每层为数据加上自己的头部信息
 - 解封装：接收端逐层去掉头部，还原原始数据
 - PDU：每一层的数据单位，传输层叫「段」，网络层叫「包」，链路层叫「帧」
-
----
 
 # 地址与端点标识
 ## IP 地址 / 端口号 / MAC 地址
@@ -97,8 +92,6 @@ review_due:
 | 是否可改  | 可动态/静态配置  | 可动态分配      | 可由硬件提供或软件配置 |
 | 对应层级  | 网络层       | 传输层        | 链路层         |
 
----
-
 # DNS 解析与缓存
 
 > 核心：递归查询vs迭代查询、解析流程、缓存机制
@@ -136,8 +129,20 @@ DNS 是分布式命名系统，不只返回 IP：`A/AAAA` 提供地址，`CNAME`
 
 [RFC 8499: DNS Terminology](https://www.rfc-editor.org/rfc/rfc8499.html) · [RFC 8200: IPv6](https://www.rfc-editor.org/rfc/rfc8200.html)
 
----
+**参考资料：** 下一步：[02-TCP Handshake and State Machine (TCP 握手与状态机)](02-TCP%20Handshake%20and%20State%20Machine%20%28TCP%20%E6%8F%A1%E6%89%8B%E4%B8%8E%E7%8A%B6%E6%80%81%E6%9C%BA%29.md)
 
-> [!info]- 延伸阅读
-> - 下一步：[02-TCP Handshake and State Machine (TCP 握手与状态机)](/06-Systems%20and%20Networking%20(系统与网络)/02-Network%20Protocols%20(网络协议)/02-TCP%20Handshake%20and%20State%20Machine%20(TCP%20握手与状态机).md)
+# 考察题目
 
+## 1. 动手题
+
+用本机客户端连接一个监听端口，记录 DNS 解析、路由、socket 四元组和服务端进程；换错端口复测。
+
+> [!note]- 验收要点
+> 能解释地址定位主机、端口分用进程；错误端口与错误域名表现不同。
+
+## 2. 机制追问
+
+客户端知道域名和端口后，数据如何到达目标进程？
+
+> [!note]- 参考答案
+> DNS 得到地址，IP 负责跨网络寻址与路由，TCP 用源/目标地址和端口标识连接并可靠传字节流；目标主机按端口和连接元组分用到 socket。

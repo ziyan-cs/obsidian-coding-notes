@@ -3,15 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Redis 主线程串行执行命令以简化共享状态，但网络、持久化和后台释放并非都在同一线程。客户端必须处理连接池、超时、重试、阻塞命令和大 key，避免把故障放大。
 
 # Redis Event Loop (Redis 事件循环)
 
-> [!note] 本节重点： Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
+**本节要点：** Redis 单线程模型、I/O 多路复用、为何单线程还快、瓶颈在哪里
 
 ## Redis 单线程模型
 
@@ -58,8 +55,6 @@ Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O�
 
 **注意：** Redis 6.0+ 的 I/O 线程池只在**读写 socket** 阶段多线程化，**命令执行**仍是单线程。
 
----
-
 ## 为什么单线程还这么快
 
 | 原因 | 说明 |
@@ -73,8 +68,6 @@ Redis 的多数命令执行路径以单线程事件循环为核心；网络 I/O�
 ### 延迟先分解再归因
 
 一次请求的总延迟包含排队、网络往返、命令执行、响应传输及客户端自身开销。Redis 在内存执行不等于“瓶颈通常只在网络”：大 key、大集合遍历、Lua/Functions、过期清理、持久化、fork、缺页或 CPU 饱和都可能拉高尾延迟。用客户端端到端直方图、`SLOWLOG`、`LATENCY`、CPU/内存指标与网络测量定位，不背固定硬件纳秒或倍数。[Redis 延迟排查](https://redis.io/docs/latest/management/optimization/latency/)
-
----
 
 ## I/O 多路复用
 
@@ -91,14 +84,14 @@ void aeMain(aeEventLoop *eventLoop) {
 int aeProcessEvents(aeEventLoop *el, int flags) {
     // 调用 epoll_wait 获取就绪事件
     int numevents = epoll_wait(el->epfd, events, AE_SETSIZE, tvp);
-    
+
     for (int j = 0; j < numevents; j++) {
         aeFileEvent *fe = &el->events[events[j].data.fd];
-        
+
         // 处理读事件（客户端发请求）
         if (events[j].events & EPOLLIN)
             fe->rfileProc(el, fd, fe->clientData, mask);
-        
+
         // 处理写事件（发结果给客户端）
         if (events[j].events & EPOLLOUT)
             fe->wfileProc(el, fd, fe->clientData, mask);
@@ -107,8 +100,6 @@ int aeProcessEvents(aeEventLoop *el, int flags) {
 ```
 
 **epoll 的优势：** 应用可等待就绪事件而无需用户态线性扫描所有连接；其内部复杂度与实际成本不能只用一个 O(1) 概括。
-
----
 
 ## 单线程的问题
 
@@ -132,8 +123,6 @@ HGETALL        # 取大 hash 全部字段
 SORT           # 排序 O(N+M*logM)
 LTRIM / LREM   # 列表操作可能 O(N)
 ```
-
----
 
 ## Redis 6.0 多线程 I/O
 
@@ -168,8 +157,6 @@ Main Thread                       I/O Threads
 
 多数常规命令仍由主事件循环串行执行，但这不意味着客户端并发读写天然安全：跨多条命令仍会交错，业务不变量要用原子命令、事务、Lua/Functions 或上层并发控制表达。
 
----
-
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
@@ -185,12 +172,11 @@ Main Thread                       I/O Threads
 
 >
 >
-关联：[Redis Data Structures (Redis 数据结构)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/01-Redis%20Data%20Structures%20(Redis%20数据结构).md)
->
+关联：[Redis Data Structures (Redis 数据结构)](01-Redis%20Data%20Structures%20%28Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%29.md)
 
 # Redis Client Integration (Redis 客户端集成)
 
-> [!note] 本节重点： hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
+**本节要点：** hiredis 同步/异步 API、连接池设计、Pipeline 批量操作、Redis 项目集成模式
 
 ## hiredis 库
 
@@ -271,17 +257,15 @@ int main() {
     event_base *base = event_base_new();
     redisAsyncContext *ac = redisAsyncConnect("127.0.0.1", 6379);
     redisLibeventAttach(ac, base);
-    
+
     redisAsyncSetConnectCallback(ac, onConnect);
     redisAsyncCommand(ac, onCallback, NULL, "GET mykey");
-    
+
     event_base_dispatch(base);
     redisAsyncFree(ac);
     return 0;
 }
 ```
-
----
 
 ## 连接池设计（C++ 简单实现）
 
@@ -332,8 +316,6 @@ public:
 };
 ```
 
----
-
 ## 项目集成架构
 
 ```
@@ -357,8 +339,6 @@ public:
 └──────────────────────────┘
 ```
 
----
-
 > [!example]- 题型索引
 > | 题型 | 要点 |
 > |------|------|
@@ -375,5 +355,20 @@ public:
 >
 >
 
-> [!info]- 延伸阅读
-> - 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/02-Cache%20and%20Proxy%20(缓存与代理)/05-Nginx%20Proxy%20and%20Load%20Balancing%20(Nginx%20代理与负载均衡).md)
+**参考资料：** 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](05-Nginx%20Proxy%20and%20Load%20Balancing%20%28Nginx%20%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+并发 100 个请求共用小连接池，记录排队、慢命令和超时；调整池大小与命令策略各一次。
+
+> [!note]- 验收要点
+> 定位客户端等待和服务端执行的贡献；重试有上限，不能制造放大风暴。
+
+## 2. 机制追问
+
+客户端请求 Redis 偶发超时，为什么不能只调大超时？
+
+> [!note]- 参考答案
+> 可能是网络、连接池、慢命令、服务端阻塞或排队；先量化各段延迟，设置连接和并发上限，再决定降级或重试。

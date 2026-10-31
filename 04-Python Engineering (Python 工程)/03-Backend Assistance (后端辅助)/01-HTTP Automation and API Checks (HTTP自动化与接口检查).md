@@ -4,7 +4,7 @@ review_due:
 tags: [language/python, python/http, testing/api]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 接口检查工具要验证 status、body、超时和失败信息；绝不能无超时地发请求，也不能把 token 打进日志。
 
 > [!warning] 自动化脚本也属于生产边界
@@ -74,5 +74,20 @@ def health(url: str, timeout: float = 3.0) -> dict[str, object]:
 
 为本地 `GET /healthz` 写 checker，并用本地测试 server 覆盖：200 对象、200 数组、非 JSON、超过上限、非 2xx、连接失败和 timeout；再为分页接口覆盖重复游标与中途失败。CLI 将错误映射为非零退出码，只输出脱敏 host、分类和 request ID。若引入重试，再补充 429、总 deadline、幂等前提和退避测试；非幂等请求不能自动重复执行。
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Data Processing Boundaries (数据处理边界)](/04-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/02-Data%20Processing%20Boundaries%20(数据处理边界).md)
+**参考资料：** 下一步：[02-Data Processing Boundaries (数据处理边界)](02-Data%20Processing%20Boundaries%20%28%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E8%BE%B9%E7%95%8C%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写 API 检查脚本覆盖 200、400、超时与重试；让服务端在提交后断开连接，观察重复 POST 风险。
+
+> [!note]- 验收要点
+> 有副作用请求不能盲重试；设置总 deadline、次数与幂等键或结果查询。
+
+## 2. 机制追问
+
+自动重试一个 POST 请求可能造成什么问题？
+
+> [!note]- 参考答案
+> 超时可能发生在服务已提交之后，盲目重试会重复副作用；需要幂等键、可查询结果或明确不重试，并限制次数、退避和总时间预算。

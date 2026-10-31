@@ -3,24 +3,20 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > gRPC 用 Protobuf 契约与 HTTP/2 流承载服务间 RPC；它适合受控的内部服务边界，但不自动解决 deadline、兼容性、鉴权和可观测性。
-
-> [!summary] 核心摘要
 >
 > gRPC 的价值是可生成的强类型契约、流式 RPC 与 HTTP/2 连接复用；生产可靠性仍取决于 deadline、取消、错误分类、版本演进和监控。
 
 # gRPC and Protobuf (RPC 与序列化)
 
-> [!note] 本节重点：gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
+**本节要点：** gRPC 通信模型、Protobuf 序列化、C++ gRPC 服务端/客户端实现、与 HTTP/REST 对比
 
 ## 为什么需要 RPC
 
 HTTP/JSON 适合公开 API、浏览器和直接调试；当内部服务需要可生成的契约或双向流时，gRPC 值得评估。但 JSON 并不必然慢，也能配合 OpenAPI 获得类型契约；SSE、WebSocket 和分块响应同样能提供不同形式的流式能力。
 
 gRPC 的取舍是 Protobuf 契约、HTTP/2 流与代码生成，代价包括代理兼容、二进制调试、版本治理和依赖链复杂度。
-
----
 
 # Protobuf（协议缓冲区）
 
@@ -68,8 +64,6 @@ message User {
 | **演进兼容** | 增加可选字段通常可兼容旧二进制读者；未知字段在二进制透传中通常保留，但转 JSON 或手动逐字段复制可能丢失。删除字段要 `reserved` 其编号和名称，不能复用旧 tag |
 
 相比 JSON，Protobuf 通常体积更小、编解码更快（二进制 + 字段编号），但**具体倍数受消息结构、字段类型与运行时实现影响，无固定值**，应以本场景基准测试为准（MEASURE_LOCALLY）。
-
----
 
 ## C++：一次 RPC 的契约与失败路径
 
@@ -121,8 +115,6 @@ grpc::Status FetchUser(const std::shared_ptr<grpc::Channel>& channel,
 | **Client Streaming** | 客户端流式发送，服务端一次性返回 | 大文件上传、批量写入 |
 | **Bidirectional Streaming** | 双向流，各自独立收发 | 聊天、实时协同、实时推送 |
 
----
-
 ## gRPC vs HTTP/REST
 
 | 维度 | gRPC | HTTP/REST |
@@ -139,8 +131,6 @@ grpc::Status FetchUser(const std::shared_ptr<grpc::Channel>& channel,
 - **内部服务间通信** → gRPC（性能好，强类型，流式支持）
 - **外部客户端/浏览器** → REST/gRPC-Web
 - **C++ 后端** → gRPC 是成熟且常用的 RPC 方案之一；也可按生态、运维和互操作需求评估 Thrift、HTTP/JSON 或自研协议
-
----
 
 ## 生产配置要点
 
@@ -162,4 +152,18 @@ grpc::Status FetchUser(const std::shared_ptr<grpc::Channel>& channel,
 - [gRPC C++ 文档](https://grpc.io/docs/languages/cpp/)
 - [Protocol Buffers 文档](https://protobuf.dev/)
 
----
+# 考察题目
+
+## 1. 动手题
+
+写最小 RPC，客户端设置短 deadline；服务端睡眠后尝试写副作用，观察取消传播并加幂等键。
+
+> [!note]- 验收要点
+> deadline 在调用链传递；超时结果未知时不能盲目重试副作用。
+
+## 2. 机制追问
+
+RPC 超时后客户端不知道服务端是否执行，如何设计重试？
+
+> [!note]- 参考答案
+> 超时不等于服务端未执行；区分只读与有副作用操作，使用 deadline 传播、幂等键或结果查询，并保持 Protobuf 字段号兼容。

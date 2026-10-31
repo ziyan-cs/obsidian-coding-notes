@@ -4,9 +4,9 @@ review_due:
 tags: [comparison, backend/http]
 ---
 
-> [!abstract] 学习定位：结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 结论：无论实现语言，handler 处理协议，service 处理业务，repository 隔离外部系统；请求必须有 timeout、错误语义和可观测性。
+>
 > handler 负责协议解析与响应映射，service 维护业务不变量，repository 隔离外部存储。请求链路还必须具有超时、取消、幂等、错误语义和可观测性。
 
 # 必须统一的约定
@@ -42,5 +42,20 @@ tags: [comparison, backend/http]
 2. **第二步 · 实现**：写：用自己的项目或最小实验补一个真实证据，不能只引用概念。
 3. **第三步 · 验证**：追问：回答“为什么不用另一种方案”，并说出代价而非只说优点。
 
-> [!info]- 延伸阅读
-> - 下一步：[05-Observability and Performance (可观测性与性能)](/11-Projects%20(项目实践)/03-Engineering%20Decision%20Records%20(工程决策记录)/05-Observability%20and%20Performance%20(可观测性与性能).md)
+**参考资料：** 下一步：[05-Observability and Performance (可观测性与性能)](05-Observability%20and%20Performance%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E4%B8%8E%E6%80%A7%E8%83%BD%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写一个资源创建接口契约，包含校验、错误响应、幂等键和分页查询；用自动化测试验证。
+
+> [!note]- 验收要点
+> 成功与失败状态一致，重复请求不重复创建，敏感内部细节不外泄。
+
+## 2. 机制追问
+
+接口返回 200 但业务失败，为什么会让客户端难以可靠处理？
+
+> [!note]- 参考答案
+> 传输状态与业务契约混乱会影响重试和监控；应定义输入校验、错误码、幂等、分页及超时语义，并保持响应一致。

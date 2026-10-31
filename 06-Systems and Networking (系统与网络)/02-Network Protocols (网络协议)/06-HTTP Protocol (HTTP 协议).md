@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] HTTP 定义请求与响应的语义，不负责底层连接本身；学习时要把方法、状态码、缓存、代理与连接复用放在各自层次理解。
+> [!abstract] 本篇要点
+> HTTP 定义请求与响应的语义，不负责底层连接本身；学习时要把方法、状态码、缓存、代理与连接复用放在各自层次理解。
 
 # HTTP Request and Response (HTTP 请求与响应)
 
-> [!note] 本节重点：HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
+**本节要点：** HTTP 请求行/请求头/请求体结构、HTTP 响应状态行/响应头/响应体结构
 
 ## HTTP 请求结构
 
@@ -102,11 +103,9 @@ Host: www.example.com
 
 > [!tip]- **工程要点**：HTTP 协议的头部以 `\r\n\r\n` 结束（空行），这是解析的终止边界。对于固定长度的请求体，Content-Length 指定精确字节数；对于变长内容（如 Server-Sent Events），使用 Transfer-Encoding: chunked。理解这一行终结的解析模型，是实现高性能 HTTP 状态机解析器的基础。
 
----
-
 # HTTP Methods and Status Codes (HTTP 方法与状态码)
 
-> [!note] 本节重点：HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
+**本节要点：** HTTP 方法（GET/POST/PUT/DELETE 等）语义与幂等性、状态码分类（1xx-5xx）与含义
 
 ## HTTP 请求方法
 
@@ -196,11 +195,10 @@ DELETE /users/42       → 删除用户        204 No Content / 404
 
 自测：为什么不能把所有 `PATCH` 都机械标为非幂等？为什么重复 `DELETE` 返回 `404` 并不自动证明它不幂等？
 >
->
 
 # HTTP Connection Management (HTTP 连接管理)
 
-> [!note] 本节重点：Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
+**本节要点：** Keep-Alive 长连接复用、Connection 头、管道传输 Pipeline、HTTP 队头阻塞问题
 
 ## 短连接 vs 长连接
 
@@ -236,13 +234,13 @@ Connection: close
 
 ```
 非管道模式（串行）：
-  C: 请求1 → → → 
-  S:          → 响应1 → → → 
-  C:                  请求2 → → → 
+  C: 请求1 → → →
+  S:          → 响应1 → → →
+  C:                  请求2 → → →
   S:                            → 响应2
 
 管道模式：
-  C: 请求1 → 请求2 → 请求3 → 
+  C: 请求1 → 请求2 → 请求3 →
   S:          → 响应1 → 响应2 → 响应3 →
 ```
 
@@ -296,7 +294,7 @@ Keep-Alive 时间过长：
 
 # HTTP Parser State Machine (HTTP 解析状态机)
 
-> [!note] 本节重点： HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
+**本节要点：** HTTP 解析的有限状态机实现、状态驱动解析流程、缓冲区管理与边界处理
 
 ## 为什么用状态机解析 HTTP
 
@@ -374,4 +372,18 @@ TCP 数据到达 → buffer 写入 → parse() 逐字节消费
 
 [RFC 9110: HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html) · [RFC 9112: HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112.html)
 
----
+# 考察题目
+
+## 1. 动手题
+
+用原始 socket 手写一个合法请求和一个缺少长度边界的错误请求，观察服务端解析结果。
+
+> [!note]- 验收要点
+> 请求行、头部和消息体边界明确；客户端不能以连接分段推断 HTTP 消息边界。
+
+## 2. 机制追问
+
+客户端收到 200 后仍无法解析响应，可能违反了哪些消息契约？
+
+> [!note]- 参考答案
+> 检查 Content-Type、Content-Length 或分块编码、字符编码和响应体格式；HTTP 成功状态不代表业务数据满足客户端契约。

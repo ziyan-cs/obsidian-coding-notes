@@ -4,7 +4,7 @@ review_due:
 tags: [security/secrets, security/supply-chain]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 密钥、配置与依赖都具有生命周期。安全交付要求秘密不进入代码和镜像，进程只获得最小权限，依赖来源可追踪，并能在泄漏或漏洞发生后完成轮换、回滚和审计。
 
 # Secrets 生命周期
@@ -73,3 +73,19 @@ TLS 保护传输链路，但不会自动解决服务端越权、日志泄密、�
 从一个数据库密码的创建开始，说明它如何进入服务、怎样限制权限、如何轮换、怎样避免进入日志和镜像，以及泄漏后如何撤销并审计影响。
 
 参考：[OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) · [SLSA Supply-chain Levels](https://slsa.dev/)
+
+# 考察题目
+
+## 1. 动手题
+
+在测试环境演练 API key 轮换：旧 key 失效、新 key 生效，扫描仓库与日志确认无明文。
+
+> [!note]- 验收要点
+> 轮换有过渡/撤销策略和审计记录；历史泄露需单独处置。
+
+## 2. 机制追问
+
+把 API key 加密后提交进仓库，是否就安全了？
+
+> [!note]- 参考答案
+> 不安全，解密密钥和历史泄露仍是风险；秘密应由受控密钥系统提供，限制权限、轮换并审计，依赖来源也要可追溯。

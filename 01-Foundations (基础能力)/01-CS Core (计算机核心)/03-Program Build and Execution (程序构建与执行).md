@@ -4,7 +4,7 @@ review_due:
 tags: [cs/toolchain, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 本文沿一条真实路径展开：C++ 源文件如何变成目标文件，链接器如何解析符号和重定位，内核与动态加载器如何把 ELF 变成进程，最终怎样进入 `main`。CPU 内部流水线只作为执行背景，不与构建流程混写。
 
 # 从源文件到进程
@@ -205,4 +205,20 @@ strace -f -o trace.txt ./app
 - [GNU ld linker scripts](https://sourceware.org/binutils/docs/ld/Scripts.html)
 - [Linux execve(2)](https://man7.org/linux/man-pages/man2/execve.2.html)
 
-下一步：[Memory Hierarchy and IO (存储层级与输入输出)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/04-Memory%20Hierarchy%20and%20IO%20(存储层级与输入输出).md)
+下一步：[Memory Hierarchy and IO (存储层级与输入输出)](04-Memory%20Hierarchy%20and%20IO%20%28%E5%AD%98%E5%82%A8%E5%B1%82%E7%BA%A7%E4%B8%8E%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+把一个 C++ 程序拆成两个源文件；分别制造“声明缺失”“未定义引用”“运行时缺共享库”，记录报错阶段与定位命令。
+
+> [!note]- 验收要点
+> 三类错误依次落在编译、链接、装载；用编译器诊断、`nm/readelf` 和动态库依赖检查定位。
+
+## 2. 机制追问
+
+程序编译通过却在启动时找不到共享库，错误落在哪个阶段？如何定位？
+
+> [!note]- 参考答案
+> 编译与链接已完成，问题发生在动态装载。检查 ELF 依赖、搜索路径与运行环境；区分编译器报错、链接器未定义符号和装载器缺库。

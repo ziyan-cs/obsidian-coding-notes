@@ -3,15 +3,14 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 进程提供资源与地址空间隔离；理解其生命周期、调度状态及 IPC 的同步和故障边界，才能解释服务如何创建、通信与退出。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 进程提供资源与地址空间隔离；理解其生命周期、调度状态及 IPC 的同步和故障边界，才能解释服务如何创建、通信与退出。
 >
 > 进程拥有独立地址空间和内核资源，IPC 用管道、共享内存、消息队列或 socket 跨越隔离边界。选型要同时考虑数据量、同步方式、复制成本和故障隔离。
 
 # Process Lifecycle (进程生命周期)
 
-> [!note] 本节重点：fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
+**本节要点：** fork 写时拷贝、exec 系列替换进程映像、wait/waitpid 回收子进程、进程生命周期
 
 ## 进程的本质
 
@@ -23,8 +22,6 @@ review_due:
 - PID、PPID（父进程 ID）
 
 **生命周期：** 创建 → 就绪 → 运行 → 阻塞 → 终止 → 回收
-
----
 
 ## fork()
 
@@ -81,8 +78,6 @@ fork 后：
 - ❌ 写入时有复制开销（大数据结构 fork 后立即写代价高）
 - 💡 常用优化：fork 后立即 exec（新程序不会触发父进程内存的拷贝）
 
----
-
 ## exec 族函数
 
 `exec` 用一个新程序**替换当前进程的地址空间**，但保留 PID：
@@ -115,8 +110,6 @@ if (pid == 0) {
     wait(NULL);   // 父进程等待子进程结束
 }
 ```
-
----
 
 ## wait / waitpid
 
@@ -159,8 +152,6 @@ while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
 }
 ```
 
----
-
 ## 进程状态
 
 ```
@@ -191,8 +182,6 @@ CREATED ───────────────────> READY
 > **D 状态** 不是“信号永久屏蔽”：`SIGKILL` 也不能让任务在不可中断等待中立刻退出，信号通常会保持 pending；等待条件解除后，内核才有机会处理它。先用 `ps`、`/proc/<pid>/wchan`、内核日志和 I/O 观测定位原因；来源不只有磁盘或 NFS，重启也不是第一诊断手段。
 > **Z 状态** 需要父进程调用 `wait()` 回收，否则占用 PID 资源。
 
----
-
 # Linux 调度（调度器概念）
 
 普通任务的公平调度以权重分配 CPU 时间为基本心智模型；具体挑选下一任务的实现随内核版本演进。旧版 CFS 偏重 `vruntime` 最小者，Linux 6.6 起逐步转向 EEVDF 的“符合资格的最早虚拟截止时间”选择，不能把红黑树最左节点当成所有版本的规则。
@@ -210,11 +199,9 @@ renice 5 -p 1234        # 修改运行中进程的 nice 值
 
 [Linux EEVDF scheduler](https://docs.kernel.org/scheduler/sched-eevdf.html) · [CFS scheduler history](https://docs.kernel.org/scheduler/sched-design-CFS.html)
 
----
-
 # Zombie and Orphan Processes (僵尸进程与孤儿进程)
 
-> [!note] 本节重点：僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
+**本节要点：** 僵尸进程产生原因与危害、孤儿进程的 init 收养、SIGCHLD 信号处理
 
 ## 僵尸进程（Zombie）
 
@@ -250,8 +237,6 @@ void sigchld_handler(int sig) {
 signal(SIGCHLD, sigchld_handler);
 ```
 
----
-
 ## 孤儿进程（Orphan）
 
 父进程先于子进程退出，子进程成为孤儿，被 **init 进程（PID=1，现代系统为 systemd）** 收养。
@@ -278,13 +263,9 @@ close(STDOUT_FILENO);
 close(STDERR_FILENO);
 ```
 
-
----
-
 # Interprocess Communication (进程间通信)
 
-> [!note] 本节重点：匿名管道 pipe、命名管道 fifo、共享内存 mmap、信号量与消息队列等 IPC 机制对比
-> 核心考点：各 IPC 机制的特点、适用场景、使用方式
+**本节要点：** 比较匿名管道、命名管道、共享内存、信号量和消息队列的特性、适用场景与使用方式。
 
 ## IPC 机制对比
 
@@ -296,8 +277,6 @@ close(STDERR_FILENO);
 |消息队列|双向|有|❌|有结构，按消息读取|
 |信号量|—|有|❌|同步原语，不传数据|
 |Socket|双向|有|✅|最通用，可跨主机|
-
----
 
 ## 匿名管道（pipe）
 
@@ -331,8 +310,6 @@ if (pid == 0) {
 - 写端关闭后，读端 read() 返回 0（EOF）
 - Shell 的 `|` 管道就是用 pipe 实现的
 
----
-
 ## 命名管道（FIFO）
 
 ```c
@@ -349,8 +326,6 @@ read(fd, buf, sizeof(buf));
 ```
 
 - `open()` 时会阻塞，直到另一端也 open（读写端都就绪才能通信）
-
----
 
 ## 共享内存（mmap）
 
@@ -383,6 +358,20 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
+**参考资料：** 下一步：[05-POSIX Thread Lifecycle (POSIX 线程生命周期)](05-POSIX%20Thread%20Lifecycle%20%28POSIX%20%E7%BA%BF%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%29.md)
 
-> [!info]- 延伸阅读
-> - 下一步：[05-POSIX Thread Lifecycle (POSIX 线程生命周期)](/06-Systems%20and%20Networking%20(系统与网络)/01-Linux%20Runtime%20(Linux%20运行时)/05-POSIX%20Thread%20Lifecycle%20(POSIX%20线程生命周期).md)
+# 考察题目
+
+## 1. 动手题
+
+写 `fork/exec/wait` 小程序，子进程写管道并退出；父进程读取并回收，故意漏 wait 观察状态。
+
+> [!note]- 验收要点
+> 关闭不使用的管道端；回收后无僵尸，错误路径能处理 exec 失败。
+
+## 2. 机制追问
+
+父进程 fork 后子进程退出，却留下僵尸进程，为什么？
+
+> [!note]- 参考答案
+> 退出状态要由父进程 wait/waitpid 回收；fork 后地址空间逻辑独立，IPC 需显式管道、socket 或共享内存，并处理句柄关闭。

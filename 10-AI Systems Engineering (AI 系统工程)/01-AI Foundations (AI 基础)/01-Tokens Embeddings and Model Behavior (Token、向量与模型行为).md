@@ -4,7 +4,7 @@ review_due:
 tags: [ai/foundation, ai/llm]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 语言模型根据上下文预测 token 分布；embedding 表达可计算的语义相似度，但两者都不保证事实正确。
 
 # Token 与上下文
@@ -61,8 +61,20 @@ cos(a, b) = (a · b) / (||a|| × ||b||)
 - embedding 和 RAG 不解决 prompt injection；检索内容仍是不可信数据，不能覆盖系统权限与工具策略。
 - 摘要式记忆会丢细节，原始证据应可追溯，不能让模型摘要成为唯一事实源。
 
-> [!info]- 权威参考
-> - [NIST Generative AI Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence)
+**参考资料：** [NIST Generative AI Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence)
 
-> [!question]- 理解检查
-> 为什么整篇长文只生成一个 embedding 往往不利于精确检索？切分过小又会失去什么？
+# 考察题目
+
+## 1. 动手题
+
+用同一组文本比较两种 embedding 模型的最近邻；加入语义相反但词面相近的样本。
+
+> [!note]- 验收要点
+> 记录模型版本、相似度与人工相关性标签；高相似不直接等于正确答案。
+
+## 2. 机制追问
+
+Embedding 相似度高的文档，为什么仍可能给出错误答案？
+
+> [!note]- 参考答案
+> 向量相似只衡量检索空间的近邻，不保证事实正确或满足查询意图；需评估召回、重排与答案依据，并检查模型上下文限制。

@@ -3,8 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能根据迭代器能力判断算法是否可用；知道算法的前提条件与复杂度；使用适配器和 ranges 时不误判底层容器、顺序或生命周期。
 
 # 适配器：只暴露需要的队列语义
@@ -81,7 +80,7 @@ int main() {
 - `list`、`map` 插入不使现存元素迭代器失效；擦除只使被删元素失效。
 - `unordered_map` 的 `rehash` 使迭代器失效，但不使仍存在元素的引用失效。
 
-详细操作表见 [01-Sequence Containers (顺序容器)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/01-Sequence%20Containers%20(顺序容器).md) 与 [02-Associative Containers (关联容器)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/02-Associative%20Containers%20(关联容器).md)；这里不再复制一套容易漂移的速查表。
+详细操作表见 [01-Sequence Containers (顺序容器)](01-Sequence%20Containers%20%28%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8%29.md) 与 [02-Associative Containers (关联容器)](02-Associative%20Containers%20%28%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%29.md)；这里不再复制一套容易漂移的速查表。
 
 # 常用算法：先检查区间与前提
 
@@ -161,3 +160,19 @@ int main() {
 不是所有 ranges 算法都惰性：`std::ranges::sort(values)` 会立即修改 `values`。区分“算法”与“视图”，同时检查返回迭代器是否在输入临时对象销毁后仍有效。对过滤视图中的元素做会让它不再满足谓词的修改，还可能违反其迭代语义。
 
 参考：[算法排序前提](https://eel.is/c++draft/alg.sorting.general)、[二分查找前提](https://eel.is/c++draft/alg.binary.search)、[remove 尾段状态](https://eel.is/c++draft/alg.remove)。
+
+# 考察题目
+
+## 1. 动手题
+
+用 `std::find`、`std::sort` 处理 vector 与 list，记录编译结果；改用适合 list 的排序接口。
+
+> [!note]- 验收要点
+> `std::sort` 需要随机访问迭代器，list 不满足；算法选择必须匹配迭代器能力。
+
+## 2. 机制追问
+
+把只支持前向迭代的容器传给需要随机访问的算法，问题出在哪？
+
+> [!note]- 参考答案
+> 算法有迭代器能力前提；应检查迭代器类别、区间边界和失效规则，必要时换算法或容器，不能只凭容器元素类型判断。

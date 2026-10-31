@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/build, cpp/cmake]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能从源码、目标和使用要求构建一个可移植的 C++ 工程，区分 CMake 的配置、生成、编译和测试阶段，并解释 Debug/Release 与单配置/多配置生成器。
 
 # CMake 描述的是构建图
@@ -151,4 +151,20 @@ ctest --test-dir build/dev --output-on-failure
 - [CMake target commands](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)
 - [CMake Presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
 
-下一步：[02-CMake Dependencies (CMake 依赖)](/02-Engineering%20Fundamentals%20(工程基础)/02-Build%20and%20Dependencies%20(构建与依赖)/02-CMake%20Dependencies%20(CMake%20依赖).md)
+下一步：[02-CMake Dependencies (CMake 依赖)](02-CMake%20Dependencies%20%28CMake%20%E4%BE%9D%E8%B5%96%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写一个库和可执行目标，让下游只通过 `target_link_libraries` 获得公开头文件路径；删除全局 include 后重建。
+
+> [!note]- 验收要点
+> PUBLIC/PRIVATE 传播应准确；干净构建成功，库私有头不泄漏给消费者。
+
+## 2. 机制追问
+
+一个库的头文件被下游使用时，include 路径应写成 PRIVATE 还是 PUBLIC？为什么？
+
+> [!note]- 参考答案
+> 下游编译也需要该路径，应作为 PUBLIC 使用要求传播；只在库自身实现使用的路径为 PRIVATE。依赖关系应挂在 target 上而非全局污染。

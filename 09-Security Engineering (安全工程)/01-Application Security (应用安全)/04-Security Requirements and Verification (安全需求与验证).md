@@ -4,7 +4,7 @@ review_due:
 tags: [security/appsec, security/verification, owasp/asvs]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把“注意安全”转化为可追踪、可测试、可留证的工程要求。风险清单用于发现方向，ASVS 等验证标准用于定义控制是否真正存在；扫描器只能提供部分证据。
 
 # 从威胁到可验证要求
@@ -70,3 +70,19 @@ OWASP ASVS 提供 Web 应用安全控制的验证要求。项目应先根据数�
 - [OWASP Application Security Verification Standard](https://owasp.org/projects/asvs)
 - [OWASP API Security Top 10](https://api-security.owasp.org/)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+
+# 考察题目
+
+## 1. 动手题
+
+把“防越权、防泄密、防滥用”转成三条可自动验证的要求，并指定失败判定。
+
+> [!note]- 验收要点
+> 每条有主体、动作、资源或数据边界，测试输入和预期拒绝结果明确。
+
+## 2. 机制追问
+
+“系统要安全”为什么不能直接成为验收项？
+
+> [!note]- 参考答案
+> 需从威胁与资产转成可测试要求，例如越权拒绝、密钥不泄露、输入上限与审计事件；说明验证方法和残余风险。

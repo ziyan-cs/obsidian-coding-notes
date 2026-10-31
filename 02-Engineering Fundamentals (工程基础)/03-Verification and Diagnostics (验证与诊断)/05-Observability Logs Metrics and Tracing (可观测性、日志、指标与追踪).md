@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 可观测性（Observability）不是“接入监控平台”，而是让未知故障能通过系统外部信号被解释。本篇统一日志、指标、追踪、告警和 SLO 的设计方法；语言 SDK 与平台配置留在各专题。
 
 # 从问题开始设计信号
@@ -121,8 +121,8 @@ Dashboard 用于理解状态，不应变成所有指标的陈列柜。首页保�
 
 ## 关联专题
 
-- [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)：从运行信号进入资源热点分析。
-- [Incident Response Chaos and Recovery (事故响应、混沌与恢复)](/08-Cloud%20Native%20and%20Reliability%20(云原生与可靠性)/03-Reliability%20Engineering%20(可靠性工程)/03-Incident%20Response%20Chaos%20and%20Recovery%20(事故响应、混沌与恢复).md)：用信号驱动事故处置与恢复验证。
+- [Performance Benchmarking and Profiling (性能基准与剖析)](04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)：从运行信号进入资源热点分析。
+- [Incident Response Chaos and Recovery (事故响应、混沌与恢复)](../../08-Cloud%20Native%20and%20Reliability%20%28%E4%BA%91%E5%8E%9F%E7%94%9F%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7%29/03-Reliability%20Engineering%20%28%E5%8F%AF%E9%9D%A0%E6%80%A7%E5%B7%A5%E7%A8%8B%29/03-Incident%20Response%20Chaos%20and%20Recovery%20%28%E4%BA%8B%E6%95%85%E5%93%8D%E5%BA%94%E3%80%81%E6%B7%B7%E6%B2%8C%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)：用信号驱动事故处置与恢复验证。
 
 ## 参考资料
 
@@ -132,3 +132,19 @@ Dashboard 用于理解状态，不应变成所有指标的陈列柜。首页保�
 
 > [!summary] 本篇结论
 > 可观测性要让系统状态能被解释：指标发现聚合趋势，trace 展示请求经过的组件，日志补充离散事件和上下文；SLI/SLO 与告警则把信号连接到用户影响和可执行响应。三类信号需要关联，而不是各自堆积。
+
+# 考察题目
+
+## 1. 动手题
+
+给一个两层调用链加请求 ID、结构化日志和延迟直方图；故意注入一次下游超时。
+
+> [!note]- 验收要点
+> 能从指标发现异常、从追踪定位下游段、从日志看到错误类别，且日志不含敏感数据。
+
+## 2. 机制追问
+
+一次请求失败，日志、指标和追踪各能回答什么？
+
+> [!note]- 参考答案
+> 日志记录具体事件与上下文，指标呈现总体趋势和分布，追踪连接跨组件路径；用请求标识关联三者，并控制敏感字段和基数。

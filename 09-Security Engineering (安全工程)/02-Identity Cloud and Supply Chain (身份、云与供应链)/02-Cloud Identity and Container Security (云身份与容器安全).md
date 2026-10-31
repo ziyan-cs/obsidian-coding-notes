@@ -4,7 +4,7 @@ review_due:
 tags: [security/cloud, security/container, security/iam]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 云环境的核心安全边界是身份、权限和工作负载隔离；容器镜像只是交付格式，不自动成为强安全边界。
 
 # 身份优先于网络位置
@@ -49,6 +49,20 @@ Kubernetes 的 ServiceAccount token 不等于云角色；若需要云 API，应�
 4. 管理员权限如何申请、过期和审计？
 5. 节点或容器逃逸时还有哪些隔离层？
 
-> [!info]- 官方参考
-> - [Kubernetes Security](https://kubernetes.io/docs/concepts/security/)
-> - [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+**参考资料：** [Kubernetes Security](https://kubernetes.io/docs/concepts/security/) · [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+
+# 考察题目
+
+## 1. 动手题
+
+给容器服务配置最小云权限，故意访问未授权资源并收集拒绝证据。
+
+> [!note]- 验收要点
+> 只允许实际所需 API/资源，凭据不在镜像或日志，拒绝行为可审计。
+
+## 2. 机制追问
+
+容器镜像没有漏洞报告，是否就能授予管理员权限？
+
+> [!note]- 参考答案
+> 不能。镜像扫描只覆盖已知问题的一部分；运行身份、文件系统、网络和云权限应最小化，并验证凭据暴露与逃逸边界。

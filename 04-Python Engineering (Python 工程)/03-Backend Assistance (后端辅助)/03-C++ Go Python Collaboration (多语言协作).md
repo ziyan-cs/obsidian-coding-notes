@@ -4,7 +4,7 @@ review_due:
 tags: [language/cpp, language/go, language/python, comparison]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 按约束选语言；先用单语言完成闭环，只有边界、收益和维护责任清楚时才引入第二种语言。
 
 | 任务 | 首选 | 选择依据 |
@@ -63,10 +63,21 @@ Go API service ---- database
 
 # 决策检查
 
-> [!question]- 理解检查
-> 1. 为“Go 服务 + Python 回归工具”写出契约、timeout、错误分类与版本责任。
-> 2. 如果 C++ 库返回的内存由谁释放没有写入契约，会出现哪些故障？
-> 3. 什么测量结果才能证明引入 FFI 比独立服务更合适？
-
 > [!info]- 关联
-> - 并发工具：[04-Async IO and Concurrency (异步 I-O 与并发)](/04-Python%20Engineering%20(Python%20工程)/03-Backend%20Assistance%20(后端辅助)/04-Async%20IO%20and%20Concurrency%20(异步%20I-O%20与并发).md)
+> - 并发工具：[04-Async IO and Concurrency (异步 I-O 与并发)](04-Async%20IO%20and%20Concurrency%20%28%E5%BC%82%E6%AD%A5%20I-O%20%E4%B8%8E%E5%B9%B6%E5%8F%91%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+定义三种语言之间的 JSON/RPC 契约，写一个成功样本和一个超时/字段缺失样本，分别从两端验证。
+
+> [!note]- 验收要点
+> 契约明确编码、版本、错误码、deadline 和所有权；跨进程边界不能传裸指针。
+
+## 2. 机制追问
+
+把 C++ 库直接嵌入 Go 服务与通过进程/协议调用，各有什么边界？
+
+> [!note]- 参考答案
+> 直接绑定可能引入 ABI、内存所有权和崩溃传播问题；进程/协议隔离较强但有序列化和运维成本。应先定义数据、错误、超时和版本契约。

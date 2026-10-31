@@ -4,10 +4,8 @@ review_due:
 tags: [project/flash-sale, distributed/consistency]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 秒杀的首要目标是守住库存与订单幂等不变量；限流和异步化用于把不可承受的高峰变成可控的拒绝、排队和恢复过程。
-
-> [!summary] 核心摘要
 >
 > 任何库存决策必须有一个可证明的原子真相来源；缓存预扣、数据库订单和消息投递的失败窗口必须设计补偿与去重。
 
@@ -99,5 +97,20 @@ request -> auth / per-user limit / global admission
 > [!warning] 常见误区
 > Redis 预扣库存、数据库扣减、消息投递不是三件独立操作；必须说明它们的顺序、失败补偿和最终 source of truth。
 
-> [!info]- 延伸阅读
-> - 下一步：[04-Config Center Project (配置中心项目)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/04-Config%20Center%20Project%20(配置中心项目).md)
+**参考资料：** 下一步：[04-Config Center Project (配置中心项目)](04-Config%20Center%20Project%20%28%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E9%A1%B9%E7%9B%AE%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+用 100 并发请求争抢 10 件库存，加入重复用户请求与消费者重试。
+
+> [!note]- 验收要点
+> 成功订单不超过库存且每用户遵守限购；失败可解释，队列积压有上限。
+
+## 2. 机制追问
+
+高并发扣库存时，如何避免超卖并防止重复下单？
+
+> [!note]- 参考答案
+> 用数据库条件更新或可信原子操作保护库存不变量，订单按用户/活动幂等；队列只能削峰，不能替代最终一致性校验。

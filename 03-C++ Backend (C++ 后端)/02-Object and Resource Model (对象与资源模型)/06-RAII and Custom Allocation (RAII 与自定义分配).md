@@ -4,9 +4,7 @@ review_due:
 
 ---
 
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > RAII（Resource Acquisition Is Initialization）的核心是：**资源的拥有期由对象生命周期表示**。构造函数成功后对象应处于可用状态；析构函数负责释放资源，因此无论正常返回、异常抛出还是提前 `return`，作用域退出时都能回收文件、锁、socket、内存或事务等资源。实际代码优先使用标准库封装，如 `std::vector`、智能指针和 `std::lock_guard`，而不是手写 `new/delete`。
 
 # 先建立的模型
@@ -159,4 +157,18 @@ void pool_example() {
 
 规范参考：[对齐规则](https://eel.is/c++draft/basic.align)、[PMR 资源](https://eel.is/c++draft/mem.res)。
 
----
+# 考察题目
+
+## 1. 动手题
+
+写 `unique_fd` 或文件包装类，注入构造中途失败；统计 acquire/release 次数。
+
+> [!note]- 验收要点
+> 成功获取的资源恰好释放一次；未成功获取的资源不释放，异常无需手写所有退出路径。
+
+## 2. 机制追问
+
+异常在资源获取后抛出，怎样保证资源恰好释放一次？
+
+> [!note]- 参考答案
+> 让资源由 RAII 对象独占，构造成功后析构负责释放；异常沿栈展开会析构已构造对象。自定义分配只改变存储来源，不替代所有权契约。

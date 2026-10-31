@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/server]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 生产服务不是 `ListenAndServe` 后就结束；它必须响应取消、停止接收新请求、给在途请求有限时间，并关闭依赖。
 
 > [!warning] Shutdown 不是立即杀进程
@@ -69,3 +69,19 @@ srv := &http.Server{
 `Shutdown` 不自动等待 hijacked 连接（如 WebSocket）或任意后台 goroutine；这些资源需要应用自己发停止信号、等待并设置上限。演练时分别制造慢请求、永不返回的 handler 和长连接，观察 readiness、监听返回、关闭耗时与已完成请求数。
 
 官方依据：[net/http Server.Shutdown](https://pkg.go.dev/net/http#Server.Shutdown)。
+
+# 考察题目
+
+## 1. 动手题
+
+启动 HTTP 服务与后台任务，发送终止信号；并发发新旧请求，记录哪些被接收、完成或取消。
+
+> [!note]- 验收要点
+> 停止新接入、限时排空旧请求、后台任务退出，关闭后无 goroutine 泄漏。
+
+## 2. 机制追问
+
+收到关闭信号后，怎样避免新请求进入而旧请求被突然中断？
+
+> [!note]- 参考答案
+> 先停止接入并设置排空期限，让进行中的请求完成或按超时退出；后台任务、数据库连接和 goroutine 需有明确停止顺序。

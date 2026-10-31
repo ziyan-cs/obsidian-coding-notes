@@ -3,13 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 沿源文件到可执行文件的构建链理解预处理、编译、汇编与链接，再把头文件边界、ODR 和宏放回各自阶段；能从错误信息判断应检查构建流程的哪一层。
 
 # Compilation & Linking (编译与链接)
 
-> [!note] 本节重点：编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
+**本节要点：** 编译的四个阶段、符号解析与重定位、静态链接 vs 动态链接、常见链接错误
 
 ## 编译的四个阶段
 
@@ -153,11 +152,10 @@ inline int square(int x) { return x * x; }
 > 编译把源文件分别变成目标文件，链接器再解析跨文件符号并重定位地址。`undefined reference` 先查“声明有了但定义/库没有参与链接”，`multiple definition` 先查“同一外部符号被定义多次”。静态/动态链接是部署、更新、隔离与启动成本的权衡，不能只用“谁更快”概括。
 >
 >
->
 
 # Header & Source Organization (头文件与源文件组织)
 
-> [!note] 本节重点：头文件职责、源文件职责、include 顺序、模块化设计
+**本节要点：** 头文件职责、源文件职责、include 顺序、模块化设计
 
 ## 头文件职责
 
@@ -175,7 +173,7 @@ class Foo {
 public:
     explicit Foo(std::string name);
     ~Foo();
-    
+
     void process(const Bar& bar);  // 引用，只需要前向声明
     std::string name() const;
 
@@ -278,7 +276,7 @@ project/
 
 # Preprocessor & Macros (预处理与宏)
 
-> [!note] 本节重点：预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
+**本节要点：** 预处理指令、宏的陷阱、条件编译、与 constexpr/模板的取舍
 
 ## 预处理指令概览
 
@@ -405,8 +403,20 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // static_assert 是语
 
 > **工程建议**：在 C++ 中尽量减少宏，把常量、类型和普通函数表达为语言实体。宏在预处理阶段工作，不遵循 C++ 作用域和类型检查；但条件编译、头文件守卫、token 拼接/字符串化以及某些跨编译器兼容层仍需要或适合使用宏。诊断位置可优先考虑 C++20 `std::source_location`；`__FILE__`、`__LINE__` 仍常见于断言和宏生成的调用点。`__DATE__`、`__TIME__` 会把构建时间带入产物，需纳入可复现构建考量。使用 `assert` 时不要放有副作用的表达式，因为定义 `NDEBUG` 后断言表达式不会求值。
 
----
+**参考资料：** 下一步：[02-CMake and Dependencies (CMake 与依赖)](02-CMake%20and%20Dependencies%20%28CMake%20%E4%B8%8E%E4%BE%9D%E8%B5%96%29.md)
 
+# 考察题目
 
-> [!info]- 延伸阅读
-> - 下一步：[02-CMake and Dependencies (CMake 与依赖)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/06-Engineering%20Practice%20(工程实践)/02-CMake%20and%20Dependencies%20(CMake%20与依赖).md)
+## 1. 动手题
+
+制造宏污染和重复符号两个构建问题，分别用预处理输出与符号表定位。
+
+> [!note]- 验收要点
+> 能指出宏替换后的代码及链接冲突来源；修复后从干净目录重建。
+
+## 2. 机制追问
+
+同名符号在多个源文件中定义，编译各自成功但链接失败，怎样定位？
+
+> [!note]- 参考答案
+> 区分翻译单元与链接阶段，检查头文件定义、宏展开、符号可见性和一次定义规则；用目标文件符号表辅助定位。

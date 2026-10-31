@@ -4,7 +4,7 @@ tags: [learning/mistakes, vault/system]
 ---
 
 > [!abstract] 记录理解偏差
-> 只记容易重犯、代价高或暴露认知缺口的错误。笔记正文出错则放入[审计与迁移队列](/00-Hub%20(学习入口)/07-Vault%20Audit%20&%20Migration%20Queue%20(审计与迁移队列).md)。
+> 只记容易重犯、代价高或暴露认知缺口的错误。笔记正文出错则放入[审计与迁移队列](07-Vault%20Audit%20%26%20Migration%20Queue%20%28%E5%AE%A1%E8%AE%A1%E4%B8%8E%E8%BF%81%E7%A7%BB%E9%98%9F%E5%88%97%29.md)。
 
 # 怎么记录
 

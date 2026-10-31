@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/greedy, algorithm/sliding-window, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用交换论证或“领先不变量”证明贪心选择；用窗口谓词的单调性判断滑动窗口是否成立，并掌握区间与计数边界。
 
 # 贪心不是“每次取最大”
@@ -89,4 +89,20 @@ std::size_t longest_unique(std::string_view s) {
 > [!summary] 本篇结论
 > 贪心依靠可证明的安全选择，滑动窗口依靠端点移动时的单调约束。两者都是线性扫描，但成立理由不同；先证明结构，再写模板。
 
-下一步：[15-String and Bit Algorithms (字符串与位运算)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/15-String%20and%20Bit%20Algorithms%20(字符串与位运算).md)
+下一步：[15-String and Bit Algorithms (字符串与位运算)](15-String%20and%20Bit%20Algorithms%20%28%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现最短满足和的滑动窗口，加入负数输入找出原算法失效例子；说明需要什么前提。
+
+> [!note]- 验收要点
+> 正数数组下窗口和随边界单调变化；有负数时收缩可能漏解，需换前缀和等方法。
+
+## 2. 机制追问
+
+什么时候能用滑动窗口，什么时候贪心选择需要证明？
+
+> [!note]- 参考答案
+> 窗口要能在移动边界时单调维护约束，负数等条件可能破坏单调性；贪心需交换论证或不变量证明局部选择不会排除全局最优。

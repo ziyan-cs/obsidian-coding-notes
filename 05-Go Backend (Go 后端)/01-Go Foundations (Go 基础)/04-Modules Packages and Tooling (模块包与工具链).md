@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/tooling]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > module 是依赖版本边界，package 是代码命名空间；目录结构应服务于业务边界，而不是照搬 C++ 的头文件层级。
 
 > [!tip] 先按业务组织，再抽公共层
@@ -57,5 +57,20 @@ todo-api/
 - [Go Modules Reference](https://go.dev/ref/mod)
 - [go.mod file reference](https://go.dev/doc/modules/gomod-ref)
 
-> [!info]- 延伸阅读
-> - 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](/05-Go%20Backend%20(Go%20后端)/01-Go%20Foundations%20(Go%20基础)/05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20(错误、panic、defer%20与资源安全).md)
+**参考资料：** 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20%28%E9%94%99%E8%AF%AF%E3%80%81panic%E3%80%81defer%20%E4%B8%8E%E8%B5%84%E6%BA%90%E5%AE%89%E5%85%A8%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+创建两个 Go 包和一个命令入口，写表驱动测试；从干净目录运行 `go test ./...`。
+
+> [!note]- 验收要点
+> 包导入路径与 module 名一致，无未声明的本地 replace；命令可构建。
+
+## 2. 机制追问
+
+代码在本机可编译，干净环境却找不到模块，先检查什么？
+
+> [!note]- 参考答案
+> 检查 go.mod、模块路径、版本约束和包导入路径；运行 go test 与构建验证依赖，避免依赖本地工作区或未声明的 replace。

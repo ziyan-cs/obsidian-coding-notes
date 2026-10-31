@@ -4,14 +4,12 @@ review_due:
 
 ---
 
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 模板在编译期按类型生成代码，兼顾泛型与零运行时分派；优先用约束清晰的小模板，理解推导、特化与实例化边界，避免难读的错误信息。
 
 # Template Basics (模板基础)
 
-> [!note] 本节重点：函数模板、类模板、模板特化、SFINAE 初步
+**本节要点：** 函数模板、类模板、模板特化、SFINAE 初步
 
 ## 函数模板
 
@@ -130,9 +128,6 @@ std::add_pointer_t<int>          // int*
 std::conditional_t<true, int, double>  // int
 ```
 
----
-
-
 # 模板真正发生了什么
 
 模板不是运行时的“万能函数”，而是编译器生成具体声明或定义的规则。阅读模板代码时，先区分三个阶段：
@@ -211,5 +206,20 @@ template int square<int>(int);  // 显式实例化定义
 - [Template parameters and arguments - cppreference](https://en.cppreference.com/w/cpp/language/template_parameters)
 - [Explicit instantiation - cppreference](https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation)
 
-> [!info]- 延伸阅读
-> - 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/02-Object%20and%20Resource%20Model%20(对象与资源模型)/06-RAII%20and%20Custom%20Allocation%20(RAII%20与自定义分配).md)
+**参考资料：** 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](06-RAII%20and%20Custom%20Allocation%20%28RAII%20%E4%B8%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E9%85%8D%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+写函数模板 `max_value` 并在第二个翻译单元调用；分别试定义放头文件与只放 cpp，记录链接结果。
+
+> [!note]- 验收要点
+> 模板定义对实例化点可见或提供显式实例化；比较器应满足所需语义。
+
+## 2. 机制追问
+
+模板定义只放在 cpp 中，别的翻译单元调用时为何可能链接失败？
+
+> [!note]- 参考答案
+> 实例化需要看到模板定义，常放头文件；也可在 cpp 中显式实例化所需类型。模板参数推导和实例化发生在具体使用点。

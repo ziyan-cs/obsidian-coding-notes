@@ -4,13 +4,12 @@ review_due:
 tags: [backend/server, architecture]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把“收到停止信号”展开为停止接流量、排空进行中请求、关闭依赖与超时强退的完整生命周期。
 
-
-> [!note] 本节重点：信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
-
 # 为什么需要优雅关闭
+
+**本节要点：** 信号驱动的关闭流程、graceful period、drain 连接、C++ 服务平滑重启
 
 线上服务直接 `kill -9` 会导致：
 - 正在处理的请求被中断，客户端收到连接重置
@@ -19,8 +18,6 @@ tags: [backend/server, architecture]
 - 注册中心未及时摘除节点，流量仍分发到此实例
 
 **优雅关闭的目标：** 停止接受新请求 → 处理完正在进行的请求 → 释放资源 → 退出。
-
----
 
 # 信号驱动的关闭流程
 
@@ -36,8 +33,6 @@ tags: [backend/server, architecture]
 | `SIGKILL` (9) | `kill -9` | **无法捕获**，最后手段 |
 
 **C++ 服务器应当捕获：** `SIGTERM`, `SIGINT`, `SIGQUIT` 触发关闭，`SIGHUP` 重载配置，`SIGUSR1` 日志轮转。
-
----
 
 # C++ 优雅关闭的实现
 
@@ -163,8 +158,6 @@ int main() {
 }
 ```
 
----
-
 # 服务注册中心的优雅摘除
 
 gRPC/微服务场景下，关闭前需要先从注册中心摘除本节点：
@@ -200,15 +193,11 @@ void shutdownWithDiscovery() {
 }
 ```
 
----
-
 # k8s 环境中的优雅关闭
 
 Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kubelet 会先执行它，完成后容器运行时才向容器主进程发送终止信号。`terminationGracePeriodSeconds` 默认 30 秒，但它覆盖 `preStop` 与应用排空的总过程，**不是收到 SIGTERM 后再额外获得 30 秒**；期限届满可能被强制终止。设置预算时要给 hook、应用收尾和调度误差留出空间。
 
 控制面并行更新 EndpointSlice：终止中的 endpoint 的 `ready` 会变为 false，但负载均衡器、客户端连接池与传播延迟并不保证瞬间停止流量。先标记应用不再接新业务、限制排空时间，再处理已有连接；同时测试老连接复用和晚到请求。具体行为按部署平台与 [Kubernetes Pod termination flow](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) 核对。
-
----
 
 > [!warning]- 易错点
 > | 陷阱 | 原因 | 解决 |
@@ -221,4 +210,20 @@ Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kub
 
 > [!tip]- **工程要点**：关闭流程要有总期限和分阶段预算。信号 handler 内只做允许的极简通知（例如设置 `volatile sig_atomic_t` 标志或使用经核对的 async-signal-safe 机制），在主循环停止接收新工作、排空在途请求并清理依赖。`std::atomic<bool>` 不能不加条件地当作任意平台的 signal-handler 安全替代品。
 
-下一步：[07-Backend Architecture Patterns (后端架构模式)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/07-Backend%20Architecture%20Patterns%20(后端架构模式).md)
+下一步：[07-Backend Architecture Patterns (后端架构模式)](07-Backend%20Architecture%20Patterns%20%28%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+在服务处理长请求时发 SIGTERM，同时发新请求；记录已接收与拒绝请求、排空时间和最终退出码。
+
+> [!note]- 验收要点
+> 停止新接入、旧请求在期限内完成或明确取消，资源按顺序释放。
+
+## 2. 机制追问
+
+优雅关闭为何要先停止接入，再等待旧请求？
+
+> [!note]- 参考答案
+> 停止新连接可让在途请求集合收敛；排空设定期限，之后取消或中止剩余任务，并按依赖顺序释放资源，避免无限等待。

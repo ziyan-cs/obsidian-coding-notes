@@ -4,7 +4,7 @@ review_due:
 
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能根据长度、所有权和读写需求选择数组、`vector`、`string` 或视图；能正确处理一行输入及文件打开失败。
 
 # 序列的长度、所有权与边界
@@ -90,6 +90,20 @@ int main() {
 2. 构造 `std::string_view{text.data(), 5}` 并输出；解释为什么不能直接传给 `strlen`。
 3. 用正常行、空行、非法 ID、文件不存在四种输入运行文件示例，记录各分支行为。
 
-> [!info]- 延伸阅读
-> - [01-Sequence Containers (顺序容器)](/03-C++%20Backend%20(C++%20后端)/04-STL%20and%20Data%20Structures%20(STL%20与数据结构)/01-Sequence%20Containers%20(顺序容器).md)
-> - 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)
+**参考资料：** [01-Sequence Containers (顺序容器)](../04-STL%20and%20Data%20Structures%20%28STL%20%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%29/01-Sequence%20Containers%20%28%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8%29.md) · 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)
+
+# 考察题目
+
+## 1. 动手题
+
+实现读取含空格的一行并解析两个字段，输入空行、超长行和非法数字时返回明确错误。
+
+> [!note]- 验收要点
+> `getline` 保留整行；每一步检查流状态与范围，不能把读取失败当成合法空值。
+
+## 2. 机制追问
+
+读取一行含空格的文本，为什么直接用 operator>> 可能不符合需求？如何处理失败？
+
+> [!note]- 参考答案
+> 格式化提取通常以空白分隔；整行应使用 getline，并检查流状态、编码、长度和空输入，不能把读取失败当成合法空字符串。

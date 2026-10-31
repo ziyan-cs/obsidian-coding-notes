@@ -3,9 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 线程用于并行或并发执行任务，但线程本身不解决共享数据正确性。先划分数据所有权；只有确实共享的状态才使用 mutex、condition variable 或 semaphore 协调。正确性优先于并发度：每个共享变量都要能说明谁写、谁读、由什么同步原语建立 happens-before。
 
 # 选择模型
@@ -37,7 +35,7 @@ review_due:
 
 # Thread Basics POSIX & std thread (线程基础)
 
-> [!note] 本节重点：线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
+**本节要点：** 线程的创建/汇合/分离、std::thread 与 POSIX pthread 的关系、线程生命周期管理
 
 ## std::thread 基础
 
@@ -120,11 +118,9 @@ jt.request_stop();
 > [!tip] 工程取舍
 > 建线程、栈空间、调度与上下文切换都有成本，但固定的“几微秒”并不适用于所有机器和负载。短任务通常复用线程池；CPU 密集型任务可从可用并行度附近起步测量，I/O 密集型任务还需考虑阻塞比例、队列与资源上限，不能简单规定线程数不得超过 `hardware_concurrency()`。
 
----
-
 # Mutex & Lock (互斥锁与锁管理)
 
-> [!note] 本节重点：互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
+**本节要点：** 互斥锁保护共享数据、死锁预防、RAII 锁管理、锁的粒度
 
 ## std::mutex 与 RAII 锁
 
@@ -262,11 +258,10 @@ void worker() {
 > > **面试重点**：`lock_guard` vs `unique_lock` vs `scoped_lock`（C++17）。`scoped_lock` 等价于 `lock_guard` 但支持多锁且用 `std::lock` 避免死锁。在需要锁多个 mutex 时首选 `scoped_lock`。
 >
 >
->
 
 # Condition Variable & Semaphore (条件变量与信号量)
 
-> [!note] 本节重点：条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
+**本节要点：** 条件变量解决"等待某个条件成立"的问题、虚假唤醒、信号量 vs 条件变量的选择
 
 ## 条件变量（condition_variable）
 
@@ -378,8 +373,20 @@ cv.notify_one();
 
 > **面试重点**：条件变量内部的 `wait` 做了三步：1）解锁 mutex；2）阻塞等待通知；3）被唤醒后重新加锁。所以 `wait` 需要 `unique_lock`（可手动 lock/unlock）而不是 `lock_guard`。
 
----
+**参考资料：** 下一步：[02-Atomics and Memory Order (原子与内存序)](02-Atomics%20and%20Memory%20Order%20%28%E5%8E%9F%E5%AD%90%E4%B8%8E%E5%86%85%E5%AD%98%E5%BA%8F%29.md)
 
+# 考察题目
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Atomics and Memory Order (原子与内存序)](/03-C%2B%2B%20Backend%20(C%2B%2B%20后端)/05-Concurrency%20and%20Performance%20(并发与性能)/02-Atomics%20and%20Memory%20Order%20(原子与内存序).md)
+## 1. 动手题
+
+实现阻塞队列并测试“通知先于等待”“虚假唤醒模拟”“关闭时仍有等待者”。
+
+> [!note]- 验收要点
+> 等待以谓词为准，状态修改受锁保护；关闭后所有等待者退出且任务处理策略明确。
+
+## 2. 机制追问
+
+条件变量等待偶发卡死，如何检查共享状态与通知顺序？
+
+> [!note]- 参考答案
+> 谓词与其修改应由同一互斥量保护，等待方循环检查谓词；通知只是唤醒机会，还需验证线程退出、锁顺序和异常路径。

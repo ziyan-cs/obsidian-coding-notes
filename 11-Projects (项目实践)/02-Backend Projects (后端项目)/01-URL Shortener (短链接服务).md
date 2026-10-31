@@ -4,9 +4,8 @@ review_due:
 tags: [project/url-shortener, backend/api]
 ---
 
-> [!abstract] 学习定位：目标：用户创建短链接，访问短码后重定向；重点是读写路径、冲突、缓存与统计边界，不是生成一个随机字符串。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 目标：用户创建短链接，访问短码后重定向；重点是读写路径、冲突、缓存与统计边界，不是生成一个随机字符串。
 >
 > 短链接服务把短码唯一映射到原 URL，写路径处理发号、冲突与持久化，读路径用缓存加速重定向。还要明确过期、恶意链接、热点 key 和访问统计的一致性边界。
 
@@ -79,7 +78,7 @@ GET /{code}
 
 最小指标：创建成功/冲突/失败，重定向状态，cache hit/miss，回源并发，数据库池等待，P50/P95/P99。容量估算从链接新增量、平均 URL 长度、读写比、过期比例和热点分布开始，不凭空写“亿级”。
 
-实现教程入口：[First Service Delivery (首个服务交付)](/05-Go%20Backend%20(Go%20后端)/05-Go%20Practice%20(Go%20实践)/03-First%20Service%20Delivery%20(首个服务交付).md)。
+实现教程入口：[First Service Delivery (首个服务交付)](../../05-Go%20Backend%20%28Go%20%E5%90%8E%E7%AB%AF%29/05-Go%20Practice%20%28Go%20%E5%AE%9E%E8%B7%B5%29/03-First%20Service%20Delivery%20%28%E9%A6%96%E4%B8%AA%E6%9C%8D%E5%8A%A1%E4%BA%A4%E4%BB%98%29.md)。
 
 # 验收
 
@@ -100,5 +99,20 @@ GET /{code}
 
 协议与安全参考：[RFC 9110 重定向语义](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4)、[OWASP Unvalidated Redirects Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)。
 
-> [!info]- 延伸阅读
-> - 下一步：[02-IM and Notification (即时通讯与通知)](/11-Projects%20(项目实践)/02-Backend%20Projects%20(后端项目)/02-IM%20and%20Notification%20(即时通讯与通知).md)
+**参考资料：** 下一步：[02-IM and Notification (即时通讯与通知)](02-IM%20and%20Notification%20%28%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E4%B8%8E%E9%80%9A%E7%9F%A5%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现短码生成与数据库唯一约束，注入碰撞和重复创建请求；记录跳转响应。
+
+> [!note]- 验收要点
+> 冲突重试有上限，幂等与重定向语义明确，恶意 URL 处理有边界。
+
+## 2. 机制追问
+
+短码碰撞时，怎样保证不会把两个长 URL 映射到同一个短码？
+
+> [!note]- 参考答案
+> 存储层对短码加唯一约束，冲突时重新生成并重试；还需定义幂等创建、重定向语义和恶意 URL 风险。

@@ -4,10 +4,7 @@ review_due:
 tags: [language/go, go/testing]
 ---
 
-> [!note] 方法论坐标
-> 测试策略与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)；本篇聚焦 table-driven test、httptest、race、fuzz 与 Go benchmark。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 先把业务规则写成纯函数和 table-driven test，再测试 HTTP；测试应验证可观察行为，而不是内部实现细节。
 
 # 子测试、并行与清理
@@ -106,6 +103,23 @@ func TestCreateTodo(t *testing.T) {
 
 从 `go test ./...` 开始；并发代码额外运行 `go test -race ./...`，静态检查运行 `go vet ./...`。fuzz 需单独按目标执行，例如 `go test -fuzz=FuzzParseID -fuzztime=30s`；生成的反例要进入回归语料。测试表格的目标是并排呈现输入、预期和边界，不是追求行数最少。
 
-> [!info]- 延伸阅读
-> - 下一步：[05-Observability and Operations (可观测性与运行)](/05-Go%20Backend%20(Go%20后端)/03-Web%20Services%20(Web%20服务)/05-Observability%20and%20Operations%20(可观测性与运行).md)
+**参考资料：** 下一步：[05-Observability and Operations (可观测性与运行)](05-Observability%20and%20Operations%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E4%B8%8E%E8%BF%90%E8%A1%8C%29.md)
 
+> [!info]- 关联笔记
+> 测试策略与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦 table-driven test、httptest、race、fuzz 与 Go benchmark。
+
+# 考察题目
+
+## 1. 动手题
+
+为带共享 map 的 handler 写并发测试，先触发 `go test -race` 报告，再加锁或改所有权修复。
+
+> [!note]- 验收要点
+> 修复后竞态检查通过，并验证逻辑结果；竞态检查未覆盖所有交错仍需场景测试。
+
+## 2. 机制追问
+
+Go 的 `-race` 没报错，是否证明服务没有并发问题？
+
+> [!note]- 参考答案
+> 不证明；它只检测实际执行路径中的数据竞争，逻辑竞态和未覆盖路径仍可能存在。需构造并发场景、取消和关闭测试。

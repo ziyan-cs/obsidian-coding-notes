@@ -4,7 +4,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 质量门禁把静态检查、测试、安全、制品完整性和上线观测转换为可执行的发布决策。目标不是检查越多越好，而是在反馈速度、风险和可追溯性之间建立明确规则。
 
 # 从变更到可验证制品
@@ -86,8 +86,8 @@ Canary 先接收小部分代表性流量，对照稳定版本比较成功率、�
 
 ## 关联专题
 
-- [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)：设计能支撑门禁决策的测试证据。
-- [Security Detection and Incident Evidence (安全检测与事件证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/06-Security%20Detection%20and%20Incident%20Evidence%20(安全检测与事件证据).md)：把安全信号纳入发布和响应。
+- [Testing Strategy and Evidence (测试策略与证据)](01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：设计能支撑门禁决策的测试证据。
+- [Security Detection and Incident Evidence (安全检测与事件证据)](06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)：把安全信号纳入发布和响应。
 
 ## 参考资料
 
@@ -97,3 +97,19 @@ Canary 先接收小部分代表性流量，对照稳定版本比较成功率、�
 
 > [!summary] 本篇结论
 > 发布决策应建立在可追溯的同一制品、分层质量门禁和真实运行信号上。渐进发布需要明确观测窗口与自动停止条件；应用回退不能代替数据兼容方案，回滚和向前修复都应预先设计并验证。
+
+# 考察题目
+
+## 1. 动手题
+
+写一页发布门禁：构建、测试、迁移、探针和回滚；故意让一个门禁失败并执行停止流程。
+
+> [!note]- 验收要点
+> 每项有输入、通过标准和证据；失败时不继续发布，能回到已知可用版本。
+
+## 2. 机制追问
+
+上线门禁为什么不能只看单元测试通过？
+
+> [!note]- 参考答案
+> 还要覆盖构建制品、集成契约、配置与密钥、数据库迁移、健康探针和回滚条件；每道门禁应说明失败判定与证据。

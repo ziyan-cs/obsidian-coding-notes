@@ -1,9 +1,9 @@
 ---
-study_stage: D3
-review_due: 2026-10-23
+study_stage: backlog
+review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 项目依赖必须隔离、可复现、可声明；不要把“电脑上能跑”误当成项目环境正确。
 
 # 最小工作流
@@ -72,6 +72,20 @@ src/example_app/
 
 官方资料：[uv 项目布局](https://docs.astral.sh/uv/concepts/projects/layout/) · [锁定与同步](https://docs.astral.sh/uv/concepts/projects/sync/)
 
-> [!info]- 延伸阅读
-> - 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](/04-Python%20Engineering%20(Python%20工程)/01-Python%20Foundations%20(Python%20基础)/02-Objects%20Names%20Mutability%20and%20Copying%20(对象、名称、可变性与复制).md)
+**参考资料：** 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](02-Objects%20Names%20Mutability%20and%20Copying%20%28%E5%AF%B9%E8%B1%A1%E3%80%81%E5%90%8D%E7%A7%B0%E3%80%81%E5%8F%AF%E5%8F%98%E6%80%A7%E4%B8%8E%E5%A4%8D%E5%88%B6%29.md)
 
+# 考察题目
+
+## 1. 动手题
+
+建立包 `app`，让 `python -m app.cli` 可运行；分别从项目根目录和另一目录执行，记录解释器与导入路径。
+
+> [!note]- 验收要点
+> 入口不依赖偶然的当前目录；依赖写入项目声明，干净环境可复现。
+
+## 2. 机制追问
+
+脚本直接运行正常，作为模块运行却导入失败，先检查什么？
+
+> [!note]- 参考答案
+> 检查当前解释器、工作目录、包结构和 sys.path；优先用明确的项目环境与 `python -m` 模块入口，依赖应在项目声明中而非偶然来自全局环境。

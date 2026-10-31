@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/dynamic-programming, algorithm/knapsack, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用“物品使用次数、容量语义与更新顺序”统一 0-1、完全和多重背包，并理解方案数中的组合/排列差异。
 
 # 从二维状态开始
@@ -115,4 +115,20 @@ dp[0] = 0;
 > [!summary] 本篇结论
 > 背包 DP 的统一坐标是：物品能用几次、容量代表什么、状态如何合并。遍历方向不是孤立口诀，而是在一维数组上保留或复用当前物品层的机制。
 
-下一步：[12-Interval Dynamic Programming (区间动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/12-Interval%20Dynamic%20Programming%20(区间动态规划).md)
+下一步：[12-Interval Dynamic Programming (区间动态规划)](12-Interval%20Dynamic%20Programming%20%28%E5%8C%BA%E9%97%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+同一组物品分别实现 0-1 与完全背包的一维 DP，故意交换容量循环方向，找一个结果不同的反例。
+
+> [!note]- 验收要点
+> 0-1 倒序避免重复取同物品，完全背包正序允许重复；初始化需匹配“恰好”或“至多”。
+
+## 2. 机制追问
+
+0-1 背包一维压缩为何倒序遍历容量，完全背包为何通常正序？
+
+> [!note]- 参考答案
+> 0-1 背包倒序避免本轮重复使用同一物品；完全背包正序允许当前物品多次贡献。循环方向对应状态转移允许使用哪一轮的值。

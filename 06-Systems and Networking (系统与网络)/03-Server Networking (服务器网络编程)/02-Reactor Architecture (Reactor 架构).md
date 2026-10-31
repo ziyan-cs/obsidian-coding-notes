@@ -3,12 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] Reactor 将 I/O 就绪事件分发给对应处理器；扩展到多线程时仍需明确连接状态归属、跨线程回传和队列背压。
+> [!abstract] 本篇要点
+> Reactor 将 I/O 就绪事件分发给对应处理器；扩展到多线程时仍需明确连接状态归属、跨线程回传和队列背压。
 
 # Reactor Pattern (Reactor模式)
 
-> [!note] 本节重点： Reactor 单线程模型、事件循环与回调、适用于 IO 密集型场景
-> 代表：Redis 6.0 之前的网络处理部分
+**本节要点：** Reactor 单线程模型、事件循环与回调，适用于 IO 密集型场景。代表例子是 Redis 6.0 之前的网络处理部分。
 
 ## 模型结构
 
@@ -35,38 +35,21 @@ review_due:
 └───────────────────────────────────────────────┘
 ```
 
-## 核心代码结构
+## 事件循环骨架
 
-```cpp
-// Reactor 单线程事件循环核心框架
-class Reactor {
-    int epfd_;
-    std::unordered_map<int, Handler*> handlers_;
+以下是流程伪代码，不是完整的 C++ 类。真实实现要检查 `epoll_wait` / `epoll_ctl` 错误，管理 fd 与连接对象的生命周期，并处理读写不完整、关闭和 fd 复用。
 
-public:
-    Reactor() { epfd_ = epoll_create(1); }
-
-    void register_handler(int fd, Handler* h, uint32_t events) {
-        struct epoll_event ev = {events, {.fd = fd}};
-        epoll_ctl(epfd_, EPOLL_CTL_ADD, fd, &ev);
-        handlers_[fd] = h;
-    }
-
-    void loop() {
-        struct epoll_event events[1024];
-        while (true) {
-            // 1. 等待事件（阻塞，可设超时）
-            int n = epoll_wait(epfd_, events, 1024, -1);
-            for (int i = 0; i < n; i++) {
-                int fd = events[i].data.fd;
-                // 2. 分发事件给对应 Handler
-                if (events[i].events & (EPOLLIN | EPOLLOUT))
-                    handlers_[fd]->handle(events[i].events);
-            }
-            // 3. 回到等待 —— 全部在一个线程中完成
-        }
-    }
-};
+```text
+while running:
+    events = poller.wait()
+    for event in events:
+        if event.belongs_to_listener:
+            accept_until_EAGAIN()
+            register_new_connections()
+        else:
+            connection = find_live_connection(event.token)
+            if connection:
+                connection.handle_ready(event.flags)
 ```
 
 ## 工作流程
@@ -78,7 +61,7 @@ public:
 
 ## 优点
 
-- 模型简单，无锁，无线程切换开销
+- 连接状态由同一线程管理时，通常不需要为这些状态加跨线程锁
 - 适合 I/O 密集、业务逻辑极轻的场景
 
 ## 缺点
@@ -89,12 +72,9 @@ public:
 
 > 单 Reactor 的优势是连接状态集中、同步简单；但业务处理、慢系统调用或大回复仍可能阻塞事件循环。不能把“内存操作”理解为绝无阻塞；具体产品是否采用多线程 I/O 也随版本与配置变化。
 
----
-
 # Reactor Threading Models (Reactor线程模型)
 
-> [!note] 本节重点： 单 Reactor 多线程模型、IO 线程与工作线程分离、任务队列与线程安全
-> 解决了单线程模型"业务处理阻塞"的问题
+**本节要点：** 单 Reactor 多线程模型分离 IO 线程与工作线程，通过任务队列缓解业务处理阻塞，同时引入线程安全问题。
 
 ## IO 线程与工作线程
 ```text
@@ -147,24 +127,20 @@ I/O thread: check connection is still live and request ordering policy
 
 ## 一次请求的执行路径
 1. 主线程 Reactor 监听事件，Acceptor 接受新连接
-2. 读事件到来，Handler 在**主线程**完成 `read()`，将数据投递给线程池
+2. 读事件到来，Handler 在所属 I/O 线程增量读取和分帧，只将完整请求投递给有界线程池
 3. 工作线程处理业务逻辑
 4. 工作线程将结果投递回 Reactor；所属 I/O 线程更新 write buffer 与 `EPOLLOUT`
 
 ## 收益
-- 业务处理与 I/O 解耦，业务耗时不影响 I/O 响应
+- 业务计算从 I/O loop 移走，减少其阻塞事件分发的时间；仍须限制队列与每连接在途任务
 - 能利用多核 CPU
 
 ## 边界与代价
 - **单 Reactor 仍是瓶颈**：所有 I/O 事件都在一个线程处理
-- 工作线程写回时需要注意线程安全（共享的 fd → 加锁或排队写）
+- 工作线程不直接写 fd；结果排回连接所属 loop，由该线程更新写缓冲与发送状态
 
 相比单 Reactor 单线程，此模型把业务计算卸载到 worker，但连接 I/O 与状态仍归 Reactor 线程所有；如果主 loop 饱和，再考虑拆分为多个 I/O loop。
 
-> [!summary] 核心摘要
->
-> 单 Reactor 多线程把连接 I/O 与业务计算拆开，但不把一个连接的状态随意交给多个线程。Reactor 线程读请求并拥有 fd/read-write buffer；worker 只处理独立业务数据，完成后通过线程安全队列投递结果回 Reactor。关键风险是任务积压、连接已关闭和响应乱序。
->
 # Multi Reactor Architecture (多Reactor架构)
 
 > 本节以主 Reactor 接收、多个子 Reactor 分管连接的**一种设计**为例；Muduo/Netty 可参考，但 Nginx 的 master/worker 多进程不能画成下面这张线程分发图。
@@ -226,8 +202,6 @@ I/O thread: check connection is still live and request ordering policy
 |单 Reactor 多线程|1 + N|主线程|主线程|线程池|中等并发|
 |主从 Reactor 多线程|1 + M + N|主线程|M 个子线程|线程池（可选）|高并发生产环境|
 
----
-
 # Proactor 模式（补充对比）
 
 Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
@@ -240,8 +214,6 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 | 编程复杂度  | 较低                        | 较高                          |
 
 > Linux 上 epoll 本质是 Reactor 模型。真正的 Proactor 在 Linux 上由 **io_uring**（内核 5.1+）实现，性能极高，是现代高性能服务器的新趋势。
-
----
 
 ## 实际框架对应
 
@@ -256,13 +228,24 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 
 > **Nginx 说明**：Nginx 采用 master/worker 多进程架构，worker 各自运行事件循环；它**不是**主 Reactor accept 后分发给子 Reactor 的 Muduo/Netty 式主从模型。历史上 worker 通过 accept_mutex（或新版 EPOLLEXCLUSIVE / SO_REUSEPORT）竞争共享监听 socket，具体机制随版本与配置不同，实现时按所用版本核对官方文档。
 
----
-
 > [!tip]- **工程要点**
 > 主从 Reactor 是一种常见的连接分片方案，不是所有高并发服务的唯一标准架构。它减少连接内部的跨线程共享，但任务队列、全局资源与观测仍可能需要锁；还要验证子 loop 负载、热点连接和关闭时跨线程回调的生命周期。
 >
 
+**参考资料：** 下一步：[03-Timers (定时器)](03-Timers%20%28%E5%AE%9A%E6%97%B6%E5%99%A8%29.md)
 
+# 考察题目
 
-> [!info]- 延伸阅读
-> - 下一步：[03-Timers (定时器)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/03-Timers%20(定时器).md)
+## 1. 动手题
+
+把耗时业务放事件循环里压测，再迁到有界工作队列；比较其他连接的 p99 延迟。
+
+> [!note]- 验收要点
+> 事件循环保持短回调，队列满时有拒绝或背压策略，任务退出可回收。
+
+## 2. 机制追问
+
+Reactor 为什么通常把 I/O 事件分发与业务计算分开？
+
+> [!note]- 参考答案
+> 事件循环应快速处理就绪、注册和连接状态，耗时业务会阻塞其他连接；需明确线程/队列边界、任务所有权和背压。

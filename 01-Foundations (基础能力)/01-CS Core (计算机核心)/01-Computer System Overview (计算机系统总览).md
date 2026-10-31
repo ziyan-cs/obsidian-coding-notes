@@ -1,12 +1,12 @@
 ---
-study_stage: D3
-review_due: 2026-10-23
+study_stage: backlog
+review_due:
 tags:
   - cs/architecture
   - learning/foundation
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 先用存储程序模型理解“程序怎样驱动硬件”，再沿寄存器传送过程观察一条指令，最后把 ISA、操作系统、固件与微架构放进同一张分层图。本文建立坐标系，不替代后续的数据表示、存储层级和操作系统专题。
 
 # 存储程序模型与系统部件
@@ -73,13 +73,6 @@ decode(IR)
 
 ## 装入类指令：内存到寄存器
 
-> [!important] 图片范围
-> 下图是课程中的传统累加器模型。图中 1～9 的编号应以原课程讲义定义为准；本文用稳定的微操作语义解释数据方向，不把编号硬套到不同教材的节拍命名上。
-
-**图 1：取数/装入类指令的数据通路**
-
-![取数或装入类指令中，数据从存储器经 MDR 进入 CPU 寄存器的数据通路|638](../../assets/63b5b756a35967c9f97747fdf4e0dbd4.png)
-
 取指完成并得到有效地址 `EA` 后，装入类指令的核心数据流是：
 
 ```text
@@ -91,10 +84,6 @@ ACC ← MDR                 # 现代 ISA 中通常是目标通用寄存器
 这里要区分两次可能的内存读取：第一次读取**指令本身**，第二次读取指令指定的**操作数**。如果操作数已在缓存中，物理实现不必访问 DRAM，但 ISA 可见结果不变。
 
 ## 存储类指令：寄存器到内存
-
-**图 2：存数/存储类指令的数据通路**
-
-![存数或存储类指令中，数据从 CPU 寄存器经 MDR 写入存储器的数据通路|633](../../assets/5982c057a88b075eb0fe9234bfcdcd6b.png)
 
 存储类指令在得到有效地址后反向传递数据：
 
@@ -231,4 +220,20 @@ strace -o trace.txt ./demo
 - [Arm: Caches and Self-Modifying Code](https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/caches-self-modifying-code-implementing-clear-cache)
 - [UEFI Specification 2.11](https://uefi.org/specs/UEFI/2.11/)
 
-下一步：[Data Representation (数据表示)](/01-Foundations%20(基础能力)/01-CS%20Core%20(计算机核心)/02-Data%20Representation%20(数据表示).md)
+下一步：[Data Representation (数据表示)](02-Data%20Representation%20%28%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+编译一个输出进程 ID 的 C++ 程序；用系统工具找出其可执行文件、地址空间和一次系统调用，标注每一步处于哪层。
+
+> [!note]- 验收要点
+> 应区分可执行文件、运行进程、用户态代码和内核调用；至少保存命令与观察结果。
+
+## 2. 机制追问
+
+一段源代码成为正在运行的进程，要经过哪些关键边界？CPU 执行指令时为何还需要操作系统？
+
+> [!note]- 参考答案
+> 源码经编译和链接形成可执行文件，装载器映射代码与数据并创建进程；CPU 按 ISA 执行指令，操作系统负责地址空间、资源管理和受保护的系统调用。

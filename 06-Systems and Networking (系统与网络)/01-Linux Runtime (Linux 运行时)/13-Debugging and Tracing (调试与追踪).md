@@ -3,19 +3,14 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 通用定位链见 [Debugging and Failure Localization (调试与故障定位)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/02-Debugging%20and%20Failure%20Localization%20(调试与故障定位).md)，性能实验见 [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)；本篇保留 strace、GDB、perf 等 Linux 现场工具。
-
-> [!abstract] 按问题层级选工具：`strace` 看系统调用，GDB 看程序状态，`perf` 看 CPU 热点；用复现和证据把现象连回代码路径。
-
-> [!summary] 核心摘要
+> [!abstract] 本篇要点
+> 按问题层级选工具：`strace` 看系统调用，GDB 看程序状态，`perf` 看 CPU 热点；用复现和证据把现象连回代码路径。
 >
 > 调试先稳定复现并缩小范围，再分别观察系统调用、进程状态、网络和性能热点。strace、gdb、perf 等工具回答不同问题，证据链应从现象连接到具体代码路径。
 
-
-> [!note] 本节重点：strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
-
 # strace：系统调用追踪
+
+**本节要点：** strace 追踪系统调用、gdb 断点/堆栈/内存调试、perf 性能采样分析
 
 `strace` 可跟踪指定进程/线程的系统调用及返回值，适合回答“卡在哪个调用、返回了什么 errno”；`-f` 才会跟踪新创建的子进程/线程。附加追踪会改变时序并增加开销，线上先缩小时间窗和调用集合，不把它当成所有故障的第一工具。
 
@@ -144,3 +139,21 @@ Performance counter stats for './prog':
 
 > [!tip]- **工程要点**：先用日志、指标与最小复现界定故障，再选工具：`strace` 查 syscall/errno，`gdb` 查进程内部状态与 core，`perf` 查采样热点。附加调试器会暂停进程，追踪会改变时序；在生产环境先评估权限、敏感数据与性能影响。
 
+> [!info]- 关联笔记
+> 通用定位链见 [Debugging and Failure Localization (调试与故障定位)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md)，性能实验见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇保留 strace、GDB、perf 等 Linux 现场工具。
+
+# 考察题目
+
+## 1. 动手题
+
+制造一个阻塞读与一个 CPU 忙循环，分别用 strace、gdb 线程栈和 perf 定位。
+
+> [!note]- 验收要点
+> 阻塞读能见等待系统调用，忙循环有 CPU 样本；工具结论与症状一致。
+
+## 2. 机制追问
+
+服务卡住时，strace、gdb 和 perf 各适合回答什么问题？
+
+> [!note]- 参考答案
+> strace 看系统调用与等待，gdb 看线程栈和变量，perf 采样 CPU 热点；先明确是阻塞、崩溃还是耗 CPU，再选工具和证据。

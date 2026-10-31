@@ -4,7 +4,7 @@ review_due:
 tags: [cloud-native/kubernetes, kubernetes/scheduling, kubernetes/storage]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从 API 对象进入调度、节点资源与存储控制循环，理解 Pod 为什么 Pending、为什么被驱逐、为什么挂载失败。重点不是背字段，而是根据事件和状态解释控制面决策。
 
 # 调度是一组约束求解
@@ -100,3 +100,19 @@ spec:
 - [Kubernetes Scheduling, Preemption and Eviction](https://kubernetes.io/docs/concepts/scheduling-eviction/)
 - [Kubernetes Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 - [Kubernetes Storage](https://kubernetes.io/docs/concepts/storage/)
+
+# 考察题目
+
+## 1. 动手题
+
+设置过高 requests 让 Pod Pending，再设置过低 memory limit 触发 OOM；分别诊断。
+
+> [!note]- 验收要点
+> 用调度事件与容器终止原因解释两种故障，资源参数调整有测量依据。
+
+## 2. 机制追问
+
+Pod 长期 Pending 与运行后 OOMKilled，各自先看什么？
+
+> [!note]- 参考答案
+> Pending 查资源请求、节点约束、污点、卷绑定和调度事件；OOMKilled 查容器内存限制、实际峰值和应用分配。requests 与 limits 作用不同。

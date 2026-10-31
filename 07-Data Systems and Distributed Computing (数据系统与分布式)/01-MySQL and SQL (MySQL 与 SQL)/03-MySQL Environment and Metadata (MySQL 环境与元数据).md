@@ -4,7 +4,8 @@ review_due:
 tags: [database/mysql, operations/configuration]
 ---
 
-> [!abstract] 学习目标：不背固定安装路径，而是从运行实例查询配置来源、数据目录、字符集、连接状态和元数据，并知道哪些文件不能手工操作。
+> [!abstract] 本篇要点
+> 不背固定安装路径，而是从运行实例查询配置来源、数据目录、字符集、连接状态和元数据，并知道哪些文件不能手工操作。
 
 # 先确认正在连接哪个实例
 
@@ -91,3 +92,19 @@ SHOW VARIABLES LIKE 'collation%';
 - [MySQL 8.4 Reference Manual: Using Option Files](https://dev.mysql.com/doc/refman/8.4/en/option-files.html)
 - [MySQL 8.4 Reference Manual: Data Dictionary](https://dev.mysql.com/doc/refman/8.4/en/data-dictionary.html)
 - [MySQL 8.4 Reference Manual: Performance Schema](https://dev.mysql.com/doc/refman/8.4/en/performance-schema.html)
+
+# 考察题目
+
+## 1. 动手题
+
+连接两个测试实例，执行同一查询前打印版本、数据库、字符集、隔离级别与表索引。
+
+> [!note]- 验收要点
+> 实验记录能证明连接的实际实例；差异不归因于“SQL 不稳定”。
+
+## 2. 机制追问
+
+同一条 SQL 在两个环境表现不同，如何排除“连错实例”？
+
+> [!note]- 参考答案
+> 先查询实例地址、数据库、版本、字符集、隔离级别和权限，再看表定义与索引；配置文件与当前连接会话可能不同。

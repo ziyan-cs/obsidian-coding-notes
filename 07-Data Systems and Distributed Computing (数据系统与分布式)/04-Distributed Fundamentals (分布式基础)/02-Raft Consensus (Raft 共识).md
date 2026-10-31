@@ -3,15 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > Raft 把共识拆为领导者选举、日志复制和安全约束；只有多数派确认且满足提交规则的日志才能成为已提交状态。它解决复制状态机一致性，不自动解决业务事务。
 
 # Raft Leader Election (Raft领导者选举)
 
-> [!note] 本节重点： Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
+**本节要点：** Raft 角色（Leader/Candidate/Follower）、任期、选举流程、随机超时时间
 
 ## Raft 角色与任期
 
@@ -44,8 +41,6 @@ Term 1        Term 2        Term 3          Term 4
 - Raft 时间被划分为不同 Term，每个 Term 以选举开始
 - 每个 Term 最多有一个 Leader
 - 如果选举失败（split vote），该 Term 无 Leader，立即进入下一 Term
-
----
 
 ## 选举流程
 
@@ -80,7 +75,7 @@ void Node::startElection() {
     currentTerm_++;
     role_ = CANDIDATE;
     votedFor_ = id_;  // 投自己
-    
+
     std::atomic<int> votes{1};
     for (auto& peer : peers_) {
         std::thread([this, peer, term = currentTerm_, &votes] {
@@ -90,8 +85,6 @@ void Node::startElection() {
     }
 }
 ```
-
----
 
 ## 随机超时时间
 
@@ -109,8 +102,6 @@ void Node::startElection() {
   -> 其他节点收到心跳，重置定时器
 ```
 
----
-
 ## 选举限制
 
 **只有拥有全部已提交日志的节点才能当选 Leader：**
@@ -124,8 +115,6 @@ Follower 投票前比较：
 
 这个限制保证 Leader 一定包含所有已提交的日志
 ```
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -142,11 +131,10 @@ Follower 投票前比较：
 
 >
 >
->
 
 # Raft Log Replication (Raft日志复制)
 
-> [!note] 本节重点： 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
+**本节要点：** 日志结构、日志复制流程、日志匹配特性、Leader 崩溃处理
 
 ## Raft 日志结构
 
@@ -162,8 +150,6 @@ Leader 视角的日志：
         └────┴────┴────┴────┴────┴────┴────┘
          已提交并应用              已提交   未提交（未同步多数）
 ```
-
----
 
 ## 日志复制流程
 
@@ -204,8 +190,6 @@ Client               Leader              Follower 1          Follower 2
 4. Leader 应用到状态机后回复客户端
 5. 后续的心跳/AppendEntries 会携带最新 commitIndex 通知 Follower 提交
 
----
-
 ## 日志匹配特性
 
 Raft 的**核心一致性保证**——两条关键性质：
@@ -224,8 +208,6 @@ AppendEntries RPC 携带 prevLogIndex 和 prevLogTerm
 - Leader 收到拒绝 -> 回退 prevLogIndex 重试（最终找到一致点）
 ```
 
----
-
 ## Leader 崩溃恢复
 
 ```
@@ -239,8 +221,6 @@ S3 可能被选为 Leader（日志 1 1 1 2 —— 可能覆盖 S2 未提交的�
 Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 在 Raft 的协议与持久化假设成立时，冲突修复只覆盖未提交条目；已提交条目不会被后续合法日志覆盖
 ```
-
----
 
 ## 日志压缩与快照
 
@@ -257,10 +237,8 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
      │  lastIncludedTerm = 2         │
      │  state machine data: {...}    │
      └───────────────────────────────┘
-     ↑ 可以丢弃 index <= 5 的日志 
+     ↑ 可以丢弃 index <= 5 的日志
 ```
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -277,11 +255,10 @@ Raft 规则：Leader 强制覆写 Follower 中与自己不一致的日志条目
 
 >
 >
->
 
 # Raft Safety and Membership (Raft安全性与成员变更)
 
-> [!note] 本节重点： Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
+**本节要点：** Raft 安全性保证（Election Safety / Leader Completeness / State Machine Safety）、成员变更、联合共识
 
 ## Raft 安全性保证
 
@@ -323,8 +300,6 @@ Raft 保证以下安全性：
 
 若两份日志在同一 index 的 term 相同，则该位置及其之前的条目一致；这是日志匹配性质，不意味着不同 term 的同一 index 必然相同。
 
----
-
 ## 成员变更（集群扩容/缩容）
 
 下述联合共识是 [Raft 论文](https://raft.github.io/raft.pdf)的模型；具体产品的成员变更 API、学习者与单节点变更限制应另查产品文档。
@@ -359,8 +334,6 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
   逐个添加，无需联合共识
 ```
 
----
-
 ## 节点恢复
 
 ```
@@ -371,8 +344,6 @@ Raft 成员变更的最大挑战——**不能直接从旧配置直接切换到�
 4. 从快照恢复状态机
 5. 以 Follower 身份启动
 ```
-
----
 
 ## 持久化
 
@@ -385,8 +356,6 @@ Raft 节点需要持久化的状态：
 | log[] | 日志条目（未提交的也要持久化） |
 | lastApplied | 最后应用到状态机的日志 |
 | snapshot | 最新的快照 |
-
----
 
 > [!example]- 题型索引
 > | 题型 | 要点 |
@@ -402,4 +371,19 @@ Raft 节点需要持久化的状态：
 > etcd 使用单节点变更简化了成员变更。生产环境 Raft 集群通常为 3 或 5 节点。3 节点允许 1 故障，5 节点允许 2 故障。偶数节点（4/6）没有优势（多数派为 3/4 或 4/6，故障容限相同但多了节点）。
 
 >
->
+
+# 考察题目
+
+## 1. 动手题
+
+手推三节点 Raft：领导者写一条日志，只复制到一个追随者后领导者故障；记录新领导者和提交状态。
+
+> [!note]- 验收要点
+> 判断多数派与当前任期提交规则，不能把客户端收到请求当已提交。
+
+## 2. 机制追问
+
+Raft 领导者收到写请求后，什么时候可以认为日志已提交？
+
+> [!note]- 参考答案
+> 当前任期日志在多数节点持久化并满足提交规则后可提交；领导者再应用状态机并传播提交索引，单节点写入不等于集群提交。

@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/errors, go/context]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Go 用显式 `error` 表达可预期失败，用 `defer` 绑定局部清理，用 `context` 传播请求取消、截止时间和请求范围数据。
 
 # 错误语义与包装
@@ -110,3 +110,19 @@ func getStatus(ctx context.Context, client *http.Client, url string) (int, error
 > 1. 为什么 `defer f.Close()` 应紧跟成功 `Open`？
 > 2. 为什么不能用 `context` 传数据库连接或业务参数？
 > 3. 什么时候应该包装 error，什么时候原样返回？
+
+# 考察题目
+
+## 1. 动手题
+
+写函数打开文件后返回包装错误，用 `errors.Is` 验证原错误仍可识别；注入失败检查文件关闭。
+
+> [!note]- 验收要点
+> 使用 `%w` 保留错误链，defer 在成功获取资源后注册，失败路径不泄漏。
+
+## 2. 机制追问
+
+一次数据库调用失败后，错误该在哪里包装，defer 何时执行？
+
+> [!note]- 参考答案
+> 在掌握上下文的边界包装错误并保留原链；defer 在函数返回前后进先出执行，参数在声明时求值。panic 仅留给确实不可恢复的程序错误或明确边界。

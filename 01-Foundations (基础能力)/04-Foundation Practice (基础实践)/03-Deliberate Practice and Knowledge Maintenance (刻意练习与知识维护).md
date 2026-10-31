@@ -4,7 +4,7 @@ review_due:
 tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 把阅读、编码、复盘和项目证据组成可持续闭环；知道哪些内容应进入错因记录、模板或正式笔记，并用 Hub 统一安排学习而不在模块中散落日程。
 
 # 学会的判定标准
@@ -88,10 +88,9 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 学习队列属性不等于正文事实核验：
 
 - `study_stage`：待学、首次学习、复习阶段或已巩固；
-- `review_due`：下一次实际学习、主动回忆或实践的日期；
-- `studied_on`：首次有效学习的真实日期，不能用排期日预填。
+- `review_due`：下一次主动回忆或实践的日期；未学懂时留空。
 
-完成学习后写入 `studied_on`，按实际掌握程度更新 `study_stage` 与 `review_due`。完全不会可短期复查；能解释但不会实践，安排变体练习；连续多次独立完成后再拉长间隔。正文事实的版本与来源单独记录在相关段落。具体任务统一由 Hub 和查询脚本呈现。
+首次学懂并完成小验证后，将 `study_stage` 改为 `D1`，把 `review_due` 设为次日；后续按实际表现推进。完全不会就先补学；能解释但不会实践，则在下次复习中安排变体练习。正文事实的版本与来源单独记录在相关段落。具体任务统一由 Hub 和查询脚本呈现。
 
 # 从笔记走向项目证据
 
@@ -140,4 +139,20 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 > [!summary] 本篇结论
 > 刻意练习依靠主动回忆、即时反馈、错误归因和陌生迁移。笔记负责稳定知识，Hub 负责时间安排，代码与实验负责提供证据；三者分工能避免计划、模板和正文互相污染。
 
-回到：[00-Foundations Standard (基础能力标准与自测)](/01-Foundations%20(基础能力)/00-Foundations%20Standard%20(基础能力标准与自测).md)
+回到：[00-Foundations Standard (基础能力标准与自测)](../00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+选一道已会的题，隔几天不看笔记重做；记录首次错误、最小反例、修正原则和再次验证结果。
+
+> [!note]- 验收要点
+> 记录错因与可迁移原则，不复制整段题解；复查时先回忆再对照答案。
+
+## 2. 机制追问
+
+读完笔记后觉得熟悉，怎样证明自己真的会用？
+
+> [!note]- 参考答案
+> 合上笔记解释机制与前提，完成最小实现或实验，构造反例并迁移到新场景；错误记录保存错因和验证方式，复习优先主动回忆。

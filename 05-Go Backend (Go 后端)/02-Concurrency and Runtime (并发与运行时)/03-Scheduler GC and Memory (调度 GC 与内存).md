@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > goroutine 很轻但并非免费；调度、栈、分配和 GC 都会影响尾延迟，优化必须从 profile 证据开始。
 
 # G-M-P 心智模型
@@ -87,9 +87,20 @@ go test -run=^$ -bench=BenchmarkName -cpuprofile=cpu.out ./path
 go tool pprof cpu.out
 ```
 
-> [!question]- 理解检查
-> 如果 P99 上升且 goroutine 数持续增长，应怎样区分下游变慢、锁竞争和 goroutine 泄漏？
+**参考资料：** [Diagnostics](https://go.dev/doc/diagnostics) · [A Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)
 
-> [!info]- 官方参考
-> - [Diagnostics](https://go.dev/doc/diagnostics)
-> - [A Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)
+# 考察题目
+
+## 1. 动手题
+
+写分配大量短命对象的基准，记录 allocs/op、GC 次数和延迟；减少一次分配后复测。
+
+> [!note]- 验收要点
+> 固定输入和负载，比较总延迟与分配而非只看 GC 次数；解释逃逸或对象复用的代价。
+
+## 2. 机制追问
+
+服务延迟尖峰出现时，看到 GC 就能断定是 GC 导致吗？
+
+> [!note]- 参考答案
+> 不能。需比较分配率、GC 暂停、CPU、调度与请求追踪；减少分配前先定位热点，区分相关性和因果。

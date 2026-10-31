@@ -1,9 +1,9 @@
 ---
-study_stage: D3
-review_due: 2026-10-23
+study_stage: backlog
+review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 用对象、类型、初始化、表达式、控制流与函数组成可运行的小程序，并解释每个边界。示例以 C++17 为基线。
 
 # 对象、类型与初始化
@@ -137,6 +137,20 @@ int main() {
 3. 测试 `divide_exact` 的除零、不整除、精确整除和 `INT_MIN / -1`。
 4. 运行 `Vec2` 示例，解释 `operator+` 为什么复用 `operator+=`，并验证 `at(2)` 的异常边界。
 
-> [!info]- 延伸阅读
-> - [02-Arrays Strings and IO (数组字符串与输入输出)](/03-C++%20Backend%20(C++%20后端)/01-Language%20Basics%20(语言基础)/02-Arrays%20Strings%20and%20IO%20(数组字符串与输入输出).md)
-> - 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)
+**参考资料：** [02-Arrays Strings and IO (数组字符串与输入输出)](02-Arrays%20Strings%20and%20IO%20%28%E6%95%B0%E7%BB%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%29.md) · 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)
+
+# 考察题目
+
+## 1. 动手题
+
+写一个函数同时支持“只读输入”和“修改输出”两种需求，分别用 `const&`、值或返回值设计接口并测试。
+
+> [!note]- 验收要点
+> 避免用可变引用隐藏副作用；测试覆盖空输入、边界和调用方对象是否被修改。
+
+## 2. 机制追问
+
+函数接收一个对象时，值、引用和 const 引用分别表达什么契约？
+
+> [!note]- 参考答案
+> 值传递产生独立参数对象，引用可修改调用方对象，const 引用借用且不允许经该引用修改；还要考虑生命周期、空值和接口意图。

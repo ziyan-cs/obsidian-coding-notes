@@ -3,12 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位：从数据真相、业务不变量和故障窗口出发，理解事务、缓存、消息与分布式协调的边界。
-
-
-> [!note] 本节重点：MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
+> [!abstract] 本篇要点
+> 连接池复用昂贵的数据库连接，但必须限制并发、验证失效连接并在故障时及时释放资源。
 
 # MySQL C API 基础
+
+**本节要点：** MySQL C API 连接池实现、连接复用与并发控制、连接池参数调优
 
 ```c
 #include <mysql/mysql.h>
@@ -157,8 +157,7 @@ thread_cache_size = 64          # 线程缓存
 >
 >
 
-> [!info]- 延伸阅读
-> - 下一步：[11-Replication (复制)](/07-Data%20Systems%20and%20Distributed%20Computing%20(数据系统与分布式)/01-MySQL%20and%20SQL%20(MySQL%20与%20SQL)/11-Replication%20(复制).md)
+**参考资料：** 下一步：[11-Replication (复制)](11-Replication%20%28%E5%A4%8D%E5%88%B6%29.md)
 ## 连接池管理的是稀缺状态
 
 数据库连接不是一个普通指针。它包含认证会话、事务状态、隔离级别、临时表、会话变量与服务端资源。连接池的职责是控制这些有状态资源的生命周期，而不仅是避免重复 `connect()`。
@@ -225,3 +224,19 @@ auto conn = take_idle_connection();
 
 - [MySQL C API](https://dev.mysql.com/doc/c-api/8.4/en/)
 - [MySQL 8.4 Reference Manual: Server System Variables](https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html)
+
+# 考察题目
+
+## 1. 动手题
+
+设置很小的连接池并并发发请求，观察等待/超时；故意漏 close，再修复。
+
+> [!note]- 验收要点
+> 连接能归还池，等待有上限；报告池大小、数据库连接数与错误语义。
+
+## 2. 机制追问
+
+连接池开得越大，吞吐就越高吗？
+
+> [!note]- 参考答案
+> 不一定。过多连接会增加数据库并发争用和内存成本；按请求并发、查询时间与数据库容量设上限，并测试等待、超时和连接泄漏。

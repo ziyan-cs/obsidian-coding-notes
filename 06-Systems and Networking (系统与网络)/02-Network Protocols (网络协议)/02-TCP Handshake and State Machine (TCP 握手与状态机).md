@@ -4,10 +4,8 @@ review_due:
 tags: [network/tcp, systems/state-machine]
 ---
 
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > TCP 用三次握手交换并确认双方初始序列号，关闭时则分别终止两个发送方向；状态机决定资源何时可释放。TIME_WAIT 通常由主动关闭方承担，用于吸收旧报文并保留响应 FIN 重传的状态。
->
 
 # 三次握手（建立连接）
 
@@ -202,3 +200,19 @@ cat /proc/sys/net/ipv4/ip_local_port_range
 
 - [RFC 9293 — Transmission Control Protocol](https://www.rfc-editor.org/rfc/rfc9293.html)：三次握手、状态机、关闭流程与 2MSL 要求。
 - [Linux IP sysctl documentation](https://docs.kernel.org/networking/ip-sysctl.html)：`tcp_fin_timeout`、`tcp_tw_reuse` 等参数的当前语义；实践前仍需核对目标内核版本。
+
+# 考察题目
+
+## 1. 动手题
+
+抓一次正常 TCP 建连与关闭，再对未监听端口连接；标出 SYN/ACK/FIN/RST 与状态变化。
+
+> [!note]- 验收要点
+> 正常握手与明确拒绝可区分；抓包时间线需与应用日志对应。
+
+## 2. 机制追问
+
+连接超时与连接被拒绝分别暗示什么？如何结合状态机排查？
+
+> [!note]- 参考答案
+> 超时可能是包丢失、过滤或对端无响应；拒绝通常表示可达但目标端口无监听或明确拒绝。抓包并查看 SYN、RST、重传和监听队列状态。

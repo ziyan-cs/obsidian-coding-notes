@@ -5,7 +5,7 @@ review_due:
 tags: [engineering/verification]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 测试不是“把函数跑一遍”，而是用可重复的实验约束系统行为。本篇统一测试分层、用例设计、替身边界、并发与故障测试以及证据保存；语言框架的具体语法留在各语言专题。
 
 # 从风险反推测试
@@ -117,8 +117,8 @@ format/lint -> compile/type check -> unit -> component
 
 ## 关联专题
 
-- [Release Verification and Quality Gates (发布验证与质量门禁)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/07-Release%20Verification%20and%20Quality%20Gates%20(发布验证与质量门禁).md)：把测试结果转化为合并与发布决策。
-- [Testing Benchmark and Evidence (测试压测与证据)](/11-Projects%20(项目实践)/01-Project%20Method%20(项目方法)/02-Testing%20Benchmark%20and%20Evidence%20(测试压测与证据).md)：项目交付时如何组织证据包。
+- [Release Verification and Quality Gates (发布验证与质量门禁)](07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)：把测试结果转化为合并与发布决策。
+- [Testing Benchmark and Evidence (测试压测与证据)](../../11-Projects%20%28%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%29/01-Project%20Method%20%28%E9%A1%B9%E7%9B%AE%E6%96%B9%E6%B3%95%29/02-Testing%20Benchmark%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E5%8E%8B%E6%B5%8B%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：项目交付时如何组织证据包。
 
 ## 参考资料
 
@@ -129,3 +129,19 @@ format/lint -> compile/type check -> unit -> component
 
 > [!summary] 本篇结论
 > 测试的价值不在数量，而在关键风险上建立可重复、可判定的证据。测试范围应由失效代价和系统边界决定；单元、集成、端到端、并发与故障测试互相补充，不能彼此替代。
+
+# 考察题目
+
+## 1. 动手题
+
+给一个带数据库的接口画测试金字塔，分别写一个业务单测和一个真实数据库集成测试。
+
+> [!note]- 验收要点
+> 单测隔离业务决策，集成测试验证事务/协议；两者都覆盖一个失败条件。
+
+## 2. 机制追问
+
+接口测试中何时使用替身，何时必须访问真实依赖？
+
+> [!note]- 参考答案
+> 替身适合隔离业务逻辑与故障注入；事务、序列化、超时和协议兼容等风险需真实依赖或集成测试。测试层次由失败风险决定。

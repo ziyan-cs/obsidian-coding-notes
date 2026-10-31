@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/memory]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > slice、map 和 string 都是小型描述值而非“完整数据本体”；复制描述值可能继续共享底层存储，容量、别名与生命周期必须显式推理。
 
 # Array 与 Slice
@@ -79,12 +79,20 @@ Go 类型系统不直接表达唯一所有权，因此文档必须说明：函�
 3. 对共享 map 写 race 测试，运行 `go test -race`，再用 mutex 修复。
 4. 处理含中文、emoji 和非法 UTF-8 的 string，比较字节、rune 与显示字符。
 
-> [!question]- 理解检查
-> 1. 复制 slice 后，修改元素和 append 分别可能影响谁？
-> 2. 为什么从 map 直接读取零值不能证明 key 存在？
-> 3. 小子切片为什么可能保留巨大内存？
+**参考资料：** [Go Slices: usage and internals](https://go.dev/blog/slices-intro) · [Strings, bytes, runes and characters in Go](https://go.dev/blog/strings) · [Go Memory Model](https://go.dev/ref/mem)
 
-> [!info]- 官方参考
-> - [Go Slices: usage and internals](https://go.dev/blog/slices-intro)
-> - [Strings, bytes, runes and characters in Go](https://go.dev/blog/strings)
-> - [Go Memory Model](https://go.dev/ref/mem)
+# 考察题目
+
+## 1. 动手题
+
+写一个函数对传入 slice 执行 `append`，分别给足容量与刚好容量，打印底层数据和地址关系。
+
+> [!note]- 验收要点
+> 容量足够时可能共享数组，扩容后新数组分离；测试不能依赖具体增长倍数。
+
+## 2. 机制追问
+
+把 slice 传给函数后 append，调用方为何有时看见修改、有时看不见？
+
+> [!note]- 参考答案
+> slice 头部被复制，但可能共享底层数组；append 若容量足够会写共享数组，扩容后转向新数组。应明确所有权并避免依赖偶然容量。

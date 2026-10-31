@@ -4,10 +4,8 @@ review_due:
 tags: [career/interview, learning/retrospective]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 本篇定义长期可复用的模拟面试与复盘方法，不保存两周冲刺日程。实际训练任务和外部面试日期统一写入 Hub 的 Study Cycle。
-
-> [!summary] 核心摘要
 >
 > 模拟面试用于暴露知识、检索、表达、编码和证据缺口；复盘只保留可验证的根因和少量下一步，不把题库答案复制成另一套笔记。
 
@@ -37,4 +35,20 @@ tags: [career/interview, learning/retrospective]
 
 # 统一调度
 
-何时模拟、目标岗位和本轮改进项属于 Study Cycle；本篇只保存方法。作品集证据见 [Resume Evidence and Portfolio (简历证据与作品集)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/02-Resume%20Evidence%20and%20Portfolio%20(简历证据与作品集).md)。
+何时模拟、目标岗位和本轮改进项属于 Study Cycle；本篇只保存方法。作品集证据见 [Resume Evidence and Portfolio (简历证据与作品集)](02-Resume%20Evidence%20and%20Portfolio%20%28%E7%AE%80%E5%8E%86%E8%AF%81%E6%8D%AE%E4%B8%8E%E4%BD%9C%E5%93%81%E9%9B%86%29.md)。
+
+# 考察题目
+
+## 1. 动手题
+
+模拟 20 分钟项目追问，记录答错处的首次判断、反例和下一次验证计划；一周后重答。
+
+> [!note]- 验收要点
+> 复盘定位机制缺口而非背句子，重答能用代码或实验支撑。
+
+## 2. 机制追问
+
+模拟面试答错一个问题，复盘为什么不能只背标准答案？
+
+> [!note]- 参考答案
+> 应记录当时假设、错因、反例和对应项目证据，补前置后重新口述或实践，检查能否迁移到变体。

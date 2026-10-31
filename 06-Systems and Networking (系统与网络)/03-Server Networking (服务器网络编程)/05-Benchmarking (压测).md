@@ -3,13 +3,8 @@ study_stage: backlog
 review_due:
 ---
 
-> [!note] 方法论坐标
-> 可重复基准、负载模型和剖析方法见 [Performance Benchmarking and Profiling (性能基准与剖析)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/04-Performance%20Benchmarking%20and%20Profiling%20(性能基准与剖析).md)；本篇聚焦网络服务器的 wrk/ab、连接与排队现象。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 本篇只处理网络服务的负载模型、连接与队列，以及怎样从观测证据判断瓶颈；工具跑出的 QPS 不是脱离环境的能力标签。
-
-> [!summary] 核心摘要
 >
 > 压测必须固定机器、连接数、请求模型、持续时间和数据集，同时观察吞吐、p50/p99、错误率、CPU、内存与队列。结果只能解释测试条件内的系统行为，不能脱离环境比较。
 
@@ -89,7 +84,23 @@ ab -n 1000 -c 10 http://127.0.0.1:8080/
 
 [wrk 官方说明](https://github.com/wg/wrk/blob/master/README.md) · [wrk2 固定吞吐模型](https://github.com/giltene/wrk2)
 
----
+**参考资料：** 下一步：[06-Graceful Shutdown and Drain (优雅关闭与请求排空)](06-Graceful%20Shutdown%20and%20Drain%20%28%E4%BC%98%E9%9B%85%E5%85%B3%E9%97%AD%E4%B8%8E%E8%AF%B7%E6%B1%82%E6%8E%92%E7%A9%BA%29.md)
 
-> [!info]- 延伸阅读
-> - 下一步：[06-Graceful Shutdown and Drain (优雅关闭与请求排空)](/06-Systems%20and%20Networking%20(系统与网络)/03-Server%20Networking%20(服务器网络编程)/06-Graceful%20Shutdown%20and%20Drain%20(优雅关闭与请求排空).md)
+> [!info]- 关联笔记
+> 可重复基准、负载模型和剖析方法见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇聚焦网络服务器的 wrk/ab、连接与排队现象。
+
+# 考察题目
+
+## 1. 动手题
+
+对同一 API 做固定时长压测，记录并发、错误率、p50/p95/p99、CPU 和客户端资源；改变一项负载参数。
+
+> [!note]- 验收要点
+> 报告可复现，解释瓶颈是否在服务端；不以最高 QPS 单值作为结论。
+
+## 2. 机制追问
+
+压测报告只有 QPS，为什么无法判断服务是否满足目标？
+
+> [!note]- 参考答案
+> 还需负载模型、并发、持续时间、错误率、延迟分位、客户端与服务端资源，以及环境配置；QPS 可能被客户端或单一路径限制。

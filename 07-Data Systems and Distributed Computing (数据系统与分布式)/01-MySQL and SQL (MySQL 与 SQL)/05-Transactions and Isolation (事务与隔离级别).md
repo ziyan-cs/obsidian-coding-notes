@@ -3,13 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!summary] 核心摘要
->
+> [!abstract] 本篇要点
 > 事务用原子性、一致性、隔离性和持久性约束一组读写；隔离级别决定并发事务能观察到哪些中间状态。选择级别时要把脏读、不可重复读、幻读与业务不变量对应起来，而不是默认隔离越强越好。
 
 # 隔离级别与并发现象
 
-> [!note] 本节重点：四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
+**本节要点：** 四种隔离级别（RU/RC/RR/Serializable）的并发问题防护能力、MySQL InnoDB 默认 RR 级别
 
 ## SQL 标准隔离级别
 
@@ -134,7 +133,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 # Transaction Anomalies (事务并发异常)
 
-> [!note] 本节重点：脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
+**本节要点：** 脏读（未提交数据）、不可重复读（同一行前后不同）、幻读（行数变化）三种并发问题
 
 ## 脏读（Dirty Read）
 
@@ -154,7 +153,7 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
   ├── ROLLBACK              │
   │   balance roll back 100 │
   │                         │
-  │                         │── Business logic makes wrong decisions 
+  │                         │── Business logic makes wrong decisions
   |                         |   based on balance=0
 ```
 
@@ -250,7 +249,18 @@ SELECT * FROM performance_schema.data_lock_waits\G
 
 > [!tip]- **工程要点**：脏读在实践中很少遇到（RU 极少使用）。不可重复读在高并发写入场景很常见，RC 级别下如果业务要求同一事务内读一致性，需要应用层加锁。幻读最容易在"检查且插入"的场景出现（如注册时检查用户名是否存在），Gap Lock 在 RR 级别下防护，但在 RC 级别下需要用应用层唯一约束或悲观锁来防止。
 
----
+# 考察题目
 
+## 1. 动手题
 
----
+用两个数据库会话复现不可重复读或丢失更新；加入条件更新或锁后再测。
+
+> [!note]- 验收要点
+> 写出事务时间线和最终不变量；明确当前隔离级别及修复所依赖的原子性。
+
+## 2. 机制追问
+
+两个事务都先读后写，结果违反业务约束，隔离级别能自动防止吗？
+
+> [!note]- 参考答案
+> 不一定。需明确读写现象与业务不变量，选择条件更新、锁或唯一约束等原子保护，并用两个会话复现。

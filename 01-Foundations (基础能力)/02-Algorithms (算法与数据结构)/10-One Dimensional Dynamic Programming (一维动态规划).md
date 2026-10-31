@@ -4,7 +4,7 @@ review_due:
 tags: [algorithm/dynamic-programming, algorithm/state-design, learning/foundation]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 从状态、转移、初值和遍历顺序推导一维动态规划，理解滚动压缩的前提，并能区分计数、可行性与最优化问题。
 
 # 动态规划解决什么问题
@@ -123,4 +123,20 @@ long long max_subarray(const std::vector<int>& a) {
 > [!summary] 本篇结论
 > 一维 DP 的核心是让状态包含未来决策所需的最少历史。先定义语义和依赖，再确定初值与顺序；滚动变量只是已证明依赖后的空间优化。
 
-下一步：[11-Knapsack Dynamic Programming (背包动态规划)](/01-Foundations%20(基础能力)/02-Algorithms%20(算法与数据结构)/11-Knapsack%20Dynamic%20Programming%20(背包动态规划).md)
+下一步：[11-Knapsack Dynamic Programming (背包动态规划)](11-Knapsack%20Dynamic%20Programming%20%28%E8%83%8C%E5%8C%85%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现打家劫舍与最大子数组和，先写状态定义，再对空输入、全负数与短数组测试。
+
+> [!note]- 验收要点
+> 两题状态语义不同；最大子数组若要求非空，不能把全负数结果错误设为 0。
+
+## 2. 机制追问
+
+面对一维 DP，先写代码还是先定义状态？怎样检查初始化？
+
+> [!note]- 参考答案
+> 先定义 dp[i] 的确切含义及可用前驱，再推导转移；用最小规模、空输入和不可达状态核对初始化，防止错误传播到全部状态。

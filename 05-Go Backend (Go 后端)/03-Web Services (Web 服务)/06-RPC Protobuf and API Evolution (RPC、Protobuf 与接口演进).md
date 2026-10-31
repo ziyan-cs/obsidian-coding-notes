@@ -4,7 +4,7 @@ review_due:
 tags: [go/rpc, protocol/protobuf, api/evolution]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > RPC 把网络调用包装成接口，但不会消除超时、重试、部分失败与兼容问题；Protobuf schema 是跨服务长期契约，字段编号一旦发布就必须谨慎演进。
 
 # 先看远程调用的真实边界
@@ -61,12 +61,20 @@ proto3 默认值与“字段未出现”可能难以区分，需要存在性时�
 
 为 todo 服务定义 Create/Get/List 三个 RPC。给 Create 加 request ID 与数据库唯一约束；模拟服务端提交后响应丢失，验证客户端重试不会重复创建。随后新增可选 description 字段，用旧客户端与新服务互测，并演示为什么复用字段编号会错误解释数据。
 
-> [!question]- 理解检查
-> 1. RPC timeout 后，为什么不能断言服务端没有执行？
-> 2. 删除 Protobuf 字段后为什么还要 reserved 编号？
-> 3. 流式 RPC 中慢消费者如何把压力传回服务端？
+**参考资料：** [Protocol Buffers Programming Guides](https://protobuf.dev/programming-guides/) · [gRPC Guides](https://grpc.io/docs/guides/) · [Go Generated Code Guide](https://protobuf.dev/reference/go/go-generated/)
 
-> [!info]- 官方参考
-> - [Protocol Buffers Programming Guides](https://protobuf.dev/programming-guides/)
-> - [gRPC Guides](https://grpc.io/docs/guides/)
-> - [Go Generated Code Guide](https://protobuf.dev/reference/go/go-generated/)
+# 考察题目
+
+## 1. 动手题
+
+定义两个版本的 Protobuf 消息：新增字段、删除旧字段并 reserve 编号；做新旧客户端互通测试。
+
+> [!note]- 验收要点
+> 旧数据不被新语义误读；deadline、错误码和未知字段处理有明确契约。
+
+## 2. 机制追问
+
+Protobuf 新增字段为何通常比复用旧字段号安全？
+
+> [!note]- 参考答案
+> 字段号是线上的兼容标识；删除后复用会让旧数据被新语义误读。新增字段并保留或 reserve 旧号，验证新旧客户端超时和错误契约。

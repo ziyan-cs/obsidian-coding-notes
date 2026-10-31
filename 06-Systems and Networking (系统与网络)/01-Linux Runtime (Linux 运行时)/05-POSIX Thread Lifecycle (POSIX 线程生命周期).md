@@ -3,11 +3,12 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标：掌握 pthread 创建、等待、分离、取消与线程资源回收边界。
-
-> [!note] 本节重点：POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
+> [!abstract] 本篇要点
+> 掌握 pthread 创建、等待、分离、取消与线程资源回收边界。
 
 # 线程的本质
+
+**本节要点：** POSIX 线程 pthread_create/join/detach API、线程属性设置、线程生命周期管理
 
 线程是进程内的**执行流**，共享进程的地址空间、文件描述符、信号处理，但拥有独立的：
 
@@ -15,8 +16,6 @@ review_due:
 - 寄存器（包括 PC、SP）
 - 线程本地存储（TLS）
 - errno
-
----
 
 # 创建与等待
 
@@ -50,8 +49,6 @@ int main(void) {
 }
 ```
 
----
-
 # 线程属性
 
 ```c
@@ -68,8 +65,6 @@ pthread_create(&tid, &attr, worker, NULL);
 pthread_attr_destroy(&attr);
 ```
 
----
-
 # 分离（detach）与合并（join）
 
 ```c
@@ -83,8 +78,6 @@ pthread_detach(pthread_self());
 ```
 
 > 若线程既没有 join 也没有 detach，线程结束后资源泄漏（类似僵尸进程）。
-
----
 
 # 线程本地存储（TLS）
 
@@ -100,9 +93,6 @@ pthread_key_create(&key, free);         // 创建 key，free 是析构函数
 pthread_setspecific(key, malloc(100));  // 设置当前线程的值
 void *val = pthread_getspecific(key);   // 获取当前线程的值
 ```
-
-
----
 
 # 生命周期状态与错误处理
 
@@ -131,3 +121,19 @@ if (rc != 0) {
 实验：创建 N 个线程并 join；故意复用循环变量观察错误；改为独立参数；再实现 stop flag + condition variable 的关闭流程，并用 sanitizer 检查竞态。
 
 参考：[pthreads(7)](https://man7.org/linux/man-pages/man7/pthreads.7.html)、[pthread_create(3)](https://man7.org/linux/man-pages/man3/pthread_create.3.html)。
+
+# 考察题目
+
+## 1. 动手题
+
+创建 pthread 传入临时局部对象地址，复现寿命风险；改为拥有参数并 join，记录资源释放。
+
+> [!note]- 验收要点
+> 线程参数存活到读取结束，join 或 detach 明确，不能返回已失效栈地址。
+
+## 2. 机制追问
+
+pthread 创建成功后不 join 也不 detach，会留下什么资源问题？
+
+> [!note]- 参考答案
+> 线程结束后其线程描述信息仍需 join 回收，或事先 detach；参数和返回值指向的数据也必须活到使用结束。

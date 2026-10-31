@@ -4,10 +4,7 @@ review_due:
 tags: [python/testing, testing/property, testing/integration]
 ---
 
-> [!note] 方法论坐标
-> 性质、模糊、集成与故障测试的共同设计原则见 [Testing Strategy and Evidence (测试策略与证据)](/02-Engineering%20Fundamentals%20(工程基础)/03-Verification%20and%20Diagnostics%20(验证与诊断)/01-Testing%20Strategy%20and%20Evidence%20(测试策略与证据).md)；本篇保留 Hypothesis 与 Python 环境实践。
-
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 示例测试验证已想到的案例，性质与 fuzz 测试探索输入空间，集成测试验证真实边界；三者解决不同风险，不能互相替代。
 
 # 从风险选择测试层次
@@ -66,11 +63,23 @@ Fuzz target 应快速、确定、无外部副作用，并具有可判断的 orac
 4. 集成测试真实文件权限、原子替换和 CLI 退出码。
 5. 保存一个历史失败输入，证明修复不会回归。
 
-> [!question]- 理解检查
-> 1. 为什么 100% 行覆盖率仍可能漏掉严重输入组合？
-> 2. fuzz target 为什么要快速、确定并具有 oracle？
-> 3. fake 通过后，为什么仍需要少量真实协议集成测试？
+**参考资料：** [Python unittest: Organizing test code](https://docs.python.org/3/library/unittest.html#organizing-test-code) · [pytest Good Integration Practices](https://docs.pytest.org/en/stable/explanation/goodpractices.html)
 
-> [!info]- 官方参考
-> - [Python unittest: Organizing test code](https://docs.python.org/3/library/unittest.html#organizing-test-code)
-> - [pytest Good Integration Practices](https://docs.pytest.org/en/stable/explanation/goodpractices.html)
+> [!info]- 关联笔记
+> 性质、模糊、集成与故障测试的共同设计原则见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)；本篇保留 Hypothesis 与 Python 环境实践。
+
+# 考察题目
+
+## 1. 动手题
+
+为 CSV 或 JSON 行解析器定义“合法输入往返一致、非法输入不崩溃”性质，运行随机测试并保存最小失败样本。
+
+> [!note]- 验收要点
+> 性质有明确前提；失败种子可复现，真实文件或服务另用集成测试覆盖。
+
+## 2. 机制追问
+
+为解析器写模糊测试时，怎样判断随机输入暴露的是真错误？
+
+> [!note]- 参考答案
+> 先定义性质或不变量，如不崩溃、往返一致或输出范围；保存能复现失败的种子并最小化，集成测试补真实依赖与协议行为。

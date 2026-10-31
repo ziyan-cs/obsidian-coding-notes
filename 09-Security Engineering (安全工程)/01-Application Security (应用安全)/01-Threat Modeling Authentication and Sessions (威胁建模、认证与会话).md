@@ -4,7 +4,7 @@ review_due:
 tags: [security/threat-model, security/authentication]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 先识别资产、攻击者、入口和信任边界，再设计身份验证与会话。安全不是给正常流程补一个登录接口，而是约束所有“不可信输入如何获得权限”。
 
 # 威胁建模与信任边界
@@ -79,3 +79,19 @@ JWT 使用时必须在服务端固定允许的算法并将 key 与算法绑定�
 - [ ] 身份服务超时或不可用时，系统是 fail closed 还是允许有限降级。
 
 官方参考：[OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) · [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
+
+# 考察题目
+
+## 1. 动手题
+
+为一个订单 API 画信任边界，写登录、会话过期和跨用户读取测试。
+
+> [!note]- 验收要点
+> 认证与资源授权分开验证；过期会话拒绝，跨用户请求不能泄露订单。
+
+## 2. 机制追问
+
+用户已登录，为什么仍不能访问任意订单？
+
+> [!note]- 参考答案
+> 认证只确认身份，授权还需逐资源判断主体、动作和对象关系；会话还要考虑失效、续期、盗用与跨租户边界。

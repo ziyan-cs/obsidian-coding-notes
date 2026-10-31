@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 缓存是可丢弃的派生数据；设计必须先确定真相来源，再说明读写路径、失效窗口和回源保护。
 
 # Cache-Aside 读写路径
@@ -47,8 +47,21 @@ Redis 调用要设置比请求总预算更短的 timeout，并限制连接池。
 
 TTL、容量、timeout 和热点阈值都由新鲜度目标与测量决定，不是固定常数。至少监控 hit ratio、miss 回源量、命令延迟、timeout、池等待、key 数量、内存淘汰和热点 key。
 
-> [!question]- 理解检查
-> 数据库提交成功但缓存删除失败时，旧值窗口怎样产生？如果所有实例同时绕过 Redis 回源，数据库会发生什么？
-
 > [!info]- 关联
-> - 可靠补偿：[03-Messaging and Idempotency (消息与幂等)](/05-Go%20Backend%20(Go%20后端)/04-Data%20Integration%20(数据集成)/03-Messaging%20and%20Idempotency%20(消息与幂等).md)
+> - 可靠补偿：[03-Messaging and Idempotency (消息与幂等)](03-Messaging%20and%20Idempotency%20%28%E6%B6%88%E6%81%AF%E4%B8%8E%E5%B9%82%E7%AD%89%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+实现 Cache-Aside 读写，注入删除缓存失败和缓存不可用，测数据库回源量。
+
+> [!note]- 验收要点
+> 定义旧值可见窗口、TTL 与降级；失败时不能无界回源压垮数据库。
+
+## 2. 机制追问
+
+数据库写入成功但删除缓存失败，会出现什么？
+
+> [!note]- 参考答案
+> 旧缓存可能继续被读到；需要说明一致性窗口、TTL、重试或补偿，且回源路径要有容量保护。缓存不能代替数据库的正确性来源。

@@ -3,7 +3,7 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 能区分转发引用与普通右值引用，按推导结果解释引用折叠，并在包装函数中保持调用方的值类别和返回类型。
 
 # 为什么 `T&&` 有时能接收左值
@@ -85,3 +85,19 @@ static_assert(std::is_same_v<decltype(forward_call(by_ref)), int&>);
 > 只有下游 API 真正区分左值/右值时，才需要转发引用。普通只读借用优先用 `const T&` 或合适的视图；需要转移所有权时把参数契约写明确。转发不是性能咒语。
 
 参考：[标准草案：`std::forward`](https://eel.is/c++draft/forward)、[`decltype` 规则](https://eel.is/c++draft/dcl.type.decltype)。
+
+# 考察题目
+
+## 1. 动手题
+
+实现转发包装 `invoke(F&&, Args&&...)`，用左值和右值重载记录调用；对照错误的全 `std::move` 写法。
+
+> [!note]- 验收要点
+> 使用 `std::forward` 保留原值类别，左值实参不会被意外移动。
+
+## 2. 机制追问
+
+模板包装函数为什么不能对所有参数都直接 std::move？
+
+> [!note]- 参考答案
+> 对左值也 move 会改变调用方对象；转发引用应配合 std::forward<T> 保留原始值类别，并检查包装器是否错误延长或缩短引用寿命。

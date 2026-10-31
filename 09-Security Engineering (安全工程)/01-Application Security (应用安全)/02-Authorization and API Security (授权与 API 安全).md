@@ -4,7 +4,7 @@ review_due:
 tags: [security/authorization, security/api]
 ---
 
-> [!abstract] 学习目标
+> [!abstract] 本篇要点
 > 授权必须在服务端针对“主体、动作、资源、上下文”逐次判断。API 安全的核心不是隐藏接口，而是让每个对象、字段和业务动作都有明确权限与资源上限。
 
 # 授权模型
@@ -77,3 +77,19 @@ SSRF 防护不能只校验字符串前缀：应限制允许的 scheme/host/port�
 
 选择一个“修改订单”接口，说明身份从哪里来、对象归属如何检查、允许修改哪些字段、怎样限制资源消耗，以及需要哪些负向测试。
 官方参考：[OWASP API Security Top 10](https://api-security.owasp.org/editions/2023/en/0x11-t10/) · [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)
+
+# 考察题目
+
+## 1. 动手题
+
+为 `/users/{id}/orders/{order}` 写对象级授权测试，覆盖本人、他人和管理员。
+
+> [!note]- 验收要点
+> 服务端按实际资源关系判断，改 URL ID 或批量接口不能绕过授权。
+
+## 2. 机制追问
+
+接口只在前端隐藏“删除”按钮，为什么仍可能越权？
+
+> [!note]- 参考答案
+> 客户端可绕过，服务端必须按身份、资源和动作逐次授权；对象 ID、批量接口和字段级访问都要测试横向与纵向越权。

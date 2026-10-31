@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, backend/workflow]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > 本篇描述 Go 服务从业务规则到生产运行的长期交付路径，不规定首月周次。当前任务由 Hub 的 Study Cycle 选择。
 
 # 业务核心与包边界
@@ -63,3 +63,19 @@ go build ./...
 | 性能边界 | 固定环境的 benchmark/pprof/压测原始命令 | 先定位瓶颈，再修改实现 |
 
 这篇是所有 Go 服务通用的工作顺序；具体业务拆解、schema 和短链接故障案例放在“首个服务交付”专题。标准库与工具命令以 [Go command documentation](https://pkg.go.dev/cmd/go) 和 [Go testing package](https://pkg.go.dev/testing) 为准。
+
+# 考察题目
+
+## 1. 动手题
+
+从 HTTP 请求到 SQL 写入做最小纵向切片，加超时、错误映射和关闭测试。
+
+> [!note]- 验收要点
+> 代码包边界清晰，失败可回滚，请求取消能传到数据库，README 可复现。
+
+## 2. 机制追问
+
+Go 服务从入口到依赖关闭，应先定义哪些契约？
+
+> [!note]- 参考答案
+> 定义请求、业务、存储和配置边界，明确超时、错误、资源所有权与关闭顺序；从一条可测试的纵向路径逐步扩展。

@@ -3,10 +3,9 @@ study_stage: backlog
 review_due:
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > > 简历不是知识清单，而是可核验的能力索引；每条项目描述都应指向问题、行动、约束、结果和证据。
-
-> [!summary] 核心摘要
+>
 > 用“在什么约束下解决什么问题—我做了哪项关键决策—结果如何验证”描述经历。数字必须能解释测量环境和基线；仓库、测试、文档、压测与故障复盘共同构成证据链，无法追问的名词不要写进简历。
 
 # 项目条目的结构
@@ -52,6 +51,20 @@ review_due:
 > 2. 哪条简历表述最容易被连续追问击穿？
 > 3. 如果去掉所有框架名，你还能否讲清工程价值？
 
-> [!info]- 延伸阅读
-> - 前置：[01-Backend Competency Evidence (后端能力证据)](/12-Career%20(求职与成长)/03-Career%20Execution%20(求职执行)/01-Backend%20Competency%20Evidence%20(后端能力证据).md)
-> - 延伸：[03-Project Deep Dive (项目难点表达)](/12-Career%20(求职与成长)/01-Interview%20Expression%20(面试表达)/03-Project%20Deep%20Dive%20(项目难点表达).md)
+**参考资料：** 前置：[01-Backend Competency Evidence (后端能力证据)](01-Backend%20Competency%20Evidence%20%28%E5%90%8E%E7%AB%AF%E8%83%BD%E5%8A%9B%E8%AF%81%E6%8D%AE%29.md) · 延伸：[03-Project Deep Dive (项目难点表达)](../01-Interview%20Expression%20%28%E9%9D%A2%E8%AF%95%E8%A1%A8%E8%BE%BE%29/03-Project%20Deep%20Dive%20%28%E9%A1%B9%E7%9B%AE%E9%9A%BE%E7%82%B9%E8%A1%A8%E8%BE%BE%29.md)
+
+# 考察题目
+
+## 1. 动手题
+
+将一条“提升性能”的简历描述链接到原始压测、代码改动和复现 README，请他人验证。
+
+> [!note]- 验收要点
+> 数字有基线、环境、样本和边界；作品入口无隐藏依赖。
+
+## 2. 机制追问
+
+简历写“性能提升 50%”时，怎样让表述可核验？
+
+> [!note]- 参考答案
+> 附上原始基线、测试环境、负载模型、指标定义和改动范围，说明个人贡献与适用边界；作品入口应可复现演示。

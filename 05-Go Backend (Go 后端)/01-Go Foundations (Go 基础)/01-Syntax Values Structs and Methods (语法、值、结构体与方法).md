@@ -4,7 +4,7 @@ review_due:
 tags: [language/go, go/foundations]
 ---
 
-> [!abstract] 学习定位
+> [!abstract] 本篇要点
 > Go 默认复制值，指针用于共享可修改对象；零值、显式控制流和小方法集共同形成可预测的程序结构。
 
 # 程序、声明与零值
@@ -115,12 +115,20 @@ func NewLimiter(capacity int) (*Limiter, error) {
 
 练习：实现带容量与当前使用量的 `Quota`。构造时校验容量，方法拒绝负数与超限，表驱动测试零值、边界和复制行为；再说明它是否允许多个 goroutine 同时使用。
 
-> [!question]- 理解检查
-> 1. struct 被复制后，哪些字段仍可能共享底层状态？
-> 2. string 的字节长度为什么不等于字符数量？
-> 3. pointer receiver 与并发安全有什么关系？
+**参考资料：** [A Tour of Go](https://go.dev/tour/) · [The Go Programming Language Specification](https://go.dev/ref/spec) · [Effective Go](https://go.dev/doc/effective_go)
 
-> [!info]- 官方参考
-> - [A Tour of Go](https://go.dev/tour/)
-> - [The Go Programming Language Specification](https://go.dev/ref/spec)
-> - [Effective Go](https://go.dev/doc/effective_go)
+# 考察题目
+
+## 1. 动手题
+
+写 `Counter` 的值接收者与指针接收者方法，分别调用并打印原对象；解释复制与修改。
+
+> [!note]- 验收要点
+> 值接收者修改副本，指针接收者可修改原值；包含 slice/map 的字段还需考虑共享底层数据。
+
+## 2. 机制追问
+
+Go 方法用值接收者还是指针接收者，如何判断？
+
+> [!note]- 参考答案
+> 看是否需修改原对象、复制成本、类型一致性与并发安全；指针接收者不自动保证线程安全，值接收者也可能含引用语义字段。
