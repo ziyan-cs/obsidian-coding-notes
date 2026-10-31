@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [sre/incident, sre/resilience]
+tags: [topic/debugging, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -64,7 +64,7 @@ evidence: dashboard, trace, logs and timeline
 复盘不等于无人负责，而是不以惩罚个人替代系统改进。记录影响、时间线、触发事件、促成条件、有效和无效响应，并给行动项设负责人、期限和验证标准。
 
 > [!info]- 关联笔记
-> 事故证据链与发布停止条件分别见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md) 和 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)；本篇聚焦云原生环境的混沌、恢复和无责复盘。
+> 事故证据链与发布停止条件分别见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>) 和 [Release Verification and Quality Gates (发布验证与质量门禁)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/07-Release Verification and Quality Gates (发布验证与质量门禁).md>)；本篇聚焦云原生环境的混沌、恢复和无责复盘。
 
 # 考察题目
 

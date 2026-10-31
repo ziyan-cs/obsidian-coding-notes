@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/build, cpp/dependencies]
+tags: [topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -115,7 +115,7 @@ CMakeToolchain
 - [vcpkg versioning](https://learn.microsoft.com/en-us/vcpkg/users/versioning)
 - [Conan 2 lockfiles](https://docs.conan.io/2/tutorial/versioning/lockfiles.html)
 
-下一步：[03-Package Management and Reproducible Builds (包管理与可复现构建)](03-Package%20Management%20and%20Reproducible%20Builds%20%28%E5%8C%85%E7%AE%A1%E7%90%86%E4%B8%8E%E5%8F%AF%E5%A4%8D%E7%8E%B0%E6%9E%84%E5%BB%BA%29.md)
+下一步：[03-Package Management and Reproducible Builds (包管理与可复现构建)](<./03-Package Management and Reproducible Builds (包管理与可复现构建).md>)
 
 # 考察题目
 

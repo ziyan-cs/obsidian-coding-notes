@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/consistency, topic/distributed-systems, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -185,7 +186,7 @@ D4 ([A:3])         <- A 更新 v3（与 D3 冲突！需要合并）
 >
 >
 
-**参考资料：** 下一步：[02-Raft Consensus (Raft 共识)](02-Raft%20Consensus%20%28Raft%20%E5%85%B1%E8%AF%86%29.md)
+**参考资料：** 下一步：[02-Raft Consensus (Raft 共识)](<./02-Raft Consensus (Raft 共识).md>)
 
 # 考察题目
 

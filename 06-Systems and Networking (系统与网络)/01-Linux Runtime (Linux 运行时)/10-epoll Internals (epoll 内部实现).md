@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -126,7 +127,7 @@ epoll:       本轮至多返回 50 个事件，用户态逐项处理
 > [!tip]- **工程要点**
 > epoll 通常适合关注 fd 多、每轮就绪比例低的事件循环，但没有通用的“超过 1000 必须改用 epoll”阈值。`epoll_wait` 仍需把本轮事件写入用户缓冲区，应用也要逐项处理；注册、修改、回调与锁争用都有成本。`select` 还受 `fd_set`/`FD_SETSIZE` 使用方式限制，不能把“百万 fd 的 select”当作可直接执行的对照实验。实际选型以目标平台的负载和 profile 为准。
 
-关联：[epoll API and Trigger Modes (epoll API 与触发模式)](09-epoll%20API%20and%20Trigger%20Modes%20%28epoll%20API%20%E4%B8%8E%E8%A7%A6%E5%8F%91%E6%A8%A1%E5%BC%8F%29.md)
+关联：[epoll API and Trigger Modes (epoll API 与触发模式)](<./09-epoll API and Trigger Modes (epoll API 与触发模式).md>)
 
 [epoll(7) Linux manual](https://man7.org/linux/man-pages/man7/epoll.7.html) · [epoll_wait(2) Linux manual](https://man7.org/linux/man-pages/man2/epoll_wait.2.html)
 

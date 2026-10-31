@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/verification]
+tags: [topic/debugging, topic/observability]
 ---
 
 > [!abstract] 本篇要点
@@ -121,8 +121,8 @@ Dashboard 用于理解状态，不应变成所有指标的陈列柜。首页保�
 
 ## 关联专题
 
-- [Performance Benchmarking and Profiling (性能基准与剖析)](04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)：从运行信号进入资源热点分析。
-- [Incident Response Chaos and Recovery (事故响应、混沌与恢复)](../../08-Cloud%20Native%20and%20Reliability%20%28%E4%BA%91%E5%8E%9F%E7%94%9F%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7%29/03-Reliability%20Engineering%20%28%E5%8F%AF%E9%9D%A0%E6%80%A7%E5%B7%A5%E7%A8%8B%29/03-Incident%20Response%20Chaos%20and%20Recovery%20%28%E4%BA%8B%E6%95%85%E5%93%8D%E5%BA%94%E3%80%81%E6%B7%B7%E6%B2%8C%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)：用信号驱动事故处置与恢复验证。
+- [Performance Benchmarking and Profiling (性能基准与剖析)](<./04-Performance Benchmarking and Profiling (性能基准与剖析).md>)：从运行信号进入资源热点分析。
+- [Incident Response Chaos and Recovery (事故响应、混沌与恢复)](<../../08-Cloud Native and Reliability (云原生与可靠性)/03-Reliability Engineering (可靠性工程)/03-Incident Response Chaos and Recovery (事故响应、混沌与恢复).md>)：用信号驱动事故处置与恢复验证。
 
 ## 参考资料
 

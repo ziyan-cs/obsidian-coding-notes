@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, engineering/cloud-native, sre]
+tags: [topic/cloud-native, topic/reliability]
 ---
 
 > [!abstract] 完成标准

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, go/foundations]
+tags: [language/go, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点

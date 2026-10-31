@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/performance]
 ---
 
 > [!abstract] 本篇要点
@@ -40,9 +41,13 @@ wrk -t2 -c20 -d30s --latency -s post.lua http://127.0.0.1:8080/api
 
 ## 吞吐量与延迟的关系
 
-<img src="/assets/file-20260620143339758.png" alt="吞吐量与延迟的性能拐点模型" width="800">
+| 负载阶段 | 成功吞吐 | 排队与尾延迟 |
+| --- | --- | --- |
+| 低负载 | 随到达率上升 | 通常较稳定 |
+| 接近容量上限 | 增长变慢 | 可能明显上升 |
+| 超出可持续容量 | 持平或下降 | 超时、拒绝与长尾增加 |
 
-图只表示负载升高后排队可能急剧增加，不能由图读出所有服务都存在相同拐点。
+这是固定请求模型下的定性示意。实际拐点要用成功吞吐、错误率、排队和延迟分位一起判断；客户端或依赖也可能先成为瓶颈。
 
 ## 性能瓶颈定位流程
 
@@ -84,10 +89,10 @@ ab -n 1000 -c 10 http://127.0.0.1:8080/
 
 [wrk 官方说明](https://github.com/wg/wrk/blob/master/README.md) · [wrk2 固定吞吐模型](https://github.com/giltene/wrk2)
 
-**参考资料：** 下一步：[06-Graceful Shutdown and Drain (优雅关闭与请求排空)](06-Graceful%20Shutdown%20and%20Drain%20%28%E4%BC%98%E9%9B%85%E5%85%B3%E9%97%AD%E4%B8%8E%E8%AF%B7%E6%B1%82%E6%8E%92%E7%A9%BA%29.md)
+**参考资料：** 下一步：[06-Graceful Shutdown and Drain (优雅关闭与请求排空)](<./06-Graceful Shutdown and Drain (优雅关闭与请求排空).md>)
 
 > [!info]- 关联笔记
-> 可重复基准、负载模型和剖析方法见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇聚焦网络服务器的 wrk/ab、连接与排队现象。
+> 可重复基准、负载模型和剖析方法见 [Performance Benchmarking and Profiling (性能基准与剖析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/04-Performance Benchmarking and Profiling (性能基准与剖析).md>)；本篇聚焦网络服务器的 wrk/ab、连接与排队现象。
 
 # 考察题目
 

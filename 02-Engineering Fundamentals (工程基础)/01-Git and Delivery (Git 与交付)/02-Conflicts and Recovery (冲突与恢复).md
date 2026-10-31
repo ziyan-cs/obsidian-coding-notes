@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/git, engineering/recovery]
+tags: [topic/debugging, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -140,7 +140,7 @@ tag 指向源码版本，不等于制品已经经过同一构建、签名和发�
 - [Git: reset, restore and revert](https://git-scm.com/docs/git#_reset_restore_and_revert)
 - [git-reflog documentation](https://git-scm.com/docs/git-reflog)
 
-下一步：[03-CI CD (持续集成与交付)](03-CI%20CD%20%28%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%8E%E4%BA%A4%E4%BB%98%29.md)
+下一步：[03-CI CD (持续集成与交付)](<./03-CI CD (持续集成与交付).md>)
 
 # 考察题目
 

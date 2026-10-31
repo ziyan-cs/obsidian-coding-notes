@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [ai/rag, data/retrieval]
+tags: [topic/ai, topic/data-processing]
 ---
 
 > [!abstract] 本篇要点

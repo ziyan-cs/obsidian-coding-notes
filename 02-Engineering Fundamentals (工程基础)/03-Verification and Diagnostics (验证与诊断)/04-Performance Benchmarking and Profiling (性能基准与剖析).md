@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/verification]
+tags: [topic/performance, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -80,8 +80,8 @@ baseline -> hypothesis -> measurement -> change
 
 ## 关联专题
 
-- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)：从线上指标进入有假设的性能分析。
-- [Benchmarking (压测)](../../06-Systems%20and%20Networking%20%28%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%29/03-Server%20Networking%20%28%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%29/05-Benchmarking%20%28%E5%8E%8B%E6%B5%8B%29.md)：服务器网络压测的工具与参数。
+- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<./05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>)：从线上指标进入有假设的性能分析。
+- [Benchmarking (压测)](<../../06-Systems and Networking (系统与网络)/03-Server Networking (服务器网络编程)/05-Benchmarking (压测).md>)：服务器网络压测的工具与参数。
 
 ## 参考资料
 

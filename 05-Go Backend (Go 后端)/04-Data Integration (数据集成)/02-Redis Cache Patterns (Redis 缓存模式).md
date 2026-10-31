@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/go, topic/caching, topic/databases]
 ---
 
 > [!abstract] 本篇要点
@@ -48,7 +49,7 @@ Redis 调用要设置比请求总预算更短的 timeout，并限制连接池。
 TTL、容量、timeout 和热点阈值都由新鲜度目标与测量决定，不是固定常数。至少监控 hit ratio、miss 回源量、命令延迟、timeout、池等待、key 数量、内存淘汰和热点 key。
 
 > [!info]- 关联
-> - 可靠补偿：[03-Messaging and Idempotency (消息与幂等)](03-Messaging%20and%20Idempotency%20%28%E6%B6%88%E6%81%AF%E4%B8%8E%E5%B9%82%E7%AD%89%29.md)
+> - 可靠补偿：[03-Messaging and Idempotency (消息与幂等)](<./03-Messaging and Idempotency (消息与幂等).md>)
 
 # 考察题目
 

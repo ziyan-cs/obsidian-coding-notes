@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/cli]
+tags: [language/python, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

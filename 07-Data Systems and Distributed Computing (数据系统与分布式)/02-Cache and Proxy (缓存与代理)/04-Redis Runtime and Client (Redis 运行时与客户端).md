@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/caching, topic/performance]
 ---
 
 > [!abstract] 本篇要点
@@ -172,7 +173,7 @@ Main Thread                       I/O Threads
 
 >
 >
-关联：[Redis Data Structures (Redis 数据结构)](01-Redis%20Data%20Structures%20%28Redis%20%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%29.md)
+关联：[Redis Data Structures (Redis 数据结构)](<./01-Redis Data Structures (Redis 数据结构).md>)
 
 # Redis Client Integration (Redis 客户端集成)
 
@@ -355,7 +356,7 @@ public:
 >
 >
 
-**参考资料：** 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](05-Nginx%20Proxy%20and%20Load%20Balancing%20%28Nginx%20%E4%BB%A3%E7%90%86%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%29.md)
+**参考资料：** 下一步：[05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡)](<./05-Nginx Proxy and Load Balancing (Nginx 代理与负载均衡).md>)
 
 # 考察题目
 

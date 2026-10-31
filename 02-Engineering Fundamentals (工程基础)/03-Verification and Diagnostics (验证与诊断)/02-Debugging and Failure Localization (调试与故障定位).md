@@ -2,7 +2,7 @@
 study_stage: backlog
 review_due:
 
-tags: [engineering/verification]
+tags: [topic/debugging, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -131,8 +131,8 @@ strace -ff -tt -T -p <pid>
 
 ## 关联专题
 
-- [Memory Safety and Dynamic Analysis (内存安全与动态分析)](03-Memory%20Safety%20and%20Dynamic%20Analysis%20%28%E5%86%85%E5%AD%98%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90%29.md)：用 sanitizer 和动态分析验证内存/并发假设。
-- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)：从线上信号定位故障入口。
+- [Memory Safety and Dynamic Analysis (内存安全与动态分析)](<./03-Memory Safety and Dynamic Analysis (内存安全与动态分析).md>)：用 sanitizer 和动态分析验证内存/并发假设。
+- [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<./05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>)：从线上信号定位故障入口。
 
 ## 参考资料
 

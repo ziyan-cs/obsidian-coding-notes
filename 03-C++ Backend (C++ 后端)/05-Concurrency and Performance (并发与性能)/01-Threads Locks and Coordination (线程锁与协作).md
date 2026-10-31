@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/concurrency, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -373,7 +374,7 @@ cv.notify_one();
 
 > **面试重点**：条件变量内部的 `wait` 做了三步：1）解锁 mutex；2）阻塞等待通知；3）被唤醒后重新加锁。所以 `wait` 需要 `unique_lock`（可手动 lock/unlock）而不是 `lock_guard`。
 
-**参考资料：** 下一步：[02-Atomics and Memory Order (原子与内存序)](02-Atomics%20and%20Memory%20Order%20%28%E5%8E%9F%E5%AD%90%E4%B8%8E%E5%86%85%E5%AD%98%E5%BA%8F%29.md)
+**参考资料：** 下一步：[02-Atomics and Memory Order (原子与内存序)](<./02-Atomics and Memory Order (原子与内存序).md>)
 
 # 考察题目
 

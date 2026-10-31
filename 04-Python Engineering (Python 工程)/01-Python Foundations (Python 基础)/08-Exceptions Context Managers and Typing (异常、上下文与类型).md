@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/python, topic/error-handling, topic/resource-management, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点

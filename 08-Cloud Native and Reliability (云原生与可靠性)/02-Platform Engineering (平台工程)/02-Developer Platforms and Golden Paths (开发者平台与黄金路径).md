@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cloud/platform-engineering, engineering/developer-experience]
+tags: [topic/cloud-native, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

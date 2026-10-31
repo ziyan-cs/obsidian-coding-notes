@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [backend/server, architecture]
+tags: [topic/api, topic/system-design]
 ---
 
 > [!abstract] 本篇要点

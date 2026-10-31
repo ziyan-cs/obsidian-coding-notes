@@ -2,7 +2,7 @@
 study_stage: backlog
 review_due:
 
-tags: [engineering/build, security/supply-chain]
+tags: [topic/build, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -94,7 +94,7 @@ application
 - [SLSA specification v1.2](https://slsa.dev/spec/v1.2/)
 - [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
-下一步：[04-Make and Shell Automation (Make 与 Shell 自动化)](04-Make%20and%20Shell%20Automation%20%28Make%20%E4%B8%8E%20Shell%20%E8%87%AA%E5%8A%A8%E5%8C%96%29.md)
+下一步：[04-Make and Shell Automation (Make 与 Shell 自动化)](<./04-Make and Shell Automation (Make 与 Shell 自动化).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [python/testing, testing/property, testing/integration]
+tags: [language/python, topic/data-processing, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -66,7 +66,7 @@ Fuzz target 应快速、确定、无外部副作用，并具有可判断的 orac
 **参考资料：** [Python unittest: Organizing test code](https://docs.python.org/3/library/unittest.html#organizing-test-code) · [pytest Good Integration Practices](https://docs.pytest.org/en/stable/explanation/goodpractices.html)
 
 > [!info]- 关联笔记
-> 性质、模糊、集成与故障测试的共同设计原则见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)；本篇保留 Hypothesis 与 Python 环境实践。
+> 性质、模糊、集成与故障测试的共同设计原则见 [Testing Strategy and Evidence (测试策略与证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>)；本篇保留 Hypothesis 与 Python 环境实践。
 
 # 考察题目
 

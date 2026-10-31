@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [comparison, backend/http]
+tags: [topic/api, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -42,7 +42,7 @@ tags: [comparison, backend/http]
 2. **第二步 · 实现**：写：用自己的项目或最小实验补一个真实证据，不能只引用概念。
 3. **第三步 · 验证**：追问：回答“为什么不用另一种方案”，并说出代价而非只说优点。
 
-**参考资料：** 下一步：[05-Observability and Performance (可观测性与性能)](05-Observability%20and%20Performance%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E4%B8%8E%E6%80%A7%E8%83%BD%29.md)
+**参考资料：** 下一步：[05-Observability and Performance (可观测性与性能)](<./05-Observability and Performance (可观测性与性能).md>)
 
 # 考察题目
 

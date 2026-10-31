@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, go/errors, go/context]
+tags: [language/go, topic/debugging, topic/error-handling, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

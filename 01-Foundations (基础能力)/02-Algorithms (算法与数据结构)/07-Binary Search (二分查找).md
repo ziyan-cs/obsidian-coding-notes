@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/search, algorithm/invariant, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -93,7 +93,7 @@ long long first_feasible(long long low, long long high) {
 > [!summary] 本篇结论
 > 二分是对单调谓词分界的搜索。统一半开区间、明确循环不变量和不存在答案的语义，比记忆若干看似相似的模板可靠得多。
 
-下一步：[08-Sorting Algorithms (排序算法)](08-Sorting%20Algorithms%20%28%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%29.md)
+下一步：[08-Sorting Algorithms (排序算法)](<./08-Sorting Algorithms (排序算法).md>)
 
 # 考察题目
 

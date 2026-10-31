@@ -1,6 +1,6 @@
 ---
 study_stage: reference
-tags: [vault/sources, learning/verification]
+tags: [topic/documentation]
 ---
 
 > [!abstract] 核验边界
@@ -25,7 +25,7 @@ tags: [vault/sources, learning/verification]
 - **性能待实测**：`MEASURE_LOCALLY` 后说明比较对象和指标，不保留无条件的固定倍数。
 - **已有测量**：记录环境、配置、输入规模、命令和结果范围，保留复现信息。
 
-标记是待办线索，不能替代修正。行为与笔记冲突、依赖升级、来源失效或出现安全通告时复查；影响当前学习的问题记入[审计与迁移队列](07-Vault%20Audit%20%26%20Migration%20Queue%20%28%E5%AE%A1%E8%AE%A1%E4%B8%8E%E8%BF%81%E7%A7%BB%E9%98%9F%E5%88%97%29.md)。
+标记是待办线索，不能替代修正。行为与笔记冲突、依赖升级、来源失效或出现安全通告时复查；影响当前学习的问题记入[审计与迁移队列](<./07-Vault Audit & Migration Queue (审计与迁移队列).md>)。
 
 # 常用来源
 

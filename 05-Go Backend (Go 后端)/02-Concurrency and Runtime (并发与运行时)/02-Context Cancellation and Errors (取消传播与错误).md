@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/go, topic/concurrency, topic/error-handling, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -106,7 +107,7 @@ case <-time.After(time.Second):
 
 把 `work` 改成调用支持 context 的 HTTP 请求或数据库 `QueryContext`，分别验证主动取消、自己设的超时、下游报错和正常返回。每条路径都等待子 goroutine 退出；若使用 `errgroup`，先把 `golang.org/x/sync/errgroup` 明确加入 module 依赖。错误分类使用 `errors.Is`，不要比较字符串。
 
-**参考资料：** 下一步：[03-Scheduler GC and Memory (调度 GC 与内存)](03-Scheduler%20GC%20and%20Memory%20%28%E8%B0%83%E5%BA%A6%20GC%20%E4%B8%8E%E5%86%85%E5%AD%98%29.md)
+**参考资料：** 下一步：[03-Scheduler GC and Memory (调度 GC 与内存)](<./03-Scheduler GC and Memory (调度 GC 与内存).md>)
 
 # 考察题目
 

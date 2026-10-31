@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [go/project, backend/delivery]
+tags: [language/go, topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -197,8 +197,8 @@ go test -run Integration -count=1 ./tests/integration/...
 
 ## 关联专题与官方资料
 
-- [URL Shortener (短链接服务)](../../11-Projects%20%28%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%29/02-Backend%20Projects%20%28%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE%29/01-URL%20Shortener%20%28%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%9C%8D%E5%8A%A1%29.md)：后续项目迭代与验收记录。
-- [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：测试层次和证据要求。
+- [URL Shortener (短链接服务)](<../../11-Projects (项目实践)/02-Backend Projects (后端项目)/01-URL Shortener (短链接服务).md>)：后续项目迭代与验收记录。
+- [Testing Strategy and Evidence (测试策略与证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>)：测试层次和证据要求。
 - [Go database/sql tutorial](https://go.dev/doc/tutorial/database-access)
 - [net/http package](https://pkg.go.dev/net/http)
 - [Go Diagnostics](https://go.dev/doc/diagnostics)

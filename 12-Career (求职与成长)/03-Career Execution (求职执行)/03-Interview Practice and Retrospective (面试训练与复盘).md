@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [career/interview, learning/retrospective]
+tags: [topic/career, topic/learning]
 ---
 
 > [!abstract] 本篇要点
@@ -35,7 +35,7 @@ tags: [career/interview, learning/retrospective]
 
 # 统一调度
 
-何时模拟、目标岗位和本轮改进项属于 Study Cycle；本篇只保存方法。作品集证据见 [Resume Evidence and Portfolio (简历证据与作品集)](02-Resume%20Evidence%20and%20Portfolio%20%28%E7%AE%80%E5%8E%86%E8%AF%81%E6%8D%AE%E4%B8%8E%E4%BD%9C%E5%93%81%E9%9B%86%29.md)。
+何时模拟、目标岗位和本轮改进项属于 Study Cycle；本篇只保存方法。作品集证据见 [Resume Evidence and Portfolio (简历证据与作品集)](<./02-Resume Evidence and Portfolio (简历证据与作品集).md>)。
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/ci-cd, engineering/delivery, security/supply-chain]
+tags: [topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -145,7 +145,7 @@ GitHub environment 可绑定生产等目标，并设置审批、分支限制和 
 - [GitHub Actions security](https://docs.github.com/en/actions/how-tos/secure-your-work)
 - [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
 
-下一步：[01-CMake Project and Targets (CMake 项目与目标)](../02-Build%20and%20Dependencies%20%28%E6%9E%84%E5%BB%BA%E4%B8%8E%E4%BE%9D%E8%B5%96%29/01-CMake%20Project%20and%20Targets%20%28CMake%20%E9%A1%B9%E7%9B%AE%E4%B8%8E%E7%9B%AE%E6%A0%87%29.md)
+下一步：[01-CMake Project and Targets (CMake 项目与目标)](<../02-Build and Dependencies (构建与依赖)/01-CMake Project and Targets (CMake 项目与目标).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/quality]
+tags: [language/python, topic/observability, topic/testing, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -56,7 +56,7 @@ union 通过真实判断收窄：`if value is None`、`isinstance`、枚举分�
 官方资料：[typing](https://docs.python.org/3/library/typing.html) · [logging](https://docs.python.org/3/library/logging.html)。
 
 > [!info]- 关联笔记
-> 日志与信号语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)，静态检查进入发布门禁的原则见 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)；本篇聚焦 Python typing、logging 与 lint 工具。
+> 日志与信号语义见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>)，静态检查进入发布门禁的原则见 [Release Verification and Quality Gates (发布验证与质量门禁)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/07-Release Verification and Quality Gates (发布验证与质量门禁).md>)；本篇聚焦 Python typing、logging 与 lint 工具。
 
 # 考察题目
 

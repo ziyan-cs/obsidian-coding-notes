@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -22,7 +23,7 @@ review_due:
 
 这些约束允许局部不完全平衡，但禁止连续红节点；最长根叶路径不会超过最短路径的两倍，树高因而为 `O(log N)`。插入通常先把新节点设为红：若父节点为黑则结束；若父节点为红，再按叔节点颜色选择变色或旋转并向上修复。删除修复更复杂，应先掌握 BST 删除与黑高度为何可能改变，再研究具体 case，不必把某个库的旋转次数当标准保证。
 
-这解释了**常见实现**怎样满足有序容器的对数复杂度；代码不能依赖其节点布局。先修 [05-Binary Search Trees (二叉搜索树)](../../01-Foundations%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%29/02-Algorithms%20%28%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%29/05-Binary%20Search%20Trees%20%28%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%29.md) 中的 BST/AVL 高度概念，再回来对比红黑树更宽松的平衡约束。
+这解释了**常见实现**怎样满足有序容器的对数复杂度；代码不能依赖其节点布局。先修 [05-Binary Search Trees (二叉搜索树)](<../../01-Foundations (基础能力)/02-Algorithms (算法与数据结构)/05-Binary Search Trees (二叉搜索树).md>) 中的 BST/AVL 高度概念，再回来对比红黑树更宽松的平衡约束。
 
 ## 有序容器：比较器同时定义等价
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/iteration]
+tags: [language/python, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

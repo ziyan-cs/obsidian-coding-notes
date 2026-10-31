@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/im, backend/concurrency]
+tags: [topic/messaging, topic/networking, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

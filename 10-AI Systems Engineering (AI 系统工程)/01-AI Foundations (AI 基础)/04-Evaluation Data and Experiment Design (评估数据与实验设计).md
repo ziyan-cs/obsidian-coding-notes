@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [ai/evaluation, ai/data, engineering/experimentation]
+tags: [topic/ai, topic/testing]
 ---
 
 > [!abstract] 本篇要点

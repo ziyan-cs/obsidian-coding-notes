@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -160,8 +161,8 @@ socket 通常很快就处于可写状态，因此不应在输出缓冲为空时�
 
 ## 延伸阅读
 
-- [Socket 与事件循环](01-Sockets%20and%20Event%20Loop%20%28Socket%20%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%29.md)：系统调用、非阻塞语义与 socket 生命周期。
-- [Reactor 架构](02-Reactor%20Architecture%20%28Reactor%20%E6%9E%B6%E6%9E%84%29.md)：就绪事件如何驱动连接状态机。
+- [Socket 与事件循环](<./01-Sockets and Event Loop (Socket 与事件循环).md>)：系统调用、非阻塞语义与 socket 生命周期。
+- [Reactor 架构](<./02-Reactor Architecture (Reactor 架构).md>)：就绪事件如何驱动连接状态机。
 - [RFC 9293：TCP](https://www.rfc-editor.org/rfc/rfc9293.html)。
 
 # 考察题目

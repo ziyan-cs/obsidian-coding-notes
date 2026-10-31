@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/backtracking, algorithm/search, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -125,7 +125,7 @@ if (i > start && a[i] == a[i - 1]) continue; // 组合/子集的同层去重
 > [!summary] 本篇结论
 > 回溯是对决策树的系统枚举：状态必须足够描述未来，选择与撤销必须对称，剪枝必须证明不会漏解。输出规模往往已经是指数级，因此复杂度要按搜索树和结果量分析。
 
-下一步：[10-One Dimensional Dynamic Programming (一维动态规划)](10-One%20Dimensional%20Dynamic%20Programming%20%28%E4%B8%80%E7%BB%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+下一步：[10-One Dimensional Dynamic Programming (一维动态规划)](<./10-One Dimensional Dynamic Programming (一维动态规划).md>)
 
 # 考察题目
 

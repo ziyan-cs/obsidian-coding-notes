@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/databases, topic/performance]
 ---
 
 > [!abstract] 本篇要点
@@ -448,7 +449,7 @@ pt-query-digest /var/log/mysql/slow.log
 
 > [!tip]- **工程要点**：慢查询阈值、是否记录未用索引查询、采样与保留周期都要考虑日志量和 SLO。先按总耗时、调用频率、P95/P99、扫描/返回行比筛选，再用执行计划与真实参数验证。不要只为消除 `filesort` 或改变 SQL 形状而盲目加索引。
 
-**参考资料：** 下一步：[10-Connection Pool (连接池)](10-Connection%20Pool%20%28%E8%BF%9E%E6%8E%A5%E6%B1%A0%29.md)
+**参考资料：** 下一步：[10-Connection Pool (连接池)](<./10-Connection Pool (连接池).md>)
 
 # 考察题目
 

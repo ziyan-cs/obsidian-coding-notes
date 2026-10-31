@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/python, topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -67,7 +68,7 @@ project/
 **参考资料：** [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/) · [Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 
 > [!info]- 关联笔记
-> 跨语言的合并与发布判定见 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)；本篇聚焦 Python 项目的格式、类型、测试和依赖基线。
+> 跨语言的合并与发布判定见 [Release Verification and Quality Gates (发布验证与质量门禁)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/07-Release Verification and Quality Gates (发布验证与质量门禁).md>)；本篇聚焦 Python 项目的格式、类型、测试和依赖基线。
 
 # 考察题目
 

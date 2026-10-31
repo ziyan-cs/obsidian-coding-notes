@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [math/probability, math/statistics, performance/queueing]
+tags: [topic/math, topic/performance]
 ---
 
 > [!abstract] 本篇要点
@@ -106,7 +106,7 @@ W = 1 / (μ - λ)
 > [!summary] 本篇结论
 > 概率描述条件化的不确定性，统计判断样本证据是否可信，排队理论连接到达、在途量和延迟。容量决策必须同时观察分布、偏差、饱和与反馈，而非只看平均 QPS。
 
-下一步：[03-Linear Algebra and Numerical Intuition (线性代数与数值直觉)](03-Linear%20Algebra%20and%20Numerical%20Intuition%20%28%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B8%8E%E6%95%B0%E5%80%BC%E7%9B%B4%E8%A7%89%29.md)
+下一步：[03-Linear Algebra and Numerical Intuition (线性代数与数值直觉)](<./03-Linear Algebra and Numerical Intuition (线性代数与数值直觉).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/tree, algorithm/search, learning/foundation]
+tags: [topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -86,7 +86,7 @@ balance = height(left) - height(right)
 > [!summary] 本篇结论
 > BST 用全局顺序不变量把查找缩到一条根到叶路径；复杂度取决于高度。AVL 通过局部旋转维护严格高度界，从而把最坏查找、插入和删除限制在 `O(log n)`。
 
-下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](06-Graphs%20Union%20Find%20and%20Shortest%20Paths%20%28%E5%9B%BE%E5%B9%B6%E6%9F%A5%E9%9B%86%E4%B8%8E%E6%9C%80%E7%9F%AD%E8%B7%AF%29.md)
+下一步：[06-Graphs Union Find and Shortest Paths (图并查集与最短路)](<./06-Graphs Union Find and Shortest Paths (图并查集与最短路).md>)
 
 # 考察题目
 

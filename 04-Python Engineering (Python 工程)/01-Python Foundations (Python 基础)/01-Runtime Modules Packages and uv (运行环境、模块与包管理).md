@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/python, topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -72,7 +73,7 @@ src/example_app/
 
 官方资料：[uv 项目布局](https://docs.astral.sh/uv/concepts/projects/layout/) · [锁定与同步](https://docs.astral.sh/uv/concepts/projects/sync/)
 
-**参考资料：** 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](02-Objects%20Names%20Mutability%20and%20Copying%20%28%E5%AF%B9%E8%B1%A1%E3%80%81%E5%90%8D%E7%A7%B0%E3%80%81%E5%8F%AF%E5%8F%98%E6%80%A7%E4%B8%8E%E5%A4%8D%E5%88%B6%29.md)
+**参考资料：** 下一步：[02-Objects Names Mutability and Copying (对象、名称、可变性与复制)](<./02-Objects Names Mutability and Copying (对象、名称、可变性与复制).md>)
 
 # 考察题目
 

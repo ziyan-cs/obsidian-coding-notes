@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, learning/foundation]
+tags: [topic/resource-management, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -99,7 +99,7 @@ perf stat -e page-faults,minor-faults,major-faults -- ./program
 - [Linux Multi-Gen LRU](https://docs.kernel.org/mm/multigen_lru.html)
 - [Linux Memory Management](https://docs.kernel.org/admin-guide/mm/index.html)
 
-下一步：[09-File Systems and Storage (文件系统与存储)](09-File%20Systems%20and%20Storage%20%28%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%AD%98%E5%82%A8%29.md)
+下一步：[09-File Systems and Storage (文件系统与存储)](<./09-File Systems and Storage (文件系统与存储).md>)
 
 # 考察题目
 

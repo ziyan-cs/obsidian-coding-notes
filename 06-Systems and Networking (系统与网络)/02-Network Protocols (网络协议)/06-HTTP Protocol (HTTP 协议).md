@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/api, topic/networking]
 ---
 
 > [!abstract] 本篇要点

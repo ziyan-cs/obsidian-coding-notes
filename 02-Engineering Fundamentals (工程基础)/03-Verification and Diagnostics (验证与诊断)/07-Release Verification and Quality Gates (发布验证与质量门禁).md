@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/verification]
+tags: [topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -86,8 +86,8 @@ Canary 先接收小部分代表性流量，对照稳定版本比较成功率、�
 
 ## 关联专题
 
-- [Testing Strategy and Evidence (测试策略与证据)](01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：设计能支撑门禁决策的测试证据。
-- [Security Detection and Incident Evidence (安全检测与事件证据)](06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)：把安全信号纳入发布和响应。
+- [Testing Strategy and Evidence (测试策略与证据)](<./01-Testing Strategy and Evidence (测试策略与证据).md>)：设计能支撑门禁决策的测试证据。
+- [Security Detection and Incident Evidence (安全检测与事件证据)](<./06-Security Detection and Incident Evidence (安全检测与事件证据).md>)：把安全信号纳入发布和响应。
 
 ## 参考资料
 

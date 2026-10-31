@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/graph, algorithm/shortest-path, learning/foundation]
+tags: [topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -129,7 +129,7 @@ std::vector<long long> dijkstra(const std::vector<std::vector<Edge>>& g, int s) 
 > [!summary] 本篇结论
 > 图算法的第一步不是套模板，而是确定方向、边权、稀疏度和输出语义。遍历解决可达性，拓扑序解决依赖，并查集合并连通分量，最短路则由边权条件决定。
 
-下一步：[07-Binary Search (二分查找)](07-Binary%20Search%20%28%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%29.md)
+下一步：[07-Binary Search (二分查找)](<./07-Binary Search (二分查找).md>)
 
 # 考察题目
 

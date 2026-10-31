@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/secure-coding, language/cpp]
+tags: [topic/resource-management, topic/security]
 ---
 
 > [!abstract] 本篇要点

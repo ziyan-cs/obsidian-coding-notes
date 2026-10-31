@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, language/go, backend]
+tags: [language/go, topic/api]
 ---
 
 > [!abstract] 完成标准

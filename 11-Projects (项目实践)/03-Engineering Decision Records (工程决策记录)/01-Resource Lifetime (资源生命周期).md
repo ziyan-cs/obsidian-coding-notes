@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [comparison, resource/lifetime]
+tags: [topic/project-delivery, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -38,7 +38,7 @@ acquire -> one clear owner -> use -> release
 > - 自测：一个函数创建 DB 连接、打开文件并加锁，三种语言各应把释放写在哪里？
 > - 自测：为什么不能用“对象最终会被 GC”解释文件描述符不会泄漏？
 
-**参考资料：** 下一步：[02-Concurrency Models (并发模型)](02-Concurrency%20Models%20%28%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%29.md)
+**参考资料：** 下一步：[02-Concurrency Models (并发模型)](<./02-Concurrency Models (并发模型).md>)
 
 # 考察题目
 

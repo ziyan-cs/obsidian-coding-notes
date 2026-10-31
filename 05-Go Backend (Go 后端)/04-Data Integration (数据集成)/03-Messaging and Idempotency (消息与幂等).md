@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/go, topic/consistency, topic/distributed-systems, topic/messaging]
 ---
 
 > [!abstract] 本篇要点

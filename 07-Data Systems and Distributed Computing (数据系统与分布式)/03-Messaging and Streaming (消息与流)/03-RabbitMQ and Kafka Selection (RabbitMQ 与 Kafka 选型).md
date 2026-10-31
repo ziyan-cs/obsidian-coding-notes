@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/messaging, topic/system-design]
 ---
 
 > [!abstract] 本篇要点

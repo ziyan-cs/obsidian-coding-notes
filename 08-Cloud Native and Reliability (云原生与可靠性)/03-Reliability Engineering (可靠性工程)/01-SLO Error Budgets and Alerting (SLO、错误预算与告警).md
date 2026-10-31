@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [sre/slo, observability/alerting]
+tags: [topic/observability, topic/reliability]
 ---
 
 > [!abstract] 本篇要点

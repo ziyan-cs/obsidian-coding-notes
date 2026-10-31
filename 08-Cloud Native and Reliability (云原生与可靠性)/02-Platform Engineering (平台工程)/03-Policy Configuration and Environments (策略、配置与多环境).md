@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cloud/configuration, cloud/policy]
+tags: [topic/cloud-native, topic/security]
 ---
 
 > [!abstract] 本篇要点

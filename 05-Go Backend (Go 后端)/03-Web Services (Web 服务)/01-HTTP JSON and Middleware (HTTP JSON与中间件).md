@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, go/http]
+tags: [language/go, topic/api]
 ---
 
 > [!abstract] 本篇要点
@@ -143,7 +143,7 @@ srv := &http.Server{
 
 给 `GET /hello` 和 `POST /todos` 写 `httptest`：分别检查成功 JSON、错误方法、未知字段、第二个 JSON 值、body 超限和服务层错误。方法路由的 405 与 `Allow` 响应由当前 `ServeMux` 负责；请求体超限应识别 `*http.MaxBytesError` 并映射为 413，而不是一律返回 400。
 
-**参考资料：** 下一步：[02-Routing Validation and Errors (路由校验与错误)](02-Routing%20Validation%20and%20Errors%20%28%E8%B7%AF%E7%94%B1%E6%A0%A1%E9%AA%8C%E4%B8%8E%E9%94%99%E8%AF%AF%29.md)
+**参考资料：** 下一步：[02-Routing Validation and Errors (路由校验与错误)](<./02-Routing Validation and Errors (路由校验与错误).md>)
 
 # 考察题目
 

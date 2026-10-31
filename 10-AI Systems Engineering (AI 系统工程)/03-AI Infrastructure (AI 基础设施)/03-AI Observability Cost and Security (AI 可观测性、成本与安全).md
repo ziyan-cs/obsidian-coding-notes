@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [ai/observability, ai/security, ai/cost]
+tags: [topic/ai, topic/observability, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -55,7 +55,7 @@ unit cost = (model tokens + retrieval + tools + retries + allocated infrastructu
 **参考资料：** [OWASP Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) · [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) · [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
 
 > [!info]- 关联笔记
-> 通用遥测设计和安全检测证据见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md) 与 [Security Detection and Incident Evidence (安全检测与事件证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦 token、模型版本、质量漂移、成本和提示注入等 AI 特有信号。
+> 通用遥测设计和安全检测证据见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>) 与 [Security Detection and Incident Evidence (安全检测与事件证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/06-Security Detection and Incident Evidence (安全检测与事件证据).md>)；本篇聚焦 token、模型版本、质量漂移、成本和提示注入等 AI 特有信号。
 
 # 考察题目
 

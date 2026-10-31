@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, database, distributed-systems]
+tags: [topic/databases, topic/distributed-systems]
 ---
 
 > [!abstract] 完成标准

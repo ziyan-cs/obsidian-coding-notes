@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, foundation]
+tags: [topic/algorithms, topic/systems]
 ---
 
 > [!abstract] 完成标准

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/config-center, distributed/configuration]
+tags: [topic/consistency, topic/distributed-systems, topic/project-delivery, topic/reliability]
 ---
 
 > [!abstract] 本篇要点

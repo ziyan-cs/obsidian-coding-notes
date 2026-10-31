@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -273,7 +273,7 @@ auto owned = std::make_unique<int>(42);
 > 2. `&ref` 得到的是什么？这能否证明引用本身是一个独立对象？
 > 3. 何时函数参数该使用 `T*`，何时使用 `T&` 或 `const T&`？
 
-**参考资料：** 下一步：[02-Memory Layout and Allocation (内存布局与分配)](02-Memory%20Layout%20and%20Allocation%20%28%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E5%88%86%E9%85%8D%29.md) · 标准草案：[指针算术](https://eel.is/c++draft/expr.add)、[dynamic_cast](https://eel.is/c++draft/expr.dynamic.cast)、[引用与引用折叠](https://eel.is/c++draft/dcl.ref)、[临时对象生命周期](https://eel.is/c++draft/class.temporary)、[const_cast](https://eel.is/c++draft/expr.const.cast)
+**参考资料：** 下一步：[02-Memory Layout and Allocation (内存布局与分配)](<./02-Memory Layout and Allocation (内存布局与分配).md>) · 标准草案：[指针算术](https://eel.is/c++draft/expr.add)、[dynamic_cast](https://eel.is/c++draft/expr.dynamic.cast)、[引用与引用折叠](https://eel.is/c++draft/dcl.ref)、[临时对象生命周期](https://eel.is/c++draft/class.temporary)、[const_cast](https://eel.is/c++draft/expr.const.cast)
 
 # 考察题目
 

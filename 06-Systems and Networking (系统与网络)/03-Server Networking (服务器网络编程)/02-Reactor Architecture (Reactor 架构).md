@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/networking]
 ---
 
 > [!abstract] 本篇要点
@@ -232,7 +233,7 @@ Reactor 和 Proactor 的根本区别在于 **I/O 操作由谁来执行**：
 > 主从 Reactor 是一种常见的连接分片方案，不是所有高并发服务的唯一标准架构。它减少连接内部的跨线程共享，但任务队列、全局资源与观测仍可能需要锁；还要验证子 loop 负载、热点连接和关闭时跨线程回调的生命周期。
 >
 
-**参考资料：** 下一步：[03-Timers (定时器)](03-Timers%20%28%E5%AE%9A%E6%97%B6%E5%99%A8%29.md)
+**参考资料：** 下一步：[03-Timers (定时器)](<./03-Timers (定时器).md>)
 
 # 考察题目
 

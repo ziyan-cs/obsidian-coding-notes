@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -306,7 +307,7 @@ Netty 的 HashedWheelTimer 是可参考的实现之一；具体槽数、tick 与
 
 > [!tip]- **工程要点**：时间轮以时间量化和槽管理换取低成本调度；大量同槽到期任务、跨层级级联和取消残留都可能形成尖峰。先估算定时器数量、精度、取消比例和超时分布，再用压测比较小根堆与时间轮。
 
-**参考资料：** 下一步：[04-Connections Buffers and Framing (连接缓冲与分帧)](04-Connections%20Buffers%20and%20Framing%20%28%E8%BF%9E%E6%8E%A5%E7%BC%93%E5%86%B2%E4%B8%8E%E5%88%86%E5%B8%A7%29.md)
+**参考资料：** 下一步：[04-Connections Buffers and Framing (连接缓冲与分帧)](<./04-Connections Buffers and Framing (连接缓冲与分帧).md>)
 
 # 考察题目
 

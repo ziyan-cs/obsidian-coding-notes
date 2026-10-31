@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [distributed/system]
+tags: [topic/concurrency, topic/consistency, topic/databases, topic/system-design]
 ---
 
 > [!abstract] 本篇要点

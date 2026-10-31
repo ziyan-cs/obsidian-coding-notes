@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/sorting, algorithm/invariant, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -81,7 +81,7 @@ std::nth_element(values.begin(), values.begin() + k, values.end());
 > [!summary] 本篇结论
 > 排序的选择取决于稳定性、最坏界、空间、键结构和数据分布。工程上优先标准算法；手写排序的价值在于理解分区、归并、堆序和比较器不变量。
 
-下一步：[09-Backtracking and State Space Search (回溯与状态空间搜索)](09-Backtracking%20and%20State%20Space%20Search%20%28%E5%9B%9E%E6%BA%AF%E4%B8%8E%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2%29.md)
+下一步：[09-Backtracking and State Space Search (回溯与状态空间搜索)](<./09-Backtracking and State Space Search (回溯与状态空间搜索).md>)
 
 # 考察题目
 

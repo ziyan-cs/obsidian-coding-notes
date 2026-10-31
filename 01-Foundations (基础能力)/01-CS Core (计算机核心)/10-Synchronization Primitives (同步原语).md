@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, cpp/concurrency, learning/foundation]
+tags: [topic/concurrency, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -112,7 +112,7 @@ ThreadSanitizer 擅长发现数据竞争，不证明算法无死锁，也可能�
 - [C++ draft: concurrency support](https://eel.is/c++draft/thread)
 - [Linux futex(2)](https://man7.org/linux/man-pages/man2/futex.2.html)
 
-下一步：[11-Deadlock Analysis and Recovery (死锁分析与恢复)](11-Deadlock%20Analysis%20and%20Recovery%20%28%E6%AD%BB%E9%94%81%E5%88%86%E6%9E%90%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)
+下一步：[11-Deadlock Analysis and Recovery (死锁分析与恢复)](<./11-Deadlock Analysis and Recovery (死锁分析与恢复).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -90,7 +90,7 @@ int main() {
 2. 构造 `std::string_view{text.data(), 5}` 并输出；解释为什么不能直接传给 `strlen`。
 3. 用正常行、空行、非法 ID、文件不存在四种输入运行文件示例，记录各分支行为。
 
-**参考资料：** [01-Sequence Containers (顺序容器)](../04-STL%20and%20Data%20Structures%20%28STL%20%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%29/01-Sequence%20Containers%20%28%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8%29.md) · 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)
+**参考资料：** [01-Sequence Containers (顺序容器)](<../04-STL and Data Structures (STL 与数据结构)/01-Sequence Containers (顺序容器).md>) · 规范依据：[string_view](https://eel.is/c++draft/string.view)、[文件流](https://eel.is/c++draft/fstream)
 
 # 考察题目
 

@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/systems]
 ---
 
 > [!abstract] 本篇要点

@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/debugging, topic/performance]
 ---
 
 > [!abstract] 本篇要点
@@ -87,7 +88,7 @@ BENCHMARK_MAIN();
 > 写清“问题负载 → 指标基线 → profiler 证据 → 修改假设 → 对照结果 → 正确性回归”。如果无法复现原问题或收益落在测量噪声内，先不要宣称优化成功。
 
 > [!info]- 关联笔记
-> 基准实验与剖析方法统一见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇聚焦 C++ release 构建、perf、分配器和 Google Benchmark。
+> 基准实验与剖析方法统一见 [Performance Benchmarking and Profiling (性能基准与剖析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/04-Performance Benchmarking and Profiling (性能基准与剖析).md>)；本篇聚焦 C++ release 构建、perf、分配器和 Google Benchmark。
 
 # 考察题目
 

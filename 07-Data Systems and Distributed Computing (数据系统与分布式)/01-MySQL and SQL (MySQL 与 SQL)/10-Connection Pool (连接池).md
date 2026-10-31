@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/databases, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -157,7 +158,7 @@ thread_cache_size = 64          # 线程缓存
 >
 >
 
-**参考资料：** 下一步：[11-Replication (复制)](11-Replication%20%28%E5%A4%8D%E5%88%B6%29.md)
+**参考资料：** 下一步：[11-Replication (复制)](<./11-Replication (复制).md>)
 ## 连接池管理的是稀缺状态
 
 数据库连接不是一个普通指针。它包含认证会话、事务状态、隔离级别、临时表、会话变量与服务端资源。连接池的职责是控制这些有状态资源的生命周期，而不仅是避免重复 `connect()`。

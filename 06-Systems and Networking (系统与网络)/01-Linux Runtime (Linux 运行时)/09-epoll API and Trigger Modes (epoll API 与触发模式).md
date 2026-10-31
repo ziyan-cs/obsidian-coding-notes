@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -137,7 +138,7 @@ ev.events = EPOLLIN | EPOLLET;  // 边缘触发
 - **初学与常规服务**：优先 LT，减少漏通知风险；仍需限制每连接的处理预算并做好背压。
 - **已经有成熟非阻塞状态机的服务**：可对 ET 做基准测试，再决定是否采用。不要把某个产品的某一版本实现当作普遍性能定律。
 
-遇到“ET 连接卡住”，按顺序查：fd 是否非阻塞、读写是否处理到 `EAGAIN`、预算提前结束后是否已自行重新调度、`EPOLLONESHOT` 是否重新激活。详见 [epoll(7)](https://man7.org/linux/man-pages/man7/epoll.7.html) 与 [epoll Internals (epoll 内部实现)](10-epoll%20Internals%20%28epoll%20%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%29.md)。
+遇到“ET 连接卡住”，按顺序查：fd 是否非阻塞、读写是否处理到 `EAGAIN`、预算提前结束后是否已自行重新调度、`EPOLLONESHOT` 是否重新激活。详见 [epoll(7)](https://man7.org/linux/man-pages/man7/epoll.7.html) 与 [epoll Internals (epoll 内部实现)](<./10-epoll Internals (epoll 内部实现).md>)。
 
 # 考察题目
 

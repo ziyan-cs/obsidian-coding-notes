@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, security]
+tags: [topic/security]
 ---
 
 > [!abstract] 完成标准

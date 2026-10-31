@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/caching, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -371,7 +372,7 @@ Redis 4.0+ 支持 LFU 淘汰，用双向计数器：
 >
 >
 
-**参考资料：** 下一步：[03-Cache Consistency Problems (缓存一致性问题)](03-Cache%20Consistency%20Problems%20%28%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%29.md)
+**参考资料：** 下一步：[03-Cache Consistency Problems (缓存一致性问题)](<./03-Cache Consistency Problems (缓存一致性问题).md>)
 
 # 考察题目
 

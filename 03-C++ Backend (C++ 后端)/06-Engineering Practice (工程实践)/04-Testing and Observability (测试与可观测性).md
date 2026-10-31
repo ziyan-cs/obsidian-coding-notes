@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/observability, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -144,10 +145,10 @@ C++ OpenTelemetry 的 SDK、Exporter、传输与框架集成是**不同层**。�
 
 先让服务具备**请求计数、错误率、延迟直方图和结构化错误日志**。跨服务调用增多后补 trace。一次故障按“告警窗口 → 指标定位受影响路由 → trace 找耗时段 → 日志核对失败上下文 → 构造回归测试”闭环；监控不替代测试，也不保证单次故障总有完整 trace。
 
-**参考资料：** 下一步：[05-Profiling and Optimization (性能分析与优化)](05-Profiling%20and%20Optimization%20%28%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E4%B8%8E%E4%BC%98%E5%8C%96%29.md)
+**参考资料：** 下一步：[05-Profiling and Optimization (性能分析与优化)](<./05-Profiling and Optimization (性能分析与优化).md>)
 
 > [!info]- 关联笔记
-> 测试证据设计与可观测性语义统一见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md) 和 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)；本篇聚焦 GoogleTest/GMock、spdlog、Prometheus 与 OpenTelemetry C++。
+> 测试证据设计与可观测性语义统一见 [Testing Strategy and Evidence (测试策略与证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>) 和 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>)；本篇聚焦 GoogleTest/GMock、spdlog、Prometheus 与 OpenTelemetry C++。
 
 # 考察题目
 

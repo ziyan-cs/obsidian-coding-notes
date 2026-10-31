@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -128,7 +128,7 @@ int main() {
 > [!note] 掌握标志
 > 能解释 `auto` 的复制/借用、`decltype(auto)` 的返回引用、lambda 捕获的生命周期，以及 `std::function` 为什么不应无条件放进最热的调用路径。
 
-延伸：[02-Value Categories and Move (值类别与移动语义)](02-Value%20Categories%20and%20Move%20%28%E5%80%BC%E7%B1%BB%E5%88%AB%E4%B8%8E%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%29.md)。
+延伸：[02-Value Categories and Move (值类别与移动语义)](<./02-Value Categories and Move (值类别与移动语义).md>)。
 
 # 考察题目
 

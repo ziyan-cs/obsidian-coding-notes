@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [career/evidence, backend/competency]
+tags: [topic/career, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

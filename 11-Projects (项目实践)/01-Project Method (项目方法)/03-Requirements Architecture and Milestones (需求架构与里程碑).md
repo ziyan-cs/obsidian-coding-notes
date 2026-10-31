@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/project-delivery, topic/system-design]
 ---
 
 > [!abstract] 本篇要点
@@ -61,7 +62,7 @@ client -> API -> domain service -> repository -> database
 > 2. 哪个假设最可能推翻当前架构，如何用最小实验验证？
 > 3. 当前里程碑失败时，回退边界在哪里？
 
-**参考资料：** 前置：[01-Project Design Template (项目设计模板)](01-Project%20Design%20Template%20%28%E9%A1%B9%E7%9B%AE%E8%AE%BE%E8%AE%A1%E6%A8%A1%E6%9D%BF%29.md) · 延伸：[02-Testing Benchmark and Evidence (测试压测与证据)](02-Testing%20Benchmark%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E5%8E%8B%E6%B5%8B%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)
+**参考资料：** 前置：[01-Project Design Template (项目设计模板)](<./01-Project Design Template (项目设计模板).md>) · 延伸：[02-Testing Benchmark and Evidence (测试压测与证据)](<./02-Testing Benchmark and Evidence (测试压测与证据).md>)
 
 # 考察题目
 

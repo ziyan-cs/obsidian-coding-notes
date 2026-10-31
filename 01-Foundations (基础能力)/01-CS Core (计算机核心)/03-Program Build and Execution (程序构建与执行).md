@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/toolchain, learning/foundation]
+tags: [topic/build, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -205,7 +205,7 @@ strace -f -o trace.txt ./app
 - [GNU ld linker scripts](https://sourceware.org/binutils/docs/ld/Scripts.html)
 - [Linux execve(2)](https://man7.org/linux/man-pages/man2/execve.2.html)
 
-下一步：[Memory Hierarchy and IO (存储层级与输入输出)](04-Memory%20Hierarchy%20and%20IO%20%28%E5%AD%98%E5%82%A8%E5%B1%82%E7%BA%A7%E4%B8%8E%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%29.md)
+下一步：[Memory Hierarchy and IO (存储层级与输入输出)](<./04-Memory Hierarchy and IO (存储层级与输入输出).md>)
 
 # 考察题目
 

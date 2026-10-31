@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/detection, operations/incident]
+tags: [topic/observability, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -48,7 +48,7 @@ detect -> triage -> contain -> preserve evidence
 为账号泄露、密钥泄露、恶意镜像、越权访问和数据泄漏准备运行手册。演练要验证联系人、权限、备份、回滚和日志查询真实可用。
 
 > [!info]- 关联笔记
-> 威胁驱动检测、日志语义与证据保全统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦安全事件源、规则运营和响应联动。
+> 威胁驱动检测、日志语义与证据保全统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/06-Security Detection and Incident Evidence (安全检测与事件证据).md>)；本篇聚焦安全事件源、规则运营和响应联动。
 
 # 考察题目
 

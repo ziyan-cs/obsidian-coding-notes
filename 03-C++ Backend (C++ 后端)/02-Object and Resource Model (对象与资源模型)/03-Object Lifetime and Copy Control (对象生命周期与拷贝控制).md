@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -181,7 +181,7 @@ public:
 // 真实项目优先使用 RAII 成员，让类遵循 Rule of Zero。
 ```
 
-**参考资料：** 下一步：[04-Polymorphism and Inheritance (多态与继承)](04-Polymorphism%20and%20Inheritance%20%28%E5%A4%9A%E6%80%81%E4%B8%8E%E7%BB%A7%E6%89%BF%29.md)
+**参考资料：** 下一步：[04-Polymorphism and Inheritance (多态与继承)](<./04-Polymorphism and Inheritance (多态与继承).md>)
 
 # 考察题目
 

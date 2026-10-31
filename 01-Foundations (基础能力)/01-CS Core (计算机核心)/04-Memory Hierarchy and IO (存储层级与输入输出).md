@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/architecture, cs/io, learning/foundation]
+tags: [topic/performance, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -243,7 +243,7 @@ iostat -xz 1
 - [Linux kernel: Dynamic DMA mapping](https://kernel.org/doc/html/next/core-api/dma-api.html)
 - [Linux kernel memory barriers](https://kernel.org/doc/html/latest/core-api/wrappers/memory-barriers.html)
 
-下一步：[Operating System Overview and Boot (操作系统总览与启动)](05-Operating%20System%20Overview%20and%20Boot%20%28%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%80%BB%E8%A7%88%E4%B8%8E%E5%90%AF%E5%8A%A8%29.md)
+下一步：[Operating System Overview and Boot (操作系统总览与启动)](<./05-Operating System Overview and Boot (操作系统总览与启动).md>)
 
 # 考察题目
 

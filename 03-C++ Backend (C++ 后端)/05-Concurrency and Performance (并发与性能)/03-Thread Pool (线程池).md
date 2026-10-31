@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/concurrency, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -150,7 +151,7 @@ int main() {
 
 生产级实现还要明确：多提交者与关闭方的生命周期同步、超时和取消策略、队列公平性、指标、worker 崩溃策略、任务优先级是否真的需要，以及容量拒绝或阻塞的背压选择。工作窃取、动态扩缩容不是“必须有”，只有负载证据支持时再增加复杂度。
 
-**参考资料：** [01-Threads Locks and Coordination (线程锁与协作)](01-Threads%20Locks%20and%20Coordination%20%28%E7%BA%BF%E7%A8%8B%E9%94%81%E4%B8%8E%E5%8D%8F%E4%BD%9C%29.md) · [04-Lock Free and Performance (无锁与性能)](04-Lock%20Free%20and%20Performance%20%28%E6%97%A0%E9%94%81%E4%B8%8E%E6%80%A7%E8%83%BD%29.md)
+**参考资料：** [01-Threads Locks and Coordination (线程锁与协作)](<./01-Threads Locks and Coordination (线程锁与协作).md>) · [04-Lock Free and Performance (无锁与性能)](<./04-Lock Free and Performance (无锁与性能).md>)
 
 # 考察题目
 

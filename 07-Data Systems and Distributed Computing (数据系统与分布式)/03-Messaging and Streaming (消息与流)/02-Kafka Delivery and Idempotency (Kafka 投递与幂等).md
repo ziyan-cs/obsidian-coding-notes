@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/consistency, topic/messaging, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -207,7 +208,7 @@ Producer -> Broker -> Consumer
 >
 > 参考 [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)；具体参数默认值与客户端分区器行为以部署版本为准。
 
-**参考资料：** 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](03-RabbitMQ%20and%20Kafka%20Selection%20%28RabbitMQ%20%E4%B8%8E%20Kafka%20%E9%80%89%E5%9E%8B%29.md)
+**参考资料：** 下一步：[03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型)](<./03-RabbitMQ and Kafka Selection (RabbitMQ 与 Kafka 选型).md>)
 
 # 考察题目
 

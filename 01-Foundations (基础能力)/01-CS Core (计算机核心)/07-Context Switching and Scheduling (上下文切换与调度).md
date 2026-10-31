@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, learning/foundation]
+tags: [topic/concurrency, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -103,7 +103,7 @@ perf sched latency
 - [Linux Scheduler documentation](https://docs.kernel.org/scheduler/index.html)
 - [sched(7)](https://man7.org/linux/man-pages/man7/sched.7.html)
 
-下一步：[08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)](08-Virtual%20Memory%20Paging%20and%20Allocation%20%28%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E3%80%81%E5%88%86%E9%A1%B5%E4%B8%8E%E5%88%86%E9%85%8D%29.md)
+下一步：[08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配)](<./08-Virtual Memory Paging and Allocation (虚拟内存、分页与分配).md>)
 
 # 考察题目
 

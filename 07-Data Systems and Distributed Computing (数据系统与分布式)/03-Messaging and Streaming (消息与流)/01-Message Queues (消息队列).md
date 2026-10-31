@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/distributed-systems, topic/messaging]
 ---
 
 > [!abstract] 本篇要点

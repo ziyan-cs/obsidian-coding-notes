@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -206,7 +206,7 @@ template int square<int>(int);  // 显式实例化定义
 - [Template parameters and arguments - cppreference](https://en.cppreference.com/w/cpp/language/template_parameters)
 - [Explicit instantiation - cppreference](https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation)
 
-**参考资料：** 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](06-RAII%20and%20Custom%20Allocation%20%28RAII%20%E4%B8%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E9%85%8D%29.md)
+**参考资料：** 下一步：[06-RAII and Custom Allocation (RAII 与自定义分配)](<./06-RAII and Custom Allocation (RAII 与自定义分配).md>)
 
 # 考察题目
 

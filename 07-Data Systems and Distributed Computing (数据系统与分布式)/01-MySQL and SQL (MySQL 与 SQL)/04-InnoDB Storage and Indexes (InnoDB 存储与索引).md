@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/data-structures, topic/databases]
 ---
 
 > [!abstract] 本篇要点
@@ -427,7 +428,7 @@ WHERE a = 1 AND c = 2              → 只用到 a（中间跳过 b）
 
 > [!tip]- **工程要点**：ICP 是 MySQL 5.6 的里程碑优化——它将 WHERE 过滤下推到存储引擎层，减少回表次数。但 ICP 并不能完全替代覆盖索引，最彻底的优化仍然是"索引列覆盖查询的所有 SELECT 列"。实践中，先用覆盖索引满足高频查询，再通过 ICP 减少低频查询的回表代价。
 
-**参考资料：** 下一步：[05-Transactions and Isolation (事务与隔离级别)](05-Transactions%20and%20Isolation%20%28%E4%BA%8B%E5%8A%A1%E4%B8%8E%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%29.md)
+**参考资料：** 下一步：[05-Transactions and Isolation (事务与隔离级别)](<./05-Transactions and Isolation (事务与隔离级别).md>)
 
 # 考察题目
 

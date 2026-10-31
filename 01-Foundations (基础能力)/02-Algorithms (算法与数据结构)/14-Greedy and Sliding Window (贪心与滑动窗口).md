@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/greedy, algorithm/sliding-window, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -89,7 +89,7 @@ std::size_t longest_unique(std::string_view s) {
 > [!summary] 本篇结论
 > 贪心依靠可证明的安全选择，滑动窗口依靠端点移动时的单调约束。两者都是线性扫描，但成立理由不同；先证明结构，再写模板。
 
-下一步：[15-String and Bit Algorithms (字符串与位运算)](15-String%20and%20Bit%20Algorithms%20%28%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97%29.md)
+下一步：[15-String and Bit Algorithms (字符串与位运算)](<./15-String and Bit Algorithms (字符串与位运算).md>)
 
 # 考察题目
 

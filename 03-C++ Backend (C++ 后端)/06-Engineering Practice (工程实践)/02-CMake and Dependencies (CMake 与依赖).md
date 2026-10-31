@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/build, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -111,7 +112,7 @@ target_link_libraries(app PRIVATE fmt::fmt)
 
 资料：[CMake 官方教程：目标命令](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)、[CMake 官方教程：链接作用域](https://cmake.org/cmake/help/latest/guide/tutorial/Getting%20Started%20with%20CMake.html)。
 
-**参考资料：** [03-Exceptions and Debugging (异常与调试)](03-Exceptions%20and%20Debugging%20%28%E5%BC%82%E5%B8%B8%E4%B8%8E%E8%B0%83%E8%AF%95%29.md)
+**参考资料：** [03-Exceptions and Debugging (异常与调试)](<./03-Exceptions and Debugging (异常与调试).md>)
 
 # 考察题目
 

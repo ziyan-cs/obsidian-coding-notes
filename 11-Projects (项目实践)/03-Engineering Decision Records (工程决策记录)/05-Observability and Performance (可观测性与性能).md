@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [comparison, observability, performance]
+tags: [topic/observability, topic/performance, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -44,7 +44,7 @@ tags: [comparison, observability, performance]
 > - 自测：为什么火焰图中的热点不必然就是第一个该优化的点？
 
 > [!info]- 关联笔记
-> 技术判断基线见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/05-Observability%20Logs%20Metrics%20and%20Tracing%20%28%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E3%80%81%E6%97%A5%E5%BF%97%E3%80%81%E6%8C%87%E6%A0%87%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md) 与 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇聚焦如何把监控与性能证据表达成工程决策。
+> 技术判断基线见 [Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/05-Observability Logs Metrics and Tracing (可观测性、日志、指标与追踪).md>) 与 [Performance Benchmarking and Profiling (性能基准与剖析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/04-Performance Benchmarking and Profiling (性能基准与剖析).md>)；本篇聚焦如何把监控与性能证据表达成工程决策。
 
 # 考察题目
 

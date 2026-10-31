@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/files]
+tags: [language/python, topic/data-processing, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

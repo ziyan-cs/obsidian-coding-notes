@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/dynamic-programming, algorithm/knapsack, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -115,7 +115,7 @@ dp[0] = 0;
 > [!summary] 本篇结论
 > 背包 DP 的统一坐标是：物品能用几次、容量代表什么、状态如何合并。遍历方向不是孤立口诀，而是在一维数组上保留或复用当前物品层的机制。
 
-下一步：[12-Interval Dynamic Programming (区间动态规划)](12-Interval%20Dynamic%20Programming%20%28%E5%8C%BA%E9%97%B4%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+下一步：[12-Interval Dynamic Programming (区间动态规划)](<./12-Interval Dynamic Programming (区间动态规划).md>)
 
 # 考察题目
 

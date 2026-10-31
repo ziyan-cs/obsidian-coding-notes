@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/testing]
+tags: [language/python, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -100,7 +100,7 @@ fixture 不应隐藏断言或创建与当前测试无关的大量对象。若读
 **参考资料：** [pytest 入门文档](https://docs.pytest.org/en/stable/getting-started.html) · [pytest fixtures](https://docs.pytest.org/en/stable/how-to/fixtures.html)
 
 > [!info]- 关联笔记
-> 测试分层与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦 pytest fixture、参数化与 Python 测试替身。
+> 测试分层与证据标准见 [Testing Strategy and Evidence (测试策略与证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>)；本篇聚焦 pytest fixture、参数化与 Python 测试替身。
 
 # 考察题目
 

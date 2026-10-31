@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/ai, project/security, project/cloud-native]
+tags: [topic/ai, topic/project-delivery, topic/security]
 ---
 
 > [!abstract] 本篇要点

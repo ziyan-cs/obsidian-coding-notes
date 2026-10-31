@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/concurrency, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

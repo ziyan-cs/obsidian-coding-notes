@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, language/python, automation]
+tags: [language/python, topic/testing]
 ---
 
 > [!abstract] 完成标准

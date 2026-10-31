@@ -11,6 +11,6 @@
   "baseFontSize": 19,
   "interfaceFontFamily": "",
   "textFontFamily": "",
-  "showRibbon": false,
+  "showRibbon": true,
   "showViewHeader": true
 }

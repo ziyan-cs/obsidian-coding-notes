@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/performance, learning/foundation]
+tags: [topic/performance, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -114,7 +114,7 @@ L = λW
 - [Linux pressure stall information](https://docs.kernel.org/accounting/psi.html)
 - [Google SRE: Monitoring Distributed Systems](https://sre.google/sre-book/monitoring-distributed-systems/)
 
-回到：[00-Foundations Standard (基础能力标准与自测)](../00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md)
+回到：[00-Foundations Standard (基础能力标准与自测)](<../00-Foundations Standard (基础能力标准与自测).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, learning/foundation]
+tags: [topic/reliability, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -107,7 +107,7 @@ cat /proc/filesystems
 - [Linux pathname lookup](https://docs.kernel.org/filesystems/path-lookup.html)
 - [Linux ext4 documentation](https://docs.kernel.org/filesystems/ext4/index.html)
 
-下一步：[10-Synchronization Primitives (同步原语)](10-Synchronization%20Primitives%20%28%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD%29.md)
+下一步：[10-Synchronization Primitives (同步原语)](<./10-Synchronization Primitives (同步原语).md>)
 
 # 考察题目
 

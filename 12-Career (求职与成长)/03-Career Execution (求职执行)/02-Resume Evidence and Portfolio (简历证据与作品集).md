@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/career, topic/documentation]
 ---
 
 > [!abstract] 本篇要点
@@ -51,7 +52,7 @@ review_due:
 > 2. 哪条简历表述最容易被连续追问击穿？
 > 3. 如果去掉所有框架名，你还能否讲清工程价值？
 
-**参考资料：** 前置：[01-Backend Competency Evidence (后端能力证据)](01-Backend%20Competency%20Evidence%20%28%E5%90%8E%E7%AB%AF%E8%83%BD%E5%8A%9B%E8%AF%81%E6%8D%AE%29.md) · 延伸：[03-Project Deep Dive (项目难点表达)](../01-Interview%20Expression%20%28%E9%9D%A2%E8%AF%95%E8%A1%A8%E8%BE%BE%29/03-Project%20Deep%20Dive%20%28%E9%A1%B9%E7%9B%AE%E9%9A%BE%E7%82%B9%E8%A1%A8%E8%BE%BE%29.md)
+**参考资料：** 前置：[01-Backend Competency Evidence (后端能力证据)](<./01-Backend Competency Evidence (后端能力证据).md>) · 延伸：[03-Project Deep Dive (项目难点表达)](<../01-Interview Expression (面试表达)/03-Project Deep Dive (项目难点表达).md>)
 
 # 考察题目
 

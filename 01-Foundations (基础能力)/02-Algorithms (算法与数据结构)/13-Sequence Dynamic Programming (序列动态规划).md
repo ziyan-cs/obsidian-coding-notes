@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/dynamic-programming, algorithm/sequence, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -106,7 +106,7 @@ s[l] == s[r]：dp[l][r] = dp[l+1][r-1] + 2
 > [!summary] 本篇结论
 > 序列 DP 的状态必须明确连续性、前缀范围和是否强制以当前位置结尾。长度可以压缩，恢复路径则需要保留决策；不要把输出要求当成无关细节。
 
-下一步：[14-Greedy and Sliding Window (贪心与滑动窗口)](14-Greedy%20and%20Sliding%20Window%20%28%E8%B4%AA%E5%BF%83%E4%B8%8E%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%29.md)
+下一步：[14-Greedy and Sliding Window (贪心与滑动窗口)](<./14-Greedy and Sliding Window (贪心与滑动窗口).md>)
 
 # 考察题目
 

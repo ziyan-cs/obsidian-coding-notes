@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/data-structure, algorithm/bfs, learning/foundation]
+tags: [topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -128,7 +128,7 @@ std::optional<std::pair<std::size_t, std::size_t>> two_sum(
 > [!summary] 本篇结论
 > 栈保存最近的未决状态，队列保存按发现顺序待处理的状态，哈希表用额外空间换快速定位。模板正确性的核心分别是单调性、最短层次和键映射语义。
 
-下一步：[03-Heap and Top K (堆与 Top K)](03-Heap%20and%20Top%20K%20%28%E5%A0%86%E4%B8%8E%20Top%20K%29.md)
+下一步：[03-Heap and Top K (堆与 Top K)](<./03-Heap and Top K (堆与 Top K).md>)
 
 # 考察题目
 

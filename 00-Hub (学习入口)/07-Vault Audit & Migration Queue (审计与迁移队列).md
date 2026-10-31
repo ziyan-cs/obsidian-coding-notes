@@ -1,10 +1,10 @@
 ---
 study_stage: reference
-tags: [vault/audit, vault/migration]
+tags: [topic/documentation]
 ---
 
 > [!abstract] 维护范围
-> 收集笔记本身的事实、示例、结构或链接问题。学习任务看[学习周期](09-Study%20Cycle%20%28%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%9C%9F%29.md)，个人误解记入[错误记录](05-Mistake%20Log%20%28%E9%94%99%E8%AF%AF%E8%AE%B0%E5%BD%95%29.md)。
+> 收集笔记本身的事实、示例、结构或链接问题。学习任务看[学习周期](<./09-Study Cycle (学习周期).md>)，个人误解记入[错误记录](<./05-Mistake Log (错误记录).md>)。
 
 # 先处理什么
 

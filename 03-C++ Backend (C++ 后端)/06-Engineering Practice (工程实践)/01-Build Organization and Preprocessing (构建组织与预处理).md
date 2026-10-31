@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -403,7 +404,7 @@ static_assert(sizeof(int) == 4, "int must be 4 bytes");  // static_assert 是语
 
 > **工程建议**：在 C++ 中尽量减少宏，把常量、类型和普通函数表达为语言实体。宏在预处理阶段工作，不遵循 C++ 作用域和类型检查；但条件编译、头文件守卫、token 拼接/字符串化以及某些跨编译器兼容层仍需要或适合使用宏。诊断位置可优先考虑 C++20 `std::source_location`；`__FILE__`、`__LINE__` 仍常见于断言和宏生成的调用点。`__DATE__`、`__TIME__` 会把构建时间带入产物，需纳入可复现构建考量。使用 `assert` 时不要放有副作用的表达式，因为定义 `NDEBUG` 后断言表达式不会求值。
 
-**参考资料：** 下一步：[02-CMake and Dependencies (CMake 与依赖)](02-CMake%20and%20Dependencies%20%28CMake%20%E4%B8%8E%E4%BE%9D%E8%B5%96%29.md)
+**参考资料：** 下一步：[02-CMake and Dependencies (CMake 与依赖)](<./02-CMake and Dependencies (CMake 与依赖).md>)
 
 # 考察题目
 

@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/go, topic/api, topic/error-handling, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -54,7 +55,7 @@ service 返回领域错误，不返回 HTTP status。handler 使用 `errors.Is/A
 
 在 handler 中按 `errors.Is/As` 判断已定义领域错误；对 `*http.MaxBytesError` 单独映射 413。错误 body 至少包含稳定 `code`、可安全展示的 `message` 和 `request_id`，例如 `{"code":"invalid_argument","message":"title is required","request_id":"..."}`。日志保留完整错误链，但过滤凭据和原始敏感输入。
 
-**参考资料：** 下一步：[03-API Lifecycle and Graceful Shutdown (服务生命周期)](03-API%20Lifecycle%20and%20Graceful%20Shutdown%20%28%E6%9C%8D%E5%8A%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%29.md)
+**参考资料：** 下一步：[03-API Lifecycle and Graceful Shutdown (服务生命周期)](<./03-API Lifecycle and Graceful Shutdown (服务生命周期).md>)
 
 # 考察题目
 

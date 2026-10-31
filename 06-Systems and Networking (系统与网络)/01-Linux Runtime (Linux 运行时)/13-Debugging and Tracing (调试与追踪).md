@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/debugging, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -140,7 +141,7 @@ Performance counter stats for './prog':
 > [!tip]- **工程要点**：先用日志、指标与最小复现界定故障，再选工具：`strace` 查 syscall/errno，`gdb` 查进程内部状态与 core，`perf` 查采样热点。附加调试器会暂停进程，追踪会改变时序；在生产环境先评估权限、敏感数据与性能影响。
 
 > [!info]- 关联笔记
-> 通用定位链见 [Debugging and Failure Localization (调试与故障定位)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md)，性能实验见 [Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md)；本篇保留 strace、GDB、perf 等 Linux 现场工具。
+> 通用定位链见 [Debugging and Failure Localization (调试与故障定位)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/02-Debugging and Failure Localization (调试与故障定位).md>)，性能实验见 [Performance Benchmarking and Profiling (性能基准与剖析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/04-Performance Benchmarking and Profiling (性能基准与剖析).md>)；本篇保留 strace、GDB、perf 等 Linux 现场工具。
 
 # 考察题目
 

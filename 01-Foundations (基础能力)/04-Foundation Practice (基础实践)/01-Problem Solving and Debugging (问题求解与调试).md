@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/debugging, foundations/practice]
+tags: [topic/debugging, topic/learning]
 ---
 
 > [!abstract] 本篇要点
@@ -144,7 +144,7 @@ perf report
 > [!summary] 本篇结论
 > 调试不是凭经验猜测，而是不断缩小可疑集合的证据过程。复现、最小化、不变量、工具观测和可证伪实验共同把症状推进到根因。
 
-下一步：[02-Testing and Verification (测试与验证)](02-Testing%20and%20Verification%20%28%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%AA%8C%E8%AF%81%29.md)
+下一步：[02-Testing and Verification (测试与验证)](<./02-Testing and Verification (测试与验证).md>)
 
 # 考察题目
 

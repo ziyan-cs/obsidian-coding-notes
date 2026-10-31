@@ -1,6 +1,6 @@
 ---
 study_stage: reference
-tags: [vault/standard, learning/note-taking]
+tags: [topic/documentation, topic/learning]
 ---
 
 > [!abstract] 写作标准
@@ -10,14 +10,16 @@ tags: [vault/standard, learning/note-taking]
 
 文件和目录使用 `序号-English (中文)`，笔记加 `.md`。正文不再重复文件名作标题。常规结构保持“模块 → 专题 → 笔记”；模块的 `00-... Standard` 用于掌握标准与综合自测。
 
-学习进度只维护 `study_stage` 与 `review_due`。未学用 `backlog`，首次学懂后改为 `D1` 并手动填写次日复习日期；尚未学懂时可用 `learn`。后续复习用 `D3 / D7 / D14 / D30 / D60`，稳定掌握用 `solid`，Hub 等参考页用 `reference`。既有 `tags` 只作分类，不要求随学习修改。
+学习进度只维护 `study_stage` 与 `review_due`。未学用 `backlog`，首次学懂后改为 `D1` 并手动填写次日复习日期；尚未学懂时可用 `learn`。后续复习用 `D3 / D7 / D14 / D30 / D60`，稳定掌握用 `solid`，Hub 等参考页用 `reference`。`tags` 只作主题分类，不随学习进度修改。
 
 ```yaml
 study_stage: backlog
 review_due:
 ```
 
-`review_due` 在 Obsidian 中统一设为**日期**属性：未安排时保留空值；首次学懂后，将 `study_stage` 改为 `D1`，再把 `review_due` 填为次日的真实日期（`YYYY-MM-DD`）。属性类型配置保存在 `.obsidian/types.json`，随笔记库一起使用。阶段更新见[间隔复习系统](02-Spaced%20Review%20System%20%28%E9%97%B4%E9%9A%94%E5%A4%8D%E4%B9%A0%E7%B3%BB%E7%BB%9F%29.md)。
+`review_due` 在 Obsidian 中统一设为**日期**属性：未安排时保留空值；首次学懂后，将 `study_stage` 改为 `D1`，再把 `review_due` 填为次日的真实日期（`YYYY-MM-DD`）。属性类型配置保存在 `.obsidian/types.json`，随笔记库一起使用。阶段更新见[间隔复习系统](<./02-Spaced Review System (间隔复习系统).md>)。
+
+标签采用两类：`language/cpp`、`language/python`、`language/go` 标明主要语言；`topic/*` 标明可跨模块检索的主题，例如 `topic/concurrency` 串联操作系统、C++、Go、数据库与项目实践。每篇只选直接相关的少数标签；目录已经表达所属模块，`study_stage` 已经表达进度，不用标签重复。新增标签前先检查[主题知识图谱](<./08-Topic Network (主题知识图谱).md>)中的现有主题是否适用，避免为单篇笔记造标签。前置、实现和验证关系由具体笔记链接表达，不从标签共现推断。
 
 # 内容与排版
 
@@ -30,10 +32,10 @@ review_due:
 
 # 链接与事实
 
-库内 Markdown 链接使用相对路径，显示简明标题；路径中的空格、括号、中文等字符做 URL 编码。这样在 Obsidian 和 GitHub 中都能导航。例如：
+库内笔记链接使用相对 Markdown 路径，显示简明标题；同目录以 `./` 开头，上级目录使用 `../`。文件名含空格或括号时，用 `<...>` 包住目标路径，保持可读并让 Obsidian 与 GitHub 正确解析。例如：
 
-[学习周期](09-Study%20Cycle%20%28%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%9C%9F%29.md)
+[学习周期](<./09-Study Cycle (学习周期).md>)
 
-只链接必要的前置、对照或实践，文末少量关联即可。修改名称或路径后同步入链并检查目标，不在每篇末尾堆一份目录。Obsidian 的“新建链接格式”设为“相对于文件的路径”，避免新链接退回库根路径。
+只链接必要的前置、对照或实践，文末少量关联即可，不在每篇末尾堆一份目录。Obsidian 的“新建链接格式”设为“相对于文件的路径”，并开启“自动更新内部链接”；在 Obsidian 中重命名或移动文件后检查入链。若直接在文件系统或 Git 中改路径，也要核对并修复入链。
 
-版本相关结论注明适用环境和来源，性能数字交代测量条件。未核实内容按[来源与时效规则](06-Sources%20%26%20Freshness%20Policy%20%28%E6%9D%A5%E6%BA%90%E4%B8%8E%E6%97%B6%E6%95%88%E8%A7%84%E5%88%99%29.md)标明具体疑点。
+版本相关结论注明适用环境和来源，性能数字交代测量条件。未核实内容按[来源与时效规则](<./06-Sources & Freshness Policy (来源与时效规则).md>)标明具体疑点。

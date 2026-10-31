@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, career, interview]
+tags: [topic/career, topic/system-design]
 ---
 
 > [!abstract] 完成标准

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/url-shortener, backend/api]
+tags: [topic/api, topic/databases, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -78,7 +78,7 @@ GET /{code}
 
 最小指标：创建成功/冲突/失败，重定向状态，cache hit/miss，回源并发，数据库池等待，P50/P95/P99。容量估算从链接新增量、平均 URL 长度、读写比、过期比例和热点分布开始，不凭空写“亿级”。
 
-实现教程入口：[First Service Delivery (首个服务交付)](../../05-Go%20Backend%20%28Go%20%E5%90%8E%E7%AB%AF%29/05-Go%20Practice%20%28Go%20%E5%AE%9E%E8%B7%B5%29/03-First%20Service%20Delivery%20%28%E9%A6%96%E4%B8%AA%E6%9C%8D%E5%8A%A1%E4%BA%A4%E4%BB%98%29.md)。
+实现教程入口：[First Service Delivery (首个服务交付)](<../../05-Go Backend (Go 后端)/05-Go Practice (Go 实践)/03-First Service Delivery (首个服务交付).md>)。
 
 # 验收
 
@@ -99,7 +99,7 @@ GET /{code}
 
 协议与安全参考：[RFC 9110 重定向语义](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4)、[OWASP Unvalidated Redirects Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)。
 
-**参考资料：** 下一步：[02-IM and Notification (即时通讯与通知)](02-IM%20and%20Notification%20%28%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E4%B8%8E%E9%80%9A%E7%9F%A5%29.md)
+**参考资料：** 下一步：[02-IM and Notification (即时通讯与通知)](<./02-IM and Notification (即时通讯与通知).md>)
 
 # 考察题目
 

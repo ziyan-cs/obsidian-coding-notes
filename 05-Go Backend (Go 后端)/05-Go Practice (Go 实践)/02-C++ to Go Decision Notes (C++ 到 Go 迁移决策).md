@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, language/cpp, comparison]
+tags: [language/go, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -40,7 +40,7 @@ C++ 的 RAII 对象通常在作用域结束时析构；Go 的 `defer` 在**当�
 > 2. 一个接口只有一个调用者时，什么时候不该急着抽 Go interface？
 > 3. 你会拿什么 profile 或压测证据支持一次语言/架构调整？
 
-**参考资料：** 下一步：[03-First Service Delivery (首个服务交付)](03-First%20Service%20Delivery%20%28%E9%A6%96%E4%B8%AA%E6%9C%8D%E5%8A%A1%E4%BA%A4%E4%BB%98%29.md)
+**参考资料：** 下一步：[03-First Service Delivery (首个服务交付)](<./03-First Service Delivery (首个服务交付).md>)
 
 # 考察题目
 

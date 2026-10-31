@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/debugging, topic/error-handling, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -264,7 +265,7 @@ valgrind --tool=callgrind ./main
 > [!tip]- **工程要点**：把 Sanitizer 作为可重复的测试配置，而不是“跑过一次就安全”。ASan/UBSan 常适合日常 CI；TSan 通常独立运行；GDB 用于观察真实崩溃现场。具体组合以项目平台、依赖与测试时长为准。
 
 > [!info]- 关联笔记
-> 通用故障定位与动态分析见 [Debugging and Failure Localization (调试与故障定位)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md) 和 [Memory Safety and Dynamic Analysis (内存安全与动态分析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/03-Memory%20Safety%20and%20Dynamic%20Analysis%20%28%E5%86%85%E5%AD%98%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90%29.md)；本篇保留 C++ 异常安全、GDB 与编译器工具的落地细节。
+> 通用故障定位与动态分析见 [Debugging and Failure Localization (调试与故障定位)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/02-Debugging and Failure Localization (调试与故障定位).md>) 和 [Memory Safety and Dynamic Analysis (内存安全与动态分析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/03-Memory Safety and Dynamic Analysis (内存安全与动态分析).md>)；本篇保留 C++ 异常安全、GDB 与编译器工具的落地细节。
 
 # 考察题目
 

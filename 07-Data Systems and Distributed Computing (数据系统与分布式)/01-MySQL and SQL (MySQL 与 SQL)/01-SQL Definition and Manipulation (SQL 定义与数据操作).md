@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/data-processing, topic/databases]
 ---
 
 > [!abstract] 本篇要点

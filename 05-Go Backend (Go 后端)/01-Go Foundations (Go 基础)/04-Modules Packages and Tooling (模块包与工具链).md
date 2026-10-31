@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, go/tooling]
+tags: [language/go, topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -57,7 +57,7 @@ todo-api/
 - [Go Modules Reference](https://go.dev/ref/mod)
 - [go.mod file reference](https://go.dev/doc/modules/gomod-ref)
 
-**参考资料：** 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](05-Errors%20Panic%20Defer%20and%20Resource%20Safety%20%28%E9%94%99%E8%AF%AF%E3%80%81panic%E3%80%81defer%20%E4%B8%8E%E8%B5%84%E6%BA%90%E5%AE%89%E5%85%A8%29.md)
+**参考资料：** 下一步：[05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全)](<./05-Errors Panic Defer and Resource Safety (错误、panic、defer 与资源安全).md>)
 
 # 考察题目
 

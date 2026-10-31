@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/dynamic-programming, algorithm/interval, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -89,7 +89,7 @@ dp[l][r] = max(dp[l][k] + value[l]×value[k]×value[r] + dp[k][r])
 > [!summary] 本篇结论
 > 区间 DP 通过最后一次操作把大区间拆为已知小区间。状态边界、遍历长度和切分点共同决定正确性；高级优化只有在代价结构满足严格条件时成立。
 
-下一步：[13-Sequence Dynamic Programming (序列动态规划)](13-Sequence%20Dynamic%20Programming%20%28%E5%BA%8F%E5%88%97%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+下一步：[13-Sequence Dynamic Programming (序列动态规划)](<./13-Sequence Dynamic Programming (序列动态规划).md>)
 
 # 考察题目
 

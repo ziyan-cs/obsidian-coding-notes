@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/build, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -185,7 +186,7 @@ dlclose(handle);
 
 [ld.so(8) Linux manual](https://man7.org/linux/man-pages/man8/ld.so.8.html) · [ldd(1) security note](https://man7.org/linux/man-pages/man1/ldd.1.html)
 
-**参考资料：** 下一步：[13-Debugging and Tracing (调试与追踪)](13-Debugging%20and%20Tracing%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E8%BF%BD%E8%B8%AA%29.md)
+**参考资料：** 下一步：[13-Debugging and Tracing (调试与追踪)](<./13-Debugging and Tracing (调试与追踪).md>)
 
 # 考察题目
 

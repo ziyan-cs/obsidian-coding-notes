@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -137,7 +138,7 @@ int main() {
 3. 测试 `divide_exact` 的除零、不整除、精确整除和 `INT_MIN / -1`。
 4. 运行 `Vec2` 示例，解释 `operator+` 为什么复用 `operator+=`，并验证 `at(2)` 的异常边界。
 
-**参考资料：** [02-Arrays Strings and IO (数组字符串与输入输出)](02-Arrays%20Strings%20and%20IO%20%28%E6%95%B0%E7%BB%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%29.md) · 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)
+**参考资料：** [02-Arrays Strings and IO (数组字符串与输入输出)](<./02-Arrays Strings and IO (数组字符串与输入输出).md>) · 规范依据：[基础类型](https://eel.is/c++draft/basic.fundamental)、[列表初始化](https://eel.is/c++draft/dcl.init.list)
 
 # 考察题目
 

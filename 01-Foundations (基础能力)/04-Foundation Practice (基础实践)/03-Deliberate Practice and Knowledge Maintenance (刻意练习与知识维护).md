@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice]
+tags: [topic/documentation, topic/learning]
 ---
 
 > [!abstract] 本篇要点
@@ -139,7 +139,7 @@ tags: [learning/deliberate-practice, knowledge/maintenance, foundations/practice
 > [!summary] 本篇结论
 > 刻意练习依靠主动回忆、即时反馈、错误归因和陌生迁移。笔记负责稳定知识，Hub 负责时间安排，代码与实验负责提供证据；三者分工能避免计划、模板和正文互相污染。
 
-回到：[00-Foundations Standard (基础能力标准与自测)](../00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md)
+回到：[00-Foundations Standard (基础能力标准与自测)](<../00-Foundations Standard (基础能力标准与自测).md>)
 
 # 考察题目
 

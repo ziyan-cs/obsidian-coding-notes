@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/verification]
+tags: [topic/debugging, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -107,8 +107,8 @@ scheduled Valgrind/fuzz corpus
 
 ## 关联专题
 
-- [Testing Strategy and Evidence (测试策略与证据)](01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：用测试输入扩大动态分析覆盖。
-- [Debugging and Failure Localization (调试与故障定位)](02-Debugging%20and%20Failure%20Localization%20%28%E8%B0%83%E8%AF%95%E4%B8%8E%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%29.md)：从报告回到首次错误状态。
+- [Testing Strategy and Evidence (测试策略与证据)](<./01-Testing Strategy and Evidence (测试策略与证据).md>)：用测试输入扩大动态分析覆盖。
+- [Debugging and Failure Localization (调试与故障定位)](<./02-Debugging and Failure Localization (调试与故障定位).md>)：从报告回到首次错误状态。
 
 ## 参考资料
 

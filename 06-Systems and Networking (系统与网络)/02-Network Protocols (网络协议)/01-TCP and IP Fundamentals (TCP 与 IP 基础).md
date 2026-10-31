@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -129,7 +130,7 @@ DNS 是分布式命名系统，不只返回 IP：`A/AAAA` 提供地址，`CNAME`
 
 [RFC 8499: DNS Terminology](https://www.rfc-editor.org/rfc/rfc8499.html) · [RFC 8200: IPv6](https://www.rfc-editor.org/rfc/rfc8200.html)
 
-**参考资料：** 下一步：[02-TCP Handshake and State Machine (TCP 握手与状态机)](02-TCP%20Handshake%20and%20State%20Machine%20%28TCP%20%E6%8F%A1%E6%89%8B%E4%B8%8E%E7%8A%B6%E6%80%81%E6%9C%BA%29.md)
+**参考资料：** 下一步：[02-TCP Handshake and State Machine (TCP 握手与状态机)](<./02-TCP Handshake and State Machine (TCP 握手与状态机).md>)
 
 # 考察题目
 

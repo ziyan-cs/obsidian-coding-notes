@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/caching, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -393,7 +394,7 @@ void dictRehash(dict *d, int n) {
 >
 >
 
-**参考资料：** 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](02-Redis%20Persistence%20and%20Eviction%20%28Redis%20%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E6%B7%98%E6%B1%B0%29.md)
+**参考资料：** 下一步：[02-Redis Persistence and Eviction (Redis 持久化与淘汰)](<./02-Redis Persistence and Eviction (Redis 持久化与淘汰).md>)
 
 # 考察题目
 

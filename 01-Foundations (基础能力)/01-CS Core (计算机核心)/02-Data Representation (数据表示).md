@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/architecture, learning/foundation]
+tags: [topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -255,7 +255,7 @@ g++ -std=c++20 -O2 -Wall -Wextra -fsanitize=undefined demo.cpp
 - [The Unicode Standard — latest version](https://www.unicode.org/versions/latest/)
 - [Unicode 18.0 Core Specification: Conformance and Unicode Encoding Forms](https://unicode.org/versions/Unicode18.0.0/core-spec/chapter-3/)
 
-下一步：[Program Build and Execution (程序构建与执行)](03-Program%20Build%20and%20Execution%20%28%E7%A8%8B%E5%BA%8F%E6%9E%84%E5%BB%BA%E4%B8%8E%E6%89%A7%E8%A1%8C%29.md)
+下一步：[Program Build and Execution (程序构建与执行)](<./03-Program Build and Execution (程序构建与执行).md>)
 
 # 考察题目
 

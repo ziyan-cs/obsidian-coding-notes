@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/python, topic/data-processing, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

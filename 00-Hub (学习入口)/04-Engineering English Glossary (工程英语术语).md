@@ -1,6 +1,6 @@
 ---
 study_stage: reference
-tags: [english/engineering, learning/glossary]
+tags: [topic/documentation]
 ---
 
 > [!abstract] 用法
@@ -21,17 +21,17 @@ tags: [english/engineering, learning/glossary]
 
 # 网络与数据
 
-| Term | 常用义 | 阅读时注意 |
-| --- | --- | --- |
-| payload / framing | 载荷 / 分帧 | 消息内容与字节流边界是两回事 |
-| handshake | 握手 | 建立身份、能力或参数共识 |
-| timeout / deadline | 超时 / 截止时刻 | 相对时长与绝对时刻不同 |
-| retry / idempotency | 重试 / 幂等 | 重试需考虑副作用、上限与退避 |
-| consistency | 一致性 | 说明对象、观察者和时间范围 |
-| durability | 持久性 | 取决于承诺的故障模型 |
-| replication / sharding | 复制 / 分片 | 复制保留副本；分片按规则拆分数据 |
-| network partition | 网络分区 | 节点间无法正常通信，不是数据分片 |
-| authentication / authorization | 认证 / 授权 | 你是谁，与允许你做什么 |
+| Term                           | 常用义       | 阅读时注意            |
+| ------------------------------ | --------- | ---------------- |
+| payload / framing              | 载荷 / 分帧   | 消息内容与字节流边界是两回事   |
+| handshake                      | 握手        | 建立身份、能力或参数共识     |
+| timeout / deadline             | 超时 / 截止时刻 | 相对时长与绝对时刻不同      |
+| retry / idempotency            | 重试 / 幂等   | 重试需考虑副作用、上限与退避   |
+| consistency                    | 一致性       | 说明对象、观察者和时间范围    |
+| durability                     | 持久性       | 取决于承诺的故障模型       |
+| replication / sharding         | 复制 / 分片   | 复制保留副本；分片按规则拆分数据 |
+| network partition              | 网络分区      | 节点间无法正常通信，不是数据分片 |
+| authentication / authorization | 认证 / 授权   | 你是谁，与允许你做什么      |
 
 # 交付与运行
 

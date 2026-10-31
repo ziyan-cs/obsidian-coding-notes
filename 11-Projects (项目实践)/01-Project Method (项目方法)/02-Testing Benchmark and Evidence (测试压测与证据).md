@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [career/portfolio, project/evidence]
+tags: [topic/performance, topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -43,10 +43,10 @@ tags: [career/portfolio, project/evidence]
 > - 你能在两分钟内从仓库启动项目，并说明一个已知限制吗？
 > - 你能展示某个性能数字的环境、负载和原始证据吗？
 
-**参考资料：** 下一步：[01-Project Design Template (项目设计模板)](01-Project%20Design%20Template%20%28%E9%A1%B9%E7%9B%AE%E8%AE%BE%E8%AE%A1%E6%A8%A1%E6%9D%BF%29.md)
+**参考资料：** 下一步：[01-Project Design Template (项目设计模板)](<./01-Project Design Template (项目设计模板).md>)
 
 > [!info]- 关联笔记
-> 项目证据包分别按 [Testing Strategy and Evidence (测试策略与证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)、[Performance Benchmarking and Profiling (性能基准与剖析)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/04-Performance%20Benchmarking%20and%20Profiling%20%28%E6%80%A7%E8%83%BD%E5%9F%BA%E5%87%86%E4%B8%8E%E5%89%96%E6%9E%90%29.md) 与 [Release Verification and Quality Gates (发布验证与质量门禁)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md) 的标准组织；本篇负责把它们收敛为可演示、可复核的交付物。
+> 项目证据包分别按 [Testing Strategy and Evidence (测试策略与证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>)、[Performance Benchmarking and Profiling (性能基准与剖析)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/04-Performance Benchmarking and Profiling (性能基准与剖析).md>) 与 [Release Verification and Quality Gates (发布验证与质量门禁)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/07-Release Verification and Quality Gates (发布验证与质量门禁).md>) 的标准组织；本篇负责把它们收敛为可演示、可复核的交付物。
 
 # 考察题目
 

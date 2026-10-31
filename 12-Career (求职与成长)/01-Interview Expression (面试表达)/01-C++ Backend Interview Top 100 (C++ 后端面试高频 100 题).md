@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [career/interview]
+tags: [topic/career]
 ---
 
 > [!abstract] 本篇要点

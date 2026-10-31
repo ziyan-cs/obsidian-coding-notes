@@ -1,10 +1,10 @@
 ---
 study_stage: reference
-tags: [career/roadmap, career/backend]
+tags: [topic/career, topic/learning]
 ---
 
 > [!abstract] 长期方向
-> C++ 建立资源、并发与性能直觉，Python 支持自动化和验证，Go 用于后续服务开发。具体任务只在[学习周期](09-Study%20Cycle%20%28%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%9C%9F%29.md)维护。
+> C++ 建立资源、并发与性能直觉，Python 支持自动化和验证，Go 用于后续服务开发。具体任务只在[学习周期](<./09-Study Cycle (学习周期).md>)维护。
 
 # 能力如何连接
 
@@ -28,4 +28,4 @@ tags: [career/roadmap, career/backend]
 
 **进度可调整**：读不懂时补前置，已掌握时通过验证后继续。
 
-模块掌握要求见[知识库地图](00-Vault%20Map%20%28%E7%9F%A5%E8%AF%86%E5%BA%93%E5%9C%B0%E5%9B%BE%29.md)中的标准入口。
+模块掌握要求见[知识库地图](<./00-Vault Map (知识库地图).md>)中的标准入口。

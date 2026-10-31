@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [ai/foundation, ai/inference]
+tags: [topic/ai, topic/systems]
 ---
 
 > [!abstract] 本篇要点

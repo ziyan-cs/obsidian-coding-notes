@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/appsec, security/verification, owasp/asvs]
+tags: [topic/security, topic/testing]
 ---
 
 > [!abstract] 本篇要点

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, cpp/concurrency, learning/foundation]
+tags: [topic/concurrency, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -103,7 +103,7 @@ void transfer(Account& from, Account& to, int amount) {
 - [Linux lockdep design](https://docs.kernel.org/locking/lockdep-design.html)
 - [PostgreSQL explicit locking and deadlocks](https://www.postgresql.org/docs/current/explicit-locking.html)
 
-下一步：[12-Performance and System Thinking (性能与系统思维)](12-Performance%20and%20System%20Thinking%20%28%E6%80%A7%E8%83%BD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E6%80%9D%E7%BB%B4%29.md)
+下一步：[12-Performance and System Thinking (性能与系统思维)](<./12-Performance and System Thinking (性能与系统思维).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, go/concurrency]
+tags: [language/go, topic/concurrency, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

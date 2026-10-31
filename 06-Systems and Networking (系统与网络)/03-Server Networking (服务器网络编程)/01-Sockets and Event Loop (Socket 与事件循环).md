@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/networking]
 ---
 
 > [!abstract] 本篇要点
@@ -347,7 +348,7 @@ setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT,   &cnt,   sizeof(cnt));
 
 > 应用层心跳可以定义业务级超时与响应语义；内核 keepalive 只观察 TCP 层连通性。两者可组合使用，具体参数应按网络环境和故障检测目标配置。
 
-**参考资料：** 下一步：[02-Reactor Architecture (Reactor 架构)](02-Reactor%20Architecture%20%28Reactor%20%E6%9E%B6%E6%9E%84%29.md)
+**参考资料：** 下一步：[02-Reactor Architecture (Reactor 架构)](<./02-Reactor Architecture (Reactor 架构).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [learning/standard, language/cpp, backend]
+tags: [language/cpp, topic/resource-management]
 ---
 
 > [!abstract] 完成标准

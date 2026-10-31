@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/type-systems]
 ---
 
 > [!abstract] 本篇要点

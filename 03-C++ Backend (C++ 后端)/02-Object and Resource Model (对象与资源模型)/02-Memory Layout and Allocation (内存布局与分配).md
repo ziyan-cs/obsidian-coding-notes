@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -187,7 +187,7 @@ T* p = new (storage) T(args);
 p->~T();  // 不可对 p 调用 delete；T 必须在此作用域中是完整类型
 ```
 
-**参考资料：** 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](03-Object%20Lifetime%20and%20Copy%20Control%20%28%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%8B%B7%E8%B4%9D%E6%8E%A7%E5%88%B6%29.md)
+**参考资料：** 下一步：[03-Object Lifetime and Copy Control (对象生命周期与拷贝控制)](<./03-Object Lifetime and Copy Control (对象生命周期与拷贝控制).md>)
 
 # 考察题目
 

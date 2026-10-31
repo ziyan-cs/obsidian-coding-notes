@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cs/os, learning/foundation]
+tags: [topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -116,7 +116,7 @@ systemd-analyze                # 使用 systemd 时观察启动阶段
 - [UEFI Specification](https://uefi.org/specifications)
 - [Linux x86 boot documentation](https://docs.kernel.org/arch/x86/boot.html)
 
-下一步：[06-Processes and Threads (进程与线程)](06-Processes%20and%20Threads%20%28%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%29.md)
+下一步：[06-Processes and Threads (进程与线程)](<./06-Processes and Threads (进程与线程).md>)
 
 # 考察题目
 

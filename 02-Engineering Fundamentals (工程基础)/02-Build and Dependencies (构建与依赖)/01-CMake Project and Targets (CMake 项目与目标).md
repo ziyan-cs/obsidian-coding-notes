@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/build, cpp/cmake]
+tags: [topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -151,7 +151,7 @@ ctest --test-dir build/dev --output-on-failure
 - [CMake target commands](https://cmake.org/cmake/help/latest/guide/tutorial/In-Depth%20CMake%20Target%20Commands.html)
 - [CMake Presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
 
-下一步：[02-CMake Dependencies (CMake 依赖)](02-CMake%20Dependencies%20%28CMake%20%E4%BE%9D%E8%B5%96%29.md)
+下一步：[02-CMake Dependencies (CMake 依赖)](<./02-CMake Dependencies (CMake 依赖).md>)
 
 # 考察题目
 

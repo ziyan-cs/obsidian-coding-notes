@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [sre/capacity, cloud/cost]
+tags: [topic/performance, topic/reliability]
 ---
 
 > [!abstract] 本篇要点

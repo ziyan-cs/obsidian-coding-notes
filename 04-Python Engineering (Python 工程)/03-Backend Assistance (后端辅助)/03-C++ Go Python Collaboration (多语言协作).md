@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/cpp, language/go, language/python, comparison]
+tags: [language/python, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -64,7 +64,7 @@ Go API service ---- database
 # 决策检查
 
 > [!info]- 关联
-> - 并发工具：[04-Async IO and Concurrency (异步 I-O 与并发)](04-Async%20IO%20and%20Concurrency%20%28%E5%BC%82%E6%AD%A5%20I-O%20%E4%B8%8E%E5%B9%B6%E5%8F%91%29.md)
+> - 并发工具：[04-Async IO and Concurrency (异步 I-O 与并发)](<./04-Async IO and Concurrency (异步 I-O 与并发).md>)
 
 # 考察题目
 

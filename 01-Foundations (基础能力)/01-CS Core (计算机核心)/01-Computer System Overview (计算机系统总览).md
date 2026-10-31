@@ -1,9 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags:
-  - cs/architecture
-  - learning/foundation
+tags: [topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -220,7 +218,7 @@ strace -o trace.txt ./demo
 - [Arm: Caches and Self-Modifying Code](https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/caches-self-modifying-code-implementing-clear-cache)
 - [UEFI Specification 2.11](https://uefi.org/specs/UEFI/2.11/)
 
-下一步：[Data Representation (数据表示)](02-Data%20Representation%20%28%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%A4%BA%29.md)
+下一步：[Data Representation (数据表示)](<./02-Data Representation (数据表示).md>)
 
 # 考察题目
 

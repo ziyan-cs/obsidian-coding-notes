@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/threat-model, security/authentication]
+tags: [topic/api, topic/security]
 ---
 
 > [!abstract] 本篇要点

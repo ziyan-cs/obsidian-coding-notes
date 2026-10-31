@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking, topic/security]
 ---
 
 > [!abstract] 本篇要点

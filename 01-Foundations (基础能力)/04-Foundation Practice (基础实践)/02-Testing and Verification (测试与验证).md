@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/testing, foundations/practice]
+tags: [topic/learning, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -124,7 +124,7 @@ oracle：高精度参考实现
 > [!summary] 本篇结论
 > 测试质量来自契约、风险和 oracle，而不是用例数量。边界划分、性质、fuzzing、真实集成与并发控制从不同方向压缩未知行为，失败样本最终应沉淀为回归证据。
 
-下一步：[03-Deliberate Practice and Knowledge Maintenance (刻意练习与知识维护)](03-Deliberate%20Practice%20and%20Knowledge%20Maintenance%20%28%E5%88%BB%E6%84%8F%E7%BB%83%E4%B9%A0%E4%B8%8E%E7%9F%A5%E8%AF%86%E7%BB%B4%E6%8A%A4%29.md)
+下一步：[03-Deliberate Practice and Knowledge Maintenance (刻意练习与知识维护)](<./03-Deliberate Practice and Knowledge Maintenance (刻意练习与知识维护).md>)
 
 # 考察题目
 

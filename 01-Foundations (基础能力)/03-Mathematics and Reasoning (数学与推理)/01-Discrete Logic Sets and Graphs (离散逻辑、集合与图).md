@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [math/discrete, foundations/reasoning]
+tags: [topic/algorithms, topic/math]
 ---
 
 > [!abstract] 本篇要点
@@ -122,7 +122,7 @@ DAG 支持拓扑序，适合依赖构建；等待图中的环可能意味着死�
 > [!summary] 本篇结论
 > 离散推理把模糊经验转成带定义域和前提的命题。集合与关系描述结构，计数估算状态空间，图描述依赖；证明、不变量和反例共同约束程序与系统结论。
 
-下一步：[02-Probability Statistics and Queueing (概率、统计与排队)](02-Probability%20Statistics%20and%20Queueing%20%28%E6%A6%82%E7%8E%87%E3%80%81%E7%BB%9F%E8%AE%A1%E4%B8%8E%E6%8E%92%E9%98%9F%29.md)
+下一步：[02-Probability Statistics and Queueing (概率、统计与排队)](<./02-Probability Statistics and Queueing (概率、统计与排队).md>)
 
 # 考察题目
 

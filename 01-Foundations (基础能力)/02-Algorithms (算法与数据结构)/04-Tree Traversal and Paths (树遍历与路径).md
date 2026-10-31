@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/tree, algorithm/traversal, learning/foundation]
+tags: [topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -120,7 +120,7 @@ TreeNode* lca(TreeNode* root, TreeNode* p, TreeNode* q) {
 > [!summary] 本篇结论
 > 树题的统一模型是：进入节点时获得自顶向下状态，退出节点时汇总子树返回值。先定义路径和空树语义，再选择 DFS 的处理时机或 BFS 的层次顺序。
 
-下一步：[05-Binary Search Trees (二叉搜索树)](05-Binary%20Search%20Trees%20%28%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%29.md)
+下一步：[05-Binary Search Trees (二叉搜索树)](<./05-Binary Search Trees (二叉搜索树).md>)
 
 # 考察题目
 

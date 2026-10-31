@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [comparison, concurrency]
+tags: [topic/concurrency, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -42,7 +42,7 @@ tags: [comparison, concurrency]
 > - 自测：一个消费者停住时，生产者是阻塞、丢弃、限流还是持久化？为什么？
 > - 自测：Go service 关闭时，怎样证明没有 goroutine leak？
 
-**参考资料：** 下一步：[03-Error Handling (错误处理)](03-Error%20Handling%20%28%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%29.md)
+**参考资料：** 下一步：[03-Error Handling (错误处理)](<./03-Error Handling (错误处理).md>)
 
 # 考察题目
 

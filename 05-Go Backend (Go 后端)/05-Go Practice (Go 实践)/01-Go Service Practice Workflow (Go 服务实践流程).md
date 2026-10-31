@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/go, backend/workflow]
+tags: [language/go, topic/api, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点

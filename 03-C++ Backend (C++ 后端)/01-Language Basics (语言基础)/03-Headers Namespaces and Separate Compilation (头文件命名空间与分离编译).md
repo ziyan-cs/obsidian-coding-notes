@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -83,7 +84,7 @@ void connect(storage::Client& client);
 > 2. 哪些错误发生在编译期，哪些发生在链接期？
 > 3. 前置声明为什么不能支持按值成员？
 
-**参考资料：** 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](../00-C%2B%2B%20Backend%20Standard%20%28C%2B%2B%20%E5%90%8E%E7%AB%AF%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md) · 前置：[01-Core Syntax and Functions (核心语法与函数)](01-Core%20Syntax%20and%20Functions%20%28%E6%A0%B8%E5%BF%83%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0%29.md) · 延伸：[01-CMake Project and Targets (CMake 项目与目标)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/02-Build%20and%20Dependencies%20%28%E6%9E%84%E5%BB%BA%E4%B8%8E%E4%BE%9D%E8%B5%96%29/01-CMake%20Project%20and%20Targets%20%28CMake%20%E9%A1%B9%E7%9B%AE%E4%B8%8E%E7%9B%AE%E6%A0%87%29.md)
+**参考资料：** 模块验收：[00-C++ Backend Standard (C++ 后端标准与自测)](<../00-C++ Backend Standard (C++ 后端标准与自测).md>) · 前置：[01-Core Syntax and Functions (核心语法与函数)](<./01-Core Syntax and Functions (核心语法与函数).md>) · 延伸：[01-CMake Project and Targets (CMake 项目与目标)](<../../02-Engineering Fundamentals (工程基础)/02-Build and Dependencies (构建与依赖)/01-CMake Project and Targets (CMake 项目与目标).md>)
 
 # 考察题目
 

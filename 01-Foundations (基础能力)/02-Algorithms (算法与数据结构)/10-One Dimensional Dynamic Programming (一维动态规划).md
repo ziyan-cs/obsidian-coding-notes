@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/dynamic-programming, algorithm/state-design, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -123,7 +123,7 @@ long long max_subarray(const std::vector<int>& a) {
 > [!summary] 本篇结论
 > 一维 DP 的核心是让状态包含未来决策所需的最少历史。先定义语义和依赖，再确定初值与顺序；滚动变量只是已证明依赖后的空间优化。
 
-下一步：[11-Knapsack Dynamic Programming (背包动态规划)](11-Knapsack%20Dynamic%20Programming%20%28%E8%83%8C%E5%8C%85%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%29.md)
+下一步：[11-Knapsack Dynamic Programming (背包动态规划)](<./11-Knapsack Dynamic Programming (背包动态规划).md>)
 
 # 考察题目
 

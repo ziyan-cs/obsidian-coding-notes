@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [backend/server, architecture]
+tags: [topic/reliability, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -210,7 +210,7 @@ Kubernetes 删除 Pod 时，宽限计时先开始；若配置了 `preStop`，kub
 
 > [!tip]- **工程要点**：关闭流程要有总期限和分阶段预算。信号 handler 内只做允许的极简通知（例如设置 `volatile sig_atomic_t` 标志或使用经核对的 async-signal-safe 机制），在主循环停止接收新工作、排空在途请求并清理依赖。`std::atomic<bool>` 不能不加条件地当作任意平台的 signal-handler 安全替代品。
 
-下一步：[07-Backend Architecture Patterns (后端架构模式)](07-Backend%20Architecture%20Patterns%20%28%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%29.md)
+下一步：[07-Backend Architecture Patterns (后端架构模式)](<./07-Backend Architecture Patterns (后端架构模式).md>)
 
 # 考察题目
 

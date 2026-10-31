@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cloud-native/kubernetes, sre/troubleshooting, operations]
+tags: [topic/cloud-native, topic/debugging]
 ---
 
 > [!abstract] 本篇要点

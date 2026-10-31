@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -80,7 +81,7 @@ int main() {
 - `list`、`map` 插入不使现存元素迭代器失效；擦除只使被删元素失效。
 - `unordered_map` 的 `rehash` 使迭代器失效，但不使仍存在元素的引用失效。
 
-详细操作表见 [01-Sequence Containers (顺序容器)](01-Sequence%20Containers%20%28%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8%29.md) 与 [02-Associative Containers (关联容器)](02-Associative%20Containers%20%28%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%29.md)；这里不再复制一套容易漂移的速查表。
+详细操作表见 [01-Sequence Containers (顺序容器)](<./01-Sequence Containers (顺序容器).md>) 与 [02-Associative Containers (关联容器)](<./02-Associative Containers (关联容器).md>)；这里不再复制一套容易漂移的速查表。
 
 # 常用算法：先检查区间与前提
 

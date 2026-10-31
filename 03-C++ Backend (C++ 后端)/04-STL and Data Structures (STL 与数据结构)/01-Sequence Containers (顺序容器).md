@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [language/cpp, topic/data-structures, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

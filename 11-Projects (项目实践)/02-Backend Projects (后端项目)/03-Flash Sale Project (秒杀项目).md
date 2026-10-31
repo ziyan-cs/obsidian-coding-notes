@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/flash-sale, distributed/consistency]
+tags: [topic/concurrency, topic/consistency, topic/databases, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -97,7 +97,7 @@ request -> auth / per-user limit / global admission
 > [!warning] 常见误区
 > Redis 预扣库存、数据库扣减、消息投递不是三件独立操作；必须说明它们的顺序、失败补偿和最终 source of truth。
 
-**参考资料：** 下一步：[04-Config Center Project (配置中心项目)](04-Config%20Center%20Project%20%28%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E9%A1%B9%E7%9B%AE%29.md)
+**参考资料：** 下一步：[04-Config Center Project (配置中心项目)](<./04-Config Center Project (配置中心项目).md>)
 
 # 考察题目
 

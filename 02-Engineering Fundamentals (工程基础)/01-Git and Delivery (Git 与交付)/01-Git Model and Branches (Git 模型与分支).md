@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [engineering/git, engineering/collaboration]
+tags: [topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
@@ -141,7 +141,7 @@ was available, which allowed an out-of-bounds read on partial input.
 - [Git reference manual](https://git-scm.com/docs/git)
 - [Pro Git: Git Internals](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
 
-下一步：[02-Conflicts and Recovery (冲突与恢复)](02-Conflicts%20and%20Recovery%20%28%E5%86%B2%E7%AA%81%E4%B8%8E%E6%81%A2%E5%A4%8D%29.md)
+下一步：[02-Conflicts and Recovery (冲突与恢复)](<./02-Conflicts and Recovery (冲突与恢复).md>)
 
 # 考察题目
 

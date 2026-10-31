@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/incident-response, operations/recovery]
+tags: [topic/reliability, topic/security]
 ---
 
 > [!abstract] 本篇要点
@@ -58,11 +58,11 @@ tags: [security/incident-response, operations/recovery]
 # 权威参考
 
 - [NIST SP 800-61 Rev. 3: Incident Response Recommendations and Considerations](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
-- [CISA Incident Response Playbooks](https://www.cisa.gov/news-events/news/federal-government-cybersecurity-incident-and-vulnerability-response-playbooks)
+- [CISA Incident Response Playbooks](https://www.cisa.gov/resources-tools/resources/federal-government-cybersecurity-incident-and-vulnerability-response-playbooks)
 - [Google SRE Workbook: Incident Response](https://sre.google/workbook/incident-response/)
 
 > [!info]- 关联笔记
-> 检测质量与事件证据统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](../../02-Engineering%20Fundamentals%20%28%E5%B7%A5%E7%A8%8B%E5%9F%BA%E7%A1%80%29/03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/06-Security%20Detection%20and%20Incident%20Evidence%20%28%E5%AE%89%E5%85%A8%E6%A3%80%E6%B5%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E8%AF%81%E6%8D%AE%29.md)；本篇聚焦确认事件后的隔离、根除、恢复与沟通。
+> 检测质量与事件证据统一见 [Security Detection and Incident Evidence (安全检测与事件证据)](<../../02-Engineering Fundamentals (工程基础)/03-Verification and Diagnostics (验证与诊断)/06-Security Detection and Incident Evidence (安全检测与事件证据).md>)；本篇聚焦确认事件后的隔离、根除、恢复与沟通。
 
 # 考察题目
 

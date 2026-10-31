@@ -1,9 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags:
-  - language/python
-  - python/object-model
+tags: [language/python, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

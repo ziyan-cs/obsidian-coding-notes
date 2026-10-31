@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/string, algorithm/bit-manipulation, learning/foundation]
+tags: [topic/algorithms]
 ---
 
 > [!abstract] 本篇要点
@@ -106,7 +106,7 @@ for (std::uint64_t sub = mask; sub != 0; sub = (sub - 1) & mask) {
 > [!summary] 本篇结论
 > KMP 用模式串自身的 border 复用匹配历史；位运算用固定宽度整数压缩集合和状态。两者都依赖精确语义：字符串要声明编码，位操作要声明宽度、符号与输入前提。
 
-回到：[00-Foundations Standard (基础能力标准与自测)](../00-Foundations%20Standard%20%28%E5%9F%BA%E7%A1%80%E8%83%BD%E5%8A%9B%E6%A0%87%E5%87%86%E4%B8%8E%E8%87%AA%E6%B5%8B%29.md)
+回到：[00-Foundations Standard (基础能力标准与自测)](<../00-Foundations Standard (基础能力标准与自测).md>)
 
 # 考察题目
 

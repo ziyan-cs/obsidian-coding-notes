@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/functions]
+tags: [language/python]
 ---
 
 > [!abstract] 本篇要点

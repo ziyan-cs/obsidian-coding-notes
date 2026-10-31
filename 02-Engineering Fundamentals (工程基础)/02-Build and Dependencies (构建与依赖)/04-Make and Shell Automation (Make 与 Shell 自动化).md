@@ -2,7 +2,7 @@
 study_stage: backlog
 review_due:
 
-tags: [engineering/build, engineering/automation]
+tags: [topic/build]
 ---
 
 > [!abstract] 本篇要点
@@ -133,7 +133,7 @@ CMake 更适合跨平台项目声明目标和配置依赖；其生成器可选�
 - [GNU Make prerequisites](https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html)
 - [Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
 
-下一步：[01-Testing Strategy and Evidence (测试策略与证据)](../03-Verification%20and%20Diagnostics%20%28%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%AF%8A%E6%96%AD%29/01-Testing%20Strategy%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E7%AD%96%E7%95%A5%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)
+下一步：[01-Testing Strategy and Evidence (测试策略与证据)](<../03-Verification and Diagnostics (验证与诊断)/01-Testing Strategy and Evidence (测试策略与证据).md>)
 
 # 考察题目
 

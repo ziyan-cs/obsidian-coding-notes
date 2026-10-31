@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/consistency, topic/databases]
 ---
 
 > [!abstract] 本篇要点
@@ -175,7 +176,7 @@ RR 级别下：
 > - **自测**：1) Read View 里 min_trx_id / max_trx_id / m_ids 分别怎么判断可见性？ 2) 为什么 RR 靠 MVCC 只能防"快照读"的不可重复读，仍需 Next-Key Lock 防当前读的幻读？
 >
 >
-> 关联：[Transactions and Isolation (事务与隔离级别)](05-Transactions%20and%20Isolation%20%28%E4%BA%8B%E5%8A%A1%E4%B8%8E%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%29.md) · [Locks and Deadlocks (锁与死锁)](07-Locks%20and%20Deadlocks%20%28%E9%94%81%E4%B8%8E%E6%AD%BB%E9%94%81%29.md)
+> 关联：[Transactions and Isolation (事务与隔离级别)](<./05-Transactions and Isolation (事务与隔离级别).md>) · [Locks and Deadlocks (锁与死锁)](<./07-Locks and Deadlocks (锁与死锁).md>)
 
 # 考察题目
 

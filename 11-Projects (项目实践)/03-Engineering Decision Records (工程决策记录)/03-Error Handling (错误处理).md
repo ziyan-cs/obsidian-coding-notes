@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [comparison, errors]
+tags: [topic/error-handling, topic/project-delivery, topic/reliability]
 ---
 
 > [!abstract] 本篇要点

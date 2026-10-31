@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/databases, topic/reliability]
 ---
 
 > [!abstract] 本篇要点
@@ -324,7 +325,7 @@ SHOW BINLOG EVENTS IN 'mysql-bin.000001';       -- binlog 事件内容
 
 > [!tip]- **工程要点**：`binlog_format`、`sync_binlog`、redo flush 策略与复制拓扑需要按恢复目标和性能预算配置；ROW 常用于降低复制语义差异，但不等于“复制永不丢失”。两阶段提交协调 binlog 与 redo 的提交恢复判定，仍不能替代副本确认、备份和故障演练。
 
-**参考资料：** 下一步：[09-Query Analysis and Optimization (查询分析与优化)](09-Query%20Analysis%20and%20Optimization%20%28%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E4%B8%8E%E4%BC%98%E5%8C%96%29.md)
+**参考资料：** 下一步：[09-Query Analysis and Optimization (查询分析与优化)](<./09-Query Analysis and Optimization (查询分析与优化).md>)
 
 # 考察题目
 

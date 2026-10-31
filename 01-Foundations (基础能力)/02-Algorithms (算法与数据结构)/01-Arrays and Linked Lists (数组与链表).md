@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [algorithm/data-structure, algorithm/two-pointers, learning/foundation]
+tags: [topic/algorithms, topic/data-structures]
 ---
 
 > [!abstract] 本篇要点
@@ -144,7 +144,7 @@ ListNode* reverse(ListNode* head) {
 > [!summary] 本篇结论
 > 数组依靠连续布局提供随机访问与局部性，链表依靠显式链接提供节点级重连。双指针、前缀和与链表模板真正需要记忆的是区间、状态和可达性不变量。
 
-下一步：[02-Stack Queue and Hashing (栈队列与哈希)](02-Stack%20Queue%20and%20Hashing%20%28%E6%A0%88%E9%98%9F%E5%88%97%E4%B8%8E%E5%93%88%E5%B8%8C%29.md)
+下一步：[02-Stack Queue and Hashing (栈队列与哈希)](<./02-Stack Queue and Hashing (栈队列与哈希).md>)
 
 # 考察题目
 

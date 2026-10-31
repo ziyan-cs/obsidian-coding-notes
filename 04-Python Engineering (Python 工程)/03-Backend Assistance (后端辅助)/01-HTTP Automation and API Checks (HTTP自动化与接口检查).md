@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [language/python, python/http, testing/api]
+tags: [language/python, topic/api, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -74,7 +74,7 @@ def health(url: str, timeout: float = 3.0) -> dict[str, object]:
 
 为本地 `GET /healthz` 写 checker，并用本地测试 server 覆盖：200 对象、200 数组、非 JSON、超过上限、非 2xx、连接失败和 timeout；再为分页接口覆盖重复游标与中途失败。CLI 将错误映射为非零退出码，只输出脱敏 host、分类和 request ID。若引入重试，再补充 429、总 deadline、幂等前提和退避测试；非幂等请求不能自动重复执行。
 
-**参考资料：** 下一步：[02-Data Processing Boundaries (数据处理边界)](02-Data%20Processing%20Boundaries%20%28%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E8%BE%B9%E7%95%8C%29.md)
+**参考资料：** 下一步：[02-Data Processing Boundaries (数据处理边界)](<./02-Data Processing Boundaries (数据处理边界).md>)
 
 # 考察题目
 

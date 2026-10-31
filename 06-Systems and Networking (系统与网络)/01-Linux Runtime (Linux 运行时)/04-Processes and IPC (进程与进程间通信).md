@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/systems]
 ---
 
 > [!abstract] 本篇要点
@@ -358,7 +359,7 @@ void *addr = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 > 共享内存本身没有同步机制，必须配合**信号量或互斥锁**使用，防止并发读写冲突。
 
-**参考资料：** 下一步：[05-POSIX Thread Lifecycle (POSIX 线程生命周期)](05-POSIX%20Thread%20Lifecycle%20%28POSIX%20%E7%BA%BF%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%29.md)
+**参考资料：** 下一步：[05-POSIX Thread Lifecycle (POSIX 线程生命周期)](<./05-POSIX Thread Lifecycle (POSIX 线程生命周期).md>)
 
 # 考察题目
 

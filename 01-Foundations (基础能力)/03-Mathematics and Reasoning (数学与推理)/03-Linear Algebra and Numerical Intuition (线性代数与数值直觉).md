@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [math/linear-algebra, math/numerical, ai/foundation]
+tags: [topic/ai, topic/math]
 ---
 
 > [!abstract] 本篇要点
@@ -106,7 +106,7 @@ softmax(xᵢ) = exp(xᵢ - m) / Σ exp(xⱼ - m)，m=max(x)
 > [!summary] 本篇结论
 > 线性代数提供表示与变换语言，数值分析约束这些数学对象如何在有限精度机器上可靠计算。向量相似度是模型和度量下的证据，不是事实或权限证明。
 
-下一步：[01-Problem Solving and Debugging (问题求解与调试)](../04-Foundation%20Practice%20%28%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5%29/01-Problem%20Solving%20and%20Debugging%20%28%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3%E4%B8%8E%E8%B0%83%E8%AF%95%29.md)
+下一步：[01-Problem Solving and Debugging (问题求解与调试)](<../04-Foundation Practice (基础实践)/01-Problem Solving and Debugging (问题求解与调试).md>)
 
 # 考察题目
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [security/secrets, security/supply-chain]
+tags: [topic/security]
 ---
 
 > [!abstract] 本篇要点

@@ -2,7 +2,7 @@
 study_stage: backlog
 review_due:
 
-tags: [engineering/verification]
+tags: [topic/project-delivery, topic/testing]
 ---
 
 > [!abstract] 本篇要点
@@ -117,8 +117,8 @@ format/lint -> compile/type check -> unit -> component
 
 ## 关联专题
 
-- [Release Verification and Quality Gates (发布验证与质量门禁)](07-Release%20Verification%20and%20Quality%20Gates%20%28%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%29.md)：把测试结果转化为合并与发布决策。
-- [Testing Benchmark and Evidence (测试压测与证据)](../../11-Projects%20%28%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%29/01-Project%20Method%20%28%E9%A1%B9%E7%9B%AE%E6%96%B9%E6%B3%95%29/02-Testing%20Benchmark%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E5%8E%8B%E6%B5%8B%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)：项目交付时如何组织证据包。
+- [Release Verification and Quality Gates (发布验证与质量门禁)](<./07-Release Verification and Quality Gates (发布验证与质量门禁).md>)：把测试结果转化为合并与发布决策。
+- [Testing Benchmark and Evidence (测试压测与证据)](<../../11-Projects (项目实践)/01-Project Method (项目方法)/02-Testing Benchmark and Evidence (测试压测与证据).md>)：项目交付时如何组织证据包。
 
 ## 参考资料
 

@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cloud-native/kubernetes, kubernetes/scheduling, kubernetes/storage]
+tags: [topic/cloud-native, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点

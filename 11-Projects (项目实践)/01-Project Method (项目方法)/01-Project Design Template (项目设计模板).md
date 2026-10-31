@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [project/template, backend/design]
+tags: [topic/project-delivery, topic/system-design]
 ---
 
 > [!abstract] 本篇要点
@@ -65,7 +65,7 @@ API / 事件及错误示例：
 
 演示时按一条真实请求走：输入校验 → 状态变更 → 失败注入 → 日志/指标定位。一次成功请求只能证明 happy path；再展示一个可预期失败和恢复动作，才算能说明工程边界。
 
-**参考资料：** 下一步：[02-Testing Benchmark and Evidence (测试压测与证据)](02-Testing%20Benchmark%20and%20Evidence%20%28%E6%B5%8B%E8%AF%95%E5%8E%8B%E6%B5%8B%E4%B8%8E%E8%AF%81%E6%8D%AE%29.md)
+**参考资料：** 下一步：[02-Testing Benchmark and Evidence (测试压测与证据)](<./02-Testing Benchmark and Evidence (测试压测与证据).md>)
 
 # 考察题目
 

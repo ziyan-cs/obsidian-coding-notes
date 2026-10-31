@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/concurrency, topic/consistency, topic/distributed-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -110,7 +111,7 @@ Raft 与 Multi-Paxos 都利用多数派和稳定 leader 降低正常路径开销
 >
 >
 
-**参考资料：** 下一步：[04-Distributed Transactions (分布式事务)](04-Distributed%20Transactions%20%28%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%29.md)
+**参考资料：** 下一步：[04-Distributed Transactions (分布式事务)](<./04-Distributed Transactions (分布式事务).md>)
 
 # 考察题目
 

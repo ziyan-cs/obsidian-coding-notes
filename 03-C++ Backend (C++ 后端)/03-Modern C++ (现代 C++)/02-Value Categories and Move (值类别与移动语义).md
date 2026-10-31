@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-
+tags: [language/cpp, topic/resource-management]
 ---
 
 > [!abstract] 本篇要点
@@ -153,7 +153,7 @@ return s;   // NRVO 可省略复制/移动；即使 C++17 也并非强制
 // 通常不要 return std::move(s)：它会让此处不再符合 NRVO 条件，并可能多一次移动。
 ```
 
-**参考资料：** 下一步：[03-Smart Pointers (智能指针)](03-Smart%20Pointers%20%28%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%29.md)
+**参考资料：** 下一步：[03-Smart Pointers (智能指针)](<./03-Smart Pointers (智能指针).md>)
 
 # 考察题目
 

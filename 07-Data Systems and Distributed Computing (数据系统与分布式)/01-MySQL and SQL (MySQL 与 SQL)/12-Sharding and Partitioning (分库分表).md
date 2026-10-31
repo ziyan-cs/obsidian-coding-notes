@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/databases, topic/distributed-systems]
 ---
 
 > [!abstract] 本篇要点
@@ -159,7 +160,7 @@ CREATE TABLE order (
 >
 >
 
-**参考资料：** 下一步：[13-MySQL and Redis Caching (MySQL 与 Redis 缓存)](13-MySQL%20and%20Redis%20Caching%20%28MySQL%20%E4%B8%8E%20Redis%20%E7%BC%93%E5%AD%98%29.md)
+**参考资料：** 下一步：[13-MySQL and Redis Caching (MySQL 与 Redis 缓存)](<./13-MySQL and Redis Caching (MySQL 与 Redis 缓存).md>)
 
 # 考察题目
 

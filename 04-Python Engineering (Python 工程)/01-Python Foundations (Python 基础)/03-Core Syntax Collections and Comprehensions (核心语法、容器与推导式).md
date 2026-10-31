@@ -1,9 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags:
-  - language/python
-  - python/collections
+tags: [language/python, topic/data-processing]
 ---
 
 > [!abstract] 本篇要点

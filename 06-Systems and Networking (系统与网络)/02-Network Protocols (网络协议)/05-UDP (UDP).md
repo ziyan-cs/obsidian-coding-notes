@@ -1,6 +1,7 @@
 ---
 study_stage: backlog
 review_due:
+tags: [topic/networking]
 ---
 
 > [!abstract] 本篇要点
@@ -194,7 +195,7 @@ sendto(fd, buf, len, 0,
 > |"UDP 没有粘包问题就不用处理边界"|消息边界保留，但仍需处理大包分片、乱序等问题|
 >
 
-**参考资料：** 下一步：[06-HTTP Protocol (HTTP 协议)](06-HTTP%20Protocol%20%28HTTP%20%E5%8D%8F%E8%AE%AE%29.md)
+**参考资料：** 下一步：[06-HTTP Protocol (HTTP 协议)](<./06-HTTP Protocol (HTTP 协议).md>)
 
 # 考察题目
 

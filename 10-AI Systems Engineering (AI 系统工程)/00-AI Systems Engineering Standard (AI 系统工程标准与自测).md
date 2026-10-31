@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [ai/standard, learning/self-assessment]
+tags: [topic/ai]
 ---
 
 > [!abstract] 完成标准

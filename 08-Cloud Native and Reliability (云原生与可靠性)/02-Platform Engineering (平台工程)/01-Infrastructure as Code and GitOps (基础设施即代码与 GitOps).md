@@ -1,7 +1,7 @@
 ---
 study_stage: backlog
 review_due:
-tags: [cloud/iac, cloud/gitops]
+tags: [topic/cloud-native, topic/project-delivery]
 ---
 
 > [!abstract] 本篇要点
